@@ -1,0 +1,159 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  UMKM
+  CONSULTANT
+  INVESTOR
+  ADMIN
+}
+
+enum ReadinessStatus {
+  PROFILE_INCOMPLETE
+  PROFILE_COMPLETE
+  CONSULTANT_ASSIGNED
+  ASSESSMENT_IN_PROGRESS
+  ACTION_PLAN_ACTIVE
+  READINESS_EVALUATION
+  READY_FOR_FUNDING
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(UMKM)
+  avatar       String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  businessProfile   BusinessProfile?
+  consultantProfile ConsultantProfile?
+  investorProfile   InvestorProfile?
+  accessRequests    AccessRequest[]
+}
+
+model ConsultantProfile {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firmName           String
+  isCertified        Boolean  @default(true)
+  activeClientsCount Int      @default(0)
+  createdAt          DateTime @default(now())
+
+  businesses BusinessProfile[]
+}
+
+model InvestorProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firmName          String
+  commitmentCapital String   @default("Rp 1.5 Miliar")
+  isVerified        Boolean  @default(true)
+  createdAt         DateTime @default(now())
+}
+
+model BusinessProfile {
+  id             String          @id @default(cuid())
+  userId         String          @unique
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand          String
+  name           String
+  sector         String
+  location       String
+  description    String          @db.Text
+  fundingTarget  String          @default("Rp 250.000.000")
+  equityOffered  String          @default("12%")
+  status         ReadinessStatus @default(ACTION_PLAN_ACTIVE)
+  consultantId   String?
+  consultant     ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
+  nextMentoring  String          @default("Kamis, 14:00 WIB")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  assessment     Assessment?
+  tasks          ActionPlanTask[]
+  monthlyReports MonthlyReport[]
+  documents      DataRoomDocument[]
+  accessRequests AccessRequest[]
+}
+
+model Assessment {
+  id              String          @id @default(cuid())
+  businessId      String          @unique
+  business        BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  financial       Int             @default(50)
+  operationsHpp   Int             @default(50)
+  marketing       Int             @default(50)
+  hrTeam          Int             @default(50)
+  legal           Int             @default(50)
+  compositeScore  Int             @default(50)
+  isVerified      Boolean         @default(false)
+  consultantNotes String?         @db.Text
+  updatedAt       DateTime        @updatedAt
+}
+
+model ActionPlanTask {
+  id                 String          @id @default(cuid())
+  businessId         String
+  business           BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  title              String
+  description        String?         @db.Text
+  priority           String          @default("Sedang") // Mendesak, Tinggi, Sedang
+  dueDate            String
+  status             String          @default("todo") // todo, submitted, verified, revision
+  umkmNotes          String?         @db.Text
+  evidenceName       String?
+  evidenceUrl        String?
+  consultantFeedback String?         @db.Text
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model MonthlyReport {
+  id              String          @id @default(cuid())
+  businessId      String
+  business        BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  monthYear       String
+  omzet           Decimal         @db.Decimal(15, 2)
+  hpp             Decimal         @db.Decimal(15, 2)
+  hppRatio        Int
+  operationalCost Decimal         @db.Decimal(15, 2)
+  netCash         Decimal         @db.Decimal(15, 2)
+  status          String          @default("submitted") // submitted, verified, anomaly_flagged
+  anomalyFlagged  Boolean         @default(false)
+  submittedAt     DateTime        @default(now())
+}
+
+model DataRoomDocument {
+  id             String          @id @default(cuid())
+  businessId     String
+  business       BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name           String
+  category       String
+  size           String
+  fileUrl        String?
+  isConfidential Boolean         @default(true)
+  verifiedAt     DateTime        @default(now())
+}
+
+model AccessRequest {
+  id             String          @id @default(cuid())
+  businessId     String
+  business       BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  investorId     String
+  investor       User            @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  proposedTicket String
+  status         String          @default("pending") // pending, approved, rejected
+  requestedAt    DateTime        @default(now())
+  respondedAt    DateTime?
+}

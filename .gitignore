@@ -1,0 +1,78 @@
+# ==============================================================================
+# FILE INI UNTUK APA:
+# File ini mendefinisikan daftar file, folder, secret, dan cache yang TIDAK BOLEH 
+# dimasukkan (di-commit) ke dalam repositori Git. Melindungi kerahasiaan kredensial, 
+# mencegah penyimpanan node_modules raksasa, dan menjaga repository tetap bersih.
+# ==============================================================================
+
+# [WAJIB] 1. Dependencies & Package Managers
+node_modules/
+.pnp
+.pnp.js
+
+# [WAJIB] 2. Environment Variables & Secrets (Kerahasiaan Kredensial)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# [WAJIB] 3. Production Build & Output Cache
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# [WAJIB] 4. Editor & IDE Settings
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# [WAJIB] 5. Operating System Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# [OPSIONAL] 6. Logs & Debugger Output
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# [OPSIONAL] 7. Coverage Testing Output
+coverage/
+*.lcov
+.nyc_output/
+
+# [OPSIONAL] 8. AI & Workspace Temp
+.gemini/
+.system_generated/
+*.log
+
+# ==============================================================================
+# ## Cara Mengisi
+#
+# 1. Apa saja nilai yang harus diisi:
+#    - File `.gitignore` ini sudah berisi konfigurasi standar industri yang lengkap dan siap pakai.
+#    - Jika Anda menggunakan editor khusus (seperti Sublime Text atau Vim), pastikan file sisa seperti `*.swp` sudah tercakup.
+#
+# 2. Bagaimana cara mendapatkan nilai:
+#    - Jika membuat file sensitif baru (misal sertifikat SSL `*.key` atau backup database `*.sql`), tambahkan ekstensi tersebut di bagian paling bawah.
+#
+# 3. Contoh konkret pengisian jika ada file tambahan:
+#    # Tambahan berkas export lokal:
+#    temp_reports/*.xlsx
+#    dump_backup.json
+# ==============================================================================

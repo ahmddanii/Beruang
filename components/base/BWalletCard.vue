@@ -46,14 +46,14 @@
       <!-- Pocket Content (Teks di Bagian Depan Dompet) -->
       <div class="relative z-10 px-4 sm:px-4.5 pb-4 sm:pb-5 pt-3 space-y-1 mt-auto">
         <!-- Eyebrow: Label "Saldo Kas Toko" -->
-        <p class="text-xs sm:text-sm font-sans font-semibold text-neutral-600 dark:text-neutral-300 leading-snug">
+        <p class="text-xs sm:text-sm  font-semibold text-neutral-600 dark:text-neutral-300 leading-snug">
           {{ label }}
         </p>
 
         <!-- Primary Amount: Nominal Besar Konsisten Sejajar dengan Card Laba Bersih -->
         <div class="flex items-baseline min-w-0">
           <span
-            class="text-2xl sm:text-[25px] lg:text-[26px] xl:text-[28px] font-heading font-black text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none whitespace-nowrap"
+            class="text-2xl sm:text-[25px] lg:text-[26px] xl:text-[28px]  font-black text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none whitespace-nowrap"
           >
             {{ value }}
           </span>

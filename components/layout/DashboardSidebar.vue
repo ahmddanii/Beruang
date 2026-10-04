@@ -15,7 +15,7 @@
                 class="w-full h-full object-contain filter brightness-110"
               />
             </div>
-            <span class="font-heading font-semibold text-lg tracking-tight text-neutral-900 dark:text-white">
+            <span class=" font-semibold text-lg tracking-tight text-neutral-900 dark:text-white">
               Beruang
             </span>
           </NuxtLink>
@@ -44,14 +44,14 @@
 
               <!-- Name & Role -->
               <div class="min-w-0 flex-1">
-                <p class="font-heading font-semibold text-sm text-neutral-900 dark:text-white truncate leading-tight">
+                <p class=" font-semibold text-sm text-neutral-900 dark:text-white truncate leading-tight">
                   {{ authStore.currentUser?.name || 'Pengguna' }}
                 </p>
                 <div class="flex items-center gap-1.5 mt-0.5">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-sans font-semibold bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs  font-semibold bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300">
                     {{ currentRoleLabel }}
                   </span>
-                  <span class="text-xs text-neutral-500 dark:text-neutral-400 font-sans font-medium">Ganti ▾</span>
+                  <span class="text-xs text-neutral-500 dark:text-neutral-400  font-medium">Ganti ▾</span>
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@
             v-if="isProfileMenuOpen"
             class="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-neutral-900 border border-neutral-200/90 dark:border-neutral-800 rounded-xl p-1.5 shadow-dropdown z-30 space-y-1 animate-in fade-in duration-100"
           >
-            <div class="px-2.5 py-1 text-[10px] font-heading font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+            <div class="px-2.5 py-1 text-[10px]  font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
               Ganti Peran Pengguna
             </div>
 
@@ -76,7 +76,7 @@
               :key="role.id"
               type="button"
               :class="[
-                'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-heading font-medium transition-colors duration-150',
+                'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs  font-medium transition-colors duration-150',
                 authStore.currentUser?.role === role.id
                   ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold'
                   : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
@@ -94,7 +94,7 @@
 
             <NuxtLink
               to="/masuk"
-              class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-heading font-medium text-danger hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors duration-150"
+              class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs  font-medium text-danger hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors duration-150"
               @click="isProfileMenuOpen = false"
             >
               <HugeiconsIcon :icon="Logout01Icon" :size="13" :stroke-width="2" />
@@ -123,7 +123,7 @@
               <!-- Section Category Title -->
               <div
                 v-if="section.title"
-                class="px-6 pb-1 text-xs sm:text-sm font-bold text-neutral-600 dark:text-neutral-300 font-heading tracking-tight"
+                class="px-6 pb-1 text-xs sm:text-sm font-bold text-neutral-600 dark:text-neutral-300  tracking-tight"
               >
                 {{ section.title }}
               </div>
@@ -135,7 +135,7 @@
                   :key="item.to"
                   :to="item.to"
                   :class="[
-                    'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-sans text-[15px] transition-colors duration-150 group',
+                    'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl  text-[15px] transition-colors duration-150 group',
                     isActive(item.to)
                       ? 'bg-[#1F52EB] text-white font-medium shadow-xs'
                       : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
@@ -187,7 +187,7 @@
                   class="w-full h-full object-contain filter brightness-110"
                 />
               </div>
-              <span class="font-heading font-semibold text-lg tracking-tight text-neutral-900 dark:text-white">
+              <span class=" font-semibold text-lg tracking-tight text-neutral-900 dark:text-white">
                 Beruang
               </span>
             </NuxtLink>
@@ -210,10 +210,10 @@
                   <HugeiconsIcon :icon="RubiksCubeIcon" :size="16" :stroke-width="1.75" />
                 </div>
                 <div class="min-w-0 flex-1">
-                  <p class="font-heading font-semibold text-sm text-neutral-900 dark:text-white truncate leading-tight">
+                  <p class=" font-semibold text-sm text-neutral-900 dark:text-white truncate leading-tight">
                     {{ authStore.currentUser?.name || 'Pengguna' }}
                   </p>
-                  <p class="text-xs text-neutral-600 dark:text-neutral-300 truncate leading-tight mt-0.5 font-sans">
+                  <p class="text-xs text-neutral-600 dark:text-neutral-300 truncate leading-tight mt-0.5 ">
                     {{ authStore.currentUser?.email || 'user@beruang.id' }}
                   </p>
                 </div>
@@ -241,7 +241,7 @@
                 <!-- Section Category Title -->
                 <div
                   v-if="section.title"
-                  class="px-6 pb-1 text-xs sm:text-sm font-bold text-neutral-600 dark:text-neutral-300 font-heading tracking-tight"
+                  class="px-6 pb-1 text-xs sm:text-sm font-bold text-neutral-600 dark:text-neutral-300  tracking-tight"
                 >
                   {{ section.title }}
                 </div>
@@ -253,7 +253,7 @@
                     :key="`mob-${item.to}`"
                     :to="item.to"
                     :class="[
-                      'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-sans text-[15px] transition-colors duration-150 group',
+                      'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl  text-[15px] transition-colors duration-150 group',
                       isActive(item.to)
                         ? 'bg-[#1F52EB] text-white font-medium shadow-xs'
                         : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60'

@@ -3,7 +3,7 @@
     <BCard padding="lg" class="border border-border-light dark:border-border-dark">
       <div class="text-center mb-6">
         <SiBeru state="greeting" size="sm" class="w-16 h-16 mx-auto mb-2" />
-        <h2 class="font-heading font-bold text-2xl text-neutral-900 dark:text-white tracking-tight">
+        <h2 class=" font-bold text-2xl text-neutral-900 dark:text-white tracking-tight">
           Mulai Perjalanan Bisnismu
         </h2>
         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
@@ -13,7 +13,7 @@
 
       <!-- Role Selection Cards -->
       <div class="mb-5">
-        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2 font-heading">
+        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2 ">
           Pilih Peran Akun
         </label>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -31,7 +31,7 @@
             <div class="mb-2 text-neutral-500" :class="{ 'text-primary-600': form.role === r.key }">
               <HugeiconsIcon :icon="r.icon" :size="22" :stroke-width="1.75" />
             </div>
-            <span class="font-heading font-bold text-xs text-neutral-900 dark:text-neutral-100">{{ r.title }}</span>
+            <span class=" font-bold text-xs text-neutral-900 dark:text-neutral-100">{{ r.title }}</span>
             <span class="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1 leading-tight">{{ r.desc }}</span>
           </div>
         </div>
@@ -39,7 +39,7 @@
 
       <form @submit.prevent="handleRegister" class="space-y-3.5">
         <div>
-          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
             Nama Lengkap
           </label>
           <input
@@ -52,7 +52,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
             {{ form.role === 'UMKM' ? 'Nama Usaha / Brand' : form.role === 'CONSULTANT' ? 'Bidang / Lembaga Konsultasi' : 'Nama Perusahaan / Sindikasi' }}
           </label>
           <input
@@ -65,7 +65,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
             Alamat Email
           </label>
           <input
@@ -78,7 +78,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
             Nomor WhatsApp
           </label>
           <input
@@ -91,7 +91,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
             Kata Sandi
           </label>
           <input
@@ -119,7 +119,7 @@
 
       <div class="mt-6 pt-5 border-t border-border-light dark:border-border-dark text-center text-xs text-neutral-600 dark:text-neutral-400">
         Sudah memiliki akun Beruang?
-        <NuxtLink to="/masuk" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline font-heading ml-1">
+        <NuxtLink to="/masuk" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline  ml-1">
           Masuk di Sini
         </NuxtLink>
       </div>

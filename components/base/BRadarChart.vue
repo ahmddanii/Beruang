@@ -97,7 +97,7 @@
       </g>
 
       <!-- Axis Labels -->
-      <g class="labels font-heading font-semibold text-xs sm:text-sm">
+      <g class="labels  font-semibold text-xs sm:text-sm">
         <text
           v-for="(label, index) in labels"
           :key="index"

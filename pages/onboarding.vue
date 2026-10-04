@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-4 sm:p-8 font-sans">
+  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-4 sm:p-8 ">
     <div class="max-w-2xl mx-auto space-y-8">
       <!-- Top Brand Header -->
       <div class="flex items-center justify-between">
@@ -7,7 +7,7 @@
           <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs">
             <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
           </div>
-          <span class="font-heading font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white">
+          <span class=" font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white">
             Beruang
           </span>
         </NuxtLink>
@@ -28,7 +28,7 @@
               <HugeiconsIcon :icon="Building01Icon" :size="20" :stroke-width="1.75" />
             </div>
             <div>
-              <h3 class="font-heading font-bold text-lg text-neutral-900 dark:text-neutral-50">
+              <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-50">
                 1. Kenalkan Usahamu
               </h3>
               <p class="text-xs text-neutral-500">
@@ -38,7 +38,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
               Nama Brand / Usaha
             </label>
             <input
@@ -51,7 +51,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
               Nama Pemilik / Founder
             </label>
             <input
@@ -65,7 +65,7 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Tahun Berdiri
               </label>
               <input
@@ -77,7 +77,7 @@
               />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Status Izin Usaha
               </label>
               <select
@@ -100,7 +100,7 @@
               <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="1.75" />
             </div>
             <div>
-              <h3 class="font-heading font-bold text-lg text-neutral-900 dark:text-neutral-50">
+              <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-50">
                 2. Sektor & Skala Usaha
               </h3>
               <p class="text-xs text-neutral-500">
@@ -110,7 +110,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
+            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 ">
               Sektor Bisnis
             </label>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -119,7 +119,7 @@
                 :key="s"
                 type="button"
                 :class="[
-                  'p-2.5 rounded-xl text-xs font-heading font-semibold border transition-all text-center',
+                  'p-2.5 rounded-xl text-xs  font-semibold border transition-all text-center',
                   form.sector === s
                     ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
                     : 'border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'
@@ -132,7 +132,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
               Kota / Kabupaten Operasional
             </label>
             <input
@@ -145,7 +145,7 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Jumlah Outlet / Cabang
               </label>
               <input
@@ -156,7 +156,7 @@
               />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Jumlah Karyawan
               </label>
               <input
@@ -176,7 +176,7 @@
               <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
             </div>
             <div>
-              <h3 class="font-heading font-bold text-lg text-neutral-900 dark:text-neutral-50">
+              <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-50">
                 3. Baseline Finansial Awal
               </h3>
               <p class="text-xs text-neutral-500">
@@ -186,7 +186,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
               Rata-rata Omzet Penjualan Bulanan (Rp)
             </label>
             <input
@@ -203,7 +203,7 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Estimasi HPP (% dari Omzet)
               </label>
               <input
@@ -216,7 +216,7 @@
               />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Target Pendanaan (Rp)
               </label>
               <input
@@ -236,7 +236,7 @@
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-3">
               <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="28" :stroke-width="1.75" />
             </div>
-            <h3 class="font-heading font-extrabold text-xl text-neutral-900 dark:text-neutral-50">
+            <h3 class=" font-extrabold text-xl text-neutral-900 dark:text-neutral-50">
               Profil Usahamu Siap Dikaji
             </h3>
             <p class="text-xs text-neutral-600 dark:text-neutral-400 max-w-md mx-auto mt-1">
@@ -247,7 +247,7 @@
           <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2.5">
             <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
               <span class="text-neutral-500 font-medium">Nama Usaha:</span>
-              <span class="font-heading font-bold text-neutral-900 dark:text-white">{{ form.name }}</span>
+              <span class=" font-bold text-neutral-900 dark:text-white">{{ form.name }}</span>
             </div>
             <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
               <span class="text-neutral-500 font-medium">Sektor & Kota:</span>
@@ -263,7 +263,7 @@
             </div>
             <div class="flex justify-between">
               <span class="text-neutral-500 font-medium">Target Pendanaan:</span>
-              <span class="font-bold text-primary-600 tabular-nums font-heading">
+              <span class="font-bold text-primary-600 tabular-nums ">
                 Rp {{ form.targetFunding.toLocaleString('id-ID') }}
               </span>
             </div>

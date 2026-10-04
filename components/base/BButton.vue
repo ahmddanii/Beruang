@@ -5,7 +5,7 @@
     :type="to ? undefined : type"
     :disabled="disabled || loading"
     :class="[
-      'btn-modern font-heading font-medium inline-flex flex-row items-center justify-center whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/30 focus-visible:ring-offset-1 transition-all select-none',
+      'btn-modern inline-flex flex-row items-center justify-center whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/30 focus-visible:ring-offset-1 transition-all select-none',
       sizeClasses[size],
       variantClasses[variant],
       block ? 'w-full' : '',
@@ -73,10 +73,10 @@ defineEmits<{
 }>()
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-lg gap-1.5',
-  md: 'text-sm sm:text-base font-semibold px-4.5 py-2 rounded-xl gap-2',
-  lg: 'text-base font-semibold px-5.5 py-2.5 rounded-xl gap-2.5',
-  xl: 'text-lg font-semibold px-6.5 py-3 rounded-2xl gap-3'
+  sm: 'text-[14px] leading-[20px] font-bold px-4 py-1.5 rounded-full gap-2',
+  md: 'text-[16px] leading-[24px] font-bold px-6 py-2 rounded-full gap-2',
+  lg: 'text-[16px] leading-[24px] font-bold px-8 py-3 rounded-full gap-2.5',
+  xl: 'text-[18px] leading-[24px] font-bold px-10 py-4 rounded-full gap-3'
 }
 
 const variantClasses: Record<ButtonVariant, string> = {

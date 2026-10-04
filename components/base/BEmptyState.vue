@@ -7,14 +7,14 @@
       <!-- Optional floating mini speech bubble -->
       <div
         v-if="speech"
-        class="absolute -top-3 -right-6 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-[11px] font-heading font-semibold px-3 py-1 rounded-full shadow-md border border-neutral-200 dark:border-neutral-700 animate-bounce"
+        class="absolute -top-3 -right-6 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-[11px]  font-semibold px-3 py-1 rounded-full shadow-md border border-neutral-200 dark:border-neutral-700 animate-bounce"
       >
         {{ speech }}
       </div>
     </div>
 
     <!-- Title & inviting copy -->
-    <h3 class="font-heading font-bold text-lg text-neutral-900 dark:text-neutral-100 max-w-md">
+    <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-100 max-w-md">
       {{ title }}
     </h3>
 

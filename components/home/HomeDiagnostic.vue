@@ -1,38 +1,42 @@
 <template>
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-    <div class="rounded-3xl bg-neutral-50/70 dark:bg-[#151519] border border-neutral-200/80 dark:border-neutral-800 p-8 sm:p-12 lg:p-14 shadow-xs relative overflow-hidden">
+  <section class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 pb-24">
+    <!-- Main Box: bg-white, radius-24px -->
+    <div class="rounded-[24px] bg-white dark:bg-[#15161A] border border-[#EAEAEA] dark:border-[#26272F] p-8 sm:p-16 shadow-xs relative overflow-hidden">
+      
       <!-- Section Header -->
-      <div class="max-w-2xl mx-auto text-center space-y-2 mb-10">
-        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 block">
+      <div class="max-w-2xl mx-auto text-center flex flex-col gap-4 mb-16">
+        <span class="text-[12px]  font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 block leading-[16px]">
           § 01 // SIMULASI & DIAGNOSA MANDIRI
         </span>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight">
+        <h2 class="text-[26px] sm:text-[42px]  font-extrabold text-neutral-900 dark:text-white tracking-tight leading-[32px] sm:leading-[52px]">
           Cek Kelayakan Pendanaan Usahamu dalam 1 Menit
         </h2>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed">
+        <p class="text-[16px] text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-[24px] ">
           Pilih profil usahamu di bawah ini untuk melihat estimasi skor kesiapan audit 5 pilar dan rekomendasi tiket modal yang realistis.
         </p>
       </div>
 
-      <!-- Main Interactive Box (Split 2 Columns: Controls on Left, Live Score on Right) -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center max-w-5xl mx-auto">
-        <!-- Controls (Pill Chips) -->
-        <div class="lg:col-span-7 space-y-6">
+      <!-- Main Interactive Box (Split 2 Columns) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center max-w-5xl mx-auto">
+        
+        <!-- Controls (Left Col 7) -->
+        <div class="lg:col-span-7 flex flex-col gap-8">
+          
           <!-- Step 1: Sector -->
-          <div class="space-y-2.5">
-            <span class="text-xs font-heading font-bold text-neutral-900 dark:text-white uppercase tracking-wider block">
+          <div class="flex flex-col gap-4">
+            <span class="text-[12px]  font-bold text-neutral-900 dark:text-white uppercase tracking-wider block leading-[16px]">
               1. Pilih Sektor Usaha
             </span>
-            <div class="grid grid-cols-2 gap-2 sm:gap-2.5">
+            <div class="grid grid-cols-2 gap-4">
               <button
                 v-for="sec in sectors"
                 :key="sec.id"
                 type="button"
                 :class="[
-                  'px-3.5 py-2.5 rounded-xl text-xs font-heading font-semibold text-left transition-all border cursor-pointer flex items-center gap-2 select-none',
+                  'px-4 py-3 rounded-[12px] text-[16px]  font-semibold text-left transition-all border cursor-pointer flex items-center gap-2 select-none leading-[24px]',
                   selectedSector === sec.id
                     ? 'bg-primary-500 text-white border-primary-600 shadow-xs'
-                    : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-400'
+                    : 'bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-700 dark:text-neutral-300 border-[#EAEAEA] dark:border-[#26272F] hover:border-neutral-400 dark:hover:border-neutral-600'
                 ]"
                 @click="selectedSector = sec.id"
               >
@@ -43,20 +47,20 @@
           </div>
 
           <!-- Step 2: Revenue Range -->
-          <div class="space-y-2.5">
-            <span class="text-xs font-heading font-bold text-neutral-900 dark:text-white uppercase tracking-wider block">
+          <div class="flex flex-col gap-4">
+            <span class="text-[12px]  font-bold text-neutral-900 dark:text-white uppercase tracking-wider block leading-[16px]">
               2. Omzet Rata-rata per Bulan
             </span>
-            <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+            <div class="grid grid-cols-3 gap-4">
               <button
                 v-for="rev in revenues"
                 :key="rev.id"
                 type="button"
                 :class="[
-                  'px-3 py-2.5 rounded-xl text-xs font-heading font-semibold text-center transition-all border cursor-pointer select-none',
+                  'px-4 py-3 rounded-[12px] text-[16px]  font-semibold text-center transition-all border cursor-pointer select-none leading-[24px]',
                   selectedRevenue === rev.id
                     ? 'bg-primary-500 text-white border-primary-600 shadow-xs'
-                    : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-400'
+                    : 'bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-700 dark:text-neutral-300 border-[#EAEAEA] dark:border-[#26272F] hover:border-neutral-400 dark:hover:border-neutral-600'
                 ]"
                 @click="selectedRevenue = rev.id"
               >
@@ -66,20 +70,20 @@
           </div>
 
           <!-- Step 3: Bookkeeping Method -->
-          <div class="space-y-2.5">
-            <span class="text-xs font-heading font-bold text-neutral-900 dark:text-white uppercase tracking-wider block">
+          <div class="flex flex-col gap-4">
+            <span class="text-[12px]  font-bold text-neutral-900 dark:text-white uppercase tracking-wider block leading-[16px]">
               3. Cara Pencatatan Kas Saat Ini
             </span>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button
                 v-for="rec in records"
                 :key="rec.id"
                 type="button"
                 :class="[
-                  'px-3 py-2.5 rounded-xl text-xs font-heading font-semibold text-left sm:text-center transition-all border cursor-pointer select-none truncate',
+                  'px-4 py-3 rounded-[12px] text-[16px]  font-semibold text-left sm:text-center transition-all border cursor-pointer select-none truncate leading-[24px]',
                   selectedRecord === rec.id
                     ? 'bg-primary-500 text-white border-primary-600 shadow-xs'
-                    : 'bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800 hover:border-neutral-400'
+                    : 'bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-700 dark:text-neutral-300 border-[#EAEAEA] dark:border-[#26272F] hover:border-neutral-400 dark:hover:border-neutral-600'
                 ]"
                 @click="selectedRecord = rec.id"
               >
@@ -90,34 +94,34 @@
         </div>
 
         <!-- Live Score Output Card (Col 5) -->
-        <div class="lg:col-span-5 bg-white dark:bg-[#151519] border border-neutral-200/80 dark:border-neutral-800 rounded-3xl p-6 sm:p-7 shadow-xs space-y-5">
-          <div class="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
-            <span class="text-[11px] font-heading font-bold uppercase tracking-wider text-primary-500">
+        <div class="lg:col-span-5 bg-[#FAFAFA] dark:bg-[#0F1014] border border-[#EAEAEA] dark:border-[#26272F] rounded-[16px] p-8 flex flex-col gap-6">
+          <div class="flex items-center justify-between pb-4 border-b border-[#EAEAEA] dark:border-[#26272F]">
+            <span class="text-[12px]  font-bold uppercase tracking-wider text-primary-500 leading-[16px]">
               Hasil Diagnosa Awal
             </span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold">
+            <span class="text-[12px]  px-2 py-1 rounded-[4px] bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold leading-[16px]">
               Instan
             </span>
           </div>
 
           <!-- Score Display -->
-          <div class="space-y-1">
-            <span class="text-xs text-neutral-400 block font-medium">Estimasi Skor Kesiapan:</span>
+          <div class="flex flex-col gap-2">
+            <span class="text-[16px] text-neutral-500 block font-medium leading-[24px]">Estimasi Skor Kesiapan:</span>
             <div class="flex items-baseline gap-2">
-              <span class="text-4xl sm:text-5xl font-heading font-extrabold text-primary-500 tabular-nums font-mono">
+              <span class="text-[42px] sm:text-[68px]  font-extrabold text-primary-500 tabular-nums  leading-[52px] sm:leading-[84px]">
                 {{ calculatedScore }}
               </span>
-              <span class="text-sm font-bold text-neutral-400 font-mono">/ 100</span>
+              <span class="text-[16px] font-bold text-neutral-400  leading-[24px]">/ 100</span>
             </div>
-            <div class="pt-1">
+            <div class="pt-2">
               <span
                 :class="[
-                  'inline-block text-[11px] font-heading font-bold px-2.5 py-0.5 rounded-md border',
+                  'inline-block text-[12px]  font-bold px-3 py-1 rounded-[8px] border leading-[16px]',
                   calculatedScore >= 80
-                    ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                    ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
                     : calculatedScore >= 65
-                    ? 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800'
-                    : 'bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-300 border-red-200 dark:border-red-800'
+                    ? 'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                    : 'bg-red-50 text-red-800 dark:bg-red-950/60 dark:text-red-300 border-red-200 dark:border-red-800'
                 ]"
               >
                 {{ verdict.badge }}
@@ -125,24 +129,25 @@
             </div>
           </div>
 
-          <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+          <p class="text-[16px] text-neutral-600 dark:text-neutral-300 leading-[24px] ">
             {{ verdict.desc }}
           </p>
 
-          <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-3">
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-neutral-500">Rekomendasi Tiket Modal:</span>
-              <strong class="font-mono text-neutral-900 dark:text-white">{{ verdict.ticket }}</strong>
+          <div class="pt-4 border-t border-[#EAEAEA] dark:border-[#26272F] flex flex-col gap-6">
+            <div class="flex items-center justify-between text-[16px]">
+              <span class="text-neutral-500 leading-[24px]">Rekomendasi Tiket Modal:</span>
+              <strong class=" text-neutral-900 dark:text-white leading-[24px]">{{ verdict.ticket }}</strong>
             </div>
 
             <NuxtLink
               to="/daftar"
-              class="block w-full text-center py-3 rounded-xl font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all active:scale-[0.98]"
+              class="block w-full text-center py-4 rounded-[12px]  font-bold text-[16px] bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all active:scale-[0.98] leading-[24px]"
             >
               Daftarkan Usaha untuk Audit Lengkap →
             </NuxtLink>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -193,8 +198,8 @@ const verdict = computed(() => {
     }
   } else if (calculatedScore.value >= 70) {
     return {
-      badge: 'Grade B • Butuh 1 Bulan Pendampingan',
-      desc: 'Usaha stabil, tinggal merapikan SOP stok bahan baku dan verifikasi pemisahan rekening bersama konsultan BNSP.',
+      badge: 'Grade B • Butuh Pendampingan',
+      desc: 'Usaha stabil, tinggal merapikan SOP stok bahan baku dan verifikasi pemisahan rekening bersama konsultan.',
       ticket: 'Rp 50 Jt – Rp 150 Jt'
     }
   } else {

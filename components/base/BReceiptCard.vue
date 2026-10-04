@@ -50,20 +50,20 @@
     <!-- BOTTOM SECTION: TEKS DI BAWAH & MARGIN UP DI SAMPING ANGKA BESAR -->
     <div class="space-y-1 mt-auto pt-3">
       <!-- Label "Laba Bersih Bulan Ini" -->
-      <p class="text-xs sm:text-sm font-sans font-semibold text-neutral-600 dark:text-neutral-300 leading-snug">
+      <p class="text-xs sm:text-sm  font-semibold text-neutral-600 dark:text-neutral-300 leading-snug">
         {{ label }}
       </p>
 
       <!-- Headline Metric Besar + Margin Up di Samping Angka -->
       <div class="flex items-baseline gap-1.5 sm:gap-2 min-w-0">
         <span
-          class="text-2xl sm:text-[25px] lg:text-[26px] xl:text-[28px] font-heading font-black text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none whitespace-nowrap"
+          class="text-2xl sm:text-[25px] lg:text-[26px] xl:text-[28px]  font-black text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none whitespace-nowrap"
         >
           {{ value }}
         </span>
 
         <!-- Margin Up di Samping Angka Besar (Bukan Berupa Pills Mengambang) -->
-        <span class="inline-flex items-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs xl:text-sm font-sans font-bold text-primary-600 dark:text-primary-400 whitespace-nowrap shrink-0">
+        <span class="inline-flex items-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs xl:text-sm  font-bold text-primary-600 dark:text-primary-400 whitespace-nowrap shrink-0">
           <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </svg>

@@ -7,7 +7,7 @@
     :aria-label="`${label}: ${value}`"
   >
     <!-- TOP WALLET INTERIOR (2 KARTU TERSUSUN OTENTIK DI DALAM SAKU DOMPET) -->
-    <div class="relative w-full h-15 sm:h-16 pt-1 sm:pt-1.5 overflow-hidden pointer-events-none">
+    <div class="relative w-full h-15 sm:h-16 pt-2.5 sm:pt-3.5 px-3 overflow-hidden pointer-events-none">
       <!-- 1. Kotak Belakang: Kotak Biru di Belakangnya (Lebih lebar tapi tidak sama dengan kotak putih) -->
       <div
         class="mx-auto w-[88%] sm:w-[90%] h-14 rounded-t-xl border border-b-0 border-[#AFD0F8] dark:border-[#274070] bg-[#C8DCFB] dark:bg-[#1D2F54]"
@@ -15,7 +15,7 @@
 
       <!-- 2. Kotak Depan: Diturunkan sedikit & tingginya diturunkan sesuai instruksi user -->
       <div
-        class="absolute left-2.5 right-2.5 sm:left-3 sm:right-3 top-5 sm:top-5.5 h-9 sm:h-10 rounded-t-xl border border-b-0 border-[#CFE1FC] dark:border-[#22355C] bg-[#F3F7FE] dark:bg-[#16233E] z-2"
+        class="absolute left-2.5 right-2.5 sm:left-3 sm:right-3 top-6 sm:top-7 h-9 sm:h-10 rounded-t-xl border border-b-0 border-[#CFE1FC] dark:border-[#22355C] bg-[#F3F7FE] dark:bg-[#16233E] z-2"
       />
     </div>
 

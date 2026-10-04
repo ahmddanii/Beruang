@@ -28,7 +28,6 @@ build/
 
 # [WAJIB] 4. Editor & IDE Settings
 .vscode/*
-.agents
 !.vscode/extensions.json
 .idea/
 *.suo

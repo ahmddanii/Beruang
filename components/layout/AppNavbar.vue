@@ -111,7 +111,7 @@
         <!-- Masuk link: px-4 py-2 (×8) -->
         <NuxtLink
           to="/masuk"
-          class="px-4 py-2 rounded-[12px] text-[14px] font-semibold text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors duration-150 leading-6"
+          class="hidden lg:block px-4 py-2 rounded-[12px] text-[14px] font-semibold text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors duration-150 leading-6"
         >
           Masuk
         </NuxtLink>
@@ -119,7 +119,7 @@
         <!-- Primary CTA: px-4 py-2 (×8), gap-2 (×8), radius 12px -->
         <NuxtLink
           to="/daftar"
-          class="inline-flex items-center justify-center px-4 py-2 rounded-[12px] text-[14px] font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-150 active:scale-[0.98] leading-6"
+          class="hidden lg:inline-flex items-center justify-center px-4 py-2 rounded-[12px] text-[14px] font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-150 active:scale-[0.98] leading-6"
         >
           <span>Daftar</span>
         </NuxtLink>

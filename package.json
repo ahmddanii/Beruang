@@ -1,34 +1,39 @@
 {
-  "name": "beruang-app",
+  "name": "beruang-frontend",
   "private": true,
-  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@hugeicons/core-free-icons": "^4.3.5",
+    "@hugeicons/vue": "^1.0.8",
+    "@lottiefiles/dotlottie-vue": "^0.11.27",
+    "@pinia/nuxt": "^0.9.0",
+    "@vueuse/core": "^12.7.0",
+    "@vueuse/nuxt": "^12.7.0",
     "canvas-confetti": "^1.9.4",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cn": "^0.3.0",
-    "framer-motion": "^13.3.0",
-    "lucide-react": "^1.16.0",
-    "radix-ui": "^1.6.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "recharts": "^3.10.1",
-    "tailwind-merge": "^3.0.1"
+    "chart.js": "^4.4.7",
+    "lucide-vue-next": "^0.475.0",
+    "nuxt": "^3.15.4",
+    "pinia": "^2.3.1",
+    "vee-validate": "^4.15.0",
+    "vue": "^3.5.13",
+    "vue-chartjs": "^5.3.2",
+    "vue-router": "^4.5.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.0.0",
+    "@nuxtjs/tailwindcss": "^6.12.2",
     "@types/canvas-confetti": "^1.9.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.2",
-    "vite": "^6.1.0"
+    "@types/node": "^22.13.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.2",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3"
   }
 }

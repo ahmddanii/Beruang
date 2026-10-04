@@ -22,10 +22,13 @@ node_modules/
 dist/
 dist-ssr/
 build/
+.nuxt/
+.output/
 *.tsbuildinfo
 
 # [WAJIB] 4. Editor & IDE Settings
 .vscode/*
+.agents
 !.vscode/extensions.json
 .idea/
 *.suo

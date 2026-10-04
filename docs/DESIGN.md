@@ -1,108 +1,130 @@
-# DESIGN.md — Beruang (Ber-Uang) Design System
-## Powered by Google Stitch & shadcn/ui
+# Beruang Design System
+## Desktop-first financial workspace
 
-Dokumen ini adalah single source of truth (SSOT) untuk seluruh arsitektur UI/UX platform **Beruang (Ber-Uang)**.
-Sistem desain ini disinkronkan langsung dari Google Stitch Project `projects/9051643215289631919` (**Beruang MSME Capital & Growth**) dan ditenagai oleh pustaka komponen resmi **shadcn/ui**.
+Dokumen ini adalah sumber kebenaran visual untuk Beruang, platform B2B financial telemetry dan kesiapan pendanaan UMKM.
 
----
+## 1. Creative thesis
 
-## 1. DESIGN PHILOSOPHY & ATMOSPHERE
+Beruang adalah ruang kerja finansial yang membantu pemilik bisnis memahami kondisi usaha, memperbaiki kesiapan, dan mengambil keputusan pendanaan dengan percaya diri.
 
-Beruang adalah platform B2B financial telemetry dan kesiapan pendanaan UMKM.
-- **Visual Style:** *Modern Fintech Minimalism with Subtle Editorial Craft*.
-- **Tone:** Grounded, authoritative, optimistic, and transparent. Menghindari motif crypto neon murahan atau kartu bertumpuk kaku, mengutamakan stabilitas modal jangka panjang dan kepercayaan institusional.
-- **Visual Mechanics:** Kanvas off-white luas, aksen hijau botani tua (*Deep Botanical Forest Green*), aksen energi limau lembut (*Soft Energetic Lime*), garis hairline presisi 1px, dan ruang bernapas (*whitespace*) yang lapang.
+Arah visual: refined fintech workspace. Tenang, terstruktur, transparan, dan berorientasi pada keputusan. Referensi utamanya adalah aplikasi desktop dengan sidebar persisten, topbar ringan, panel data yang lapang, dan aksen warna yang berfungsi sebagai status.
 
----
+Jangan membuat dashboard terasa seperti landing page, aplikasi crypto, atau kumpulan kartu dekoratif.
 
-## 2. COLOR PALETTE & DESIGN TOKENS
+## 2. Desktop-first shell
 
-### 2.1 Color Variables & shadcn Mapping
+Struktur dasar:
 
-```css
-:root {
-  /* Canvas & Surfaces */
-  --background: #F7F8F4;              /* Soft parchment warm-neutral canvas */
-  --foreground: #111E19;              /* Obsidian Charcoal Green text */
-  --card: #FFFFFF;                    /* Pure white card surface */
-  --card-foreground: #111E19;
-  --popover: #FFFFFF;
-  --popover-foreground: #111E19;
+- Sidebar kiri persisten pada layar desktop.
+- Main workspace fleksibel di sebelah kanan.
+- Topbar ringan untuk konteks halaman, periode, notifikasi, AI Copilot, dan profil.
+- Konten dibatasi pada lebar sekitar 1440px agar tidak terlalu melebar.
+- Desktop menampilkan perbandingan data secara berdampingan.
+- Mobile mengubah sidebar menjadi drawer dan grid menjadi stack.
 
-  /* Primary Brand: Deep Botanical Forest Green */
-  --primary: #173F35;                 /* Main brand & primary interactive triggers */
-  --primary-foreground: #FFFFFF;
-  --primary-hover: #204F43;
+Sidebar memiliki lebar 240 sampai 280px, border kanan 1px, dan tidak memakai shadow besar.
 
-  /* Secondary Accent: Soft Energetic Lime */
-  --secondary: #E8F4B8;               /* Optimistic accent for metric highlights & active chips */
-  --secondary-foreground: #173F35;
-  --secondary-hover: #DCEDB0;
+## 3. Information architecture
 
-  /* Neutral & Structure */
-  --muted: #F0F2EB;                   /* Warm parchment for stratified panels */
-  --muted-foreground: #617369;        /* Secondary label text */
-  --border: #E2E8E4;                  /* 1px hairline border */
-  --input: #E2E8E4;
-  --ring: #173F35;
+### UMKM
 
-  /* Semantic Status */
-  --success: #1F7A4D;                 /* Growth green / verified tags */
-  --success-bg: #EBF5EE;
-  --warning: #D97706;                 /* Attention required */
-  --warning-bg: #FEF3C7;
-  --destructive: #DC2626;             /* Deficit / danger */
-  --destructive-bg: #FEE2E2;
+- Overview
+- Action Plan
+- Laporan dan Kas Harian
+- Audit 5-Dimensi
+- Verified Data Room
+- Profil dan Dokumen
 
-  --radius: 1rem;                     /* 16px default border radius */
-}
-```
+### Konsultan
 
----
+- Portfolio Klien
+- Radar Diagnostic
+- Verifikasi Laporan
+- Review Action Plan
 
-## 3. COMPONENT DISCIPLINE (SHADCN/UI PRIMITIVES)
+### Investor
 
-Seluruh komponen UI wajib memanfaatkan pustaka resmi `shadcn/ui` tanpa membuat div ad-hoc:
+- Curated Deal Flow
+- Data Room Due Diligence
+- Investasi Aktif
 
-1. **Card (`@/components/ui/card`)**:
-   - Digunakan untuk membungkus section data analitik.
-   - Komposisi: `Card` → `CardHeader` (`CardTitle` + `CardDescription`) → `CardContent` → `CardFooter`.
-   - Permukaan `#FFFFFF` dengan garis tepi 1px `#E2E8E4` dan sudut `rounded-2xl` (16px).
-2. **Button (`@/components/ui/button`)**:
-   - `default`: Solid `#173F35` teks putih (primary CTA).
-   - `secondary`: Soft lime `#E8F4B8` teks `#173F35` (secondary high-intent CTA).
-   - `outline`: Border 1px `#E2E8E4` background putih hover `#F0F2EB`.
-   - `ghost`: Transparan untuk aksi utilitas.
-   - `destructive`: Soft red container `#FEE2E2` dengan teks `#DC2626`.
-3. **Badge (`@/components/ui/badge`)**:
-   - `default`: `#173F35` teks putih.
-   - `secondary`: `#E8F4B8` teks `#173F35`.
-   - `verified`: `#EBF5EE` teks `#1F7A4D` border `#1F7A4D`/20 dengan dot hijau.
-   - `warning`: `#FEF3C7` teks `#D97706`.
-   - `outline`: Border 1px `#E2E8E4` teks `#617369`.
-4. **Tabs (`@/components/ui/tabs`)**:
-   - Segmented control berlatar `#F0F2EB` dengan tab aktif berlatar `#FFFFFF` dan bayangan lembut.
-5. **Table (`@/components/ui/table`)**:
-   - Tabel ledger finansial bulanan dengan baris bergantian (*alternating rows*) dan kolom numerik rata kanan (*tabular-nums*).
-6. **Progress (`@/components/ui/progress`)**:
-   - Track `#E2E8E4` dengan indikator isi `#173F35` atau `#1F7A4D`.
-7. **Dialog (`@/components/ui/dialog`)**:
-   - Modal konfirmasi input omzet, upload bukti, dan permintaan akses data room.
+Sidebar hanya memuat area kerja utama. CTA seperti upload laporan, memperbarui profil, atau meminta review harus berada di halaman yang relevan.
 
----
+## 4. Layout and density
 
-## 4. TYPOGRAPHY & NUMERICAL ALIGNMENT
+- Canvas halaman menggunakan #F7F8FA.
+- Panel utama menggunakan putih.
+- Gunakan grid 12 kolom pada layar besar.
+- Metric summary biasanya memakai 4 kolom.
+- Area analitik memakai komposisi 8 kolom dan 4 kolom.
+- Table atau ledger dapat memakai seluruh 12 kolom.
+- Jarak antar panel 24 sampai 32px.
+- Padding halaman desktop 32 sampai 40px.
+- Gunakan whitespace untuk memisahkan konteks, bukan shadow.
 
-- **Font Family**: `Inter` / `Plus Jakarta Sans` / `Poppins` sans-serif.
-- **Financial Figures (Tabular Numerals - MANDATORY)**:
-  Semua nominal mata uang (`Rp`), persentase, saldo, dan tabel keuangan WAJIB menerapkan:
-  `font-variant-numeric: tabular-nums lining-nums` (`tabular-nums`).
+Jangan mengubah semua elemen menjadi card. Gunakan panel besar untuk chart, table untuk data komparatif, dan inline status untuk informasi singkat.
 
----
+## 5. Color tokens
 
-## 5. ANTI-PATTERNS (BANNED AI CLICHÉS)
+Warna utama: background #F7F8FA, foreground #111318, card #FFFFFF, primary #011BFF, primary hover #0016CC, secondary #EAF0FF, muted #F1F3F7, muted foreground #667085, border #E3E6EC, success #1F7A4D, warning #D97706, destructive #DC2626.
 
-- **DILARANG** menampilkan mockup bingkai ponsel buatan (fake phone frame) di desktop.
-- **DILARANG** menggunakan warna gradien neon ungu/biru yang mencolok (*no AI neon slop*).
-- **DILARANG** menggunakan hitam pekat sintetis `#000000`; gunakan `#111E19` (*Obsidian Charcoal*).
-- **DILARANG** membuat kartu di dalam kartu bertingkat 3 lapis (*no triple nested cards*).
+Aksen blue tint digunakan untuk highlight progres dan secondary action. Blue solid hanya digunakan pada navigasi aktif dan tindakan utama. Jangan memenuhi seluruh halaman dengan warna aksen.
+
+## 6. Surfaces and components
+
+- Panel: background putih, border 1px #E3E6EC, radius 12 sampai 16px.
+- Sidebar active item: blue primary dengan teks putih.
+- Sidebar hover: muted parchment dengan teks foreground.
+- Button primary: blue primary.
+- Button secondary: soft blue tint.
+- Button outline: putih dengan border hairline.
+- Badge verified: success background dan success foreground.
+- Table: baris bersih, angka rata kanan, hover halus, tidak memakai zebra yang kontras.
+- Dialog: putih, radius 16px, border hairline, shadow hanya untuk pemisahan layer.
+- Input: minimal, label jelas, focus ring blue primary.
+
+Semua komponen interaktif wajib memiliki default, hover, active, focus-visible, disabled, loading, dan empty state jika relevan.
+
+## 7. Typography
+
+Heading dan metric memakai Plus Jakarta Sans. Body dan control memakai Inter atau Poppins. Hierarki harus jelas tanpa memakai terlalu banyak ukuran.
+
+Nominal Rupiah, persentase, skor, jumlah transaksi, dan tanggal numerik wajib memakai tabular-nums lining-nums.
+
+Judul halaman singkat. Deskripsi halaman memberi konteks dan menjelaskan manfaat, bukan mengulang judul.
+
+## 8. Copywriting
+
+Brand voice: grounded, authoritative, optimistic, transparent, dan mudah dipahami pemilik UMKM.
+
+Label sidebar harus ringkas: Overview, Action Plan, Data Room.
+
+Gunakan CTA yang konkret: Perbarui Data Keuangan, Upload Laporan, Lihat Rincian, Mulai Action Plan, dan Minta Review Konsultan.
+
+Gunakan deskripsi halaman yang lebih informatif, misalnya: Pantau arus kas, profitabilitas, dan perubahan kondisi bisnis Anda dalam satu tampilan.
+
+Hindari jargon teknis tanpa penjelasan, copy promosi berlebihan, dan CTA generik seperti Klik di sini.
+
+## 9. Responsive transformation
+
+- Desktop: sidebar persisten.
+- Tablet: sidebar dapat collapse menjadi rail atau drawer.
+- Mobile: sidebar hidden by default dan dibuka melalui menu.
+- Desktop multi-column menjadi mobile single-column.
+- Filter inline menjadi dialog atau sheet.
+- Table penuh menjadi horizontal scroll atau detail row.
+- CTA di samping heading berpindah ke bawah heading.
+
+Mobile bukan versi desktop yang diperkecil. Hierarki informasi tetap sama, tetapi pola interaksinya boleh berubah.
+
+## 10. Anti-patterns
+
+- Tidak memakai gradient neon ungu atau biru.
+- Tidak memakai fake phone frame pada desktop.
+- Tidak memakai biru sebagai dekorasi berlebihan; gunakan hanya untuk navigasi aktif dan tindakan utama.
+- Tidak memakai shadow besar pada setiap card.
+- Tidak membuat card di dalam card lebih dari dua lapisan.
+- Tidak memakai #000000 sebagai warna utama.
+- Tidak menaruh semua CTA di sidebar.
+- Tidak menyembunyikan data penting desktop di balik accordion tanpa alasan.
+- Tidak mengandalkan hover sebagai satu-satunya cara menemukan aksi.

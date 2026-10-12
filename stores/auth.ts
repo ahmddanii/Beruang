@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', {
       name: 'Fikri Setiawan',
       email: 'fikri@kopisenja.id',
       role: 'UMKM' as UserRole,
-      avatar: '',
+      avatar: '/images/user-profile.png',
       businessName: 'Kopi Senja Nusantara',
       phone: '081234567890',
       verified: true
@@ -63,6 +63,12 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.isAuthenticated = false
       this.token = ''
+    },
+
+    updateAvatar(avatarUrl: string) {
+      if (this.currentUser) {
+        this.currentUser.avatar = avatarUrl
+      }
     }
   }
 })

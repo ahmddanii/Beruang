@@ -1,7 +1,40 @@
+import { fileURLToPath } from 'node:url'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
+
+  experimental: {
+    appManifest: false
+  },
+
+  alias: {
+    '#app-manifest': fileURLToPath(new URL('./stubs/app-manifest.mjs', import.meta.url))
+  },
+
+  vite: {
+    resolve: {
+      alias: {
+        '#app-manifest': fileURLToPath(new URL('./stubs/app-manifest.mjs', import.meta.url))
+      }
+    },
+    plugins: [
+      {
+        name: 'vite-plugin-fix-app-manifest',
+        resolveId(id: string) {
+          if (id === '#app-manifest') {
+            return '\0#app-manifest'
+          }
+        },
+        load(id: string) {
+          if (id === '\0#app-manifest') {
+            return 'export default {}'
+          }
+        }
+      }
+    ]
+  },
 
   modules: [
     '@nuxtjs/tailwindcss',
@@ -33,7 +66,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;600&display=swap' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:wght@400;500;600&display=swap' }
       ]
     }
   },

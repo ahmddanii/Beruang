@@ -6,8 +6,8 @@
     style="-webkit-tap-highlight-color: transparent; outline: none;"
     :aria-label="`${label}: ${targetAmount}`"
   >
-    <!-- TOP SECTION: HEADER DENGAN PILLS CEK SYARAT DI POJOK KANAN ATAS (PLAFON TERBUKA DIHAPUS) -->
-    <div class="space-y-3">
+    <!-- TOP SECTION: HEADER DENGAN PILLS CEK SYARAT DI POJOK KANAN ATAS -->
+    <div class="space-y-3.5">
       <div class="flex items-center justify-between gap-2">
         <span class="text-xs sm:text-sm font-sans font-medium text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
           4 dari 5 Syarat Lengkap
@@ -22,15 +22,17 @@
         </span>
       </div>
 
-      <!-- Segmented Pills: Warna Biru Platform (Makin Ke Kanan Makin Gelap, Kiri Terang) -->
-      <div class="flex items-center gap-[3px] sm:gap-1 w-full py-0.5">
-        <div
-          v-for="i in totalTicks"
-          :key="i"
-          class="flex-1 h-5 sm:h-5.5 rounded-full transition-colors duration-150"
-          :class="i > filledTicks ? 'bg-neutral-200/70 dark:bg-neutral-800' : ''"
-          :style="getPillStyle(i)"
-        />
+      <!-- Single Unified Progress Bar: Satu Kesatuan dengan Gradasi Biru (Kiri Terang -> Kanan Gelap) -->
+      <div class="w-full py-0.5">
+        <div class="w-full h-3.5 sm:h-4 bg-neutral-100 dark:bg-neutral-800/90 rounded-full overflow-hidden p-0.5 border border-neutral-200/60 dark:border-neutral-700/60">
+          <div
+            class="h-full rounded-full transition-all duration-300 ease-out"
+            :style="{
+              width: `${progress}%`,
+              background: 'linear-gradient(90deg, #7BB2FF 0%, #0066FF 100%)'
+            }"
+          />
+        </div>
       </div>
     </div>
 
@@ -44,7 +46,7 @@
       <!-- Headline Metric Besar "Rp 250.000.000" (Ukuran Persis Sesuai Card 1 & Card 2) -->
       <div class="flex items-baseline min-w-0">
         <span
-          class="text-2xl sm:text-[25px] lg:text-[26px] xl:text-[28px] font-heading font-black text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none whitespace-nowrap"
+          class="text-2xl sm:text-3xl lg:text-[34px] xl:text-[36px] font-heading font-semibold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none whitespace-nowrap"
         >
           {{ targetAmount }}
         </span>
@@ -54,41 +56,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, resolveComponent } from 'vue'
+import { resolveComponent } from 'vue'
 
 const NuxtLink = resolveComponent('NuxtLink')
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     label?: string
     targetAmount?: string
     progress?: number
     to?: string
-    totalTicks?: number
   }>(),
   {
     label: 'Kesiapan Modal',
     targetAmount: 'Rp 250.000.000',
     progress: 80,
-    to: '/dashboard/penilaian',
-    totalTicks: 28
+    to: '/dashboard/penilaian'
   }
 )
-
-const filledTicks = computed(() => {
-  return Math.round((props.progress / 100) * props.totalTicks)
-})
-
-// Gradasi per pill warna biru platform: kiri terang (light blue) makin ke kanan makin gelap (deep royal blue)
-function getPillStyle(i: number) {
-  if (i > filledTicks.value) {
-    return {}
-  }
-  // Lightness dari 76% (terang di kiri) menurun ke 36% (gelap di kanan), hue 218 (biru platform)
-  const factor = (i - 1) / Math.max(1, filledTicks.value - 1)
-  const lightness = 76 - factor * 40
-  return {
-    backgroundColor: `hsl(218, 92%, ${lightness.toFixed(1)}%)`
-  }
-}
 </script>

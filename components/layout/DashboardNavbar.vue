@@ -112,7 +112,7 @@ import { useKonsultanStore } from '~/stores/konsultan'
 import { useInvestorStore } from '~/stores/investor'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  Home01Icon,
+  Home03Icon,
   Task01Icon,
   Coins01Icon,
   Award01Icon,
@@ -169,7 +169,7 @@ const navItems = computed(() => {
       {
         to: '/dashboard',
         label: 'Beranda',
-        icon: Home01Icon
+        icon: Home03Icon
       },
       {
         to: '/dashboard/rencana-aksi',

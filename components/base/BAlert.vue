@@ -45,7 +45,7 @@
     <!-- Content -->
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2 mb-0.5">
-        <h4 class="font-heading font-semibold text-sm text-neutral-900 dark:text-neutral-100">
+        <h4 class=" font-semibold text-sm text-neutral-900 dark:text-neutral-100">
           {{ title }}
         </h4>
         <span

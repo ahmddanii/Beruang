@@ -19,7 +19,7 @@
         <!-- Step Bubble -->
         <div
           :class="[
-            'w-10 h-10 rounded-full flex items-center justify-center font-heading font-bold text-sm transition-all duration-200 border-2 select-none',
+            'w-10 h-10 rounded-full flex items-center justify-center  font-bold text-sm transition-all duration-200 border-2 select-none',
             index + 1 < currentStep
               ? 'bg-success text-white border-success-dark shadow-xs'
               : index + 1 === currentStep
@@ -44,7 +44,7 @@
         <!-- Step Label -->
         <span
           :class="[
-            'mt-2 text-xs font-semibold tracking-tight text-center max-w-[90px] truncate transition-colors font-heading',
+            'mt-2 text-xs font-semibold tracking-tight text-center max-w-[90px] truncate transition-colors ',
             index + 1 === currentStep
               ? 'text-primary-600 dark:text-primary-400 font-bold'
               : index + 1 < currentStep

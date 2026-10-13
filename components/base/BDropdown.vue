@@ -5,7 +5,7 @@
       <slot name="trigger" :is-open="isOpen">
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs font-heading font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20 active:scale-[0.96]"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs  font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20 active:scale-[0.96]"
         >
           <span>{{ label }}</span>
           <svg class="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -37,7 +37,7 @@
             :key="item.value"
             type="button"
             :class="[
-              'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-heading font-medium transition-colors text-left',
+              'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs  font-medium transition-colors text-left',
               modelValue === item.value
                 ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
                 : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'

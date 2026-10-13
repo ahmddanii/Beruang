@@ -41,7 +41,7 @@
             >
               <slot name="header" :close="close">
                 <div class="pr-2 min-w-0 flex-1">
-                  <h3 class="font-heading font-extrabold text-xl sm:text-2xl text-neutral-900 dark:text-neutral-100 tracking-tight">
+                  <h3 class=" font-extrabold text-xl sm:text-2xl text-neutral-900 dark:text-neutral-100 tracking-tight">
                     {{ title }}
                   </h3>
                   <p v-if="subtitle" class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1 leading-relaxed">

@@ -1,11 +1,11 @@
 <template>
-  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto font-sans space-y-12">
+  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto  space-y-12">
     <!-- Header -->
     <div class="text-center space-y-3 max-w-2xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-950/60 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 text-xs font-heading font-semibold">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-950/60 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 text-xs  font-semibold">
         <span>Kontak & Dukungan</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl  font-bold text-neutral-900 dark:text-white tracking-tight">
         Hubungi Tim Beruang.
       </h1>
       <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
@@ -17,7 +17,7 @@
       <!-- Left Column: Contact Channels Info -->
       <div class="md:col-span-5 space-y-4">
         <BCard padding="lg" class="space-y-5">
-          <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+          <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
             Kanal Komunikasi Langsung
           </h3>
 
@@ -28,7 +28,7 @@
               </div>
               <div>
                 <span class="text-neutral-400 block text-xs">WhatsApp Resmi:</span>
-                <strong class="font-heading font-bold text-neutral-900 dark:text-white">+62 812-3456-7890</strong>
+                <strong class=" font-bold text-neutral-900 dark:text-white">+62 812-3456-7890</strong>
               </div>
             </div>
 
@@ -38,7 +38,7 @@
               </div>
               <div>
                 <span class="text-neutral-400 block text-xs">Email Korespondensi:</span>
-                <strong class="font-heading font-bold text-neutral-900 dark:text-white">halo@beruang.id</strong>
+                <strong class=" font-bold text-neutral-900 dark:text-white">halo@beruang.id</strong>
               </div>
             </div>
 
@@ -70,7 +70,7 @@
         <BCard padding="lg">
           <form @submit.prevent="handleSubmit" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Nama Lengkap
               </label>
               <input
@@ -83,7 +83,7 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Alamat Email Aktif
               </label>
               <input
@@ -96,7 +96,7 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Peran / Kebutuhan Anda
               </label>
               <select
@@ -111,7 +111,7 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
                 Pesan / Pertanyaan Anda
               </label>
               <textarea

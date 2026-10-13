@@ -1,28 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Universal letter-spacing and font-family normalization */
-*, *::before, *::after {
-  letter-spacing: normal !important;
-}
+/* ================================================================
+   BERUANG DESIGN SYSTEM TOKENS
+   Spatial: 8px grid (4px for micro-elements)
+   Typography: Golden Ratio 1.618 (base 16px)
+   Line-height: WCAG (body ×1.5, heading ×1.25, rounded to ×4/×8)
+   Corner Radius: Nested = container_radius - padding
+   ================================================================ */
 
 :root {
-  /* Apple-inspired Clean Surfaces */
-  --bg-canvas: #FFFFFF;
-  --bg-sidebar: #FAFAFA;
+  /* ── Surface Palette (matched to post-login dashboard) ── */
+  --bg-canvas: #FAFAFA;
   --bg-surface: #FFFFFF;
-  --bg-surface-subtle: #FAFAFA;
-  --bg-surface-hover: #F4F4F6;
-  --border: #EAEAEA;
+  --bg-surface-subtle: #F4F4F6;
+  --bg-surface-hover: #EEEEF0;
+  --border-default: #EAEAEA;
   --border-subtle: #F0F0F2;
   --text-primary: #111827;
   --text-secondary: #4B5563;
   --text-muted: #6B7280;
 
-  /* Solid Accent Blue #1f52eb (Zero Gradient) */
+  /* ── Accent (Solid Blue, Zero Gradient) ── */
   --color-primary-50: #EEF3FE;
   --color-primary-100: #D8E4FD;
   --color-primary-200: #B4CBFC;
@@ -31,37 +33,64 @@
   --color-primary-700: #1332A3;
   --color-primary-tint: rgba(31, 82, 235, 0.08);
 
+  /* ── Semantic Colors ── */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
+  --color-info: #1F52EB;
 
-  /* Concentric Border Radii Tokens */
-  --radius-xs: 6px;
+  /* ── Golden Ratio Type Scale (base 16px × 1.618) ── */
+  --text-caption: 0.75rem;    /* 12px — captions, badges, micro-labels */
+  --text-body: 1rem;          /* 16px — body text (base) */
+  --text-subhead: 1.625rem;   /* 26px — h4, sub-headings */
+  --text-heading: 2.625rem;   /* 42px — h3, section headings */
+  --text-display: 4.25rem;    /* 68px — h1/h2, hero display */
+
+  /* ── WCAG Line Heights (body ×1.5, heading ×1.25, rounded ×4) ── */
+  --lh-caption: 1rem;         /* 12×1.5=18 → 16px (×8) */
+  --lh-body: 1.5rem;          /* 16×1.5=24px (×8) ✓ */
+  --lh-subhead: 2rem;         /* 26×1.25=32.5 → 32px (×8) */
+  --lh-heading: 3.25rem;      /* 42×1.25=52.5 → 52px (×4) */
+  --lh-display: 5.25rem;      /* 68×1.25=85 → 84px (×4) */
+
+  /* ── 8px Spatial Grid (4px for micro) ── */
+  --sp-1: 0.25rem;   /* 4px — icon gaps, micro */
+  --sp-2: 0.5rem;    /* 8px — small gaps, inner padding */
+  --sp-3: 0.75rem;   /* 12px — icon-to-text gap */
+  --sp-4: 1rem;      /* 16px — paragraph gap ≈ body size */
+  --sp-5: 1.5rem;    /* 24px — card padding, between elements */
+  --sp-6: 2rem;      /* 32px — above headings, section inner gap */
+  --sp-8: 3rem;      /* 48px — between-section spacing */
+  --sp-10: 4rem;     /* 64px — section vertical padding */
+  --sp-12: 5rem;     /* 80px — hero/cta section padding */
+  --sp-16: 6rem;     /* 96px — extra-large spacing */
+
+  /* ── Corner Radius System ── */
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
   --radius-2xl: 24px;
+  --radius-full: 9999px;
 }
 
 .dark {
   --bg-canvas: #0F1014;
-  --bg-sidebar: #141519;
-  --bg-surface: #18191E;
+  --bg-surface: #15161A;
   --bg-surface-subtle: #141519;
   --bg-surface-hover: #1F2026;
-  --border: #26272F;
+  --border-default: #26272F;
   --border-subtle: #1E1F25;
   --text-primary: #F9FAFB;
   --text-secondary: #D4D4D8;
   --text-muted: #A1A1AA;
-
   --color-primary-tint: rgba(31, 82, 235, 0.16);
 }
 
+/* ── Base Reset ── */
 html {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: normal !important;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   color: var(--text-primary);
   background-color: var(--bg-canvas);
@@ -73,11 +102,9 @@ html {
 body {
   background-color: var(--bg-canvas);
   color: var(--text-primary);
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: normal !important;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
 }
 
 .dark html,
@@ -86,28 +113,19 @@ body {
   background-color: var(--bg-canvas);
 }
 
-/* Headings with Poppins and normal spacing */
+/* ── Heading Typography ── */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif !important;
-  font-weight: 600;
-  letter-spacing: normal !important;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-b, strong {
-  font-weight: 600;
-}
-
-input, textarea, select, button {
-  font-family: 'Poppins', sans-serif;
-  letter-spacing: normal !important;
-}
-
-/* Tabular nums for all currency, counters & metrics */
+/* ── Tabular Nums (currency, metrics, scores) ── */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Modern Flat Button Transition Effect */
+/* ── Modern Button Base ── */
 .btn-modern {
   position: relative;
   display: inline-flex !important;
@@ -115,8 +133,7 @@ input, textarea, select, button {
   align-items: center !important;
   justify-content: center !important;
   white-space: nowrap !important;
-  font-family: 'Poppins', sans-serif !important;
-  letter-spacing: normal !important;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   border-radius: 10px;
   transition: opacity 0.15s ease, transform 0.1s ease, background-color 0.15s ease, border-color 0.15s ease;
@@ -152,7 +169,7 @@ input, textarea, select, button {
   transform: none;
 }
 
-/* Custom Scrollbar */
+/* ── Custom Scrollbar ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

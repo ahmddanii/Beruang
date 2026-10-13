@@ -1,13 +1,10 @@
 <template>
-  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto font-sans space-y-16 sm:space-y-20">
+  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto  space-y-16 sm:space-y-20">
     <!-- Hero Section -->
     <div class="max-w-3xl space-y-5">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-950/60 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 text-xs font-heading font-semibold">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary-500" />
-        <span>Solusi Khusus Pelaku UMKM</span>
-      </div>
 
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.08]">
+
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl  font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.08]">
         Bisnismu, Siap Naik Kelas dan Didanai.
       </h1>
 
@@ -35,7 +32,7 @@
         <div class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
           <HugeiconsIcon :icon="Analytics01Icon" :size="20" :stroke-width="1.75" />
         </div>
-        <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
           Diagnosa 5 Aspek
         </h3>
         <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -47,7 +44,7 @@
         <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
           <HugeiconsIcon :icon="UserGroupIcon" :size="20" :stroke-width="1.75" />
         </div>
-        <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
           Konsultan Pendamping
         </h3>
         <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -59,7 +56,7 @@
         <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">
           <HugeiconsIcon :icon="AlertCircleIcon" :size="20" :stroke-width="1.75" />
         </div>
-        <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
           AI Anomaly Alert
         </h3>
         <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -71,7 +68,7 @@
         <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
           <HugeiconsIcon :icon="Award01Icon" :size="20" :stroke-width="1.75" />
         </div>
-        <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
           Sertifikasi Siap Modal
         </h3>
         <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
@@ -83,7 +80,7 @@
     <!-- Before vs After Comparison Grid -->
     <div class="space-y-6">
       <div class="max-w-2xl">
-        <h2 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+        <h2 class="text-2xl sm:text-3xl  font-bold text-neutral-900 dark:text-white tracking-tight">
           Transformasi Usahamu Bersama Beruang
         </h2>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
@@ -98,7 +95,7 @@
             <div class="w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/60 text-red-600 flex items-center justify-center shrink-0">
               <HugeiconsIcon :icon="Cancel01Icon" :size="16" :stroke-width="2" />
             </div>
-            <h3 class="font-heading font-bold text-base text-red-600 dark:text-red-400">
+            <h3 class=" font-bold text-base text-red-600 dark:text-red-400">
               Sebelum Masuk Pembinaan
             </h3>
           </div>
@@ -128,7 +125,7 @@
             <div class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center shrink-0">
               <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" :stroke-width="2" />
             </div>
-            <h3 class="font-heading font-bold text-base text-emerald-600 dark:text-emerald-400">
+            <h3 class=" font-bold text-base text-emerald-600 dark:text-emerald-400">
               Setelah Tervalidasi di Beruang
             </h3>
           </div>
@@ -157,7 +154,7 @@
     <!-- Final Call to Action Box -->
     <div class="p-8 sm:p-12 rounded-3xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div class="max-w-xl space-y-2">
-        <h3 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+        <h3 class="text-2xl sm:text-3xl  font-bold text-neutral-900 dark:text-white tracking-tight">
           Cari Tahu Skor Kesiapan Usahamu Hari Ini
         </h3>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">

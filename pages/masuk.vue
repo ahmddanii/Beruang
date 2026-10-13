@@ -47,34 +47,8 @@
         </p>
       </div>
 
-      <!-- 3. Minimalist Action Stack (Role Selector + Google OAuth + WhatsApp) -->
+      <!-- 3. Minimalist Action Stack (Google OAuth + WhatsApp) -->
       <div class="w-full max-w-sm space-y-2.5">
-        
-        <!-- Role Selector Pill Segment (Sama seperti Halaman Daftar) -->
-        <div class="space-y-1">
-          <div class="p-1 rounded-full bg-neutral-100/90 dark:bg-neutral-850/80 border border-neutral-200/80 dark:border-neutral-700/70 grid grid-cols-3 gap-1">
-            <button
-              v-for="r in roleCards"
-              :key="r.key"
-              type="button"
-              :class="[
-                'flex items-center justify-center gap-1.5 py-2 px-2 rounded-full text-xs transition-all duration-150 cursor-pointer select-none',
-                selectedRole === r.key
-                  ? 'bg-white dark:bg-[#18191E] text-primary-600 dark:text-primary-400 font-bold shadow-2xs'
-                  : 'text-neutral-500 dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white'
-              ]"
-              @click="onSelectRole(r.key)"
-            >
-              <HugeiconsIcon :icon="r.icon" :size="14" :stroke-width="selectedRole === r.key ? 2.2 : 1.8" />
-              <span class="truncate">{{ r.shortTitle }}</span>
-            </button>
-          </div>
-          <!-- Role Context Micro Caption -->
-          <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">
-            {{ activeRoleMeta?.desc }}
-          </p>
-        </div>
-
         <!-- Button 1: Login with Google (Pure White Card Surface with Hairline Border) -->
         <button
           type="button"
@@ -656,10 +630,9 @@ function verifyAndLogin() {
 
 function handleGoogleLogin() {
   loading.value = true
-  const card = activeRoleMeta.value
-  loadingMessage.value = `✓ Menghubungkan akun Google sebagai ${card.title}...`
+  loadingMessage.value = '✓ Menghubungkan akun Google...'
   setTimeout(() => {
-    const account = resolveAccountRole(card.demoPhone, selectedRole.value)
+    const account = resolveAccountRole('812-3456-7890')
     authStore.login(account.email, account.role)
     loading.value = false
     router.push(account.route)

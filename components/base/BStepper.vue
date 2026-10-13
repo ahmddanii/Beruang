@@ -21,10 +21,10 @@
           :class="[
             'w-10 h-10 rounded-full flex items-center justify-center  font-bold text-sm transition-all duration-200 border-2 select-none',
             index + 1 < currentStep
-              ? 'bg-success text-white border-success-dark shadow-xs'
+              ? 'bg-emerald-500 text-white border-emerald-600 shadow-xs'
               : index + 1 === currentStep
-                ? 'bg-primary-500 text-white border-primary-700 shadow-chunky-sm scale-110'
-                : 'bg-white dark:bg-neutral-900 text-neutral-400 border-neutral-300 dark:border-neutral-700'
+                ? 'bg-primary-600 text-white border-primary-600 shadow-sm shadow-primary-600/30 scale-105'
+                : 'bg-white dark:bg-[#18191E] text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-neutral-700'
           ]"
         >
           <!-- Completed Checkmark -->

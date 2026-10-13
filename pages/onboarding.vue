@@ -1,26 +1,47 @@
 <template>
-  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-4 sm:p-8 ">
-    <div class="max-w-2xl mx-auto space-y-8">
+  <div class="min-h-screen min-h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-start sm:justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
+    
+    <!-- Subtle Ambient Background Glow (UMKM Dashboard Aesthetic) -->
+    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />
+
+    <!-- Atmospheric Layered Cloud Horizon (Same as Login & Register) -->
+    <BCloudBackground :fixed="true" />
+
+    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda" -->
+    <div class="fixed top-6 left-6 sm:top-8 sm:left-8 z-30">
+      <NuxtLink
+        to="/"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150"
+      >
+        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
+        <span>Kembali ke Beranda</span>
+      </NuxtLink>
+    </div>
+
+    <!-- Center Flow Container -->
+    <div class="relative z-10 w-full max-w-2xl mx-auto my-auto space-y-6 pt-14 sm:pt-6 pb-12">
       <!-- Top Brand Header -->
       <div class="flex items-center justify-between">
-        <NuxtLink to="/" class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs">
+        <NuxtLink to="/" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs flex items-center justify-center transition-transform group-hover:scale-105">
             <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
           </div>
-          <span class=" font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white">
+          <span class="font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white">
             Beruang
           </span>
         </NuxtLink>
-        <span class="text-xs text-neutral-500 font-medium tabular-nums">
+        <span class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
           Langkah {{ currentStep }} dari 4
         </span>
       </div>
 
       <!-- Stepper Component -->
-      <BStepper :steps="steps" :current-step="currentStep" />
+      <div class="p-3 sm:p-4 rounded-2xl bg-white/80 dark:bg-[#18191E]/80 backdrop-blur-md border border-[#EAEAEA] dark:border-[#26272F] shadow-xs">
+        <BStepper :steps="steps" :current-step="currentStep" />
+      </div>
 
       <!-- Main Form Container -->
-      <BCard padding="lg" class="border border-[#E4E7EC] dark:border-[#2B2B31] shadow-none">
+      <div class="bg-white/95 dark:bg-[#18191E]/95 backdrop-blur-md rounded-3xl border border-[#EAEAEA] dark:border-[#26272F] shadow-sm p-6 sm:p-8">
         <!-- Step 1: Identitas Usaha -->
         <div v-if="currentStep === 1" class="space-y-4">
           <div class="flex items-center gap-3 mb-2">
@@ -272,45 +293,42 @@
 
         <!-- Step Navigation Buttons -->
         <div class="mt-8 pt-5 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-          <BButton
+          <button
             v-if="currentStep > 1"
             type="button"
-            variant="secondary"
-            size="md"
-            class="flex items-center gap-1.5"
+            class="inline-flex items-center gap-2 h-11 px-6 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-[#22252E] font-semibold text-sm transition-all cursor-pointer shadow-xs active:scale-[0.99]"
             @click="currentStep--"
           >
-            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="15" :stroke-width="2" />
+            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
             <span>Kembali</span>
-          </BButton>
+          </button>
           <div v-else />
 
-          <BButton
+          <button
             v-if="currentStep < 4"
             type="button"
-            variant="primary"
-            size="md"
-            class="flex items-center gap-1.5"
+            class="inline-flex items-center gap-2 h-11 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
             @click="currentStep++"
           >
             <span>Langkah Selanjutnya</span>
-            <HugeiconsIcon :icon="ArrowRight02Icon" :size="15" :stroke-width="2" />
-          </BButton>
+            <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
+          </button>
 
-          <BButton
+          <button
             v-else
             type="button"
-            variant="primary"
-            size="lg"
-            :loading="submitting"
-            class="flex items-center gap-2"
+            :disabled="submitting"
+            class="inline-flex items-center gap-2 h-11 px-7 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
             @click="finishOnboarding"
           >
-            <span>Masuk ke Dashboard Saya</span>
-            <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
-          </BButton>
+            <span v-if="submitting">Menyimpan...</span>
+            <template v-else>
+              <span>Masuk ke Dashboard Saya</span>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
+            </template>
+          </button>
         </div>
-      </BCard>
+      </div>
     </div>
   </div>
 </template>
@@ -319,10 +337,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUmkmStore } from '~/stores/umkm'
-import BCard from '~/components/base/BCard.vue'
-import BButton from '~/components/base/BButton.vue'
+import BCloudBackground from '~/components/base/BCloudBackground.vue'
 import BStepper from '~/components/base/BStepper.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
+
+definePageMeta({
+  layout: false // Standalone Zen Layout with unified background
+})
 import {
   Building01Icon,
   Store01Icon,

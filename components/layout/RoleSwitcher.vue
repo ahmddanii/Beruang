@@ -18,7 +18,7 @@
       <button
         type="button"
         :class="[
-          'px-2.5 py-1 rounded-lg font-heading font-semibold transition-all duration-150',
+          'px-2.5 py-1 rounded-lg  font-semibold transition-all duration-150',
           authStore.currentUser?.role === 'UMKM'
             ? 'bg-primary-500 text-white shadow-xs'
             : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
@@ -31,7 +31,7 @@
       <button
         type="button"
         :class="[
-          'px-2.5 py-1 rounded-lg font-heading font-semibold transition-all duration-150',
+          'px-2.5 py-1 rounded-lg  font-semibold transition-all duration-150',
           authStore.currentUser?.role === 'CONSULTANT'
             ? 'bg-primary-500 text-white shadow-xs'
             : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
@@ -44,7 +44,7 @@
       <button
         type="button"
         :class="[
-          'px-2.5 py-1 rounded-lg font-heading font-semibold transition-all duration-150',
+          'px-2.5 py-1 rounded-lg  font-semibold transition-all duration-150',
           authStore.currentUser?.role === 'INVESTOR'
             ? 'bg-primary-500 text-white shadow-xs'
             : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
@@ -57,7 +57,7 @@
       <button
         type="button"
         :class="[
-          'px-2.5 py-1 rounded-lg font-heading font-semibold transition-all duration-150',
+          'px-2.5 py-1 rounded-lg  font-semibold transition-all duration-150',
           authStore.currentUser?.role === 'ADMIN'
             ? 'bg-primary-500 text-white shadow-xs'
             : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
@@ -69,7 +69,7 @@
 
       <NuxtLink
         to="/dev/components"
-        class="text-neutral-400 hover:text-gold ml-2 pl-2 border-l border-neutral-700 text-[11px] font-mono"
+        class="text-neutral-400 hover:text-gold ml-2 pl-2 border-l border-neutral-700 text-[11px] "
       >
         UI Kit
       </NuxtLink>

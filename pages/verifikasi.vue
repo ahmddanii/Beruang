@@ -5,7 +5,7 @@
         <div class="w-12 h-12 rounded-2xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center mx-auto mb-3">
           <HugeiconsIcon :icon="ShieldCheckIcon" :size="24" :stroke-width="1.75" />
         </div>
-        <h2 class="font-heading font-bold text-2xl text-neutral-900 dark:text-white tracking-tight">
+        <h2 class=" font-bold text-2xl text-neutral-900 dark:text-white tracking-tight">
           Verifikasi Akun Anda
         </h2>
         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-xs mx-auto">
@@ -19,7 +19,7 @@
           :key="i"
           type="text"
           maxlength="1"
-          class="w-12 h-14 text-center font-heading font-extrabold text-2xl rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none tabular-nums"
+          class="w-12 h-14 text-center  font-extrabold text-2xl rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none tabular-nums"
           :value="otp[i - 1]"
           @input="onOtpInput($event, i - 1)"
         />

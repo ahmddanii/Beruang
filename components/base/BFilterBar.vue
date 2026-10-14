@@ -7,7 +7,7 @@
     >
       <select
         :value="filter.value"
-        class="appearance-none bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark text-neutral-800 dark:text-neutral-200 text-xs font-heading font-medium pl-3.5 pr-8 py-2 rounded-xl hover:border-neutral-400 dark:hover:border-neutral-600 focus:outline-none focus:ring-1 focus:ring-primary-500 cursor-pointer shadow-xs transition-colors"
+        class="appearance-none bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark text-neutral-800 dark:text-neutral-200 text-xs  font-medium pl-3.5 pr-8 py-2 rounded-xl hover:border-neutral-400 dark:hover:border-neutral-600 focus:outline-none focus:ring-1 focus:ring-primary-500 cursor-pointer shadow-xs transition-colors"
         @change="$emit('update:filter', { id: filter.id, value: ($event.target as HTMLSelectElement).value })"
       >
         <option
@@ -32,7 +32,7 @@
     <button
       v-if="hasActiveFilter"
       type="button"
-      class="shrink-0 text-xs font-heading font-medium text-neutral-400 hover:text-danger px-2.5 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+      class="shrink-0 text-xs  font-medium text-neutral-400 hover:text-danger px-2.5 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
       @click="$emit('reset')"
     >
       Reset Filter

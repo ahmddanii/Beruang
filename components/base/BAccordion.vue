@@ -7,14 +7,14 @@
     >
       <button
         type="button"
-        class="w-full px-4 py-3 text-left flex items-center justify-between gap-3 font-heading font-medium text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors focus:outline-none"
+        class="w-full px-4 py-3 text-left flex items-center justify-between gap-3  font-medium text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors focus:outline-none"
         @click="toggle(item.id || String(idx))"
       >
         <div class="flex items-center gap-2">
           <span>{{ item.title }}</span>
           <span
             v-if="item.badge"
-            class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300"
+            class="text-[10px]  px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300"
           >
             {{ item.badge }}
           </span>
@@ -33,7 +33,7 @@
 
       <div
         v-if="isOpen(item.id || String(idx))"
-        class="px-4 pb-4 pt-1 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed border-t border-neutral-100 dark:border-neutral-800 font-sans"
+        class="px-4 pb-4 pt-1 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed border-t border-neutral-100 dark:border-neutral-800 "
       >
         <p>{{ item.content }}</p>
       </div>

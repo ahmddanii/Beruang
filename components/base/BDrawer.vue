@@ -30,10 +30,10 @@
             <!-- Header -->
             <div class="px-6 py-5 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between shrink-0">
               <div>
-                <h3 class="font-heading font-bold text-xl sm:text-2xl text-neutral-900 dark:text-neutral-100 tracking-tight">
+                <h3 class=" font-bold text-xl sm:text-2xl text-neutral-900 dark:text-neutral-100 tracking-tight">
                   {{ title }}
                 </h3>
-                <p v-if="subtitle" class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-sans mt-0.5">
+                <p v-if="subtitle" class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400  mt-0.5">
                   {{ subtitle }}
                 </p>
               </div>
@@ -50,7 +50,7 @@
             </div>
 
             <!-- Content -->
-            <div class="p-6 overflow-y-auto flex-1 font-sans">
+            <div class="p-6 overflow-y-auto flex-1 ">
               <slot />
             </div>
 

@@ -3,7 +3,7 @@
     <!-- Header / Legend -->
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div v-if="title" class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2.5">
-        <h4 class="font-heading font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-100">
+        <h4 class=" font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-100">
           {{ title }}
         </h4>
         <span v-if="subtitle" class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">
@@ -141,7 +141,7 @@
         }"
         class="absolute -translate-x-1/2 pointer-events-none bg-neutral-900/95 backdrop-blur-sm text-white px-3.5 py-2.5 rounded-xl text-xs sm:text-sm shadow-xl z-20 whitespace-nowrap border border-neutral-700"
       >
-        <p class="font-heading font-bold text-neutral-200 mb-1 border-b border-neutral-700 pb-1">
+        <p class=" font-bold text-neutral-200 mb-1 border-b border-neutral-700 pb-1">
           {{ categories[activeIdx] }}
         </p>
         <div v-for="s in series" :key="s.id" class="flex items-center justify-between gap-4 py-0.5">
@@ -149,7 +149,7 @@
             <span class="w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: s.color }" />
             {{ s.name }}
           </span>
-          <span class="font-bold tabular-nums font-heading" :style="{ color: s.color }">
+          <span class="font-bold tabular-nums " :style="{ color: s.color }">
             {{ formatValue(s.data[activeIdx]) }}
           </span>
         </div>

@@ -3,7 +3,7 @@
     <!-- Header with label & percentage -->
     <div v-if="label || showPercentage" class="flex justify-between items-center mb-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
       <span>{{ label }}</span>
-      <span v-if="showPercentage" class="tabular-nums font-heading">{{ clampedValue }}%</span>
+      <span v-if="showPercentage" class="tabular-nums ">{{ clampedValue }}%</span>
     </div>
 
     <!-- Track -->

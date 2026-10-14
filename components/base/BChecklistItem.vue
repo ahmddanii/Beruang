@@ -76,7 +76,7 @@
       </p>
 
       <div v-if="dueDate || consultantNote" class="mt-2 flex items-center gap-3 text-xs text-neutral-600 dark:text-neutral-300 font-medium">
-        <span v-if="dueDate" class="inline-flex items-center gap-1 font-mono">
+        <span v-if="dueDate" class="inline-flex items-center gap-1 ">
           <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
             <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>

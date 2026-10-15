@@ -850,26 +850,26 @@
               <span>Lanjut</span>
               <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
             </button>
-          </div>
 
-          <button
-            v-else
-            type="button"
-            :disabled="submitting || (activeRole === 'CONSULTANT' && !isConsultantAgreed) || (activeRole === 'INVESTOR' && !isInvestorAgreed)"
-            :class="[
-              'inline-flex items-center gap-2 h-10 px-6 rounded-full font-bold text-xs sm:text-sm shadow-sm transition-all',
-              (activeRole === 'CONSULTANT' && !isConsultantAgreed) || (activeRole === 'INVESTOR' && !isInvestorAgreed)
-                ? 'bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
-                : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/20 active:scale-[0.99] cursor-pointer'
-            ]"
-            @click="finishOnboarding"
-          >
-            <span v-if="submitting">Menyimpan...</span>
-            <template v-else>
-              <span>{{ finishButtonLabel }}</span>
-              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
-            </template>
-          </button>
+            <button
+              v-else
+              type="button"
+              :disabled="submitting || (activeRole === 'CONSULTANT' && !isConsultantAgreed) || (activeRole === 'INVESTOR' && !isInvestorAgreed)"
+              :class="[
+                'inline-flex items-center gap-2 h-10 px-6 rounded-full font-bold text-xs sm:text-sm shadow-sm transition-all',
+                (activeRole === 'CONSULTANT' && !isConsultantAgreed) || (activeRole === 'INVESTOR' && !isInvestorAgreed)
+                  ? 'bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
+                  : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/20 active:scale-[0.99] cursor-pointer'
+              ]"
+              @click="finishOnboarding"
+            >
+              <span v-if="submitting">Menyimpan...</span>
+              <template v-else>
+                <span>{{ finishButtonLabel }}</span>
+                <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
+              </template>
+            </button>
+          </div>
         </div>
       </div>
     </div>

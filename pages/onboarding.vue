@@ -116,14 +116,13 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Tahun Mulai
+                  Tanggal Mulai Usaha
                 </label>
                 <input
-                  v-model.number="formUmkm.year"
-                  type="number"
-                  min="2000"
-                  max="2026"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                  v-model="formUmkm.startDate"
+                  type="date"
+                  max="2026-12-31"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
                 />
               </div>
               <div class="space-y-1">
@@ -171,7 +170,7 @@
           <!-- Step 2: Sektor & Lokasi/Outlet -->
           <div v-else-if="currentStep === 2" class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
-              <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="1.75" />
               </div>
               <div class="text-left">
@@ -247,7 +246,7 @@
           <!-- Step 3: Baseline Finansial -->
           <div v-else-if="currentStep === 3" class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
-              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
               </div>
               <div class="text-left">
@@ -262,18 +261,21 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Rata-rata Penjualan / Bulan (Rp)
+                Rata-rata Penjualan / Bulan
               </label>
-              <input
-                v-model.number="formUmkm.monthlyRevenue"
-                type="number"
-                step="1000000"
-                placeholder="contoh: 50000000"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
-              />
-              <span class="text-[11px] text-neutral-500 block tabular-nums">
-                Rp {{ (formUmkm.monthlyRevenue || 0).toLocaleString('id-ID') }}
-              </span>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400">Rp.</span>
+                </div>
+                <input
+                  v-model="displayMonthlyRevenue"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="0"
+                  class="w-full pl-11 pr-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums font-semibold"
+                  @input="handleMonthlyRevenueInput"
+                />
+              </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-left">
@@ -293,15 +295,21 @@
               </div>
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Kebutuhan Modal (Rp)
+                  Kebutuhan Modal
                 </label>
-                <input
-                  v-model.number="formUmkm.targetFunding"
-                  type="number"
-                  step="5000000"
-                  placeholder="150000000"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
-                />
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400">Rp.</span>
+                  </div>
+                  <input
+                    v-model="displayTargetFunding"
+                    type="text"
+                    inputmode="numeric"
+                    placeholder="0"
+                    class="w-full pl-11 pr-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums font-semibold"
+                    @input="handleTargetFundingInput"
+                  />
+                </div>
                 <span class="text-[10px] text-neutral-400">Modal yang ingin dicari</span>
               </div>
             </div>
@@ -438,7 +446,7 @@
           <!-- Step 2: Spesialisasi & Kapasitas Pendampingan -->
           <div v-else-if="currentStep === 2" class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
-              <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="UserGroupIcon" :size="20" :stroke-width="1.75" />
               </div>
               <div class="text-left">
@@ -624,7 +632,7 @@
           <!-- Step 2: Kriteria Portofolio & Tiket Modal (Opsional untuk Bantuan Rekomendasi) -->
           <div v-else-if="currentStep === 2" class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
-              <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
               </div>
               <div class="text-left">
@@ -923,6 +931,7 @@ const formUmkm = ref({
   name: authStore.currentUser?.businessName || authStore.currentUser?.org_name || 'Kopi Senja Nusantara',
   owner: authStore.currentUser?.name || 'Fikri Setiawan',
   year: 2021,
+  startDate: '2021-08-17',
   legalStatus: 'NIB_READY',
   nib: '1209000123456',
   npwp: '81.423.891.4-429.000',
@@ -936,6 +945,29 @@ const formUmkm = ref({
   equityOffered: '10% Bagi Hasil',
   description: authStore.currentUser?.businessProfile?.description || ''
 })
+
+const displayMonthlyRevenue = ref(
+  formUmkm.value.monthlyRevenue ? Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID') : '60.000.000'
+)
+const displayTargetFunding = ref(
+  formUmkm.value.targetFunding ? Number(formUmkm.value.targetFunding).toLocaleString('id-ID') : '150.000.000'
+)
+
+function handleMonthlyRevenueInput(e: Event) {
+  const input = e.target as HTMLInputElement
+  const rawDigits = input.value.replace(/\D/g, '')
+  const num = rawDigits ? parseInt(rawDigits, 10) : 0
+  formUmkm.value.monthlyRevenue = num
+  displayMonthlyRevenue.value = rawDigits ? Number(rawDigits).toLocaleString('id-ID') : ''
+}
+
+function handleTargetFundingInput(e: Event) {
+  const input = e.target as HTMLInputElement
+  const rawDigits = input.value.replace(/\D/g, '')
+  const num = rawDigits ? parseInt(rawDigits, 10) : 0
+  formUmkm.value.targetFunding = num
+  displayTargetFunding.value = rawDigits ? Number(rawDigits).toLocaleString('id-ID') : ''
+}
 
 // Consultant Form Data
 const consultantSpecializations = [
@@ -1004,8 +1036,11 @@ function finishOnboarding() {
       umkmStore.profile.ownerName = formUmkm.value.owner
       umkmStore.profile.sector = formUmkm.value.sector
       umkmStore.profile.city = formUmkm.value.city
-      umkmStore.profile.established_year = formUmkm.value.year
-      umkmStore.profile.establishedYear = formUmkm.value.year
+      const establishedYear = formUmkm.value.startDate
+        ? new Date(formUmkm.value.startDate).getFullYear()
+        : (formUmkm.value.year || 2021)
+      umkmStore.profile.established_year = establishedYear
+      umkmStore.profile.establishedYear = establishedYear
       umkmStore.profile.outlets_count = formUmkm.value.outlets
       umkmStore.profile.outletsCount = formUmkm.value.outlets
       umkmStore.profile.employees_count = formUmkm.value.employees
@@ -1033,7 +1068,9 @@ function finishOnboarding() {
           owner_name: formUmkm.value.owner,
           sector: formUmkm.value.sector,
           city: formUmkm.value.city,
-          established_year: formUmkm.value.year,
+          established_year: formUmkm.value.startDate
+            ? new Date(formUmkm.value.startDate).getFullYear()
+            : (formUmkm.value.year || 2021),
           outlets_count: formUmkm.value.outlets,
           employees_count: formUmkm.value.employees,
           funding_target: formUmkm.value.targetFunding,

@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen min-h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
+  <div class="min-h-screen min-h-dvh w-full bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
     
-    <!-- Subtle Ambient Background Glow -->
-    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />
+    <!-- Subtle Ambient Background Glow (Teal Ambient matching Landing Page) -->
+    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-[#0081A0]/5 dark:bg-[#0081A0]/10 rounded-full blur-3xl" />
 
     <!-- Atmospheric Layered Cloud Overlay -->
     <BCloudBackground :fixed="true" />
@@ -12,7 +12,7 @@
       <NuxtLink
         v-if="step === 'role'"
         to="/"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
         <span>Kembali ke Beranda</span>
@@ -20,7 +20,7 @@
       <button
         v-else
         type="button"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150 cursor-pointer"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150 cursor-pointer"
         @click="goToRoleStep"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
@@ -60,7 +60,7 @@
         
         <!-- Role Selector Pill Segment -->
         <div class="space-y-1">
-          <div class="p-1 rounded-full bg-neutral-100/90 dark:bg-neutral-850/80 border border-neutral-200/80 dark:border-neutral-700/70 grid grid-cols-3 gap-1">
+          <div class="p-1 rounded-full bg-neutral-100/90 dark:bg-[#13161F]/90 border border-neutral-200/80 dark:border-white/10 grid grid-cols-3 gap-1 shadow-2xs">
             <button
               v-for="r in roleCards"
               :key="r.key"
@@ -68,7 +68,7 @@
               :class="[
                 'flex items-center justify-center gap-1.5 py-2 px-2 rounded-full text-xs transition-all duration-150 cursor-pointer select-none',
                 selectedRole === r.key
-                  ? 'bg-white dark:bg-[#18191E] text-primary-600 dark:text-primary-400 font-bold shadow-2xs'
+                  ? 'bg-white dark:bg-[#1A1D26] text-[#0081A0] dark:text-[#2091AA] font-bold shadow-xs border border-neutral-200/60 dark:border-white/10'
                   : 'text-neutral-500 dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white'
               ]"
               @click="onRoleTabClick(r.key)"
@@ -83,11 +83,11 @@
           </p>
         </div>
 
-        <!-- Button 1: Register with Google OAuth -->
+        <!-- Button 1: Register with Google OAuth (Tactile White Card Surface) -->
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-900 dark:text-white font-bold text-sm shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-white/10 text-neutral-900 dark:text-white font-bold text-sm shadow-xs hover:bg-neutral-50 dark:hover:bg-[#1A1E29] hover:border-neutral-300 dark:hover:border-white/20 transition-all duration-150 active:scale-[0.99] cursor-pointer"
           @click="handleGoogleRegister"
         >
           <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -99,11 +99,11 @@
           <span>Daftar sebagai {{ activeRoleMeta.shortTitle }} (Google)</span>
         </button>
 
-        <!-- Button 2: Register with WhatsApp -->
+        <!-- Button 2: Register with WhatsApp (Brand Teal #0081A0) -->
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-primary-500 hover:bg-primary-600 text-white font-bold text-sm shadow-sm shadow-primary-500/20 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-sm shadow-[0_4px_14px_rgba(0,129,160,0.25)] transition-all duration-150 active:scale-[0.99] cursor-pointer"
           @click="goToPhoneStep"
         >
           <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2" />
@@ -117,7 +117,7 @@
           </span>
           <NuxtLink
             to="/masuk"
-            class="text-xs sm:text-sm font-bold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-150 ml-1.5"
+            class="text-xs sm:text-sm font-bold text-[#0081A0] hover:text-[#00708C] dark:text-[#2091AA] dark:hover:text-[#50AABF] transition-colors duration-150 ml-1.5"
           >
             Masuk di Sini
           </NuxtLink>
@@ -125,7 +125,7 @@
       </div>
 
       <!-- Loading / Feedback Badge -->
-      <div v-if="loadingMessage" class="mt-4 px-5 py-2.5 rounded-full bg-emerald-500 text-white font-bold text-sm shadow-sm animate-pulse">
+      <div v-if="loadingMessage" class="mt-4 px-5 py-2.5 rounded-full bg-[#00AA13] text-white font-bold text-sm shadow-sm animate-pulse">
         {{ loadingMessage }}
       </div>
     </main>
@@ -141,31 +141,31 @@
           <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain select-none" />
           <div class="text-left">
             <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none block">
-              <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+              <span class="text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
             </span>
-            <span class="text-[11px] font-semibold text-primary-600 dark:text-primary-400 select-none">
+            <span class="text-[11px] font-semibold text-[#0081A0] dark:text-[#2091AA] select-none">
               Pendaftaran Akun {{ activeRoleMeta.shortTitle }}
             </span>
           </div>
         </div>
 
-        <span class="inline-flex items-center px-3 py-1 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
           {{ currentStepNumber }} / 2
         </span>
       </div>
 
-      <!-- Stepper Component -->
-      <div class="p-3 sm:p-4 rounded-2xl bg-white/80 dark:bg-[#18191E]/80 backdrop-blur-md border border-[#EAEAEA] dark:border-[#26272F] shadow-xs">
+      <!-- Stepper Component Container -->
+      <div class="p-3 sm:p-4 rounded-2xl bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 shadow-xs">
         <BStepper :steps="registrationSteps" :current-step="currentStepNumber" />
       </div>
 
       <!-- Main Form Container -->
-      <div class="bg-white/95 dark:bg-[#18191E]/95 backdrop-blur-md rounded-3xl border border-[#EAEAEA] dark:border-[#26272F] shadow-sm p-6 sm:p-8 space-y-5">
+      <div class="bg-white/95 dark:bg-[#13161F]/95 backdrop-blur-md rounded-3xl border border-[#E2E8F0] dark:border-white/10 shadow-sm p-6 sm:p-8 space-y-5">
         
         <!-- STEP 1: Phone Number Input -->
         <div v-if="step === 'phone'" class="space-y-4">
           <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-[#0081A0]/10 dark:bg-[#0081A0]/20 text-[#0081A0] dark:text-[#2091AA] flex items-center justify-center shrink-0">
               <HugeiconsIcon :icon="Call02Icon" :size="20" :stroke-width="1.75" />
             </div>
             <div class="text-left">
@@ -189,14 +189,15 @@
 
             <div
               :class="[
-                'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
+                'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#13161F]',
                 phoneValidationError
-                  ? 'border-danger/80 ring-2 ring-danger/15'
-                  : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
+                  ? 'border-red-500 ring-2 ring-red-500/15'
+                  : 'border-neutral-200/90 dark:border-white/10 focus-within:border-[#0081A0] focus-within:ring-2 focus-within:ring-[#0081A0]/20'
               ]"
             >
-              <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
-                <span class="text-base leading-none">🇮🇩</span>
+              <!-- Country Code Prefix Badge (NO EMOJI) -->
+              <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-[#1A1D26] border border-neutral-200/80 dark:border-white/10 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
+                <span class="text-xs font-extrabold text-[#0081A0] dark:text-[#2091AA]">ID</span>
                 <span>+62</span>
               </div>
 
@@ -208,7 +209,7 @@
                 autocomplete="tel-national"
                 inputmode="numeric"
                 placeholder="812-3456-7890"
-                class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
+                class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
                 @input="onPhoneInput"
                 @keydown="onPhoneKeydown"
                 @keydown.enter="requestOtp"
@@ -216,8 +217,8 @@
             </div>
 
             <div class="px-1 min-h-[18px]">
-              <p v-if="phoneValidationError" class="text-xs text-danger flex items-center gap-1.5 animate-in fade-in duration-150">
-                <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
+              <p v-if="phoneValidationError" class="text-xs text-red-600 dark:text-red-400 flex items-center gap-1.5 animate-in fade-in duration-150">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
                 <span>{{ phoneValidationError }}</span>
               </p>
               <p v-else-if="!isPhoneValid" class="text-[11px] text-neutral-500 dark:text-neutral-400">
@@ -227,14 +228,14 @@
           </div>
 
           <!-- Fast Demo Quick Fill Helper -->
-          <div class="p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between text-xs">
+          <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#13161F]/70 border border-[#E2E8F0] dark:border-white/10 flex items-center justify-between text-xs">
             <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-              <span class="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />
+              <span class="w-1.5 h-1.5 rounded-full bg-[#0081A0] shrink-0" />
               <span>Nomor demo {{ activeRoleMeta.shortTitle }}: <strong class="font-bold text-neutral-900 dark:text-white">+62 {{ activeRoleDemoPhone }}</strong></span>
             </div>
             <button
               type="button"
-              class="px-3 py-1.5 rounded-xl bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-700 hover:border-primary-500 text-primary-600 dark:text-primary-400 font-bold text-xs transition-colors cursor-pointer shadow-2xs"
+              class="px-3.5 py-1.5 rounded-full bg-white dark:bg-[#1A1D26] border border-[#0081A0]/30 hover:border-[#0081A0] text-[#0081A0] dark:text-[#2091AA] font-bold text-xs transition-colors cursor-pointer shadow-2xs"
               @click="fillCurrentRoleDemoPhone"
             >
               Isi Otomatis
@@ -245,7 +246,7 @@
           <div class="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
             <button
               type="button"
-              class="px-5 py-3 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-bold text-sm transition-all duration-150 cursor-pointer flex items-center gap-2"
+              class="px-5 py-2.5 rounded-full border border-neutral-200 dark:border-white/10 hover:border-[#0081A0] text-neutral-700 dark:text-neutral-300 font-bold text-sm transition-all duration-150 cursor-pointer flex items-center gap-2 bg-white dark:bg-[#13161F]"
               @click="goToRoleStep"
             >
               <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
@@ -256,9 +257,9 @@
               type="button"
               :disabled="loading || !isPhoneValid"
               :class="[
-                'px-6 py-3 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
+                'px-6 py-2.5 rounded-full font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
                 isPhoneValid && !loading
-                  ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99]'
+                  ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99]'
                   : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
               ]"
               @click="requestOtp"
@@ -272,7 +273,7 @@
         <!-- STEP 2: 4-Digit OTP Input -->
         <div v-else-if="step === 'otp'" class="space-y-4">
           <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-[#0081A0]/10 dark:bg-[#0081A0]/20 text-[#0081A0] dark:text-[#2091AA] flex items-center justify-center shrink-0">
               <HugeiconsIcon :icon="ShieldCheckIcon" :size="20" :stroke-width="1.75" />
             </div>
             <div class="text-left">
@@ -286,11 +287,11 @@
           </div>
 
           <div class="text-center py-1">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold mx-auto">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-[#1A1D26] text-neutral-700 dark:text-neutral-300 text-xs font-semibold mx-auto border border-neutral-200/60 dark:border-white/10">
               <span>Kirim ke: +62 {{ phoneInput }}</span>
               <button
                 type="button"
-                class="text-primary-600 hover:text-primary-500 font-bold ml-1 cursor-pointer"
+                class="text-[#0081A0] hover:text-[#00708C] dark:text-[#2091AA] font-bold ml-1 cursor-pointer"
                 @click="goToPhoneStep"
               >
                 Ubah
@@ -311,10 +312,10 @@
               autocomplete="one-time-code"
               pattern="[0-9]*"
               :class="[
-                'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-primary-500/15 caret-primary-500 shadow-2xs',
+                'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-[#0081A0]/15 caret-[#0081A0] shadow-2xs',
                 otpDigits[idx]
-                  ? 'border-primary-500 bg-primary-50/30 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400'
-                  : 'border-neutral-200/90 dark:border-neutral-700/80 bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white hover:border-neutral-300 dark:hover:border-neutral-600 focus:border-primary-500'
+                  ? 'border-[#0081A0] bg-[#0081A0]/5 dark:bg-[#0081A0]/15 text-[#0081A0] dark:text-[#2091AA]'
+                  : 'border-neutral-200/90 dark:border-white/10 bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white hover:border-[#0081A0]/60 focus:border-[#0081A0]'
               ]"
               @input="onOtpInput(idx, $event)"
               @keydown="onOtpKeydown(idx, $event)"
@@ -324,14 +325,14 @@
           </div>
 
           <!-- Demo Hint -->
-          <div class="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between text-left">
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 dark:bg-amber-950/40 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between text-left">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
               <span>Kode uji coba: <strong class="font-bold text-amber-900 dark:text-amber-200">1234</strong></span>
             </div>
             <button
               type="button"
-              class="px-3 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 hover:bg-amber-200 dark:hover:bg-amber-800 text-amber-900 dark:text-amber-200 font-bold text-xs transition-colors cursor-pointer"
+              class="px-3.5 py-1.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-900 dark:text-amber-200 font-bold text-xs transition-colors cursor-pointer"
               @click="fillOtpDemo"
             >
               Isi Otomatis
@@ -342,7 +343,7 @@
           <div class="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
             <button
               type="button"
-              class="px-5 py-3 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-bold text-sm transition-all duration-150 cursor-pointer flex items-center gap-2"
+              class="px-5 py-2.5 rounded-full border border-neutral-200 dark:border-white/10 hover:border-[#0081A0] text-neutral-700 dark:text-neutral-300 font-bold text-sm transition-all duration-150 cursor-pointer flex items-center gap-2 bg-white dark:bg-[#13161F]"
               @click="goToPhoneStep"
             >
               <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
@@ -353,9 +354,9 @@
               type="button"
               :disabled="loading || otpString.length < 4"
               :class="[
-                'px-6 py-3 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
+                'px-6 py-2.5 rounded-full font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
                 otpString.length === 4 && !loading
-                  ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99]'
+                  ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99]'
                   : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
               ]"
               @click="verifyAndRegister"

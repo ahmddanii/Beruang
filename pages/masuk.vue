@@ -1,19 +1,19 @@
 <template>
-  <div class="h-screen h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-4 sm:px-6 select-none relative overflow-hidden font-sans">
+  <div class="h-screen h-dvh w-full bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-4 sm:px-6 select-none relative overflow-hidden font-sans">
     
-    <!-- Subtle Ambient Background Glow (UMKM Dashboard Aesthetic) -->
-    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />
+    <!-- Subtle Ambient Background Glow (Teal Ambient matching Landing Page) -->
+    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-[#0081A0]/5 dark:bg-[#0081A0]/10 rounded-full blur-3xl" />
 
-    <!-- Atmospheric Layered Cloud Overlay (Grayscale / Neutral Theme matching UMKM Dashboard) -->
+    <!-- Atmospheric Layered Cloud Overlay -->
     <BCloudBackground />
 
     <!-- ===================================================================== -->
-    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda" (Pill shape, No Hover)     -->
+    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda" (Pill shape, Tactile Style) -->
     <!-- ===================================================================== -->
     <div class="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
       <NuxtLink
         to="/"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
         <span>Kembali ke Beranda</span>
@@ -27,7 +27,7 @@
       
       <!-- 1. Lottie Animation Hero (Refined Proportionate Scale) -->
       <div class="relative flex flex-col items-center">
-        <div class="w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[260px] md:h-[260px] lg:w-[280px] lg:h-[280px] max-h-[28vh] relative flex items-center justify-center">
+        <div class="w-[190px] h-[190px] sm:w-[220px] sm:h-[220px] md:w-[240px] md:h-[240px] max-h-[26vh] relative flex items-center justify-center">
           <BLottiePlayer
             :src="lottieAnimationUrl"
             :autoplay="true"
@@ -49,11 +49,11 @@
 
       <!-- 3. Minimalist Action Stack (Google OAuth + WhatsApp) -->
       <div class="w-full max-w-sm space-y-2.5">
-        <!-- Button 1: Login with Google (Pure White Card Surface with Hairline Border) -->
+        <!-- Button 1: Login with Google (Pure White/Dark Card Surface with Hairline Border) -->
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-900 dark:text-white font-bold text-sm shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-white/10 text-neutral-900 dark:text-white font-bold text-sm shadow-xs hover:bg-neutral-50 dark:hover:bg-[#1A1E29] hover:border-neutral-300 dark:hover:border-white/20 transition-all duration-150 active:scale-[0.99] cursor-pointer"
           @click="handleGoogleLogin"
         >
           <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -65,11 +65,11 @@
           <span>Masuk dengan Google</span>
         </button>
 
-        <!-- Button 2: Login with WhatsApp (Primary Blue Accent bg-primary-500 / hover:bg-primary-600) -->
+        <!-- Button 2: Login with WhatsApp (Brand Teal #0081A0 / Hover #00708C) -->
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-primary-500 hover:bg-primary-600 text-white font-bold text-sm shadow-sm shadow-primary-500/20 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-sm shadow-[0_4px_14px_rgba(0,129,160,0.25)] transition-all duration-150 active:scale-[0.99] cursor-pointer"
           @click="openPhoneModal = true"
         >
           <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2" />
@@ -83,7 +83,7 @@
           </span>
           <NuxtLink
             to="/daftar"
-            class="text-xs sm:text-sm font-bold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-150 ml-1.5"
+            class="text-xs sm:text-sm font-bold text-[#0081A0] hover:text-[#00708C] dark:text-[#2091AA] dark:hover:text-[#50AABF] transition-colors duration-150 ml-1.5"
           >
             Daftar Akun Baru
           </NuxtLink>
@@ -91,7 +91,7 @@
       </div>
 
       <!-- Loading / Feedback Badge -->
-      <div v-if="loadingMessage" class="mt-3 px-5 py-2.5 rounded-full bg-emerald-500 text-white font-bold text-sm shadow-sm animate-pulse">
+      <div v-if="loadingMessage" class="mt-3 px-5 py-2.5 rounded-full bg-[#00AA13] text-white font-bold text-sm shadow-sm animate-pulse">
         {{ loadingMessage }}
       </div>
 
@@ -108,7 +108,7 @@
     >
       <template #header="{ close }">
         <div class="flex items-start gap-3.5 flex-1 pr-1">
-          <div class="w-11 h-11 rounded-2xl bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-700/70 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+          <div class="w-11 h-11 rounded-2xl bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-white/10 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
@@ -121,7 +121,7 @@
               Pilih Akun
             </h3>
             <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-0.5 leading-relaxed">
-              Pilih akun Google untuk melanjutkan ke <span class="font-bold text-neutral-800 dark:text-neutral-200">Beruang</span>.
+              Pilih akun Google untuk melanjutkan ke <span class="font-bold text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="font-bold text-[#00AA13] dark:text-[#22C55E]">uang</span>.
             </p>
           </div>
         </div>
@@ -134,7 +134,7 @@
           :key="acc.email"
           type="button"
           :disabled="loading"
-          class="w-full p-3.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-neutral-50 dark:hover:bg-[#20222A] hover:border-neutral-300 dark:hover:border-neutral-700 flex items-center gap-3.5 transition-all duration-150 active:scale-[0.99] cursor-pointer text-left group"
+          class="w-full p-3.5 rounded-2xl border border-[#E2E8F0] dark:border-white/10 bg-white dark:bg-[#13161F] hover:bg-neutral-50 dark:hover:bg-[#1A1E29] hover:border-[#0081A0]/60 dark:hover:border-[#0081A0]/60 flex items-center gap-3.5 transition-all duration-150 active:scale-[0.99] cursor-pointer text-left group shadow-xs"
           @click="selectGoogleAccount(acc)"
         >
           <!-- Avatar Initial -->
@@ -148,7 +148,7 @@
               <span class="font-bold text-sm text-neutral-900 dark:text-white truncate">
                 {{ acc.name }}
               </span>
-              <span :class="['px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider', acc.badgeClass]">
+              <span :class="['px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider', acc.badgeClass]">
                 {{ acc.roleLabel }}
               </span>
             </div>
@@ -162,7 +162,7 @@
         <button
           type="button"
           :disabled="loading"
-          class="w-full p-3.5 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center gap-3.5 transition-all text-xs font-semibold cursor-pointer"
+          class="w-full p-3.5 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-[#0081A0] dark:hover:border-[#0081A0] text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center gap-3.5 transition-all text-xs font-semibold cursor-pointer"
           @click="selectGoogleAccount(googleAccounts[0])"
         >
           <div class="w-10 h-10 rounded-full border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-500 dark:text-neutral-400 shrink-0">
@@ -194,7 +194,7 @@
       <!-- Custom Header Slot with Brand Icon Badge -->
       <template #header="{ close }">
         <div class="flex items-start gap-3.5 flex-1 pr-1">
-          <div class="w-11 h-11 rounded-2xl bg-primary-50 dark:bg-primary-950/70 border border-primary-100 dark:border-primary-900/60 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0 shadow-2xs mt-0.5">
+          <div class="w-11 h-11 rounded-2xl bg-[#0081A0]/10 dark:bg-[#0081A0]/20 border border-[#0081A0]/20 flex items-center justify-center text-[#0081A0] dark:text-[#2091AA] shrink-0 shadow-2xs mt-0.5">
             <HugeiconsIcon :icon="Call02Icon" :size="20" :stroke-width="2.2" />
           </div>
           <div class="min-w-0 flex-1 text-left">
@@ -222,17 +222,17 @@
           <!-- Input Container with Dynamic Validation Feedback -->
           <div
             :class="[
-              'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
+              'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#13161F]',
               phoneValidationError
-                ? 'border-danger/80 ring-2 ring-danger/15'
+                ? 'border-red-500 ring-2 ring-red-500/15'
                 : isPhoneValid
-                  ? 'border-emerald-500/70 ring-2 ring-emerald-500/15'
-                  : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
+                  ? 'border-[#00AA13] ring-2 ring-[#00AA13]/15'
+                  : 'border-neutral-200/90 dark:border-white/10 focus-within:border-[#0081A0] focus-within:ring-2 focus-within:ring-[#0081A0]/20'
             ]"
           >
-            <!-- Country Code Prefix Badge -->
-            <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
-              <span class="text-base leading-none">🇮🇩</span>
+            <!-- Country Code Prefix Badge (NO EMOJI) -->
+            <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-[#1A1D26] border border-neutral-200/80 dark:border-white/10 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
+              <span class="text-xs font-extrabold text-[#0081A0] dark:text-[#2091AA]">ID</span>
               <span>+62</span>
             </div>
 
@@ -246,7 +246,7 @@
               autocomplete="tel-national"
               inputmode="numeric"
               placeholder="812-3456-7890"
-              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
+              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
               @input="onPhoneInput"
               @keydown="onPhoneKeydown"
               @keydown.enter="submitPhoneLogin"
@@ -255,12 +255,12 @@
 
           <!-- Real-Time Validation Feedback & Instructions -->
           <div class="px-1 min-h-[18px]">
-            <p v-if="phoneValidationError" class="text-xs text-danger flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
+            <p v-if="phoneValidationError" class="text-xs text-red-600 dark:text-red-400 flex items-center gap-1.5 animate-in fade-in duration-150">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
               <span>{{ phoneValidationError }}</span>
             </p>
-            <p v-else-if="isPhoneValid" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+            <p v-else-if="isPhoneValid" class="text-xs text-[#00AA13] dark:text-[#22C55E] font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#00AA13] shrink-0" />
               <span>Akun terdeteksi: <strong class="font-bold">{{ detectedAccount.name }}</strong> ({{ detectedAccount.role === 'UMKM' ? 'Pemilik UMKM' : detectedAccount.role === 'CONSULTANT' ? 'Konsultan Bisnis' : 'Investor Mitra' }})</span>
             </p>
             <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
@@ -270,7 +270,7 @@
         </div>
 
         <!-- Fast Demo Account Selector Chips -->
-        <div class="p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 space-y-2">
+        <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#13161F]/70 border border-[#E2E8F0] dark:border-white/10 space-y-2">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold text-neutral-700 dark:text-neutral-300">Pilih Cepat Akun Demo:</span>
             <span class="text-[11px] text-neutral-500 dark:text-neutral-400">1-Klik isi nomor</span>
@@ -283,8 +283,8 @@
               :class="[
                 'py-2 px-2.5 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
                 cleanPhone === r.demoPhone.replace(/\D/g, '')
-                  ? 'bg-primary-50 dark:bg-primary-950/70 border-primary-500/60 text-primary-700 dark:text-primary-300 shadow-2xs ring-1 ring-primary-500/30'
-                  : 'bg-white dark:bg-[#18191E] border-neutral-200/80 dark:border-neutral-700/60 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
+                  ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/20 border-[#0081A0] text-[#0081A0] dark:text-[#2091AA] shadow-2xs ring-1 ring-[#0081A0]/30'
+                  : 'bg-white dark:bg-[#1A1D26] border-neutral-200/80 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
               ]"
               @click="setDemoPhone(r.demoPhone, r.key)"
             >
@@ -294,14 +294,14 @@
           </div>
         </div>
 
-        <!-- Submit Button (Aligned to Landing Page Blue bg-primary-500 / hover:bg-primary-600) -->
+        <!-- Submit Button (Brand Teal #0081A0) -->
         <button
           type="button"
           :disabled="loading || !isPhoneValid"
           :class="[
-            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
+            'w-full py-3.5 px-6 rounded-full font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             isPhoneValid && !loading
-              ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99] cursor-pointer'
+              ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
           @click="submitPhoneLogin"
@@ -382,9 +382,9 @@ const googleAccounts = [
     name: 'Fikri Setiawan',
     email: 'fikri.setiawan@gmail.com',
     roleLabel: 'UMKM',
-    badgeClass: 'bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800',
+    badgeClass: 'bg-[#0081A0]/10 text-[#0081A0] dark:bg-[#0081A0]/20 dark:text-[#2091AA] border border-[#0081A0]/20',
     initial: 'F',
-    avatarBg: 'bg-blue-600 text-white',
+    avatarBg: 'bg-[#0081A0] text-white',
     route: '/dashboard'
   },
   {
@@ -392,9 +392,9 @@ const googleAccounts = [
     name: 'Dra. Maya Suryani, M.M.',
     email: 'maya.suryani@gmail.com',
     roleLabel: 'Konsultan',
-    badgeClass: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800',
+    badgeClass: 'bg-[#00AA13]/10 text-[#00AA13] dark:bg-[#00AA13]/20 dark:text-[#22C55E] border border-[#00AA13]/20',
     initial: 'M',
-    avatarBg: 'bg-emerald-600 text-white',
+    avatarBg: 'bg-[#00AA13] text-white',
     route: '/konsultan'
   },
   {
@@ -402,9 +402,9 @@ const googleAccounts = [
     name: 'Hendro Wicaksono',
     email: 'hendro.wicaksono@gmail.com',
     roleLabel: 'Investor',
-    badgeClass: 'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800',
+    badgeClass: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20',
     initial: 'H',
-    avatarBg: 'bg-amber-600 text-white',
+    avatarBg: 'bg-[#F59E0B] text-white',
     route: '/investor'
   }
 ]

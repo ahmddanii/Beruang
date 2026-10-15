@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen min-h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-start sm:justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
+  <div class="min-h-screen min-h-dvh w-full bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 flex flex-col justify-start sm:justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
     
     <!-- Subtle Ambient Background Glow -->
-    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />
+    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-[#0081A0]/5 dark:bg-[#0081A0]/10 rounded-full blur-3xl" />
 
     <!-- Atmospheric Layered Cloud Horizon -->
     <BCloudBackground :fixed="true" />
@@ -11,7 +11,7 @@
     <div class="fixed top-6 left-6 sm:top-8 sm:left-8 z-30">
       <NuxtLink
         to="/"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
         <span>Kembali ke Beranda</span>
@@ -27,9 +27,9 @@
           <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain select-none" />
           <div class="text-left">
             <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none block">
-              <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+              <span class="text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
             </span>
-            <span class="text-[11px] font-semibold text-primary-600 dark:text-primary-400 select-none">
+            <span class="text-[11px] font-semibold text-[#0081A0] dark:text-[#2091AA] select-none">
               {{ roleHeaderTitle }}
             </span>
           </div>
@@ -37,7 +37,7 @@
 
         <!-- Role Quick Switcher -->
         <div class="flex items-center gap-2">
-          <div class="p-1 rounded-full bg-neutral-100/90 dark:bg-neutral-850/80 border border-neutral-200/80 dark:border-neutral-700/70 flex gap-1">
+          <div class="p-1 rounded-full bg-neutral-100/90 dark:bg-[#13161F]/90 border border-neutral-200/80 dark:border-white/10 flex gap-1 shadow-2xs">
             <button
               v-for="r in availableRoles"
               :key="r.key"
@@ -45,7 +45,7 @@
               :class="[
                 'px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer',
                 activeRole === r.key
-                  ? 'bg-white dark:bg-[#18191E] text-primary-600 dark:text-primary-400 shadow-2xs'
+                  ? 'bg-white dark:bg-[#1A1D26] text-[#0081A0] dark:text-[#2091AA] shadow-xs'
                   : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
               ]"
               @click="switchRole(r.key)"
@@ -53,19 +53,19 @@
               {{ r.label }}
             </button>
           </div>
-          <span class="inline-flex items-center px-3 py-1 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
             {{ currentStep }} / {{ currentStepsList.length }}
           </span>
         </div>
       </div>
 
       <!-- Stepper Component -->
-      <div class="p-3 sm:p-4 rounded-2xl bg-white/80 dark:bg-[#18191E]/80 backdrop-blur-md border border-[#EAEAEA] dark:border-[#26272F] shadow-xs">
+      <div class="p-3 sm:p-4 rounded-2xl bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 shadow-xs">
         <BStepper :steps="currentStepsList" :current-step="currentStep" />
       </div>
 
       <!-- Main Form Container -->
-      <div class="bg-white/95 dark:bg-[#18191E]/95 backdrop-blur-md rounded-3xl border border-[#EAEAEA] dark:border-[#26272F] shadow-sm p-6 sm:p-8">
+      <div class="bg-white/95 dark:bg-[#13161F]/95 backdrop-blur-md rounded-3xl border border-[#E2E8F0] dark:border-white/10 shadow-sm p-6 sm:p-8">
         
         <!-- ================================================================= -->
         <!-- ROLE 1: UMKM ONBOARDING                                           -->
@@ -837,7 +837,7 @@
           <button
             v-if="currentStep > 1"
             type="button"
-            class="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-[#22252E] font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-[0.99]"
+            class="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-[0.99]"
             @click="currentStep--"
           >
             <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
@@ -858,7 +858,7 @@
             <button
               v-if="currentStep < currentStepsList.length"
               type="button"
-              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
+              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-xs sm:text-sm shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] transition-all cursor-pointer"
               @click="currentStep++"
             >
               <span>Lanjut</span>
@@ -869,7 +869,7 @@
               v-else
               type="button"
               :disabled="submitting"
-              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
+              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-xs sm:text-sm shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] transition-all cursor-pointer"
               @click="finishOnboarding"
             >
               <span v-if="submitting">Memproses...</span>

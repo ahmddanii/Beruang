@@ -231,7 +231,12 @@ watch(() => route.path, () => {
   isProfileDropdownOpen.value = false
 })
 
-const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const currentRole = computed(() => {
+  if (route.path.startsWith('/konsultan')) return 'CONSULTANT'
+  if (route.path.startsWith('/investor')) return 'INVESTOR'
+  if (route.path.startsWith('/admin')) return 'ADMIN'
+  return authStore.currentUser?.role || 'UMKM'
+})
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'
   if (currentRole.value === 'INVESTOR') return '/investor'
@@ -247,6 +252,9 @@ const handleBrandClick = (e: MouseEvent) => {
 }
 
 const userAvatarUrl = computed(() => {
+  if (currentRole.value === 'CONSULTANT') {
+    return '/images/user-profile.png'
+  }
   if (authStore.currentUser?.role === 'UMKM') {
     return (
       umkmStore.profile.ownerAvatarUrl ||
@@ -258,7 +266,7 @@ const userAvatarUrl = computed(() => {
 })
 
 const userRoleDisplay = computed(() => {
-  const role = authStore.currentUser?.role
+  const role = currentRole.value
   if (role === 'CONSULTANT') return 'Konsultan'
   if (role === 'INVESTOR') return 'Investor'
   if (role === 'ADMIN') return 'Administrator'
@@ -268,7 +276,7 @@ const userRoleDisplay = computed(() => {
 const profileRoute = computed(() => {
   const role = authStore.currentUser?.role
   if (role === 'UMKM') return '/dashboard/profile'
-  if (role === 'CONSULTANT') return '/konsultan/pengaturan'
+  if (role === 'CONSULTANT') return '/konsultan/profil'
   if (role === 'INVESTOR') return '/investor/pengaturan'
   return '/dashboard/profile'
 })
@@ -325,7 +333,16 @@ const currentPageInfo = computed(() => {
 
   // Konsultan pages
   if (p === '/konsultan' || p === '/konsultan/') {
-    return { title: 'Daftar Klien', icon: UserGroupIcon }
+    return { title: 'Klien Binaan', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/konsultan/request')) {
+    return { title: 'Permintaan Masuk', icon: UserAdd01Icon }
+  }
+  if (p.startsWith('/konsultan/rencana-aksi')) {
+    return { title: 'Rencana Aksi', icon: Task01Icon }
+  }
+  if (p.startsWith('/konsultan/profil')) {
+    return { title: 'Profil & Dokumen', icon: UserCircleIcon }
   }
   if (p.startsWith('/konsultan/validasi')) {
     return { title: 'Validasi Kas', icon: CheckmarkCircle01Icon }

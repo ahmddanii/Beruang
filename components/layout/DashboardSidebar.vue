@@ -281,7 +281,12 @@ watch(
   }
 )
 
-const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const currentRole = computed(() => {
+  if (route.path.startsWith('/konsultan')) return 'CONSULTANT'
+  if (route.path.startsWith('/investor')) return 'INVESTOR'
+  if (route.path.startsWith('/admin')) return 'ADMIN'
+  return authStore.currentUser?.role || 'UMKM'
+})
 
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'
@@ -348,13 +353,16 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/konsultan', label: 'Daftar Klien', icon: UserGroupIcon },
+          { to: '/konsultan', label: 'Klien Binaan', icon: UserGroupIcon },
+          { to: '/konsultan/request', label: 'Permintaan Masuk', icon: UserAdd01Icon },
+          { to: '/konsultan/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
           { to: '/konsultan/validasi', label: 'Validasi Kas', icon: CheckmarkCircle01Icon }
         ]
       },
       {
-        title: 'Pengawasan',
+        title: 'Manajemen',
         items: [
+          { to: '/konsultan/profil', label: 'Profil & Dokumen', icon: UserCircleIcon },
           { to: '/konsultan/alert', label: 'Peringatan', icon: Alert01Icon }
         ]
       }

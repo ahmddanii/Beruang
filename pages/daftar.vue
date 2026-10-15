@@ -137,17 +137,17 @@
       
       <!-- Top Brand Header & Step Badge -->
       <div class="flex items-center justify-between flex-wrap gap-2">
-        <NuxtLink to="/" class="flex items-center gap-2.5 group">
-          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" />
+        <div class="flex items-center gap-2.5 select-none cursor-default">
+          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain select-none" />
           <div class="text-left">
             <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none block">
               <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
             </span>
-            <span class="text-[11px] font-semibold text-primary-600 dark:text-primary-400">
+            <span class="text-[11px] font-semibold text-primary-600 dark:text-primary-400 select-none">
               Pendaftaran Akun {{ activeRoleMeta.shortTitle }}
             </span>
           </div>
-        </NuxtLink>
+        </div>
 
         <span class="inline-flex items-center px-3 py-1 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
           {{ currentStepNumber }} / 2

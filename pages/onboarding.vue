@@ -716,63 +716,52 @@
             </div>
           </div>
 
-          <!-- Step 3: Janji Kerahasiaan -->
+          <!-- Step 3: Rekap Data & Konfirmasi Investor -->
           <div v-else class="space-y-4">
             <div class="text-center mb-3">
               <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Janji Kerahasiaan
+                Data Investor Siap Disimpan!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
-                Jaga kerahasiaan data sebelum melihat buku kas usaha.
+                Periksa kembali kelengkapan profilmu sebelum mulai menjelajahi katalog usaha.
               </p>
             </div>
 
-            <!-- Profile Summary -->
-            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-1.5">
-              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-1.5">
-                <span class="text-neutral-500">Pemodal:</span>
+            <!-- Profile Summary Card -->
+            <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Nama Investor:</span>
                 <span class="font-bold text-neutral-900 dark:text-white">{{ formInvestor.name }}</span>
               </div>
-              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-1.5">
-                <span class="text-neutral-500">Lembaga / Tipe:</span>
-                <span class="font-semibold">{{ formInvestor.entityName }} ({{ formInvestor.investorType }})</span>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Perusahaan / Kelompok:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formInvestor.entityName || 'Pribadi / Perorangan' }}</span>
               </div>
-              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-1.5">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Jenis Investor:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formInvestor.investorType }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kota Asal:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formInvestor.city }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
                 <span class="text-neutral-500">Kisaran Modal:</span>
-                <span class="font-bold text-primary-600 tabular-nums">{{ formInvestor.ticketRange }}</span>
+                <span class="font-bold text-primary-600 dark:text-primary-400 tabular-nums">{{ formInvestor.ticketRange }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Bidang Usaha Pilihan:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200 text-right max-w-[60%]">
+                  {{ formInvestor.sectors.length > 0 ? formInvestor.sectors.join(', ') : 'Semua Bidang Usaha (Bebas)' }}
+                </span>
               </div>
               <div class="flex justify-between">
-                <span class="text-neutral-500">Bidang Usaha:</span>
-                <span class="font-semibold">{{ formInvestor.sectors.join(', ') || 'Semua Bidang' }}</span>
+                <span class="text-neutral-500">Harapan Untung Bersih:</span>
+                <span class="font-semibold text-emerald-600 dark:text-emerald-400">&gt; {{ formInvestor.minMargin }}</span>
               </div>
-            </div>
-
-            <!-- Checklist -->
-            <div class="space-y-2 pt-1 text-left">
-              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-850/60 cursor-pointer">
-                <input
-                  v-model="formInvestor.agreeNda"
-                  type="checkbox"
-                  class="rounded text-primary-600 focus:ring-primary-500"
-                />
-                <span class="text-xs text-neutral-700 dark:text-neutral-300">
-                  Tidak membocorkan data keuangan dan rahasia dagang UMKM.
-                </span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-850/60 cursor-pointer">
-                <input
-                  v-model="formInvestor.agreeProtocol"
-                  type="checkbox"
-                  class="rounded text-primary-600 focus:ring-primary-500"
-                />
-                <span class="text-xs text-neutral-700 dark:text-neutral-300">
-                  Hanya melihat laporan rinci jika sudah diizinkan pemilik usaha.
-                </span>
-              </label>
             </div>
           </div>
         </template>
@@ -813,13 +802,8 @@
             <button
               v-else
               type="button"
-              :disabled="submitting || (activeRole === 'INVESTOR' && !isInvestorAgreed)"
-              :class="[
-                'inline-flex items-center gap-2 h-10 px-6 rounded-full font-bold text-xs sm:text-sm shadow-sm transition-all',
-                activeRole === 'INVESTOR' && !isInvestorAgreed
-                  ? 'bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
-                  : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/20 active:scale-[0.99] cursor-pointer'
-              ]"
+              :disabled="submitting"
+              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
               @click="finishOnboarding"
             >
               <span v-if="submitting">Menyimpan...</span>
@@ -905,7 +889,7 @@ const stepsConsultant = [
 const stepsInvestor = [
   { title: 'Data Diri' },
   { title: 'Pilihan Modal' },
-  { title: 'Kerahasiaan' }
+  { title: 'Selesai' }
 ]
 
 const currentStepsList = computed(() => {
@@ -994,9 +978,7 @@ const formInvestor = ref({
   city: authStore.currentUser?.city || 'Jakarta Pusat',
   ticketRange: authStore.currentUser?.ticketRange || '150 - 500 Juta',
   sectors: ['Makanan & Minuman', 'Pakaian & Kerajinan'],
-  minMargin: '35%',
-  agreeNda: true,
-  agreeProtocol: true
+  minMargin: '35%'
 })
 
 function toggleInvestorSector(sec: string) {
@@ -1007,10 +989,6 @@ function toggleInvestorSector(sec: string) {
     formInvestor.value.sectors.push(sec)
   }
 }
-
-const isInvestorAgreed = computed(() => {
-  return formInvestor.value.agreeNda && formInvestor.value.agreeProtocol
-})
 
 function finishOnboarding() {
   submitting.value = true

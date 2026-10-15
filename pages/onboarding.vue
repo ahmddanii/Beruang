@@ -449,7 +449,7 @@
           </div>
 
           <!-- Step 2: Spesialisasi & Kapasitas Pendampingan -->
-          <div v-else-if="currentStep === 2" class="space-y-3.5">
+          <div v-else class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
               <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="UserGroupIcon" :size="20" :stroke-width="1.75" />
@@ -513,77 +513,6 @@
                   <option :value="15">15 Usaha</option>
                 </select>
               </div>
-            </div>
-          </div>
-
-          <!-- Step 3: Janji Pendamping -->
-          <div v-else class="space-y-4">
-            <div class="text-center mb-3">
-              <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
-                <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
-              </div>
-              <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Janji Pendamping
-              </h3>
-              <p class="text-xs text-neutral-500 max-w-sm mx-auto">
-                Tiga janji utama untuk menjaga kepercayaan pelaku usaha.
-              </p>
-            </div>
-
-            <!-- Profile Overview -->
-            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-1.5">
-              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-1.5">
-                <span class="text-neutral-500">Konsultan:</span>
-                <span class="font-bold text-neutral-900 dark:text-white">{{ formConsultant.name }}</span>
-              </div>
-              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-1.5">
-                <span class="text-neutral-500">Sertifikat:</span>
-                <span class="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ formConsultant.bnspLicense }}</span>
-              </div>
-              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-1.5">
-                <span class="text-neutral-500">Keahlian:</span>
-                <span class="font-semibold">{{ formConsultant.specialization }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-neutral-500">Kapasitas:</span>
-                <span class="font-semibold">{{ formConsultant.maxClients }} Usaha (Pengalaman {{ formConsultant.experience }})</span>
-              </div>
-            </div>
-
-            <!-- Ethics Checklist -->
-            <div class="space-y-2 pt-1 text-left">
-              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-850/60 cursor-pointer">
-                <input
-                  v-model="formConsultant.agreeConfidentiality"
-                  type="checkbox"
-                  class="rounded text-primary-600 focus:ring-primary-500"
-                />
-                <span class="text-xs text-neutral-700 dark:text-neutral-300">
-                  Jaga rahasia data keuangan dan bukti rekening UMKM.
-                </span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-850/60 cursor-pointer">
-                <input
-                  v-model="formConsultant.agreeSla"
-                  type="checkbox"
-                  class="rounded text-primary-600 focus:ring-primary-500"
-                />
-                <span class="text-xs text-neutral-700 dark:text-neutral-300">
-                  Beri tanggapan dan masukan maksimal 3 hari kerja.
-                </span>
-              </label>
-
-              <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-850/60 cursor-pointer">
-                <input
-                  v-model="formConsultant.agreeObjective"
-                  type="checkbox"
-                  class="rounded text-primary-600 focus:ring-primary-500"
-                />
-                <span class="text-xs text-neutral-700 dark:text-neutral-300">
-                  Beri penilaian jujur dan adil tanpa memihak.
-                </span>
-              </label>
             </div>
           </div>
         </template>
@@ -854,10 +783,10 @@
             <button
               v-else
               type="button"
-              :disabled="submitting || (activeRole === 'CONSULTANT' && !isConsultantAgreed) || (activeRole === 'INVESTOR' && !isInvestorAgreed)"
+              :disabled="submitting || (activeRole === 'INVESTOR' && !isInvestorAgreed)"
               :class="[
                 'inline-flex items-center gap-2 h-10 px-6 rounded-full font-bold text-xs sm:text-sm shadow-sm transition-all',
-                (activeRole === 'CONSULTANT' && !isConsultantAgreed) || (activeRole === 'INVESTOR' && !isInvestorAgreed)
+                activeRole === 'INVESTOR' && !isInvestorAgreed
                   ? 'bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
                   : 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/20 active:scale-[0.99] cursor-pointer'
               ]"
@@ -939,8 +868,7 @@ const stepsUmkm = [
 
 const stepsConsultant = [
   { title: 'Data Diri' },
-  { title: 'Keahlian' },
-  { title: 'Janji Pendamping' }
+  { title: 'Keahlian' }
 ]
 
 const stepsInvestor = [
@@ -1009,16 +937,7 @@ const formConsultant = ref({
   city: authStore.currentUser?.city || 'Jakarta Selatan',
   specialization: authStore.currentUser?.specialization || 'Keuangan & Biaya',
   experience: '5+ Tahun',
-  maxClients: 10,
-  agreeConfidentiality: true,
-  agreeSla: true,
-  agreeObjective: true
-})
-
-const isConsultantAgreed = computed(() => {
-  return formConsultant.value.agreeConfidentiality &&
-    formConsultant.value.agreeSla &&
-    formConsultant.value.agreeObjective
+  maxClients: 10
 })
 
 // Investor Form Data

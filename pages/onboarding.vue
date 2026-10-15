@@ -544,13 +544,6 @@
                 <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.maxClients }} Usaha (Pengalaman {{ formConsultant.experience }})</span>
               </div>
             </div>
-
-            <div class="p-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/40 text-left flex items-start gap-2.5">
-              <span class="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">💡</span>
-              <p class="text-[11px] leading-relaxed text-blue-800 dark:text-blue-300">
-                Setelah tersimpan, akunmu akan langsung diarahkan ke halaman pendampingan untuk memvalidasi laporan keuangan dan rencana aksi UMKM.
-              </p>
-            </div>
           </div>
         </template>
 

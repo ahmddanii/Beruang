@@ -251,7 +251,7 @@
         </div>
 
         <!-- 4-Digit Input Boxes -->
-        <div class="flex items-center justify-center gap-3 py-2">
+        <div class="flex items-center justify-center gap-2.5 sm:gap-3 py-2">
           <input
             v-for="(digit, idx) in otpDigits"
             :key="idx"
@@ -260,10 +260,18 @@
             type="text"
             maxlength="1"
             inputmode="numeric"
+            autocomplete="one-time-code"
             pattern="[0-9]*"
-            class="w-13 h-15 sm:w-15 sm:h-17 rounded-2xl border-2 border-[#EAEAEA] dark:border-[#26272F] bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white text-2xl sm:text-3xl font-extrabold text-center focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none shadow-xs transition-all"
+            :class="[
+              'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-primary-500/15 caret-primary-500 shadow-2xs',
+              otpDigits[idx]
+                ? 'border-primary-500 bg-primary-50/30 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400'
+                : 'border-neutral-200/90 dark:border-neutral-700/80 bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white hover:border-neutral-300 dark:hover:border-neutral-600 focus:border-primary-500'
+            ]"
             @input="onOtpInput(idx, $event)"
-            @keydown.backspace="onOtpBackspace(idx, $event)"
+            @keydown="onOtpKeydown(idx, $event)"
+            @paste="onOtpPaste"
+            @focus="onOtpFocus"
           />
         </div>
 
@@ -474,10 +482,25 @@ function requestOtp() {
 
 function onOtpInput(index: number, event: Event) {
   const target = event.target as HTMLInputElement
-  const val = target.value.replace(/\D/g, '')
-  otpDigits.value[index] = val ? val[val.length - 1] : ''
+  const raw = target.value.replace(/\D/g, '')
 
-  if (val && index < 3) {
+  if (raw.length > 1) {
+    const digits = raw.slice(0, 4).split('')
+    digits.forEach((d, i) => {
+      if (index + i < 4) {
+        otpDigits.value[index + i] = d
+      }
+    })
+    const nextIdx = Math.min(index + digits.length, 3)
+    otpRefs.value[nextIdx]?.focus()
+    if (otpString.value.length === 4) {
+      verifyAndRegister()
+    }
+    return
+  }
+
+  otpDigits.value[index] = raw
+  if (raw && index < 3) {
     otpRefs.value[index + 1]?.focus()
   }
   if (otpString.value.length === 4) {
@@ -485,10 +508,42 @@ function onOtpInput(index: number, event: Event) {
   }
 }
 
-function onOtpBackspace(index: number, event: KeyboardEvent) {
-  if (!otpDigits.value[index] && index > 0) {
+function onOtpKeydown(index: number, event: KeyboardEvent) {
+  if (event.key === 'Backspace') {
+    if (!otpDigits.value[index] && index > 0) {
+      event.preventDefault()
+      otpDigits.value[index - 1] = ''
+      otpRefs.value[index - 1]?.focus()
+    }
+  } else if (event.key === 'ArrowLeft' && index > 0) {
+    event.preventDefault()
     otpRefs.value[index - 1]?.focus()
+  } else if (event.key === 'ArrowRight' && index < 3) {
+    event.preventDefault()
+    otpRefs.value[index + 1]?.focus()
   }
+}
+
+function onOtpPaste(event: ClipboardEvent) {
+  event.preventDefault()
+  const text = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 4)
+  if (!text) return
+  const chars = text.split('')
+  chars.forEach((c, i) => {
+    if (i < 4) {
+      otpDigits.value[i] = c
+    }
+  })
+  const nextIdx = Math.min(chars.length, 3)
+  otpRefs.value[nextIdx]?.focus()
+  if (otpString.value.length === 4) {
+    verifyAndRegister()
+  }
+}
+
+function onOtpFocus(event: Event) {
+  const target = event.target as HTMLInputElement
+  target.select()
 }
 
 function fillOtpDemo() {

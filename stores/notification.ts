@@ -21,47 +21,47 @@ export interface AppNotification {
 const DEFAULT_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'notif-umkm-1',
-    title: 'Catatan Kas Mingguan Disetujui! ☕',
-    message: 'Dra. Maya Suryani (Konsultan) telah memvalidasi laporan kas minggu ini. Arus kas bersih tokomu dinyatakan sehat tanpa selisih.',
+    title: 'Catatan Kas Mingguan Tervalidasi',
+    message: 'Dra. Maya Suryani (Konsultan Pendamping) telah mengecek laporan pergerakan uang tokomu minggu ini. Saldo kas dinyatakan tervalidasi dan tertib.',
     category: 'KONSULTAN',
     priority: 'HIGH',
     timestamp: '15 menit lalu',
     date: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/dashboard/progres',
-    actionLabel: 'Cek Mutasi Kas',
+    actionLabel: 'Lihat Catatan Kas',
     roleTarget: 'UMKM'
   },
   {
     id: 'notif-umkm-2',
-    title: 'Minat Masuk: Akses Data Room 🤝',
-    message: 'Nusantara Capital Ventures tertarik dengan profil Kopi Senja Nusantara dan mengajukan pembukaan Data Room untuk rencana modal Rp250 Juta.',
+    title: 'Tawaran Baru: Pengajuan Akses Modal',
+    message: 'Nusantara Capital Ventures tertarik dengan profil Kopi Senja Nusantara dan mengajukan pembukaan ruang data untuk penjajakan modal kerja Rp250 Juta.',
     category: 'INVESTOR',
     priority: 'HIGH',
     timestamp: '1 jam lalu',
     date: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/dashboard/permintaan-investor',
-    actionLabel: 'Tinjau Investor',
+    actionLabel: 'Tinjau Mitra Modal',
     roleTarget: 'UMKM'
   },
   {
     id: 'notif-umkm-3',
-    title: 'Skor Kesiapan Naik ke 82%! 🚀',
-    message: 'Bagus banget! Skor diagnostik 5 dimensi tokomu kini menembus ambang batas siap modal (Ready for Funding). Yok bisa yok!',
+    title: 'Kesiapan Modal Tokomu Naik ke 82%',
+    message: 'Perkembangan positif! Evaluasi 5 dimensi tokomu kini telah melampaui batas standar kesiapan modal mitra investor.',
     category: 'KESEHATAN',
     priority: 'NORMAL',
     timestamp: '3 jam lalu',
     date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/dashboard/penilaian',
-    actionLabel: 'Lihat Radar Diagnostik',
+    actionLabel: 'Cek Kesiapan Usaha',
     roleTarget: 'UMKM'
   },
   {
     id: 'notif-umkm-4',
-    title: '1 Tugas Rencana Aksi Ditugaskan 📋',
-    message: 'Konsultan menambahkan panduan: "Standardisasi pencatatan HPP biji kopi blend vs single origin di outlet 2".',
+    title: 'Tugas Baru pada Rencana Aksi',
+    message: 'Konsultan menambahkan panduan: "Standardisasi pencatatan modal jualan biji kopi blend dan single origin di outlet 2".',
     category: 'AKSI',
     priority: 'NORMAL',
     timestamp: 'Kemarin, 16:30',
@@ -73,8 +73,8 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
   },
   {
     id: 'notif-umkm-5',
-    title: 'Pengingat: Tutup Buku Kas Harian 🪙',
-    message: 'Sudah selesai operasional hari ini? Yuk catat omzet dan pengeluaran agar arus kas tokomu terlindungi dan tercatat rapi.',
+    title: 'Pengingat: Rekap Catatan Kas Harian',
+    message: 'Pastikan total uang masuk dan biaya operasional hari ini telah dicatat agar pergerakan uang tokomu tetap transparan dan akurat.',
     category: 'KAS',
     priority: 'NORMAL',
     timestamp: '2 hari lalu',
@@ -84,11 +84,37 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     actionLabel: 'Catat Kas Hari Ini',
     roleTarget: 'UMKM'
   },
+  {
+    id: 'notif-umkm-6',
+    title: 'Dokumen Usaha Dicek Konsultan',
+    message: 'Konsultan telah memvalidasi kelengkapan NIB dan profil tokomu. Status kelengkapan data dinyatakan tervalidasi.',
+    category: 'KONSULTAN',
+    priority: 'NORMAL',
+    timestamp: '3 hari lalu',
+    date: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
+    isRead: true,
+    link: '/dashboard/profile',
+    actionLabel: 'Lihat Profil Usaha',
+    roleTarget: 'UMKM'
+  },
+  {
+    id: 'notif-umkm-7',
+    title: 'Biaya Operasional Toko Terjaga Hemat',
+    message: 'Rasio pengeluaran operasional bulan ini tercatat hemat 6%, menjaga untung bersih tokomu tetap tumbuh stabil.',
+    category: 'KAS',
+    priority: 'NORMAL',
+    timestamp: '5 hari lalu',
+    date: new Date(Date.now() - 120 * 60 * 60 * 1000).toISOString(),
+    isRead: true,
+    link: '/dashboard/progres',
+    actionLabel: 'Lihat Catatan Kas',
+    roleTarget: 'UMKM'
+  },
   // Notifications for Consultant role
   {
     id: 'notif-kon-1',
-    title: 'Klien Baru Mengajukan Validasi Kas',
-    message: 'Kopi Senja Nusantara baru saja mengirim rekap kas minggu ke-2 Oktober untuk diverifikasi.',
+    title: 'Klien Mengajukan Pengecekan Kas',
+    message: 'Kopi Senja Nusantara baru saja mengirim rekap catatan kas untuk diperiksa kelengkapannya.',
     category: 'KONSULTAN',
     priority: 'HIGH',
     timestamp: '25 menit lalu',
@@ -101,8 +127,8 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
   // Notifications for Investor role
   {
     id: 'notif-inv-1',
-    title: 'UMKM Terkurasi Baru: Kopi Senja',
-    message: 'UMKM sektor F&B dengan skor kesiapan 82% dan 3 outlet aktif telah siap ditinjau di katalog.',
+    title: 'UMKM Tervalidasi Baru: Kopi Senja',
+    message: 'UMKM sektor F&B dengan skor kesiapan modal 82% dan 3 outlet aktif telah siap ditinjau di katalog usaha.',
     category: 'INVESTOR',
     priority: 'NORMAL',
     timestamp: '2 jam lalu',
@@ -140,13 +166,13 @@ export const useNotificationStore = defineStore('notification', {
   },
 
   actions: {
-    initNotifications() {
-      if (this.isInitialized) return
+    initNotifications(forceReset = false) {
+      if (this.isInitialized && !forceReset) return
       this.isInitialized = true
 
-      if (import.meta.client) {
+      if (import.meta.client && !forceReset) {
         try {
-          const saved = localStorage.getItem('beruang_notifications_v1')
+          const saved = localStorage.getItem('beruang_notifications_v2')
           if (saved) {
             const parsed = JSON.parse(saved)
             if (Array.isArray(parsed) && parsed.length > 0) {
@@ -159,7 +185,7 @@ export const useNotificationStore = defineStore('notification', {
         }
       }
 
-      // Default mock if none stored
+      // Default mock if none stored or forced reset
       this.notifications = [...DEFAULT_NOTIFICATIONS]
       this.saveToStorage()
     },
@@ -167,7 +193,7 @@ export const useNotificationStore = defineStore('notification', {
     saveToStorage() {
       if (import.meta.client) {
         try {
-          localStorage.setItem('beruang_notifications_v1', JSON.stringify(this.notifications))
+          localStorage.setItem('beruang_notifications_v2', JSON.stringify(this.notifications))
         } catch (e) {
           console.warn('Gagal menyimpan notifikasi ke localStorage', e)
         }

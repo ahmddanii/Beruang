@@ -6,7 +6,7 @@
     viewBox="0 0 24 24"
     fill="currentColor"
     :class="[
-      'transition-colors duration-150 shrink-0 text-[#0081A0] dark:text-[#38BDF8]',
+      'transition-colors duration-150 shrink-0 text-[#2091AA] dark:text-[#50AABF]',
       extraClass
     ]"
     aria-hidden="true"
@@ -127,6 +127,14 @@
         d="M19 14C19.5523 14 20 14.4477 20 15V17H22C22.5523 17 23 17.4477 23 18C23 18.5523 22.5523 19 22 19H20V21C20 21.5523 19.5523 22 19 22C18.4477 22 18 21.5523 18 21V19H16C15.4477 19 15 18.5523 15 18C15 17.4477 15.4477 17 16 17H18V15C18 14.4477 18.4477 14 19 14Z"
       />
     </g>
+
+    <!-- 13. Notification Bell (Notifikasi) -->
+    <path
+      v-else-if="filledKey === 'notification'"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M12 2C10.8954 2 10 2.89543 10 4.02513C6.61718 4.60627 4.5 7.47271 4.5 11V15.2929L3.14645 16.6464C2.83145 16.9614 2.74836 17.4338 2.93481 17.8344C3.12126 18.235 3.53583 18.5 4 18.5H20C20.4642 18.5 20.8787 18.235 21.0652 17.8344C21.2516 17.4338 21.1686 16.9614 20.8536 16.6464L19.5 15.2929V11C19.5 7.47271 17.3828 4.60627 14 4.02513C14 2.89543 13.1046 2 12 2ZM9.5 20C9.5 21.3807 10.6193 22.5 12 22.5C13.3807 22.5 14.5 21.3807 14.5 20H9.5Z"
+    />
   </svg>
 
   <!-- Default Outline Hugeicon when not active or fallback -->
@@ -170,6 +178,7 @@ const filledKey = computed(() => {
   if (p.startsWith('/dashboard/penilaian')) return 'analytics'
   if (p.startsWith('/dashboard/profil-publik') || p === '/investor') return 'store'
   if (p.startsWith('/dashboard/pendanaan')) return 'award'
+  if (p.startsWith('/dashboard/notifikasi')) return 'notification'
   if (
     p.startsWith('/dashboard/permintaan-investor') ||
     p === '/konsultan' ||

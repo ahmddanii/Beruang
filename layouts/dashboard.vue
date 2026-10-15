@@ -27,7 +27,7 @@
             class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
           />
           <span class="font-heading font-extrabold text-lg sm:text-xl tracking-tight leading-none select-none">
-            <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+            <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>
           </span>
         </NuxtLink>
       </div>
@@ -41,7 +41,7 @@
         <div class="relative">
           <button
             type="button"
-            class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-neutral-200/90 dark:border-neutral-700/80 p-0.5 hover:ring-2 hover:ring-[#0081A0]/30 dark:hover:ring-[#38BDF8]/30 transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs overflow-hidden group bg-white dark:bg-[#18191E] flex items-center justify-center"
+            class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-neutral-200/90 dark:border-neutral-700/80 p-0.5 hover:ring-2 hover:ring-[#2091AA]/30 dark:hover:ring-[#50AABF]/30 transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs overflow-hidden group bg-white dark:bg-[#18191E] flex items-center justify-center"
             aria-label="Buka Menu Profil & Pengaturan"
             title="Menu Akun & Pengaturan"
             @click="isProfileDropdownOpen = !isProfileDropdownOpen"
@@ -129,7 +129,7 @@
                   :class="[
                     'w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer text-left',
                     authStore.currentUser?.role === role.id
-                      ? 'bg-white dark:bg-neutral-800 text-[#0081A0] dark:text-[#38BDF8] font-semibold shadow-2xs'
+                      ? 'bg-white dark:bg-neutral-800 text-[#2091AA] dark:text-[#50AABF] font-semibold shadow-2xs'
                       : 'text-neutral-600 dark:text-neutral-400 hover:bg-white/80 dark:hover:bg-neutral-800/60'
                   ]"
                   @click="switchRole(role.id, role.path)"
@@ -137,7 +137,7 @@
                   <span>{{ role.name }}</span>
                   <span
                     v-if="authStore.currentUser?.role === role.id"
-                    class="w-1.5 h-1.5 rounded-full bg-[#0081A0] dark:bg-[#38BDF8]"
+                    class="w-1.5 h-1.5 rounded-full bg-[#2091AA] dark:bg-[#50AABF]"
                   />
                 </button>
               </div>
@@ -167,8 +167,8 @@
       <!-- Main Dashboard Workspace Content (Fluid full-width layout matching Trueform references) -->
       <main class="flex-1 w-full min-w-0 overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:pl-16 lg:pr-12 xl:pl-20 xl:pr-16 py-7 sm:py-9">
         <!-- Page Header: Current Page Name & Icon at the Very Top of Main Container -->
-        <div class="flex items-center gap-3 sm:gap-3.5 mb-6 sm:mb-8 select-none">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center text-[#0081A0] dark:text-[#38BDF8] shadow-xs shrink-0">
+        <div class="flex items-start gap-3 sm:gap-3.5 mb-6 sm:mb-8 select-none">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center text-[#2091AA] dark:text-[#50AABF] shadow-xs shrink-0 mt-0.5">
             <SidebarNavIcon
               :to="route.path"
               :outline-icon="currentPageInfo.icon"
@@ -180,6 +180,9 @@
             <h1 class="font-heading font-bold text-xl sm:text-2xl lg:text-[28px] text-neutral-900 dark:text-white tracking-tight leading-tight">
               {{ currentPageInfo.title }}
             </h1>
+            <p v-if="currentPageInfo.description" class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1 font-poppins leading-relaxed max-w-3xl">
+              {{ currentPageInfo.description }}
+            </p>
           </div>
         </div>
 
@@ -302,7 +305,11 @@ const currentPageInfo = computed(() => {
     return { title: 'Profil Usaha', icon: UserCircleIcon }
   }
   if (p.startsWith('/dashboard/progres')) {
-    return { title: 'Catatan Kas', icon: Coins01Icon }
+    return {
+      title: 'Catatan Kas',
+      icon: Coins01Icon,
+      description: 'Pencatatan mutasi kas harian, uang masuk penjualan, modal belanja bahan baku, dan biaya operasional tokomu untuk memantau kesehatan keuangan usaha.'
+    }
   }
   if (p.startsWith('/dashboard/rencana-aksi')) {
     return { title: 'Rencana Aksi', icon: Task01Icon }
@@ -316,8 +323,8 @@ const currentPageInfo = computed(() => {
   if (p.startsWith('/dashboard/pendanaan')) {
     return { title: 'Cari Modal', icon: Award01Icon }
   }
-  if (p.startsWith('/dashboard/permintaan-investor')) {
-    return { title: 'Tawaran Masuk', icon: UserGroupIcon }
+  if (p.startsWith('/dashboard/permintaan-investor') || p.startsWith('/dashboard/notifikasi')) {
+    return { title: 'Notifikasi', icon: Notification01Icon }
   }
   if (p.startsWith('/dashboard/pengaturan')) {
     return { title: 'Pengaturan Usaha', icon: Settings01Icon }

@@ -1,13 +1,7 @@
 <template>
   <div class="space-y-8 pb-10">
-    <!-- Header & Breadcrumb -->
+    <!-- Header -->
     <div>
-      <div class="flex items-center gap-2 text-xs text-neutral-500 mb-2">
-        <NuxtLink to="/admin" class="hover:text-primary-600 transition-colors flex items-center gap-1.5">
-          <HugeiconsIcon :icon="ArrowLeft02Icon" :size="14" :stroke-width="2" />
-          <span>Dashboard Admin</span>
-        </NuxtLink>
-      </div>
       <h1 class="text-2xl sm:text-3xl font-heading font-extrabold text-neutral-900 dark:text-neutral-50 tracking-tight">
         Kelola Pengguna Platform
       </h1>

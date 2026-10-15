@@ -6,7 +6,7 @@
         <NuxtLink to="/" class="flex items-center gap-2.5">
           <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain" />
           <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
-            <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+            <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>
           </span>
         </NuxtLink>
         <span class="text-xs text-neutral-500 font-medium tabular-nums">

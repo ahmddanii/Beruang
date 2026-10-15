@@ -44,6 +44,18 @@ export interface MonthlyRecord {
 
 export type MonthlyFinancialRecord = MonthlyRecord
 
+export interface DailyTransaction {
+  id: string
+  date: string
+  title: string
+  category: 'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL'
+  amount: number
+  paymentMethod: 'QRIS' | 'TRANSFER' | 'TUNAI'
+  status: 'VERIFIED' | 'PENDING'
+  notes?: string
+  receiptNumber?: string
+}
+
 export interface InvestorRequest {
   id: string
   investorId: string
@@ -324,7 +336,98 @@ export const useUmkmStore = defineStore('umkm', {
         proposedTicket: 100000000,
         introMessage: 'Tertarik dengan model roastery efisien dan margin sehat. Ingin meninjau rekening koran dan proyeksi cashflow.'
       }
-    ] as InvestorRequest[]
+    ] as InvestorRequest[],
+
+    dailyTransactions: [
+      {
+        id: 'tx-01',
+        date: '15 Oktober 2026',
+        title: 'Penjualan Kopi Susu Aren POS Kasir',
+        category: 'PEMASUKAN',
+        amount: 3850000,
+        paymentMethod: 'QRIS',
+        status: 'VERIFIED',
+        receiptNumber: 'INV/20261015/POS/089',
+        notes: 'Rekap harian kasir 3 gerai aktif'
+      },
+      {
+        id: 'tx-02',
+        date: '14 Oktober 2026',
+        title: 'Biji Kopi Arabika Malabar 25kg (Bahan Baku)',
+        category: 'MODAL_JUALAN',
+        amount: 3250000,
+        paymentMethod: 'TRANSFER',
+        status: 'VERIFIED',
+        receiptNumber: 'PO/20261014/MALABAR/012',
+        notes: 'Restock mingguan roastery supplier Malabar'
+      },
+      {
+        id: 'tx-03',
+        date: '13 Oktober 2026',
+        title: 'Susu Fresh Milk Pasteurisasi 60 Liter',
+        category: 'MODAL_JUALAN',
+        amount: 1140000,
+        paymentMethod: 'TRANSFER',
+        status: 'VERIFIED',
+        receiptNumber: 'INV/20261013/MILK/45',
+        notes: 'Pasokan harian susu murni peternak Lembang'
+      },
+      {
+        id: 'tx-04',
+        date: '12 Oktober 2026',
+        title: 'Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago',
+        category: 'OPERASIONAL',
+        amount: 2450000,
+        paymentMethod: 'TRANSFER',
+        status: 'VERIFIED',
+        receiptNumber: 'PLN/20261012/DAGO/981',
+        notes: 'Beban operasional rutin bulanan'
+      },
+      {
+        id: 'tx-05',
+        date: '11 Oktober 2026',
+        title: 'Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2',
+        category: 'PEMASUKAN',
+        amount: 5200000,
+        paymentMethod: 'QRIS',
+        status: 'VERIFIED',
+        receiptNumber: 'INV/20261011/POS/102',
+        notes: 'Lonjakan pesanan promo akhir pekan'
+      },
+      {
+        id: 'tx-06',
+        date: '10 Oktober 2026',
+        title: 'Pengadaan Cup Biodegradable & Paper Straw',
+        category: 'MODAL_JUALAN',
+        amount: 880000,
+        paymentMethod: 'TUNAI',
+        status: 'VERIFIED',
+        receiptNumber: 'NOTA/20261010/CUP/21',
+        notes: 'Kemasan takeaway 1.000 pcs'
+      },
+      {
+        id: 'tx-07',
+        date: '09 Oktober 2026',
+        title: 'Maintenance Rutin Mesin Espresso Simonelli',
+        category: 'OPERASIONAL',
+        amount: 750000,
+        paymentMethod: 'TUNAI',
+        status: 'VERIFIED',
+        receiptNumber: 'SRV/20261009/TECH/07',
+        notes: 'Descaling dan pergantian gasket seal'
+      },
+      {
+        id: 'tx-08',
+        date: '08 Oktober 2026',
+        title: 'Penjualan Hari Kerja (Senin - Rabu)',
+        category: 'PEMASUKAN',
+        amount: 4120000,
+        paymentMethod: 'QRIS',
+        status: 'VERIFIED',
+        receiptNumber: 'INV/20261008/POS/067',
+        notes: 'Kasir online terhubung mPOS'
+      }
+    ] as DailyTransaction[]
   }),
 
   getters: {
@@ -351,6 +454,28 @@ export const useUmkmStore = defineStore('umkm', {
       if (task) {
         task.completed = !task.completed
       }
+    },
+
+    addTask(task: Omit<ActionPlanTask, 'id' | 'completed'>) {
+      const newId = `t-${Date.now()}`
+      this.tasks.push({
+        ...task,
+        id: newId,
+        completed: false
+      })
+    },
+
+    addDailyTransaction(tx: Omit<DailyTransaction, 'id' | 'status'>) {
+      const newTx: DailyTransaction = {
+        ...tx,
+        id: `tx-${Date.now()}`,
+        status: 'VERIFIED'
+      }
+      this.dailyTransactions.unshift(newTx)
+    },
+
+    deleteDailyTransaction(txId: string) {
+      this.dailyTransactions = this.dailyTransactions.filter(t => t.id !== txId)
     },
 
     addMonthlyProgress(record: Omit<MonthlyRecord, 'status'>) {

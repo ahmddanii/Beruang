@@ -2,11 +2,9 @@
   <div class="space-y-8 pb-12 font-sans">
     <!-- Breadcrumb & Top Bar -->
     <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2 text-xs text-neutral-500">
-        <NuxtLink to="/investor" class="hover:underline">← Katalog Marketplace</NuxtLink>
-        <span>/</span>
-        <span class="text-neutral-800 dark:text-neutral-200 font-semibold">{{ item?.name }}</span>
-      </div>
+      <NuxtLink to="/investor" class="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-neutral-600 dark:text-neutral-300 hover:text-primary-600 transition-colors">
+        ← Kembali ke Katalog
+      </NuxtLink>
 
       <button
         type="button"

@@ -1,17 +1,11 @@
 <template>
   <div class="space-y-8 pb-10">
-    <!-- Breadcrumb -->
-    <div class="flex items-center gap-2 text-xs text-neutral-500">
-      <NuxtLink to="/investor" class="hover:text-primary-600 transition-colors flex items-center gap-1.5">
+    <!-- Top Action -->
+    <div>
+      <NuxtLink :to="`/investor/umkm/${umkmId}`" class="hover:text-primary-600 transition-colors inline-flex items-center gap-1.5 text-xs text-neutral-500 font-medium">
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="14" :stroke-width="2" />
-        <span>Katalog Marketplace</span>
+        <span>Kembali ke Profil {{ item?.name || 'Usaha' }}</span>
       </NuxtLink>
-      <span>/</span>
-      <NuxtLink :to="`/investor/umkm/${umkmId}`" class="hover:text-primary-600 transition-colors">
-        {{ item?.name }}
-      </NuxtLink>
-      <span>/</span>
-      <span class="text-neutral-800 dark:text-neutral-200 font-semibold">Data Room Terproteksi</span>
     </div>
 
     <!-- Locked State if NOT approved -->

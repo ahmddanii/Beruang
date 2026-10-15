@@ -6,12 +6,12 @@
       :class="[
         'relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer select-none',
         isOpen
-          ? 'bg-[#E1F4FD] dark:bg-[#0081A0]/20 text-[#0081A0] dark:text-[#38BDF8] border-2 border-[#0081A0]/40 dark:border-[#38BDF8]/40 shadow-xs'
+          ? 'bg-[#E6F4F7] dark:bg-[#2091AA]/20 text-[#2091AA] dark:text-[#50AABF] border-2 border-[#2091AA]/40 dark:border-[#50AABF]/40 shadow-xs'
           : 'bg-white dark:bg-[#18191E] hover:bg-neutral-100 dark:hover:bg-[#202128] border border-neutral-200/90 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white shadow-2xs'
       ]"
       aria-label="Notifikasi & Pemberitahuan Usaha"
       :aria-expanded="isOpen"
-      title="Notifikasi Usaha"
+      title="Notifikasi"
       @click="toggleDropdown"
     >
       <HugeiconsIcon
@@ -44,11 +44,11 @@
       <div class="px-4 sm:px-5 py-3.5 border-b border-neutral-100 dark:border-neutral-800/80 bg-neutral-50/70 dark:bg-neutral-900/40 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <h3 class="font-heading font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-white tracking-tight">
-            Notifikasi Usaha
+            Notifikasi
           </h3>
           <span
             v-if="notificationStore.unreadCount > 0"
-            class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#00AA13]/10 text-[#00AA13] dark:text-[#22C55E] dark:bg-[#22C55E]/15 tabular-nums"
+            class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-[#00AA13] dark:text-emerald-400 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 tabular-nums"
           >
             {{ notificationStore.unreadCount }} Baru
           </span>
@@ -57,7 +57,7 @@
         <button
           v-if="notificationStore.unreadCount > 0"
           type="button"
-          class="text-xs font-medium text-[#0081A0] dark:text-[#38BDF8] hover:text-[#005e75] dark:hover:text-sky-300 transition-colors flex items-center gap-1 active:scale-95 cursor-pointer"
+          class="text-xs font-medium text-[#2091AA] dark:text-[#50AABF] hover:text-[#187286] dark:hover:text-[#62BDD2] transition-colors flex items-center gap-1 active:scale-95 cursor-pointer"
           title="Tandai semua notifikasi sudah dibaca"
           @click="handleMarkAllRead"
         >
@@ -75,7 +75,7 @@
           :class="[
             'px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-150 cursor-pointer',
             activeFilter === tab.id
-              ? 'bg-[#E1F4FD] dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#38BDF8] font-semibold shadow-2xs'
+              ? 'bg-[#E6F4F7] dark:bg-[#2091AA]/25 text-[#2091AA] dark:text-[#50AABF] font-semibold shadow-2xs'
               : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
           ]"
           @click="activeFilter = tab.id"
@@ -97,7 +97,7 @@
           v-if="filteredNotifications.length === 0"
           class="py-12 px-6 text-center flex flex-col items-center justify-center space-y-3"
         >
-          <div class="w-12 h-12 rounded-2xl bg-[#E1F4FD] dark:bg-[#0081A0]/15 text-[#0081A0] dark:text-[#38BDF8] flex items-center justify-center">
+          <div class="w-12 h-12 rounded-2xl bg-[#E6F4F7] dark:bg-[#2091AA]/15 text-[#2091AA] dark:text-[#50AABF] flex items-center justify-center">
             <HugeiconsIcon :icon="Notification02Icon" :size="24" :stroke-width="1.8" />
           </div>
           <div>
@@ -111,7 +111,7 @@
           <button
             v-if="activeFilter !== 'ALL'"
             type="button"
-            class="text-xs font-semibold text-[#0081A0] dark:text-[#38BDF8] hover:underline cursor-pointer pt-1"
+            class="text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline cursor-pointer pt-1"
             @click="activeFilter = 'ALL'"
           >
             Tampilkan Semua Notifikasi
@@ -126,7 +126,7 @@
             'p-3.5 sm:p-4 transition-all duration-150 group relative cursor-pointer',
             item.isRead
               ? 'bg-white dark:bg-[#18191E] hover:bg-neutral-50 dark:hover:bg-[#1c1d24]'
-              : 'bg-[#F4FAFE]/80 dark:bg-[#0081A0]/10 hover:bg-[#EDF7FD] dark:hover:bg-[#0081A0]/15'
+              : 'bg-[#E6F4F7]/40 dark:bg-[#2091AA]/10 hover:bg-[#E6F4F7]/70 dark:hover:bg-[#2091AA]/15'
           ]"
           @click="handleNotificationClick(item)"
         >
@@ -151,7 +151,7 @@
                 <!-- Unread Blue Dot -->
                 <span
                   v-if="!item.isRead"
-                  class="w-2 h-2 rounded-full bg-[#0081A0] dark:bg-[#38BDF8] shrink-0"
+                  class="w-2 h-2 rounded-full bg-[#2091AA] dark:bg-[#50AABF] shrink-0"
                   title="Belum Dibaca"
                 />
                 <h4
@@ -180,7 +180,7 @@
 
                 <span
                   v-if="item.actionLabel"
-                  class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0081A0] dark:text-[#38BDF8] group-hover:text-[#005e75] dark:group-hover:text-sky-300 transition-colors"
+                  class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2091AA] dark:text-[#50AABF] group-hover:text-[#187589] dark:group-hover:text-[#6ec2d5] transition-colors"
                 >
                   <span>{{ item.actionLabel }}</span>
                   <HugeiconsIcon :icon="ArrowRight01Icon" :size="11" :stroke-width="2.2" />
@@ -201,17 +201,19 @@
         </div>
       </div>
 
-      <!-- Dropdown Bottom Footer -->
-      <div class="px-4 py-2.5 bg-neutral-50 dark:bg-neutral-900/60 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-[11px] text-neutral-500 dark:text-neutral-400">
-        <span class="truncate">
-          Pendampingan UMKM Terpadu
+      <!-- Dropdown Bottom Footer: Button Lihat Semuanya (Mengarahkan ke Halaman Khusus Notifikasi) -->
+      <div class="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-xs">
+        <span class="text-neutral-500 dark:text-neutral-400 font-medium">
+          {{ notificationStore.roleNotifications.length }} notifikasi tersimpan
         </span>
         <NuxtLink
-          to="/dashboard/progres"
-          class="font-semibold text-[#0081A0] dark:text-[#38BDF8] hover:underline cursor-pointer shrink-0"
+          to="/dashboard/notifikasi"
+          class="font-heading font-semibold text-[#2091AA] dark:text-[#50AABF] hover:text-[#187589] dark:hover:text-[#6ec2d5] flex items-center gap-1.5 transition-colors cursor-pointer group/footer"
+          title="Buka Halaman Notifikasi"
           @click="isOpen = false"
         >
-          Buka Catatan Kas
+          <span>Lihat Semuanya</span>
+          <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2.2" class="transition-transform group-hover/footer:translate-x-0.5" />
         </NuxtLink>
       </div>
     </div>
@@ -257,7 +259,7 @@ const categoryIconConfig: Record<
 > = {
   KONSULTAN: {
     icon: CheckmarkCircle01Icon,
-    pillClass: 'bg-[#E1F4FD] text-[#0081A0] border-[#0081A0]/20 dark:bg-[#0081A0]/20 dark:text-[#38BDF8] dark:border-[#38BDF8]/30'
+    pillClass: 'bg-[#E6F4F7] text-[#2091AA] border-[#2091AA]/20 dark:bg-[#2091AA]/20 dark:text-[#50AABF] dark:border-[#50AABF]/30'
   },
   INVESTOR: {
     icon: Award01Icon,
@@ -284,7 +286,7 @@ const filterTabs = computed(() => {
     { id: 'ALL' as const, label: 'Semua', count: allCount },
     { id: 'UNREAD' as const, label: 'Belum Dibaca', count: unreadCount },
     { id: 'KONSULTAN' as const, label: 'Konsultan' },
-    { id: 'INVESTOR' as const, label: 'Investor' },
+    { id: 'INVESTOR' as const, label: 'Akses Modal' },
     { id: 'KAS' as const, label: 'Kas Toko' }
   ]
 })

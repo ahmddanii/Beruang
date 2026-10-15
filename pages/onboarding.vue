@@ -396,7 +396,7 @@
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Profil Usahamu Sudah Siap!
+                Profil Anda Sudah Siap!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
                 Periksa kembali ringkasan usahamu sebelum masuk ke beranda toko.
@@ -576,7 +576,7 @@
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Profil Konsultan Sudah Siap!
+                Profil Anda Sudah Siap!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
                 Periksa kembali data keahlianmu sebelum mulai mendampingi UMKM.
@@ -789,7 +789,7 @@
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Profil Investor Sudah Siap!
+                Profil Anda Sudah Siap!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
                 Periksa kembali pilihan modalmu sebelum mulai mencari peluang usaha.

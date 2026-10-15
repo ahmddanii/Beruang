@@ -2,13 +2,7 @@
   <div class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-10 sm:space-y-12 font-sans">
     
     <!-- Top Header -->
-    <div class="max-w-2xl space-y-3.5 text-center mx-auto">
-      <!-- Top Pill Badge (Sesuai Gaya Beranda UMKM) -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#13161F] shadow-[0_2px_8px_rgba(0,0,0,0.05)] border border-neutral-200/90 dark:border-neutral-800 text-xs sm:text-sm font-poppins font-medium text-neutral-800 dark:text-neutral-200 mx-auto">
-        <span class="text-[#0081A0] dark:text-[#2091AA] font-bold">💬</span>
-        <span>Pusat Bantuan & FAQ</span>
-      </div>
-
+    <div class="max-w-2xl space-y-2 text-center mx-auto">
       <h1 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
         Pertanyaan yang Sering Diajukan.
       </h1>

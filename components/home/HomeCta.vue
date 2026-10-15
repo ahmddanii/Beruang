@@ -5,11 +5,6 @@
       <!-- Subtle Ambient Glow -->
       <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <!-- Top Pill Tag -->
-      <div class="relative z-10 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-poppins font-medium text-cyan-200">
-        <span>🚀 Mulai Transformasi Finansial Hari Ini</span>
-      </div>
-
       <!-- Heading & Subtitle -->
       <div class="relative z-10 max-w-2xl mx-auto space-y-2.5">
         <h2 class="text-2xl sm:text-3xl lg:text-[34px] font-poppins font-bold tracking-tight text-white leading-snug">
@@ -39,19 +34,6 @@
         >
           <span>Gabung Sebagai Konsultan BNSP</span>
         </NuxtLink>
-      </div>
-
-      <!-- Trust Checkmarks -->
-      <div class="relative z-10 pt-4 border-t border-white/10 w-full flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-[11px] sm:text-xs font-poppins text-cyan-200/80">
-        <span class="inline-flex items-center gap-1.5">
-          <span class="text-emerald-400 font-bold">✓</span> 100% Proteksi Kerahasiaan Data Room
-        </span>
-        <span class="inline-flex items-center gap-1.5">
-          <span class="text-emerald-400 font-bold">✓</span> Lisensi Audit Konsultan BNSP
-        </span>
-        <span class="inline-flex items-center gap-1.5">
-          <span class="text-emerald-400 font-bold">✓</span> Tanpa Skema Utang Bunga Berlipat
-        </span>
       </div>
 
     </div>

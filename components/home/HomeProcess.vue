@@ -3,13 +3,7 @@
     <div class="flex flex-col gap-8 sm:gap-10">
       
       <!-- Section Header -->
-      <div class="flex flex-col items-center gap-3 text-center max-w-2xl mx-auto">
-        <!-- Top Pill Badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-[#13161F] shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-neutral-200/90 dark:border-neutral-800 text-xs font-poppins font-medium text-neutral-700 dark:text-neutral-300">
-          <span class="text-[#0081A0] dark:text-[#2091AA] font-bold">⚡</span>
-          <span>Tahapan Terstruktur</span>
-        </div>
-
+      <div class="flex flex-col items-center gap-2 text-center max-w-2xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
           Perjalanan Menuju Akses Permodalan
         </h2>
@@ -48,10 +42,10 @@
               </p>
               <div class="pt-2 flex flex-wrap gap-1.5">
                 <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
-                  ✓ Audit 5 Aspek
+                  Audit 5 Aspek
                 </span>
                 <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
-                  ✓ Deteksi Kebocoran
+                  Deteksi Kebocoran
                 </span>
               </div>
             </div>
@@ -97,10 +91,10 @@
               </p>
               <div class="pt-2 flex flex-wrap gap-1.5">
                 <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
-                  ✓ SOP Gerai
+                  SOP Gerai
                 </span>
                 <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
-                  ✓ Pendampingan BNSP
+                  Pendampingan BNSP
                 </span>
               </div>
             </div>
@@ -143,10 +137,10 @@
               </p>
               <div class="pt-2 flex flex-wrap gap-1.5">
                 <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
-                  ✓ Data Room Aman
+                  Data Room Aman
                 </span>
                 <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
-                  ✓ Bagi Hasil Sehat
+                  Bagi Hasil Sehat
                 </span>
               </div>
             </div>

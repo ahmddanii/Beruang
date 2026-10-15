@@ -2,11 +2,7 @@
   <div class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8 font-sans">
     
     <!-- Header -->
-    <div class="text-center space-y-3 max-w-xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#13161F] shadow-[0_2px_8px_rgba(0,0,0,0.05)] border border-neutral-200/90 dark:border-neutral-800 text-xs sm:text-sm font-poppins font-medium text-neutral-800 dark:text-neutral-200">
-        <span class="text-[#0081A0] dark:text-[#2091AA] font-bold">📞</span>
-        <span>Kontak & Dukungan</span>
-      </div>
+    <div class="text-center space-y-2 max-w-xl mx-auto">
       <h1 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
         Hubungi Tim Beruang.
       </h1>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-2">
+  <title id="title-2">Beruang - The Tech Capsule</title>
+  <!-- Single continuous body with ears, half-lidded eyes, and vertical vault slot cutout -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 128 44
+      C 150 44 164 48 172 54
+      C 178 38 198 42 202 58
+      C 204 68 200 78 196 86
+      L 196 156
+      C 196 198 168 224 128 224
+      C 88 224 60 198 60 156
+      L 60 86
+      C 56 78 52 68 54 58
+      C 58 42 78 38 84 54
+      C 92 48 106 44 128 44 Z
+
+      M 80 114
+      L 102 114
+      C 102 122 80 122 80 114 Z
+
+      M 154 114
+      L 176 114
+      C 176 122 154 122 154 114 Z
+
+      M 112 120
+      C 112 110 120 106 128 106
+      C 136 106 144 110 144 120
+      L 144 164
+      C 144 174 136 178 128 178
+      C 120 178 112 174 112 164 Z
+    "
+  />
+  <!-- Emerald Growth Nose & Combination Dial Notch -->
+  <path
+    fill="#00AA13"
+    d="
+      M 118 124
+      C 118 118 122 116 128 116
+      C 134 116 138 118 138 124
+      C 138 130 134 132 128 132
+      C 122 132 118 130 118 124 Z
+
+      M 124 158
+      C 124 155 126 154 128 154
+      C 130 154 132 155 132 158
+      L 132 166
+      C 132 169 130 170 128 170
+      C 126 170 124 169 124 166 Z
+    "
+  />
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Style 2C</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-2c">Beruang - The Organic Squircle Bear</title>
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 128 80
+      C 110 80 102 70 92 56
+      C 82 42 66 42 56 56
+      C 44 72 46 94 42 120
+      C 36 168 54 216 92 232
+      C 108 238 120 238 128 238
+      C 136 238 148 238 164 232
+      C 202 216 220 168 214 120
+      C 210 94 212 72 200 56
+      C 190 42 174 42 164 56
+      C 154 70 146 80 128 80 Z
+
+      M 128 118
+      C 150 118 168 136 168 158
+      C 168 180 150 198 128 198
+      C 106 198 88 180 88 158
+      C 88 136 106 118 128 118 Z
+
+      M 76 124
+      C 76 117 87 117 87 124
+      C 87 131 76 131 76 124 Z
+
+      M 169 124
+      C 169 117 180 117 180 124
+      C 180 131 169 131 169 124 Z
+    "
+  />
+  <path
+    fill="#00AA13"
+    d="
+      M 114 154
+      C 114 146 120 142 128 142
+      C 136 142 142 146 142 154
+      C 142 162 136 166 128 166
+      C 120 166 114 162 114 154 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

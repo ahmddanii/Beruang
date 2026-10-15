@@ -1,0 +1,39 @@
+{
+  "brand": "Beruang",
+  "tagline": "Akselerator Kelayakan UMKM",
+  "brief": "Platform akselerator kelayakan pendanaan UMKM. Menyelaraskan identitas visual dengan palet resmi halaman beranda (GoPay Trust Blue #0066D6 dan Growth Green #00AA13), dengan anatomi beruang sejati (telinga bundar menonjol, moncong nyata, hidung lebar, dua mata terbuka).",
+  "adjectives": ["Beruang Sejati", "Vibrant Blue", "Growth Green", "Berwibawa", "Finansial Modern"],
+  "criteria": "Anatomi beruang yang jelas dan tidak abstrak berlebihan, selaras dengan palet GoPay Blue 60% dan Green 30% pada halaman beranda.",
+  "industry": "finance",
+  "brand_color": "#0066D6",
+  "tile_color": "#0066D6",
+  "greyscale": false,
+  "final": false,
+  "round": 4,
+  "designer": "Antigravity Senior Brand Team",
+  "concepts": [
+    {
+      "name": "Opsi 1: The Iconic Modern Bear",
+      "symbol": "opt1-iconic-bear.svg",
+      "lockup": "opt1-iconic-bear-lockup.svg",
+      "idea": "Anatomi beruang ikonik dengan telinga bundar menonjol, moncong putih membal, dan hidung hijau GoPay.",
+      "rationale": [
+        "Sangat jelas terbaca sebagai beruang sejati tanpa perlu ditebak-tebak.",
+        "Mengadopsi 100% warna dominan halaman beranda: GoPay Vibrant Blue (#0066D6) dan Growth Green (#00AA13).",
+        "Wajah ramah berwibawa khas mentor bisnis modern."
+      ]
+    },
+    {
+      "name": "Opsi 2: The Flat Geometric Bear",
+      "symbol": "opt2-flat-geometric.svg",
+      "lockup": "opt2-flat-geometric-lockup.svg",
+      "idea": "Bentuk beruang geometris flat solid murni (audit 99/100) dengan siluet telinga bundar dan moncong brankas.",
+      "rationale": [
+        "Gaya agensi teknologi modern (minimalis, tajam, presisi).",
+        "Compound path tunggal yang tahan di skala favicon 16px.",
+        "Warna biru trust dan hidung hijau pertumbuhan modal."
+      ]
+    }
+  ],
+  "recommendation": "Opsi 1 memberikan identitas 'Beruang' yang paling ramah dan hidup sesuai karakter brand UMKM, sedangkan Opsi 2 memberikan pendekatan lebih flat dan institusional."
+}

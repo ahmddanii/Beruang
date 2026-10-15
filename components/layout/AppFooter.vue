@@ -4,13 +4,11 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 pb-16 border-b border-[#EAEAEA] dark:border-[#26272F]">
         
         <!-- Brand column -->
-        <div class="lg:col-span-2 flex flex-col gap-6">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-[12px] bg-amber-400 p-2 shadow-xs">
-              <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
-            </div>
-            <span class="font-bold text-[26px] tracking-tight text-neutral-900 dark:text-white leading-[32px]">
-              Beruang
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-2.5">
+            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-9 w-auto object-contain" />
+            <span class="font-heading font-extrabold text-2xl tracking-tight leading-none select-none">
+              <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
             </span>
           </div>
           <p class="text-[16px] text-neutral-600 dark:text-neutral-400 max-w-sm leading-[24px]">

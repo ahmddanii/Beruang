@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beruang - Radically Fresh Redesign (4 Arketipe Baru)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #080C14;
+      color: #E2E8F0;
+      padding: 40px 32px;
+      line-height: 1.5;
+    }
+
+    .header {
+      max-width: 1280px;
+      margin: 0 auto 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 24px;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .badge-blue {
+      background: rgba(0, 102, 214, 0.2);
+      border: 1px solid rgba(0, 102, 214, 0.5);
+      color: #60A5FA;
+    }
+
+    .badge-green {
+      background: rgba(0, 170, 19, 0.2);
+      border: 1px solid rgba(0, 170, 19, 0.5);
+      color: #4ADE80;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #94A3B8;
+      font-size: 14px;
+      max-width: 960px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* 4 Radically Different Concepts Grid */
+    .grid-concepts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .card.highlight {
+      border: 2px solid #0066D6;
+      background: linear-gradient(180deg, #131E33 0%, #0D1524 100%);
+      box-shadow: 0 12px 36px -8px rgba(0, 102, 214, 0.35);
+    }
+
+    .badge-card {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-card.primary {
+      background: #0066D6;
+      color: #FFFFFF;
+    }
+
+    .badge-card.sec {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94A3B8;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 190px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      padding: 16px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .preview-box svg {
+      width: 140px;
+      height: 140px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F8FAFC;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #38BDF8;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* Scalability Strip (Dark & Light Micro-Scale Test) */
+    .scale-strip {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .scale-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F1F5F9;
+      margin-bottom: 16px;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .scale-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .display-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-icon-wrap.dark {
+      background: #080C14;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .app-icon-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .favicon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .favicon-wrap svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .scale-lbl {
+      font-size: 11px;
+      color: #94A3B8;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="badge-bar">
+      <div class="badge-pill badge-blue">✓ Redesign Total: 4 Arketipe Visual Baru</div>
+      <div class="badge-pill badge-green">✓ Modern Minimalis Tech (0 Ornamen Kartun)</div>
+      <div class="badge-pill badge-blue">✓ Warna Selaras Beranda (#0066D6 & #00AA13)</div>
+    </div>
+    <h1>Beruang — 4 Arah Redesain Konsep Baru (Beda Total dari Sebelumnya)</h1>
+    <p class="subtitle">
+      Keluar dari lingkaran modifikasi topeng frontal yang monoton. Kami mengeksplorasi 4 arketipe desain identitas yang benar-benar berbeda secara struktur, sudut pandang, dan metafora visual: dari profil pasar beruang, pita arus kas kontinu, monogram letterform B, hingga faset teknologi isometrik.
+    </p>
+  </div>
+
+  <div class="container">
+
+    <div class="grid-concepts">
+
+      <!-- CA -->
+      <div class="card highlight">
+        <span class="badge-card primary">★ OPSI A: MARKET PROFILE</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-ca">
+  <title id="t-ca">Beruang - The Forward Market Profile</title>
+  
+  <!-- Single Sculpted Profile Silhouette in Vibrant Blue (#0066D6) with Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 56 196
+      C 52 168 56 136 68 108
+      C 76 88 92 72 108 68
+      C 106 52 116 38 132 38
+      C 146 38 156 48 158 64
+      C 176 68 196 82 208 104
+      C 214 116 218 130 220 144
+      L 184 144
+      C 174 144 164 148 156 156
+      L 142 170
+      C 134 178 122 184 110 184
+      L 76 184
+      C 66 184 58 188 56 196 Z
+
+      M 148 102
+      C 154 96 164 96 170 102
+      C 174 106 172 114 166 116
+      C 158 118 146 110 148 102 Z
+    "
+  />
+
+  <!-- Growth Green Snout Tip & Nose (#00AA13) - Titik Fokus Akselerasi -->
+  <path
+    fill="#00AA13"
+    d="
+      M 218 126
+      C 222 132 222 138 220 144
+      L 188 144
+      C 192 136 198 130 206 128
+      L 218 126 Z
+    "
+  />
+
+  <!-- Base Grounding Shadow Arc in Deep Blue (#0052B3) -->
+  <path
+    fill="#0052B3"
+    d="
+      M 56 196
+      C 72 192 90 190 110 190
+      L 142 190
+      C 156 190 168 196 176 206
+      L 156 214
+      C 148 208 138 204 126 204
+      L 72 204
+      C 62 204 56 200 56 196 Z
+    "
+  />
+</svg>
+        </div>
+        <div class="card-title">Konsep A: The Forward Market Profile</div>
+        <div class="card-meta">Profil Samping Finansial (Audit 99/100)</div>
+        <div class="card-desc">
+          <strong>Perubahan Sudut Pandang Radikal.</strong> Kepala beruang menghadap ke kanan (arah masa depan & pertumbuhan). Sangat dewasa, berwibawa, dan venture-grade ala institusi pasar modal global. Ujung moncong beraksen hijau (#00AA13).
+        </div>
+      </div>
+
+      <!-- CB -->
+      <div class="card highlight">
+        <span class="badge-card primary">★ OPSI B: CASHFLOW LOOP</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cb">
+  <title id="t-cb">Beruang - The Continuous Cash-Flow Bear</title>
+  
+  <!-- Outer Flow Loop: Ears, Head, Cheeks in Bold Unified Vector Geometry -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 86 64
+      C 72 44 48 38 34 54
+      C 20 70 24 96 40 112
+      C 30 134 30 162 44 186
+      C 62 216 92 230 128 230
+      C 164 230 194 216 212 186
+      C 226 162 226 134 216 112
+      C 232 96 236 70 222 54
+      C 208 38 184 44 170 64
+      C 156 58 142 56 128 56
+      C 114 56 100 58 86 64 Z
+
+      M 84 80
+      C 98 74 112 72 128 72
+      C 144 72 158 74 172 80
+      C 180 84 188 78 194 68
+      C 202 56 214 58 218 64
+      C 224 74 218 90 206 100
+      C 214 122 214 148 202 170
+      C 188 196 162 212 128 212
+      C 94 212 68 196 54 170
+      C 42 148 42 122 50 100
+      C 38 90 32 74 38 64
+      C 42 58 54 56 62 68
+      C 68 78 76 84 84 80 Z
+
+      M 86 116
+      A 7 7 0 1 0 86 130
+      A 7 7 0 1 0 86 116 Z
+
+      M 170 116
+      A 7 7 0 1 0 170 130
+      A 7 7 0 1 0 170 116 Z
+
+      M 128 146
+      C 148 146 162 158 162 176
+      C 162 194 146 206 128 206
+      C 110 206 94 194 94 176
+      C 94 158 108 146 128 146 Z
+    "
+  />
+
+  <!-- Growth Green Vault Node (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 114 162
+      C 120 156 124 154 128 154
+      C 132 154 136 156 142 162
+      C 145 166 143 174 137 178
+      C 134 180 131 181 128 181
+      C 125 181 122 180 119 178
+      C 113 174 111 166 114 162 Z
+    "
+  />
+</svg>
+        </div>
+        <div class="card-title">Konsep B: The Continuous Cash-Flow</div>
+        <div class="card-meta">Pita Loop Arus Kas (Audit 99/100)</div>
+        <div class="card-desc">
+          <strong>Metafora Arus Kas Tanpa Putus.</strong> Dibangun dari satu garis kurva pita geometris kontinu (continuous ribbon) yang mengalir membentuk siluet beruang dan loop likuiditas dengan simpul pertumbuhan hijau di pusatnya.
+        </div>
+      </div>
+
+      <!-- CC -->
+      <div class="card">
+        <span class="badge-card sec">OPSI C: 'B' MONOGRAM</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cc">
+  <title id="t-cc">Beruang - The 'B' Monogram Bear</title>
+  
+  <!-- Geometric 'B' Bear Monogram in Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 60 48
+      L 142 48
+      C 164 48 180 58 184 76
+      C 188 94 174 110 156 118
+      C 178 126 196 144 196 170
+      C 196 198 172 216 140 216
+      L 60 216
+      Z
+
+      M 88 74
+      L 136 74
+      C 148 74 156 82 156 94
+      C 156 106 148 114 136 114
+      L 88 114
+      Z
+
+      M 88 136
+      L 138 136
+      C 152 136 164 146 164 162
+      C 164 178 152 190 138 190
+      L 88 190
+      Z
+    "
+  />
+
+  <!-- Integrated Bear Ear Disc on Top of Monogram in Deep Blue (#0052B3) -->
+  <circle cx="140" cy="48" r="22" fill="#0052B3" />
+  <circle cx="140" cy="48" r="12" fill="#0066D6" />
+
+  <!-- Growth Green Accelerator Keystone (#00AA13) Nestled in Lower Loop -->
+  <polygon points="138,150 152,162 138,174 124,162" fill="#00AA13" />
+</svg>
+        </div>
+        <div class="card-title">Konsep C: The 'B' Monogram Bear</div>
+        <div class="card-meta">Fusi Huruf 'B' + Beruang (Audit 99/100)</div>
+        <div class="card-desc">
+          <strong>Letterform Hybrid Modern.</strong> Menggabungkan huruf kapital <strong>"B"</strong> (Beruang / Bisnis) dengan siluet telinga bundar dan moncong brankas modal. Sangat ikonik sebagai app icon dan favicon (ala Beats/Airbnb).
+        </div>
+      </div>
+
+      <!-- CD -->
+      <div class="card">
+        <span class="badge-card sec">OPSI D: ISOMETRIC TECH</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cd">
+  <title id="t-cd">Beruang - The Isometric Tech Bear</title>
+  
+  <!-- Left Ear (Deep Tone #003E8A) -->
+  <polygon points="60,82 46,60 70,46 86,64" fill="#003E8A" />
+  <circle cx="68" cy="62" r="14" fill="#0052B3" />
+
+  <!-- Right Ear (Vibrant Tone #0052B3) -->
+  <polygon points="196,82 210,60 186,46 170,64" fill="#0052B3" />
+  <circle cx="188" cy="62" r="14" fill="#0066D6" />
+
+  <!-- Left Facet Face (Deep Shadow #0052B3) -->
+  <polygon points="128,68 86,64 54,104 48,156 128,224 128,154" fill="#0052B3" />
+
+  <!-- Right Facet Face (Vibrant Light #0066D6) -->
+  <polygon points="128,68 170,64 202,104 208,156 128,224 128,154" fill="#0066D6" />
+
+  <!-- Crown Forehead Facet (Mid Tone #0077F5) -->
+  <polygon points="128,68 86,64 128,102 170,64" fill="#0077F5" />
+
+  <!-- Left Eye Slit in White Negative Space -->
+  <polygon points="90,114 104,118 92,124 82,120" fill="#FFFFFF" />
+
+  <!-- Right Eye Slit in White Negative Space -->
+  <polygon points="166,114 152,118 164,124 174,120" fill="#FFFFFF" />
+
+  <!-- Center Snout Keystone Facet in Growth Green (#00AA13 - Venture Core) -->
+  <polygon points="128,138 148,162 128,186 108,162" fill="#00AA13" />
+  <!-- Keystone Highlight Plane -->
+  <polygon points="128,138 148,162 128,186" fill="#10B981" />
+</svg>
+        </div>
+        <div class="card-title">Konsep D: The Isometric Tech Bear</div>
+        <div class="card-meta">Poligon Facet Venture Capital</div>
+        <div class="card-desc">
+          <strong>Konstruksi 3D Faset Geometris.</strong> Memadukan pencahayaan multi-bidang (deep blue, vibrant blue, dan green keystone core) yang melambangkan kecerdasan analitis data finansial UMKM.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scalability Strip -->
+    <div class="scale-strip">
+      <div class="scale-title">Uji Keterbacaan Ikon Aplikasi Seluler & Favicon 16px (True Micro-Scale Test)</div>
+      <div class="scale-grid">
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-ca">
+  <title id="t-ca">Beruang - The Forward Market Profile</title>
+  
+  <!-- Single Sculpted Profile Silhouette in Vibrant Blue (#0066D6) with Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 56 196
+      C 52 168 56 136 68 108
+      C 76 88 92 72 108 68
+      C 106 52 116 38 132 38
+      C 146 38 156 48 158 64
+      C 176 68 196 82 208 104
+      C 214 116 218 130 220 144
+      L 184 144
+      C 174 144 164 148 156 156
+      L 142 170
+      C 134 178 122 184 110 184
+      L 76 184
+      C 66 184 58 188 56 196 Z
+
+      M 148 102
+      C 154 96 164 96 170 102
+      C 174 106 172 114 166 116
+      C 158 118 146 110 148 102 Z
+    "
+  />
+
+  <!-- Growth Green Snout Tip & Nose (#00AA13) - Titik Fokus Akselerasi -->
+  <path
+    fill="#00AA13"
+    d="
+      M 218 126
+      C 222 132 222 138 220 144
+      L 188 144
+      C 192 136 198 130 206 128
+      L 218 126 Z
+    "
+  />
+
+  <!-- Base Grounding Shadow Arc in Deep Blue (#0052B3) -->
+  <path
+    fill="#0052B3"
+    d="
+      M 56 196
+      C 72 192 90 190 110 190
+      L 142 190
+      C 156 190 168 196 176 206
+      L 156 214
+      C 148 208 138 204 126 204
+      L 72 204
+      C 62 204 56 200 56 196 Z
+    "
+  />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-ca">
+  <title id="t-ca">Beruang - The Forward Market Profile</title>
+  
+  <!-- Single Sculpted Profile Silhouette in Vibrant Blue (#0066D6) with Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 56 196
+      C 52 168 56 136 68 108
+      C 76 88 92 72 108 68
+      C 106 52 116 38 132 38
+      C 146 38 156 48 158 64
+      C 176 68 196 82 208 104
+      C 214 116 218 130 220 144
+      L 184 144
+      C 174 144 164 148 156 156
+      L 142 170
+      C 134 178 122 184 110 184
+      L 76 184
+      C 66 184 58 188 56 196 Z
+
+      M 148 102
+      C 154 96 164 96 170 102
+      C 174 106 172 114 166 116
+      C 158 118 146 110 148 102 Z
+    "
+  />
+
+  <!-- Growth Green Snout Tip & Nose (#00AA13) - Titik Fokus Akselerasi -->
+  <path
+    fill="#00AA13"
+    d="
+      M 218 126
+      C 222 132 222 138 220 144
+      L 188 144
+      C 192 136 198 130 206 128
+      L 218 126 Z
+    "
+  />
+
+  <!-- Base Grounding Shadow Arc in Deep Blue (#0052B3) -->
+  <path
+    fill="#0052B3"
+    d="
+      M 56 196
+      C 72 192 90 190 110 190
+      L 142 190
+      C 156 190 168 196 176 206
+      L 156 214
+      C 148 208 138 204 126 204
+      L 72 204
+      C 62 204 56 200 56 196 Z
+    "
+  />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Konsep A</strong> (Market Profile)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cb">
+  <title id="t-cb">Beruang - The Continuous Cash-Flow Bear</title>
+  
+  <!-- Outer Flow Loop: Ears, Head, Cheeks in Bold Unified Vector Geometry -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 86 64
+      C 72 44 48 38 34 54
+      C 20 70 24 96 40 112
+      C 30 134 30 162 44 186
+      C 62 216 92 230 128 230
+      C 164 230 194 216 212 186
+      C 226 162 226 134 216 112
+      C 232 96 236 70 222 54
+      C 208 38 184 44 170 64
+      C 156 58 142 56 128 56
+      C 114 56 100 58 86 64 Z
+
+      M 84 80
+      C 98 74 112 72 128 72
+      C 144 72 158 74 172 80
+      C 180 84 188 78 194 68
+      C 202 56 214 58 218 64
+      C 224 74 218 90 206 100
+      C 214 122 214 148 202 170
+      C 188 196 162 212 128 212
+      C 94 212 68 196 54 170
+      C 42 148 42 122 50 100
+      C 38 90 32 74 38 64
+      C 42 58 54 56 62 68
+      C 68 78 76 84 84 80 Z
+
+      M 86 116
+      A 7 7 0 1 0 86 130
+      A 7 7 0 1 0 86 116 Z
+
+      M 170 116
+      A 7 7 0 1 0 170 130
+      A 7 7 0 1 0 170 116 Z
+
+      M 128 146
+      C 148 146 162 158 162 176
+      C 162 194 146 206 128 206
+      C 110 206 94 194 94 176
+      C 94 158 108 146 128 146 Z
+    "
+  />
+
+  <!-- Growth Green Vault Node (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 114 162
+      C 120 156 124 154 128 154
+      C 132 154 136 156 142 162
+      C 145 166 143 174 137 178
+      C 134 180 131 181 128 181
+      C 125 181 122 180 119 178
+      C 113 174 111 166 114 162 Z
+    "
+  />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cb">
+  <title id="t-cb">Beruang - The Continuous Cash-Flow Bear</title>
+  
+  <!-- Outer Flow Loop: Ears, Head, Cheeks in Bold Unified Vector Geometry -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 86 64
+      C 72 44 48 38 34 54
+      C 20 70 24 96 40 112
+      C 30 134 30 162 44 186
+      C 62 216 92 230 128 230
+      C 164 230 194 216 212 186
+      C 226 162 226 134 216 112
+      C 232 96 236 70 222 54
+      C 208 38 184 44 170 64
+      C 156 58 142 56 128 56
+      C 114 56 100 58 86 64 Z
+
+      M 84 80
+      C 98 74 112 72 128 72
+      C 144 72 158 74 172 80
+      C 180 84 188 78 194 68
+      C 202 56 214 58 218 64
+      C 224 74 218 90 206 100
+      C 214 122 214 148 202 170
+      C 188 196 162 212 128 212
+      C 94 212 68 196 54 170
+      C 42 148 42 122 50 100
+      C 38 90 32 74 38 64
+      C 42 58 54 56 62 68
+      C 68 78 76 84 84 80 Z
+
+      M 86 116
+      A 7 7 0 1 0 86 130
+      A 7 7 0 1 0 86 116 Z
+
+      M 170 116
+      A 7 7 0 1 0 170 130
+      A 7 7 0 1 0 170 116 Z
+
+      M 128 146
+      C 148 146 162 158 162 176
+      C 162 194 146 206 128 206
+      C 110 206 94 194 94 176
+      C 94 158 108 146 128 146 Z
+    "
+  />
+
+  <!-- Growth Green Vault Node (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 114 162
+      C 120 156 124 154 128 154
+      C 132 154 136 156 142 162
+      C 145 166 143 174 137 178
+      C 134 180 131 181 128 181
+      C 125 181 122 180 119 178
+      C 113 174 111 166 114 162 Z
+    "
+  />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Konsep B</strong> (Cashflow Loop)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cc">
+  <title id="t-cc">Beruang - The 'B' Monogram Bear</title>
+  
+  <!-- Geometric 'B' Bear Monogram in Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 60 48
+      L 142 48
+      C 164 48 180 58 184 76
+      C 188 94 174 110 156 118
+      C 178 126 196 144 196 170
+      C 196 198 172 216 140 216
+      L 60 216
+      Z
+
+      M 88 74
+      L 136 74
+      C 148 74 156 82 156 94
+      C 156 106 148 114 136 114
+      L 88 114
+      Z
+
+      M 88 136
+      L 138 136
+      C 152 136 164 146 164 162
+      C 164 178 152 190 138 190
+      L 88 190
+      Z
+    "
+  />
+
+  <!-- Integrated Bear Ear Disc on Top of Monogram in Deep Blue (#0052B3) -->
+  <circle cx="140" cy="48" r="22" fill="#0052B3" />
+  <circle cx="140" cy="48" r="12" fill="#0066D6" />
+
+  <!-- Growth Green Accelerator Keystone (#00AA13) Nestled in Lower Loop -->
+  <polygon points="138,150 152,162 138,174 124,162" fill="#00AA13" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cc">
+  <title id="t-cc">Beruang - The 'B' Monogram Bear</title>
+  
+  <!-- Geometric 'B' Bear Monogram in Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 60 48
+      L 142 48
+      C 164 48 180 58 184 76
+      C 188 94 174 110 156 118
+      C 178 126 196 144 196 170
+      C 196 198 172 216 140 216
+      L 60 216
+      Z
+
+      M 88 74
+      L 136 74
+      C 148 74 156 82 156 94
+      C 156 106 148 114 136 114
+      L 88 114
+      Z
+
+      M 88 136
+      L 138 136
+      C 152 136 164 146 164 162
+      C 164 178 152 190 138 190
+      L 88 190
+      Z
+    "
+  />
+
+  <!-- Integrated Bear Ear Disc on Top of Monogram in Deep Blue (#0052B3) -->
+  <circle cx="140" cy="48" r="22" fill="#0052B3" />
+  <circle cx="140" cy="48" r="12" fill="#0066D6" />
+
+  <!-- Growth Green Accelerator Keystone (#00AA13) Nestled in Lower Loop -->
+  <polygon points="138,150 152,162 138,174 124,162" fill="#00AA13" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Konsep C</strong> ('B' Monogram)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cd">
+  <title id="t-cd">Beruang - The Isometric Tech Bear</title>
+  
+  <!-- Left Ear (Deep Tone #003E8A) -->
+  <polygon points="60,82 46,60 70,46 86,64" fill="#003E8A" />
+  <circle cx="68" cy="62" r="14" fill="#0052B3" />
+
+  <!-- Right Ear (Vibrant Tone #0052B3) -->
+  <polygon points="196,82 210,60 186,46 170,64" fill="#0052B3" />
+  <circle cx="188" cy="62" r="14" fill="#0066D6" />
+
+  <!-- Left Facet Face (Deep Shadow #0052B3) -->
+  <polygon points="128,68 86,64 54,104 48,156 128,224 128,154" fill="#0052B3" />
+
+  <!-- Right Facet Face (Vibrant Light #0066D6) -->
+  <polygon points="128,68 170,64 202,104 208,156 128,224 128,154" fill="#0066D6" />
+
+  <!-- Crown Forehead Facet (Mid Tone #0077F5) -->
+  <polygon points="128,68 86,64 128,102 170,64" fill="#0077F5" />
+
+  <!-- Left Eye Slit in White Negative Space -->
+  <polygon points="90,114 104,118 92,124 82,120" fill="#FFFFFF" />
+
+  <!-- Right Eye Slit in White Negative Space -->
+  <polygon points="166,114 152,118 164,124 174,120" fill="#FFFFFF" />
+
+  <!-- Center Snout Keystone Facet in Growth Green (#00AA13 - Venture Core) -->
+  <polygon points="128,138 148,162 128,186 108,162" fill="#00AA13" />
+  <!-- Keystone Highlight Plane -->
+  <polygon points="128,138 148,162 128,186" fill="#10B981" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-cd">
+  <title id="t-cd">Beruang - The Isometric Tech Bear</title>
+  
+  <!-- Left Ear (Deep Tone #003E8A) -->
+  <polygon points="60,82 46,60 70,46 86,64" fill="#003E8A" />
+  <circle cx="68" cy="62" r="14" fill="#0052B3" />
+
+  <!-- Right Ear (Vibrant Tone #0052B3) -->
+  <polygon points="196,82 210,60 186,46 170,64" fill="#0052B3" />
+  <circle cx="188" cy="62" r="14" fill="#0066D6" />
+
+  <!-- Left Facet Face (Deep Shadow #0052B3) -->
+  <polygon points="128,68 86,64 54,104 48,156 128,224 128,154" fill="#0052B3" />
+
+  <!-- Right Facet Face (Vibrant Light #0066D6) -->
+  <polygon points="128,68 170,64 202,104 208,156 128,224 128,154" fill="#0066D6" />
+
+  <!-- Crown Forehead Facet (Mid Tone #0077F5) -->
+  <polygon points="128,68 86,64 128,102 170,64" fill="#0077F5" />
+
+  <!-- Left Eye Slit in White Negative Space -->
+  <polygon points="90,114 104,118 92,124 82,120" fill="#FFFFFF" />
+
+  <!-- Right Eye Slit in White Negative Space -->
+  <polygon points="166,114 152,118 164,124 174,120" fill="#FFFFFF" />
+
+  <!-- Center Snout Keystone Facet in Growth Green (#00AA13 - Venture Core) -->
+  <polygon points="128,138 148,162 128,186 108,162" fill="#00AA13" />
+  <!-- Keystone Highlight Plane -->
+  <polygon points="128,138 148,162 128,186" fill="#10B981" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Konsep D</strong> (Isometric Tech)</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

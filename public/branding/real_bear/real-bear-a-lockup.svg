@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Polar Vault Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-ra">Beruang - The Polar Vault Bear</title>
+  <defs>
+    <clipPath id="squircle-ra">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Deep Slate Navy Squircle Canvas -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <g clip-path="url(#squircle-ra)">
+    <!-- Distinct Bear Ears with Inner Contrast -->
+    <ellipse cx="76" cy="88" rx="26" ry="28" fill="#E0F2FE" />
+    <ellipse cx="76" cy="88" rx="14" ry="16" fill="#BAE6FD" />
+
+    <ellipse cx="180" cy="88" rx="26" ry="28" fill="#E0F2FE" />
+    <ellipse cx="180" cy="88" rx="14" ry="16" fill="#BAE6FD" />
+
+    <!-- Chubby Ice-Blue Bear Head & Body -->
+    <path
+      fill="#E0F2FE"
+      d="
+        M 44 240
+        L 44 190
+        C 42 136 72 96 128 96
+        C 184 96 214 136 212 190
+        L 212 240 Z
+      "
+    />
+
+    <!-- Prominent White Bear Snout / Muzzle -->
+    <ellipse cx="128" cy="166" rx="36" ry="30" fill="#FFFFFF" />
+
+    <!-- Cute Bear Nose in Deep Navy -->
+    <path
+      fill="#0F172A"
+      d="
+        M 116 156
+        C 116 148 122 144 128 144
+        C 134 144 140 148 140 156
+        C 140 164 134 168 128 168
+        C 122 168 116 164 116 156 Z
+      "
+    />
+    <!-- Subtle Bear Smile -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="3"
+      stroke-linecap="round"
+      d="
+        M 123 174
+        Q 128 179 133 174
+      "
+    />
+
+    <!-- Peaceful Contented Closed Curved Eyes (Exact Ref Charm) -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="7"
+      stroke-linecap="round"
+      d="
+        M 94 138
+        C 99 146 109 146 114 138
+
+        M 142 138
+        C 147 146 157 146 162 138
+      "
+    />
+
+    <!-- Emerald Safe-Dial Vault Collar (The Vault Bear Accent) -->
+    <path
+      fill="#00AA13"
+      d="
+        M 56 218
+        C 76 226 180 226 200 218
+        L 204 230
+        C 180 240 76 240 52 230 Z
+      "
+    />
+    <!-- Circular Vault Dial Medallion in Center of Collar -->
+    <circle cx="128" cy="226" r="18" fill="#0081A0" stroke="#00AA13" stroke-width="3" />
+    <circle cx="128" cy="226" r="10" fill="#00AA13" />
+    <circle cx="128" cy="226" r="4" fill="#FFFFFF" />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

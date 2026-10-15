@@ -24,12 +24,10 @@
       <!-- Top Brand Header & Role Switcher -->
       <div class="flex items-center justify-between flex-wrap gap-2">
         <NuxtLink to="/" class="flex items-center gap-2.5 group">
-          <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs flex items-center justify-center transition-transform group-hover:scale-105">
-            <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
-          </div>
+          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" />
           <div class="text-left">
-            <span class="font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white block leading-tight">
-              Beruang
+            <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none block">
+              <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
             </span>
             <span class="text-[11px] font-semibold text-primary-600 dark:text-primary-400">
               {{ roleHeaderTitle }}

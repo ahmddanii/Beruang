@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - The Geometric Vault</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-1">Beruang - The Geometric Vault</title>
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 96 64
+      C 86 60 70 42 54 52
+      C 42 60 44 80 52 96
+      C 38 116 34 146 52 174
+      C 68 202 96 216 128 216
+      C 160 216 188 202 204 174
+      C 222 146 218 116 204 96
+      C 212 80 214 60 202 52
+      C 186 42 170 60 160 64
+      L 96 64 Z
+
+      M 128 102
+      C 150 102 168 120 168 142
+      C 168 164 150 182 128 182
+      C 106 182 88 164 88 142
+      C 88 120 106 102 128 102 Z
+    "
+  />
+  <!-- Emerald Growth Horizontal Oval Nose -->
+  <path
+    fill="#00AA13"
+    d="
+      M 110 136
+      C 110 126 118 126 128 126
+      C 138 126 146 126 146 136
+      C 146 146 138 146 128 146
+      C 118 146 110 146 110 136 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

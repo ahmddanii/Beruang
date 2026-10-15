@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-rb">
+  <title id="title-rb">Beruang - The Minimal Slate Bear</title>
+  <defs>
+    <clipPath id="squircle-rb">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Ice-Blue Squircle Canvas -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#F0F7FD" />
+
+  <g clip-path="url(#squircle-rb)">
+    <!-- Rounded Bear Ears -->
+    <circle cx="74" cy="92" r="28" fill="#0F172A" />
+    <circle cx="74" cy="92" r="15" fill="#1E293B" />
+
+    <circle cx="182" cy="92" r="28" fill="#0F172A" />
+    <circle cx="182" cy="92" r="15" fill="#1E293B" />
+
+    <!-- Deep Slate Navy Bear Head -->
+    <circle cx="128" cy="146" r="70" fill="#0F172A" />
+
+    <!-- Pure White Snout / Muzzle -->
+    <ellipse cx="128" cy="164" rx="34" ry="28" fill="#FFFFFF" />
+
+    <!-- Emerald Green Nose (The Growth Keystone) -->
+    <path
+      fill="#00AA13"
+      d="
+        M 116 154
+        C 116 146 122 142 128 142
+        C 134 142 140 146 140 154
+        C 140 162 134 166 128 166
+        C 122 166 116 162 116 154 Z
+      "
+    />
+    <!-- Subtle Bear Smile -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="3"
+      stroke-linecap="round"
+      d="
+        M 124 172
+        Q 128 176 132 172
+      "
+    />
+
+    <!-- Peaceful Curved Closed Eyes in White -->
+    <path
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="7"
+      stroke-linecap="round"
+      d="
+        M 92 134
+        C 97 142 107 142 112 134
+
+        M 144 134
+        C 149 142 159 142 164 134
+      "
+    />
+  </g>
+</svg>

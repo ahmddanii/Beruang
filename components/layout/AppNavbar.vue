@@ -3,21 +3,15 @@
     <!-- h-16 = 64px (×8), px-8 = 32px (×8) -->
     <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 h-16 flex items-center justify-between gap-4">
       <!-- Brand Logo -->
-      <NuxtLink to="/" class="flex items-center gap-3 group shrink-0" title="Beranda Beruang">
-        <!-- Logo: 40×40 (×8), radius-lg=16px, nested image gets radius 8px (16-8=8) -->
-        <div class="w-10 h-10 rounded-[16px] bg-neutral-950 dark:bg-white flex items-center justify-center p-2 shadow-xs group-hover:scale-105 transition-transform duration-150">
-          <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain filter brightness-110 rounded-[8px]" />
-        </div>
-        <div class="flex flex-col">
-          <!-- Brand name: 20px ≈ subhead scale, lh 28px (×4) -->
-          <span class=" font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white leading-7">
-            Beruang
-          </span>
-          <!-- Tagline: 12px caption, lh 16px (×8) -->
-          <span class="text-[12px] leading-4 text-neutral-500 dark:text-neutral-400 font-medium tracking-tight mt-1 hidden sm:block">
-            Finansial & Modal UMKM
-          </span>
-        </div>
+      <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" title="Beranda Beruang">
+        <img
+          src="/logo/logoSmall.svg"
+          alt="Beruang Logo"
+          class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
+        />
+        <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
+          <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+        </span>
       </NuxtLink>
 
       <!-- Desktop Navigation Links -->

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - The Vault Dome Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-f1">Beruang - The Vault Dome Bear</title>
+  <defs>
+    <clipPath id="squircle-f1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Deep Slate Navy Squircle Canvas (60% Architecture) -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <g clip-path="url(#squircle-f1)">
+    <!-- White Security Vault Dome Helmet / Arch behind head -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 62 168
+        C 58 92 88 56 128 56
+        C 168 56 198 92 194 168
+        C 176 166 80 166 62 168 Z
+      "
+    />
+    <!-- Emerald Green Safe Combination Dial on Dome (10% Interaction Accent) -->
+    <circle cx="128" cy="98" r="18" fill="#00AA13" />
+    <circle cx="128" cy="98" r="12" fill="#0081A0" />
+    <circle cx="128" cy="98" r="5" fill="#FFFFFF" />
+    <!-- 4 Dial Tick Notches -->
+    <rect x="126" y="82" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+    <rect x="126" y="110" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+    <rect x="112" y="96" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+    <rect x="140" y="96" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+
+    <!-- Cute Bear Ears in Ice-Blue -->
+    <circle cx="78" cy="144" r="22" fill="#E0F2FE" />
+    <circle cx="78" cy="144" r="12" fill="#BAE6FD" />
+
+    <circle cx="178" cy="144" r="22" fill="#E0F2FE" />
+    <circle cx="178" cy="144" r="12" fill="#BAE6FD" />
+
+    <!-- Doughy Ice-Blue Bear Head emerging from bottom -->
+    <path
+      fill="#E0F2FE"
+      d="
+        M 44 240
+        C 40 164 74 128 128 128
+        C 182 128 216 164 212 240 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes in Deep Navy (No Nose / No Mouth - Exact Ref Charm) -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

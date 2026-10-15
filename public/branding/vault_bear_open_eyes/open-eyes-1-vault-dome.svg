@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-oe1">
+  <title id="title-oe1">Beruang - The Vault Dome Bear (Open Eyes)</title>
+  <defs>
+    <clipPath id="squircle-oe1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Deep Slate Navy Squircle Canvas (60% Dominan) -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <g clip-path="url(#squircle-oe1)">
+    <!-- White Security Vault Dome Helmet on Top of Head -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 142
+        C 64 82 90 54 128 54
+        C 166 54 192 82 190 142
+        L 194 148
+        C 194 152 62 152 62 148 Z
+      "
+    />
+    <!-- Emerald Green Safe Combination Dial on Helmet (10% Interaction Accent) -->
+    <circle cx="128" cy="94" r="18" fill="#00AA13" />
+    <circle cx="128" cy="94" r="11" fill="#0081A0" />
+    <circle cx="128" cy="94" r="4.5" fill="#FFFFFF" />
+    <!-- 4 Dial Tick Marks -->
+    <rect x="126" y="78" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+    <rect x="126" y="106" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+    <rect x="112" y="92" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+    <rect x="140" y="92" width="4" height="4" rx="1.5" fill="#FFFFFF" />
+
+    <!-- Clearly Identifiable Round Bear Ears with Inner Contrast -->
+    <ellipse cx="62" cy="118" rx="20" ry="22" fill="#E0F2FE" />
+    <ellipse cx="62" cy="118" rx="11" ry="13" fill="#BAE6FD" />
+
+    <ellipse cx="194" cy="118" rx="20" ry="22" fill="#E0F2FE" />
+    <ellipse cx="194" cy="118" rx="11" ry="13" fill="#BAE6FD" />
+
+    <!-- Cute Doughy Ice-Blue Bear Head & Body -->
+    <path
+      fill="#E0F2FE"
+      d="
+        M 44 240
+        L 44 176
+        C 42 142 74 132 128 132
+        C 182 132 214 142 212 176
+        L 212 240 Z
+      "
+    />
+
+    <!-- Distinct White Bear Snout / Muzzle -->
+    <ellipse cx="128" cy="180" rx="34" ry="26" fill="#FFFFFF" />
+
+    <!-- Cute Bear Nose -->
+    <path
+      fill="#0F172A"
+      d="
+        M 118 172
+        C 118 165 123 162 128 162
+        C 133 162 138 165 138 172
+        C 138 178 133 182 128 182
+        C 123 182 118 178 118 172 Z
+      "
+    />
+    <!-- Subtle Bear Smile -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      d="
+        M 124 186
+        Q 128 190 132 186
+      "
+    />
+
+    <!-- WIDE OPEN FRIENDLY EYES with Sparkle Catchlights -->
+    <circle cx="96" cy="154" r="8.5" fill="#0F172A" />
+    <circle cx="98.5" cy="151.5" r="3" fill="#FFFFFF" />
+    <circle cx="94.5" cy="156.5" r="1.2" fill="#FFFFFF" />
+
+    <circle cx="160" cy="154" r="8.5" fill="#0F172A" />
+    <circle cx="162.5" cy="151.5" r="3" fill="#FFFFFF" />
+    <circle cx="158.5" cy="156.5" r="1.2" fill="#FFFFFF" />
+  </g>
+</svg>

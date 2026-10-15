@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Navbar Logo Test</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #F3F8FC;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .navbar-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 16px;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    .navbar-card.dark {
+      background: rgba(10, 10, 12, 0.95);
+      border-color: rgba(39, 39, 42, 0.8);
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      height: 38px;
+      width: auto;
+      display: block;
+    }
+
+    .brand-text {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .ber {
+      color: #0081A0;
+    }
+
+    .dark .ber {
+      color: #00A5CC;
+    }
+
+    .uang {
+      color: #00AA13;
+    }
+
+    .dark .uang {
+      color: #22C55E;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .dark .nav-links {
+      color: #94A3B8;
+    }
+
+    .cta-btn {
+      background: #0081A0;
+      color: #FFF;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h3 style="font-size: 13px; color: #64748B; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Mode Terang (Light Mode Navbar)</h3>
+    <div class="navbar-card">
+      <div class="brand-link">
+        <div class="logo-img">
+          <svg width="116" height="98" viewBox="0 0 116 98" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M24.5 35C34.165 35 42 27.165 42 17.5C42 7.83502 34.165 0 24.5 0C14.835 0 7 7.83502 7 17.5C7 27.165 14.835 35 24.5 35Z" fill="#0081A0"/>
+<path d="M24.5 26C29.1944 26 33 22.1944 33 17.5C33 12.8056 29.1944 9 24.5 9C19.8056 9 16 12.8056 16 17.5C16 22.1944 19.8056 26 24.5 26Z" fill="white"/>
+<path d="M90.5 35C100.165 35 108 27.165 108 17.5C108 7.83502 100.165 0 90.5 0C80.835 0 73 7.83502 73 17.5C73 27.165 80.835 35 90.5 35Z" fill="#0081A0"/>
+<path d="M90.5 26C95.1944 26 99 22.1944 99 17.5C99 12.8056 95.1944 9 90.5 9C85.8056 9 82 12.8056 82 17.5C82 22.1944 85.8056 26 90.5 26Z" fill="white"/>
+<path d="M58 5C48 5 38 7 28 13C10 23 0 43 0 67C0 92.6827 32.3173 98 58 98C83.6827 98 116 92.6827 116 67C116 43 106 23 88 13C78 7 68 5 58 5Z" fill="#0081A0"/>
+<path d="M26 47C32 39 42 39 48 47C42 42 32 42 26 47Z" fill="white"/>
+<path d="M68 47C74 39 84 39 90 47C84 42 74 42 68 47Z" fill="white"/>
+<path d="M57 79C69.1503 79 79 73.1797 79 66C79 58.8203 69.1503 53 57 53C44.8497 53 35 58.8203 35 66C35 73.1797 44.8497 79 57 79Z" fill="white"/>
+<path d="M49 63.3333C49 59.3333 52.5 58 57 58C61.5 58 65 59.3333 65 63.3333C65 67.3333 61.5 70 57 70C52.5 70 49 67.3333 49 63.3333Z" fill="#0081A0"/>
+</svg>
+
+        </div>
+        <span class="brand-text">
+          <span class="ber">Ber</span><span class="uang">uang</span>
+        </span>
+      </div>
+      <div class="nav-links">
+        <span>Untuk UMKM</span>
+        <span>Untuk Investor</span>
+        <span>Katalog Terkurasi</span>
+        <span>Tentang Kami</span>
+      </div>
+      <a href="#" class="cta-btn">Mulai Sekarang</a>
+    </div>
+  </div>
+
+  <div>
+    <h3 style="font-size: 13px; color: #64748B; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Mode Gelap (Dark Mode Navbar)</h3>
+    <div class="navbar-card dark">
+      <div class="brand-link">
+        <div class="logo-img">
+          <svg width="116" height="98" viewBox="0 0 116 98" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M24.5 35C34.165 35 42 27.165 42 17.5C42 7.83502 34.165 0 24.5 0C14.835 0 7 7.83502 7 17.5C7 27.165 14.835 35 24.5 35Z" fill="#0081A0"/>
+<path d="M24.5 26C29.1944 26 33 22.1944 33 17.5C33 12.8056 29.1944 9 24.5 9C19.8056 9 16 12.8056 16 17.5C16 22.1944 19.8056 26 24.5 26Z" fill="white"/>
+<path d="M90.5 35C100.165 35 108 27.165 108 17.5C108 7.83502 100.165 0 90.5 0C80.835 0 73 7.83502 73 17.5C73 27.165 80.835 35 90.5 35Z" fill="#0081A0"/>
+<path d="M90.5 26C95.1944 26 99 22.1944 99 17.5C99 12.8056 95.1944 9 90.5 9C85.8056 9 82 12.8056 82 17.5C82 22.1944 85.8056 26 90.5 26Z" fill="white"/>
+<path d="M58 5C48 5 38 7 28 13C10 23 0 43 0 67C0 92.6827 32.3173 98 58 98C83.6827 98 116 92.6827 116 67C116 43 106 23 88 13C78 7 68 5 58 5Z" fill="#0081A0"/>
+<path d="M26 47C32 39 42 39 48 47C42 42 32 42 26 47Z" fill="white"/>
+<path d="M68 47C74 39 84 39 90 47C84 42 74 42 68 47Z" fill="white"/>
+<path d="M57 79C69.1503 79 79 73.1797 79 66C79 58.8203 69.1503 53 57 53C44.8497 53 35 58.8203 35 66C35 73.1797 44.8497 79 57 79Z" fill="white"/>
+<path d="M49 63.3333C49 59.3333 52.5 58 57 58C61.5 58 65 59.3333 65 63.3333C65 67.3333 61.5 70 57 70C52.5 70 49 67.3333 49 63.3333Z" fill="#0081A0"/>
+</svg>
+
+        </div>
+        <span class="brand-text">
+          <span class="ber">Ber</span><span class="uang">uang</span>
+        </span>
+      </div>
+      <div class="nav-links">
+        <span>Untuk UMKM</span>
+        <span>Untuk Investor</span>
+        <span>Katalog Terkurasi</span>
+        <span>Tentang Kami</span>
+      </div>
+      <a href="#" class="cta-btn">Mulai Sekarang</a>
+    </div>
+  </div>
+</body>
+</html>

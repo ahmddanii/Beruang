@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">Option 4: The Monolithic Kodiak</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-opt4">Beruang - The Monolithic Kodiak</title>
+  
+  <!-- Single Sculpted Bear Silhouette in Vibrant Blue (#0066D6) with Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 88 72
+      C 78 50 56 42 42 56
+      C 30 68 34 90 48 106
+      C 38 126 36 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 220 154 218 126 208 106
+      C 222 90 226 68 214 56
+      C 200 42 178 50 168 72
+      C 156 66 142 64 128 64
+      C 114 64 100 66 88 72 Z
+
+      M 88 114
+      A 7 7 0 1 0 88 128
+      A 7 7 0 1 0 88 114 Z
+
+      M 168 114
+      A 7 7 0 1 0 168 128
+      A 7 7 0 1 0 168 114 Z
+
+      M 128 140
+      C 152 140 168 152 168 174
+      C 168 196 150 210 128 210
+      C 106 210 88 196 88 174
+      C 88 152 104 140 128 140 Z
+    "
+  />
+
+  <!-- Green Growth Bear Nose (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 156
+      C 118 150 123 148 128 148
+      C 133 148 138 150 144 156
+      C 148 162 144 172 138 176
+      C 134 178 131 179 128 179
+      C 125 179 122 178 118 176
+      C 112 172 108 162 112 156 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-oe3">
+  <title id="title-oe3">Beruang - The Cloud-Vault Bear (Open Eyes)</title>
+  <defs>
+    <clipPath id="squircle-oe3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Trust Fintech Blue Squircle Canvas -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0081A0" />
+
+  <g clip-path="url(#squircle-oe3)">
+    <!-- White Bear Ears -->
+    <circle cx="76" cy="116" r="24" fill="#FFFFFF" />
+    <circle cx="76" cy="116" r="13" fill="#E0F2FE" />
+
+    <circle cx="180" cy="116" r="24" fill="#FFFFFF" />
+    <circle cx="180" cy="116" r="13" fill="#E0F2FE" />
+
+    <!-- White Doughy Bear Head -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 44 240
+        L 44 176
+        C 42 136 74 126 128 126
+        C 182 126 214 136 212 176
+        L 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat on top of head -->
+    <path
+      fill="#F0F9FF"
+      stroke="#E0F2FE"
+      stroke-width="3"
+      d="
+        M 90 134
+        C 70 134 60 110 76 94
+        C 66 74 92 56 114 68
+        C 124 48 148 48 158 66
+        C 178 56 200 78 190 100
+        C 204 116 194 134 174 134 Z
+      "
+    />
+    <!-- Emerald Green Padlock on Cloud Hat (Cloud Private Data Room) -->
+    <circle cx="128" cy="94" r="14" fill="#00AA13" />
+    <path
+      fill="#FFFFFF"
+      d="
+        M 128 88
+        A 4 4 0 1 0 128 96
+        L 126 101
+        C 126 102 127 103 128 103
+        C 129 103 130 102 130 101
+        L 128 96
+        A 4 4 0 0 0 128 88 Z
+      "
+    />
+
+    <!-- Snout / Muzzle in Ice-Blue -->
+    <ellipse cx="128" cy="180" rx="32" ry="24" fill="#F0F9FF" />
+    <!-- Cute Bear Nose -->
+    <path
+      fill="#0F172A"
+      d="
+        M 118 172
+        C 118 165 123 162 128 162
+        C 133 162 138 165 138 172
+        C 138 178 133 182 128 182
+        C 123 182 118 178 118 172 Z
+      "
+    />
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      d="
+        M 124 186
+        Q 128 190 132 186
+      "
+    />
+
+    <!-- WIDE OPEN FRIENDLY EYES with Catchlight Sparkle -->
+    <circle cx="96" cy="154" r="8.5" fill="#0F172A" />
+    <circle cx="98.5" cy="151.5" r="3" fill="#FFFFFF" />
+    <circle cx="94.5" cy="156.5" r="1.2" fill="#FFFFFF" />
+
+    <circle cx="160" cy="154" r="8.5" fill="#0F172A" />
+    <circle cx="162.5" cy="151.5" r="3" fill="#FFFFFF" />
+    <circle cx="158.5" cy="156.5" r="1.2" fill="#FFFFFF" />
+  </g>
+</svg>

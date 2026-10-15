@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Concept A: Sentinel Bear (Geometric Protective Bear Head) -->
+  <g fill="none" fill-rule="evenodd">
+    <!-- Left Ear -->
+    <path
+      d="M52 86 C40 76 38 52 54 36 C70 20 94 26 100 42"
+      fill="#0081A0"
+    />
+    <!-- Right Ear -->
+    <path
+      d="M204 86 C216 76 218 52 202 36 C186 20 162 26 156 42"
+      fill="#0081A0"
+    />
+    <!-- Main Head Structure -->
+    <path
+      d="M60 76 C54 130 52 176 84 208 C108 232 148 232 172 208 C204 176 202 130 196 76 C172 70 84 70 60 76 Z"
+      fill="#0081A0"
+    />
+    <!-- Inner Face / Muzzle Vault Cutout (Real negative space) -->
+    <path
+      d="M96 116 C96 102 106 92 120 92 L136 92 C150 92 160 102 160 116 L160 144 C160 162 146 176 128 176 C110 176 96 162 96 144 Z"
+      fill="#F3F8FC"
+    />
+    <!-- Muzzle Nose & Smile Accent (Emerald Growth) -->
+    <path
+      d="M114 130 C114 124 120 120 128 120 C136 120 142 124 142 130 C142 138 134 146 128 146 C122 146 114 138 114 130 Z"
+      fill="#00AA13"
+    />
+    <!-- Eyes -->
+    <circle cx="92" cy="98" r="7" fill="#F3F8FC" />
+    <circle cx="164" cy="98" r="7" fill="#F3F8FC" />
+  </g>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-opt3">
+  <title id="t-opt3">Beruang - The Dual-Tone Venture Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="70" cy="72" r="26" fill="#0052B3" />
+  <circle cx="70" cy="72" r="15" fill="#0066D6" />
+
+  <!-- Right Ear -->
+  <circle cx="186" cy="72" r="26" fill="#0052B3" />
+  <circle cx="186" cy="72" r="15" fill="#0066D6" />
+
+  <!-- Main Bear Head (Vibrant Blue #0066D6) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 68
+      C 104 64 116 62 128 62
+      C 140 62 152 64 164 68
+      C 188 78 210 102 212 136
+      C 214 172 194 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 62 200 42 172 44 136
+      C 46 102 68 78 92 68 Z
+    "
+  />
+
+  <!-- Prominent Green Snout / Moncong Hijau Pertumbuhan (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 134
+      C 154 134 172 148 172 172
+      C 172 194 152 208 128 208
+      C 104 208 84 194 84 172
+      C 84 148 102 134 128 134 Z
+    "
+  />
+
+  <!-- Deep Slate Bear Nose on Green Snout (#0F172A) -->
+  <path
+    fill="#0F172A"
+    d="
+      M 112 152
+      C 118 148 123 146 128 146
+      C 133 146 138 148 144 152
+      C 147 156 145 164 138 170
+      C 134 173 131 174 128 174
+      C 125 174 122 173 118 170
+      C 111 164 109 156 112 152 Z
+    "
+  />
+
+  <!-- Open Alert Bear Eyes (White Sclera + Deep Navy Pupil) -->
+  <ellipse cx="94" cy="114" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="94" cy="114" r="6" fill="#0F172A" />
+  <circle cx="92" cy="112" r="2" fill="#FFFFFF" />
+
+  <ellipse cx="162" cy="114" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="162" cy="114" r="6" fill="#0F172A" />
+  <circle cx="160" cy="112" r="2" fill="#FFFFFF" />
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - The Safe-Dial Minimal</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-v3">Beruang - The Safe-Dial Minimalist</title>
+  <!-- Outer Head & Ears in Deep Forest Slate / Dark Teal -->
+  <ellipse cx="68" cy="74" rx="26" ry="26" fill="#0F2937" />
+  <ellipse cx="68" cy="74" rx="14" ry="14" fill="#0081A0" />
+
+  <ellipse cx="188" cy="74" rx="26" ry="26" fill="#0F2937" />
+  <ellipse cx="188" cy="74" rx="14" ry="14" fill="#0081A0" />
+
+  <!-- Main Round Head -->
+  <circle cx="128" cy="140" r="82" fill="#0F2937" />
+
+  <!-- Calm Almond Eyes -->
+  <path
+    fill="#FFFFFF"
+    d="
+      M 86 122
+      C 86 116 100 116 100 122
+      C 97 127 89 127 86 122 Z
+
+      M 156 122
+      C 156 116 170 116 170 122
+      C 167 127 159 127 156 122 Z
+    "
+  />
+
+  <!-- Circular Snout in Ice Blue -->
+  <ellipse cx="128" cy="164" rx="42" ry="38" fill="#F0F6FA" />
+
+  <!-- Safe Combination Dial (Vault Element) -->
+  <circle cx="128" cy="154" r="18" fill="#0081A0" />
+  <circle cx="128" cy="154" r="12" fill="#00AA13" />
+  <circle cx="128" cy="154" r="4" fill="#FFFFFF" />
+
+  <!-- Safe Dial Index Line -->
+  <line x1="128" y1="138" x2="128" y2="142" stroke="#0F2937" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Smile from Dial to Snout Bottom -->
+  <path
+    fill="none"
+    stroke="#0F2937"
+    stroke-width="3"
+    stroke-linecap="round"
+    d="
+      M 128 174
+      L 128 178
+      M 120 184
+      Q 128 190 136 184
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

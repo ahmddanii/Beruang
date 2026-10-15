@@ -1,0 +1,28 @@
+{
+  "brand": "Beruang",
+  "tagline": "Akselerator Kelayakan UMKM",
+  "brief": "Platform akselerator kelayakan dan kesiapan pendanaan UMKM. Menjaga integritas data privat dan kesiapan modal venture-grade. Solid, terstruktur, berwibawa, dan presisi secara matematis tanpa unsur komikal.",
+  "adjectives": ["Solid", "Geometris", "Berwibawa", "Protektif", "Akseleratif"],
+  "criteria": "Pictorial mark geometris monolitik (abstraksi kepala beruang dan brankas kas privat), skala tahan hingga 16px, palet Slate Navy (#0F172A) dan Emerald Growth (#059669).",
+  "industry": "finance",
+  "brand_color": "#0F172A",
+  "tile_color": "#0F172A",
+  "greyscale": false,
+  "final": true,
+  "round": 2,
+  "designer": "Antigravity Senior Brand Team",
+  "concepts": [
+    {
+      "name": "The Monolithic Vault (Iterasi A2)",
+      "symbol": "vault-refined-r27.svg",
+      "lockup": "vault-refined-r27-lockup.svg",
+      "idea": "Siluet kepala beruang monolitik dengan kubah brankas kas terkalibrasi dan batu penjuru zamrud akselerasi modal.",
+      "rationale": [
+        "Radius lingkaran tengah diperkecil 25% (r=27px) untuk memulihkan ketebalan dan soliditas kepala beruang (+26% volume Slate Navy).",
+        "Menghilangkan ilusi 'eyeball/lensa kamera' dan memperkuat aura brankas privat perbankan modern.",
+        "Ketahanan skala 100% sempurna hingga ukuran 16px favicon tanpa kehilangan siluet telinga maupun pusat zamrud."
+      ]
+    }
+  ],
+  "recommendation": "Iterasi A2 (r = 27px) mencapai proporsi rasio keemasan terbaik: kokoh melindungi aset UMKM sekaligus tajam dan berkelas di mata investor modal ventura."
+}

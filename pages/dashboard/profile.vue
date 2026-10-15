@@ -1,11 +1,22 @@
 <template>
   <div class="space-y-8 pb-16 font-sans text-neutral-900 dark:text-neutral-100">
+    <!-- Breadcrumb Back Navigation -->
+    <div class="flex items-center gap-2">
+      <NuxtLink
+        to="/dashboard"
+        class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-poppins font-medium text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors group"
+      >
+        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="15" :stroke-width="2" class="transition-transform group-hover:-translate-x-0.5" />
+        <span>Kembali ke Beranda</span>
+      </NuxtLink>
+    </div>
+
     <!-- Header Page Navigation -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-200/80 dark:border-neutral-800/80">
       <div>
         <div class="flex items-center gap-2.5">
           <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
-            Profil & Banner Toko
+            Profil Usaha
           </h1>
           <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-poppins font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
@@ -20,13 +31,14 @@
       <div class="flex items-center gap-2.5 shrink-0">
         <NuxtLink
           to="/dashboard"
-          class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs active:scale-95 cursor-pointer"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-neutral-100/80 dark:bg-[#18191E] dark:hover:bg-neutral-800/80 border border-neutral-200/90 hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs active:scale-95 cursor-pointer"
         >
-          <span>← Kembali ke Beranda</span>
+          <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
+          <span>Kembali ke Beranda</span>
         </NuxtLink>
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-poppins font-semibold shadow-xs transition-colors active:scale-95 cursor-pointer"
+          class="btn-3d-blue px-5 py-2.5 text-xs sm:text-sm font-poppins font-semibold active:scale-95 cursor-pointer"
           @click="saveProfile"
         >
           <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" />
@@ -272,13 +284,14 @@
         <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-end gap-3">
           <NuxtLink
             to="/dashboard"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors active:scale-[0.97]"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 bg-white dark:bg-[#18191E] text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs active:scale-[0.97]"
           >
-            Batal
+            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="15" :stroke-width="2" />
+            <span>Kembali ke Beranda</span>
           </NuxtLink>
           <button
             type="button"
-            class="px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-poppins font-semibold shadow-xs transition-colors active:scale-[0.97] flex items-center gap-2 cursor-pointer"
+            class="btn-3d-blue px-6 py-2.5 text-xs sm:text-sm font-poppins font-semibold active:scale-[0.97] flex items-center gap-2 cursor-pointer"
             @click="saveProfile"
           >
             <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" />
@@ -320,7 +333,8 @@ import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   CheckmarkCircle01Icon,
   Camera01Icon,
-  UserCircleIcon
+  UserCircleIcon,
+  ArrowLeft02Icon
 } from '@hugeicons/core-free-icons'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'

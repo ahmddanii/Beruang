@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Tech Capsule</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-r5">Beruang - The Tech Capsule Vault Bear (Ref 5 Synthesis)</title>
+  <!-- Ice-Blue Background Canvas -->
+  <rect width="256" height="256" rx="56" fill="#F0F7FD" />
+
+  <!-- Single Continuous Capsule Bear Silhouette with Notch Ears & Cutouts -->
+  <path
+    fill="#0F172A"
+    fill-rule="evenodd"
+    d="
+      M 128 36
+      C 152 36 166 40 174 46
+      C 180 30 200 34 204 50
+      C 206 60 202 70 198 78
+      L 198 160
+      C 198 206 170 232 128 232
+      C 86 232 58 206 58 160
+      L 58 78
+      C 54 70 50 60 52 50
+      C 56 34 76 30 82 46
+      C 90 40 104 36 128 36 Z
+
+      M 80 104
+      L 102 104
+      C 102 112 80 112 80 104 Z
+
+      M 154 104
+      L 176 104
+      C 176 112 154 112 154 104 Z
+
+      M 112 140
+      C 112 126 120 120 128 120
+      C 136 120 144 126 144 140
+      L 144 186
+      C 144 198 136 204 128 204
+      C 120 204 112 198 112 186 Z
+    "
+  />
+
+  <!-- Emerald Safe-Dial & Keyhole inside Vault Slot -->
+  <circle cx="128" cy="154" r="12" fill="#00AA13" />
+  <circle cx="128" cy="154" r="5" fill="#FFFFFF" />
+  <!-- Combination Slot Line -->
+  <rect x="126" y="176" width="4" height="12" rx="2" fill="#00AA13" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

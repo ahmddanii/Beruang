@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-r4">
+  <title id="title-r4">Beruang - The Sculpted Vault Bear (Ref 4 Synthesis)</title>
+  <!-- Ice-Blue Background Canvas -->
+  <rect width="256" height="256" rx="56" fill="#F0F7FD" />
+
+  <!-- Symmetrical Deep Slate Navy Sculpted Bear Head with Muzzle & Calm Eyes Cutout -->
+  <path
+    fill="#0F172A"
+    fill-rule="evenodd"
+    d="
+      M 98 72
+      C 86 68 68 48 52 58
+      C 40 66 42 88 52 104
+      C 36 126 32 156 52 184
+      C 68 212 96 226 128 226
+      C 160 226 188 212 204 184
+      C 224 156 220 126 204 104
+      C 214 88 216 66 204 58
+      C 188 48 170 68 158 72
+      L 98 72 Z
+
+      M 128 112
+      C 150 112 168 130 168 152
+      C 168 174 150 192 128 192
+      C 106 192 88 174 88 152
+      C 88 130 106 112 128 112 Z
+
+      M 76 112
+      C 76 106 90 106 90 112
+      C 87 117 79 117 76 112 Z
+
+      M 166 112
+      C 166 106 180 106 180 112
+      C 177 117 169 117 166 112 Z
+    "
+  />
+
+  <!-- Emerald Growth Horizontal Oval Nose (Vault Keystone) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 110 146
+      C 110 136 118 132 128 132
+      C 138 132 146 136 146 146
+      C 146 156 138 160 128 160
+      C 118 160 110 156 110 146 Z
+    "
+  />
+</svg>

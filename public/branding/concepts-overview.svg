@@ -1,0 +1,812 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="984" viewBox="0 0 1600 984"><rect width="1600" height="984" fill="#f7f7f4"/><text x="60" y="78" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="40" font-weight="700" fill="#161616">Beruang — Konsep Identitas Visual Logo</text><text x="60" y="116" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="20" fill="#6b6b6b">Akselerator Kelayakan UMKM • Semi-Formal, Terpercaya, Digital-First</text><rect x="60" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#161616" stroke-width="2"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="90" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c0-title-c1">Beruang - The Vault Bear</title>
+  <!-- Symmetrical Geometric Bear Head with Integrated Vault Shield & True Holes -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 76 40
+      A 32 32 0 1 0 102 70
+      L 154 70
+      A 32 32 0 1 0 180 40
+      A 32 32 0 0 0 152 64
+      C 144 60 136 58 128 58
+      C 120 58 112 60 104 64
+      A 32 32 0 0 0 76 40 Z
+
+      M 62 82
+      C 42 108 42 152 62 184
+      C 78 210 104 224 128 224
+      C 152 224 178 210 194 184
+      C 214 152 214 108 194 82
+      C 176 72 152 68 128 68
+      C 104 68 80 72 62 82 Z
+
+      M 94 106
+      A 8 8 0 1 0 94 122
+      A 8 8 0 1 0 94 106 Z
+
+      M 162 106
+      A 8 8 0 1 0 162 122
+      A 8 8 0 1 0 162 106 Z
+
+      M 104 148
+      C 104 134 114 124 128 124
+      C 142 124 152 134 152 148
+      C 152 174 140 188 128 188
+      C 116 188 104 174 104 148 Z
+    "
+  />
+  <!-- Emerald Growth Nose / Upward Horizon Arc -->
+  <path
+    fill="#00AA13"
+    d="
+      M 116 142
+      C 116 137 121 133 128 133
+      C 135 133 140 137 140 142
+      C 140 149 133 154 128 154
+      C 123 154 116 149 116 142 Z
+    "
+  />
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-lockup" viewBox="0 0 680 180" x="90" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l0-title-lockup">Beruang Lockup - The Vault Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <!-- Symbol scaled to 130x130 at (24, 25) -->
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="l0-title-c1">Beruang - The Vault Bear</title>
+  <!-- Symmetrical Geometric Bear Head with Integrated Vault Shield & True Holes -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 76 40
+      A 32 32 0 1 0 102 70
+      L 154 70
+      A 32 32 0 1 0 180 40
+      A 32 32 0 0 0 152 64
+      C 144 60 136 58 128 58
+      C 120 58 112 60 104 64
+      A 32 32 0 0 0 76 40 Z
+
+      M 62 82
+      C 42 108 42 152 62 184
+      C 78 210 104 224 128 224
+      C 152 224 178 210 194 184
+      C 214 152 214 108 194 82
+      C 176 72 152 68 128 68
+      C 104 68 80 72 62 82 Z
+
+      M 94 106
+      A 8 8 0 1 0 94 122
+      A 8 8 0 1 0 94 106 Z
+
+      M 162 106
+      A 8 8 0 1 0 162 122
+      A 8 8 0 1 0 162 106 Z
+
+      M 104 148
+      C 104 134 114 124 128 124
+      C 142 124 152 134 152 148
+      C 152 174 140 188 128 188
+      C 116 188 104 174 104 148 Z
+    "
+  />
+  <!-- Emerald Growth Nose / Upward Horizon Arc -->
+  <path
+    fill="#00AA13"
+    d="
+      M 116 142
+      C 116 137 121 133 128 133
+      C 135 133 140 137 140 142
+      C 140 149 133 154 128 154
+      C 123 154 116 149 116 142 Z
+    "
+  />
+
+  </g>
+  <!-- Wordmark Text -->
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="90" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s064-title-c1">Beruang - The Vault Bear</title>
+  <!-- Symmetrical Geometric Bear Head with Integrated Vault Shield & True Holes -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 76 40
+      A 32 32 0 1 0 102 70
+      L 154 70
+      A 32 32 0 1 0 180 40
+      A 32 32 0 0 0 152 64
+      C 144 60 136 58 128 58
+      C 120 58 112 60 104 64
+      A 32 32 0 0 0 76 40 Z
+
+      M 62 82
+      C 42 108 42 152 62 184
+      C 78 210 104 224 128 224
+      C 152 224 178 210 194 184
+      C 214 152 214 108 194 82
+      C 176 72 152 68 128 68
+      C 104 68 80 72 62 82 Z
+
+      M 94 106
+      A 8 8 0 1 0 94 122
+      A 8 8 0 1 0 94 106 Z
+
+      M 162 106
+      A 8 8 0 1 0 162 122
+      A 8 8 0 1 0 162 106 Z
+
+      M 104 148
+      C 104 134 114 124 128 124
+      C 142 124 152 134 152 148
+      C 152 174 140 188 128 188
+      C 116 188 104 174 104 148 Z
+    "
+  />
+  <!-- Emerald Growth Nose / Upward Horizon Arc -->
+  <path
+    fill="#00AA13"
+    d="
+      M 116 142
+      C 116 137 121 133 128 133
+      C 135 133 140 137 140 142
+      C 140 149 133 154 128 154
+      C 123 154 116 149 116 142 Z
+    "
+  />
+</svg>
+</g><text x="122" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="180" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s032-title-c1">Beruang - The Vault Bear</title>
+  <!-- Symmetrical Geometric Bear Head with Integrated Vault Shield & True Holes -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 76 40
+      A 32 32 0 1 0 102 70
+      L 154 70
+      A 32 32 0 1 0 180 40
+      A 32 32 0 0 0 152 64
+      C 144 60 136 58 128 58
+      C 120 58 112 60 104 64
+      A 32 32 0 0 0 76 40 Z
+
+      M 62 82
+      C 42 108 42 152 62 184
+      C 78 210 104 224 128 224
+      C 152 224 178 210 194 184
+      C 214 152 214 108 194 82
+      C 176 72 152 68 128 68
+      C 104 68 80 72 62 82 Z
+
+      M 94 106
+      A 8 8 0 1 0 94 122
+      A 8 8 0 1 0 94 106 Z
+
+      M 162 106
+      A 8 8 0 1 0 162 122
+      A 8 8 0 1 0 162 106 Z
+
+      M 104 148
+      C 104 134 114 124 128 124
+      C 142 124 152 134 152 148
+      C 152 174 140 188 128 188
+      C 116 188 104 174 104 148 Z
+    "
+  />
+  <!-- Emerald Growth Nose / Upward Horizon Arc -->
+  <path
+    fill="#00AA13"
+    d="
+      M 116 142
+      C 116 137 121 133 128 133
+      C 135 133 140 137 140 142
+      C 140 149 133 154 128 154
+      C 123 154 116 149 116 142 Z
+    "
+  />
+</svg>
+</g><text x="196" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="238" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s016-title-c1">Beruang - The Vault Bear</title>
+  <!-- Symmetrical Geometric Bear Head with Integrated Vault Shield & True Holes -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 76 40
+      A 32 32 0 1 0 102 70
+      L 154 70
+      A 32 32 0 1 0 180 40
+      A 32 32 0 0 0 152 64
+      C 144 60 136 58 128 58
+      C 120 58 112 60 104 64
+      A 32 32 0 0 0 76 40 Z
+
+      M 62 82
+      C 42 108 42 152 62 184
+      C 78 210 104 224 128 224
+      C 152 224 178 210 194 184
+      C 214 152 214 108 194 82
+      C 176 72 152 68 128 68
+      C 104 68 80 72 62 82 Z
+
+      M 94 106
+      A 8 8 0 1 0 94 122
+      A 8 8 0 1 0 94 106 Z
+
+      M 162 106
+      A 8 8 0 1 0 162 122
+      A 8 8 0 1 0 162 106 Z
+
+      M 104 148
+      C 104 134 114 124 128 124
+      C 142 124 152 134 152 148
+      C 152 174 140 188 128 188
+      C 116 188 104 174 104 148 Z
+    "
+  />
+  <!-- Emerald Growth Nose / Upward Horizon Arc -->
+  <path
+    fill="#00AA13"
+    d="
+      M 116 142
+      C 116 137 121 133 128 133
+      C 135 133 140 137 140 142
+      C 140 149 133 154 128 154
+      C 123 154 116 149 116 142 Z
+    "
+  />
+</svg>
+</g><text x="246" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="90.0" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">A · The Vault Bear</text><text x="90.0" y="808" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#161616" letter-spacing="1.5">RECOMMENDED</text><text x="90.0" y="842" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Siluet kepala beruang protektif dengan</text><text x="90.0" y="868" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">kubah brankas dan kurva senyum zamrud.</text><rect x="562.667" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="592.667" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c1-title-c2">Beruang - The Growth Monogram B</title>
+  <!-- Main B Shape in Trust Blue with evenodd counters (Shifted -14 to be optically centered) -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 42 48
+      C 42 39 49 32 58 32
+      L 122 32
+      C 148 32 168 48 168 72
+      C 168 86 160 98 148 106
+      C 166 114 182 132 182 158
+      C 182 190 154 216 120 216
+      L 58 216
+      C 49 216 42 209 42 200
+      L 42 48 Z
+
+      M 82 68
+      L 82 108
+      L 118 108
+      C 130 108 138 100 138 88
+      C 138 76 130 68 118 68
+      L 82 68 Z
+
+      M 82 140
+      L 82 180
+      L 120 180
+      C 134 180 144 170 144 160
+      C 144 150 134 140 120 140
+      L 82 140 Z
+    "
+  />
+  <!-- Bear Ear Arc on Top Loop -->
+  <path
+    fill="#0081A0"
+    d="
+      M 134 32
+      A 26 26 0 1 0 174 64
+      C 174 50 160 36 144 32 Z
+    "
+  />
+  <!-- Emerald Growth Momentum Dynamic Wedge (Profitability Accent) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 182 128
+      L 206 104
+      C 209 101 214 103 214 108
+      L 214 144
+      C 214 148 210 152 206 152
+      L 182 152
+      C 178 144 180 136 182 128 Z
+    "
+  />
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-lockup" viewBox="0 0 680 180" x="592.667" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l1-title-lockup">Beruang Lockup - The Growth Monogram</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <!-- Symbol scaled to 130x130 at (24, 25) -->
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="l1-title-c2">Beruang - The Growth Monogram B</title>
+  <!-- Main B Shape in Trust Blue with evenodd counters (Shifted -14 to be optically centered) -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 42 48
+      C 42 39 49 32 58 32
+      L 122 32
+      C 148 32 168 48 168 72
+      C 168 86 160 98 148 106
+      C 166 114 182 132 182 158
+      C 182 190 154 216 120 216
+      L 58 216
+      C 49 216 42 209 42 200
+      L 42 48 Z
+
+      M 82 68
+      L 82 108
+      L 118 108
+      C 130 108 138 100 138 88
+      C 138 76 130 68 118 68
+      L 82 68 Z
+
+      M 82 140
+      L 82 180
+      L 120 180
+      C 134 180 144 170 144 160
+      C 144 150 134 140 120 140
+      L 82 140 Z
+    "
+  />
+  <!-- Bear Ear Arc on Top Loop -->
+  <path
+    fill="#0081A0"
+    d="
+      M 134 32
+      A 26 26 0 1 0 174 64
+      C 174 50 160 36 144 32 Z
+    "
+  />
+  <!-- Emerald Growth Momentum Dynamic Wedge (Profitability Accent) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 182 128
+      L 206 104
+      C 209 101 214 103 214 108
+      L 214 144
+      C 214 148 210 152 206 152
+      L 182 152
+      C 178 144 180 136 182 128 Z
+    "
+  />
+
+  </g>
+  <!-- Wordmark Text -->
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="592.667" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s164-title-c2">Beruang - The Growth Monogram B</title>
+  <!-- Main B Shape in Trust Blue with evenodd counters (Shifted -14 to be optically centered) -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 42 48
+      C 42 39 49 32 58 32
+      L 122 32
+      C 148 32 168 48 168 72
+      C 168 86 160 98 148 106
+      C 166 114 182 132 182 158
+      C 182 190 154 216 120 216
+      L 58 216
+      C 49 216 42 209 42 200
+      L 42 48 Z
+
+      M 82 68
+      L 82 108
+      L 118 108
+      C 130 108 138 100 138 88
+      C 138 76 130 68 118 68
+      L 82 68 Z
+
+      M 82 140
+      L 82 180
+      L 120 180
+      C 134 180 144 170 144 160
+      C 144 150 134 140 120 140
+      L 82 140 Z
+    "
+  />
+  <!-- Bear Ear Arc on Top Loop -->
+  <path
+    fill="#0081A0"
+    d="
+      M 134 32
+      A 26 26 0 1 0 174 64
+      C 174 50 160 36 144 32 Z
+    "
+  />
+  <!-- Emerald Growth Momentum Dynamic Wedge (Profitability Accent) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 182 128
+      L 206 104
+      C 209 101 214 103 214 108
+      L 214 144
+      C 214 148 210 152 206 152
+      L 182 152
+      C 178 144 180 136 182 128 Z
+    "
+  />
+</svg>
+</g><text x="624.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="682.667" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s132-title-c2">Beruang - The Growth Monogram B</title>
+  <!-- Main B Shape in Trust Blue with evenodd counters (Shifted -14 to be optically centered) -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 42 48
+      C 42 39 49 32 58 32
+      L 122 32
+      C 148 32 168 48 168 72
+      C 168 86 160 98 148 106
+      C 166 114 182 132 182 158
+      C 182 190 154 216 120 216
+      L 58 216
+      C 49 216 42 209 42 200
+      L 42 48 Z
+
+      M 82 68
+      L 82 108
+      L 118 108
+      C 130 108 138 100 138 88
+      C 138 76 130 68 118 68
+      L 82 68 Z
+
+      M 82 140
+      L 82 180
+      L 120 180
+      C 134 180 144 170 144 160
+      C 144 150 134 140 120 140
+      L 82 140 Z
+    "
+  />
+  <!-- Bear Ear Arc on Top Loop -->
+  <path
+    fill="#0081A0"
+    d="
+      M 134 32
+      A 26 26 0 1 0 174 64
+      C 174 50 160 36 144 32 Z
+    "
+  />
+  <!-- Emerald Growth Momentum Dynamic Wedge (Profitability Accent) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 182 128
+      L 206 104
+      C 209 101 214 103 214 108
+      L 214 144
+      C 214 148 210 152 206 152
+      L 182 152
+      C 178 144 180 136 182 128 Z
+    "
+  />
+</svg>
+</g><text x="698.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="740.667" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s116-title-c2">Beruang - The Growth Monogram B</title>
+  <!-- Main B Shape in Trust Blue with evenodd counters (Shifted -14 to be optically centered) -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 42 48
+      C 42 39 49 32 58 32
+      L 122 32
+      C 148 32 168 48 168 72
+      C 168 86 160 98 148 106
+      C 166 114 182 132 182 158
+      C 182 190 154 216 120 216
+      L 58 216
+      C 49 216 42 209 42 200
+      L 42 48 Z
+
+      M 82 68
+      L 82 108
+      L 118 108
+      C 130 108 138 100 138 88
+      C 138 76 130 68 118 68
+      L 82 68 Z
+
+      M 82 140
+      L 82 180
+      L 120 180
+      C 134 180 144 170 144 160
+      C 144 150 134 140 120 140
+      L 82 140 Z
+    "
+  />
+  <!-- Bear Ear Arc on Top Loop -->
+  <path
+    fill="#0081A0"
+    d="
+      M 134 32
+      A 26 26 0 1 0 174 64
+      C 174 50 160 36 144 32 Z
+    "
+  />
+  <!-- Emerald Growth Momentum Dynamic Wedge (Profitability Accent) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 182 128
+      L 206 104
+      C 209 101 214 103 214 108
+      L 214 144
+      C 214 148 210 152 206 152
+      L 182 152
+      C 178 144 180 136 182 128 Z
+    "
+  />
+</svg>
+</g><text x="748.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="592.6666666666667" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">B · The Growth Monogram B</text><text x="592.6666666666667" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Monogram &#x27;B&#x27; hibrida beruang dengan</text><text x="592.6666666666667" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">momentum pertumbuhan profitabilitas.</text><rect x="1065.33" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1095.33" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c2-title-c3">Beruang - The Prosperity Crest</title>
+  <!-- Left Ear -->
+  <circle cx="76" cy="64" r="26" fill="#0081A0" />
+  <!-- Right Ear -->
+  <circle cx="180" cy="64" r="26" fill="#0081A0" />
+
+  <!-- Shield Base with exact 60° (dx=30, dy=52) and 120° angles -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 60 76
+      C 56 128 54 172 82 202
+      C 106 228 150 228 174 202
+      C 202 172 200 128 196 76
+      L 60 76 Z
+
+      M 128 100
+      L 158 152
+      L 135 192
+      L 121 192
+      L 98 152
+      Z
+    "
+  />
+  <!-- Central Growth Keystone (Emerald Accent with exact 60° angles) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 116
+      L 151 156
+      L 137 180
+      L 119 180
+      L 105 156
+      Z
+    "
+  />
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-lockup" viewBox="0 0 680 180" x="1095.33" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l2-title-lockup">Beruang Lockup - The Prosperity Crest</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <!-- Symbol scaled to 130x130 at (24, 25) -->
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="l2-title-c3">Beruang - The Prosperity Crest</title>
+  <!-- Left Ear -->
+  <circle cx="76" cy="64" r="26" fill="#0081A0" />
+  <!-- Right Ear -->
+  <circle cx="180" cy="64" r="26" fill="#0081A0" />
+
+  <!-- Shield Base with exact 60° (dx=30, dy=52) and 120° angles -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 60 76
+      C 56 128 54 172 82 202
+      C 106 228 150 228 174 202
+      C 202 172 200 128 196 76
+      L 60 76 Z
+
+      M 128 100
+      L 158 152
+      L 135 192
+      L 121 192
+      L 98 152
+      Z
+    "
+  />
+  <!-- Central Growth Keystone (Emerald Accent with exact 60° angles) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 116
+      L 151 156
+      L 137 180
+      L 119 180
+      L 105 156
+      Z
+    "
+  />
+
+  </g>
+  <!-- Wordmark Text -->
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1095.33" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s264-title-c3">Beruang - The Prosperity Crest</title>
+  <!-- Left Ear -->
+  <circle cx="76" cy="64" r="26" fill="#0081A0" />
+  <!-- Right Ear -->
+  <circle cx="180" cy="64" r="26" fill="#0081A0" />
+
+  <!-- Shield Base with exact 60° (dx=30, dy=52) and 120° angles -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 60 76
+      C 56 128 54 172 82 202
+      C 106 228 150 228 174 202
+      C 202 172 200 128 196 76
+      L 60 76 Z
+
+      M 128 100
+      L 158 152
+      L 135 192
+      L 121 192
+      L 98 152
+      Z
+    "
+  />
+  <!-- Central Growth Keystone (Emerald Accent with exact 60° angles) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 116
+      L 151 156
+      L 137 180
+      L 119 180
+      L 105 156
+      Z
+    "
+  />
+</svg>
+</g><text x="1127.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1185.33" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s232-title-c3">Beruang - The Prosperity Crest</title>
+  <!-- Left Ear -->
+  <circle cx="76" cy="64" r="26" fill="#0081A0" />
+  <!-- Right Ear -->
+  <circle cx="180" cy="64" r="26" fill="#0081A0" />
+
+  <!-- Shield Base with exact 60° (dx=30, dy=52) and 120° angles -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 60 76
+      C 56 128 54 172 82 202
+      C 106 228 150 228 174 202
+      C 202 172 200 128 196 76
+      L 60 76 Z
+
+      M 128 100
+      L 158 152
+      L 135 192
+      L 121 192
+      L 98 152
+      Z
+    "
+  />
+  <!-- Central Growth Keystone (Emerald Accent with exact 60° angles) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 116
+      L 151 156
+      L 137 180
+      L 119 180
+      L 105 156
+      Z
+    "
+  />
+</svg>
+</g><text x="1201.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1243.33" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s216-title-c3">Beruang - The Prosperity Crest</title>
+  <!-- Left Ear -->
+  <circle cx="76" cy="64" r="26" fill="#0081A0" />
+  <!-- Right Ear -->
+  <circle cx="180" cy="64" r="26" fill="#0081A0" />
+
+  <!-- Shield Base with exact 60° (dx=30, dy=52) and 120° angles -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 60 76
+      C 56 128 54 172 82 202
+      C 106 228 150 228 174 202
+      C 202 172 200 128 196 76
+      L 60 76 Z
+
+      M 128 100
+      L 158 152
+      L 135 192
+      L 121 192
+      L 98 152
+      Z
+    "
+  />
+  <!-- Central Growth Keystone (Emerald Accent with exact 60° angles) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 116
+      L 151 156
+      L 137 180
+      L 119 180
+      L 105 156
+      Z
+    "
+  />
+</svg>
+</g><text x="1251.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="1095.3333333333335" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">C · The Prosperity Crest</text><text x="1095.3333333333335" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Tiga pilar geometris (UMKM, Konsultan,</text><text x="1095.3333333333335" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Investor) membentuk lambang perisai</text><text x="1095.3333333333335" y="866" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">beruang.</text></svg>

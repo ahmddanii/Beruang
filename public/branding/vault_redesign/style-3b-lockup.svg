@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Style 3B</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-3b">Beruang - The Calm Vault Guardian</title>
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 100 88
+      C 88 84 70 64 54 74
+      C 42 82 44 102 52 118
+      C 38 138 34 168 52 196
+      C 68 224 96 236 128 236
+      C 160 236 188 224 204 196
+      C 222 168 218 138 204 118
+      C 212 102 214 82 202 74
+      C 186 64 168 84 156 88
+      L 100 88 Z
+
+      M 128 120
+      C 151 120 170 139 170 162
+      C 170 185 151 204 128 204
+      C 105 204 86 185 86 162
+      C 86 139 105 120 128 120 Z
+
+      M 72 126
+      C 72 119 92 119 92 126
+      C 88 132 76 132 72 126 Z
+
+      M 164 126
+      C 164 119 184 119 184 126
+      C 180 132 168 132 164 126 Z
+    "
+  />
+  <!-- Emerald Growth Horizontal Oval Nose -->
+  <path
+    fill="#00AA13"
+    d="
+      M 108 154
+      C 108 143 117 143 128 143
+      C 139 143 148 143 148 154
+      C 148 165 139 165 128 165
+      C 117 165 108 165 108 154 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

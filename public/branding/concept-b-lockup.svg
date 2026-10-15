@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang Lockup - The Growth Monogram</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <!-- Symbol scaled to 130x130 at (24, 25) -->
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-c2">Beruang - The Growth Monogram B</title>
+  <!-- Main B Shape in Trust Blue with evenodd counters (Shifted -14 to be optically centered) -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 42 48
+      C 42 39 49 32 58 32
+      L 122 32
+      C 148 32 168 48 168 72
+      C 168 86 160 98 148 106
+      C 166 114 182 132 182 158
+      C 182 190 154 216 120 216
+      L 58 216
+      C 49 216 42 209 42 200
+      L 42 48 Z
+
+      M 82 68
+      L 82 108
+      L 118 108
+      C 130 108 138 100 138 88
+      C 138 76 130 68 118 68
+      L 82 68 Z
+
+      M 82 140
+      L 82 180
+      L 120 180
+      C 134 180 144 170 144 160
+      C 144 150 134 140 120 140
+      L 82 140 Z
+    "
+  />
+  <!-- Bear Ear Arc on Top Loop -->
+  <path
+    fill="#0081A0"
+    d="
+      M 134 32
+      A 26 26 0 1 0 174 64
+      C 174 50 160 36 144 32 Z
+    "
+  />
+  <!-- Emerald Growth Momentum Dynamic Wedge (Profitability Accent) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 182 128
+      L 206 104
+      C 209 101 214 103 214 108
+      L 214 144
+      C 214 148 210 152 206 152
+      L 182 152
+      C 178 144 180 136 182 128 Z
+    "
+  />
+
+  </g>
+  <!-- Wordmark Text -->
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

@@ -127,7 +127,7 @@
             :y="height - 4"
             text-anchor="middle"
           >
-            {{ cat }}
+            {{ formatCategoryLabel(cat) }}
           </text>
         </g>
       </svg>
@@ -191,9 +191,28 @@ const props = withDefaults(
   }
 )
 
-const width = 600
+const width = 800
 const height = 220
-const padding = { top: 20, right: 24, bottom: 32, left: 24 }
+const padding = { top: 20, right: 32, bottom: 32, left: 32 }
+
+function formatCategoryLabel(cat: string) {
+  if (props.categories.length <= 6) return cat
+  const map: Record<string, string> = {
+    Januari: 'Jan',
+    Februari: 'Feb',
+    Maret: 'Mar',
+    April: 'Apr',
+    Mei: 'Mei',
+    Juni: 'Jun',
+    Juli: 'Jul',
+    Agustus: 'Ags',
+    September: 'Sep',
+    Oktober: 'Okt',
+    November: 'Nov',
+    Desember: 'Des'
+  }
+  return map[cat] || (cat.length > 4 ? cat.slice(0, 3) : cat)
+}
 
 const activeIdx = ref<number | null>(null)
 const svgRef = ref<SVGSVGElement | null>(null)

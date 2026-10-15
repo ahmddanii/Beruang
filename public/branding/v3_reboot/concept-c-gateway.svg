@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-cc">
+  <title id="title-cc">Beruang - The Gateway Arch Bear</title>
+  <!-- Monolithic Bear Silhouette with Archway Vault Cutout -->
+  <path
+    fill="#0F172A"
+    fill-rule="evenodd"
+    d="
+      M 96 66
+      C 86 62 70 44 54 54
+      C 42 62 44 82 52 98
+      C 38 118 34 148 52 176
+      C 68 204 96 218 128 218
+      C 160 218 188 204 204 176
+      C 222 148 218 118 204 98
+      C 212 82 214 62 202 54
+      C 186 44 170 62 160 66
+      L 96 66 Z
+
+      M 128 106
+      C 146 106 160 120 160 138
+      L 160 218
+      L 96 218
+      L 96 138
+      C 96 120 110 106 128 106 Z
+    "
+  />
+  <!-- Suspended Emerald Growth Keystone at Vault Apex -->
+  <polygon points="128,118 140,136 128,152 116,136" fill="#059669" />
+</svg>

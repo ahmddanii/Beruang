@@ -89,11 +89,11 @@
       </nav>
 
       <!-- CTA Buttons & Theme Toggle -->
-      <div class="flex items-center gap-3 shrink-0">
-        <!-- Theme Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Theme Toggle: 40×40 circular button -->
         <button
           type="button"
-          class="p-2.5 rounded-full text-neutral-500 hover:text-[#0081A0] dark:text-neutral-400 dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-150 cursor-pointer"
+          class="w-10 h-10 rounded-full flex items-center justify-center text-neutral-500 hover:text-[#0081A0] dark:text-neutral-400 dark:hover:text-[#2091AA] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 cursor-pointer"
           title="Ganti Tema (Light/Dark)"
           @click="toggleTheme"
         >
@@ -101,31 +101,31 @@
           <HugeiconsIcon v-else :icon="Moon01Icon" :size="18" :stroke-width="1.8" />
         </button>
 
-        <!-- Masuk link -->
+        <!-- Masuk link: height 40px, rounded-full pill -->
         <NuxtLink
           to="/masuk"
-          class="hidden lg:block px-4.5 py-2 rounded-full text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-150"
+          class="hidden lg:inline-flex items-center justify-center h-10 px-4 rounded-full text-sm font-semibold text-neutral-700 dark:text-neutral-200 hover:text-[#0081A0] dark:hover:text-[#2091AA] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 whitespace-nowrap"
         >
           Masuk
         </NuxtLink>
 
-        <!-- Primary CTA: Standard Width Pill -->
+        <!-- Primary CTA Daftar: height 40px, generous px-6 pill -->
         <NuxtLink
           to="/daftar"
-          class="hidden lg:inline-flex items-center justify-center px-5.5 py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_10px_rgba(0,129,160,0.25)] transition-all duration-150 active:scale-[0.98]"
+          class="hidden lg:inline-flex items-center justify-center h-10 px-6 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
         >
           <span>Daftar</span>
         </NuxtLink>
 
-        <!-- Mobile Menu Toggle: 44×44 touch target -->
+        <!-- Mobile Menu Toggle: 40×40 touch target -->
         <button
           type="button"
-          class="lg:hidden p-2.5 rounded-xl text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          class="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#2091AA] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
           aria-label="Menu Navigasi"
           @click="mobileMenuOpen = !mobileMenuOpen"
         >
-          <HugeiconsIcon v-if="!mobileMenuOpen" :icon="Menu01Icon" :size="22" :stroke-width="2" />
-          <HugeiconsIcon v-else :icon="Cancel01Icon" :size="22" :stroke-width="2" />
+          <HugeiconsIcon v-if="!mobileMenuOpen" :icon="Menu01Icon" :size="20" :stroke-width="2" />
+          <HugeiconsIcon v-else :icon="Cancel01Icon" :size="20" :stroke-width="2" />
         </button>
       </div>
     </div>

@@ -149,35 +149,10 @@
         </div>
       </template>
 
-      <!-- STEP 1: Registration Form Input (Role Tailored) -->
-      <div v-if="otpStep === 'input'" class="space-y-3.5 pt-1 pb-1 text-left">
-        
-        <!-- Role Indicator & Toggle in Modal -->
-        <div class="space-y-1">
-          <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-            Peran Akun
-          </label>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              v-for="r in roleCards"
-              :key="r.key"
-              type="button"
-              :class="[
-                'py-2 px-2 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-1',
-                selectedRole === r.key
-                  ? 'bg-primary-50 dark:bg-primary-950/70 border-primary-500/60 text-primary-700 dark:text-primary-300 shadow-2xs ring-1 ring-primary-500/30'
-                  : 'bg-white dark:bg-[#18191E] border-neutral-200/80 dark:border-neutral-700/60 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
-              ]"
-              @click="onRoleTabClick(r.key)"
-            >
-              <HugeiconsIcon :icon="r.icon" :size="16" :stroke-width="1.8" />
-              <span class="text-xs font-bold">{{ r.shortTitle }}</span>
-            </button>
-          </div>
-        </div>
-
+      <!-- STEP 1: Registration Form Input (Phone Verification) -->
+      <div v-if="otpStep === 'input'" class="space-y-4 pt-1 pb-1 text-left">
         <!-- Phone Input Group -->
-        <div class="space-y-1.5 pt-0.5">
+        <div class="space-y-1.5">
           <div class="flex items-center justify-between">
             <label for="regPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
               Nomor WhatsApp / Handphone
@@ -230,29 +205,19 @@
           </div>
         </div>
 
-        <!-- Fast Demo Quick Fill Card -->
-        <div class="p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-neutral-700 dark:text-neutral-300">Pilih Cepat Akun Demo:</span>
-            <span class="text-[11px] text-neutral-500 dark:text-neutral-400">1-Klik isi nomor</span>
+        <!-- Fast Demo Quick Fill Helper for Active Role -->
+        <div class="p-3 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />
+            <span>Nomor demo {{ activeRoleMeta.shortTitle }}: <strong class="font-bold text-neutral-900 dark:text-white">+62 {{ activeRoleDemoPhone }}</strong></span>
           </div>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              v-for="r in roleCards"
-              :key="r.key"
-              type="button"
-              :class="[
-                'py-2 px-2.5 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
-                selectedRole === r.key
-                  ? 'bg-primary-50 dark:bg-primary-950/70 border-primary-500/60 text-primary-700 dark:text-primary-300 shadow-2xs ring-1 ring-primary-500/30'
-                  : 'bg-white dark:bg-[#18191E] border-neutral-200/80 dark:border-neutral-700/60 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
-              ]"
-              @click="applyDemoProfile(r.key)"
-            >
-              <span class="block text-xs font-bold">{{ r.shortTitle }}</span>
-              <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate">{{ r.demoName }}</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            class="px-2.5 py-1 rounded-lg bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-700 hover:border-primary-500 text-primary-600 dark:text-primary-400 font-bold text-xs transition-colors cursor-pointer shadow-2xs"
+            @click="fillCurrentRoleDemoPhone"
+          >
+            Isi Otomatis
+          </button>
         </div>
 
         <!-- Submit Button -->
@@ -376,6 +341,7 @@ const roleCards = [
     title: 'Pemilik Usaha',
     shortTitle: 'UMKM',
     demoName: 'Fikri S.',
+    demoPhone: '812-3456-7890',
     desc: 'Kembangkan usaha dan siap dapat modal.',
     icon: Store01Icon
   },
@@ -384,6 +350,7 @@ const roleCards = [
     title: 'Konsultan',
     shortTitle: 'Konsultan',
     demoName: 'Dra. Maya',
+    demoPhone: '819-8765-4321',
     desc: 'Bantu bimbing UMKM agar usahanya maju.',
     icon: UserGroupIcon
   },
@@ -392,6 +359,7 @@ const roleCards = [
     title: 'Investor',
     shortTitle: 'Investor',
     demoName: 'Hendro W.',
+    demoPhone: '811-2233-4455',
     desc: 'Cari usaha pilihan untuk diberi modal.',
     icon: Coins01Icon
   }
@@ -409,6 +377,10 @@ const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
 })
 
+const activeRoleDemoPhone = computed(() => {
+  return activeRoleMeta.value.demoPhone || '812-3456-7890'
+})
+
 const modalTitle = computed(() => {
   return `Daftar Akun ${activeRoleMeta.value.shortTitle}`
 })
@@ -419,17 +391,14 @@ const modalSubtitle = computed(() => {
 
 function onRoleTabClick(role: UserRole) {
   selectedRole.value = role
-  if (role === 'UMKM') {
-    phoneInput.value = formatIndonesianPhone('812-3456-7890')
-  } else if (role === 'CONSULTANT') {
-    phoneInput.value = formatIndonesianPhone('819-8765-4321')
-  } else if (role === 'INVESTOR') {
-    phoneInput.value = formatIndonesianPhone('811-2233-4455')
+  const card = roleCards.find(r => r.key === role)
+  if (card?.demoPhone) {
+    phoneInput.value = formatIndonesianPhone(card.demoPhone)
   }
 }
 
-function applyDemoProfile(role: UserRole) {
-  onRoleTabClick(role)
+function fillCurrentRoleDemoPhone() {
+  phoneInput.value = formatIndonesianPhone(activeRoleDemoPhone.value)
 }
 
 function formatIndonesianPhone(val: string): string {

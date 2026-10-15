@@ -1,29 +1,37 @@
 <template>
-  <div class="h-screen h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-4 sm:px-6 select-none relative overflow-hidden font-sans">
+  <div class="min-h-screen min-h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
     
     <!-- Subtle Ambient Background Glow -->
     <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />
 
     <!-- Atmospheric Layered Cloud Overlay -->
-    <BCloudBackground />
+    <BCloudBackground :fixed="true" />
 
-    <!-- ===================================================================== -->
-    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda"                            -->
-    <!-- ===================================================================== -->
-    <div class="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
+    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda" / "Pilih Peran Lain" -->
+    <div class="fixed top-6 left-6 sm:top-8 sm:left-8 z-30">
       <NuxtLink
+        v-if="step === 'role'"
         to="/"
         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
         <span>Kembali ke Beranda</span>
       </NuxtLink>
+      <button
+        v-else
+        type="button"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150 cursor-pointer"
+        @click="goToRoleStep"
+      >
+        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
+        <span>Pilih Peran Lain</span>
+      </button>
     </div>
 
     <!-- ===================================================================== -->
-    <!-- CENTER: Floating Lottie with Registration Action Stack                -->
+    <!-- VIEW A: ROLE SELECTION & REGISTRATION METHOD (HERO VIEW)              -->
     <!-- ===================================================================== -->
-    <main class="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center text-center my-auto py-2">
+    <main v-if="step === 'role'" class="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center text-center my-auto py-2 animate-in fade-in duration-200">
       
       <!-- 1. Lottie Animation Hero -->
       <div class="relative flex flex-col items-center">
@@ -96,7 +104,7 @@
           type="button"
           :disabled="loading"
           class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-primary-500 hover:bg-primary-600 text-white font-bold text-sm shadow-sm shadow-primary-500/20 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
-          @click="openPhoneModal = true"
+          @click="goToPhoneStep"
         >
           <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2" />
           <span>Daftar dengan WhatsApp</span>
@@ -120,214 +128,269 @@
       <div v-if="loadingMessage" class="mt-4 px-5 py-2.5 rounded-full bg-emerald-500 text-white font-bold text-sm shadow-sm animate-pulse">
         {{ loadingMessage }}
       </div>
-
     </main>
 
     <!-- ===================================================================== -->
-    <!-- ROLE-SPECIFIC WHATSAPP REGISTRATION MODAL                             -->
+    <!-- VIEW B: REGISTRATION PROCESS FLOW (MATCHES ONBOARDING PAGE DESIGN)     -->
     <!-- ===================================================================== -->
-    <BModal
-      v-model="openPhoneModal"
-      size="md"
-      :title="otpStep === 'input' ? modalTitle : 'Verifikasi Kode Masuk'"
-      :hide-divider="true"
-    >
-      <!-- Custom Header Slot with Brand Icon Badge -->
-      <template #header="{ close }">
-        <div class="flex items-start gap-3.5 flex-1 pr-1">
-          <div class="w-10 h-10 rounded-2xl bg-primary-50 dark:bg-primary-950/70 border border-primary-100 dark:border-primary-900/60 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0 shadow-2xs mt-0.5">
-            <HugeiconsIcon :icon="activeRoleMeta.icon" :size="20" :stroke-width="2.2" />
+    <div v-else class="relative z-10 w-full max-w-xl mx-auto my-auto space-y-4 pt-14 sm:pt-6 pb-12 animate-in fade-in duration-200">
+      
+      <!-- Top Brand Header & Step Badge -->
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <NuxtLink to="/" class="flex items-center gap-2.5 group">
+          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" />
+          <div class="text-left">
+            <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none block">
+              <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+            </span>
+            <span class="text-[11px] font-semibold text-primary-600 dark:text-primary-400">
+              Pendaftaran Akun {{ activeRoleMeta.shortTitle }}
+            </span>
           </div>
-          <div class="min-w-0 flex-1 text-left">
-            <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-snug">
-              {{ otpStep === 'input' ? modalTitle : 'Verifikasi Kode Masuk' }}
-            </h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-              {{ otpStep === 'input' ? modalSubtitle : `Kode 4 angka sudah dikirim ke +62 ${cleanPhone}` }}
-            </p>
-          </div>
-        </div>
-      </template>
+        </NuxtLink>
 
-      <!-- STEP 1: Registration Form Input (Phone Verification) -->
-      <div v-if="otpStep === 'input'" class="space-y-4 pt-1 pb-1 text-left">
-        <!-- Phone Input Group -->
-        <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <label for="regPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
-              Nomor WhatsApp / Handphone
-            </label>
-            <span class="text-[11px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
+          {{ currentStepNumber }} / 2
+        </span>
+      </div>
+
+      <!-- Stepper Component -->
+      <div class="p-3 sm:p-4 rounded-2xl bg-white/80 dark:bg-[#18191E]/80 backdrop-blur-md border border-[#EAEAEA] dark:border-[#26272F] shadow-xs">
+        <BStepper :steps="registrationSteps" :current-step="currentStepNumber" />
+      </div>
+
+      <!-- Main Form Container -->
+      <div class="bg-white/95 dark:bg-[#18191E]/95 backdrop-blur-md rounded-3xl border border-[#EAEAEA] dark:border-[#26272F] shadow-sm p-6 sm:p-8 space-y-5">
+        
+        <!-- STEP 1: Phone Number Input -->
+        <div v-if="step === 'phone'" class="space-y-4">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+              <HugeiconsIcon :icon="Call02Icon" :size="20" :stroke-width="1.75" />
+            </div>
+            <div class="text-left">
+              <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                1. Nomor WhatsApp / Handphone
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Masukkan nomor aktif untuk verifikasi pendaftaran akun {{ activeRoleMeta.shortTitle }}.
+              </p>
+            </div>
           </div>
 
-          <div
-            :class="[
-              'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
-              phoneValidationError
-                ? 'border-danger/80 ring-2 ring-danger/15'
-                : isPhoneValid
-                  ? 'border-emerald-500/70 ring-2 ring-emerald-500/15'
-                  : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
-            ]"
-          >
-            <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
-              <span class="text-base leading-none">🇮🇩</span>
-              <span>+62</span>
+          <!-- Phone Input Group -->
+          <div class="space-y-1.5 text-left">
+            <div class="flex items-center justify-between">
+              <label for="regPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+                Nomor WhatsApp / Handphone
+              </label>
+              <span class="text-[11px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
             </div>
 
+            <div
+              :class="[
+                'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
+                phoneValidationError
+                  ? 'border-danger/80 ring-2 ring-danger/15'
+                  : isPhoneValid
+                    ? 'border-emerald-500/70 ring-2 ring-emerald-500/15'
+                    : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
+              ]"
+            >
+              <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
+                <span class="text-base leading-none">🇮🇩</span>
+                <span>+62</span>
+              </div>
+
+              <input
+                id="regPhone"
+                :value="phoneInput"
+                type="tel"
+                required
+                autocomplete="tel-national"
+                inputmode="numeric"
+                placeholder="812-3456-7890"
+                class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
+                @input="onPhoneInput"
+                @keydown="onPhoneKeydown"
+                @keydown.enter="requestOtp"
+              />
+            </div>
+
+            <div class="px-1 min-h-[18px]">
+              <p v-if="phoneValidationError" class="text-xs text-danger flex items-center gap-1.5 animate-in fade-in duration-150">
+                <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
+                <span>{{ phoneValidationError }}</span>
+              </p>
+              <p v-else-if="isPhoneValid" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span>Nomor seluler valid (+62 {{ phoneInput }}). Data profil diisi pada tahap onboarding.</span>
+              </p>
+              <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
+                Ketik angka saja, tanda hubung (-) otomatis terisi.
+              </p>
+            </div>
+          </div>
+
+          <!-- Fast Demo Quick Fill Helper -->
+          <div class="p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />
+              <span>Nomor demo {{ activeRoleMeta.shortTitle }}: <strong class="font-bold text-neutral-900 dark:text-white">+62 {{ activeRoleDemoPhone }}</strong></span>
+            </div>
+            <button
+              type="button"
+              class="px-3 py-1.5 rounded-xl bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-700 hover:border-primary-500 text-primary-600 dark:text-primary-400 font-bold text-xs transition-colors cursor-pointer shadow-2xs"
+              @click="fillCurrentRoleDemoPhone"
+            >
+              Isi Otomatis
+            </button>
+          </div>
+
+          <!-- Bottom Navigation Action Bar -->
+          <div class="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
+            <button
+              type="button"
+              class="px-5 py-3 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-bold text-sm transition-all duration-150 cursor-pointer flex items-center gap-2"
+              @click="goToRoleStep"
+            >
+              <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
+              <span>Kembali</span>
+            </button>
+
+            <button
+              type="button"
+              :disabled="loading || !isPhoneValid"
+              :class="[
+                'px-6 py-3 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
+                isPhoneValid && !loading
+                  ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99]'
+                  : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
+              ]"
+              @click="requestOtp"
+            >
+              <span>{{ loading ? 'Mengirim Kode...' : 'Kirim Kode Verifikasi' }}</span>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2.2" />
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: 4-Digit OTP Input -->
+        <div v-else-if="step === 'otp'" class="space-y-4">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+              <HugeiconsIcon :icon="ShieldCheckIcon" :size="20" :stroke-width="1.75" />
+            </div>
+            <div class="text-left">
+              <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                2. Verifikasi Kode Masuk
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Kode 4 angka sudah dikirim via WhatsApp ke +62 {{ cleanPhone }}.
+              </p>
+            </div>
+          </div>
+
+          <div class="text-center py-1">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold mx-auto">
+              <span>Kirim ke: +62 {{ phoneInput }}</span>
+              <button
+                type="button"
+                class="text-primary-600 hover:text-primary-500 font-bold ml-1 cursor-pointer"
+                @click="goToPhoneStep"
+              >
+                Ubah
+              </button>
+            </div>
+          </div>
+
+          <!-- 4-Digit Input Boxes -->
+          <div class="flex items-center justify-center gap-2.5 sm:gap-3 py-2">
             <input
-              id="regPhone"
-              :value="phoneInput"
-              type="tel"
-              required
-              autocomplete="tel-national"
+              v-for="(digit, idx) in otpDigits"
+              :key="idx"
+              :ref="el => setOtpRef(el, idx)"
+              v-model="otpDigits[idx]"
+              type="text"
+              maxlength="1"
               inputmode="numeric"
-              placeholder="812-3456-7890"
-              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
-              @input="onPhoneInput"
-              @keydown="onPhoneKeydown"
-              @keydown.enter="requestOtp"
+              autocomplete="one-time-code"
+              pattern="[0-9]*"
+              :class="[
+                'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-primary-500/15 caret-primary-500 shadow-2xs',
+                otpDigits[idx]
+                  ? 'border-primary-500 bg-primary-50/30 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400'
+                  : 'border-neutral-200/90 dark:border-neutral-700/80 bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white hover:border-neutral-300 dark:hover:border-neutral-600 focus:border-primary-500'
+              ]"
+              @input="onOtpInput(idx, $event)"
+              @keydown="onOtpKeydown(idx, $event)"
+              @paste="onOtpPaste"
+              @focus="onOtpFocus"
             />
           </div>
 
-          <div class="px-1 min-h-[18px]">
-            <p v-if="phoneValidationError" class="text-xs text-danger flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
-              <span>{{ phoneValidationError }}</span>
-            </p>
-            <p v-else-if="isPhoneValid" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              <span>Nomor seluler valid (+62 {{ phoneInput }}). Data profil diisi pada tahap onboarding.</span>
-            </p>
-            <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
-              Ketik angka saja, tanda hubung (-) otomatis terisi.
-            </p>
+          <!-- Demo Hint -->
+          <div class="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between text-left">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
+              <span>Kode uji coba: <strong class="font-bold text-amber-900 dark:text-amber-200">1234</strong></span>
+            </div>
+            <button
+              type="button"
+              class="px-3 py-1.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 hover:bg-amber-200 dark:hover:bg-amber-800 text-amber-900 dark:text-amber-200 font-bold text-xs transition-colors cursor-pointer"
+              @click="fillOtpDemo"
+            >
+              Isi Otomatis
+            </button>
+          </div>
+
+          <!-- Bottom Navigation Action Bar -->
+          <div class="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
+            <button
+              type="button"
+              class="px-5 py-3 rounded-2xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-bold text-sm transition-all duration-150 cursor-pointer flex items-center gap-2"
+              @click="goToPhoneStep"
+            >
+              <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
+              <span>Ubah Nomor</span>
+            </button>
+
+            <button
+              type="button"
+              :disabled="loading || otpString.length < 4"
+              :class="[
+                'px-6 py-3 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
+                otpString.length === 4 && !loading
+                  ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99]'
+                  : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
+              ]"
+              @click="verifyAndRegister"
+            >
+              <span>{{ loading ? 'Mendaftarkan...' : 'Verifikasi & Lanjut' }}</span>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2.2" />
+            </button>
           </div>
         </div>
 
-        <!-- Fast Demo Quick Fill Helper for Active Role -->
-        <div class="p-3 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between text-xs">
-          <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary-500 shrink-0" />
-            <span>Nomor demo {{ activeRoleMeta.shortTitle }}: <strong class="font-bold text-neutral-900 dark:text-white">+62 {{ activeRoleDemoPhone }}</strong></span>
-          </div>
-          <button
-            type="button"
-            class="px-2.5 py-1 rounded-lg bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-700 hover:border-primary-500 text-primary-600 dark:text-primary-400 font-bold text-xs transition-colors cursor-pointer shadow-2xs"
-            @click="fillCurrentRoleDemoPhone"
-          >
-            Isi Otomatis
-          </button>
-        </div>
-
-        <!-- Submit Button -->
-        <button
-          type="button"
-          :disabled="loading || !isPhoneValid"
-          :class="[
-            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
-            isPhoneValid && !loading
-              ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99] cursor-pointer'
-              : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
-          ]"
-          @click="requestOtp"
-        >
-          <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2.2" />
-          <span>{{ loading ? 'Mengirim Kode...' : 'Kirim Kode Masuk' }}</span>
-        </button>
       </div>
-
-      <!-- STEP 2: 4-Digit OTP Input -->
-      <div v-else class="space-y-4 text-center pt-1 pb-1">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold mx-auto">
-          <span>Kirim ke: +62 {{ phoneInput }}</span>
-          <button
-            type="button"
-            class="text-primary-600 hover:text-primary-500 font-bold ml-1 cursor-pointer"
-            @click="otpStep = 'input'"
-          >
-            Ubah
-          </button>
-        </div>
-
-        <!-- 4-Digit Input Boxes -->
-        <div class="flex items-center justify-center gap-2.5 sm:gap-3 py-2">
-          <input
-            v-for="(digit, idx) in otpDigits"
-            :key="idx"
-            :ref="el => setOtpRef(el, idx)"
-            v-model="otpDigits[idx]"
-            type="text"
-            maxlength="1"
-            inputmode="numeric"
-            autocomplete="one-time-code"
-            pattern="[0-9]*"
-            :class="[
-              'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-primary-500/15 caret-primary-500 shadow-2xs',
-              otpDigits[idx]
-                ? 'border-primary-500 bg-primary-50/30 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400'
-                : 'border-neutral-200/90 dark:border-neutral-700/80 bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white hover:border-neutral-300 dark:hover:border-neutral-600 focus:border-primary-500'
-            ]"
-            @input="onOtpInput(idx, $event)"
-            @keydown="onOtpKeydown(idx, $event)"
-            @paste="onOtpPaste"
-            @focus="onOtpFocus"
-          />
-        </div>
-
-        <!-- Demo Hint -->
-        <div class="p-3 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between text-left">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
-            <span>Kode uji coba: <strong class="font-bold text-amber-900 dark:text-amber-200">1234</strong></span>
-          </div>
-          <button
-            type="button"
-            class="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/60 hover:bg-amber-200 dark:hover:bg-amber-800 text-amber-900 dark:text-amber-200 font-bold text-xs transition-colors cursor-pointer"
-            @click="fillOtpDemo"
-          >
-            Isi Otomatis
-          </button>
-        </div>
-
-        <button
-          type="button"
-          :disabled="loading || otpString.length < 4"
-          :class="[
-            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
-            otpString.length === 4 && !loading
-              ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99] cursor-pointer'
-              : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
-          ]"
-          @click="verifyAndRegister"
-        >
-          <span>{{ loading ? 'Mendaftarkan...' : 'Verifikasi & Lanjut' }}</span>
-        </button>
-
-        <button
-          type="button"
-          class="text-xs sm:text-sm font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors duration-150 cursor-pointer"
-          @click="otpStep = 'input'"
-        >
-          ← Kembali ke data awal
-        </button>
-      </div>
-    </BModal>
+    </div>
 
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, nextTick, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
 import BCloudBackground from '~/components/base/BCloudBackground.vue'
-import BModal from '~/components/base/BModal.vue'
+import BStepper from '~/components/base/BStepper.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   ArrowLeft02Icon,
+  ArrowRight02Icon,
   Call02Icon,
+  ShieldCheckIcon,
   Store01Icon,
   UserGroupIcon,
   Coins01Icon
@@ -338,6 +401,7 @@ definePageMeta({
 })
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
 const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
@@ -373,12 +437,17 @@ const roleCards = [
   }
 ]
 
+// Steps for Phone & OTP Flow
+const registrationSteps = [
+  { title: 'Nomor WhatsApp', description: 'Nomor telepon aktif' },
+  { title: 'Verifikasi Kode', description: 'Kode OTP 4 angka' }
+]
+
 // State
 const selectedRole = ref<UserRole>('UMKM')
+const step = ref<'role' | 'phone' | 'otp'>('role')
 const loading = ref(false)
 const loadingMessage = ref('')
-const openPhoneModal = ref(false)
-const otpStep = ref<'input' | 'otp'>('input')
 const phoneInput = ref('812-3456-7890')
 
 const activeRoleMeta = computed(() => {
@@ -389,12 +458,8 @@ const activeRoleDemoPhone = computed(() => {
   return activeRoleMeta.value.demoPhone || '812-3456-7890'
 })
 
-const modalTitle = computed(() => {
-  return `Daftar Akun ${activeRoleMeta.value.shortTitle}`
-})
-
-const modalSubtitle = computed(() => {
-  return 'Masukkan nomor WhatsApp aktif untuk verifikasi pendaftaran.'
+const currentStepNumber = computed(() => {
+  return step.value === 'otp' ? 2 : 1
 })
 
 function onRoleTabClick(role: UserRole) {
@@ -408,6 +473,46 @@ function onRoleTabClick(role: UserRole) {
 function fillCurrentRoleDemoPhone() {
   phoneInput.value = formatIndonesianPhone(activeRoleDemoPhone.value)
 }
+
+function goToPhoneStep() {
+  step.value = 'phone'
+  router.push({ path: '/daftar', query: { step: 'phone', role: selectedRole.value } })
+}
+
+function goToRoleStep() {
+  step.value = 'role'
+  router.push({ path: '/daftar' })
+}
+
+function goToOtpStep() {
+  step.value = 'otp'
+  router.push({ path: '/daftar', query: { step: 'otp', role: selectedRole.value } })
+}
+
+// Sync route queries on load and on route change
+onMounted(() => {
+  if (route.query.role && ['UMKM', 'CONSULTANT', 'INVESTOR'].includes(route.query.role as string)) {
+    selectedRole.value = route.query.role as UserRole
+    const card = roleCards.find(r => r.key === selectedRole.value)
+    if (card?.demoPhone) {
+      phoneInput.value = formatIndonesianPhone(card.demoPhone)
+    }
+  }
+  if (route.query.step === 'phone' || route.query.step === 'otp') {
+    step.value = route.query.step as 'phone' | 'otp'
+  }
+})
+
+watch(() => route.query, (q) => {
+  if (q.role && ['UMKM', 'CONSULTANT', 'INVESTOR'].includes(q.role as string)) {
+    selectedRole.value = q.role as UserRole
+  }
+  if (q.step === 'phone' || q.step === 'otp') {
+    step.value = q.step as 'phone' | 'otp'
+  } else {
+    step.value = 'role'
+  }
+})
 
 function formatIndonesianPhone(val: string): string {
   let digits = val.replace(/\D/g, '')
@@ -472,7 +577,7 @@ function requestOtp() {
   loading.value = true
   setTimeout(() => {
     loading.value = false
-    otpStep.value = 'otp'
+    goToOtpStep()
     otpDigits.value = ['', '', '', '']
     nextTick(() => {
       otpRefs.value[0]?.focus()
@@ -598,7 +703,6 @@ function verifyAndRegister() {
 
   setTimeout(() => {
     loading.value = false
-    openPhoneModal.value = false
 
     const defaultName = (
       selectedRole.value === 'UMKM'
@@ -618,7 +722,7 @@ function verifyAndRegister() {
 
     const email = `user_${cleanPhone.value}@beruang.id`
 
-    // Simpan ke authStore dengan field tabel PostgreSQL (public.users & business_profiles/consultant_profiles/investor_profiles)
+    // Simpan ke authStore dengan field tabel PostgreSQL
     authStore.register({
       name: defaultName,
       email,

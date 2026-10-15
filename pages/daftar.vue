@@ -1,14 +1,14 @@
 <template>
   <div class="h-screen h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 flex flex-col justify-center items-center px-4 py-4 sm:px-6 select-none relative overflow-hidden font-sans">
     
-    <!-- Subtle Ambient Background Glow (UMKM Dashboard Aesthetic) -->
+    <!-- Subtle Ambient Background Glow -->
     <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />
 
-    <!-- Atmospheric Layered Cloud Overlay (Grayscale / Neutral Theme matching UMKM Dashboard) -->
+    <!-- Atmospheric Layered Cloud Overlay -->
     <BCloudBackground />
 
     <!-- ===================================================================== -->
-    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda" (Pill shape, No Hover)     -->
+    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda"                            -->
     <!-- ===================================================================== -->
     <div class="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
       <NuxtLink
@@ -21,13 +21,13 @@
     </div>
 
     <!-- ===================================================================== -->
-    <!-- CENTER: Floating Lottie with Zen Registration Stack                   -->
+    <!-- CENTER: Floating Lottie with Registration Action Stack                -->
     <!-- ===================================================================== -->
     <main class="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center text-center my-auto py-2">
       
-      <!-- 1. Lottie Animation Hero (Refined Proportionate Scale) -->
+      <!-- 1. Lottie Animation Hero -->
       <div class="relative flex flex-col items-center">
-        <div class="w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[260px] md:h-[260px] lg:w-[280px] lg:h-[280px] max-h-[28vh] relative flex items-center justify-center">
+        <div class="w-[190px] h-[190px] sm:w-[220px] sm:h-[220px] md:w-[240px] md:h-[240px] max-h-[26vh] relative flex items-center justify-center">
           <BLottiePlayer
             :src="lottieAnimationUrl"
             :autoplay="true"
@@ -39,7 +39,7 @@
 
       <!-- 2. Welcoming Sapaan & Subtitle -->
       <div class="space-y-1 mb-3 sm:mb-4">
-        <h1 class="text-2xl sm:text-3xl md:text-3xl lg:text-[34px] font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
+        <h1 class="text-2xl sm:text-3xl md:text-3xl lg:text-[32px] font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
           Mulai Perjalanan Bisnismu
         </h1>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-sm mx-auto">
@@ -47,7 +47,7 @@
         </p>
       </div>
 
-      <!-- 3. Minimalist Action Stack (Role Tab + Google OAuth + WhatsApp) -->
+      <!-- 3. Action Stack (Role Tab + Google OAuth + WhatsApp) -->
       <div class="w-full max-w-sm space-y-2.5">
         
         <!-- Role Selector Pill Segment -->
@@ -63,7 +63,7 @@
                   ? 'bg-white dark:bg-[#18191E] text-primary-600 dark:text-primary-400 font-bold shadow-2xs'
                   : 'text-neutral-500 dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white'
               ]"
-              @click="selectedRole = r.key"
+              @click="onRoleTabClick(r.key)"
             >
               <HugeiconsIcon :icon="r.icon" :size="14" :stroke-width="selectedRole === r.key ? 2.2 : 1.8" />
               <span class="truncate">{{ r.shortTitle }}</span>
@@ -75,7 +75,7 @@
           </p>
         </div>
 
-        <!-- Button 1: Register with Google OAuth (Exact Match with Login Page) -->
+        <!-- Button 1: Register with Google OAuth -->
         <button
           type="button"
           :disabled="loading"
@@ -88,10 +88,10 @@
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
           </svg>
-          <span>Daftar dengan Google</span>
+          <span>Daftar sebagai {{ activeRoleMeta.shortTitle }} (Google)</span>
         </button>
 
-        <!-- Button 2: Register with WhatsApp (Primary Blue Accent bg-primary-600 / hover:bg-primary-700) -->
+        <!-- Button 2: Register with WhatsApp -->
         <button
           type="button"
           :disabled="loading"
@@ -124,37 +124,37 @@
     </main>
 
     <!-- ===================================================================== -->
-    <!-- PHONE NUMBER / WHATSAPP REGISTRATION MODAL                            -->
+    <!-- ROLE-SPECIFIC WHATSAPP REGISTRATION MODAL                             -->
     <!-- ===================================================================== -->
     <BModal
       v-model="openPhoneModal"
       size="md"
-      :title="otpStep === 'input' ? 'Daftar via WhatsApp' : 'Verifikasi Kode OTP'"
+      :title="otpStep === 'input' ? modalTitle : 'Verifikasi Kode Masuk'"
       :hide-divider="true"
     >
       <!-- Custom Header Slot with Brand Icon Badge -->
       <template #header="{ close }">
         <div class="flex items-start gap-3.5 flex-1 pr-1">
-          <div class="w-11 h-11 rounded-2xl bg-primary-50 dark:bg-primary-950/70 border border-primary-100 dark:border-primary-900/60 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0 shadow-2xs mt-0.5">
-            <HugeiconsIcon :icon="Call02Icon" :size="20" :stroke-width="2.2" />
+          <div class="w-10 h-10 rounded-2xl bg-primary-50 dark:bg-primary-950/70 border border-primary-100 dark:border-primary-900/60 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0 shadow-2xs mt-0.5">
+            <HugeiconsIcon :icon="activeRoleMeta.icon" :size="20" :stroke-width="2.2" />
           </div>
           <div class="min-w-0 flex-1 text-left">
-            <h3 class="font-extrabold text-xl sm:text-2xl text-neutral-900 dark:text-white tracking-tight leading-snug">
-              {{ otpStep === 'input' ? 'Daftar via WhatsApp' : 'Verifikasi Kode OTP' }}
+            <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-snug">
+              {{ otpStep === 'input' ? modalTitle : 'Verifikasi Kode Masuk' }}
             </h3>
-            <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-0.5 leading-relaxed">
-              {{ otpStep === 'input' ? 'Kami akan mengirimkan 4-digit kode verifikasi ke nomor WhatsApp aktifmu.' : `Masukkan kode verifikasi yang telah dikirim ke +62 ${cleanPhone}` }}
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+              {{ otpStep === 'input' ? modalSubtitle : `Kode 4 angka sudah dikirim ke +62 ${cleanPhone}` }}
             </p>
           </div>
         </div>
       </template>
 
-      <!-- STEP 1: Registration Form Input -->
-      <div v-if="otpStep === 'input'" class="space-y-4 pt-1 pb-1 text-left">
+      <!-- STEP 1: Registration Form Input (Role Tailored) -->
+      <div v-if="otpStep === 'input'" class="space-y-3.5 pt-1 pb-1 text-left">
         
         <!-- Role Indicator & Toggle in Modal -->
-        <div class="space-y-1.5">
-          <label class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
             Peran Akun
           </label>
           <div class="grid grid-cols-3 gap-2">
@@ -168,7 +168,7 @@
                   ? 'bg-primary-50 dark:bg-primary-950/70 border-primary-500/60 text-primary-700 dark:text-primary-300 shadow-2xs ring-1 ring-primary-500/30'
                   : 'bg-white dark:bg-[#18191E] border-neutral-200/80 dark:border-neutral-700/60 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
               ]"
-              @click="selectedRole = r.key"
+              @click="onRoleTabClick(r.key)"
             >
               <HugeiconsIcon :icon="r.icon" :size="16" :stroke-width="1.8" />
               <span class="text-xs font-bold">{{ r.shortTitle }}</span>
@@ -176,34 +176,216 @@
           </div>
         </div>
 
-        <!-- Name Input -->
-        <div class="space-y-1.5">
-          <label for="regName" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
-            Nama Lengkap
-          </label>
-          <input
-            id="regName"
-            v-model="nameInput"
-            type="text"
-            required
-            placeholder="Contoh: Budi Santoso"
-            class="w-full px-4 py-3 rounded-2xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-          />
-        </div>
-
-        <!-- Phone Input Group -->
-        <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <label for="regPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
-              Nomor WhatsApp / Handphone
+        <!-- ======================================================= -->
+        <!-- FIELDS FOR UMKM                                         -->
+        <!-- ======================================================= -->
+        <template v-if="selectedRole === 'UMKM'">
+          <div class="space-y-1">
+            <label for="regName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nama Pemilik
             </label>
-            <span class="text-[11px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
+            <input
+              id="regName"
+              v-model="nameInput"
+              type="text"
+              required
+              placeholder="contoh: Fikri Setiawan"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
           </div>
 
-          <!-- Input Container with Dynamic Error State -->
+          <div class="space-y-1">
+            <label for="regBusinessName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nama Usaha
+            </label>
+            <input
+              id="regBusinessName"
+              v-model="businessNameInput"
+              type="text"
+              required
+              placeholder="contoh: Kopi Senja Nusantara"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Jenis Usaha
+            </label>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button
+                v-for="s in umkmSectors"
+                :key="s"
+                type="button"
+                :class="[
+                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
+                  sectorInput === s
+                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
+                ]"
+                @click="sectorInput = s"
+              >
+                {{ s }}
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- ======================================================= -->
+        <!-- FIELDS FOR CONSULTANT                                   -->
+        <!-- ======================================================= -->
+        <template v-else-if="selectedRole === 'CONSULTANT'">
+          <div class="space-y-1">
+            <label for="regConsultantName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nama & Gelar
+            </label>
+            <input
+              id="regConsultantName"
+              v-model="nameInput"
+              type="text"
+              required
+              placeholder="contoh: Dra. Maya Suryani, M.M."
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label for="regInstitution" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nama Kantor / Lembaga
+            </label>
+            <input
+              id="regInstitution"
+              v-model="institutionInput"
+              type="text"
+              placeholder="contoh: Maya Advisory atau Mandiri"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label for="regBnsp" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nomor Sertifikat BNSP
+            </label>
+            <input
+              id="regBnsp"
+              v-model="bnspInput"
+              type="text"
+              placeholder="BNSP-KONS-2024-8891"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all tabular-nums"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Keahlian Utama
+            </label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button
+                v-for="sp in consultantSpecializations"
+                :key="sp"
+                type="button"
+                :class="[
+                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
+                  specializationInput === sp
+                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
+                ]"
+                @click="specializationInput = sp"
+              >
+                {{ sp }}
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- ======================================================= -->
+        <!-- FIELDS FOR INVESTOR                                     -->
+        <!-- ======================================================= -->
+        <template v-else-if="selectedRole === 'INVESTOR'">
+          <div class="space-y-1">
+            <label for="regInvestorName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nama Lengkap
+            </label>
+            <input
+              id="regInvestorName"
+              v-model="nameInput"
+              type="text"
+              required
+              placeholder="contoh: Hendro Wicaksono"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label for="regInvestorEntity" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nama Perusahaan / Kelompok
+            </label>
+            <input
+              id="regInvestorEntity"
+              v-model="investorEntityInput"
+              type="text"
+              placeholder="contoh: Nusantara Angel Syndicate atau Pribadi"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Jenis Investor
+            </label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button
+                v-for="t in investorTypes"
+                :key="t"
+                type="button"
+                :class="[
+                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
+                  investorTypeInput === t
+                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
+                ]"
+                @click="investorTypeInput = t"
+              >
+                {{ t }}
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Kemampuan Modal
+            </label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button
+                v-for="tr in ticketRanges"
+                :key="tr"
+                type="button"
+                :class="[
+                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
+                  ticketRangeInput === tr
+                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
+                ]"
+                @click="ticketRangeInput = tr"
+              >
+                {{ tr }}
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- Phone Input Group -->
+        <div class="space-y-1 pt-0.5">
+          <div class="flex items-center justify-between">
+            <label for="regPhone" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Nomor WhatsApp
+            </label>
+            <span class="text-[10px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
+          </div>
+
           <div
             :class="[
-              'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
+              'relative flex items-center p-1 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
               phoneValidationError
                 ? 'border-danger/80 ring-2 ring-danger/15'
                 : isPhoneValid
@@ -211,13 +393,11 @@
                   : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
             ]"
           >
-            <!-- Country Code Prefix Badge -->
-            <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
+            <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
               <span class="text-base leading-none">🇮🇩</span>
               <span>+62</span>
             </div>
 
-            <!-- Phone Input Field -->
             <input
               id="regPhone"
               :value="phoneInput"
@@ -226,60 +406,56 @@
               autocomplete="tel-national"
               inputmode="numeric"
               placeholder="812-3456-7890"
-              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
+              class="w-full px-3 py-1.5 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-base sm:text-lg font-bold tracking-wide focus:outline-none tabular-nums"
               @input="onPhoneInput"
               @keydown="onPhoneKeydown"
             />
           </div>
 
-          <!-- Real-Time Validation Feedback & Instructions -->
-          <div class="px-1 min-h-[18px]">
-            <p v-if="phoneValidationError" class="text-xs text-danger flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
-              <span>{{ phoneValidationError }}</span>
+          <div class="px-1 min-h-[14px]">
+            <p v-if="phoneValidationError" class="text-[11px] text-danger">
+              {{ phoneValidationError }}
             </p>
-            <p v-else-if="isPhoneValid" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              <span>Format nomor seluler valid (+62 {{ phoneInput }})</span>
+            <p v-else-if="isPhoneValid" class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+              Nomor sudah sesuai (+62 {{ phoneInput }})
             </p>
-            <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
-              Ketik angka saja, tanda hubung (-) otomatis terisi.
+            <p v-else class="text-[10px] text-neutral-400">
+              Ketik angka saja, tanda hubung otomatis terisi.
             </p>
           </div>
         </div>
 
         <!-- Fast Demo Quick Fill Card -->
-        <div class="p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 space-y-2">
+        <div class="p-2.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 space-y-1.5">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-neutral-700 dark:text-neutral-300">Isi Cepat Data Demo:</span>
-            <span class="text-[11px] text-neutral-500 dark:text-neutral-400">Evaluasi Juri</span>
+            <span class="font-bold text-neutral-700 dark:text-neutral-300 text-[11px]">Coba Langsung (Data Uji Coba):</span>
           </div>
           <div class="grid grid-cols-3 gap-2">
             <button
               type="button"
-              class="py-2 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
-              @click="setDemoRegister('Fikri Setiawan', '812-3456-7890', 'UMKM')"
+              class="py-1.5 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
+              @click="applyDemoProfile('UMKM')"
             >
               <span class="block text-xs font-bold">UMKM</span>
-              <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">Fikri S.</span>
+              <span class="block text-[10px] text-neutral-400 truncate">Fikri S.</span>
             </button>
 
             <button
               type="button"
-              class="py-2 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
-              @click="setDemoRegister('Dra. Maya Suryani', '819-8765-4321', 'CONSULTANT')"
+              class="py-1.5 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
+              @click="applyDemoProfile('CONSULTANT')"
             >
               <span class="block text-xs font-bold">Konsultan</span>
-              <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">Dra. Maya</span>
+              <span class="block text-[10px] text-neutral-400 truncate">Dra. Maya</span>
             </button>
 
             <button
               type="button"
-              class="py-2 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
-              @click="setDemoRegister('Hendro Wicaksono', '811-2233-4455', 'INVESTOR')"
+              class="py-1.5 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
+              @click="applyDemoProfile('INVESTOR')"
             >
               <span class="block text-xs font-bold">Investor</span>
-              <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">Hendro W.</span>
+              <span class="block text-[10px] text-neutral-400 truncate">Hendro W.</span>
             </button>
           </div>
         </div>
@@ -289,7 +465,7 @@
           type="button"
           :disabled="loading || !isPhoneValid || !nameInput.trim()"
           :class="[
-            'w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
+            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             isPhoneValid && nameInput.trim() && !loading
               ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
@@ -297,15 +473,14 @@
           @click="requestOtp"
         >
           <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2.2" />
-          <span>{{ loading ? 'Mengirim Kode...' : 'Kirim Kode OTP WhatsApp' }}</span>
+          <span>{{ loading ? 'Mengirim Kode...' : 'Kirim Kode Masuk' }}</span>
         </button>
       </div>
 
       <!-- STEP 2: 4-Digit OTP Input -->
-      <div v-else class="space-y-5 text-center pt-1 pb-1">
-        <!-- Phone indicator chip -->
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold mx-auto">
-          <span>Kirim ke: 🇮🇩 +62 {{ phoneInput }}</span>
+      <div v-else class="space-y-4 text-center pt-1 pb-1">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold mx-auto">
+          <span>Kirim ke: +62 {{ phoneInput }}</span>
           <button
             type="button"
             class="text-primary-600 hover:text-primary-700 font-bold ml-1 cursor-pointer"
@@ -326,17 +501,17 @@
             maxlength="1"
             inputmode="numeric"
             pattern="[0-9]*"
-            class="w-14 h-16 sm:w-16 sm:h-18 rounded-2xl border-2 border-[#EAEAEA] dark:border-[#26272F] bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white text-3xl font-extrabold text-center focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none shadow-xs transition-all"
+            class="w-13 h-15 sm:w-15 sm:h-17 rounded-2xl border-2 border-[#EAEAEA] dark:border-[#26272F] bg-white dark:bg-[#18191E] text-neutral-900 dark:text-white text-2xl sm:text-3xl font-extrabold text-center focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none shadow-xs transition-all"
             @input="onOtpInput(idx, $event)"
             @keydown.backspace="onOtpBackspace(idx, $event)"
           />
         </div>
 
         <!-- Demo Hint -->
-        <div class="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-xs sm:text-sm text-amber-800 dark:text-amber-300 flex items-center justify-between text-left">
+        <div class="p-3 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between text-left">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
-            <span>Kode Demo: <strong class="font-bold text-amber-900 dark:text-amber-200">1234</strong></span>
+            <span>Kode uji coba: <strong class="font-bold text-amber-900 dark:text-amber-200">1234</strong></span>
           </div>
           <button
             type="button"
@@ -351,22 +526,22 @@
           type="button"
           :disabled="loading || otpString.length < 4"
           :class="[
-            'w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
+            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             otpString.length === 4 && !loading
               ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
           @click="verifyAndRegister"
         >
-          <span>{{ loading ? 'Mendaftarkan Akun...' : 'Verifikasi & Selesaikan Pendaftaran' }}</span>
+          <span>{{ loading ? 'Mendaftarkan...' : 'Verifikasi & Lanjut' }}</span>
         </button>
 
         <button
           type="button"
-          class="text-sm font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors duration-150 cursor-pointer"
+          class="text-xs sm:text-sm font-semibold text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors duration-150 cursor-pointer"
           @click="otpStep = 'input'"
         >
-          ← Kembali ke data pendaftaran
+          ← Kembali ke data awal
         </button>
       </div>
     </BModal>
@@ -391,41 +566,68 @@ import {
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: false // Standalone Zen / Ultra-Minimalist Canvas (Identical to Login)
+  layout: false
 })
 
 const router = useRouter()
 const authStore = useAuthStore()
 
-// Official Lottie Animation URL (Identical to Login Page)
 const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
 
-// Role Definitions
+// Role Definitions (Layman-Friendly)
 const roleCards = [
   {
     key: 'UMKM' as UserRole,
-    title: 'Pemilik UMKM',
+    title: 'Pemilik Usaha',
     shortTitle: 'UMKM',
-    desc: 'Bina usaha, kurasi laporan keuangan & siap didanai investor.',
-    icon: Store01Icon,
-    targetRoute: '/onboarding'
+    desc: 'Kembangkan usaha dan siap dapat modal.',
+    icon: Store01Icon
   },
   {
     key: 'CONSULTANT' as UserRole,
-    title: 'Konsultan Bisnis',
+    title: 'Konsultan',
     shortTitle: 'Konsultan',
-    desc: 'Dampingi pelaku usaha, validasi BNSP & buka sesi mentoring.',
-    icon: UserGroupIcon,
-    targetRoute: '/konsultan'
+    desc: 'Bantu bimbing UMKM agar usahanya maju.',
+    icon: UserGroupIcon
   },
   {
     key: 'INVESTOR' as UserRole,
-    title: 'Investor Mitra',
+    title: 'Investor',
     shortTitle: 'Investor',
-    desc: 'Akses katalog UMKM terkurasi dengan metrik riil transparan.',
-    icon: Coins01Icon,
-    targetRoute: '/investor'
+    desc: 'Cari usaha pilihan untuk diberi modal.',
+    icon: Coins01Icon
   }
+]
+
+// Pilihan mudah dipahami
+const umkmSectors = [
+  'Makanan & Minuman',
+  'Pakaian & Kerajinan',
+  'Pertanian',
+  'Toko & Jasa',
+  'Teknologi',
+  'Lainnya'
+]
+
+const consultantSpecializations = [
+  'Keuangan & Biaya',
+  'Operasional & Stok',
+  'Pemasaran & Jual',
+  'Izin Usaha'
+]
+
+const investorTypes = [
+  'Pribadi',
+  'Kelompok Modal',
+  'Perusahaan Modal',
+  'Kantor Keluarga'
+]
+
+const ticketRanges = [
+  '50 - 150 Juta',
+  '150 - 500 Juta',
+  '500 Jt - 1 Miliar',
+  '> 1 Miliar'
 ]
 
 // State
@@ -434,32 +636,79 @@ const loading = ref(false)
 const loadingMessage = ref('')
 const openPhoneModal = ref(false)
 const otpStep = ref<'input' | 'otp'>('input')
+
+// Dynamic Fields
 const nameInput = ref('Fikri Setiawan')
 const phoneInput = ref('812-3456-7890')
+const businessNameInput = ref('Kopi Senja Nusantara')
+const sectorInput = ref('Makanan & Minuman')
+const institutionInput = ref('Maya Advisory Partner')
+const bnspInput = ref('BNSP-KONS-2024-8891')
+const specializationInput = ref('Keuangan & Biaya')
+const investorEntityInput = ref('Nusantara Angel Syndicate')
+const investorTypeInput = ref('Kelompok Modal')
+const ticketRangeInput = ref('150 - 500 Juta')
 
 const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
 })
 
-/**
- * Format raw digits into standard Indonesian mobile phone pattern:
- * e.g. 812-3456-7890 (no need for user to type "-")
- */
+const modalTitle = computed(() => {
+  if (selectedRole.value === 'UMKM') return 'Daftar Akun Usaha'
+  if (selectedRole.value === 'CONSULTANT') return 'Daftar Konsultan'
+  return 'Daftar Investor'
+})
+
+const modalSubtitle = computed(() => {
+  if (selectedRole.value === 'UMKM') {
+    return 'Isi data singkat untuk mulai mendaftar.'
+  }
+  if (selectedRole.value === 'CONSULTANT') {
+    return 'Isi data singkat untuk mendampingi UMKM.'
+  }
+  return 'Isi data singkat untuk mencari peluang usaha.'
+})
+
+function onRoleTabClick(role: UserRole) {
+  selectedRole.value = role
+  applyDefaultRolePlaceholders(role)
+}
+
+function applyDefaultRolePlaceholders(role: UserRole) {
+  if (role === 'UMKM') {
+    nameInput.value = 'Fikri Setiawan'
+    businessNameInput.value = 'Kopi Senja Nusantara'
+    sectorInput.value = 'Makanan & Minuman'
+    phoneInput.value = formatIndonesianPhone('812-3456-7890')
+  } else if (role === 'CONSULTANT') {
+    nameInput.value = 'Dra. Maya Suryani, M.M.'
+    institutionInput.value = 'Maya Advisory Partner'
+    bnspInput.value = 'BNSP-KONS-2024-8891'
+    specializationInput.value = 'Keuangan & Biaya'
+    phoneInput.value = formatIndonesianPhone('819-8765-4321')
+  } else if (role === 'INVESTOR') {
+    nameInput.value = 'Hendro Wicaksono'
+    investorEntityInput.value = 'Nusantara Angel Syndicate'
+    investorTypeInput.value = 'Kelompok Modal'
+    ticketRangeInput.value = '150 - 500 Juta'
+    phoneInput.value = formatIndonesianPhone('811-2233-4455')
+  }
+}
+
+function applyDemoProfile(role: UserRole) {
+  selectedRole.value = role
+  applyDefaultRolePlaceholders(role)
+}
+
 function formatIndonesianPhone(val: string): string {
   let digits = val.replace(/\D/g, '')
-
   if (digits.startsWith('0')) {
     digits = digits.slice(1)
   }
-
   digits = digits.slice(0, 13)
 
-  if (digits.length <= 3) {
-    return digits
-  }
-  if (digits.length <= 7) {
-    return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  }
+  if (digits.length <= 3) return digits
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`
   return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
 }
 
@@ -483,32 +732,14 @@ function onPhoneKeydown(event: KeyboardEvent) {
   }
 }
 
-function setDemoRegister(name: string, phone: string, role: UserRole) {
-  nameInput.value = name
-  phoneInput.value = formatIndonesianPhone(phone)
-  selectedRole.value = role
-}
-
-const cleanPhone = computed(() => {
-  return phoneInput.value.replace(/\D/g, '')
-})
+const cleanPhone = computed(() => phoneInput.value.replace(/\D/g, ''))
 
 const phoneValidationError = computed(() => {
   const digits = cleanPhone.value
   if (!digits) return ''
-
-  if (!digits.startsWith('8')) {
-    return 'Nomor seluler Indonesia harus diawali angka 8 (setelah kode +62).'
-  }
-
-  if (digits.length < 9) {
-    return `Nomor telepon belum lengkap (${digits.length}/9 digit minimum).`
-  }
-
-  if (digits.length > 13) {
-    return 'Nomor telepon maksimal 13 digit.'
-  }
-
+  if (!digits.startsWith('8')) return 'Nomor harus diawali angka 8 setelah +62.'
+  if (digits.length < 9) return `Nomor belum lengkap (${digits.length}/9 digit).`
+  if (digits.length > 13) return 'Nomor maksimal 13 digit.'
   return ''
 })
 
@@ -517,7 +748,7 @@ const isPhoneValid = computed(() => {
   return digits.startsWith('8') && digits.length >= 9 && digits.length <= 13
 })
 
-// OTP Inputs
+// OTP
 const otpDigits = ref(['', '', '', ''])
 const otpRefs = ref<(HTMLInputElement | null)[]>([])
 
@@ -525,9 +756,7 @@ function setOtpRef(el: any, index: number) {
   if (el) otpRefs.value[index] = el as HTMLInputElement
 }
 
-const otpString = computed(() => {
-  return otpDigits.value.join('')
-})
+const otpString = computed(() => otpDigits.value.join(''))
 
 function requestOtp() {
   if (!isPhoneValid.value || !nameInput.value.trim()) return
@@ -539,7 +768,7 @@ function requestOtp() {
     nextTick(() => {
       otpRefs.value[0]?.focus()
     })
-  }, 350)
+  }, 300)
 }
 
 function onOtpInput(index: number, event: Event) {
@@ -550,7 +779,6 @@ function onOtpInput(index: number, event: Event) {
   if (val && index < 3) {
     otpRefs.value[index + 1]?.focus()
   }
-
   if (otpString.value.length === 4) {
     verifyAndRegister()
   }
@@ -567,50 +795,41 @@ function fillOtpDemo() {
   verifyAndRegister()
 }
 
-/**
- * Handle Google OAuth Registration
- * Seamless 1-click registration with selected role and destination routing
- */
 function handleGoogleRegister() {
   loading.value = true
   loadingMessage.value = '✓ Menghubungkan akun Google...'
 
   setTimeout(() => {
     let email = 'fikri.google@gmail.com'
-    let name = 'Fikri Setiawan (Google)'
+    let name = 'Fikri Setiawan'
     let businessName = 'Kopi Senja Nusantara'
-    let targetRoute = '/onboarding'
 
     if (selectedRole.value === 'CONSULTANT') {
       email = 'maya.google@gmail.com'
-      name = 'Dra. Maya Suryani (Google)'
-      businessName = 'Senior Business Consultant'
-      targetRoute = '/konsultan'
+      name = 'Dra. Maya Suryani, M.M.'
+      businessName = 'Maya Advisory Partner'
     } else if (selectedRole.value === 'INVESTOR') {
       email = 'hendro.google@gmail.com'
-      name = 'Hendro Wicaksono (Google)'
+      name = 'Hendro Wicaksono'
       businessName = 'Nusantara Angel Syndicate'
-      targetRoute = '/investor'
     }
 
     authStore.login(email, selectedRole.value)
     if (authStore.currentUser) {
       authStore.currentUser.name = name
       authStore.currentUser.businessName = businessName
+      authStore.currentUser.onboardingCompleted = false
     }
 
     loading.value = false
-    loadingMessage.value = `✓ Berhasil terdaftar sebagai ${activeRoleMeta.value.title}! Mengarahkan...`
+    loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
 
     setTimeout(() => {
-      router.push(targetRoute)
-    }, 350)
-  }, 450)
+      router.push(`/onboarding?role=${selectedRole.value}`)
+    }, 300)
+  }, 400)
 }
 
-/**
- * Handle WhatsApp OTP Verification & Registration Completion
- */
 function verifyAndRegister() {
   loading.value = true
   const roleMeta = activeRoleMeta.value
@@ -621,19 +840,32 @@ function verifyAndRegister() {
 
     const email = `${nameInput.value.toLowerCase().replace(/[^a-z0-9]/g, '') || 'pengguna'}@beruang.id`
     authStore.login(email, selectedRole.value)
+    
     if (authStore.currentUser) {
       authStore.currentUser.name = nameInput.value.trim() || 'Pengguna Baru'
       authStore.currentUser.phone = `+62 ${cleanPhone.value}`
+      authStore.currentUser.onboardingCompleted = false
+
       if (selectedRole.value === 'UMKM') {
-        authStore.currentUser.businessName = 'Usaha Baru'
+        authStore.currentUser.businessName = businessNameInput.value.trim() || 'Usaha Baru'
+        authStore.currentUser.sector = sectorInput.value
+      } else if (selectedRole.value === 'CONSULTANT') {
+        authStore.currentUser.businessName = institutionInput.value.trim() || 'Konsultan Mandiri'
+        authStore.currentUser.institution = institutionInput.value.trim() || 'Konsultan Mandiri'
+        authStore.currentUser.bnspLicense = bnspInput.value.trim() || 'BNSP-KONS-2024-8891'
+        authStore.currentUser.specialization = specializationInput.value
+      } else if (selectedRole.value === 'INVESTOR') {
+        authStore.currentUser.businessName = investorEntityInput.value.trim() || 'Pribadi'
+        authStore.currentUser.investorType = investorTypeInput.value
+        authStore.currentUser.ticketRange = ticketRangeInput.value
       }
     }
 
-    loadingMessage.value = `✓ Selamat datang! Akun ${roleMeta.title} berhasil dibuat...`
+    loadingMessage.value = `✓ Berhasil! Membuka halaman ${roleMeta.shortTitle}...`
 
     setTimeout(() => {
-      router.push(roleMeta.targetRoute)
-    }, 350)
-  }, 400)
+      router.push(`/onboarding?role=${selectedRole.value}`)
+    }, 300)
+  }, 350)
 }
 </script>

@@ -141,6 +141,31 @@
                 </select>
               </div>
             </div>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Nomor NIB (Bila ada)
+                </label>
+                <input
+                  v-model="formUmkm.nib"
+                  type="text"
+                  placeholder="contoh: 1209000123456"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  NPWP Usaha (Bila ada)
+                </label>
+                <input
+                  v-model="formUmkm.npwp"
+                  type="text"
+                  placeholder="81.423.891.4-429.000"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+            </div>
           </div>
 
           <!-- Step 2: Sektor & Lokasi/Outlet -->
@@ -277,7 +302,36 @@
                   placeholder="150000000"
                   class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
                 />
-                <span class="text-[10px] text-neutral-400">Modal yang ingin kamu cari</span>
+                <span class="text-[10px] text-neutral-400">Modal yang ingin dicari</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Tawaran Bagi Hasil / Modal
+                </label>
+                <select
+                  v-model="formUmkm.equityOffered"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                >
+                  <option value="5% Bagi Hasil">5% Bagi Hasil</option>
+                  <option value="10% Bagi Hasil">10% Bagi Hasil</option>
+                  <option value="15% Bagi Hasil">15% Bagi Hasil</option>
+                  <option value="20% Bagi Hasil">20% Bagi Hasil</option>
+                  <option value="Sesuai Diskusi">Sesuai Diskusi Nanti</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Cerita Singkat Usaha
+                </label>
+                <input
+                  v-model="formUmkm.description"
+                  type="text"
+                  placeholder="contoh: Kedai kopi susu gula aren dengan 3 outlet..."
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                />
               </div>
             </div>
           </div>
@@ -892,17 +946,21 @@ const umkmSectors = [
 ]
 
 const formUmkm = ref({
-  name: authStore.currentUser?.businessName || 'Kopi Senja Nusantara',
+  name: authStore.currentUser?.businessName || authStore.currentUser?.org_name || 'Kopi Senja Nusantara',
   owner: authStore.currentUser?.name || 'Fikri Setiawan',
   year: 2021,
   legalStatus: 'NIB_READY',
+  nib: '1209000123456',
+  npwp: '81.423.891.4-429.000',
   sector: authStore.currentUser?.sector || 'Makanan & Minuman',
-  city: 'Bandung, Jawa Barat',
+  city: authStore.currentUser?.city || 'Bandung, Jawa Barat',
   outlets: 3,
   employees: 14,
   monthlyRevenue: 60000000,
   hppPercentage: 40,
-  targetFunding: 150000000
+  targetFunding: 150000000,
+  equityOffered: '10% Bagi Hasil',
+  description: 'Spesialis kopi susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%.'
 })
 
 // Consultant Form Data
@@ -915,7 +973,7 @@ const consultantSpecializations = [
 
 const formConsultant = ref({
   name: authStore.currentUser?.name || 'Dra. Maya Suryani, M.M.',
-  institution: authStore.currentUser?.institution || 'Maya Advisory Partner',
+  institution: authStore.currentUser?.institution || authStore.currentUser?.org_name || 'Maya Advisory Partner',
   bnspLicense: authStore.currentUser?.bnspLicense || 'BNSP-KONS-2024-8891',
   city: authStore.currentUser?.city || 'Jakarta Selatan',
   specialization: authStore.currentUser?.specialization || 'Keuangan & Biaya',
@@ -950,10 +1008,10 @@ const investorTargetSectors = [
 
 const formInvestor = ref({
   name: authStore.currentUser?.name || 'Hendro Wicaksono',
-  entityName: authStore.currentUser?.businessName || 'Nusantara Angel Syndicate',
-  investorType: 'Kelompok Modal',
+  entityName: authStore.currentUser?.businessName || authStore.currentUser?.org_name || 'Nusantara Angel Syndicate',
+  investorType: authStore.currentUser?.investorType || 'Kelompok Modal',
   city: authStore.currentUser?.city || 'Jakarta Pusat',
-  ticketRange: '150 - 500 Juta',
+  ticketRange: authStore.currentUser?.ticketRange || '150 - 500 Juta',
   sectors: ['Makanan & Minuman', 'Pakaian & Kerajinan'],
   minMargin: '35%',
   agreeNda: true,
@@ -980,45 +1038,96 @@ function finishOnboarding() {
     authStore.setRole(activeRole.value)
 
     if (activeRole.value === 'UMKM') {
+      // Sinkronkan ke umkmStore (kompatibel skema business_profiles)
+      umkmStore.profile.brand = formUmkm.value.name
       umkmStore.profile.name = formUmkm.value.name
+      umkmStore.profile.owner_name = formUmkm.value.owner
       umkmStore.profile.ownerName = formUmkm.value.owner
       umkmStore.profile.sector = formUmkm.value.sector
       umkmStore.profile.city = formUmkm.value.city
+      umkmStore.profile.established_year = formUmkm.value.year
+      umkmStore.profile.establishedYear = formUmkm.value.year
+      umkmStore.profile.outlets_count = formUmkm.value.outlets
       umkmStore.profile.outletsCount = formUmkm.value.outlets
+      umkmStore.profile.employees_count = formUmkm.value.employees
       umkmStore.profile.employeesCount = formUmkm.value.employees
+      umkmStore.profile.funding_target = formUmkm.value.targetFunding
       umkmStore.profile.fundingTarget = formUmkm.value.targetFunding
+      umkmStore.profile.nib = formUmkm.value.nib
+      umkmStore.profile.npwp = formUmkm.value.npwp
+      umkmStore.profile.equity_offered = formUmkm.value.equityOffered
+      umkmStore.profile.description = formUmkm.value.description
+      umkmStore.profile.status = 'READY_FOR_FUNDING'
 
+      // Simpan ke authStore dengan entitas tabel business_profiles
       authStore.updateProfile({
         name: formUmkm.value.owner,
         businessName: formUmkm.value.name,
+        org_name: formUmkm.value.name,
         sector: formUmkm.value.sector,
         city: formUmkm.value.city,
-        onboardingCompleted: true
+        onboardingCompleted: true,
+        businessProfile: {
+          id: `bp-${authStore.currentUser?.id || 1}`,
+          user_id: Number(authStore.currentUser?.id || 1),
+          brand: formUmkm.value.name,
+          owner_name: formUmkm.value.owner,
+          sector: formUmkm.value.sector,
+          city: formUmkm.value.city,
+          established_year: formUmkm.value.year,
+          outlets_count: formUmkm.value.outlets,
+          employees_count: formUmkm.value.employees,
+          funding_target: formUmkm.value.targetFunding,
+          nib: formUmkm.value.nib,
+          npwp: formUmkm.value.npwp,
+          equity_offered: formUmkm.value.equityOffered,
+          description: formUmkm.value.description,
+          status: 'READY_FOR_FUNDING'
+        }
       })
 
       submitting.value = false
       router.push('/dashboard')
     } else if (activeRole.value === 'CONSULTANT') {
+      // Simpan ke authStore dengan entitas tabel consultant_profiles
       authStore.updateProfile({
         name: formConsultant.value.name,
         businessName: formConsultant.value.institution,
+        org_name: formConsultant.value.institution,
         institution: formConsultant.value.institution,
         bnspLicense: formConsultant.value.bnspLicense,
         specialization: formConsultant.value.specialization,
         city: formConsultant.value.city,
-        onboardingCompleted: true
+        onboardingCompleted: true,
+        consultantProfile: {
+          id: `cp-${authStore.currentUser?.id || 2}`,
+          user_id: Number(authStore.currentUser?.id || 2),
+          firm_name: formConsultant.value.institution,
+          specialization: formConsultant.value.specialization,
+          is_certified: true,
+          active_clients_count: 0
+        }
       })
 
       submitting.value = false
       router.push('/konsultan')
     } else if (activeRole.value === 'INVESTOR') {
+      // Simpan ke authStore dengan entitas tabel investor_profiles
       authStore.updateProfile({
         name: formInvestor.value.name,
         businessName: formInvestor.value.entityName,
+        org_name: formInvestor.value.entityName,
         investorType: formInvestor.value.investorType,
         ticketRange: formInvestor.value.ticketRange,
         city: formInvestor.value.city,
-        onboardingCompleted: true
+        onboardingCompleted: true,
+        investorProfile: {
+          id: `ip-${authStore.currentUser?.id || 3}`,
+          user_id: Number(authStore.currentUser?.id || 3),
+          firm_name: formInvestor.value.entityName,
+          commitment_capital: formInvestor.value.ticketRange,
+          is_verified: true
+        }
       })
 
       submitting.value = false

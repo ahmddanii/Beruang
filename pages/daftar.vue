@@ -195,8 +195,22 @@
           </div>
 
           <div class="space-y-1">
+            <label for="regEmail" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Email Aktif
+            </label>
+            <input
+              id="regEmail"
+              v-model="emailInput"
+              type="email"
+              required
+              placeholder="contoh: fikri@kopisenja.id"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
             <label for="regBusinessName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama Usaha
+              Nama Usaha (Brand)
             </label>
             <input
               id="regBusinessName"
@@ -245,6 +259,20 @@
               type="text"
               required
               placeholder="contoh: Dra. Maya Suryani, M.M."
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label for="regConsultantEmail" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Email Aktif
+            </label>
+            <input
+              id="regConsultantEmail"
+              v-model="emailInput"
+              type="email"
+              required
+              placeholder="contoh: maya.suryani@beruang.id"
               class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
             />
           </div>
@@ -312,6 +340,20 @@
               type="text"
               required
               placeholder="contoh: Hendro Wicaksono"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label for="regInvestorEmail" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+              Email Aktif
+            </label>
+            <input
+              id="regInvestorEmail"
+              v-model="emailInput"
+              type="email"
+              required
+              placeholder="contoh: hendro@nusantaraventures.com"
               class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
             />
           </div>
@@ -463,10 +505,10 @@
         <!-- Submit Button -->
         <button
           type="button"
-          :disabled="loading || !isPhoneValid || !nameInput.trim()"
+          :disabled="loading || !isPhoneValid || !nameInput.trim() || !emailInput.trim()"
           :class="[
             'w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
-            isPhoneValid && nameInput.trim() && !loading
+            isPhoneValid && nameInput.trim() && emailInput.trim() && !loading
               ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
@@ -639,6 +681,7 @@ const otpStep = ref<'input' | 'otp'>('input')
 
 // Dynamic Fields
 const nameInput = ref('Fikri Setiawan')
+const emailInput = ref('fikri@kopisenja.id')
 const phoneInput = ref('812-3456-7890')
 const businessNameInput = ref('Kopi Senja Nusantara')
 const sectorInput = ref('Makanan & Minuman')
@@ -677,17 +720,20 @@ function onRoleTabClick(role: UserRole) {
 function applyDefaultRolePlaceholders(role: UserRole) {
   if (role === 'UMKM') {
     nameInput.value = 'Fikri Setiawan'
+    emailInput.value = 'fikri@kopisenja.id'
     businessNameInput.value = 'Kopi Senja Nusantara'
     sectorInput.value = 'Makanan & Minuman'
     phoneInput.value = formatIndonesianPhone('812-3456-7890')
   } else if (role === 'CONSULTANT') {
     nameInput.value = 'Dra. Maya Suryani, M.M.'
+    emailInput.value = 'maya.suryani@beruang.id'
     institutionInput.value = 'Maya Advisory Partner'
     bnspInput.value = 'BNSP-KONS-2024-8891'
     specializationInput.value = 'Keuangan & Biaya'
     phoneInput.value = formatIndonesianPhone('819-8765-4321')
   } else if (role === 'INVESTOR') {
     nameInput.value = 'Hendro Wicaksono'
+    emailInput.value = 'hendro@nusantaraventures.com'
     investorEntityInput.value = 'Nusantara Angel Syndicate'
     investorTypeInput.value = 'Kelompok Modal'
     ticketRangeInput.value = '150 - 500 Juta'
@@ -814,12 +860,18 @@ function handleGoogleRegister() {
       businessName = 'Nusantara Angel Syndicate'
     }
 
-    authStore.login(email, selectedRole.value)
-    if (authStore.currentUser) {
-      authStore.currentUser.name = name
-      authStore.currentUser.businessName = businessName
-      authStore.currentUser.onboardingCompleted = false
-    }
+    // Registrasi sesuai skema database (users & initial profiles)
+    authStore.register({
+      name,
+      email,
+      phone: selectedRole.value === 'UMKM' ? '+62 812-3456-7890' : selectedRole.value === 'CONSULTANT' ? '+62 819-8765-4321' : '+62 811-2233-4455',
+      role: selectedRole.value,
+      org_name: businessName,
+      sector: 'Makanan & Minuman',
+      specialization: 'Keuangan & Biaya',
+      commitment_capital: '150 - 500 Juta',
+      otp_code: '1234'
+    })
 
     loading.value = false
     loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
@@ -838,30 +890,32 @@ function verifyAndRegister() {
     loading.value = false
     openPhoneModal.value = false
 
-    const email = `${nameInput.value.toLowerCase().replace(/[^a-z0-9]/g, '') || 'pengguna'}@beruang.id`
-    authStore.login(email, selectedRole.value)
-    
-    if (authStore.currentUser) {
-      authStore.currentUser.name = nameInput.value.trim() || 'Pengguna Baru'
-      authStore.currentUser.phone = `+62 ${cleanPhone.value}`
-      authStore.currentUser.onboardingCompleted = false
+    const orgName = (
+      selectedRole.value === 'UMKM'
+        ? businessNameInput.value.trim() || 'Usaha Baru'
+        : selectedRole.value === 'CONSULTANT'
+          ? institutionInput.value.trim() || 'Maya Advisory Partner'
+          : investorEntityInput.value.trim() || 'Nusantara Angel Syndicate'
+    )
 
-      if (selectedRole.value === 'UMKM') {
-        authStore.currentUser.businessName = businessNameInput.value.trim() || 'Usaha Baru'
-        authStore.currentUser.sector = sectorInput.value
-      } else if (selectedRole.value === 'CONSULTANT') {
-        authStore.currentUser.businessName = institutionInput.value.trim() || 'Konsultan Mandiri'
-        authStore.currentUser.institution = institutionInput.value.trim() || 'Konsultan Mandiri'
-        authStore.currentUser.bnspLicense = bnspInput.value.trim() || 'BNSP-KONS-2024-8891'
-        authStore.currentUser.specialization = specializationInput.value
-      } else if (selectedRole.value === 'INVESTOR') {
-        authStore.currentUser.businessName = investorEntityInput.value.trim() || 'Pribadi'
-        authStore.currentUser.investorType = investorTypeInput.value
-        authStore.currentUser.ticketRange = ticketRangeInput.value
-      }
-    }
+    const email = emailInput.value.trim().toLowerCase() || `${nameInput.value.toLowerCase().replace(/[^a-z0-9]/g, '') || 'pengguna'}@beruang.id`
 
-    loadingMessage.value = `✓ Berhasil! Membuka halaman ${roleMeta.shortTitle}...`
+    // Simpan ke authStore dengan field tabel PostgreSQL (public.users & business_profiles/consultant_profiles/investor_profiles)
+    authStore.register({
+      name: nameInput.value.trim() || 'Pengguna Baru',
+      email,
+      phone: `+62 ${cleanPhone.value}`,
+      role: selectedRole.value,
+      org_name: orgName,
+      sector: sectorInput.value,
+      specialization: specializationInput.value,
+      bnsp_license: bnspInput.value,
+      commitment_capital: ticketRangeInput.value,
+      investor_type: investorTypeInput.value,
+      otp_code: otpString.value || '1234'
+    })
+
+    loadingMessage.value = `✓ Berhasil! Membuka onboarding ${roleMeta.shortTitle}...`
 
     setTimeout(() => {
       router.push(`/onboarding?role=${selectedRole.value}`)

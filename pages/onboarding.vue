@@ -306,33 +306,20 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
-              <div class="space-y-1">
-                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Tawaran Bagi Hasil / Modal
-                </label>
-                <select
-                  v-model="formUmkm.equityOffered"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                >
-                  <option value="5% Bagi Hasil">5% Bagi Hasil</option>
-                  <option value="10% Bagi Hasil">10% Bagi Hasil</option>
-                  <option value="15% Bagi Hasil">15% Bagi Hasil</option>
-                  <option value="20% Bagi Hasil">20% Bagi Hasil</option>
-                  <option value="Sesuai Diskusi">Sesuai Diskusi Nanti</option>
-                </select>
-              </div>
-              <div class="space-y-1">
-                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Cerita Singkat Usaha
-                </label>
-                <input
-                  v-model="formUmkm.description"
-                  type="text"
-                  placeholder="contoh: Kedai kopi susu gula aren dengan 3 outlet..."
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                />
-              </div>
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Tawaran Bagi Hasil / Modal
+              </label>
+              <select
+                v-model="formUmkm.equityOffered"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              >
+                <option value="5% Bagi Hasil">5% Bagi Hasil</option>
+                <option value="10% Bagi Hasil">10% Bagi Hasil</option>
+                <option value="15% Bagi Hasil">15% Bagi Hasil</option>
+                <option value="20% Bagi Hasil">20% Bagi Hasil</option>
+                <option value="Sesuai Diskusi">Sesuai Diskusi Nanti</option>
+              </select>
             </div>
           </div>
 
@@ -919,7 +906,7 @@ const formUmkm = ref({
   hppPercentage: 40,
   targetFunding: 150000000,
   equityOffered: '10% Bagi Hasil',
-  description: 'Spesialis kopi susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%.'
+  description: authStore.currentUser?.businessProfile?.description || ''
 })
 
 // Consultant Form Data

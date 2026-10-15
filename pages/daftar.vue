@@ -192,9 +192,7 @@
                 'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
                 phoneValidationError
                   ? 'border-danger/80 ring-2 ring-danger/15'
-                  : isPhoneValid
-                    ? 'border-emerald-500/70 ring-2 ring-emerald-500/15'
-                    : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
+                  : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
               ]"
             >
               <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
@@ -222,11 +220,7 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
                 <span>{{ phoneValidationError }}</span>
               </p>
-              <p v-else-if="isPhoneValid" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span>Nomor seluler valid (+62 {{ phoneInput }}). Data profil diisi pada tahap onboarding.</span>
-              </p>
-              <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
+              <p v-else-if="!isPhoneValid" class="text-[11px] text-neutral-500 dark:text-neutral-400">
                 Ketik angka saja, tanda hubung (-) otomatis terisi.
               </p>
             </div>

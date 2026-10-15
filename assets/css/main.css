@@ -32,14 +32,14 @@
   --text-secondary: #4B5563;
   --text-muted: #6B7280;
 
-  /* Primary Brand (Solid Blue) */
-  --color-primary-50: #EEF3FE;
-  --color-primary-100: #D8E4FD;
-  --color-primary-200: #B4CBFC;
-  --color-primary-500: #1F52EB;
-  --color-primary-600: #173FC7;
-  --color-primary-700: #1332A3;
-  --color-primary-tint: rgba(31, 82, 235, 0.08);
+  /* Primary Brand (Solid Blue - GoPay Vibrant Trust Blue) */
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-200: #BFDBFE;
+  --color-primary-500: #0066D6;
+  --color-primary-600: #0052B3;
+  --color-primary-700: #003E8A;
+  --color-primary-tint: rgba(0, 102, 214, 0.08);
 
   /* Growth & Verified Green */
   --color-green-50: #F0FDF4;
@@ -101,7 +101,7 @@
   --text-primary: #F9FAFB;
   --text-secondary: #D4D4D8;
   --text-muted: #A1A1AA;
-  --color-primary-tint: rgba(31, 82, 235, 0.16);
+  --color-primary-tint: rgba(0, 102, 214, 0.16);
 }
 
 /* ── Base Reset ── */

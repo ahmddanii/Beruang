@@ -95,7 +95,7 @@
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-sm shadow-primary-600/20 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 h-12 px-6 rounded-full bg-primary-500 hover:bg-primary-600 text-white font-bold text-sm shadow-sm shadow-primary-500/20 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
           @click="openPhoneModal = true"
         >
           <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2" />
@@ -109,7 +109,7 @@
           </span>
           <NuxtLink
             to="/masuk"
-            class="text-xs sm:text-sm font-bold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-150 ml-1.5"
+            class="text-xs sm:text-sm font-bold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-150 ml-1.5"
           >
             Masuk di Sini
           </NuxtLink>
@@ -509,7 +509,7 @@
           :class="[
             'w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             isPhoneValid && nameInput.trim() && emailInput.trim() && !loading
-              ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
+              ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
           @click="requestOtp"
@@ -525,7 +525,7 @@
           <span>Kirim ke: +62 {{ phoneInput }}</span>
           <button
             type="button"
-            class="text-primary-600 hover:text-primary-700 font-bold ml-1 cursor-pointer"
+            class="text-primary-600 hover:text-primary-500 font-bold ml-1 cursor-pointer"
             @click="otpStep = 'input'"
           >
             Ubah
@@ -570,7 +570,7 @@
           :class="[
             'w-full py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             otpString.length === 4 && !loading
-              ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
+              ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
           @click="verifyAndRegister"

@@ -114,17 +114,75 @@
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-left">
-              <div class="space-y-1">
+              <div ref="yearPickerRef" class="space-y-1 relative">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Tanggal Mulai Usaha
+                  Tahun Mulai Usaha
                 </label>
-                <input
-                  v-model="formUmkm.startDate"
-                  type="date"
-                  max="2026-12-31"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                />
+                <div
+                  class="relative flex items-center cursor-pointer"
+                  @click="isYearPickerOpen = !isYearPickerOpen"
+                >
+                  <input
+                    v-model.number="formUmkm.year"
+                    type="number"
+                    min="1990"
+                    max="2026"
+                    placeholder="2021"
+                    class="w-full px-3.5 pr-10 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums font-semibold cursor-pointer"
+                    @keydown.enter.prevent="isYearPickerOpen = false"
+                  />
+                  <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                    <HugeiconsIcon :icon="Calendar03Icon" :size="18" :stroke-width="1.8" />
+                  </div>
+                </div>
+
+                <!-- Tanggalan Popover Pemilih Tahun -->
+                <div
+                  v-if="isYearPickerOpen"
+                  class="absolute top-full left-0 mt-1.5 w-64 p-3 rounded-2xl bg-white dark:bg-[#1A1D24] border border-neutral-200 dark:border-neutral-700 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150"
+                >
+                  <div class="flex items-center justify-between pb-2 mb-2 border-b border-neutral-100 dark:border-neutral-800">
+                    <button
+                      type="button"
+                      class="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center transition-colors cursor-pointer"
+                      @click.stop="pickerDecadeStart -= 12"
+                    >
+                      <HugeiconsIcon :icon="ArrowLeft02Icon" :size="14" :stroke-width="2" />
+                    </button>
+                    <span class="text-xs font-bold text-neutral-800 dark:text-neutral-200 tabular-nums">
+                      {{ pickerDecadeStart }} - {{ pickerDecadeStart + 11 }}
+                    </span>
+                    <button
+                      type="button"
+                      class="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center transition-colors cursor-pointer"
+                      @click.stop="pickerDecadeStart += 12"
+                    >
+                      <HugeiconsIcon :icon="ArrowRight02Icon" :size="14" :stroke-width="2" />
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-1.5">
+                    <button
+                      v-for="y in decadeYears"
+                      :key="y"
+                      type="button"
+                      :disabled="y > 2026"
+                      :class="[
+                        'py-2 px-1 rounded-xl text-xs font-bold transition-all tabular-nums text-center cursor-pointer',
+                        formUmkm.year === y
+                          ? 'bg-primary-600 text-white shadow-xs'
+                          : y > 2026
+                            ? 'text-neutral-300 dark:text-neutral-600 cursor-not-allowed opacity-40'
+                            : 'text-neutral-700 dark:text-neutral-200 hover:bg-primary-50 dark:hover:bg-primary-950/60 hover:text-primary-600 dark:hover:text-primary-400'
+                      ]"
+                      @click.stop="selectYear(y)"
+                    >
+                      {{ y }}
+                    </button>
+                  </div>
+                </div>
               </div>
+
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
                   Status Izin Usaha
@@ -843,8 +901,10 @@ import {
   ArrowLeft02Icon,
   ArrowRight02Icon,
   UserGroupIcon,
-  Award01Icon
+  Award01Icon,
+  Calendar03Icon
 } from '@hugeicons/core-free-icons'
+import { onClickOutside } from '@vueuse/core'
 
 definePageMeta({
   layout: false
@@ -968,6 +1028,30 @@ function handleTargetFundingInput(e: Event) {
   formUmkm.value.targetFunding = num
   displayTargetFunding.value = rawDigits ? Number(rawDigits).toLocaleString('id-ID') : ''
 }
+
+// Year Picker (Tanggalan Khusus Tahun)
+const isYearPickerOpen = ref(false)
+const yearPickerRef = ref<HTMLElement | null>(null)
+const pickerDecadeStart = ref(2015)
+
+const decadeYears = computed(() => {
+  const years = []
+  for (let i = 0; i < 12; i++) {
+    years.push(pickerDecadeStart.value + i)
+  }
+  return years
+})
+
+function selectYear(y: number) {
+  if (y > 2026) return
+  formUmkm.value.year = y
+  formUmkm.value.startDate = `${y}-01-01`
+  isYearPickerOpen.value = false
+}
+
+onClickOutside(yearPickerRef, () => {
+  isYearPickerOpen.value = false
+})
 
 // Consultant Form Data
 const consultantSpecializations = [

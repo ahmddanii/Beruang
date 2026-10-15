@@ -396,10 +396,10 @@
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Data Usaha Siap Disimpan!
+                Profil Usahamu Sudah Siap!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
-                Konsultan Beruang akan meninjau dan membantu rencana usahamu.
+                Periksa kembali ringkasan usahamu sebelum masuk ke beranda toko.
               </p>
             </div>
 
@@ -576,10 +576,10 @@
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Data Konsultan Siap Disimpan!
+                Profil Konsultan Sudah Siap!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
-                Periksa kembali kelengkapan profilmu sebelum mulai mendampingi pelaku usaha.
+                Periksa kembali data keahlianmu sebelum mulai mendampingi UMKM.
               </p>
             </div>
 
@@ -789,10 +789,10 @@
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Data Investor Siap Disimpan!
+                Profil Investor Sudah Siap!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
-                Periksa kembali kelengkapan profilmu sebelum mulai menjelajahi katalog usaha.
+                Periksa kembali pilihan modalmu sebelum mulai mencari peluang usaha.
               </p>
             </div>
 
@@ -872,7 +872,7 @@
               class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
               @click="finishOnboarding"
             >
-              <span v-if="submitting">Menyimpan...</span>
+              <span v-if="submitting">Memproses...</span>
               <template v-else>
                 <span>{{ finishButtonLabel }}</span>
                 <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />

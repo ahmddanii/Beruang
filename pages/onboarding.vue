@@ -662,26 +662,34 @@
             </div>
           </div>
 
-          <!-- Step 2: Kriteria Portofolio & Tiket Modal -->
+          <!-- Step 2: Kriteria Portofolio & Tiket Modal (Opsional untuk Bantuan Rekomendasi) -->
           <div v-else-if="currentStep === 2" class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
               <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
               </div>
               <div class="text-left">
-                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
-                  2. Pilihan Modal & Bidang
-                </h3>
-                <p class="text-xs text-neutral-500">
-                  Berapa modal yang disiapkan dan bidang apa yang disukai?
+                <div class="flex items-center gap-2">
+                  <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                    2. Pilihan Modal & Bidang
+                  </h3>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 font-bold border border-neutral-200 dark:border-neutral-700">
+                    Opsional
+                  </span>
+                </div>
+                <p class="text-xs text-neutral-500 mt-0.5">
+                  Hanya bantuan rekomendasi awal di katalog. Boleh diisi atau langsung dilewati (bebas diatur kapan saja di filter pencarian).
                 </p>
               </div>
             </div>
 
             <div class="text-left space-y-1.5">
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Kisaran Modal per Usaha
-              </label>
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Kisaran Modal per Usaha
+                </label>
+                <span class="text-[10px] text-neutral-400">Bisa diubah nanti</span>
+              </div>
               <div class="grid grid-cols-2 gap-2">
                 <button
                   v-for="tr in ticketRanges"
@@ -701,9 +709,18 @@
             </div>
 
             <div class="text-left space-y-1.5">
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Bidang Usaha yang Dicari
-              </label>
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Bidang Usaha yang Dicari
+                </label>
+                <button
+                  type="button"
+                  class="text-[11px] text-primary-600 dark:text-primary-400 font-semibold hover:underline cursor-pointer"
+                  @click="formInvestor.sectors = formInvestor.sectors.length === investorTargetSectors.length ? [] : [...investorTargetSectors]"
+                >
+                  {{ formInvestor.sectors.length === investorTargetSectors.length ? 'Kosongkan (Bebas)' : 'Pilih Semua' }}
+                </button>
+              </div>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 <button
                   v-for="sec in investorTargetSectors"
@@ -720,6 +737,9 @@
                   {{ sec }}
                 </button>
               </div>
+              <p class="text-[11px] text-neutral-400">
+                {{ formInvestor.sectors.length === 0 ? '✓ Menampilkan semua jenis usaha tanpa filter.' : `${formInvestor.sectors.length} bidang usaha dipilih.` }}
+              </p>
             </div>
 
             <div class="text-left space-y-1">
@@ -811,15 +831,26 @@
           </button>
           <div v-else />
 
-          <button
-            v-if="currentStep < currentStepsList.length"
-            type="button"
-            class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
-            @click="currentStep++"
-          >
-            <span>Lanjut</span>
-            <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
-          </button>
+          <div class="flex items-center gap-3">
+            <button
+              v-if="activeRole === 'INVESTOR' && currentStep === 2"
+              type="button"
+              class="text-xs font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white px-2 py-2 cursor-pointer transition-colors"
+              @click="currentStep++"
+            >
+              Lewati Langkah Ini
+            </button>
+
+            <button
+              v-if="currentStep < currentStepsList.length"
+              type="button"
+              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm shadow-sm shadow-primary-600/20 active:scale-[0.99] transition-all cursor-pointer"
+              @click="currentStep++"
+            >
+              <span>Lanjut</span>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
+            </button>
+          </div>
 
           <button
             v-else

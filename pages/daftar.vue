@@ -176,258 +176,18 @@
           </div>
         </div>
 
-        <!-- ======================================================= -->
-        <!-- FIELDS FOR UMKM                                         -->
-        <!-- ======================================================= -->
-        <template v-if="selectedRole === 'UMKM'">
-          <div class="space-y-1">
-            <label for="regName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama Pemilik
-            </label>
-            <input
-              id="regName"
-              v-model="nameInput"
-              type="text"
-              required
-              placeholder="contoh: Fikri Setiawan"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regEmail" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Email Aktif
-            </label>
-            <input
-              id="regEmail"
-              v-model="emailInput"
-              type="email"
-              required
-              placeholder="contoh: fikri@kopisenja.id"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regBusinessName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama Usaha (Brand)
-            </label>
-            <input
-              id="regBusinessName"
-              v-model="businessNameInput"
-              type="text"
-              required
-              placeholder="contoh: Kopi Senja Nusantara"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Jenis Usaha
-            </label>
-            <div class="grid grid-cols-3 gap-1.5">
-              <button
-                v-for="s in umkmSectors"
-                :key="s"
-                type="button"
-                :class="[
-                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
-                  sectorInput === s
-                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
-                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
-                ]"
-                @click="sectorInput = s"
-              >
-                {{ s }}
-              </button>
-            </div>
-          </div>
-        </template>
-
-        <!-- ======================================================= -->
-        <!-- FIELDS FOR CONSULTANT                                   -->
-        <!-- ======================================================= -->
-        <template v-else-if="selectedRole === 'CONSULTANT'">
-          <div class="space-y-1">
-            <label for="regConsultantName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama & Gelar
-            </label>
-            <input
-              id="regConsultantName"
-              v-model="nameInput"
-              type="text"
-              required
-              placeholder="contoh: Dra. Maya Suryani, M.M."
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regConsultantEmail" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Email Aktif
-            </label>
-            <input
-              id="regConsultantEmail"
-              v-model="emailInput"
-              type="email"
-              required
-              placeholder="contoh: maya.suryani@beruang.id"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regInstitution" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama Kantor / Lembaga
-            </label>
-            <input
-              id="regInstitution"
-              v-model="institutionInput"
-              type="text"
-              placeholder="contoh: Maya Advisory atau Mandiri"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regBnsp" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nomor Sertifikat BNSP
-            </label>
-            <input
-              id="regBnsp"
-              v-model="bnspInput"
-              type="text"
-              placeholder="BNSP-KONS-2024-8891"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all tabular-nums"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Keahlian Utama
-            </label>
-            <div class="grid grid-cols-2 gap-1.5">
-              <button
-                v-for="sp in consultantSpecializations"
-                :key="sp"
-                type="button"
-                :class="[
-                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
-                  specializationInput === sp
-                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
-                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
-                ]"
-                @click="specializationInput = sp"
-              >
-                {{ sp }}
-              </button>
-            </div>
-          </div>
-        </template>
-
-        <!-- ======================================================= -->
-        <!-- FIELDS FOR INVESTOR                                     -->
-        <!-- ======================================================= -->
-        <template v-else-if="selectedRole === 'INVESTOR'">
-          <div class="space-y-1">
-            <label for="regInvestorName" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama Lengkap
-            </label>
-            <input
-              id="regInvestorName"
-              v-model="nameInput"
-              type="text"
-              required
-              placeholder="contoh: Hendro Wicaksono"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regInvestorEmail" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Email Aktif
-            </label>
-            <input
-              id="regInvestorEmail"
-              v-model="emailInput"
-              type="email"
-              required
-              placeholder="contoh: hendro@nusantaraventures.com"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label for="regInvestorEntity" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nama Perusahaan / Kelompok
-            </label>
-            <input
-              id="regInvestorEntity"
-              v-model="investorEntityInput"
-              type="text"
-              placeholder="contoh: Nusantara Angel Syndicate atau Pribadi"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#15161A] text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm font-semibold focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Jenis Investor
-            </label>
-            <div class="grid grid-cols-2 gap-1.5">
-              <button
-                v-for="t in investorTypes"
-                :key="t"
-                type="button"
-                :class="[
-                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
-                  investorTypeInput === t
-                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
-                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
-                ]"
-                @click="investorTypeInput = t"
-              >
-                {{ t }}
-              </button>
-            </div>
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Kemampuan Modal
-            </label>
-            <div class="grid grid-cols-2 gap-1.5">
-              <button
-                v-for="tr in ticketRanges"
-                :key="tr"
-                type="button"
-                :class="[
-                  'px-2 py-1.5 rounded-lg border text-[11px] font-semibold text-center truncate transition-all cursor-pointer',
-                  ticketRangeInput === tr
-                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
-                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-neutral-300'
-                ]"
-                @click="ticketRangeInput = tr"
-              >
-                {{ tr }}
-              </button>
-            </div>
-          </div>
-        </template>
-
         <!-- Phone Input Group -->
-        <div class="space-y-1 pt-0.5">
+        <div class="space-y-1.5 pt-0.5">
           <div class="flex items-center justify-between">
-            <label for="regPhone" class="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-              Nomor WhatsApp
+            <label for="regPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+              Nomor WhatsApp / Handphone
             </label>
-            <span class="text-[10px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
+            <span class="text-[11px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
           </div>
 
           <div
             :class="[
-              'relative flex items-center p-1 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
+              'relative flex items-center p-1.5 rounded-2xl border transition-all duration-200 bg-neutral-50/70 dark:bg-[#15161A]',
               phoneValidationError
                 ? 'border-danger/80 ring-2 ring-danger/15'
                 : isPhoneValid
@@ -435,7 +195,7 @@
                   : 'border-neutral-200/90 dark:border-neutral-800 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20'
             ]"
           >
-            <div class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
+            <div class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#1A1C23] border border-neutral-200/80 dark:border-neutral-700/70 text-neutral-800 dark:text-neutral-200 font-bold text-sm shadow-2xs select-none shrink-0">
               <span class="text-base leading-none">🇮🇩</span>
               <span>+62</span>
             </div>
@@ -448,56 +208,49 @@
               autocomplete="tel-national"
               inputmode="numeric"
               placeholder="812-3456-7890"
-              class="w-full px-3 py-1.5 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-base sm:text-lg font-bold tracking-wide focus:outline-none tabular-nums"
+              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-350 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
               @input="onPhoneInput"
               @keydown="onPhoneKeydown"
+              @keydown.enter="requestOtp"
             />
           </div>
 
-          <div class="px-1 min-h-[14px]">
-            <p v-if="phoneValidationError" class="text-[11px] text-danger">
-              {{ phoneValidationError }}
+          <div class="px-1 min-h-[18px]">
+            <p v-if="phoneValidationError" class="text-xs text-danger flex items-center gap-1.5 animate-in fade-in duration-150">
+              <span class="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
+              <span>{{ phoneValidationError }}</span>
             </p>
-            <p v-else-if="isPhoneValid" class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
-              Nomor sudah sesuai (+62 {{ phoneInput }})
+            <p v-else-if="isPhoneValid" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span>Nomor seluler valid (+62 {{ phoneInput }}). Data profil diisi pada tahap onboarding.</span>
             </p>
-            <p v-else class="text-[10px] text-neutral-400">
-              Ketik angka saja, tanda hubung otomatis terisi.
+            <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
+              Ketik angka saja, tanda hubung (-) otomatis terisi.
             </p>
           </div>
         </div>
 
         <!-- Fast Demo Quick Fill Card -->
-        <div class="p-2.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 space-y-1.5">
+        <div class="p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-850/50 border border-neutral-200/80 dark:border-neutral-800 space-y-2">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-neutral-700 dark:text-neutral-300 text-[11px]">Coba Langsung (Data Uji Coba):</span>
+            <span class="font-bold text-neutral-700 dark:text-neutral-300">Pilih Cepat Akun Demo:</span>
+            <span class="text-[11px] text-neutral-500 dark:text-neutral-400">1-Klik isi nomor</span>
           </div>
           <div class="grid grid-cols-3 gap-2">
             <button
+              v-for="r in roleCards"
+              :key="r.key"
               type="button"
-              class="py-1.5 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
-              @click="applyDemoProfile('UMKM')"
+              :class="[
+                'py-2 px-2.5 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
+                selectedRole === r.key
+                  ? 'bg-primary-50 dark:bg-primary-950/70 border-primary-500/60 text-primary-700 dark:text-primary-300 shadow-2xs ring-1 ring-primary-500/30'
+                  : 'bg-white dark:bg-[#18191E] border-neutral-200/80 dark:border-neutral-700/60 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
+              ]"
+              @click="applyDemoProfile(r.key)"
             >
-              <span class="block text-xs font-bold">UMKM</span>
-              <span class="block text-[10px] text-neutral-400 truncate">Fikri S.</span>
-            </button>
-
-            <button
-              type="button"
-              class="py-1.5 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
-              @click="applyDemoProfile('CONSULTANT')"
-            >
-              <span class="block text-xs font-bold">Konsultan</span>
-              <span class="block text-[10px] text-neutral-400 truncate">Dra. Maya</span>
-            </button>
-
-            <button
-              type="button"
-              class="py-1.5 px-2 rounded-xl border border-neutral-200/80 dark:border-neutral-700/60 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:border-primary-500 text-center transition-all cursor-pointer"
-              @click="applyDemoProfile('INVESTOR')"
-            >
-              <span class="block text-xs font-bold">Investor</span>
-              <span class="block text-[10px] text-neutral-400 truncate">Hendro W.</span>
+              <span class="block text-xs font-bold">{{ r.shortTitle }}</span>
+              <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate">{{ r.demoName }}</span>
             </button>
           </div>
         </div>
@@ -505,10 +258,10 @@
         <!-- Submit Button -->
         <button
           type="button"
-          :disabled="loading || !isPhoneValid || !nameInput.trim() || !emailInput.trim()"
+          :disabled="loading || !isPhoneValid"
           :class="[
-            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
-            isPhoneValid && nameInput.trim() && emailInput.trim() && !loading
+            'w-full py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
+            isPhoneValid && !loading
               ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-primary-500/25 active:scale-[0.99] cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
@@ -622,6 +375,7 @@ const roleCards = [
     key: 'UMKM' as UserRole,
     title: 'Pemilik Usaha',
     shortTitle: 'UMKM',
+    demoName: 'Fikri S.',
     desc: 'Kembangkan usaha dan siap dapat modal.',
     icon: Store01Icon
   },
@@ -629,6 +383,7 @@ const roleCards = [
     key: 'CONSULTANT' as UserRole,
     title: 'Konsultan',
     shortTitle: 'Konsultan',
+    demoName: 'Dra. Maya',
     desc: 'Bantu bimbing UMKM agar usahanya maju.',
     icon: UserGroupIcon
   },
@@ -636,40 +391,10 @@ const roleCards = [
     key: 'INVESTOR' as UserRole,
     title: 'Investor',
     shortTitle: 'Investor',
+    demoName: 'Hendro W.',
     desc: 'Cari usaha pilihan untuk diberi modal.',
     icon: Coins01Icon
   }
-]
-
-// Pilihan mudah dipahami
-const umkmSectors = [
-  'Makanan & Minuman',
-  'Pakaian & Kerajinan',
-  'Pertanian',
-  'Toko & Jasa',
-  'Teknologi',
-  'Lainnya'
-]
-
-const consultantSpecializations = [
-  'Keuangan & Biaya',
-  'Operasional & Stok',
-  'Pemasaran & Jual',
-  'Izin Usaha'
-]
-
-const investorTypes = [
-  'Pribadi',
-  'Kelompok Modal',
-  'Perusahaan Modal',
-  'Kantor Keluarga'
-]
-
-const ticketRanges = [
-  '50 - 150 Juta',
-  '150 - 500 Juta',
-  '500 Jt - 1 Miliar',
-  '> 1 Miliar'
 ]
 
 // State
@@ -678,72 +403,33 @@ const loading = ref(false)
 const loadingMessage = ref('')
 const openPhoneModal = ref(false)
 const otpStep = ref<'input' | 'otp'>('input')
-
-// Dynamic Fields
-const nameInput = ref('Fikri Setiawan')
-const emailInput = ref('fikri@kopisenja.id')
 const phoneInput = ref('812-3456-7890')
-const businessNameInput = ref('Kopi Senja Nusantara')
-const sectorInput = ref('Makanan & Minuman')
-const institutionInput = ref('Maya Advisory Partner')
-const bnspInput = ref('BNSP-KONS-2024-8891')
-const specializationInput = ref('Keuangan & Biaya')
-const investorEntityInput = ref('Nusantara Angel Syndicate')
-const investorTypeInput = ref('Kelompok Modal')
-const ticketRangeInput = ref('150 - 500 Juta')
 
 const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
 })
 
 const modalTitle = computed(() => {
-  if (selectedRole.value === 'UMKM') return 'Daftar Akun Usaha'
-  if (selectedRole.value === 'CONSULTANT') return 'Daftar Konsultan'
-  return 'Daftar Investor'
+  return `Daftar Akun ${activeRoleMeta.value.shortTitle}`
 })
 
 const modalSubtitle = computed(() => {
-  if (selectedRole.value === 'UMKM') {
-    return 'Isi data singkat untuk mulai mendaftar.'
-  }
-  if (selectedRole.value === 'CONSULTANT') {
-    return 'Isi data singkat untuk mendampingi UMKM.'
-  }
-  return 'Isi data singkat untuk mencari peluang usaha.'
+  return 'Masukkan nomor WhatsApp aktif untuk verifikasi pendaftaran.'
 })
 
 function onRoleTabClick(role: UserRole) {
   selectedRole.value = role
-  applyDefaultRolePlaceholders(role)
-}
-
-function applyDefaultRolePlaceholders(role: UserRole) {
   if (role === 'UMKM') {
-    nameInput.value = 'Fikri Setiawan'
-    emailInput.value = 'fikri@kopisenja.id'
-    businessNameInput.value = 'Kopi Senja Nusantara'
-    sectorInput.value = 'Makanan & Minuman'
     phoneInput.value = formatIndonesianPhone('812-3456-7890')
   } else if (role === 'CONSULTANT') {
-    nameInput.value = 'Dra. Maya Suryani, M.M.'
-    emailInput.value = 'maya.suryani@beruang.id'
-    institutionInput.value = 'Maya Advisory Partner'
-    bnspInput.value = 'BNSP-KONS-2024-8891'
-    specializationInput.value = 'Keuangan & Biaya'
     phoneInput.value = formatIndonesianPhone('819-8765-4321')
   } else if (role === 'INVESTOR') {
-    nameInput.value = 'Hendro Wicaksono'
-    emailInput.value = 'hendro@nusantaraventures.com'
-    investorEntityInput.value = 'Nusantara Angel Syndicate'
-    investorTypeInput.value = 'Kelompok Modal'
-    ticketRangeInput.value = '150 - 500 Juta'
     phoneInput.value = formatIndonesianPhone('811-2233-4455')
   }
 }
 
 function applyDemoProfile(role: UserRole) {
-  selectedRole.value = role
-  applyDefaultRolePlaceholders(role)
+  onRoleTabClick(role)
 }
 
 function formatIndonesianPhone(val: string): string {
@@ -805,7 +491,7 @@ function setOtpRef(el: any, index: number) {
 const otpString = computed(() => otpDigits.value.join(''))
 
 function requestOtp() {
-  if (!isPhoneValid.value || !nameInput.value.trim()) return
+  if (!isPhoneValid.value) return
   loading.value = true
   setTimeout(() => {
     loading.value = false
@@ -890,32 +576,40 @@ function verifyAndRegister() {
     loading.value = false
     openPhoneModal.value = false
 
-    const orgName = (
+    const defaultName = (
       selectedRole.value === 'UMKM'
-        ? businessNameInput.value.trim() || 'Usaha Baru'
+        ? 'Fikri Setiawan'
         : selectedRole.value === 'CONSULTANT'
-          ? institutionInput.value.trim() || 'Maya Advisory Partner'
-          : investorEntityInput.value.trim() || 'Nusantara Angel Syndicate'
+          ? 'Dra. Maya Suryani, M.M.'
+          : 'Hendro Wicaksono'
     )
 
-    const email = emailInput.value.trim().toLowerCase() || `${nameInput.value.toLowerCase().replace(/[^a-z0-9]/g, '') || 'pengguna'}@beruang.id`
+    const defaultOrg = (
+      selectedRole.value === 'UMKM'
+        ? 'Kopi Senja Nusantara'
+        : selectedRole.value === 'CONSULTANT'
+          ? 'Maya Advisory Partner'
+          : 'Nusantara Angel Syndicate'
+    )
+
+    const email = `user_${cleanPhone.value}@beruang.id`
 
     // Simpan ke authStore dengan field tabel PostgreSQL (public.users & business_profiles/consultant_profiles/investor_profiles)
     authStore.register({
-      name: nameInput.value.trim() || 'Pengguna Baru',
+      name: defaultName,
       email,
       phone: `+62 ${cleanPhone.value}`,
       role: selectedRole.value,
-      org_name: orgName,
-      sector: sectorInput.value,
-      specialization: specializationInput.value,
-      bnsp_license: bnspInput.value,
-      commitment_capital: ticketRangeInput.value,
-      investor_type: investorTypeInput.value,
+      org_name: defaultOrg,
+      sector: 'Makanan & Minuman',
+      specialization: 'Keuangan & Biaya',
+      bnsp_license: 'BNSP-KONS-2024-8891',
+      commitment_capital: '150 - 500 Juta',
+      investor_type: 'Kelompok Modal',
       otp_code: otpString.value || '1234'
     })
 
-    loadingMessage.value = `✓ Berhasil! Membuka onboarding ${roleMeta.shortTitle}...`
+    loadingMessage.value = `✓ Berhasil! Membuka pendaftaran ${roleMeta.shortTitle}...`
 
     setTimeout(() => {
       router.push(`/onboarding?role=${selectedRole.value}`)

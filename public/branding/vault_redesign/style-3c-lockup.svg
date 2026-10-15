@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Style 3C</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-3c">Beruang - The Organic Squircle Vault</title>
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 128 92
+      C 112 92 98 78 84 66
+      C 68 52 50 62 48 84
+      C 46 102 46 122 42 142
+      C 36 178 56 220 94 234
+      C 108 238 120 238 128 238
+      C 136 238 148 238 162 234
+      C 200 220 220 178 214 142
+      C 210 122 210 102 208 84
+      C 206 62 188 52 172 66
+      C 158 78 144 92 128 92 Z
+
+      M 128 124
+      C 149 124 166 141 166 162
+      C 166 183 149 200 128 200
+      C 107 200 90 183 90 162
+      C 90 141 107 124 128 124 Z
+
+      M 74 128
+      C 74 121 92 121 92 128
+      C 88 134 78 134 74 128 Z
+
+      M 164 128
+      C 164 121 182 121 182 128
+      C 178 134 168 134 164 128 Z
+    "
+  />
+  <path
+    fill="#00AA13"
+    d="
+      M 110 156
+      C 110 146 118 146 128 146
+      C 138 146 146 146 146 156
+      C 146 166 138 166 128 166
+      C 118 166 110 166 110 156 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

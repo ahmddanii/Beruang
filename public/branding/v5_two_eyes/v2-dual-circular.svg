@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-v2">
+  <title id="t-v2">Beruang - Modernist Precision (Dual Circular Eyes)</title>
+  <path fill="#0F172A" fill-rule="evenodd" d="M 98 64
+  C 86 60 70 42 54 52
+  C 42 60 44 80 52 96
+  C 38 116 34 146 52 174
+  C 68 202 96 216 128 216
+  C 160 216 188 202 204 174
+  C 222 146 218 116 204 96
+  C 212 80 214 60 202 52
+  C 186 42 170 60 160 64
+  L 98 64 Z
+      M 96 107 A 7 7 0 1 0 96 121 A 7 7 0 1 0 96 107 Z
+      M 160 107 A 7 7 0 1 0 160 121 A 7 7 0 1 0 160 107 Z
+      M 128 142 A 18 18 0 1 0 128 178 A 18 18 0 1 0 128 142 Z" />
+  <polygon points="128,150 138,160 128,170 118,160" fill="#059669" />
+</svg>

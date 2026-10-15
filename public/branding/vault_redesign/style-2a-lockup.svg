@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Style 2A</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-2a">Beruang - The Pure Vault Bear</title>
+  <!-- Symmetrical Bear Silhouette with wide crown, sturdy rounded ears, and vault muzzle -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 96 84
+      C 90 70 78 60 62 60
+      C 44 60 34 76 38 98
+      C 40 114 42 124 38 140
+      C 32 174 54 212 88 228
+      C 106 236 120 238 128 238
+      C 136 238 150 236 168 228
+      C 202 212 224 174 218 140
+      C 214 124 216 114 218 98
+      C 222 76 212 60 194 60
+      C 178 60 166 70 160 84
+      L 96 84 Z
+
+      M 128 114
+      C 152 114 172 134 172 158
+      C 172 182 152 202 128 202
+      C 104 202 84 182 84 158
+      C 84 134 104 114 128 114 Z
+    "
+  />
+  <!-- Emerald Growth Horizontal Oval Nose -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 156
+      C 112 148 119 144 128 144
+      C 137 144 144 148 144 156
+      C 144 164 137 168 128 168
+      C 119 168 112 164 112 156 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

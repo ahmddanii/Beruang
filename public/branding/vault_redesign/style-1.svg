@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-1">
+  <title id="title-1">Beruang - The Modern Guardian</title>
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 100 68
+      C 88 64 70 44 54 54
+      C 42 62 44 82 52 98
+      C 38 118 34 148 52 176
+      C 68 204 96 216 128 216
+      C 160 216 188 204 204 176
+      C 222 148 218 118 204 98
+      C 212 82 214 62 202 54
+      C 186 44 168 64 156 68
+      L 100 68 Z
+
+      M 128 100
+      C 151 100 170 119 170 142
+      C 170 165 151 184 128 184
+      C 105 184 86 165 86 142
+      C 86 119 105 100 128 100 Z
+    "
+  />
+  <!-- Emerald Growth Horizontal Oval Nose (Ref 4 Proportion) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 108 134
+      C 108 123 117 123 128 123
+      C 139 123 148 123 148 134
+      C 148 145 139 145 128 145
+      C 117 145 108 145 108 134 Z
+    "
+  />
+</svg>

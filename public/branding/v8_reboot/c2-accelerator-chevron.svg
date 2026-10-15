@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-c2">
+  <title id="t-c2">Beruang - The Accelerator Chevron Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="68" cy="74" r="26" fill="#0052B3" />
+  <circle cx="68" cy="74" r="16" fill="#0066D6" />
+
+  <!-- Right Ear -->
+  <circle cx="188" cy="74" r="26" fill="#0052B3" />
+  <circle cx="188" cy="74" r="16" fill="#0066D6" />
+
+  <!-- Main Head Body (Dynamic Curved Contours) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 68
+      C 104 64 116 62 128 62
+      C 140 62 152 64 164 68
+      C 188 78 212 104 214 136
+      C 216 172 194 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 62 200 40 172 42 136
+      C 44 104 68 78 92 68 Z
+    "
+  />
+
+  <!-- Clean Vault Muzzle in Pure White -->
+  <path
+    fill="#FFFFFF"
+    d="
+      M 128 132
+      C 154 132 172 146 172 170
+      C 172 194 152 208 128 208
+      C 104 208 84 194 84 170
+      C 84 146 102 132 128 132 Z
+    "
+  />
+
+  <!-- Upward Accelerator Chevron Nose (#00AA13 - Melambangkan Akselerasi Modal) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 142
+      L 146 160
+      L 137 160
+      L 137 172
+      C 137 175 133 177 128 177
+      C 123 177 119 175 119 172
+      L 119 160
+      L 110 160 Z
+    "
+  />
+
+  <!-- Two Open, Focused Fintech Eyes -->
+  <ellipse cx="94" cy="114" rx="8" ry="10" fill="#FFFFFF" />
+  <circle cx="94" cy="115" r="5" fill="#0052B3" />
+  <circle cx="92" cy="113" r="1.8" fill="#FFFFFF" />
+
+  <ellipse cx="162" cy="114" rx="8" ry="10" fill="#FFFFFF" />
+  <circle cx="162" cy="115" r="5" fill="#0052B3" />
+  <circle cx="160" cy="113" r="1.8" fill="#FFFFFF" />
+</svg>

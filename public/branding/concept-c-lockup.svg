@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang Lockup - The Prosperity Crest</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <!-- Symbol scaled to 130x130 at (24, 25) -->
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-c3">Beruang - The Prosperity Crest</title>
+  <!-- Left Ear -->
+  <circle cx="76" cy="64" r="26" fill="#0081A0" />
+  <!-- Right Ear -->
+  <circle cx="180" cy="64" r="26" fill="#0081A0" />
+
+  <!-- Shield Base with exact 60° (dx=30, dy=52) and 120° angles -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 60 76
+      C 56 128 54 172 82 202
+      C 106 228 150 228 174 202
+      C 202 172 200 128 196 76
+      L 60 76 Z
+
+      M 128 100
+      L 158 152
+      L 135 192
+      L 121 192
+      L 98 152
+      Z
+    "
+  />
+  <!-- Central Growth Keystone (Emerald Accent with exact 60° angles) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 128 116
+      L 151 156
+      L 137 180
+      L 119 180
+      L 105 156
+      Z
+    "
+  />
+
+  </g>
+  <!-- Wordmark Text -->
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

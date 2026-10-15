@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">C3: The Prosperity Shield (Perisai Kelayakan)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-c3">Beruang - The Prosperity Shield Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="68" cy="72" r="26" fill="#0052B3" />
+  <circle cx="68" cy="72" r="15" fill="#0066D6" />
+
+  <!-- Right Ear -->
+  <circle cx="188" cy="72" r="26" fill="#0052B3" />
+  <circle cx="188" cy="72" r="15" fill="#0066D6" />
+
+  <!-- Main Shield Bear Body -->
+  <path
+    fill="#0066D6"
+    d="
+      M 90 66
+      C 102 62 115 60 128 60
+      C 141 60 154 62 166 66
+      C 190 74 212 98 214 132
+      C 216 172 188 206 128 226
+      C 68 206 40 172 42 132
+      C 44 98 66 74 90 66 Z
+    "
+  />
+
+  <!-- White Outer Muzzle Ring -->
+  <ellipse cx="128" cy="168" rx="48" ry="38" fill="#FFFFFF" />
+
+  <!-- Inner Growth Green Snout (#00AA13 - Dominan Finansial) -->
+  <ellipse cx="128" cy="168" rx="40" ry="30" fill="#00AA13" />
+
+  <!-- Deep Slate Vault Nose (#0F172A) -->
+  <path
+    fill="#0F172A"
+    d="
+      M 112 150
+      C 118 144 123 142 128 142
+      C 133 142 138 144 144 150
+      C 148 156 144 164 138 170
+      C 134 173 131 174 128 174
+      C 125 174 122 173 118 170
+      C 112 164 108 156 112 150 Z
+    "
+  />
+
+  <!-- Friendly Smile in White on Green Snout -->
+  <path
+    d="M 120 182 C 124 187 132 187 136 182"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Two Open, Intelligent Bear Eyes -->
+  <circle cx="94" cy="112" r="8" fill="#FFFFFF" />
+  <circle cx="94" cy="112" r="5" fill="#0F172A" />
+  <circle cx="92" cy="110" r="1.8" fill="#FFFFFF" />
+
+  <circle cx="162" cy="112" r="8" fill="#FFFFFF" />
+  <circle cx="162" cy="112" r="5" fill="#0F172A" />
+  <circle cx="160" cy="110" r="1.8" fill="#FFFFFF" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

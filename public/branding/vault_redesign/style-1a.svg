@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-1a">
+  <title id="title-1a">Beruang - The Pure Vault Silhouette</title>
+  <!-- Symmetrical Bear Silhouette with Crown, Rounded Ears, and Central Muzzle Cutout -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 98 76
+      C 94 54 82 36 62 36
+      C 42 36 34 56 36 78
+      C 36 96 40 108 38 126
+      C 34 164 52 200 86 220
+      C 106 230 120 232 128 232
+      C 136 232 150 230 170 220
+      C 204 200 222 164 218 126
+      C 216 108 220 96 220 78
+      C 222 56 214 36 194 36
+      C 174 36 162 54 158 76
+      L 98 76 Z
+
+      M 128 106
+      C 152 106 172 124 172 148
+      C 172 172 152 190 128 190
+      C 104 190 84 172 84 148
+      C 84 124 104 106 128 106 Z
+    "
+  />
+  <!-- Emerald Growth Horizontal Oval Nose -->
+  <path
+    fill="#00AA13"
+    d="
+      M 110 144
+      C 110 136 118 132 128 132
+      C 138 132 146 136 146 144
+      C 146 152 138 156 128 156
+      C 118 156 110 152 110 144 Z
+    "
+  />
+</svg>

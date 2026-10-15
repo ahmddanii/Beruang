@@ -2,18 +2,15 @@
   <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#0A0A0C]/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
       <!-- Brand Logo -->
-      <NuxtLink to="/" class="flex items-center gap-3 group shrink-0" title="Beranda Beruang">
-        <div class="w-10 h-10 rounded-xl bg-neutral-950 dark:bg-white flex items-center justify-center p-2 shadow-xs group-hover:scale-105 transition-transform duration-150">
-          <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain filter brightness-110" />
-        </div>
-        <div class="flex flex-col">
-          <span class="font-heading font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white leading-none">
-            Beruang
-          </span>
-          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium tracking-tight mt-1 hidden sm:block">
-            Finansial & Modal UMKM
-          </span>
-        </div>
+      <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" title="Beranda Beruang">
+        <img
+          src="/logo/logoSmall.svg"
+          alt="Beruang Logo"
+          class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
+        />
+        <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
+          <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+        </span>
       </NuxtLink>
 
       <!-- Desktop Navigation Links (Clean, No-Noise Links) -->

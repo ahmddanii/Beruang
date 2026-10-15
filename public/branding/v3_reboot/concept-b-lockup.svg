@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - The Hex-Shield Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #059669;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-cb">Beruang - The Hex-Shield Bear</title>
+  <!-- Left Ear Arc -->
+  <path
+    fill="#0F172A"
+    d="
+      M 56 64
+      C 44 76 46 96 58 108
+      L 76 92
+      C 70 82 66 72 66 64 Z
+    "
+  />
+  <!-- Right Ear Arc -->
+  <path
+    fill="#0F172A"
+    d="
+      M 200 64
+      C 212 76 210 96 198 108
+      L 180 92
+      C 186 82 190 72 190 64 Z
+    "
+  />
+  <!-- Main Shield Body with Negative Space Vault Column -->
+  <path
+    fill="#0F172A"
+    fill-rule="evenodd"
+    d="
+      M 80 72
+      L 176 72
+      L 208 128
+      L 176 184
+      L 128 220
+      L 80 184
+      L 48 128 Z
+
+      M 128 104
+      L 155 151
+      L 137 182
+      L 119 182
+      L 101 151 Z
+    "
+  />
+  <!-- Ascending Emerald Keystone / Diamond snapped to exact 60 degrees -->
+  <polygon points="128,118 143,144 128,170 113,144" fill="#059669" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

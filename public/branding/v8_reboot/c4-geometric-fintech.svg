@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-c4">
+  <title id="t-c4">Beruang - The Geometric Fintech Bear</title>
+  
+  <!-- Compound Path in Vibrant Trust Blue (#0066D6) with Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 88 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 88 68 Z
+
+      M 88 112
+      A 8 8 0 1 0 88 128
+      A 8 8 0 1 0 88 112 Z
+
+      M 168 112
+      A 8 8 0 1 0 168 128
+      A 8 8 0 1 0 168 112 Z
+
+      M 128 136
+      C 154 136 172 150 172 174
+      C 172 196 152 210 128 210
+      C 104 210 84 196 84 174
+      C 84 150 102 136 128 136 Z
+    "
+  />
+
+  <!-- Green Bear Nose (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 152
+      C 118 146 123 144 128 144
+      C 133 144 138 146 144 152
+      C 148 158 145 168 138 174
+      C 134 177 131 178 128 178
+      C 125 178 122 177 118 174
+      C 111 168 108 158 112 152 Z
+    "
+  />
+
+  <!-- Subtle Chin Anchor Notch -->
+  <path fill="#0052B3" d="M 127 182 L 129 182 L 129 194 L 127 194 Z" />
+</svg>

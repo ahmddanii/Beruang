@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">T1: The Linear Facet Bear (Tech Facets)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-t1">Beruang - The Linear Facet Bear</title>
+  
+  <!-- Compound Path in Vibrant Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 96 66
+      L 76 46
+      C 62 42 46 54 48 70
+      L 54 94
+      L 44 126
+      C 40 152 52 180 72 202
+      L 128 226
+      L 184 202
+      C 204 180 216 152 212 126
+      L 202 94
+      L 208 70
+      C 210 54 194 42 180 46
+      L 160 66
+      Z
+
+      M 86 112
+      L 102 112
+      L 98 120
+      L 82 120
+      Z
+
+      M 170 112
+      L 154 112
+      L 158 120
+      L 174 120
+      Z
+
+      M 128 136
+      L 156 160
+      L 146 196
+      L 110 196
+      L 100 160
+      Z
+    "
+  />
+
+  <!-- Growth Green Keystone Diamond (#00AA13) -->
+  <polygon points="128,146 142,162 128,178 114,162" fill="#00AA13" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

@@ -10,28 +10,36 @@
 }
 
 :root {
-  /* Apple-inspired Clean Surfaces */
-  --bg-canvas: #FFFFFF;
-  --bg-sidebar: #FAFAFA;
+  /* 60% Dominan: Ice-Blue Canvas & Structured FinTech Surfaces */
+  --bg-canvas: #F3F8FC;
+  --bg-sidebar: #FAFCFE;
   --bg-surface: #FFFFFF;
-  --bg-surface-subtle: #FAFAFA;
-  --bg-surface-hover: #F4F4F6;
-  --border: #EAEAEA;
-  --border-subtle: #F0F0F2;
-  --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
+  --bg-surface-subtle: #F0F6FB;
+  --bg-surface-hover: #E8F2FA;
+  --border: #DCE8F2;
+  --border-subtle: #E8F1F8;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
 
-  /* Solid Accent Blue #1f52eb (Zero Gradient) */
-  --color-primary-50: #EEF3FE;
-  --color-primary-100: #D8E4FD;
-  --color-primary-200: #B4CBFC;
-  --color-primary-500: #1F52EB;
-  --color-primary-600: #173FC7;
-  --color-primary-700: #1332A3;
-  --color-primary-tint: rgba(31, 82, 235, 0.08);
+  /* 60% Core Blue Brand: GoPay/Fintech Vibrant Blue */
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-200: #BFDBFE;
+  --color-primary-500: #0066D6;
+  --color-primary-600: #0052B3;
+  --color-primary-700: #003E8A;
+  --color-primary-tint: rgba(0, 102, 214, 0.08);
 
-  --color-success: #10B981;
+  /* 30% Growth & Verified Green: GoPay/Gojek Fresh Green */
+  --color-green-50: #F0FDF4;
+  --color-green-100: #DCFCE7;
+  --color-green-200: #BBF7D0;
+  --color-green-500: #00AA13;
+  --color-green-600: #00880C;
+  --color-green-700: #006609;
+  --color-success: #00AA13;
+
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
 
@@ -45,18 +53,18 @@
 }
 
 .dark {
-  --bg-canvas: #0F1014;
-  --bg-sidebar: #141519;
-  --bg-surface: #18191E;
-  --bg-surface-subtle: #141519;
-  --bg-surface-hover: #1F2026;
-  --border: #26272F;
-  --border-subtle: #1E1F25;
-  --text-primary: #F9FAFB;
-  --text-secondary: #D4D4D8;
-  --text-muted: #A1A1AA;
+  --bg-canvas: #0C121D;
+  --bg-sidebar: #101726;
+  --bg-surface: #141D2E;
+  --bg-surface-subtle: #111A2B;
+  --bg-surface-hover: #19253B;
+  --border: #1E2E48;
+  --border-subtle: #172439;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
 
-  --color-primary-tint: rgba(31, 82, 235, 0.16);
+  --color-primary-tint: rgba(0, 102, 214, 0.16);
 }
 
 html {
@@ -170,3 +178,571 @@ input, textarea, select, button {
 .dark ::-webkit-scrollbar-thumb {
   background: #2B2B31;
 }
+
+/* ==========================================================================
+   3D TACTILE BUTTONS (Inspirasi: Tombol Fisik QRIS & Top-up GoPay)
+   ========================================================================== */
+
+/* 1. 3D Blue Button (Tombol Transaksi Utama & Action Anchor) */
+.btn-3d-blue {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(180deg, #1A8EFF 0%, #0066D6 100%);
+  color: #FFFFFF !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 
+    0 6px 16px -2px rgba(0, 102, 214, 0.42),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2.5px 2px 0 rgba(0, 0, 0, 0.22);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-3d-blue:hover:not(:disabled) {
+  background: linear-gradient(180deg, #2B96FF 0%, #0070E8 100%);
+  box-shadow: 
+    0 8px 20px -2px rgba(0, 102, 214, 0.52),
+    0 3px 6px -1px rgba(0, 0, 0, 0.12),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 2px 0 rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-3d-blue:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 102, 214, 0.35),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px 0 rgba(0, 0, 0, 0.25),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* 2. 3D Green Button (Tombol Kesiapan, Audit, & Pertumbuhan) */
+.btn-3d-green {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(180deg, #00C853 0%, #009624 100%);
+  color: #FFFFFF !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 
+    0 6px 16px -2px rgba(0, 150, 36, 0.42),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2.5px 2px 0 rgba(0, 0, 0, 0.22);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-3d-green:hover:not(:disabled) {
+  background: linear-gradient(180deg, #10D862 0%, #00A62A 100%);
+  box-shadow: 
+    0 8px 20px -2px rgba(0, 150, 36, 0.52),
+    0 3px 6px -1px rgba(0, 0, 0, 0.12),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -2px 2px 0 rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-3d-green:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 150, 36, 0.35),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px 0 rgba(0, 0, 0, 0.25),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* 3. 3D Surface / White Tactile Button (Tombol secondary bervolume) */
+.btn-3d-surface {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F7FA 100%);
+  color: #0F172A;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid #DCE8F2;
+  box-shadow: 
+    0 4px 10px -2px rgba(0, 0, 0, 0.06),
+    0 1px 2px 0 rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.dark .btn-3d-surface {
+  background: linear-gradient(180deg, #22252D 0%, #16181E 100%);
+  color: #F8FAFC;
+  border-color: #2D313C;
+  box-shadow: 
+    0 4px 10px -2px rgba(0, 0, 0, 0.35),
+    0 1px 2px 0 rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-3d-surface:hover:not(:disabled) {
+  background: linear-gradient(180deg, #FFFFFF 0%, #EDF2F7 100%);
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 14px -2px rgba(0, 0, 0, 0.09),
+    0 2px 4px 0 rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.dark .btn-3d-surface:hover:not(:disabled) {
+  background: linear-gradient(180deg, #282C36 0%, #1A1D24 100%);
+}
+
+.btn-3d-surface:active:not(:disabled) {
+  transform: translateY(1.5px);
+  box-shadow: 
+    0 1px 3px 0 rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* 4. Pill Action Button (Gaya Refrensi UMKM Card: Soft Sage-Mint Gradient Pill with Gentle Border & Black Font/Icon) */
+.btn-pill-action {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.625rem !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+  max-height: 2.375rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, #F6FBF7 0%, #ECF8EF 45%, #D6F1DF 100%) !important;
+  border: 1px solid #A6D9B7 !important;
+  color: #000000 !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease;
+  user-select: none;
+  cursor: pointer;
+  text-decoration: none !important;
+  box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.6) !important;
+  transform: none !important;
+}
+
+.btn-pill-action > span {
+  display: inline-block !important;
+  line-height: 1 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: inherit !important;
+  white-space: nowrap !important;
+}
+
+.btn-pill-action > svg {
+  display: inline-block !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+  color: #000000 !important;
+}
+
+.dark .btn-pill-action {
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.08) 0%, rgba(16, 185, 129, 0.16) 100%) !important;
+  border: 1px solid rgba(52, 211, 153, 0.28) !important;
+  color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.dark .btn-pill-action > svg {
+  color: #FFFFFF !important;
+}
+
+/* Hover: Inner highlight putih lembut muncul, tanpa shadow luar & tanpa zoom */
+.btn-pill-action:hover:not(:disabled) {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5FBF6 25%, #E6F6EB 55%, #CEEED8 100%) !important;
+  border-color: #8FCFA6 !important;
+  box-shadow: 
+    inset 0 0 10px 2px rgba(255, 255, 255, 0.85),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95) !important;
+  transform: none !important;
+}
+
+.dark .btn-pill-action:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.14) 0%, rgba(16, 185, 129, 0.24) 100%) !important;
+  border-color: rgba(52, 211, 153, 0.45) !important;
+  box-shadow: 
+    inset 0 0 10px 2px rgba(255, 255, 255, 0.18),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.3) !important;
+  transform: none !important;
+}
+
+.btn-pill-action:active:not(:disabled) {
+  transform: scale(0.98) !important;
+}
+
+/* 5. Tactile Container & Card (Gaya Referensi GoPay: Base abu-abu muda, soft hairline inner highlight, soft drop shadow) */
+.card-tactile-gopay {
+  position: relative;
+  background-color: #F6F8FA !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 
+    0 4px 20px -2px rgba(15, 23, 42, 0.04),
+    0 2px 6px -1px rgba(15, 23, 42, 0.02),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.45) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-tactile-gopay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+}
+
+.dark .card-tactile-gopay {
+  background-color: #13161F !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 
+    0 4px 24px -2px rgba(0, 0, 0, 0.45),
+    0 2px 8px -1px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .card-tactile-gopay::before {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* 6. Card Metric dengan Header Biru & Rounded Info Container */
+.card-tactile-gopay.has-blue-banner {
+  background: linear-gradient(180deg, #50AABF 0%, #2091AA 100%) !important;
+  border: 1px solid #E2E8F0 !important;
+  overflow: hidden !important;
+}
+
+.dark .card-tactile-gopay.has-blue-banner {
+  background: linear-gradient(180deg, #1D6F80 0%, #114F5D 100%) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.card-tactile-gopay.has-blue-banner::before {
+  display: none !important;
+}
+
+.card-header-blue-banner {
+  position: relative;
+  width: 100% !important;
+  background: transparent !important;
+  color: #FFFFFF !important;
+}
+
+
+/* 7. Pill Gradient Button (Gaya Referensi Dropdown Tanggal: White-to-Gray Tactile Gradient Pill) */
+.btn-pill-gradient {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+  max-height: 2.375rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 45%, #EBF0F5 100%) !important;
+  border: 1px solid #D2DCE6 !important;
+  color: #000000 !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  box-shadow: 
+    0 2px 5px -1px rgba(0, 0, 0, 0.06),
+    0 1px 2px 0 rgba(0, 0, 0, 0.03),
+    inset 0 1.5px 0 0 #FFFFFF,
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.dark .btn-pill-gradient {
+  background: linear-gradient(180deg, #252A36 0%, #191D26 100%) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: #FFFFFF !important;
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-pill-gradient:hover:not(:disabled) {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FDFEFE 45%, #F0F4F8 100%) !important;
+  border-color: #B8C7D6 !important;
+  box-shadow: 
+    0 4px 8px -1px rgba(0, 0, 0, 0.08),
+    0 1px 3px 0 rgba(0, 0, 0, 0.04),
+    inset 0 1.5px 0 0 #FFFFFF,
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+.btn-pill-gradient:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.btn-pill-gradient-muted {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+  max-height: 2.375rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(245, 247, 250, 0.6) 100%) !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #64748B !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.dark .btn-pill-gradient-muted {
+  background: linear-gradient(180deg, rgba(32, 37, 48, 0.6) 0%, rgba(22, 26, 34, 0.6) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #94A3B8 !important;
+}
+
+.btn-pill-gradient-muted:hover:not(:disabled) {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 45%, #EBF0F5 100%) !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.dark .btn-pill-gradient-muted:hover:not(:disabled) {
+  background: linear-gradient(180deg, #252A36 0%, #191D26 100%) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: #FFFFFF !important;
+}
+
+.btn-pill-gradient-muted:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* 8. Segmented Pill Container (Gaya Referensi GoPay/UMKM Segmented Switch: Outer grey pill container with floating active pill) */
+.segmented-pill-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background-color: #E2E5EA !important;
+  border: 1px solid #D2D7E0 !important;
+  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  user-select: none;
+}
+
+.dark .segmented-pill-container {
+  background-color: #171B24 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Sliding active pill indicator (animated with GSAP) */
+.segmented-pill-indicator {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  height: 2.375rem;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 45%, #F0F2F6 100%) !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 0, 0, 0.08),
+    0 1px 2px 0 rgba(0, 0, 0, 0.04),
+    inset 0 1.5px 0 0 #FFFFFF !important;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  transition: none !important;
+  will-change: transform, width;
+}
+
+.dark .segmented-pill-indicator {
+  background: linear-gradient(180deg, #252A36 0%, #191D26 100%) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Tab button items (relative z-index so text sits above sliding indicator) */
+.segmented-pill-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+  max-height: 2.375rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 0.8125rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.segmented-pill-btn.is-active {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+.dark .segmented-pill-btn.is-active {
+  color: #FFFFFF !important;
+}
+
+.segmented-pill-btn.is-inactive {
+  color: #64748B !important;
+  font-weight: 500 !important;
+}
+
+.dark .segmented-pill-btn.is-inactive {
+  color: #94A3B8 !important;
+}
+
+.segmented-pill-btn.is-inactive:hover {
+  color: #0F172A !important;
+}
+
+.dark .segmented-pill-btn.is-inactive:hover {
+  color: #FFFFFF !important;
+}
+
+.segmented-pill-item-active {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+  max-height: 2.375rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 45%, #F0F2F6 100%) !important;
+  color: #000000 !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 0, 0, 0.08),
+    0 1px 2px 0 rgba(0, 0, 0, 0.04),
+    inset 0 1.5px 0 0 #FFFFFF !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.dark .segmented-pill-item-active {
+  background: linear-gradient(180deg, #252A36 0%, #191D26 100%) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #FFFFFF !important;
+  box-shadow: 
+    0 2px 6px -1px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.segmented-pill-item-inactive {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 2.375rem !important;
+  min-height: 2.375rem !important;
+  max-height: 2.375rem !important;
+  padding: 0 1.25rem !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #64748B !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  cursor: pointer;
+}
+
+.dark .segmented-pill-item-inactive {
+  color: #94A3B8 !important;
+}
+
+.segmented-pill-item-inactive:hover {
+  color: #0F172A !important;
+  background-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.dark .segmented-pill-item-inactive:hover {
+  color: #FFFFFF !important;
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+
+

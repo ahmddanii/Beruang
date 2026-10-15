@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">V1: Dual Rhomboid Eyes (Discerning Guardian)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #059669;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-v1">Beruang - Discerning Guardian (Dual Rhomboid Eyes)</title>
+  <path fill="#0F172A" fill-rule="evenodd" d="M 98 64
+  C 86 60 70 42 54 52
+  C 42 60 44 80 52 96
+  C 38 116 34 146 52 174
+  C 68 202 96 216 128 216
+  C 160 216 188 202 204 174
+  C 222 146 218 116 204 96
+  C 212 80 214 60 202 52
+  C 186 42 170 60 160 64
+  L 98 64 Z
+      M 94 106 L 102 114 L 94 122 L 86 114 Z
+      M 162 106 L 170 114 L 162 122 L 154 114 Z
+      M 112 174
+      L 112 154
+      C 112 146 120 140 128 140
+      C 136 140 144 146 144 154
+      L 144 174
+      C 138 178 134 180 128 180
+      C 122 180 118 178 112 174 Z" />
+  <polygon points="128,146 137,156 128,166 119,156" fill="#059669" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

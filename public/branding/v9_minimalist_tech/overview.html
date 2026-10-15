@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beruang - Arah Modern Minimalis Tech</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #080C14;
+      color: #E2E8F0;
+      padding: 40px 32px;
+      line-height: 1.5;
+    }
+
+    .header {
+      max-width: 1280px;
+      margin: 0 auto 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 24px;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .badge-blue {
+      background: rgba(0, 102, 214, 0.2);
+      border: 1px solid rgba(0, 102, 214, 0.5);
+      color: #60A5FA;
+    }
+
+    .badge-green {
+      background: rgba(0, 170, 19, 0.2);
+      border: 1px solid rgba(0, 170, 19, 0.5);
+      color: #4ADE80;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #94A3B8;
+      font-size: 14px;
+      max-width: 960px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* 4 Tech Concepts Grid */
+    .grid-concepts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .card.highlight {
+      border: 2px solid #0066D6;
+      background: linear-gradient(180deg, #131E33 0%, #0D1524 100%);
+      box-shadow: 0 12px 36px -8px rgba(0, 102, 214, 0.35);
+    }
+
+    .badge-card {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-card.primary {
+      background: #0066D6;
+      color: #FFFFFF;
+    }
+
+    .badge-card.sec {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94A3B8;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 190px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      padding: 16px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .preview-box svg {
+      width: 140px;
+      height: 140px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F8FAFC;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #38BDF8;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* Scalability Strip (Dark & Light Micro-Scale Test) */
+    .scale-strip {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .scale-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F1F5F9;
+      margin-bottom: 16px;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .scale-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .display-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-icon-wrap.dark {
+      background: #080C14;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .app-icon-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .favicon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .favicon-wrap svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .scale-lbl {
+      font-size: 11px;
+      color: #94A3B8;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="badge-bar">
+      <div class="badge-pill badge-blue">✓ Arah Baru: Modern Minimalis Tech</div>
+      <div class="badge-pill badge-green">✓ Presisi Geometris Murni (0 Ornamen)</div>
+      <div class="badge-pill badge-blue">✓ Selaras Halaman Beranda (#0066D6 & #00AA13)</div>
+    </div>
+    <h1>Beruang — Eksplorasi Arah Modern Minimalis Tech</h1>
+    <p class="subtitle">
+      Pendekatan desain kelas agensi teknologi internasional (ala Linear, Stripe, Raycast, Vercel). Bentuk kepala beruang diolah ke dalam kurva dan sudut geometris murni, tanpa ornamen ilustratif, dengan ketajaman arsitektur finansial modern.
+    </p>
+  </div>
+
+  <div class="container">
+
+    <div class="grid-concepts">
+
+      <!-- T1 -->
+      <div class="card highlight">
+        <span class="badge-card primary">★ OPSI T1: LINEAR FACET</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t1">
+  <title id="t-t1">Beruang - The Linear Facet Bear</title>
+  
+  <!-- Compound Path in Vibrant Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 96 66
+      L 76 46
+      C 62 42 46 54 48 70
+      L 54 94
+      L 44 126
+      C 40 152 52 180 72 202
+      L 128 226
+      L 184 202
+      C 204 180 216 152 212 126
+      L 202 94
+      L 208 70
+      C 210 54 194 42 180 46
+      L 160 66
+      Z
+
+      M 86 112
+      L 102 112
+      L 98 120
+      L 82 120
+      Z
+
+      M 170 112
+      L 154 112
+      L 158 120
+      L 174 120
+      Z
+
+      M 128 136
+      L 156 160
+      L 146 196
+      L 110 196
+      L 100 160
+      Z
+    "
+  />
+
+  <!-- Growth Green Keystone Diamond (#00AA13) -->
+  <polygon points="128,146 142,162 128,178 114,162" fill="#00AA13" />
+</svg>
+        </div>
+        <div class="card-title">T1: The Linear Facet Bear</div>
+        <div class="card-meta">Gaya Linear / Raycast / High-Tech</div>
+        <div class="card-desc">
+          Geometri facet bersudut tajam presisi. Telinga 45°/60°, dua mata slit horisontal analitis, dan hidung permata zamrud keystone (#00AA13) di tengah brankas.
+        </div>
+      </div>
+
+      <!-- T2 -->
+      <div class="card highlight">
+        <span class="badge-card primary">★ OPSI T2: SWISS MODERNIST</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t2">
+  <title id="t-t2">Beruang - The Swiss Modernist Bear</title>
+  
+  <!-- Single Compound Path in Blue (#0066D6) with Circular Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 88 68 Z
+
+      M 88 112
+      A 7.5 7.5 0 1 0 88 127
+      A 7.5 7.5 0 1 0 88 112 Z
+
+      M 168 112
+      A 7.5 7.5 0 1 0 168 127
+      A 7.5 7.5 0 1 0 168 112 Z
+
+      M 128 136
+      C 154 136 172 150 172 174
+      C 172 196 152 210 128 210
+      C 104 210 84 196 84 174
+      C 84 150 102 136 128 136 Z
+    "
+  />
+
+  <!-- Precision Curved Growth Nose (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 152
+      C 118 146 123 144 128 144
+      C 133 144 138 146 144 152
+      C 148 158 145 168 138 174
+      C 134 177 131 178 128 178
+      C 125 178 122 177 118 174
+      C 111 168 108 158 112 152 Z
+    "
+  />
+
+  <!-- Subtle Minimalist Anchor Dash in Deep Blue -->
+  <path fill="#0052B3" d="M 127 182 L 129 182 L 129 194 L 127 194 Z" />
+</svg>
+        </div>
+        <div class="card-title">T2: The Swiss Modernist Bear</div>
+        <div class="card-meta">Gaya Bauhaus / Stripe (Audit 99/100)</div>
+        <div class="card-desc">
+          Geometri kurva melingkar murni (pure circular arcs & tangents). Telinga bundar menyatu organik, moncong brankas kubah, hidung hijau GoPay, dan mata presisi.
+        </div>
+      </div>
+
+      <!-- T3 -->
+      <div class="card">
+        <span class="badge-card sec">OPSI T3: VECTOR ACCELERATOR</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t3">
+  <title id="t-t3">Beruang - The Vector Accelerator</title>
+  
+  <!-- Pure Compound Path in Vibrant Blue (#0066D6) with Cutout Vault and Dual Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 90 68 Z
+
+      M 86 112
+      L 102 114
+      L 92 120
+      L 82 116 Z
+
+      M 170 112
+      L 154 114
+      L 164 120
+      L 174 116 Z
+
+      M 128 132
+      C 154 132 172 146 172 170
+      C 172 194 152 208 128 208
+      C 104 208 84 194 84 170
+      C 84 146 102 132 128 132 Z
+    "
+  />
+
+  <!-- Geometric Upward Growth Vector Nose (#00AA13 - Akselerasi Modal) -->
+  <polygon points="128,142 146,160 137,160 137,174 119,174 119,160 110,160" fill="#00AA13" />
+</svg>
+        </div>
+        <div class="card-title">T3: The Vector Accelerator</div>
+        <div class="card-meta">Panah Pertumbuhan Modal (Audit 91/100)</div>
+        <div class="card-desc">
+          Moncong beruang mengintegrasikan panah akselerasi modal 45° melesat ke atas dalam warna hijau (#00AA13). Simbol literal dari "Akselerator Kelayakan".
+        </div>
+      </div>
+
+      <!-- T4 -->
+      <div class="card">
+        <span class="badge-card sec">OPSI T4: MONOLITHIC KODIAK</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t4">
+  <title id="t-t4">Beruang - The Monolithic Kodiak</title>
+  
+  <!-- Compound Path in Blue (#0066D6) with Cutout Muzzle and Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 92 68
+      C 82 48 60 40 46 54
+      C 34 66 38 88 50 104
+      C 40 126 38 154 50 180
+      C 68 210 96 224 128 224
+      C 160 224 188 210 206 180
+      C 218 154 216 126 206 104
+      C 218 88 222 66 210 54
+      C 196 40 174 48 164 68
+      C 152 64 140 62 128 62
+      C 116 62 104 64 92 68 Z
+
+      M 92 112
+      A 7 7 0 1 0 92 126
+      A 7 7 0 1 0 92 112 Z
+
+      M 164 112
+      A 7 7 0 1 0 164 126
+      A 7 7 0 1 0 164 112 Z
+
+      M 128 138
+      C 154 138 170 152 170 174
+      C 170 196 152 210 128 210
+      C 104 210 86 196 86 174
+      C 86 152 102 138 128 138 Z
+    "
+  />
+
+  <!-- Horizontal Minimalist Growth Nose (#00AA13) -->
+  <ellipse cx="128" cy="162" rx="16" ry="11" fill="#00AA13" />
+</svg>
+        </div>
+        <div class="card-title">T4: The Monolithic Kodiak</div>
+        <div class="card-meta">Gaya Pentagram / Apple (Audit 99/100)</div>
+        <div class="card-desc">
+          Monolitik ultra-clean single compound path. Siluet beruang kodiak yang masif dan tenang, telinga bulat tegas, hidung oval hijau minimalis.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scalability Strip -->
+    <div class="scale-strip">
+      <div class="scale-title">Uji Keterbacaan Ikon Aplikasi Seluler & Favicon 16px (True Micro-Scale Test)</div>
+      <div class="scale-grid">
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t1">
+  <title id="t-t1">Beruang - The Linear Facet Bear</title>
+  
+  <!-- Compound Path in Vibrant Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 96 66
+      L 76 46
+      C 62 42 46 54 48 70
+      L 54 94
+      L 44 126
+      C 40 152 52 180 72 202
+      L 128 226
+      L 184 202
+      C 204 180 216 152 212 126
+      L 202 94
+      L 208 70
+      C 210 54 194 42 180 46
+      L 160 66
+      Z
+
+      M 86 112
+      L 102 112
+      L 98 120
+      L 82 120
+      Z
+
+      M 170 112
+      L 154 112
+      L 158 120
+      L 174 120
+      Z
+
+      M 128 136
+      L 156 160
+      L 146 196
+      L 110 196
+      L 100 160
+      Z
+    "
+  />
+
+  <!-- Growth Green Keystone Diamond (#00AA13) -->
+  <polygon points="128,146 142,162 128,178 114,162" fill="#00AA13" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t1">
+  <title id="t-t1">Beruang - The Linear Facet Bear</title>
+  
+  <!-- Compound Path in Vibrant Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 96 66
+      L 76 46
+      C 62 42 46 54 48 70
+      L 54 94
+      L 44 126
+      C 40 152 52 180 72 202
+      L 128 226
+      L 184 202
+      C 204 180 216 152 212 126
+      L 202 94
+      L 208 70
+      C 210 54 194 42 180 46
+      L 160 66
+      Z
+
+      M 86 112
+      L 102 112
+      L 98 120
+      L 82 120
+      Z
+
+      M 170 112
+      L 154 112
+      L 158 120
+      L 174 120
+      Z
+
+      M 128 136
+      L 156 160
+      L 146 196
+      L 110 196
+      L 100 160
+      Z
+    "
+  />
+
+  <!-- Growth Green Keystone Diamond (#00AA13) -->
+  <polygon points="128,146 142,162 128,178 114,162" fill="#00AA13" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi T1</strong> (Linear Facet)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t2">
+  <title id="t-t2">Beruang - The Swiss Modernist Bear</title>
+  
+  <!-- Single Compound Path in Blue (#0066D6) with Circular Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 88 68 Z
+
+      M 88 112
+      A 7.5 7.5 0 1 0 88 127
+      A 7.5 7.5 0 1 0 88 112 Z
+
+      M 168 112
+      A 7.5 7.5 0 1 0 168 127
+      A 7.5 7.5 0 1 0 168 112 Z
+
+      M 128 136
+      C 154 136 172 150 172 174
+      C 172 196 152 210 128 210
+      C 104 210 84 196 84 174
+      C 84 150 102 136 128 136 Z
+    "
+  />
+
+  <!-- Precision Curved Growth Nose (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 152
+      C 118 146 123 144 128 144
+      C 133 144 138 146 144 152
+      C 148 158 145 168 138 174
+      C 134 177 131 178 128 178
+      C 125 178 122 177 118 174
+      C 111 168 108 158 112 152 Z
+    "
+  />
+
+  <!-- Subtle Minimalist Anchor Dash in Deep Blue -->
+  <path fill="#0052B3" d="M 127 182 L 129 182 L 129 194 L 127 194 Z" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t2">
+  <title id="t-t2">Beruang - The Swiss Modernist Bear</title>
+  
+  <!-- Single Compound Path in Blue (#0066D6) with Circular Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 88 68 Z
+
+      M 88 112
+      A 7.5 7.5 0 1 0 88 127
+      A 7.5 7.5 0 1 0 88 112 Z
+
+      M 168 112
+      A 7.5 7.5 0 1 0 168 127
+      A 7.5 7.5 0 1 0 168 112 Z
+
+      M 128 136
+      C 154 136 172 150 172 174
+      C 172 196 152 210 128 210
+      C 104 210 84 196 84 174
+      C 84 150 102 136 128 136 Z
+    "
+  />
+
+  <!-- Precision Curved Growth Nose (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 152
+      C 118 146 123 144 128 144
+      C 133 144 138 146 144 152
+      C 148 158 145 168 138 174
+      C 134 177 131 178 128 178
+      C 125 178 122 177 118 174
+      C 111 168 108 158 112 152 Z
+    "
+  />
+
+  <!-- Subtle Minimalist Anchor Dash in Deep Blue -->
+  <path fill="#0052B3" d="M 127 182 L 129 182 L 129 194 L 127 194 Z" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi T2</strong> (Swiss Modernist)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t3">
+  <title id="t-t3">Beruang - The Vector Accelerator</title>
+  
+  <!-- Pure Compound Path in Vibrant Blue (#0066D6) with Cutout Vault and Dual Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 90 68 Z
+
+      M 86 112
+      L 102 114
+      L 92 120
+      L 82 116 Z
+
+      M 170 112
+      L 154 114
+      L 164 120
+      L 174 116 Z
+
+      M 128 132
+      C 154 132 172 146 172 170
+      C 172 194 152 208 128 208
+      C 104 208 84 194 84 170
+      C 84 146 102 132 128 132 Z
+    "
+  />
+
+  <!-- Geometric Upward Growth Vector Nose (#00AA13 - Akselerasi Modal) -->
+  <polygon points="128,142 146,160 137,160 137,174 119,174 119,160 110,160" fill="#00AA13" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t3">
+  <title id="t-t3">Beruang - The Vector Accelerator</title>
+  
+  <!-- Pure Compound Path in Vibrant Blue (#0066D6) with Cutout Vault and Dual Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 68
+      C 78 48 56 40 42 54
+      C 30 66 34 88 46 104
+      C 36 126 34 154 48 180
+      C 66 210 94 224 128 224
+      C 162 224 190 210 208 180
+      C 222 154 220 126 210 104
+      C 222 88 226 66 214 54
+      C 200 40 178 48 168 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 90 68 Z
+
+      M 86 112
+      L 102 114
+      L 92 120
+      L 82 116 Z
+
+      M 170 112
+      L 154 114
+      L 164 120
+      L 174 116 Z
+
+      M 128 132
+      C 154 132 172 146 172 170
+      C 172 194 152 208 128 208
+      C 104 208 84 194 84 170
+      C 84 146 102 132 128 132 Z
+    "
+  />
+
+  <!-- Geometric Upward Growth Vector Nose (#00AA13 - Akselerasi Modal) -->
+  <polygon points="128,142 146,160 137,160 137,174 119,174 119,160 110,160" fill="#00AA13" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi T3</strong> (Vector Accelerator)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t4">
+  <title id="t-t4">Beruang - The Monolithic Kodiak</title>
+  
+  <!-- Compound Path in Blue (#0066D6) with Cutout Muzzle and Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 92 68
+      C 82 48 60 40 46 54
+      C 34 66 38 88 50 104
+      C 40 126 38 154 50 180
+      C 68 210 96 224 128 224
+      C 160 224 188 210 206 180
+      C 218 154 216 126 206 104
+      C 218 88 222 66 210 54
+      C 196 40 174 48 164 68
+      C 152 64 140 62 128 62
+      C 116 62 104 64 92 68 Z
+
+      M 92 112
+      A 7 7 0 1 0 92 126
+      A 7 7 0 1 0 92 112 Z
+
+      M 164 112
+      A 7 7 0 1 0 164 126
+      A 7 7 0 1 0 164 112 Z
+
+      M 128 138
+      C 154 138 170 152 170 174
+      C 170 196 152 210 128 210
+      C 104 210 86 196 86 174
+      C 86 152 102 138 128 138 Z
+    "
+  />
+
+  <!-- Horizontal Minimalist Growth Nose (#00AA13) -->
+  <ellipse cx="128" cy="162" rx="16" ry="11" fill="#00AA13" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-t4">
+  <title id="t-t4">Beruang - The Monolithic Kodiak</title>
+  
+  <!-- Compound Path in Blue (#0066D6) with Cutout Muzzle and Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 92 68
+      C 82 48 60 40 46 54
+      C 34 66 38 88 50 104
+      C 40 126 38 154 50 180
+      C 68 210 96 224 128 224
+      C 160 224 188 210 206 180
+      C 218 154 216 126 206 104
+      C 218 88 222 66 210 54
+      C 196 40 174 48 164 68
+      C 152 64 140 62 128 62
+      C 116 62 104 64 92 68 Z
+
+      M 92 112
+      A 7 7 0 1 0 92 126
+      A 7 7 0 1 0 92 112 Z
+
+      M 164 112
+      A 7 7 0 1 0 164 126
+      A 7 7 0 1 0 164 112 Z
+
+      M 128 138
+      C 154 138 170 152 170 174
+      C 170 196 152 210 128 210
+      C 104 210 86 196 86 174
+      C 86 152 102 138 128 138 Z
+    "
+  />
+
+  <!-- Horizontal Minimalist Growth Nose (#00AA13) -->
+  <ellipse cx="128" cy="162" rx="16" ry="11" fill="#00AA13" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi T4</strong> (Monolithic Kodiak)</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

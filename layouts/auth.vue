@@ -2,12 +2,10 @@
   <div class="min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 font-sans">
     <div class="flex-1 flex flex-col justify-center items-center p-4 sm:p-6">
       <div class="mb-6 flex flex-col items-center">
-        <NuxtLink to="/" class="flex items-center gap-3 group">
-          <div class="w-12 h-12 rounded-2xl bg-amber-400 p-2 shadow-sm group-hover:scale-105 transition-transform">
-            <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
-          </div>
-          <span class="font-heading font-extrabold text-2xl tracking-tight text-neutral-900 dark:text-white">
-            Beruang
+        <NuxtLink to="/" class="flex items-center gap-2.5 group">
+          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
+          <span class="font-heading font-extrabold text-2xl tracking-tight leading-none select-none">
+            <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
           </span>
         </NuxtLink>
       </div>

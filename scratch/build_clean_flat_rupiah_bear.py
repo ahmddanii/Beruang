@@ -1,0 +1,209 @@
+import os
+import subprocess
+
+OUT_DIR = "public/branding/v12_clean_rupiah_bear"
+os.makedirs(OUT_DIR, exist_ok=True)
+
+# -----------------------------------------------------------------------------
+# MASTER CLEAN FLAT VECTOR RUPIAH BEAR
+# Mengadopsi persis komposisi dari gambar yang di-generate:
+# - Beruang biru vibrant (#0066D6)
+# - Telinga bulat dengan inner ear putih
+# - Mata melengkung tenang (peaceful closed eyes)
+# - Moncong putih dengan hidung biru bulat
+# - Kedua tangan memeluk uang lembar Rupiah hijau (#00AA13) berlogo "Rp"
+# - Garis pemisah putih bersih
+# -----------------------------------------------------------------------------
+
+def make_symbol_svg():
+    return """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-ms">
+  <title id="t-ms">Beruang - Clean Flat Rupiah Bear</title>
+
+  <!-- Left Ear -->
+  <circle cx="86" cy="62" r="22" fill="#0066D6" />
+  <circle cx="86" cy="62" r="11" fill="#FFFFFF" />
+
+  <!-- Right Ear -->
+  <circle cx="170" cy="62" r="22" fill="#0066D6" />
+  <circle cx="170" cy="62" r="11" fill="#FFFFFF" />
+
+  <!-- Main Body & Head Shape (Smooth Chubby Contour) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 98 68
+      C 108 62 118 60 128 60
+      C 138 60 148 62 158 68
+      C 176 78 186 98 186 122
+      C 192 138 200 158 196 182
+      C 192 206 172 216 128 216
+      C 84 216 64 206 60 182
+      C 56 158 64 138 70 122
+      C 70 98 80 78 98 68 Z
+    "
+  />
+
+  <!-- Peaceful Serene Closed Eyes (Filled Smooth Arcs) -->
+  <path
+    fill="#FFFFFF"
+    d="
+      M 96 118
+      C 102 110 112 110 118 118
+      C 112 113 102 113 96 118 Z
+    "
+  />
+  <path
+    fill="#FFFFFF"
+    d="
+      M 138 118
+      C 144 110 154 110 160 118
+      C 154 113 144 113 138 118 Z
+    "
+  />
+
+  <!-- White Snout / Muzzle -->
+  <ellipse cx="128" cy="142" rx="22" ry="18" fill="#FFFFFF" />
+
+  <!-- Blue Rounded Bear Nose -->
+  <path
+    fill="#0066D6"
+    d="
+      M 120 137
+      C 120 131 123.5 129 128 129
+      C 132.5 129 136 131 136 137
+      C 136 143 132.5 147 128 147
+      C 123.5 147 120 143 120 137 Z
+    "
+  />
+
+  <!-- Indonesian Rupiah Banknote (Tilted -10deg held by paws) -->
+  <g transform="translate(128, 178) rotate(-10) translate(-128, -178)">
+    <!-- Banknote White Outline Base -->
+    <rect x="74" y="154" width="108" height="52" rx="8" fill="#FFFFFF" />
+    <!-- Banknote Green Body (#00AA13) -->
+    <rect x="76" y="156" width="104" height="48" rx="6" fill="#00AA13" />
+    <!-- Banknote White Guilloche Border -->
+    <rect x="80" y="160" width="96" height="40" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <!-- Banknote Center Circle -->
+    <circle cx="128" cy="180" r="14" fill="#FFFFFF" />
+    <!-- "Rp" Vector Glyph -->
+    <!-- 'R' -->
+    <path fill="#00AA13" d="M 122 174 L 126 174 C 128.5 174 129.5 175.2 129.5 177 C 129.5 178.8 128.5 180 126 180 L 124 180 L 124 184 L 122 184 Z M 124 176 L 124 178.5 L 125.8 178.5 C 126.8 178.5 127.5 178 127.5 177 C 127.5 176 126.8 176 125.8 176 Z" />
+    <path fill="#00AA13" d="M 125.5 179.5 L 128.5 184 L 126.2 184 L 124 180 Z" />
+    <!-- 'p' -->
+    <path fill="#00AA13" d="M 130.5 176.5 L 132.3 176.5 L 132.3 177.8 C 133 176.8 134 176.3 135.2 176.3 C 137 176.3 138.2 177.8 138.2 179.8 C 138.2 181.8 137 183.3 135.2 183.3 C 134 183.3 133 182.8 132.3 181.8 L 132.3 186 L 130.5 186 Z M 132.3 179.8 C 132.3 181 133.2 181.8 134.4 181.8 C 135.6 181.8 136.4 181 136.4 179.8 C 136.4 178.6 135.6 177.8 134.4 177.8 C 133.2 177.8 132.3 178.6 132.3 179.8 Z" />
+  </g>
+
+  <!-- Left Bear Paw Hugging Banknote with White Contour Separation -->
+  <path
+    d="
+      M 74 156
+      C 66 166 68 182 82 192
+      C 94 200 106 196 112 184
+      C 106 182 100 178 96 172
+      C 86 168 80 162 74 156 Z
+    "
+    fill="#0066D6"
+    stroke="#FFFFFF"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right Bear Paw Hugging Banknote with White Contour Separation -->
+  <path
+    d="
+      M 182 156
+      C 190 166 188 182 174 192
+      C 162 200 150 196 144 184
+      C 150 182 156 178 160 172
+      C 170 168 176 162 182 156 Z
+    "
+    fill="#0066D6"
+    stroke="#FFFFFF"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+</svg>"""
+
+def make_squircle_svg():
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-sq">
+  <title id="t-sq">Beruang - Squircle App Icon</title>
+  
+  <defs>
+    <clipPath id="sq-clip">
+      <rect x="16" y="16" width="224" height="224" rx="54" />
+    </clipPath>
+  </defs>
+
+  <!-- Squircle Canvas in Clean White / Subtle Ice-Blue Border -->
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="#FFFFFF" />
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="none" stroke="#E2E8F0" stroke-width="2" />
+
+  <g clip-path="url(#sq-clip)" transform="translate(0, 10)">
+    {make_symbol_svg()[make_symbol_svg().find('>')+1 : make_symbol_svg().rfind('</svg>')]}
+  </g>
+</svg>"""
+
+def make_dark_squircle_svg():
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-dsq">
+  <title id="t-dsq">Beruang - Dark Squircle App Icon</title>
+  
+  <defs>
+    <clipPath id="dsq-clip">
+      <rect x="16" y="16" width="224" height="224" rx="54" />
+    </clipPath>
+  </defs>
+
+  <!-- Dark Canvas in Slate Navy (#0C121D) -->
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="#0C121D" />
+  <rect x="16" y="16" width="224" height="224" rx="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+
+  <!-- Ambient Blue Glow -->
+  <circle cx="128" cy="138" r="80" fill="#0066D6" opacity="0.25" />
+
+  <g clip-path="url(#dsq-clip)" transform="translate(0, 10)">
+    {make_symbol_svg()[make_symbol_svg().find('>')+1 : make_symbol_svg().rfind('</svg>')]}
+  </g>
+</svg>"""
+
+def make_lockup_svg(symbol_svg, title):
+    inner = symbol_svg[symbol_svg.find(">") + 1 : symbol_svg.rfind("</svg>")]
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">{title}</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {{
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }}
+      .brand-tagline {{
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }}
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    {inner}
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>"""
+
+files = {
+    "rupiah-bear-master.svg": make_symbol_svg(),
+    "rupiah-bear-squircle.svg": make_squircle_svg(),
+    "rupiah-bear-dark-squircle.svg": make_dark_squircle_svg(),
+    "rupiah-bear-lockup.svg": make_lockup_svg(make_symbol_svg(), "Beruang - Akselerator Kelayakan UMKM"),
+}
+
+for name, content in files.items():
+    with open(os.path.join(OUT_DIR, name), "w", encoding="utf-8") as f:
+        f.write(content)
+
+print("Generated clean flat Rupiah bear SVGs in", OUT_DIR)

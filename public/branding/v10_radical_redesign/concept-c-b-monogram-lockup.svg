@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">Konsep C: The 'B' Monogram Bear (Fusi Huruf 'B' + Beruang)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-cc">Beruang - The 'B' Monogram Bear</title>
+  
+  <!-- Geometric 'B' Bear Monogram in Trust Blue (#0066D6) with Precision Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 60 48
+      L 142 48
+      C 164 48 180 58 184 76
+      C 188 94 174 110 156 118
+      C 178 126 196 144 196 170
+      C 196 198 172 216 140 216
+      L 60 216
+      Z
+
+      M 88 74
+      L 136 74
+      C 148 74 156 82 156 94
+      C 156 106 148 114 136 114
+      L 88 114
+      Z
+
+      M 88 136
+      L 138 136
+      C 152 136 164 146 164 162
+      C 164 178 152 190 138 190
+      L 88 190
+      Z
+    "
+  />
+
+  <!-- Integrated Bear Ear Disc on Top of Monogram in Deep Blue (#0052B3) -->
+  <circle cx="140" cy="48" r="22" fill="#0052B3" />
+  <circle cx="140" cy="48" r="12" fill="#0066D6" />
+
+  <!-- Growth Green Accelerator Keystone (#00AA13) Nestled in Lower Loop -->
+  <polygon points="138,150 152,162 138,174 124,162" fill="#00AA13" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

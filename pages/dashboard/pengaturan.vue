@@ -1,13 +1,34 @@
 <template>
   <div class="space-y-8 pb-12 max-w-4xl font-sans">
+    <!-- Breadcrumb Back Navigation -->
+    <div class="flex items-center gap-2">
+      <NuxtLink
+        to="/dashboard"
+        class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-poppins font-medium text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors group"
+      >
+        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="15" :stroke-width="2" class="transition-transform group-hover:-translate-x-0.5" />
+        <span>Kembali ke Beranda</span>
+      </NuxtLink>
+    </div>
+
     <!-- Header -->
-    <div>
-      <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
-        Pengaturan Akun & Usaha
-      </h1>
-      <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 mt-1.5 leading-relaxed">
-        Kelola profil bisnis, kontak WhatsApp resmi, dan preferensi notifikasi usahamu.
-      </p>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-200/80 dark:border-neutral-800/80">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+          Pengaturan Akun & Usaha
+        </h1>
+        <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 mt-1.5 leading-relaxed">
+          Kelola profil bisnis, kontak WhatsApp resmi, dan preferensi notifikasi usahamu.
+        </p>
+      </div>
+
+      <NuxtLink
+        to="/dashboard"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-neutral-100/80 dark:bg-[#18191E] dark:hover:bg-neutral-800/80 border border-neutral-200/90 hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs active:scale-95 cursor-pointer shrink-0"
+      >
+        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
+        <span>Kembali ke Beranda</span>
+      </NuxtLink>
     </div>
 
     <!-- Alert Save Success -->
@@ -124,6 +145,8 @@ import { ref } from 'vue'
 import { useUmkmStore } from '~/stores/umkm'
 import BCard from '~/components/base/BCard.vue'
 import BButton from '~/components/base/BButton.vue'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { ArrowLeft02Icon } from '@hugeicons/core-free-icons'
 
 definePageMeta({
   layout: 'dashboard'

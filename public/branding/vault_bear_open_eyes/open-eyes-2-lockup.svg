@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - The Polar Vault Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-oe2">Beruang - The Polar Vault Bear (Open Eyes)</title>
+  <defs>
+    <clipPath id="squircle-oe2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Deep Slate Navy Squircle Canvas -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <g clip-path="url(#squircle-oe2)">
+    <!-- Round Bear Ears with Soft Contrast -->
+    <ellipse cx="76" cy="86" rx="26" ry="28" fill="#F0F9FF" />
+    <ellipse cx="76" cy="86" rx="14" ry="16" fill="#BAE6FD" />
+
+    <ellipse cx="180" cy="86" rx="26" ry="28" fill="#F0F9FF" />
+    <ellipse cx="180" cy="86" rx="14" ry="16" fill="#BAE6FD" />
+
+    <!-- Pure White / Light Ice-Blue Bear Head & Torso -->
+    <path
+      fill="#F0F9FF"
+      d="
+        M 44 240
+        L 44 186
+        C 42 134 72 94 128 94
+        C 184 94 214 134 212 186
+        L 212 240 Z
+      "
+    />
+
+    <!-- Prominent Snout in Crisp White -->
+    <ellipse cx="128" cy="164" rx="36" ry="28" fill="#FFFFFF" />
+
+    <!-- Bear Nose in Deep Navy -->
+    <path
+      fill="#0F172A"
+      d="
+        M 116 154
+        C 116 146 122 142 128 142
+        C 134 142 140 146 140 154
+        C 140 162 134 166 128 166
+        C 122 166 116 162 116 154 Z
+      "
+    />
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="3"
+      stroke-linecap="round"
+      d="
+        M 123 172
+        Q 128 177 133 172
+      "
+    />
+
+    <!-- WIDE OPEN FRIENDLY EYES with Catchlight Sparkle -->
+    <circle cx="96" cy="138" r="8.5" fill="#0F172A" />
+    <circle cx="98.5" cy="135.5" r="3" fill="#FFFFFF" />
+    <circle cx="94.5" cy="140.5" r="1.2" fill="#FFFFFF" />
+
+    <circle cx="160" cy="138" r="8.5" fill="#0F172A" />
+    <circle cx="162.5" cy="135.5" r="3" fill="#FFFFFF" />
+    <circle cx="158.5" cy="140.5" r="1.2" fill="#FFFFFF" />
+
+    <!-- Emerald Green Safe-Dial Collar & Medallion -->
+    <path
+      fill="#00AA13"
+      d="
+        M 54 216
+        C 76 224 180 224 202 216
+        L 206 228
+        C 180 238 76 238 50 228 Z
+      "
+    />
+    <circle cx="128" cy="224" r="18" fill="#0081A0" stroke="#00AA13" stroke-width="3" />
+    <circle cx="128" cy="224" r="10" fill="#00AA13" />
+    <circle cx="128" cy="224" r="4" fill="#FFFFFF" />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

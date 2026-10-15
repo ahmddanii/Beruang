@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-opt2">
+  <title id="t-opt2">Beruang - The Flat Geometric Bear</title>
+  
+  <!-- Compound Path in Vibrant Trust Blue (#0066D6) with Cutout Muzzle & Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 90 70
+      C 82 52 64 42 48 54
+      C 34 64 36 86 48 102
+      C 36 122 34 152 48 178
+      C 64 206 92 222 128 222
+      C 164 222 192 206 208 178
+      C 222 152 220 122 208 102
+      C 220 86 222 64 208 54
+      C 192 42 174 52 166 70
+      C 154 66 142 64 128 64
+      C 114 64 102 66 90 70 Z
+
+      M 86 112
+      C 86 104 94 98 102 104
+      C 106 107 106 117 102 120
+      C 94 126 86 120 86 112 Z
+
+      M 170 112
+      C 170 104 162 98 154 104
+      C 150 107 150 117 154 120
+      C 162 126 170 120 170 112 Z
+
+      M 128 136
+      C 154 136 170 150 170 172
+      C 170 194 152 208 128 208
+      C 104 208 86 194 86 172
+      C 86 150 102 136 128 136 Z
+    "
+  />
+
+  <!-- Wide Bear Nose Pad in GoPay Growth Green (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 156
+      C 118 152 123 150 128 150
+      C 133 150 138 152 144 156
+      C 147 160 145 168 138 174
+      C 134 177 131 178 128 178
+      C 125 178 122 177 118 174
+      C 111 168 109 160 112 156 Z
+    "
+  />
+
+  <!-- Subtle Chin Anchor Point in Deep Blue (#0052B3) -->
+  <path
+    fill="#0052B3"
+    d="M 128 184 L 132 192 L 124 192 Z"
+  />
+</svg>

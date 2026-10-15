@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-c1">
+  <title id="t-c1">Beruang - The Token Guardian</title>
+  
+  <!-- Left Dynamic Coin Ear -->
+  <circle cx="66" cy="72" r="28" fill="#0052B3" />
+  <circle cx="66" cy="72" r="18" fill="#0066D6" />
+  <circle cx="66" cy="72" r="8" fill="#FFFFFF" opacity="0.9" />
+
+  <!-- Right Dynamic Coin Ear -->
+  <circle cx="190" cy="72" r="28" fill="#0052B3" />
+  <circle cx="190" cy="72" r="18" fill="#0066D6" />
+  <circle cx="190" cy="72" r="8" fill="#FFFFFF" opacity="0.9" />
+
+  <!-- Main Bear Head (Vibrant Trust Blue #0066D6) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 68
+      C 104 64 116 62 128 62
+      C 140 62 152 64 164 68
+      C 188 76 212 102 214 136
+      C 216 172 196 202 170 216
+      C 156 224 142 226 128 226
+      C 114 226 100 224 86 216
+      C 60 202 40 172 42 136
+      C 44 102 68 76 92 68 Z
+    "
+  />
+
+  <!-- Friendly White Muzzle (Bentuk Kubah Brankas Finansial) -->
+  <path
+    fill="#FFFFFF"
+    d="
+      M 128 130
+      C 156 130 176 146 176 172
+      C 176 196 154 212 128 212
+      C 102 212 80 196 80 172
+      C 80 146 100 130 128 130 Z
+    "
+  />
+
+  <!-- Growth Green Bear Nose (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 150
+      C 118 144 123 142 128 142
+      C 133 142 138 144 144 150
+      C 148 156 145 166 138 172
+      C 134 175 131 176 128 176
+      C 125 176 122 175 118 172
+      C 111 166 108 156 112 150 Z
+    "
+  />
+
+  <!-- Friendly Subtle Mouth Arc in Deep Blue (Ramah, Mentor Terpercaya) -->
+  <path
+    d="M 128 176 L 128 186 M 116 192 C 122 197 134 197 140 192"
+    fill="none"
+    stroke="#0052B3"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Two Open, Warm, Confident Eyes -->
+  <ellipse cx="94" cy="114" rx="8" ry="10" fill="#FFFFFF" />
+  <circle cx="94" cy="115" r="5" fill="#0F172A" />
+  <circle cx="92" cy="113" r="1.8" fill="#FFFFFF" />
+
+  <ellipse cx="162" cy="114" rx="8" ry="10" fill="#FFFFFF" />
+  <circle cx="162" cy="115" r="5" fill="#0F172A" />
+  <circle cx="160" cy="113" r="1.8" fill="#FFFFFF" />
+</svg>

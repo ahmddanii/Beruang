@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - The Cloud-Vault Guardian</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-f2">Beruang - The Cloud-Vault Guardian</title>
+  <defs>
+    <clipPath id="squircle-f2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Trust Fintech Blue Squircle Canvas -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0081A0" />
+
+  <g clip-path="url(#squircle-f2)">
+    <!-- Doughy Ice-White Bear Head emerging from bottom -->
+    <path
+      fill="#F0F9FF"
+      d="
+        M 44 240
+        C 40 164 74 126 128 126
+        C 182 126 216 164 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud-Vault Hat with Bear Ears (Cloud Data Room) -->
+    <!-- Hat Rim -->
+    <path
+      fill="#E0F2FE"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 155
+        C 168 159 88 159 88 155 Z
+      "
+    />
+    <!-- Hat Puffy Body with Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Emerald Safe Lock on Cloud Hat -->
+    <circle cx="128" cy="98" r="14" fill="#00AA13" />
+    <path
+      fill="#FFFFFF"
+      d="
+        M 128 92
+        A 4 4 0 1 0 128 100
+        L 126 105
+        C 126 106 127 107 128 107
+        C 129 107 130 106 130 105
+        L 128 100
+        A 4 4 0 0 0 128 92 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes in Trust Blue -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

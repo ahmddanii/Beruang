@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-v2">
+  <title id="title-v2">Beruang - The Toffee App Icon</title>
+  <defs>
+    <clipPath id="app-tile-clip">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+  <!-- Background Squircle in Deep Midnight Slate -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <g clip-path="url(#app-tile-clip)">
+    <!-- Golden Amber Diagonal Warm Glow (Top Right) -->
+    <path d="M 120 16 L 240 16 L 240 136 Z" fill="#D97706" opacity="0.85" />
+
+    <!-- Bear Head & Ears in Honey Amber -->
+    <!-- Left Ear -->
+    <ellipse cx="80" cy="86" rx="26" ry="28" fill="#F59E0B" />
+    <ellipse cx="80" cy="86" rx="14" ry="16" fill="#D97706" />
+
+    <!-- Right Ear -->
+    <ellipse cx="176" cy="86" rx="26" ry="28" fill="#F59E0B" />
+    <ellipse cx="176" cy="86" rx="14" ry="16" fill="#D97706" />
+
+    <!-- Main Bear Face Contour -->
+    <path
+      fill="#F59E0B"
+      d="
+        M 80 94
+        C 100 84 156 84 176 94
+        C 210 112 216 156 204 192
+        C 192 226 160 236 128 236
+        C 96 236 64 226 52 192
+        C 40 156 46 112 80 94 Z
+      "
+    />
+
+    <!-- Snout in Warm Ivory Cream -->
+    <ellipse cx="128" cy="172" rx="38" ry="32" fill="#FEF3C7" />
+
+    <!-- Nose in Deep Navy -->
+    <path
+      fill="#0F172A"
+      d="
+        M 116 162
+        C 116 154 122 150 128 150
+        C 134 150 140 154 140 162
+        C 140 170 134 174 128 174
+        C 122 174 116 170 116 162 Z
+      "
+    />
+    <!-- Gentle Smile Arc -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="3"
+      stroke-linecap="round"
+      d="
+        M 122 180
+        Q 128 186 134 180
+      "
+    />
+
+    <!-- Expressive Friendly Eyes with Highlights -->
+    <circle cx="98" cy="140" r="9" fill="#0F172A" />
+    <circle cx="101" cy="137" r="3.5" fill="#FFFFFF" />
+
+    <circle cx="158" cy="140" r="9" fill="#0F172A" />
+    <circle cx="161" cy="137" r="3.5" fill="#FFFFFF" />
+
+    <!-- Financial Readiness Vault Crest Badge (Emerald Accent Collar) -->
+    <path
+      fill="#00AA13"
+      d="
+        M 128 214
+        L 136 226
+        L 128 234
+        L 120 226 Z
+      "
+    />
+  </g>
+</svg>

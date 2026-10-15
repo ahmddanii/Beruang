@@ -4,14 +4,12 @@
       <div class="flex items-center justify-between h-16 gap-4">
         <!-- Left: Brand Logo & Role Pill -->
         <div class="flex items-center gap-3 shrink-0">
-          <NuxtLink to="/" class="flex items-center gap-3 group">
-            <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs transition-transform group-hover:scale-105">
-              <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
-            </div>
+          <NuxtLink to="/" class="flex items-center gap-2 group">
+            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain transition-transform group-hover:scale-105" />
             <div>
               <div class="flex items-center gap-1.5">
-                <span class="font-heading font-extrabold text-lg tracking-tight text-neutral-900 dark:text-white">
-                  Beruang
+                <span class="font-heading font-extrabold text-lg tracking-tight leading-none select-none">
+                  <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
                 </span>
                 <span
                   :class="[
@@ -22,7 +20,7 @@
                   {{ currentRoleName }}
                 </span>
               </div>
-              <span class="text-[11px] text-neutral-500 font-medium block -mt-0.5">
+              <span class="text-[11px] text-neutral-500 font-medium block mt-0.5">
                 {{ authStore.currentUser?.businessName || 'Platform Terpadu' }}
               </span>
             </div>

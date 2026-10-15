@@ -4,11 +4,9 @@
       <!-- Top Brand Header -->
       <div class="flex items-center justify-between">
         <NuxtLink to="/" class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs">
-            <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
-          </div>
-          <span class="font-heading font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white">
-            Beruang
+          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain" />
+          <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
+            <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
           </span>
         </NuxtLink>
         <span class="text-xs text-neutral-500 font-medium tabular-nums">

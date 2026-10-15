@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-v1">
+  <title id="title-v1">Beruang - The Vault Wheel Bear</title>
+  <!-- Bear Silhouette with Cutout Vault Wheel Ring & Keyhole -->
+  <path
+    fill="#0F172A"
+    fill-rule="evenodd"
+    d="
+      M 98 68
+      C 88 64 68 44 54 56
+      C 42 66 46 88 54 104
+      C 40 124 36 150 50 178
+      C 68 208 96 222 128 222
+      C 160 222 188 208 206 178
+      C 220 150 216 124 202 104
+      C 210 88 214 66 202 56
+      C 188 44 168 64 158 68
+      L 98 68 Z
+
+      M 128 106
+      C 149 106 166 123 166 144
+      C 166 165 149 182 128 182
+      C 107 182 90 165 90 144
+      C 90 123 107 106 128 106 Z
+    "
+  />
+  <!-- Vault Wheel Bolt Lugs (8 radiating bank safe gear teeth) -->
+  <g fill="#0F172A">
+    <rect x="124" y="98" width="8" height="12" rx="3" />
+    <rect x="124" y="178" width="8" height="12" rx="3" />
+    <rect x="82" y="140" width="12" height="8" rx="3" />
+    <rect x="162" y="140" width="12" height="8" rx="3" />
+    <rect x="96" y="112" width="10" height="8" rx="3" transform="rotate(45 101 116)" />
+    <rect x="150" y="166" width="10" height="8" rx="3" transform="rotate(45 155 170)" />
+    <rect x="150" y="112" width="10" height="8" rx="3" transform="rotate(-45 155 116)" />
+    <rect x="96" y="166" width="10" height="8" rx="3" transform="rotate(-45 101 170)" />
+  </g>
+  <!-- Inner Vault Door & Keyhole Accent in Emerald Green -->
+  <circle cx="128" cy="144" r="28" fill="#00AA13" />
+  <!-- Keyhole in white/negative space -->
+  <path
+    fill="#FFFFFF"
+    d="
+      M 128 134
+      A 6 6 0 1 0 128 146
+      L 125 153
+      C 125 155 126 156 128 156
+      C 130 156 131 155 131 153
+      L 128 146
+      A 6 6 0 0 0 128 134 Z
+    "
+  />
+</svg>

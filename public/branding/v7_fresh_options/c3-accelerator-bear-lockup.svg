@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">C3: The Accelerator Bear (Growth Chevron Nose)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-c3">Beruang - The Accelerator Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="66" cy="74" r="26" fill="#0052B3" />
+  <circle cx="66" cy="74" r="16" fill="#0066D6" />
+
+  <!-- Right Ear -->
+  <circle cx="190" cy="74" r="26" fill="#0052B3" />
+  <circle cx="190" cy="74" r="16" fill="#0066D6" />
+
+  <!-- Main Bear Head -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 68
+      C 104 64 116 62 128 62
+      C 140 62 152 64 164 68
+      C 188 78 210 102 212 136
+      C 214 172 194 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 62 200 42 172 44 136
+      C 46 102 68 78 92 68 Z
+    "
+  />
+
+  <!-- Clean Muzzle Vault Oval in Pure White -->
+  <ellipse cx="128" cy="174" rx="46" ry="38" fill="#FFFFFF" />
+
+  <!-- Accelerator Arrow / Upward Growth Bear Nose (#00AA13) -->
+  <polygon points="128,142 148,162 138,162 138,178 118,178 118,162 108,162" fill="#00AA13" />
+
+  <!-- Two Open Alert Bear Eyes -->
+  <circle cx="94" cy="114" r="8" fill="#FFFFFF" />
+  <circle cx="94" cy="114" r="5" fill="#0F172A" />
+  <circle cx="92" cy="112" r="2" fill="#FFFFFF" />
+
+  <circle cx="162" cy="114" r="8" fill="#FFFFFF" />
+  <circle cx="162" cy="114" r="5" fill="#0F172A" />
+  <circle cx="160" cy="112" r="2" fill="#FFFFFF" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

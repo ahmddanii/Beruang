@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Toffee App Icon</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-d">Beruang - Toffee App Icon (Ref 2)</title>
+  <defs>
+    <clipPath id="squircle-clip">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+  <!-- Background App Squircle Tile in Ice-Navy -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <!-- Clipped Bear Character Peeking in -->
+  <g clip-path="url(#squircle-clip)">
+    <!-- Bear Body & Head -->
+    <path
+      fill="#0081A0"
+      d="
+        M 40 240
+        L 40 148
+        C 40 102 70 72 118 72
+        C 126 72 134 74 142 78
+        C 152 66 170 64 182 76
+        C 192 86 190 102 184 114
+        C 204 130 216 156 216 188
+        L 216 240 Z
+      "
+    />
+    <!-- Left Ear (Inner / Outer) -->
+    <ellipse cx="88" cy="88" rx="22" ry="24" fill="#0081A0" />
+    <ellipse cx="88" cy="88" rx="12" ry="14" fill="#F3F8FC" opacity="0.9" />
+
+    <!-- Right Ear Inner -->
+    <ellipse cx="174" cy="84" rx="8" ry="10" fill="#F3F8FC" opacity="0.9" />
+
+    <!-- Cute Snout in White/Ice -->
+    <ellipse cx="140" cy="162" rx="36" ry="32" fill="#F3F8FC" />
+
+    <!-- Emerald Growth Nose & Smile inside Snout -->
+    <path
+      fill="#00AA13"
+      d="
+        M 128 152
+        C 128 144 133 140 140 140
+        C 147 140 152 144 152 152
+        C 152 158 147 162 140 162
+        C 133 162 128 158 128 152 Z
+      "
+    />
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="3"
+      stroke-linecap="round"
+      d="
+        M 132 170
+        Q 140 176 148 170
+      "
+    />
+
+    <!-- Expressive Eyes with Sparkle (Toffee Vibe) -->
+    <ellipse cx="114" cy="132" rx="6" ry="9" fill="#0F172A" />
+    <circle cx="116" cy="129" r="2.5" fill="#FFFFFF" />
+
+    <ellipse cx="172" cy="132" rx="6" ry="9" fill="#0F172A" />
+    <circle cx="174" cy="129" r="2.5" fill="#FFFFFF" />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Style 1C</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-1c">Beruang - The Friendly Vault</title>
+  <!-- Chubby Friendly Silhouette -->
+  <path
+    fill="#0081A0"
+    fill-rule="evenodd"
+    d="
+      M 128 72
+      C 108 72 98 62 88 46
+      C 74 24 50 32 44 56
+      C 38 80 44 98 42 118
+      C 38 160 52 198 86 218
+      C 104 230 118 232 128 232
+      C 138 232 152 230 170 218
+      C 204 198 218 160 214 118
+      C 212 98 218 80 212 56
+      C 206 32 182 24 168 46
+      C 158 62 148 72 128 72 Z
+
+      M 128 116
+      C 152 116 170 132 170 154
+      C 170 176 152 192 128 192
+      C 104 192 86 176 86 154
+      C 86 132 104 116 128 116 Z
+
+      M 78 110
+      C 78 102 90 102 90 110
+      C 90 118 78 118 78 110 Z
+
+      M 166 110
+      C 166 102 178 102 178 110
+      C 178 118 166 118 166 110 Z
+    "
+  />
+  <!-- Emerald Growth Nose & Smile Arc -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 144
+      C 112 136 119 132 128 132
+      C 137 132 144 136 144 144
+      C 144 152 137 156 128 156
+      C 119 156 112 152 112 144 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

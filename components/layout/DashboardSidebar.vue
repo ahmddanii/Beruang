@@ -1,150 +1,124 @@
 <template>
-  <div>
-    <!-- Desktop Sidebar (macOS Minimalist Aesthetic matching design reference) -->
+  <div class="h-full flex flex-col shrink-0">
+    <!-- Desktop Sidebar (Placed directly below Top Navbar) -->
     <aside
-      class="hidden lg:flex w-80 bg-[#FAFAFA] dark:bg-[#141519] border-r border-neutral-200/80 dark:border-neutral-800/90 flex-col shrink-0 sticky top-0 h-screen transition-colors duration-150 z-20 select-none"
+      :class="[
+        'hidden lg:flex flex-col shrink-0 h-full z-20 select-none border-r',
+        'transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] will-change-[width]',
+        isCollapsed ? 'w-[72px]' : 'w-72',
+        'bg-[#F6F8FA] dark:bg-[#13161F] border-neutral-200/80 dark:border-neutral-800/80 shadow-[1px_0_10px_rgba(0,0,0,0.02)]'
+      ]"
     >
-      <div class="py-6 flex flex-col h-full overflow-hidden">
-        <!-- Enlarged Workspace / User Profile Card (Reference-Matched Design) -->
-        <div class="relative mb-3 px-4">
-          <!-- Backdrop to close dropdown when clicking outside -->
-          <div
-            v-if="isProfileMenuOpen"
-            class="fixed inset-0 z-20"
-            @click="isProfileMenuOpen = false"
-          />
+      <div class="flex flex-col h-full overflow-hidden">
+        <!-- Top of Sidebar: Collapse / Expand Button Container -->
+        <div
+          :class="[
+            'h-12 border-b border-neutral-200/80 dark:border-neutral-800/80 shrink-0 px-3.5 flex items-center transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+            isCollapsed ? 'justify-center' : 'justify-between'
+          ]"
+        >
+          <!-- Category label when expanded -->
+          <span
+            :class="[
+              'text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins uppercase tracking-wider pl-1 overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+              isCollapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[140px] opacity-100'
+            ]"
+          >
+            Menu Navigasi
+          </span>
 
+          <!-- Collapse / Expand Toggle Button -->
           <button
             type="button"
-            class="w-full bg-white dark:bg-[#18191E] hover:bg-neutral-50 dark:hover:bg-[#1E1F25] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl p-3 flex items-center justify-between text-left transition-all duration-150 group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20 relative z-30 shadow-xs"
-            aria-label="Pilih Profil dan Peran"
-            @click="isProfileMenuOpen = !isProfileMenuOpen"
+            :class="[
+              'w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-all duration-200 active:scale-95 shrink-0 cursor-pointer',
+              isCollapsed ? 'mx-auto' : 'ml-auto'
+            ]"
+            :title="isCollapsed ? 'Perluas Sidebar (Ctrl+B)' : 'Ciutkan Sidebar (Ctrl+B)'"
+            :aria-label="isCollapsed ? 'Perluas Sidebar' : 'Ciutkan Sidebar'"
+            @click="toggleCollapse"
           >
-            <div class="flex items-center gap-3 min-w-0">
-              <!-- Logo Usaha UMKM -->
-              <div class="w-10 h-10 rounded-xl bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/20 p-1.5 flex items-center justify-center shrink-0 shadow-xs overflow-hidden transition-transform duration-150 group-hover:scale-105">
-                <img
-                  :src="umkmLogoUrl"
-                  :alt="umkmStore.profile.name || 'Logo Usaha'"
-                  class="w-full h-full object-contain"
-                />
-              </div>
-
-              <!-- Role Label & User Name -->
-              <div class="min-w-0 flex-1">
-                <span class="text-[11px] font-sans font-semibold text-primary-600 dark:text-primary-400 leading-tight block uppercase tracking-wider">
-                  {{ userRoleDisplay }}
-                </span>
-                <p class="font-heading font-semibold text-sm sm:text-base text-neutral-900 dark:text-white truncate leading-snug tracking-tight mt-0.5">
-                  {{ authStore.currentUser?.name || 'Fikri Setiawan' }}
-                </p>
-              </div>
-            </div>
-
-            <!-- Double Caret Selector Icon -->
-            <div class="text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors shrink-0 ml-1">
-              <HugeiconsIcon :icon="UnfoldMoreIcon" :size="16" :stroke-width="2" />
-            </div>
+            <HugeiconsIcon
+              :icon="SidebarLeft01Icon"
+              :size="18"
+              :stroke-width="1.8"
+              :class="['transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)]', isCollapsed ? 'rotate-180' : '']"
+            />
           </button>
-
-          <!-- Interactive Profile / Role Switcher Popover -->
-          <div
-            v-if="isProfileMenuOpen"
-            class="absolute top-full left-4 right-4 mt-2 bg-white dark:bg-neutral-900 border border-neutral-200/90 dark:border-neutral-800 rounded-2xl p-2 shadow-dropdown z-30 space-y-1 animate-in fade-in duration-100"
-          >
-            <div class="px-2.5 py-1 text-[10px] font-heading font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-              Ganti Peran Pengguna
-            </div>
-
-            <button
-              v-for="role in rolesList"
-              :key="role.id"
-              type="button"
-              :class="[
-                'w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-heading font-medium transition-colors duration-150',
-                authStore.currentUser?.role === role.id
-                  ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
-              ]"
-              @click="switchRole(role.id, role.path)"
-            >
-              <span>{{ role.name }}</span>
-              <span
-                v-if="authStore.currentUser?.role === role.id"
-                class="w-1.5 h-1.5 rounded-full bg-primary-500"
-              />
-            </button>
-
-            <div class="h-px bg-neutral-100 dark:bg-neutral-800 my-1" />
-
-            <NuxtLink
-              to="/masuk"
-              class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-heading font-medium text-danger hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors duration-150"
-              @click="isProfileMenuOpen = false"
-            >
-              <HugeiconsIcon :icon="Logout01Icon" :size="14" :stroke-width="2" />
-              <span>Keluar Akun</span>
-            </NuxtLink>
-          </div>
         </div>
 
-        <!-- Navigation Items List (Categorized, Large Clear Text matching reference) -->
-        <div class="flex-1 overflow-y-auto scrollbar-none">
-          <nav class="space-y-4" aria-label="Menu Utama">
+        <!-- Navigation Items List (Categorized, Constant Y Coordinates, Fluid Horizontal Shrink) -->
+        <div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none pt-3 pb-2 px-3.5 overscroll-contain">
+          <nav class="space-y-3" aria-label="Menu Utama">
             <div
               v-for="(section, sIdx) in navigationSections"
               :key="`sec-${sIdx}`"
               class="space-y-1"
             >
-              <!-- Full-Bleed Hairline section divider (Rata Kiri-Kanan) -->
+              <!-- Hairline section divider (Constant height & vertical margin) -->
               <div
                 v-if="sIdx > 0"
-                class="w-full h-px bg-neutral-200/80 dark:bg-neutral-800 mb-3 shrink-0"
+                class="h-px bg-neutral-200/80 dark:bg-neutral-800 my-2 shrink-0 w-full"
               />
 
-              <!-- Section Category Title -->
+              <!-- Section Category Title (Constant height, fades out without vertical jumping) -->
               <div
                 v-if="section.title"
-                class="px-6 pb-1 text-xs sm:text-sm font-semibold text-neutral-600 dark:text-neutral-300 font-heading tracking-tight"
+                class="h-5 mb-1 flex items-center overflow-hidden whitespace-nowrap font-poppins"
               >
-                {{ section.title }}
+                <span
+                  :class="[
+                    'text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider transition-opacity duration-300 px-1',
+                    isCollapsed ? 'opacity-0' : 'opacity-100'
+                  ]"
+                >
+                  {{ section.title }}
+                </span>
               </div>
 
-              <!-- Section Items with generous side padding -->
-              <div class="space-y-0.5 px-4">
+              <!-- Unified Navigation Items: Icon position is completely stable, active container wraps icon -->
+              <div class="space-y-1">
                 <NuxtLink
                   v-for="item in section.items"
                   :key="item.to"
                   :to="item.to"
+                  :title="isCollapsed ? item.label : undefined"
                   :class="[
-                    'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-poppins text-[15px] transition-all duration-150 group border',
+                    'w-full h-11 flex items-center font-poppins transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] group relative border overflow-hidden rounded-xl p-0',
                     isActive(item.to)
-                      ? 'bg-primary-50 hover:bg-primary-100/60 dark:bg-primary-950/40 dark:hover:bg-primary-900/40 text-primary-600 dark:text-primary-300 font-semibold border-primary-200/60 dark:border-primary-800/40 shadow-2xs'
-                      : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/50 border-transparent'
+                      ? 'bg-[#E1F4FD] hover:bg-[#D5EEFA] dark:bg-[#0081A0]/20 dark:hover:bg-[#0081A0]/30 text-[#0081A0] dark:text-[#38BDF8] font-semibold border-[#0081A0]/25 dark:border-[#38BDF8]/30 shadow-2xs'
+                      : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 border-transparent'
                   ]"
                 >
-                  <HugeiconsIcon
-                    :icon="item.icon"
-                    :size="20"
-                    :stroke-width="isActive(item.to) ? 2.2 : 1.75"
+                  <!-- Icon Container: Always exactly 44x44px anchored on left, icon never moves or resizes -->
+                  <div class="w-11 h-11 shrink-0 flex items-center justify-center">
+                    <SidebarNavIcon
+                      :to="item.to"
+                      :outline-icon="item.icon"
+                      :active="isActive(item.to)"
+                    />
+                  </div>
+
+                  <!-- Label Container: Fluid horizontal collapse, NO vertical movement, NO text wrapping -->
+                  <div
                     :class="[
-                      'transition-colors duration-150 shrink-0',
-                      isActive(item.to)
-                        ? 'text-primary-600 dark:text-primary-400'
-                        : 'text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-800 dark:group-hover:text-neutral-200'
+                      'overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] flex items-center text-[15px]',
+                      isCollapsed
+                        ? 'max-w-0 opacity-0 pointer-events-none'
+                        : 'max-w-[190px] opacity-100 pl-1 pr-3 pointer-events-auto'
                     ]"
-                  />
-                  <span class="truncate">{{ item.label }}</span>
+                  >
+                    <span class="truncate leading-none">{{ item.label }}</span>
+                  </div>
                 </NuxtLink>
               </div>
             </div>
           </nav>
         </div>
-
       </div>
     </aside>
 
-    <!-- Mobile Drawer Overlay & Panel (Responsive Parity) -->
+    <!-- Mobile Drawer Overlay & Panel (Responsive Parity with GoPay Tactile & Poppins typography) -->
     <Teleport to="body">
       <div
         v-if="isMobileOpen"
@@ -158,13 +132,25 @@
           @click="$emit('closeMobile')"
         />
 
-        <!-- Slide-out Drawer Panel in #fafafa -->
-        <div class="relative w-80 max-w-[88vw] bg-[#FAFAFA] dark:bg-[#141519] h-full flex flex-col shadow-2xl z-10 py-6 overflow-hidden border-r border-neutral-200/90 dark:border-neutral-800">
-          <!-- Mobile Header (Close Button aligned with Enlarged Card) -->
-          <div class="flex items-center justify-between mb-3 px-4">
-            <span class="text-xs font-heading font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-              Menu Navigasi
-            </span>
+        <!-- Slide-out Drawer Panel in Tactile Background -->
+        <div class="relative w-80 max-w-[88vw] bg-[#F6F8FA] dark:bg-[#13161F] h-full flex flex-col shadow-2xl z-10 py-6 overflow-hidden border-r border-neutral-200/90 dark:border-neutral-800">
+          <!-- Mobile Header (Brand Text & Close Button) -->
+          <div class="h-[52px] flex items-center justify-between mb-3 px-4 border-b border-neutral-200/80 dark:border-neutral-800 shrink-0">
+            <NuxtLink
+              :to="homePath"
+              class="flex items-center gap-2 min-w-0 cursor-pointer select-none group"
+              title="Kembali ke Beranda"
+              @click="handleBrandClick"
+            >
+              <img
+                src="/logo/logoSmall.svg"
+                alt="Beruang Logo"
+                class="h-6 w-auto object-contain"
+              />
+              <span class="font-heading font-extrabold text-base tracking-tight leading-none select-none">
+                <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+              </span>
+            </NuxtLink>
             <button
               type="button"
               class="p-2 rounded-xl text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-colors active:scale-[0.96]"
@@ -175,53 +161,30 @@
             </button>
           </div>
 
-          <!-- Mobile Enlarged User Profile Card -->
-          <div class="mb-3 px-4">
-            <div class="w-full bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl p-3 flex items-center justify-between shadow-xs">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/20 p-1.5 flex items-center justify-center shrink-0 shadow-xs overflow-hidden">
-                  <img
-                    :src="umkmLogoUrl"
-                    :alt="umkmStore.profile.name || 'Logo Usaha'"
-                    class="w-full h-full object-contain"
-                  />
-                </div>
-                <div class="min-w-0 flex-1">
-                  <span class="text-[11px] font-sans font-semibold text-primary-600 dark:text-primary-400 leading-tight block uppercase tracking-wider">
-                    {{ userRoleDisplay }}
-                  </span>
-                  <p class="font-heading font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-white truncate leading-snug tracking-tight mt-0.5">
-                    {{ authStore.currentUser?.name || 'Fikri Setiawan' }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Mobile Nav Items (Categorized with large legible text) -->
-          <div class="flex-1 overflow-y-auto scrollbar-none">
-            <nav class="space-y-4">
+          <!-- Mobile Nav Items (Categorized with Poppins typography) -->
+          <div class="flex-1 overflow-y-auto scrollbar-none py-1">
+            <nav class="space-y-3">
               <div
                 v-for="(section, sIdx) in navigationSections"
                 :key="`mob-sec-${sIdx}`"
                 class="space-y-1"
               >
-                <!-- Full-Bleed Hairline section divider (Rata Kiri-Kanan) -->
+                <!-- Hairline section divider -->
                 <div
                   v-if="sIdx > 0"
-                  class="w-full h-px bg-neutral-200/80 dark:bg-neutral-800 mb-3 shrink-0"
+                  class="w-full h-px bg-neutral-200/80 dark:bg-neutral-800 my-2 shrink-0"
                 />
 
                 <!-- Section Category Title -->
                 <div
                   v-if="section.title"
-                  class="px-6 pb-1 text-xs sm:text-sm font-semibold text-neutral-600 dark:text-neutral-300 font-heading tracking-tight"
+                  class="px-5 pb-1 text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins uppercase tracking-wider"
                 >
                   {{ section.title }}
                 </div>
 
-                <!-- Section Items with generous side padding -->
-                <div class="space-y-0.5 px-4">
+                <!-- Section Items (Full row directly in blue, icon size 20, text 15px, NO dots) -->
+                <div class="space-y-0.5 px-3">
                   <NuxtLink
                     v-for="item in section.items"
                     :key="`mob-${item.to}`"
@@ -229,21 +192,15 @@
                     :class="[
                       'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-poppins text-[15px] transition-all duration-150 group border',
                       isActive(item.to)
-                        ? 'bg-primary-50 hover:bg-primary-100/60 dark:bg-primary-950/40 dark:hover:bg-primary-900/40 text-primary-600 dark:text-primary-300 font-semibold border-primary-200/60 dark:border-primary-800/40 shadow-2xs'
-                        : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/50 border-transparent'
+                        ? 'bg-[#E1F4FD] hover:bg-[#D5EEFA] dark:bg-[#0081A0]/20 dark:hover:bg-[#0081A0]/30 text-[#0081A0] dark:text-[#38BDF8] font-semibold border-[#0081A0]/25 dark:border-[#38BDF8]/30 shadow-2xs'
+                        : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 border-transparent'
                     ]"
                     @click="$emit('closeMobile')"
                   >
-                    <HugeiconsIcon
-                      :icon="item.icon"
-                      :size="20"
-                      :stroke-width="isActive(item.to) ? 2.2 : 1.75"
-                      :class="[
-                        'transition-colors duration-150 shrink-0',
-                        isActive(item.to)
-                          ? 'text-primary-600 dark:text-primary-400'
-                          : 'text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-800 dark:group-hover:text-neutral-200'
-                      ]"
+                    <SidebarNavIcon
+                      :to="item.to"
+                      :outline-icon="item.icon"
+                      :active="isActive(item.to)"
                     />
                     <span class="truncate">{{ item.label }}</span>
                   </NuxtLink>
@@ -251,7 +208,6 @@
               </div>
             </nav>
           </div>
-
         </div>
       </div>
     </Teleport>
@@ -259,11 +215,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore, type UserRole } from '~/stores/auth'
+import { computed, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { HugeiconsIcon } from '@hugeicons/vue'
+import SidebarNavIcon from './SidebarNavIcon.vue'
 import {
   Home03Icon,
   Task01Icon,
@@ -276,11 +233,10 @@ import {
   Alert01Icon,
   StarIcon,
   UserAdd01Icon,
-  Logout01Icon,
   Cancel01Icon,
-  UnfoldMoreIcon,
   RubiksCubeIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  SidebarLeft01Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -292,45 +248,54 @@ const emit = defineEmits<{
 }>()
 
 const route = useRoute()
-const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
-const isProfileMenuOpen = ref(false)
+// State Collapse & Mobile Drawer from useSidebar composable
+const { isCollapsed, isMobileOpen, closeMobile, toggleCollapse } = useSidebar()
+
+function handleCloseMobile() {
+  closeMobile()
+  emit('closeMobile')
+}
+
+onMounted(() => {
+  if (import.meta.client) {
+    // Sinkronisasi avatar user dari localStorage/umkmStore
+    if (typeof umkmStore.initAvatarFromStorage === 'function') {
+      umkmStore.initAvatarFromStorage()
+    }
+    if (umkmStore.profile.ownerAvatarUrl && authStore.currentUser) {
+      authStore.updateAvatar(umkmStore.profile.ownerAvatarUrl)
+    }
+  }
+})
+
+// Sinkronkan update avatar dari umkmStore ke authStore secara real-time
+watch(
+  () => umkmStore.profile.ownerAvatarUrl,
+  (newAvatar) => {
+    if (newAvatar && authStore.currentUser) {
+      authStore.updateAvatar(newAvatar)
+    }
+  }
+)
 
 const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
 
-const userRoleDisplay = computed(() => {
-  if (currentRole.value === 'UMKM') return 'UMKM'
-  if (currentRole.value === 'CONSULTANT') return 'Konsultan'
-  if (currentRole.value === 'INVESTOR') return 'Investor'
-  if (currentRole.value === 'ADMIN') return 'Admin'
-  return 'UMKM'
+const homePath = computed(() => {
+  if (currentRole.value === 'CONSULTANT') return '/konsultan'
+  if (currentRole.value === 'INVESTOR') return '/investor'
+  if (currentRole.value === 'ADMIN') return '/admin'
+  return '/dashboard'
 })
 
-const umkmLogoUrl = computed(() => {
-  return umkmStore.profile.logoUrl || '/logo.svg'
-})
-
-const currentRoleLabel = computed(() => {
-  if (currentRole.value === 'UMKM') return 'Pemilik UMKM'
-  if (currentRole.value === 'CONSULTANT') return 'Konsultan'
-  if (currentRole.value === 'INVESTOR') return 'Investor'
-  if (currentRole.value === 'ADMIN') return 'Admin'
-  return 'Pengguna'
-})
-
-const rolesList: { id: UserRole; name: string; path: string }[] = [
-  { id: 'UMKM', name: 'Pemilik Usaha (UMKM)', path: '/dashboard' },
-  { id: 'CONSULTANT', name: 'Konsultan Bisnis', path: '/konsultan' },
-  { id: 'INVESTOR', name: 'Investor & Mitra', path: '/investor' },
-  { id: 'ADMIN', name: 'Administrator', path: '/admin' }
-]
-
-function switchRole(role: UserRole, targetRoute: string) {
-  authStore.setRole(role)
-  isProfileMenuOpen.value = false
-  router.push(targetRoute)
+const handleBrandClick = (e: MouseEvent) => {
+  emit('closeMobile')
+  if (route.path === homePath.value) {
+    e.preventDefault()
+    window.location.reload()
+  }
 }
 
 function isActive(path: string) {
@@ -416,7 +381,6 @@ const navigationSections = computed<NavSection[]>(() => {
     ]
   }
 })
-
 </script>
 
 <style scoped>

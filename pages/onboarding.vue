@@ -436,7 +436,7 @@
           </div>
 
           <!-- Step 2: Spesialisasi & Kapasitas Pendampingan -->
-          <div v-else class="space-y-3.5">
+          <div v-else-if="currentStep === 2" class="space-y-3.5">
             <div class="flex items-center gap-3 mb-2">
               <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
                 <HugeiconsIcon :icon="UserGroupIcon" :size="20" :stroke-width="1.75" />
@@ -500,6 +500,56 @@
                   <option :value="15">15 Usaha</option>
                 </select>
               </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Kesimpulan / Ringkasan Data Konsultan -->
+          <div v-else class="space-y-4">
+            <div class="text-center mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
+                <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
+              </div>
+              <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
+                Data Konsultan Siap Disimpan!
+              </h3>
+              <p class="text-xs text-neutral-500 max-w-sm mx-auto">
+                Periksa kembali kelengkapan profilmu sebelum mulai mendampingi pelaku usaha.
+              </p>
+            </div>
+
+            <!-- Profile Summary Card -->
+            <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Nama Konsultan:</span>
+                <span class="font-bold text-neutral-900 dark:text-white">{{ formConsultant.name }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kantor / Lembaga:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.institution || 'Praktisi Independen' }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Sertifikat BNSP:</span>
+                <span class="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ formConsultant.bnspLicense || '-' }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kota Domisili:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.city }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Bidang Keahlian:</span>
+                <span class="font-bold text-primary-600 dark:text-primary-400">{{ formConsultant.specialization }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-500">Kapasitas Pendampingan:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.maxClients }} Usaha (Pengalaman {{ formConsultant.experience }})</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/40 text-left flex items-start gap-2.5">
+              <span class="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">💡</span>
+              <p class="text-[11px] leading-relaxed text-blue-800 dark:text-blue-300">
+                Setelah tersimpan, akunmu akan langsung diarahkan ke halaman pendampingan untuk memvalidasi laporan keuangan dan rencana aksi UMKM.
+              </p>
             </div>
           </div>
         </template>
@@ -855,7 +905,8 @@ const stepsUmkm = [
 
 const stepsConsultant = [
   { title: 'Data Diri' },
-  { title: 'Keahlian' }
+  { title: 'Keahlian' },
+  { title: 'Kesimpulan' }
 ]
 
 const stepsInvestor = [

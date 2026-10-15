@@ -899,7 +899,7 @@ const stepsUmkm = [
 const stepsConsultant = [
   { title: 'Data Diri' },
   { title: 'Keahlian' },
-  { title: 'Kesimpulan' }
+  { title: 'Selesai' }
 ]
 
 const stepsInvestor = [

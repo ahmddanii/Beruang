@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100  transition-colors">
+  <div class="min-h-screen flex flex-col bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 transition-colors">
     <!-- Public Navbar -->
     <AppNavbar />
 

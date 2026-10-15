@@ -1,104 +1,140 @@
 <template>
-  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto  space-y-16">
+  <div class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 sm:space-y-12 font-sans">
+    
     <!-- Header -->
-    <div class="max-w-3xl space-y-5">
+    <div class="max-w-3xl space-y-4">
+      <!-- Top Pill Badge (Sesuai Gaya Beranda UMKM) -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#13161F] shadow-[0_2px_8px_rgba(0,0,0,0.05)] border border-neutral-200/90 dark:border-neutral-800 text-xs sm:text-sm font-poppins font-medium text-neutral-800 dark:text-neutral-200 w-fit">
+        <span class="text-[#0081A0] dark:text-[#2091AA] font-bold">🐻</span>
+        <span>Visi & Misi Beruang</span>
+      </div>
 
-
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl  font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.08]">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
         Mendorong 100.000 UMKM Indonesia Naik Kelas dan Terpercaya.
       </h1>
 
-      <p class="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-2xl">
+      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-poppins leading-relaxed max-w-2xl">
         <strong>Beruang (Ber-Uang)</strong> lahir dari keresahan nyata: jutaan pengusaha lokal memiliki produk hebat dan pelanggan loyal, namun tersandung pencatatan arus kas dan minimnya tata kelola sehingga gagal mengakses modal ekspansi yang layak.
       </p>
     </div>
 
-    <!-- 3 Core Pillars Bento Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <BCard padding="lg" class="space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-          <HugeiconsIcon :icon="Book02Icon" :size="20" :stroke-width="1.75" />
+    <!-- 3 Core Pillars Bento Grid (Tactile Cards dengan Header Biru) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+      
+      <!-- Pillar 1 -->
+      <div class="group rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between shadow-xs">
+        <div class="w-full px-5 py-3 card-header-blue-banner flex items-center gap-2.5">
+          <HugeiconsIcon :icon="Book02Icon" :size="18" class="text-white shrink-0" />
+          <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+            1. EDUKATIF & TAKTIS
+          </span>
         </div>
-        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
-          1. Edukatif & Terstruktur
-        </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Mengurai konsep akuntansi dan tata kelola bisnis yang rumit menjadi rencana aksi mingguan yang taktis, terukur, dan mudah dieksekusi oleh pelaku usaha di lapangan.
-        </p>
-      </BCard>
+        <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 flex flex-col justify-between flex-1 gap-3">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Mengurai konsep akuntansi dan tata kelola bisnis yang rumit menjadi rencana aksi mingguan yang taktis, terukur, dan mudah dieksekusi oleh pelaku usaha di lapangan.
+          </p>
+          <div class="pt-1">
+            <span class="btn-pill-action scale-90 origin-left">
+              <span>Kurikulum Praktis</span>
+            </span>
+          </div>
+        </div>
+      </div>
 
-      <BCard padding="lg" class="space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-          <HugeiconsIcon :icon="ShieldCheckIcon" :size="20" :stroke-width="1.75" />
+      <!-- Pillar 2 -->
+      <div class="group rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between shadow-xs">
+        <div class="w-full px-5 py-3 card-header-blue-banner flex items-center gap-2.5">
+          <HugeiconsIcon :icon="ShieldCheckIcon" :size="18" class="text-white shrink-0" />
+          <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+            2. KREDIBILITAS FINANSIAL
+          </span>
         </div>
-        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
-          2. Kredibilitas Finansial
-        </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Tidak ada klaim sepihak. Setiap metrik finansial melewati audit rekonsiliasi kas oleh konsultan berlisensi dan dilindungi standar privasi ketat di dalam Data Room.
-        </p>
-      </BCard>
+        <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 flex flex-col justify-between flex-1 gap-3">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Tidak ada klaim sepihak. Setiap metrik finansial melewati audit rekonsiliasi kas oleh konsultan berlisensi dan dilindungi standar privasi ketat di dalam Data Room.
+          </p>
+          <div class="pt-1">
+            <span class="btn-pill-action scale-90 origin-left">
+              <span>Audit Independen</span>
+            </span>
+          </div>
+        </div>
+      </div>
 
-      <BCard padding="lg" class="space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-          <HugeiconsIcon :icon="CoinsSwapIcon" :size="20" :stroke-width="1.75" />
+      <!-- Pillar 3 -->
+      <div class="group rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between shadow-xs">
+        <div class="w-full px-5 py-3 card-header-blue-banner flex items-center gap-2.5">
+          <HugeiconsIcon :icon="CoinsSwapIcon" :size="18" class="text-white shrink-0" />
+          <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+            3. DAMPAK SEKTOR RIIL
+          </span>
         </div>
-        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
-          3. Dampak Ekonomi Riil
-        </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Membantu UMKM membuka gerai baru, menyerap tenaga kerja lokal di daerah, serta menciptakan kemitraan pendanaan yang sehat, adil, dan transparan.
-        </p>
-      </BCard>
+        <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 flex flex-col justify-between flex-1 gap-3">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Membantu UMKM membuka gerai baru, menyerap tenaga kerja lokal di daerah, serta menciptakan kemitraan pendanaan yang sehat, adil, dan transparan.
+          </p>
+          <div class="pt-1">
+            <span class="btn-pill-action scale-90 origin-left">
+              <span>Ekonomi Inklusif</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Impact Numbers Section -->
-    <div class="p-8 sm:p-12 rounded-3xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark space-y-8">
-      <div class="text-center max-w-xl mx-auto space-y-2">
-        <h2 class="text-2xl sm:text-3xl  font-bold text-neutral-900 dark:text-white tracking-tight">
+    <!-- Impact Numbers Section (Tactile Container) -->
+    <div class="p-6 sm:p-8 rounded-2xl card-tactile-gopay space-y-6">
+      <div class="text-center max-w-lg mx-auto space-y-1">
+        <h2 class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
           Komitmen & Capaian Berkelanjutan
         </h2>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">
+        <p class="text-xs font-poppins text-neutral-500 dark:text-neutral-400">
           Metrik pertumbuhan ekosistem kemitraan Beruang per September 2026.
         </p>
       </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-        <div class="space-y-1">
-          <div class=" font-bold text-3xl sm:text-4xl text-neutral-900 dark:text-white tabular-nums">
-            500+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+        <div class="p-4 rounded-xl bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 space-y-1">
+          <div class="font-poppins font-bold text-2xl sm:text-3xl text-neutral-900 dark:text-white tabular-nums">
+            520+
           </div>
-          <div class="text-xs text-neutral-500 font-medium">UMKM Terdampingi</div>
+          <div class="text-xs font-poppins text-neutral-500">UMKM Terdampingi</div>
         </div>
-        <div class="space-y-1">
-          <div class=" font-bold text-3xl sm:text-4xl text-emerald-600 dark:text-emerald-400 tabular-nums">
+        <div class="p-4 rounded-xl bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 space-y-1">
+          <div class="font-poppins font-bold text-2xl sm:text-3xl text-emerald-600 dark:text-emerald-400 tabular-nums">
             Rp 12.8M
           </div>
-          <div class="text-xs text-neutral-500 font-medium">Penyaluran Modal Kemitraan</div>
+          <div class="text-xs font-poppins text-neutral-500">Penyaluran Modal</div>
         </div>
-        <div class="space-y-1">
-          <div class=" font-bold text-3xl sm:text-4xl text-primary-600 dark:text-primary-400 tabular-nums">
+        <div class="p-4 rounded-xl bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 space-y-1">
+          <div class="font-poppins font-bold text-2xl sm:text-3xl text-[#0081A0] dark:text-[#2091AA] tabular-nums">
             25+
           </div>
-          <div class="text-xs text-neutral-500 font-medium">Konsultan Mitra Berlisensi</div>
+          <div class="text-xs font-poppins text-neutral-500">Konsultan Mitra BNSP</div>
         </div>
-        <div class="space-y-1">
-          <div class=" font-bold text-3xl sm:text-4xl text-neutral-900 dark:text-white tabular-nums">
+        <div class="p-4 rounded-xl bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 space-y-1">
+          <div class="font-poppins font-bold text-2xl sm:text-3xl text-neutral-900 dark:text-white tabular-nums">
             94.2%
           </div>
-          <div class="text-xs text-neutral-500 font-medium">Tingkat Kelulusan Rencana Aksi</div>
+          <div class="text-xs font-poppins text-neutral-500">Tingkat Kelulusan Audit</div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import BCard from '~/components/base/BCard.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Book02Icon,
   ShieldCheckIcon,
   CoinsSwapIcon
 } from '@hugeicons/core-free-icons'
+
+useSeoMeta({
+  title: 'Tentang Kami - Beruang',
+  description: 'Misi Beruang dalam mendorong 100.000 UMKM Indonesia naik kelas melalui tata kelola finansial akuntabel dan akses pendanaan terverifikasi.'
+})
 </script>

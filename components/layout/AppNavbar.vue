@@ -1,28 +1,27 @@
 <template>
-  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#141519]/95 backdrop-blur-md border-b border-[#EAEAEA] dark:border-[#26272F] transition-colors">
-    <!-- h-16 = 64px (×8), px-8 = 32px (×8) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 h-16 flex items-center justify-between gap-4">
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#0C121D]/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-15 flex items-center justify-between gap-4">
       <!-- Brand Logo -->
-      <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" title="Beranda Beruang">
+      <NuxtLink to="/" class="flex items-center gap-2.5 group shrink-0" title="Beranda Beruang">
         <img
           src="/logo/logoSmall.svg"
           alt="Beruang Logo"
           class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
         />
         <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
-          <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+          <span class="text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
         </span>
       </NuxtLink>
 
       <!-- Desktop Navigation Links -->
-      <nav class="hidden lg:flex items-center gap-1">
+      <nav class="hidden lg:flex items-center gap-1.5">
         <NuxtLink
           to="/"
           :class="[
-            'px-4 py-2 rounded-[12px] text-[14px] font-semibold transition-all duration-150 select-none leading-6',
+            'px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-150 select-none',
             $route.path === '/'
-              ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 shadow-xs'
-              : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+              ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+              : 'text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60'
           ]"
         >
           Beranda
@@ -31,10 +30,10 @@
         <NuxtLink
           to="/untuk-umkm"
           :class="[
-            'px-4 py-2 rounded-[12px] text-[14px] font-semibold transition-all duration-150 select-none leading-6',
+            'px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-150 select-none',
             $route.path.startsWith('/untuk-umkm')
-              ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 shadow-xs'
-              : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+              ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+              : 'text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60'
           ]"
         >
           UMKM
@@ -43,10 +42,10 @@
         <NuxtLink
           to="/untuk-investor"
           :class="[
-            'px-4 py-2 rounded-[12px] text-[14px] font-semibold transition-all duration-150 select-none leading-6',
+            'px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-150 select-none',
             $route.path.startsWith('/untuk-investor')
-              ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 shadow-xs'
-              : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+              ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+              : 'text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60'
           ]"
         >
           Investor
@@ -55,10 +54,10 @@
         <NuxtLink
           to="/untuk-konsultan"
           :class="[
-            'px-4 py-2 rounded-[12px] text-[14px] font-semibold transition-all duration-150 select-none leading-6',
+            'px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-150 select-none',
             $route.path.startsWith('/untuk-konsultan')
-              ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 shadow-xs'
-              : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+              ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+              : 'text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60'
           ]"
         >
           Konsultan Mitra
@@ -67,10 +66,10 @@
         <NuxtLink
           to="/tentang"
           :class="[
-            'px-4 py-2 rounded-[12px] text-[14px] font-semibold transition-all duration-150 select-none leading-6',
+            'px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-150 select-none',
             $route.path.startsWith('/tentang')
-              ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 shadow-xs'
-              : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+              ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+              : 'text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60'
           ]"
         >
           Tentang Kami
@@ -79,41 +78,41 @@
         <NuxtLink
           to="/faq"
           :class="[
-            'px-4 py-2 rounded-[12px] text-[14px] font-semibold transition-all duration-150 select-none leading-6',
+            'px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-150 select-none',
             $route.path.startsWith('/faq')
-              ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 shadow-xs'
-              : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+              ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/25 text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+              : 'text-neutral-600 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60'
           ]"
         >
           Pusat Bantuan
         </NuxtLink>
       </nav>
 
-      <!-- CTA Buttons & Theme Toggle (gap-3 = 12px for small elements is ×4 OK) -->
-      <div class="flex items-center gap-3 shrink-0">
-        <!-- Theme Toggle: 40×40 touch target (×8), radius 12px -->
+      <!-- CTA Buttons & Theme Toggle -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <!-- Theme Toggle -->
         <button
           type="button"
-          class="p-2 rounded-[12px] text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors duration-150 cursor-pointer"
+          class="p-2 rounded-full text-neutral-500 hover:text-[#0081A0] dark:text-neutral-400 dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-150 cursor-pointer"
           title="Ganti Tema (Light/Dark)"
           @click="toggleTheme"
         >
-          <HugeiconsIcon v-if="isDark" :icon="Sun01Icon" :size="18" :stroke-width="1.75" />
-          <HugeiconsIcon v-else :icon="Moon01Icon" :size="18" :stroke-width="1.75" />
+          <HugeiconsIcon v-if="isDark" :icon="Sun01Icon" :size="17" :stroke-width="1.8" />
+          <HugeiconsIcon v-else :icon="Moon01Icon" :size="17" :stroke-width="1.8" />
         </button>
 
-        <!-- Masuk link: px-4 py-2 (×8) -->
+        <!-- Masuk link -->
         <NuxtLink
           to="/masuk"
-          class="hidden lg:block px-4 py-2 rounded-[12px] text-[14px] font-semibold text-neutral-700 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 transition-colors duration-150 leading-6"
+          class="hidden lg:block px-3.5 py-1.5 rounded-full text-[13px] font-semibold text-neutral-700 dark:text-neutral-300 hover:text-[#0081A0] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-150"
         >
           Masuk
         </NuxtLink>
 
-        <!-- Primary CTA: px-4 py-2 (×8), gap-2 (×8), radius 12px -->
+        <!-- Primary CTA: Refined Pill -->
         <NuxtLink
           to="/daftar"
-          class="hidden lg:inline-flex items-center justify-center px-4 py-2 rounded-[12px] text-[14px] font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-150 active:scale-[0.98] leading-6"
+          class="hidden lg:inline-flex items-center justify-center px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98]"
         >
           <span>Daftar</span>
         </NuxtLink>

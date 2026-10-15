@@ -1,45 +1,44 @@
 <template>
-  <footer class="bg-white dark:bg-[#0F1014] border-t border-[#EAEAEA] dark:border-[#26272F] pt-24 pb-8 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 pb-16 border-b border-[#EAEAEA] dark:border-[#26272F]">
+  <footer class="bg-white dark:bg-[#0C121D] border-t border-neutral-200/80 dark:border-neutral-800/80 pt-12 pb-8 transition-colors font-sans">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 border-b border-neutral-200/80 dark:border-neutral-800">
         
         <!-- Brand column -->
-        <div class="lg:col-span-2 space-y-4">
-          <div class="flex items-center gap-2.5">
-            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-9 w-auto object-contain" />
-            <span class="font-heading font-extrabold text-2xl tracking-tight leading-none select-none">
-              <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+        <div class="lg:col-span-2 space-y-3">
+          <div class="flex items-center gap-2">
+            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain" />
+            <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
+              <span class="text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
             </span>
           </div>
-          <p class="text-[16px] text-neutral-600 dark:text-neutral-400 max-w-sm leading-[24px]">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 max-w-sm leading-relaxed">
             Platform pendampingan bisnis dan pendanaan terverifikasi. Kami menghubungkan UMKM Indonesia yang berpotensi dengan konsultan profesional dan investor terpercaya.
           </p>
-
         </div>
 
         <!-- Links: Ekosistem -->
-        <div class="flex flex-col gap-6">
-          <h4 class="font-bold text-[16px] text-neutral-900 dark:text-white leading-[24px]">
+        <div class="flex flex-col gap-3.5">
+          <h4 class="font-poppins font-bold text-xs uppercase tracking-wider text-neutral-900 dark:text-white">
             Ekosistem
           </h4>
-          <ul class="flex flex-col gap-4">
+          <ul class="flex flex-col gap-2.5">
             <li>
-              <NuxtLink to="/untuk-umkm" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
+              <NuxtLink to="/untuk-umkm" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
                 Bina Usaha (UMKM)
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/untuk-investor" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
+              <NuxtLink to="/untuk-investor" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
                 Peluang Investor
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/untuk-konsultan" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
-                Jadi Konsultan
+              <NuxtLink to="/untuk-konsultan" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
+                Jadi Konsultan BNSP
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/investor" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
+              <NuxtLink to="/investor" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
                 Katalog Marketplace
               </NuxtLink>
             </li>
@@ -47,54 +46,52 @@
         </div>
 
         <!-- Links: Perusahaan -->
-        <div class="flex flex-col gap-6">
-          <h4 class="font-bold text-[16px] text-neutral-900 dark:text-white leading-[24px]">
+        <div class="flex flex-col gap-3.5">
+          <h4 class="font-poppins font-bold text-xs uppercase tracking-wider text-neutral-900 dark:text-white">
             Perusahaan
           </h4>
-          <ul class="flex flex-col gap-4">
+          <ul class="flex flex-col gap-2.5">
             <li>
-              <NuxtLink to="/tentang" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
+              <NuxtLink to="/tentang" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
                 Tentang Kami
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/faq" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
+              <NuxtLink to="/faq" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
                 Pusat Bantuan & FAQ
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/kontak" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
+              <NuxtLink to="/kontak" class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 hover:text-[#0081A0] dark:hover:text-[#2091AA] transition-colors">
                 Hubungi Kami
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/dev/components" class="text-[16px] text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors leading-[24px]">
-                Design Preview
               </NuxtLink>
             </li>
           </ul>
         </div>
 
         <!-- Consultation Section -->
-        <div class="flex flex-col gap-6">
-          <h4 class="font-bold text-[16px] text-neutral-900 dark:text-white leading-[24px]">
+        <div class="flex flex-col gap-3.5">
+          <h4 class="font-poppins font-bold text-xs uppercase tracking-wider text-neutral-900 dark:text-white">
             Mulai Sekarang
           </h4>
-          <div class="flex flex-col gap-4">
-            <p class="text-[16px] text-neutral-600 dark:text-neutral-400 leading-[24px]">
+          <div class="flex flex-col gap-2.5">
+            <p class="text-xs font-poppins text-neutral-500 dark:text-neutral-400 leading-relaxed">
               Konsultan pendamping kami siap membantu usahamu menata fundamental bisnis hari ini.
             </p>
-            <NuxtLink to="/daftar" class="inline-flex items-center gap-2 font-bold text-[16px] text-primary-600 dark:text-primary-400 hover:underline leading-[24px]">
-              Daftar Usahamu →
+            <NuxtLink to="/daftar" class="inline-flex items-center gap-1.5 font-poppins font-bold text-xs text-[#0081A0] dark:text-[#2091AA] hover:underline">
+              <span>Daftar Usahamu</span>
+              <span>→</span>
             </NuxtLink>
           </div>
         </div>
       </div>
 
       <!-- Bottom Bar -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <p class="text-[12px] text-neutral-500 dark:text-neutral-400 leading-[16px]">© 2026 Beruang (Ber-Uang) Indonesia. Hak Cipta Dilindungi.</p>
-        <div class="flex items-center gap-6 text-[12px] text-neutral-500 dark:text-neutral-400 leading-[16px]">
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-[11px] font-poppins text-neutral-400 leading-normal">
+          © 2026 Beruang (Ber-Uang) Indonesia. Hak Cipta Dilindungi.
+        </p>
+        <div class="flex items-center gap-4 text-[11px] font-poppins text-neutral-400">
           <NuxtLink to="/faq" class="hover:underline">Kebijakan Privasi</NuxtLink>
           <NuxtLink to="/faq" class="hover:underline">Syarat & Ketentuan</NuxtLink>
           <NuxtLink to="/faq" class="hover:underline">Pedoman Audit</NuxtLink>
@@ -105,9 +102,5 @@
 </template>
 
 <script setup lang="ts">
-import { HugeiconsIcon } from '@hugeicons/vue'
-import {
-  CheckmarkCircle01Icon,
-  LockKeyIcon
-} from '@hugeicons/core-free-icons'
+// Clean scaled footer
 </script>

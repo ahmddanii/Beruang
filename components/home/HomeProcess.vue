@@ -1,62 +1,165 @@
 <template>
-  <section class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 pb-24">
-    <div class="flex flex-col gap-12">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 font-sans">
+    <div class="flex flex-col gap-8 sm:gap-10">
+      
       <!-- Section Header -->
-      <div class="flex flex-col gap-4 text-center max-w-2xl mx-auto">
+      <div class="flex flex-col items-center gap-3 text-center max-w-2xl mx-auto">
+        <!-- Top Pill Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-[#13161F] shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-neutral-200/90 dark:border-neutral-800 text-xs font-poppins font-medium text-neutral-700 dark:text-neutral-300">
+          <span class="text-[#0081A0] dark:text-[#2091AA] font-bold">⚡</span>
+          <span>Tahapan Terstruktur</span>
+        </div>
 
-        <h2 class="text-[26px] sm:text-[42px]  font-extrabold text-neutral-900 dark:text-white tracking-tight leading-[32px] sm:leading-[52px]">
+        <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
           Perjalanan Menuju Akses Permodalan
         </h2>
-        <p class="text-[16px] text-neutral-600 dark:text-neutral-400 leading-[24px] ">
-          Tahapan terstruktur yang dirancang agar usahamu memiliki tata kelola akuntabel dan dipercaya oleh investor.
+        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-poppins leading-relaxed max-w-lg">
+          Tahapan terstruktur yang dirancang agar usahamu memiliki tata kelola akuntabel dan siap dipercaya oleh investor.
         </p>
       </div>
 
-      <!-- Simple 3-Step Process Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- 3-Step Process Bento Cards (Mengikuti Card Tactile Banner Biru Beranda) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
         
         <!-- Step 1 -->
-        <div class="p-8 rounded-[24px] bg-white dark:bg-[#15161A] border border-[#EAEAEA] dark:border-[#26272F] flex flex-col gap-6 shadow-sm">
-          <div class="w-12 h-12 rounded-[12px] bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 flex items-center justify-center  font-extrabold text-[26px]">
-            1
+        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between select-none h-full shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04)] transition-all duration-200">
+          <!-- Top Blue Banner -->
+          <div class="w-full px-5 py-3 card-header-blue-banner flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+                TAHAP 01
+              </span>
+            </div>
+            <span class="text-[11px] font-poppins text-white/80 font-medium">Minggu 1-2</span>
           </div>
-          <div class="flex flex-col gap-2">
-            <h3 class=" font-bold text-[26px] text-neutral-900 dark:text-white leading-[32px]">
-              Diagnosa Awal
-            </h3>
-            <p class="text-[16px] text-neutral-600 dark:text-neutral-400 leading-[24px]">
-              Konsultan pendamping memeriksa struktur bisnismu, mulai dari izin usaha, arus kas, hingga model bisnis.
-            </p>
+
+          <!-- Bottom Content Box -->
+          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+            <div class="space-y-2">
+              <h3 class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-snug">
+                Diagnosa Awal & Skor Kesiapan
+              </h3>
+              <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Konsultan pendamping memeriksa struktur bisnismu secara objektif, mulai dari izin usaha, arus kas riil, hingga model unit economics.
+              </p>
+              <div class="pt-2 flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  ✓ Audit 5 Aspek
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  ✓ Deteksi Kebocoran
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <NuxtLink to="/daftar" class="btn-pill-action group">
+                <span>Mulai Diagnosa</span>
+                <svg class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
         <!-- Step 2 -->
-        <div class="p-8 rounded-[24px] bg-white dark:bg-[#15161A] border border-[#EAEAEA] dark:border-[#26272F] flex flex-col gap-6 shadow-sm">
-          <div class="w-12 h-12 rounded-[12px] bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center  font-extrabold text-[26px]">
-            2
+        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between select-none h-full shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04)] transition-all duration-200">
+          <!-- Top Blue Banner -->
+          <div class="w-full px-5 py-3 card-header-blue-banner flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+                TAHAP 02
+              </span>
+            </div>
+            <span class="text-[11px] font-poppins text-white/80 font-medium">Minggu 3-8</span>
           </div>
-          <div class="flex flex-col gap-2">
-            <h3 class=" font-bold text-[26px] text-neutral-900 dark:text-white leading-[32px]">
-              Bina Usaha & SOP
-            </h3>
-            <p class="text-[16px] text-neutral-600 dark:text-neutral-400 leading-[24px]">
-              Rancang dan jalankan rencana aksi perbaikan, seperti pemisahan rekening pribadi dan operasional.
-            </p>
+
+          <!-- Bottom Content Box -->
+          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+            <div class="space-y-2">
+              <h3 class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-snug">
+                Bina Usaha & Disiplin Kas
+              </h3>
+              <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Rancang dan jalankan SOP operasional, pisahkan kas pribadi dan kas warung, serta kontrol margin bahan baku secara harian.
+              </p>
+              <div class="pt-2 flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  ✓ SOP Gerai
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  ✓ Pendampingan BNSP
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <NuxtLink to="/untuk-umkm" class="btn-pill-action group">
+                <span>Pelajari Pendampingan</span>
+                <svg class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
         <!-- Step 3 -->
-        <div class="p-8 rounded-[24px] bg-white dark:bg-[#15161A] border border-[#EAEAEA] dark:border-[#26272F] flex flex-col gap-6 shadow-sm">
-          <div class="w-12 h-12 rounded-[12px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center  font-extrabold text-[26px]">
-            3
+        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between select-none h-full shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04)] transition-all duration-200">
+          <!-- Top Blue Banner -->
+          <div class="w-full px-5 py-3 card-header-blue-banner flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+                TAHAP 03
+              </span>
+            </div>
+            <span class="text-[11px] font-poppins text-white/80 font-medium">Lolos Kurasi</span>
           </div>
-          <div class="flex flex-col gap-2">
-            <h3 class=" font-bold text-[26px] text-neutral-900 dark:text-white leading-[32px]">
-              Sertifikasi & Modal
-            </h3>
-            <p class="text-[16px] text-neutral-600 dark:text-neutral-400 leading-[24px]">
-              Dapatkan sertifikasi Grade A dan temui investor yang siap mendanai pertumbuhan bisnismu.
-            </p>
+
+          <!-- Bottom Content Box -->
+          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+            <div class="space-y-2">
+              <h3 class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-snug">
+                Sertifikasi & Temui Investor
+              </h3>
+              <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Raih sertifikasi Grade A, buka Data Room ber-watermark digital, dan terbitkan prospektus di katalog investasi tanpa skema utang riba.
+              </p>
+              <div class="pt-2 flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  ✓ Data Room Aman
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  ✓ Bagi Hasil Sehat
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <NuxtLink to="/investor" class="btn-pill-action group">
+                <span>Katalog Investor</span>
+                <svg class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
@@ -66,5 +169,5 @@
 </template>
 
 <script setup lang="ts">
-// Simplified process section
+// Tactile Process Steps aligned with Beranda UMKM design system
 </script>

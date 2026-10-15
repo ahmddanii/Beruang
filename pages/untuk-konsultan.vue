@@ -1,126 +1,157 @@
 <template>
-  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto  space-y-16 sm:space-y-20">
+  <div class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 sm:space-y-12 font-sans">
+    
     <!-- Hero Section -->
-    <div class="max-w-3xl space-y-5">
+    <div class="max-w-3xl space-y-4">
+      <!-- Top Pill Badge (Sesuai Gaya Beranda UMKM) -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-[#13161F] shadow-[0_2px_8px_rgba(0,0,0,0.05)] border border-neutral-200/90 dark:border-neutral-800 text-xs sm:text-sm font-poppins font-medium text-neutral-800 dark:text-neutral-200 w-fit">
+        <span class="text-[#0081A0] dark:text-[#2091AA] font-bold">🎓</span>
+        <span>Kemitraan Konsultan BNSP</span>
+      </div>
 
-
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl  font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.08]">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
         Dampingi UMKM Naik Kelas dengan Keahlian Nyata.
       </h1>
 
-      <p class="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-2xl">
+      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-poppins leading-relaxed max-w-2xl">
         Salurkan kepakaran Anda dalam tata kelola keuangan dan operasional. Manfaatkan sistem supervisi cerdas berbasis AI Anomaly Alert untuk membimbing puluhan usaha binaan secara efektif dan terukur.
       </p>
 
       <div class="flex flex-wrap items-center gap-3 pt-2">
-        <NuxtLink to="/daftar">
-          <BButton variant="primary" size="lg" class="shadow-sm">
-            Daftar Sebagai Konsultan Mitra
-          </BButton>
+        <NuxtLink to="/daftar" class="btn-3d-blue px-5 py-2.5 rounded-full text-xs sm:text-sm font-poppins font-semibold shadow-sm inline-flex items-center gap-2">
+          <span>Daftar Sebagai Konsultan Mitra</span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
         </NuxtLink>
-        <NuxtLink to="/faq">
-          <BButton variant="outline" size="lg">
-            Pelajari Syarat Kemitraan
-          </BButton>
+        <NuxtLink to="/faq" class="btn-pill-action">
+          <span>Pelajari Syarat Kemitraan</span>
         </NuxtLink>
       </div>
     </div>
 
-    <!-- 3 Core Advantages (Bento Grid) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <BCard padding="lg" class="space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-          <HugeiconsIcon :icon="CoinsSwapIcon" :size="20" :stroke-width="1.75" />
+    <!-- 3 Core Advantages (Tactile Cards dengan Header Biru) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+      
+      <!-- Advantage 1 -->
+      <div class="group rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between shadow-xs">
+        <div class="w-full px-5 py-3 card-header-blue-banner flex items-center gap-2.5">
+          <HugeiconsIcon :icon="CoinsSwapIcon" :size="18" class="text-white shrink-0" />
+          <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+            INSENTIF PROFESIONAL
+          </span>
         </div>
-        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
-          Insentif Dampingan Profesional
-        </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Dapatkan kompensasi pendampingan terstruktur per klien UMKM serta bonus keberhasilan (success fee) saat UMKM binaan Anda berhasil mengamankan pendanaan kemitraan.
-        </p>
-      </BCard>
+        <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 flex flex-col justify-between flex-1 gap-3">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Dapatkan kompensasi pendampingan terstruktur per klien UMKM serta bonus keberhasilan saat UMKM binaan Anda berhasil mengamankan pendanaan.
+          </p>
+          <div class="pt-1">
+            <span class="btn-pill-action scale-90 origin-left">
+              <span>Success Fee Transparan</span>
+            </span>
+          </div>
+        </div>
+      </div>
 
-      <BCard padding="lg" class="space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-          <HugeiconsIcon :icon="AlertCircleIcon" :size="20" :stroke-width="1.75" />
+      <!-- Advantage 2 -->
+      <div class="group rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between shadow-xs">
+        <div class="w-full px-5 py-3 card-header-blue-banner flex items-center gap-2.5">
+          <HugeiconsIcon :icon="AlertCircleIcon" :size="18" class="text-white shrink-0" />
+          <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+            AI ANOMALY ALERT
+          </span>
         </div>
-        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
-          Toolkit Cerdas AI Anomaly Alert
-        </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Tidak perlu memeriksa manual baris transaksi setiap hari. Algoritma kami memindai lonjakan HPP >10% dan deviasi margin kotor untuk langsung memberikan alert di dashboard Anda.
-        </p>
-      </BCard>
+        <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 flex flex-col justify-between flex-1 gap-3">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Tidak perlu memeriksa manual baris transaksi setiap hari. Algoritma memindai lonjakan HPP >10% dan deviasi margin kotor secara otomatis.
+          </p>
+          <div class="pt-1">
+            <span class="btn-pill-action scale-90 origin-left">
+              <span>Supervisi Cerdas</span>
+            </span>
+          </div>
+        </div>
+      </div>
 
-      <BCard padding="lg" class="space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
-          <HugeiconsIcon :icon="Award01Icon" :size="20" :stroke-width="1.75" />
+      <!-- Advantage 3 -->
+      <div class="group rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between shadow-xs">
+        <div class="w-full px-5 py-3 card-header-blue-banner flex items-center gap-2.5">
+          <HugeiconsIcon :icon="Award01Icon" :size="18" class="text-white shrink-0" />
+          <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+            REPUTASI TERAKREDITASI
+          </span>
         </div>
-        <h3 class=" font-bold text-base text-neutral-900 dark:text-white">
-          Portofolio & Reputasi Terakreditasi
-        </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Nama dan profil profesional Anda tercantum resmi pada sertifikat Ready for Funding yang Anda terbitkan, memperkuat rekam jejak konsultan Anda di mata komunitas bisnis nasional.
-        </p>
-      </BCard>
+        <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-5 flex flex-col justify-between flex-1 gap-3">
+          <p class="text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Nama dan profil profesional Anda tercantum resmi pada sertifikat Ready for Funding yang Anda terbitkan untuk klien.
+          </p>
+          <div class="pt-1">
+            <span class="btn-pill-action scale-90 origin-left">
+              <span>Portofolio Sah BNSP</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- 4 Tactical Consultation Steps -->
-    <div class="space-y-6">
-      <div class="max-w-2xl">
-        <h2 class="text-2xl sm:text-3xl  font-bold text-neutral-900 dark:text-white tracking-tight">
+    <div class="space-y-4">
+      <div class="max-w-xl">
+        <h2 class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
           Alur Kerja Konsultan Pendamping di Beruang
         </h2>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
           Framework terstruktur 4 langkah yang memudahkan supervisi multi-klien tanpa kehilangan kualitas kedalaman audit.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark space-y-3">
-          <span class=" font-bold text-xs text-primary-600 dark:text-primary-400">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div class="p-4 rounded-xl card-tactile-gopay space-y-2">
+          <span class="font-poppins font-bold text-[11px] text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider">
             LANGKAH 01
           </span>
-          <h4 class=" font-bold text-base text-neutral-900 dark:text-white">
-            Penugasan Klien Baru
+          <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+            Penugasan Klien
           </h4>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-            Menerima penugasan UMKM yang telah menyelesaikan diagnosa mandiri awal sesuai spesialisasi sektor Anda.
+          <p class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Menerima penugasan UMKM yang telah menyelesaikan diagnosa awal sesuai spesialisasi sektor Anda.
           </p>
         </div>
 
-        <div class="p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark space-y-3">
-          <span class=" font-bold text-xs text-primary-600 dark:text-primary-400">
+        <div class="p-4 rounded-xl card-tactile-gopay space-y-2">
+          <span class="font-poppins font-bold text-[11px] text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider">
             LANGKAH 02
           </span>
-          <h4 class=" font-bold text-base text-neutral-900 dark:text-white">
+          <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
             Susun Rencana Aksi
           </h4>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-            Menetapkan checklist prioritas mingguan (misal pemisahan rekening kas, pendaftaran NIB, standarisasi resep).
+          <p class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Menetapkan checklist prioritas mingguan (pemisahan kas, pendaftaran NIB, standarisasi resep).
           </p>
         </div>
 
-        <div class="p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark space-y-3">
-          <span class=" font-bold text-xs text-primary-600 dark:text-primary-400">
+        <div class="p-4 rounded-xl card-tactile-gopay space-y-2">
+          <span class="font-poppins font-bold text-[11px] text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider">
             LANGKAH 03
           </span>
-          <h4 class=" font-bold text-base text-neutral-900 dark:text-white">
+          <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
             Audit Kas & Verifikasi
           </h4>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          <p class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Memeriksa konsistensi rekonsiliasi kas riil 3 bulan berturut-turut dengan bantuan notifikasi AI anomaly.
           </p>
         </div>
 
-        <div class="p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark space-y-3">
-          <span class=" font-bold text-xs text-primary-600 dark:text-primary-400">
+        <div class="p-4 rounded-xl card-tactile-gopay space-y-2">
+          <span class="font-poppins font-bold text-[11px] text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider">
             LANGKAH 04
           </span>
-          <h4 class=" font-bold text-base text-neutral-900 dark:text-white">
+          <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
             Penerbitan Sertifikat
           </h4>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          <p class="text-xs font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Mengesahkan predikat "Ready for Funding" untuk mempublikasikan profil bisnis klien ke katalog marketplace investor.
           </p>
         </div>
@@ -128,34 +159,40 @@
     </div>
 
     <!-- Final Call to Action -->
-    <div class="p-8 sm:p-12 rounded-3xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-      <div class="max-w-xl space-y-2">
-        <h3 class="text-2xl sm:text-3xl  font-bold text-neutral-900 dark:text-white tracking-tight">
+    <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#0B2533] via-[#0F3548] to-[#124B66] text-white border border-cyan-500/20 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+      <div class="max-w-xl space-y-1.5">
+        <h3 class="text-lg sm:text-xl font-poppins font-bold text-white tracking-tight">
           Bergabung Bersama Jaringan Konsultan Terpilih
         </h3>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Kirimkan portofolio keahlian Anda dan mulailah mendampingi bisnis lokal bertransformasi menjadi usaha yang berdaya tahan tinggi.
+        <p class="text-xs text-cyan-100/80 font-poppins leading-relaxed">
+          Kirimkan portofolio keahlian Anda dan mulailah mendampingi bisnis lokal bertransformasi menjadi usaha berdaya tahan tinggi.
         </p>
       </div>
 
       <div class="shrink-0">
-        <NuxtLink to="/daftar">
-          <BButton variant="primary" size="lg">
-            Daftar Sebagai Konsultan
-          </BButton>
+        <NuxtLink to="/daftar" class="px-5 py-2.5 rounded-full bg-white hover:bg-neutral-100 text-[#0081A0] text-xs sm:text-sm font-poppins font-bold shadow-md inline-flex items-center gap-2 transition-all active:scale-[0.98]">
+          <span>Daftar Sebagai Konsultan</span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
         </NuxtLink>
       </div>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import BCard from '~/components/base/BCard.vue'
-import BButton from '~/components/base/BButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   CoinsSwapIcon,
   AlertCircleIcon,
   Award01Icon
 } from '@hugeicons/core-free-icons'
+
+useSeoMeta({
+  title: 'Untuk Konsultan - Beruang',
+  description: 'Program kemitraan konsultan bisnis berlisensi BNSP untuk pendampingan tata kelola dan audit UMKM Indonesia.'
+})
 </script>

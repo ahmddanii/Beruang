@@ -208,6 +208,7 @@ import {
   Store01Icon,
   Award01Icon,
   UserGroupIcon,
+  UserIcon,
   Settings01Icon,
   CheckmarkCircle01Icon,
   Alert01Icon,
@@ -333,7 +334,10 @@ const currentPageInfo = computed(() => {
 
   // Konsultan pages
   if (p === '/konsultan' || p === '/konsultan/') {
-    return { title: 'Klien Binaan', icon: UserGroupIcon }
+    return { title: 'Dashboard', icon: Home03Icon }
+  }
+  if (p === '/konsultan/klien' || p === '/konsultan/klien/') {
+    return { title: 'Klien', icon: UserIcon }
   }
   if (p.startsWith('/konsultan/request')) {
     return { title: 'Permintaan Masuk', icon: UserAdd01Icon }
@@ -348,7 +352,7 @@ const currentPageInfo = computed(() => {
     return { title: 'Validasi Kas', icon: CheckmarkCircle01Icon }
   }
   if (p.startsWith('/konsultan/alert')) {
-    return { title: 'Peringatan', icon: Alert01Icon }
+    return { title: 'Peringatan Masalah', icon: Alert01Icon }
   }
   if (p.startsWith('/konsultan/klien/')) {
     return { title: 'Diagnosa Klien UMKM', icon: AnalyticsUpIcon }

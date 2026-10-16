@@ -127,6 +127,13 @@
         d="M19 14C19.5523 14 20 14.4477 20 15V17H22C22.5523 17 23 17.4477 23 18C23 18.5523 22.5523 19 22 19H20V21C20 21.5523 19.5523 22 19 22C18.4477 22 18 21.5523 18 21V19H16C15.4477 19 15 18.5523 15 18C15 17.4477 15.4477 17 16 17H18V15C18 14.4477 18.4477 14 19 14Z"
       />
     </g>
+    <!-- 13. Single User (Klien) -->
+    <path
+      v-else-if="filledKey === 'user'"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2ZM4 19C4 16.2386 7.58172 14 12 14C16.4183 14 20 16.2386 20 19C20 20.6569 18.6569 22 17 22H7C5.34315 22 4 20.6569 4 19Z"
+    />
   </svg>
 
   <!-- Default Outline Hugeicon when not active or fallback -->
@@ -163,23 +170,23 @@ const props = withDefaults(
 const filledKey = computed(() => {
   const raw = props.to || ''
   const p = raw.replace(/\/$/, '') || '/'
-  if (p === '/dashboard' || p === '/admin') return 'home'
+  if (p === '/dashboard' || p === '/admin' || p === '/konsultan') return 'home'
   if (p.startsWith('/dashboard/progres')) return 'coins'
-  if (p.startsWith('/dashboard/profile')) return 'user-circle'
-  if (p.startsWith('/dashboard/rencana-aksi')) return 'task'
+  if (p.startsWith('/dashboard/profile') || p.startsWith('/konsultan/profil')) return 'user-circle'
+  if (p.startsWith('/dashboard/rencana-aksi') || p.startsWith('/konsultan/rencana-aksi')) return 'task'
   if (p.startsWith('/dashboard/penilaian')) return 'analytics'
   if (p.startsWith('/dashboard/profil-publik') || p === '/investor') return 'store'
   if (p.startsWith('/dashboard/pendanaan')) return 'award'
+  if (p.startsWith('/konsultan/klien')) return 'user'
   if (
     p.startsWith('/dashboard/permintaan-investor') ||
-    p === '/konsultan' ||
     p.startsWith('/admin/pengguna')
   )
     return 'user-group'
+  if (p.startsWith('/konsultan/request') || p.startsWith('/admin/penugasan')) return 'user-add'
   if (p.startsWith('/konsultan/validasi')) return 'checkmark-circle'
   if (p.startsWith('/konsultan/alert')) return 'alert'
   if (p.startsWith('/investor/watchlist')) return 'star'
-  if (p.startsWith('/admin/penugasan')) return 'user-add'
   return null
 })
 </script>

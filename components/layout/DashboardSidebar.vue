@@ -228,6 +228,7 @@ import {
   Coins01Icon,
   Award01Icon,
   UserGroupIcon,
+  UserIcon,
   Store01Icon,
   CheckmarkCircle01Icon,
   Alert01Icon,
@@ -353,8 +354,8 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/konsultan', label: 'Klien Binaan', icon: UserGroupIcon },
-          { to: '/konsultan/request', label: 'Permintaan Masuk', icon: UserAdd01Icon },
+          { to: '/konsultan', label: 'Dashboard', icon: Home03Icon },
+          { to: '/konsultan/klien', label: 'Klien', icon: UserIcon },
           { to: '/konsultan/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
           { to: '/konsultan/validasi', label: 'Validasi Kas', icon: CheckmarkCircle01Icon }
         ]
@@ -362,8 +363,8 @@ const navigationSections = computed<NavSection[]>(() => {
       {
         title: 'Manajemen',
         items: [
-          { to: '/konsultan/profil', label: 'Profil & Dokumen', icon: UserCircleIcon },
-          { to: '/konsultan/alert', label: 'Peringatan', icon: Alert01Icon }
+          { to: '/konsultan/alert', label: 'Peringatan Masalah', icon: Alert01Icon },
+          { to: '/konsultan/profil', label: 'Profil & Dokumen', icon: UserCircleIcon }
         ]
       }
     ]

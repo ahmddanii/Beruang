@@ -212,12 +212,9 @@
       <div class="space-y-4 pt-1 pb-1 text-left">
         <!-- Input Group -->
         <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <label for="modalPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
-              Nomor WhatsApp / Handphone
-            </label>
-            <span class="text-[11px] text-neutral-400">Format: 8xx-xxxx-xxxx</span>
-          </div>
+          <label for="modalPhone" class="block text-xs font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400">
+            Nomor WhatsApp / Handphone
+          </label>
 
           <!-- Input Container with Dynamic Validation Feedback -->
           <div
@@ -246,7 +243,7 @@
               autocomplete="tel-national"
               inputmode="numeric"
               placeholder="812-3456-7890"
-              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-bold tracking-wide focus:outline-none tabular-nums"
+              class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-medium tracking-normal focus:outline-none tabular-nums"
               @input="onPhoneInput"
               @keydown="onPhoneKeydown"
               @keydown.enter="submitPhoneLogin"
@@ -259,11 +256,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
               <span>{{ phoneValidationError }}</span>
             </p>
-            <p v-else-if="isPhoneValid" class="text-xs text-[#00AA13] dark:text-[#22C55E] font-medium flex items-center gap-1.5 animate-in fade-in duration-150">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#00AA13] shrink-0" />
-              <span>Akun terdeteksi: <strong class="font-bold">{{ detectedAccount.name }}</strong> ({{ detectedAccount.role === 'UMKM' ? 'Pemilik UMKM' : detectedAccount.role === 'CONSULTANT' ? 'Konsultan Bisnis' : 'Investor Mitra' }})</span>
-            </p>
-            <p v-else class="text-[11px] text-neutral-500 dark:text-neutral-400">
+            <p v-else-if="!isPhoneValid" class="text-[11px] text-neutral-500 dark:text-neutral-400">
               Ketik angka saja, tanda hubung (-) otomatis terisi.
             </p>
           </div>

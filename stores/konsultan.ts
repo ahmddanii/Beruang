@@ -16,6 +16,9 @@ export interface ClientUmkm {
   totalTasks: number
   growthPct: number
   joinedDate?: string
+  monthlyFee?: number
+  durationMonths?: number
+  isNew?: boolean
 }
 
 export interface ClientMentorshipRequest {
@@ -27,6 +30,8 @@ export interface ClientMentorshipRequest {
   city: string
   revenue: number
   healthScore: number
+  offeredFee: number
+  durationMonths: number
   message: string
   requestedAt: string
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED'
@@ -157,6 +162,8 @@ export const useKonsultanStore = defineStore('konsultan', {
         city: 'Bandung',
         revenue: 35000000,
         healthScore: 74,
+        offeredFee: 2000000,
+        durationMonths: 3,
         message: 'Halo Bu Maya, kami butuh bimbingan profesional untuk memisahkan keuangan pribadi dan usaha, serta merapikan pencatatan kas agar siap diajukan ke investor modal usaha.',
         requestedAt: 'Hari ini, 09:15',
         status: 'PENDING'
@@ -170,6 +177,8 @@ export const useKonsultanStore = defineStore('konsultan', {
         city: 'Garut',
         revenue: 28000000,
         healthScore: 68,
+        offeredFee: 1500000,
+        durationMonths: 6,
         message: 'Mohon arahan dan action plan untuk efisiensi biaya bahan baku benang tenun dan legalitas usaha NIB kami.',
         requestedAt: 'Kemarin, 16:40',
         status: 'PENDING'
@@ -183,6 +192,8 @@ export const useKonsultanStore = defineStore('konsultan', {
         city: 'Malang',
         revenue: 18000000,
         healthScore: 62,
+        offeredFee: 1200000,
+        durationMonths: 3,
         message: 'Ingin dibimbing dari awal untuk pembukuan kas harian dan persiapan uji kelayakan pembiayaan.',
         requestedAt: '12 Okt 2026',
         status: 'PENDING'
@@ -206,7 +217,9 @@ export const useKonsultanStore = defineStore('konsultan', {
         tasksCompleted: 5,
         totalTasks: 6,
         growthPct: 15.8,
-        joinedDate: '15 Jul 2026'
+        joinedDate: '15 Jul 2026',
+        monthlyFee: 2500000,
+        durationMonths: 6
       },
       {
         id: 'umkm-02',
@@ -223,7 +236,9 @@ export const useKonsultanStore = defineStore('konsultan', {
         tasksCompleted: 4,
         totalTasks: 7,
         growthPct: 8.2,
-        joinedDate: '01 Agu 2026'
+        joinedDate: '01 Agu 2026',
+        monthlyFee: 1800000,
+        durationMonths: 3
       },
       {
         id: 'umkm-03',
@@ -240,7 +255,9 @@ export const useKonsultanStore = defineStore('konsultan', {
         tasksCompleted: 8,
         totalTasks: 8,
         growthPct: 22.4,
-        joinedDate: '10 Jun 2026'
+        joinedDate: '10 Jun 2026',
+        monthlyFee: 3000000,
+        durationMonths: 6
       },
       {
         id: 'umkm-04',
@@ -257,7 +274,9 @@ export const useKonsultanStore = defineStore('konsultan', {
         tasksCompleted: 2,
         totalTasks: 6,
         growthPct: -4.5,
-        joinedDate: '20 Agu 2026'
+        joinedDate: '20 Agu 2026',
+        monthlyFee: 1500000,
+        durationMonths: 3
       }
     ] as ClientUmkm[],
 
@@ -411,16 +430,17 @@ export const useKonsultanStore = defineStore('konsultan', {
   },
 
   actions: {
-    // 1. Terima Permintaan Bimbingan dari UMKM
+    // 1. Terima Permintaan Bimbingan dari UMKM -> Resmi Pindah ke Klien Aktif
     acceptRequest(requestId: string) {
-      const req = this.clientRequests.find(r => r.id === requestId)
-      if (!req) return
-
-      req.status = 'ACCEPTED'
+      const reqIndex = this.clientRequests.findIndex(r => r.id === requestId)
+      if (reqIndex === -1) return
+      const req = this.clientRequests[reqIndex]
 
       // Periksa apakah UMKM sudah ada di daftar binaan
       const existingClient = this.clients.find(c => c.id === req.umkmId || c.name === req.businessName)
       if (!existingClient) {
+        const fee = req.offeredFee || (req.revenue >= 35000000 ? 2000000 : req.revenue >= 25000000 ? 1500000 : 1200000)
+        const targetFunding = req.revenue ? Math.max(100000000, Math.round((req.revenue * 5) / 10000000) * 10000000) : 150000000
         const newClient: ClientUmkm = {
           id: req.umkmId,
           name: req.businessName,
@@ -431,12 +451,15 @@ export const useKonsultanStore = defineStore('konsultan', {
           status: (req.healthScore || 65) >= 75 ? 'healthy' : (req.healthScore || 65) >= 60 ? 'warning' : 'danger',
           fundingStatus: 'IN_REVIEW',
           monthlyStatus: 'PENDING',
-          lastAuditDate: 'Baru Bergabung',
-          fundingTarget: 150000000,
+          lastAuditDate: 'Baru',
+          fundingTarget: targetFunding,
           tasksCompleted: 0,
           totalTasks: 3,
           growthPct: 0,
-          joinedDate: 'Hari ini'
+          joinedDate: 'Hari ini',
+          monthlyFee: fee,
+          durationMonths: req.durationMonths || 3,
+          isNew: true
         }
         this.clients.unshift(newClient)
 
@@ -447,7 +470,7 @@ export const useKonsultanStore = defineStore('konsultan', {
           clientName: req.businessName,
           title: 'Konsultasi Perdana & Diagnosa 5 Pilar Bisnis',
           description: 'Lakukan sesi diskusi via WhatsApp/Zoom untuk memetakan tantangan utama usaha dan menyusun target 30 hari ke depan.',
-          pillar: 'Manajemen',
+          pillar: 'Operasional',
           priority: 'Tinggi',
           status: 'TODO',
           targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
@@ -455,14 +478,16 @@ export const useKonsultanStore = defineStore('konsultan', {
           consultantNotes: 'Diskusikan hasil diagnosa awal dan target perbaikan.'
         })
       }
+
+      // Hapus dari daftar permintaan masuk karena sudah resmi pindah ke klien aktif
+      this.clientRequests.splice(reqIndex, 1)
     },
 
     // 2. Tolak Permintaan Bimbingan dari UMKM
     rejectRequest(requestId: string, reason?: string) {
-      const req = this.clientRequests.find(r => r.id === requestId)
-      if (!req) return
-      req.status = 'REJECTED'
-      req.rejectionReason = reason || 'Kapasitas bimbingan konsultan saat ini sedang penuh.'
+      const reqIndex = this.clientRequests.findIndex(r => r.id === requestId)
+      if (reqIndex === -1) return
+      this.clientRequests.splice(reqIndex, 1)
     },
 
     // 3. Tambah Action Plan untuk UMKM Binaan

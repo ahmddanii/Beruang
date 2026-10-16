@@ -130,37 +130,44 @@
           </p>
         </div>
 
-        <!-- Search & Filter Controls -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-          <!-- Filter Pills -->
-          <div class="inline-flex p-1 rounded-full bg-neutral-100 dark:bg-[#1A1D26] text-xs font-semibold shrink-0 border border-neutral-200/60 dark:border-white/10">
-            <button
-              v-for="f in filterOptions"
-              :key="f.key"
-              type="button"
-              :class="[
-                'px-3 py-1.5 rounded-full transition-all cursor-pointer text-xs',
-                selectedFilter === f.key
-                  ? 'bg-white dark:bg-[#13161F] text-[#0081A0] dark:text-[#2091AA] font-bold shadow-xs'
-                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
-              ]"
-              @click="selectedFilter = f.key"
-            >
-              {{ f.label }}
-            </button>
-          </div>
-
-          <!-- Search Field -->
-          <div class="relative w-full sm:w-56">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400">
-              <HugeiconsIcon :icon="Search01Icon" :size="15" :stroke-width="1.75" />
+        <!-- Search & Filter Controls (Pencarian lebih panjang di kiri, Filter dropdown di kanan) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <!-- 1. Search Field (Posisi di depan, ukuran lebih panjang) -->
+          <div class="relative w-full sm:w-72 md:w-80 lg:w-96">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
+              <HugeiconsIcon :icon="Search01Icon" :size="16" :stroke-width="1.8" />
             </div>
             <input
               v-model="search"
               type="text"
-              placeholder="Cari UMKM / kota..."
-              class="w-full pl-9 pr-3.5 py-1.5 rounded-full text-xs border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-[#1A1D26] text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20"
+              placeholder="Cari nama usaha, pemilik, atau kota..."
+              class="w-full pl-10 pr-4 py-2 rounded-full text-xs border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#1A1D26] text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20 transition-all shadow-2xs"
             />
+          </div>
+
+          <!-- 2. Filter Dropdown (Posisi di kanan, format dropdown) -->
+          <div class="relative shrink-0 min-w-[170px]">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
+              <HugeiconsIcon :icon="FilterIcon" :size="14" :stroke-width="2" />
+            </div>
+            <select
+              v-model="selectedFilter"
+              class="w-full pl-9 pr-8 py-2 rounded-full text-xs font-semibold border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#1A1D26] text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20 transition-all shadow-2xs appearance-none cursor-pointer"
+            >
+              <option
+                v-for="f in filterOptions"
+                :key="f.key"
+                :value="f.key"
+              >
+                {{ f.label }}
+              </option>
+            </select>
+            <!-- Chevron Down Icon -->
+            <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-neutral-400">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -277,6 +284,7 @@ import {
   Task01Icon,
   Alert01Icon,
   Search01Icon,
+  FilterIcon,
   CheckmarkCircle01Icon,
   ArrowRight01Icon,
   UserCircleIcon

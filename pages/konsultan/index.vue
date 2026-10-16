@@ -1,40 +1,6 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-20 font-sans">
     
-    <!-- 1. ALERT BANNER: PERMINTAAN BIMBINGAN BARU MENUNGGU (Jika ada) -->
-    <div
-      v-if="konsultanStore.pendingRequestsCount > 0"
-      class="card-tactile-gopay p-4 sm:p-5 rounded-3xl border border-[#0081A0]/30 bg-gradient-to-r from-[#0081A0]/10 via-transparent to-transparent flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left"
-    >
-      <div class="flex items-center gap-3.5">
-        <div class="w-11 h-11 rounded-2xl bg-[#0081A0] text-white flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(0,129,160,0.3)]">
-          <HugeiconsIcon :icon="UserAdd01Icon" :size="20" :stroke-width="2.2" />
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#0081A0]/15 text-[#0081A0] dark:text-[#2091AA]">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#0081A0] animate-pulse" />
-              <span>Pengajuan Baru</span>
-            </span>
-            <span class="text-xs text-neutral-500 font-medium">Perlu Keputusan</span>
-          </div>
-          <h4 class="font-heading font-extrabold text-sm sm:text-base text-neutral-900 dark:text-white mt-0.5">
-            Ada {{ konsultanStore.pendingRequestsCount }} permintaan bimbingan UMKM menunggu konfirmasimu
-          </h4>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
-            Kamu bebas memilih untuk menerima atau menolak UMKM yang mengajukan pendampingan.
-          </p>
-        </div>
-      </div>
-
-      <NuxtLink
-        to="/konsultan/request"
-        class="px-5 py-2.5 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white text-xs font-bold shadow-[0_4px_14px_rgba(0,129,160,0.25)] transition-all active:scale-[0.98] shrink-0 flex items-center gap-2"
-      >
-        <span>Tinjau Permintaan</span>
-        <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2" />
-      </NuxtLink>
-    </div>
 
     <!-- 2. EXECUTIVE CONSULTANT BANNER -->
     <div class="p-1.5 sm:p-2 rounded-3xl bg-neutral-200/50 dark:bg-neutral-800/40 border border-neutral-300/40 dark:border-neutral-700/30 shadow-xs">

@@ -9,7 +9,7 @@
             <div>
               <div class="flex items-center gap-1.5">
                 <span class="font-heading font-extrabold text-lg tracking-tight leading-none select-none">
-                  <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+                  <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>
                 </span>
                 <span
                   :class="[

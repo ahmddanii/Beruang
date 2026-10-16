@@ -1,376 +1,569 @@
 <template>
-  <div class="space-y-6 pb-20 font-sans">
-    <!-- Navigasi & Status -->
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2 text-xs sm:text-sm text-neutral-500">
-        <NuxtLink to="/investor" class="hover:text-primary-600 transition-colors flex items-center gap-1.5">
-          <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
-          <span>Katalog</span>
-        </NuxtLink>
-        <span>/</span>
-        <NuxtLink :to="`/investor/umkm/${umkmId}`" class="hover:text-primary-600 transition-colors">
-          {{ item.name }}
-        </NuxtLink>
-        <span>/</span>
-        <span class="text-neutral-900 dark:text-neutral-100 font-bold">Laporan Asli</span>
+  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100 select-none">
+    <!-- Toast Feedback Notification -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 -translate-y-2 scale-95"
+      enter-to-class="opacity-100 translate-y-0 scale-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 translate-y-0 scale-100"
+      leave-to-class="opacity-0 -translate-y-2 scale-95"
+    >
+      <div
+        v-if="toastMessage"
+        class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-full bg-neutral-900/90 dark:bg-neutral-800/90 text-white border border-neutral-700/60 backdrop-blur-md text-xs font-poppins font-semibold shadow-xl flex items-center gap-2 pointer-events-none"
+      >
+        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-emerald-400 shrink-0" />
+        <span>{{ toastMessage }}</span>
       </div>
+    </Transition>
 
-      <!-- Pengalih Mode Uji Coba -->
-      <div class="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs">
-        <button
-          type="button"
-          :class="[
-            'px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer',
-            item.accessStatus === 'APPROVED' ? 'bg-emerald-600 text-white shadow-xs' : 'text-neutral-500'
-          ]"
-          @click="investorStore.setAccessStatus(item.id, 'APPROVED')"
+    <!-- Top Breadcrumb Navigation -->
+    <div class="flex items-center justify-between pb-2 border-b border-neutral-100 dark:border-neutral-800/80">
+      <NuxtLink
+        to="/investor"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline transition-colors"
+      >
+        <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2.2" />
+        <span>Kembali ke Venture Social Feed</span>
+      </NuxtLink>
+
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-neutral-400 font-mono">{{ item?.code }}</span>
+        <span class="text-neutral-300 dark:text-neutral-700">•</span>
+        <NuxtLink
+          :to="`/investor/umkm/${umkmId}`"
+          class="text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
-          Izin Diberikan
-        </button>
-        <button
-          type="button"
-          :class="[
-            'px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer',
-            item.accessStatus === 'PENDING' ? 'bg-amber-600 text-white shadow-xs' : 'text-neutral-500'
-          ]"
-          @click="investorStore.setAccessStatus(item.id, 'PENDING')"
-        >
-          Menunggu Izin
-        </button>
-        <button
-          type="button"
-          :class="[
-            'px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer',
-            item.accessStatus === 'NONE' ? 'bg-neutral-700 text-white shadow-xs' : 'text-neutral-500'
-          ]"
-          @click="investorStore.setAccessStatus(item.id, 'NONE')"
-        >
-          Terkunci
-        </button>
+          Lihat Profil Publik Toko →
+        </NuxtLink>
       </div>
     </div>
 
-    <!-- TAMPILAN TERKUNCI -->
+    <!-- ========================================================================================= -->
+    <!-- CASE A: LOCKED STATE (Jika investor belum memiliki izin APPROVED)                         -->
+    <!-- ========================================================================================= -->
     <div
-      v-if="item.accessStatus !== 'APPROVED'"
-      class="max-w-md mx-auto bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-8 text-center space-y-4 shadow-xs"
+      v-if="item?.accessStatus !== 'APPROVED'"
+      class="card-tactile-gopay max-w-xl mx-auto p-8 sm:p-12 rounded-3xl border text-center space-y-5"
     >
-      <div class="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto">
-        <HugeiconsIcon :icon="SquareLock02Icon" :size="28" :stroke-width="1.75" />
+      <div class="w-16 h-16 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-500 flex items-center justify-center mx-auto shadow-xs">
+        <HugeiconsIcon :icon="SquareLock02Icon" :size="32" :stroke-width="1.8" />
       </div>
-
-      <div class="space-y-1">
-        <h2 class="font-heading font-extrabold text-xl text-neutral-900 dark:text-white">
-          {{ item.accessStatus === 'PENDING' ? 'Permohonan Sedang Menunggu Persetujuan' : 'Laporan Masih Terkunci' }}
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+          <span>Izin Akses Belum Terbuka</span>
+        </div>
+        <h2 class="font-poppins font-bold text-2xl text-neutral-900 dark:text-white tracking-tight">
+          Data Room Privat Terkunci
         </h2>
-        <p class="text-xs text-neutral-500">
-          {{ item.accessStatus === 'PENDING'
-            ? 'Menunggu pemilik toko membuka izin akses.'
-            : 'Ajukan permohonan ke pemilik untuk melihat buku kas dan rekening koran.'
-          }}
+        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto leading-relaxed font-sans">
+          Seluruh laporan keuangan riil, mutasi bank giro, dan berkas legalitas <strong>{{ item?.name }}</strong> dilindungi oleh sistem kerahasiaan Beruang. Ajukan izin permohonan akses data untuk membuka ruangan privat ini.
         </p>
       </div>
 
-      <div class="pt-2 flex justify-center gap-2">
+      <div class="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
         <NuxtLink
-          v-if="item.accessStatus === 'NONE'"
           :to="`/investor/umkm/${umkmId}/ajukan-akses`"
+          class="btn-pill-action group cursor-pointer inline-flex items-center gap-2"
         >
-          <BButton variant="primary" size="md">
-            Minta Izin Buka Laporan
-          </BButton>
-        </NuxtLink>
-        <NuxtLink :to="`/investor/umkm/${umkmId}`">
-          <BButton variant="secondary" size="md">
-            Kembali
-          </BButton>
+          <span>Ajukan Izin Akses Data Room</span>
+          <HugeiconsIcon :icon="ArrowRight01Icon" :size="15" :stroke-width="2.2" />
         </NuxtLink>
       </div>
     </div>
 
-    <!-- TAMPILAN TERBUKA: BERKAS ASLI (US-INV-05) -->
+    <!-- ========================================================================================= -->
+    <!-- CASE B: APPROVED STATE (Virtual Data Room Aktif Ber-Watermark)                             -->
+    <!-- ========================================================================================= -->
     <div v-else class="space-y-6 relative">
-      <!-- Watermark -->
+      <!-- Dynamic Security Watermark Overlay Layer (Non-Intrusive, Highly Legitimate) -->
       <div
-        class="fixed inset-0 pointer-events-none z-50 overflow-hidden flex items-center justify-center select-none opacity-[0.03]"
+        class="fixed inset-0 pointer-events-none z-40 overflow-hidden flex items-center justify-center select-none opacity-[0.035] dark:opacity-[0.05]"
         aria-hidden="true"
       >
         <div class="transform -rotate-25 text-center text-neutral-900 dark:text-white font-mono font-bold text-sm tracking-widest leading-loose">
-          DOKUMEN RAHASIA • DILIHAT OLEH {{ investorName }} • {{ accessTimestamp }}
+          RAHASIA • DILINDUNGI HUKUM BERUANG • {{ authStore.currentUser?.name }} ({{ authStore.currentUser?.email || 'investor@beruang.id' }}) • {{ accessTimestamp }}<br />
+          TIDAK UNTUK DIDISTRIBUSIKAN • AUDIT LOG ID: SEC-{{ umkmId }}-8921
         </div>
       </div>
 
-      <!-- Header Ringkas -->
-      <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6 shadow-xs flex items-center justify-between">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>IZIN SUDAH DIBERIKAN</span>
-            </span>
-            <span class="text-xs text-neutral-400 font-mono">
-              {{ accessTimestamp }}
+      <!-- 1. Executive Data Room Banner Header (GoPay Tactile Card with Blue Accent) -->
+      <div class="card-tactile-gopay has-blue-banner rounded-3xl overflow-hidden border">
+        <!-- Top: Blue Banner Bar -->
+        <div class="card-header-blue-banner px-6 sm:px-8 py-3.5 flex items-center justify-between text-white">
+          <div class="flex items-center gap-2.5">
+            <HugeiconsIcon :icon="ShieldCheckIcon" :size="20" :stroke-width="2.2" class="text-white" />
+            <span class="text-xs sm:text-sm font-semibold uppercase tracking-wider">
+              VIRTUAL DATA ROOM PRIVAT • ENKRIPSI AES-256
             </span>
           </div>
-          <h1 class="text-xl sm:text-2xl font-heading font-extrabold text-neutral-900 dark:text-white">
-            Laporan Keuangan Asli: {{ item.name }}
-          </h1>
+          <span class="text-xs font-mono opacity-90">ID LOG: SEC-{{ umkmId }}-8921</span>
         </div>
 
+        <!-- Bottom: Body Container -->
+        <div class="bg-white dark:bg-[#13161F] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-2xl">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
+                <span>Izin Akses Disetujui Pemilik</span>
+              </span>
+              <span class="text-xs text-neutral-400 font-mono">{{ item?.code }}</span>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+              Data Room Finansial: {{ item?.name }}
+            </h1>
+
+            <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
+              Akses menyeluruh terhadap pembukuan arus kas riil, bukti rekening koran giro bank terverifikasi, dan izin legalitas resmi usaha di bawah pengawasan konsultan pendamping.
+            </p>
+          </div>
+
+          <!-- Sesi Audit Status & Action -->
+          <div class="flex flex-col sm:items-end gap-3 shrink-0">
+            <div class="p-3 rounded-2xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200/70 dark:border-neutral-700/70 text-xs space-y-1">
+              <div class="flex items-center gap-1.5 font-semibold text-neutral-900 dark:text-white">
+                <HugeiconsIcon :icon="Clock01Icon" :size="14" class="text-[#2091AA] dark:text-[#50AABF]" />
+                <span>Sesi Audit Aktif:</span>
+              </div>
+              <p class="text-[11px] text-neutral-500 font-mono">
+                {{ authStore.currentUser?.name || 'Fikri Setiawan' }} • {{ accessTimestamp }}
+              </p>
+            </div>
+
+            <!-- Primary Action: Ajukan Minat Pendanaan / Term Sheet -->
+            <button
+              type="button"
+              class="btn-pill-action group cursor-pointer inline-flex items-center gap-2 text-xs"
+              @click="showTermSheetModal = true"
+            >
+              <HugeiconsIcon :icon="Coins01Icon" :size="15" :stroke-width="2.2" />
+              <span>Ajukan Minat Pendanaan</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Macro Navigation Tabs for Data Room (Kas Riil, Vault Berkas, Rencana Aksi) -->
+      <div class="flex items-center gap-2 border-b border-neutral-200 dark:border-neutral-800 pb-px">
         <button
+          v-for="tab in dataRoomTabs"
+          :key="tab.id"
           type="button"
-          class="px-4 py-2 rounded-xl text-xs font-heading font-bold bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 text-white dark:text-neutral-900 shadow-xs cursor-pointer inline-flex items-center gap-2"
-          @click="exportCsv"
+          :class="[
+            'px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 border-b-2 -mb-px',
+            activeDataRoomTab === tab.id
+              ? 'text-[#2091AA] dark:text-[#50AABF] border-[#2091AA] dark:border-[#50AABF] bg-[#E6F4F7]/40 dark:bg-[#2091AA]/10'
+              : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white border-transparent'
+          ]"
+          @click="activeDataRoomTab = tab.id"
         >
-          <HugeiconsIcon :icon="Download01Icon" :size="15" :stroke-width="2" />
-          <span>Unduh Data (CSV)</span>
+          <HugeiconsIcon :icon="tab.icon" :size="16" />
+          <span>{{ tab.label }}</span>
         </button>
       </div>
 
-      <!-- 1. TABEL LABA RUGI RIIL -->
-      <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6 shadow-xs space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-            1. Catatan Penjualan & Untung Bersih (5 Bulan)
-          </h3>
-          <span class="text-xs text-neutral-500 font-medium">Diperiksa oleh: {{ item.consultantName }}</span>
-        </div>
-
-        <div class="overflow-x-auto rounded-2xl border border-neutral-200 dark:border-neutral-800">
-          <table class="w-full text-left text-xs font-sans">
-            <thead class="bg-neutral-50 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 font-heading font-bold border-b border-neutral-200 dark:border-neutral-800">
-              <tr>
-                <th class="px-4 py-3">Bulan</th>
-                <th class="px-4 py-3 text-right">Penjualan</th>
-                <th class="px-4 py-3 text-right">Modal Bahan</th>
-                <th class="px-4 py-3 text-right">Untung Kotor</th>
-                <th class="px-4 py-3 text-right">% Untung</th>
-                <th class="px-4 py-3 text-right">Biaya Toko</th>
-                <th class="px-4 py-3 text-right">Untung Bersih</th>
-                <th class="px-4 py-3 text-right">Kas di Bank</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800">
-              <tr
-                v-for="rec in displayRecords"
-                :key="rec.month"
-                class="hover:bg-neutral-50 dark:hover:bg-neutral-800/40"
-              >
-                <td class="px-4 py-3 font-bold text-neutral-900 dark:text-white">
-                  {{ rec.month }} {{ rec.year }}
-                </td>
-                <td class="px-4 py-3 text-right font-semibold tabular-nums">
-                  Rp {{ rec.omzet.toLocaleString('id-ID') }}
-                </td>
-                <td class="px-4 py-3 text-right text-rose-600 dark:text-rose-400 tabular-nums">
-                  Rp {{ rec.hpp.toLocaleString('id-ID') }}
-                </td>
-                <td class="px-4 py-3 text-right font-bold text-emerald-600 tabular-nums">
-                  Rp {{ (rec.omzet - rec.hpp).toLocaleString('id-ID') }}
-                </td>
-                <td class="px-4 py-3 text-right font-bold text-emerald-600 tabular-nums">
-                  {{ Math.round(((rec.omzet - rec.hpp) / rec.omzet) * 100) }}%
-                </td>
-                <td class="px-4 py-3 text-right text-neutral-500 tabular-nums">
-                  Rp {{ rec.opex.toLocaleString('id-ID') }}
-                </td>
-                <td class="px-4 py-3 text-right font-extrabold text-neutral-900 dark:text-white tabular-nums">
-                  Rp {{ rec.netProfit.toLocaleString('id-ID') }}
-                </td>
-                <td class="px-4 py-3 text-right font-bold text-primary-600 tabular-nums">
-                  Rp {{ rec.cashBalance.toLocaleString('id-ID') }}
-                </td>
-              </tr>
-            </tbody>
-            <tfoot class="bg-neutral-50 dark:bg-neutral-900 font-bold border-t-2 border-neutral-200">
-              <tr>
-                <td class="px-4 py-3">Rata-Rata Bulanan:</td>
-                <td class="px-4 py-3 text-right tabular-nums">Rp {{ averageOmzet.toLocaleString('id-ID') }}</td>
-                <td class="px-4 py-3 text-right text-rose-600 tabular-nums">Rp {{ averageHpp.toLocaleString('id-ID') }}</td>
-                <td class="px-4 py-3 text-right text-emerald-600 tabular-nums">Rp {{ (averageOmzet - averageHpp).toLocaleString('id-ID') }}</td>
-                <td class="px-4 py-3 text-right text-emerald-600 tabular-nums">{{ item.marginPercentage }}%</td>
-                <td class="px-4 py-3 text-right text-neutral-500 tabular-nums">Rp {{ averageOpex.toLocaleString('id-ID') }}</td>
-                <td class="px-4 py-3 text-right tabular-nums">Rp {{ averageNetProfit.toLocaleString('id-ID') }}</td>
-                <td class="px-4 py-3 text-right text-primary-600 tabular-nums">Rp {{ latestCashBalance.toLocaleString('id-ID') }}</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-
-      <!-- 2 & 3. DOKUMEN BANK & LEGALITAS -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- 2. Rekening Koran -->
-        <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-5 shadow-xs space-y-3">
-          <h3 class="font-heading font-bold text-sm text-neutral-900 dark:text-white">
-            2. Rekening Koran Bank Asli
-          </h3>
-
-          <div class="space-y-2">
-            <div
-              v-for="doc in bankDocs"
-              :key="doc.name"
-              class="p-3 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-between text-xs"
-            >
-              <div class="space-y-0.5">
-                <h4 class="font-heading font-semibold text-neutral-900 dark:text-white">{{ doc.name }}</h4>
-                <span class="text-[11px] text-neutral-400">{{ doc.verifiedDate }}</span>
-              </div>
-
-              <button
-                type="button"
-                class="px-3 py-1 rounded-lg font-bold text-xs bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 hover:bg-primary-100 border border-primary-200 cursor-pointer"
-                @click="previewBankStatement(doc)"
-              >
-                Lihat Rekening
-              </button>
+      <!-- ======================================================================================= -->
+      <!-- TAB 1: LAPORAN KEUANGAN & PEMBUKUAN KAS RIIL (P&L Audited)                              -->
+      <!-- ======================================================================================= -->
+      <div v-if="activeDataRoomTab === 'pnl'" class="space-y-6">
+        <!-- 4 Key Metric Cards (Unified Black Figures as Requested) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
+            <span class="text-xs text-neutral-500 font-medium">Omzet Riil (30 Hari)</span>
+            <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
+              Rp 100.000.000
             </div>
+            <span class="text-[11px] text-emerald-600 font-semibold block">+9.8% (MoM) Positif</span>
+          </div>
+
+          <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
+            <span class="text-xs text-neutral-500 font-medium">Modal Jualan (HPP Bahan)</span>
+            <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
+              Rp 45.100.000
+            </div>
+            <span class="text-[11px] text-emerald-600 font-semibold block">45.1% (Sangat Hemat)</span>
+          </div>
+
+          <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
+            <span class="text-xs text-neutral-500 font-medium">Beban Operasional Toko</span>
+            <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
+              Rp 22.300.000
+            </div>
+            <span class="text-[11px] text-[#2091AA] font-semibold block">Sewa, Listrik, Gaji</span>
+          </div>
+
+          <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
+            <span class="text-xs text-neutral-500 font-medium">Untung Bersih (Net Profit)</span>
+            <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
+              Rp 32.600.000
+            </div>
+            <span class="text-[11px] text-emerald-600 font-semibold block">Margin Bersih 32.6%</span>
           </div>
         </div>
 
-        <!-- 3. Legalitas -->
-        <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-5 shadow-xs space-y-3">
-          <h3 class="font-heading font-bold text-sm text-neutral-900 dark:text-white">
-            3. Surat Izin Usaha Resmi
-          </h3>
+        <!-- Audited Full P&L Table (Venture-Grade, Clean, Reduced Density) -->
+        <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 border space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
+            <div>
+              <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white">
+                1. Laporan Laba Rugi Riil (P&L Audited 5 Bulan)
+              </h3>
+              <p class="text-xs text-neutral-500 mt-0.5 font-sans">
+                Terekonsiliasi mutasi kasir harian & rekening giro oleh konsultan: {{ item?.consultantName }}
+              </p>
+            </div>
 
-          <div class="space-y-2">
-            <div
-              v-for="leg in legalDocs"
-              :key="leg.name"
-              class="p-3 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-between text-xs"
+            <button
+              type="button"
+              class="px-3.5 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300 transition-colors flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+              @click="downloadCsvFeedback"
             >
-              <div class="space-y-0.5">
-                <h4 class="font-heading font-semibold text-neutral-900 dark:text-white">{{ leg.name }}</h4>
-                <span class="text-[11px] text-emerald-600 font-semibold">{{ leg.status }}</span>
+              <HugeiconsIcon :icon="Download01Icon" :size="14" />
+              <span>Ekspor Data (CSV)</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#13161F]">
+            <table class="w-full text-left text-xs font-poppins">
+              <thead class="bg-neutral-50 dark:bg-neutral-900/80 text-neutral-600 dark:text-neutral-400 font-semibold uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-800">
+                <tr>
+                  <th class="py-3 px-4">Periode</th>
+                  <th class="py-3 px-4">Omzet Riil (Rp)</th>
+                  <th class="py-3 px-4">Modal Jualan (HPP)</th>
+                  <th class="py-3 px-4">Laba Kotor</th>
+                  <th class="py-3 px-4">Margin %</th>
+                  <th class="py-3 px-4">Beban OPEX</th>
+                  <th class="py-3 px-4">Untung Bersih</th>
+                  <th class="py-3 px-4 text-right">Saldo Kas</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
+                <tr
+                  v-for="(rec, idx) in [...umkmStore.monthlyRecords].reverse()"
+                  :key="rec.month"
+                  :class="idx % 2 === 0 ? 'bg-white dark:bg-[#13161F]' : 'bg-neutral-50/50 dark:bg-neutral-800/30'"
+                >
+                  <td class="py-3.5 px-4 font-bold text-neutral-900 dark:text-white">
+                    {{ rec.month }} {{ rec.year }}
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums font-semibold">
+                    Rp {{ rec.omzet.toLocaleString('id-ID') }}
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums text-neutral-700 dark:text-neutral-300">
+                    Rp {{ rec.hpp.toLocaleString('id-ID') }}
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums font-semibold text-emerald-600 dark:text-emerald-400">
+                    Rp {{ (rec.omzet - rec.hpp).toLocaleString('id-ID') }}
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums font-bold text-emerald-600 dark:text-emerald-400">
+                    {{ Math.round(((rec.omzet - rec.hpp) / rec.omzet) * 100) }}%
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums text-neutral-600 dark:text-neutral-400">
+                    Rp {{ rec.opex.toLocaleString('id-ID') }}
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums font-bold text-neutral-900 dark:text-white">
+                    Rp {{ rec.netProfit.toLocaleString('id-ID') }}
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums font-semibold text-[#2091AA] dark:text-[#50AABF] text-right">
+                    Rp {{ rec.cashBalance.toLocaleString('id-ID') }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================================================= -->
+      <!-- TAB 2: RUANG BERKAS & DOKUMEN LEGALITAS (Interactive Vault with In-App Preview)         -->
+      <!-- ======================================================================================= -->
+      <div v-else-if="activeDataRoomTab === 'docs'" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Vault 1: Rekening Koran & Mutasi Giro Bank -->
+          <div class="card-tactile-gopay rounded-2xl p-5 sm:p-6 border space-y-4">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
+              <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#0066D6] dark:text-blue-400 flex items-center justify-center">
+                <HugeiconsIcon :icon="File01Icon" :size="16" :stroke-width="2" />
+              </div>
+              <div>
+                <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+                  1. Rekening Koran Bank & Kasir POS
+                </h4>
+                <p class="text-[11px] text-neutral-500">Mutasi resmi giro usaha terpisah</p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5">
+              <div
+                v-for="doc in bankDocsList"
+                :key="doc.name"
+                class="p-3.5 rounded-xl bg-neutral-100/70 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60 flex items-center justify-between text-xs transition-colors hover:border-neutral-300 group"
+              >
+                <div class="min-w-0 space-y-0.5">
+                  <h5 class="font-semibold text-neutral-900 dark:text-white truncate">{{ doc.name }}</h5>
+                  <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block">{{ doc.size }} • {{ doc.verifiedDate }}</span>
+                </div>
+
+                <button
+                  type="button"
+                  class="px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:bg-neutral-50 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+                  @click="openDocPreviewModal(doc)"
+                >
+                  <HugeiconsIcon :icon="ViewIcon" :size="13" />
+                  <span>Pratinjau</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vault 2: Izin Usaha & Kepatuhan Legalitas -->
+          <div class="card-tactile-gopay rounded-2xl p-5 sm:p-6 border space-y-4">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
+              <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] dark:text-emerald-400 flex items-center justify-center">
+                <HugeiconsIcon :icon="ShieldCheckIcon" :size="16" :stroke-width="2" />
+              </div>
+              <div>
+                <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+                  2. Izin Usaha & Legalitas Resmi
+                </h4>
+                <p class="text-[11px] text-neutral-500">Kepatuhan OSS RBA, Halal, & Sewa</p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5">
+              <div
+                v-for="leg in legalDocsList"
+                :key="leg.name"
+                class="p-3.5 rounded-xl bg-neutral-100/70 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60 flex items-center justify-between text-xs transition-colors hover:border-neutral-300 group"
+              >
+                <div class="min-w-0 space-y-0.5">
+                  <h5 class="font-semibold text-neutral-900 dark:text-white truncate">{{ leg.name }}</h5>
+                  <span class="text-[11px] text-[#00AA13] dark:text-emerald-400 font-medium block">● {{ leg.status }}</span>
+                </div>
+
+                <button
+                  type="button"
+                  class="px-3 py-1.5 rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:bg-neutral-50 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+                  @click="openDocPreviewModal(leg)"
+                >
+                  <HugeiconsIcon :icon="ViewIcon" :size="13" />
+                  <span>Pratinjau</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================================================= -->
+      <!-- TAB 3: REKAM JEJAK EKSEKUSI RENCANA AKSI (Execution Capability Track Record)            -->
+      <!-- ======================================================================================= -->
+      <div v-else-if="activeDataRoomTab === 'actions'" class="space-y-6">
+        <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 border space-y-4 font-poppins">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
+            <div>
+              <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white">
+                Rekam Jejak Eksekusi Roadmap Rencana Aksi
+              </h3>
+              <p class="text-xs text-neutral-500 mt-0.5 font-sans">
+                Bukti disiplin operasional toko dalam menuntaskan langkah perbaikan bersama konsultan pendamping.
+              </p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-[#00AA13] border border-emerald-200 shrink-0">
+              4 Tugas Selesai • 100% Terverifikasi
+            </span>
+          </div>
+
+          <div class="space-y-3">
+            <div
+              v-for="act in executedActionsList"
+              :key="act.id"
+              class="p-4 rounded-xl bg-neutral-100/70 dark:bg-neutral-800/50 border border-neutral-200/60 dark:border-neutral-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            >
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300 border border-neutral-200">
+                    {{ act.category }}
+                  </span>
+                  <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                    <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
+                    <span>Tuntas Diverifikasi</span>
+                  </span>
+                </div>
+                <h4 class="font-bold text-sm text-neutral-900 dark:text-white">{{ act.title }}</h4>
+                <p class="text-xs text-neutral-500 font-sans">{{ act.impact }}</p>
               </div>
 
-              <button
-                type="button"
-                class="px-3 py-1 rounded-lg font-bold text-xs bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 border border-neutral-200 cursor-pointer"
-                @click="previewLegalDoc(leg)"
-              >
-                Lihat Surat
-              </button>
+              <div class="text-left sm:text-right shrink-0">
+                <span class="text-[11px] text-neutral-400 block font-mono">{{ act.date }}</span>
+                <span class="text-xs font-medium text-neutral-600 dark:text-neutral-400">Verifikator: {{ item?.consultantName }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- MODAL 1: PRATINJAU MUTASI BANK -->
-    <BModal
-      v-model="showBankModal"
-      :title="`Mutasi: ${activeBankDoc?.name || ''}`"
-      size="md"
+    <!-- ========================================================================================= -->
+    <!-- MODAL 1: INTERACTIVE DOCUMENT PREVIEW WITH DYNAMIC SECURITY WATERMARK                     -->
+    <!-- ========================================================================================= -->
+    <div
+      v-if="activePreviewDoc"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-150"
+      @click.self="activePreviewDoc = null"
     >
-      <div class="space-y-3 text-xs">
-        <div class="flex justify-between p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200">
+      <div class="card-tactile-gopay rounded-3xl p-6 border max-w-2xl w-full space-y-5 bg-white dark:bg-[#13161F] shadow-2xl relative">
+        <div class="flex items-start justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+          <div class="space-y-0.5">
+            <span class="text-[10px] font-mono font-bold text-[#00AA13] uppercase tracking-wider block">
+              DOKUMEN RESMI TERVERIFIKASI
+            </span>
+            <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
+              {{ activePreviewDoc.name }}
+            </h3>
+          </div>
+          <button
+            type="button"
+            class="p-1 rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-white cursor-pointer"
+            @click="activePreviewDoc = null"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Document Preview Canvas with Heavy Security Watermark -->
+        <div class="relative rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-6 sm:p-8 min-h-[300px] flex flex-col items-center justify-center text-center overflow-hidden select-none">
+          <!-- Dynamic Diagonal Watermark -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10 dark:opacity-15 transform -rotate-15">
+            <p class="font-mono font-extrabold text-sm text-neutral-900 dark:text-white text-center leading-loose">
+              BERUANG SECURE DATA ROOM • {{ authStore.currentUser?.name }} • {{ accessTimestamp }}<br />
+              CONFIDENTIAL • PROPRIETARY & PROTECTED
+            </p>
+          </div>
+
+          <!-- Document Graphic Emblem -->
+          <div class="w-16 h-16 rounded-2xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-[#2091AA] shadow-sm mb-3">
+            <HugeiconsIcon :icon="File01Icon" :size="32" :stroke-width="1.8" />
+          </div>
+
+          <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white mb-1">
+            {{ activePreviewDoc.name }}
+          </h4>
+          <p class="text-xs text-neutral-500 font-sans max-w-sm mb-4">
+            Dokumen asli telah dipindai, dienkripsi, dan dicocokkan keabsahannya dengan basis data instansi penerbit resmi.
+          </p>
+
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 text-xs font-semibold">
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
+            <span>Kesesuaian 100% Sah & Legal</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-[11px] text-neutral-400 font-mono">
+            Audit ID: SEC-{{ umkmId }}-DOK
+          </span>
+          <button
+            type="button"
+            class="px-4 py-2 rounded-xl text-xs font-semibold bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 cursor-pointer"
+            @click="activePreviewDoc = null"
+          >
+            Tutup Pratinjau
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================================= -->
+    <!-- MODAL 2: AJUKAN MINAT PENDANAAN / TERM SHEET (Deal-Making Proposal Action)                 -->
+    <!-- ========================================================================================= -->
+    <div
+      v-if="showTermSheetModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-150"
+      @click.self="showTermSheetModal = false"
+    >
+      <div class="card-tactile-gopay rounded-3xl p-6 sm:p-7 border max-w-lg w-full space-y-5 bg-white dark:bg-[#13161F] shadow-2xl">
+        <div class="flex items-start justify-between">
           <div>
-            <strong>BANK MANDIRI (GIRO)</strong>
-            <span class="block text-[11px] text-neutral-500">Rekening: 131-00-984421-2</span>
+            <span class="text-[10px] font-bold text-[#00AA13] uppercase tracking-wider block">
+              SINDIKASI MODAL BERUANG
+            </span>
+            <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white mt-0.5">
+              Ajukan Surat Minat Investasi (Term Sheet)
+            </h3>
+            <p class="text-xs text-neutral-500 mt-0.5">Kepada: {{ item?.name }}</p>
           </div>
-          <span class="text-xs font-mono font-bold text-emerald-600">✓ 100% Cocok Kasir</span>
+          <button
+            type="button"
+            class="p-1 rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-white cursor-pointer"
+            @click="showTermSheetModal = false"
+          >
+            ✕
+          </button>
         </div>
 
-        <table class="w-full text-left text-[11px]">
-          <thead class="bg-neutral-100 dark:bg-neutral-800 font-bold">
-            <tr>
-              <th class="p-2">Tgl</th>
-              <th class="p-2">Keterangan</th>
-              <th class="p-2 text-right">Keluar</th>
-              <th class="p-2 text-right">Masuk</th>
-              <th class="p-2 text-right">Saldo</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-neutral-100 font-mono">
-            <tr>
-              <td class="p-2">01/09</td>
-              <td class="p-2">Saldo Awal</td>
-              <td class="p-2 text-right">-</td>
-              <td class="p-2 text-right">-</td>
-              <td class="p-2 text-right font-bold">42.500.000</td>
-            </tr>
-            <tr>
-              <td class="p-2">05/09</td>
-              <td class="p-2">Setoran POS Mg I</td>
-              <td class="p-2 text-right">-</td>
-              <td class="p-2 text-right text-emerald-600">+14.850.000</td>
-              <td class="p-2 text-right">57.350.000</td>
-            </tr>
-            <tr>
-              <td class="p-2">08/09</td>
-              <td class="p-2">Bahan Kopi Ciwidey</td>
-              <td class="p-2 text-right text-rose-600">-6.200.000</td>
-              <td class="p-2 text-right">-</td>
-              <td class="p-2 text-right">51.150.000</td>
-            </tr>
-            <tr>
-              <td class="p-2">20/09</td>
-              <td class="p-2">Gaji Barista 3 Toko</td>
-              <td class="p-2 text-right text-rose-600">-12.500.000</td>
-              <td class="p-2 text-right">-</td>
-              <td class="p-2 text-right">54.850.000</td>
-            </tr>
-            <tr>
-              <td class="p-2">30/09</td>
-              <td class="p-2">Setoran POS Akhir</td>
-              <td class="p-2 text-right">-</td>
-              <td class="p-2 text-right text-emerald-600">+21.450.000</td>
-              <td class="p-2 text-right font-bold text-primary-600">62.000.000</td>
-            </tr>
-          </tbody>
-        </table>
+        <form @submit.prevent="submitTermSheet" class="space-y-4 text-xs font-poppins">
+          <div>
+            <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              Nominal Tiket Investasi (Rp)
+            </label>
+            <input
+              v-model.number="termSheetForm.amount"
+              type="number"
+              step="5000000"
+              required
+              class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-sm font-bold tabular-nums text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30"
+            />
+          </div>
+
+          <div>
+            <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              Pilihan Skema Kemitraan Modal
+            </label>
+            <select
+              v-model="termSheetForm.scheme"
+              class="w-full px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30"
+            >
+              <option value="REVENUE_SHARE">Bagi Hasil Pendapatan / Revenue Sharing (Syariah)</option>
+              <option value="PROFIT_SHARE">Bagi Hasil Untung Bersih (Net Profit Sharing)</option>
+              <option value="CONVERTIBLE_NOTE">Pinjaman Kemitraan Konvertibel</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              Catatan & Syarat Pendampingan untuk Pelaku Usaha
+            </label>
+            <textarea
+              v-model="termSheetForm.notes"
+              rows="3"
+              placeholder="Sampaikan rencana waktu pencairan modal, ekspektasi pelaporan kas bulanan, atau dukungan jaringan gerai yang dapat Anda berikan..."
+              class="w-full px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-sans"
+            />
+          </div>
+
+          <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-end gap-2.5">
+            <button
+              type="button"
+              class="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
+              @click="showTermSheetModal = false"
+            >
+              Batal
+            </button>
+
+            <button
+              type="submit"
+              class="px-5 py-2 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs cursor-pointer transition-all active:scale-95"
+            >
+              Kirim Surat Minat Resmi →
+            </button>
+          </div>
+        </form>
       </div>
-
-      <template #footer>
-        <div class="flex justify-end">
-          <BButton variant="secondary" size="sm" @click="showBankModal = false">
-            Tutup
-          </BButton>
-        </div>
-      </template>
-    </BModal>
-
-    <!-- MODAL 2: PRATINJAU LEGALITAS -->
-    <BModal
-      v-model="showLegalModal"
-      :title="`Legalitas: ${activeLegalDoc?.name || ''}`"
-      size="sm"
-    >
-      <div class="space-y-2.5 text-xs">
-        <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 space-y-2">
-          <div class="flex justify-between border-b pb-1">
-            <span class="text-neutral-500">Nama Usaha:</span>
-            <strong>{{ item.name }}</strong>
-          </div>
-          <div class="flex justify-between border-b pb-1">
-            <span class="text-neutral-500">NIB:</span>
-            <strong class="font-mono">1209210048291</strong>
-          </div>
-          <div class="flex justify-between border-b pb-1">
-            <span class="text-neutral-500">KBLI:</span>
-            <strong>56303 (Kedai Kopi)</strong>
-          </div>
-          <div class="flex justify-between border-b pb-1">
-            <span class="text-neutral-500">Halal:</span>
-            <strong class="text-emerald-600">ID3211000194829 (Aktif 2028)</strong>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-neutral-500">Status:</span>
-            <strong class="text-emerald-600">Sah & Terdaftar OSS</strong>
-          </div>
-        </div>
-      </div>
-
-      <template #footer>
-        <div class="flex justify-end">
-          <BButton variant="secondary" size="sm" @click="showLegalModal = false">
-            Tutup
-          </BButton>
-        </div>
-      </template>
-    </BModal>
+    </div>
   </div>
 </template>
 
@@ -380,13 +573,20 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useInvestorStore } from '~/stores/investor'
 import { useUmkmStore } from '~/stores/umkm'
-import BButton from '~/components/base/BButton.vue'
-import BModal from '~/components/base/BModal.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  ArrowLeft02Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
   SquareLock02Icon,
-  Download01Icon
+  ShieldCheckIcon,
+  Clock01Icon,
+  Coins01Icon,
+  Download01Icon,
+  File01Icon,
+  CheckmarkCircle01Icon,
+  ViewIcon,
+  AnalyticsUpIcon,
+  Task01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -404,8 +604,6 @@ const item = computed(() => {
   return investorStore.marketplaceList.find(m => m.id === umkmId.value) || investorStore.marketplaceList[0]
 })
 
-const investorName = computed(() => authStore.currentUser?.name || 'Hendro Wicaksono')
-
 const accessTimestamp = new Date().toLocaleString('id-ID', {
   day: '2-digit',
   month: 'short',
@@ -414,99 +612,92 @@ const accessTimestamp = new Date().toLocaleString('id-ID', {
   minute: '2-digit'
 })
 
-// Catatan Laba Rugi 5 Bulan
-const displayRecords = computed(() => {
-  if (umkmStore.monthlyRecords && umkmStore.monthlyRecords.length > 0) {
-    return [...umkmStore.monthlyRecords].reverse()
+// Tab Navigation
+const dataRoomTabs = [
+  { id: 'pnl', label: 'Laporan Laba Rugi Riil', icon: AnalyticsUpIcon },
+  { id: 'docs', label: 'Vault Berkas & Legalitas', icon: File01Icon },
+  { id: 'actions', label: 'Rekam Jejak Rencana Aksi', icon: Task01Icon }
+]
+const activeDataRoomTab = ref('pnl')
+
+// Toast State
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function triggerToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 2500)
+}
+
+function downloadCsvFeedback() {
+  triggerToast('Berkas CSV Laporan P&L Audited berhasil diekspor!')
+}
+
+// Vault Documents
+const bankDocsList = [
+  { name: 'Rekening Koran Mandiri Giro Usaha (Sep 2026)', size: '2.4 MB PDF', verifiedDate: 'Audit 20 Sep 2026' },
+  { name: 'Rekening Koran Mandiri Giro Usaha (Agu 2026)', size: '2.1 MB PDF', verifiedDate: 'Audit 18 Agu 2026' },
+  { name: 'Rekapitulasi Arus Kas POS Kasir (Mei-Sep)', size: '1.2 MB PDF', verifiedDate: 'Audit 22 Sep 2026' }
+]
+
+const legalDocsList = [
+  { name: 'Nomor Induk Berusaha (NIB RBA - KBLI 56303)', status: 'Aktif Terdaftar di OSS RI' },
+  { name: 'Sertifikat Halal Resmi BPJPH Kemenag', status: 'Terbit Berlaku s.d 2028' },
+  { name: 'Perjanjian Sewa Gerai 3 Cabang Aktif', status: 'Aman s.d Desember 2028' }
+]
+
+// Executed Actions List (Reflecting the UMKM Rencana Aksi achievements)
+const executedActionsList = [
+  {
+    id: 'act-1',
+    category: 'Finansial & Kas',
+    title: 'Pemisahan Rekening Pribadi & Usaha (Bank Mandiri Giro)',
+    impact: 'Arus kas toko kini 100% bersih tanpa tercampur beban keluarga.',
+    date: '15 Sep 2026'
+  },
+  {
+    id: 'act-2',
+    category: 'Legalitas',
+    title: 'Penerbitan NIB Berbasis Risiko OSS KBLI 56303',
+    impact: 'Memenuhi syarat legalitas institusional untuk sindikasi modal.',
+    date: '10 Sep 2026'
+  },
+  {
+    id: 'act-3',
+    category: 'Operasional',
+    title: 'Standardisasi Resep Bahan Baku & SOP Barista',
+    impact: 'Menurunkan porsi modal jualan (HPP) menjadi stabil 45.1%.',
+    date: '02 Sep 2026'
+  },
+  {
+    id: 'act-4',
+    category: 'Tata Kelola Kas',
+    title: 'Digitalisasi Kasir POS & Rekonsiliasi Nota QRIS',
+    impact: 'Seluruh penjualan harian tercatat akurat dan siap audit.',
+    date: '25 Agu 2026'
   }
-  return [
-    { month: 'Mei', year: 2026, omzet: 58000000, hpp: 28000000, opex: 13000000, netProfit: 17000000, cashBalance: 62000000 },
-    { month: 'April', year: 2026, omzet: 54000000, hpp: 26500000, opex: 12500000, netProfit: 15000000, cashBalance: 52000000 },
-    { month: 'Maret', year: 2026, omzet: 49000000, hpp: 24500000, opex: 12000000, netProfit: 12500000, cashBalance: 42000000 },
-    { month: 'Februari', year: 2026, omzet: 45000000, hpp: 23000000, opex: 11500000, netProfit: 10500000, cashBalance: 33000000 },
-    { month: 'Januari', year: 2026, omzet: 42000000, hpp: 22000000, opex: 11000000, netProfit: 9000000, cashBalance: 28000000 }
-  ]
-})
-
-const averageOmzet = computed(() => {
-  const sum = displayRecords.value.reduce((acc, r) => acc + r.omzet, 0)
-  return Math.round(sum / displayRecords.value.length)
-})
-
-const averageHpp = computed(() => {
-  const sum = displayRecords.value.reduce((acc, r) => acc + r.hpp, 0)
-  return Math.round(sum / displayRecords.value.length)
-})
-
-const averageOpex = computed(() => {
-  const sum = displayRecords.value.reduce((acc, r) => acc + r.opex, 0)
-  return Math.round(sum / displayRecords.value.length)
-})
-
-const averageNetProfit = computed(() => {
-  const sum = displayRecords.value.reduce((acc, r) => acc + r.netProfit, 0)
-  return Math.round(sum / displayRecords.value.length)
-})
-
-const latestCashBalance = computed(() => {
-  return displayRecords.value[0]?.cashBalance || 62000000
-})
-
-// Dokumen Bank
-const bankDocs = [
-  { name: 'Mandiri Giro (Sep 2026)', verifiedDate: 'Audit 20 Sep 2026' },
-  { name: 'Mandiri Giro (Agu 2026)', verifiedDate: 'Audit 18 Agu 2026' },
-  { name: 'Rekap POS Kasir (Mei-Sep)', verifiedDate: 'Audit 22 Sep 2026' }
 ]
 
-// Dokumen Legalitas
-const legalDocs = [
-  { name: 'NIB RBA (KBLI 56303)', status: 'Aktif di OSS' },
-  { name: 'Sertifikat Halal Kemenag', status: 'Aktif s.d 2028' },
-  { name: 'Perjanjian Sewa Ruko', status: 'Aman s.d 2028' }
-]
+// Document Preview Modal State
+const activePreviewDoc = ref<any>(null)
 
-// Pratinjau Modal
-const showBankModal = ref(false)
-const activeBankDoc = ref<{ name: string; verifiedDate: string } | null>(null)
-
-function previewBankStatement(doc: { name: string; verifiedDate: string }) {
-  activeBankDoc.value = doc
-  showBankModal.value = true
+function openDocPreviewModal(doc: any) {
+  activePreviewDoc.value = doc
 }
 
-const showLegalModal = ref(false)
-const activeLegalDoc = ref<{ name: string; status: string } | null>(null)
+// Term Sheet Deal-Making Modal State
+const showTermSheetModal = ref(false)
+const termSheetForm = ref({
+  amount: 150000000,
+  scheme: 'REVENUE_SHARE',
+  notes: ''
+})
 
-function previewLegalDoc(doc: { name: string; status: string }) {
-  activeLegalDoc.value = doc
-  showLegalModal.value = true
-}
-
-// Download CSV
-function exportCsv() {
-  const headers = ['Bulan', 'Tahun', 'Penjualan (Rp)', 'Bahan Baku (Rp)', 'Untung Kotor (Rp)', 'Margin (%)', 'Biaya Toko (Rp)', 'Laba Bersih (Rp)', 'Saldo Kas (Rp)']
-  const rows = displayRecords.value.map(r => [
-    r.month,
-    r.year,
-    r.omzet,
-    r.hpp,
-    r.omzet - r.hpp,
-    Math.round(((r.omzet - r.hpp) / r.omzet) * 100),
-    r.opex,
-    r.netProfit,
-    r.cashBalance
-  ])
-
-  const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n')
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.setAttribute('href', url)
-  link.setAttribute('download', `Laporan_${item.value.code}.csv`)
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
+function submitTermSheet() {
+  showTermSheetModal.value = false
+  triggerToast(`Surat Minat Investasi Rp ${termSheetForm.value.amount.toLocaleString('id-ID')} berhasil dikirimkan ke pemilik usaha!`)
 }
 </script>

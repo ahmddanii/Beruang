@@ -32,14 +32,14 @@ Pedoman desain Progressive Web App (PWA) resmi untuk **Beruang / INSEVENT**. Atu
 
 | Elemen | Ukuran | Weight | Line Height | Tracking |
 | :--- | :---: | :---: | :---: | :---: |
-| **Heading H1** | `24–32px` | Bold (700 / 800) | `1.2` | `-0.03em` |
-| **Heading H2** | `20–24px` | SemiBold (600) | `1.3` | `-0.02em` |
-| **Body Text** | `16px` | Regular (400) | `1.5` | `normal` |
-| **Caption / Label** | `12–14px` | Medium (500) | `1.4` | `normal` |
-| **Button Label** | `14–16px` | Medium / SemiBold (500–600) | `1.0` | `-0.01em` |
+| **Heading H1** | `24–36px` | Bold (700) | `1.25` | `normal` |
+| **Heading H2** | `20–26px` | SemiBold (600) / Bold (700) | `1.3` | `normal` |
+| **Body Text** | `14–16px` | Regular (400) / Medium (500) | `1.5` | `normal` |
+| **Caption / Label** | `11–13px` | Medium (500) / SemiBold (600) | `1.4` | `normal` |
+| **Button Label** | `13–15px` | SemiBold (600) | `1.0` | `normal` |
 
-*   ⛔ **Dilarang keras memakai ukuran font `< 12px`** karena tidak terbaca di layar smartphone resolusi tinggi.
-*   Maksimal **2 font family** dalam aplikasi (`Satoshi` sebagai primer).
+*   ⛔ **Dilarang memakai ukuran font `< 11px`** (kecuali sub-label mikro `10px`).
+*   **Font Konsisten**: Wajib menggunakan font **`Poppins`** di seluruh aplikasi dengan `letter-spacing: normal !important;` dan kelas `tabular-nums` untuk perataan angka metrik/finansial.
 *   **Kontras Teks (WCAG AA)**: Minimal `4.5:1` untuk teks normal (<18px), dan `3:1` untuk teks besar (≥18px bold / 24px regular).
 
 ---

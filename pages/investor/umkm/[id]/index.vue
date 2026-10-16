@@ -1,246 +1,191 @@
 <template>
-  <div class="space-y-6 pb-20 font-sans">
-    <!-- Tombol Navigasi Atas -->
-    <div class="flex items-center justify-between">
+  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100 select-none">
+    <!-- Top Breadcrumb & Action Bar -->
+    <div class="flex items-center justify-between pb-2 border-b border-neutral-100 dark:border-neutral-800/80">
       <NuxtLink
         to="/investor"
-        class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-neutral-500 hover:text-primary-600 transition-colors"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline transition-colors"
       >
-        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
-        <span>Katalog Usaha</span>
+        <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2.2" />
+        <span>Kembali ke Venture Social Feed</span>
       </NuxtLink>
 
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 cursor-pointer"
-        @click="investorStore.toggleBookmark(item.id)"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 transition-colors cursor-pointer"
+        @click="item ? investorStore.toggleBookmark(item.id) : undefined"
       >
         <HugeiconsIcon
-          :icon="Bookmark01Icon"
+          :icon="StarIcon"
           :size="15"
-          :stroke-width="1.75"
-          :class="item.bookmarked ? 'text-amber-500 fill-amber-400' : 'text-neutral-400'"
+          :class="item?.bookmarked ? 'fill-amber-400 text-amber-500' : 'text-neutral-400'"
         />
-        <span>{{ item.bookmarked ? 'Tersimpan' : 'Simpan Usaha' }}</span>
+        <span>{{ item?.bookmarked ? 'Tersimpan di Pantau' : 'Simpan Usaha' }}</span>
       </button>
     </div>
 
-    <!-- 1. HEADER PROFIL RINGKAS -->
-    <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 rounded-2xl bg-amber-400 p-2 shadow-xs shrink-0 flex items-center justify-center">
-          <img src="/logo.svg" alt="Logo" class="w-full h-full object-contain" />
-        </div>
-
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs font-mono font-bold text-neutral-400">{{ item.code }}</span>
-            <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" :stroke-width="2" />
-              <span>TERVERIFIKASI</span>
-            </span>
-          </div>
-
-          <h1 class="text-2xl sm:text-3xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight">
-            {{ item.name }}
-          </h1>
-
-          <p class="text-xs sm:text-sm text-neutral-500">
-            {{ item.sector }} • {{ item.city }} • Berdiri {{ item.establishedYear }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Tombol Aksi -->
-      <div class="shrink-0 w-full md:w-auto">
-        <NuxtLink
-          v-if="item.accessStatus === 'APPROVED'"
-          :to="`/investor/data-room/${item.id}`"
-          class="px-5 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all inline-flex items-center gap-2"
-        >
-          <HugeiconsIcon :icon="FileUnlockedIcon" :size="16" :stroke-width="2" />
-          <span>Buka Laporan Asli</span>
-        </NuxtLink>
-
-        <div
-          v-else-if="item.accessStatus === 'PENDING'"
-          class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 inline-flex items-center gap-2"
-        >
-          <HugeiconsIcon :icon="Clock01Icon" :size="15" :stroke-width="2" class="text-amber-600" />
-          <span>Menunggu Persetujuan Pemilik</span>
-        </div>
-
-        <NuxtLink
-          v-else
-          :to="`/investor/umkm/${item.id}/ajukan-akses`"
-          class="px-5 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm bg-primary-600 hover:bg-primary-700 text-white shadow-xs transition-all inline-flex items-center gap-2"
-        >
-          <span>Minta Izin Buka Laporan</span>
-          <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2" />
-        </NuxtLink>
-      </div>
-    </div>
-
-    <!-- 2. KOTAK 4 ANGKA KUNCI (BAHASA MUDAH DIPAHAMI) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-center">
-      <div class="p-4 rounded-2xl bg-white dark:bg-[#141519] border border-neutral-200 dark:border-neutral-800 shadow-xs space-y-0.5">
-        <span class="text-xs text-neutral-500 font-medium block">Untung Kotor</span>
-        <span class="text-2xl sm:text-3xl font-heading font-extrabold text-emerald-600 dark:text-emerald-400 block tabular-nums">
-          {{ item.marginPercentage }}%
-        </span>
-      </div>
-
-      <div class="p-4 rounded-2xl bg-white dark:bg-[#141519] border border-neutral-200 dark:border-neutral-800 shadow-xs space-y-0.5">
-        <span class="text-xs text-neutral-500 font-medium block">Kenaikan per Tahun</span>
-        <span class="text-2xl sm:text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-400 block tabular-nums">
-          +{{ item.growthYoY }}%
-        </span>
-      </div>
-
-      <div class="p-4 rounded-2xl bg-white dark:bg-[#141519] border border-neutral-200 dark:border-neutral-800 shadow-xs space-y-0.5">
-        <span class="text-xs text-neutral-500 font-medium block">Nilai Kesehatan Toko</span>
-        <span class="text-2xl sm:text-3xl font-heading font-extrabold text-neutral-900 dark:text-white block tabular-nums">
-          {{ item.healthScore }}/100
-        </span>
-      </div>
-
-      <div class="p-4 rounded-2xl bg-white dark:bg-[#141519] border border-neutral-200 dark:border-neutral-800 shadow-xs space-y-0.5">
-        <span class="text-xs text-neutral-500 font-medium block">Modal yang Dibutuhkan</span>
-        <span class="text-2xl sm:text-3xl font-heading font-extrabold text-neutral-900 dark:text-white block tabular-nums">
-          Rp {{ (item.fundingTarget / 1000000).toLocaleString('id-ID') }} Jt
-        </span>
-      </div>
-    </div>
-
-    <!-- 3. GRAFIK KEMAJUAN USAHA (BUSINESS JOURNEY - US-INV-02) -->
-    <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 shadow-xs space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-base sm:text-lg font-heading font-extrabold text-neutral-900 dark:text-white">
-          Perjalanan Usaha: Untung vs Biaya Bahan (5 Bulan)
-        </h2>
-        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-          Penghematan Biaya: +{{ (item.journey[0]?.hppPercentage - item.journey[item.journey.length - 1]?.hppPercentage).toFixed(1) }}%
-        </span>
-      </div>
-
-      <!-- Grafik -->
-      <div class="p-3 rounded-2xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800">
-        <BLineAreaChart
-          :categories="chartCategories"
-          :series="chartSeries"
-          :value-formatter="(v) => `${v}%`"
+    <!-- 1. Pitch Hero Header Card (GoPay Tactile Card with Store Banner) -->
+    <div class="card-tactile-gopay rounded-3xl border overflow-hidden">
+      <!-- Store Banner Image -->
+      <div class="relative w-full h-44 sm:h-56 bg-neutral-900 overflow-hidden">
+        <img
+          src="/images/default-store-banner.jpg"
+          alt="Banner Toko"
+          class="w-full h-full object-cover"
         />
-      </div>
-
-      <!-- 5 Langkah Ringkas -->
-      <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 pt-1">
-        <div
-          v-for="step in item.journey"
-          :key="step.month"
-          class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-1 text-xs"
-        >
-          <div class="flex justify-between font-bold text-[11px]">
-            <span class="text-neutral-500">{{ step.month === 'Baseline' ? 'Bulan Awal' : step.month }}</span>
-            <span class="text-emerald-600">Untung {{ step.marginPercentage }}%</span>
-          </div>
-          <h4 class="font-heading font-semibold text-neutral-900 dark:text-white leading-snug line-clamp-2">
-            {{ step.milestone }}
-          </h4>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div class="absolute top-4 left-4 flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-mono font-bold border border-white/20">
+            {{ item?.code }}
+          </span>
+          <span class="px-2.5 py-1 rounded-full bg-emerald-500/90 text-white text-xs font-bold flex items-center gap-1">
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
+            <span>Ready for Funding</span>
+          </span>
         </div>
       </div>
-    </div>
 
-    <!-- 4. RENCANA PENGGUNAAN DANA -->
-    <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 shadow-xs space-y-3">
-      <div class="flex items-center justify-between">
-        <h3 class="font-heading font-bold text-sm sm:text-base text-neutral-900 dark:text-white">
-          Rencana Penggunaan Modal
-        </h3>
-        <span class="text-xs font-mono font-bold text-primary-600">
-          Total Target: Rp {{ (item.fundingTarget / 1000000).toLocaleString('id-ID') }} Jt
-        </span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-        <div
-          v-for="(plan, pIdx) in item.expansionPlan"
-          :key="pIdx"
-          class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs text-neutral-700 dark:text-neutral-300 flex items-start gap-2"
-        >
-          <span class="text-primary-600 font-bold shrink-0">✓</span>
-          <span>{{ plan }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5. PENILAIAN KONSULTAN (US-INV-03) -->
-    <div class="bg-white dark:bg-[#141519] rounded-3xl border border-neutral-200 dark:border-neutral-800 p-5 sm:p-6 shadow-xs space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-base sm:text-lg font-heading font-extrabold text-neutral-900 dark:text-white">
-          Pemeriksaan Konsultan Pendamping
-        </h2>
-        <span class="text-xs text-neutral-500 font-medium">
-          Diperiksa oleh: <strong class="text-neutral-800 dark:text-neutral-200">{{ item.consultantName }}</strong>
-        </span>
-      </div>
-
-      <!-- 5 Aspek Ringkas -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
-        <div
-          v-for="aspect in item.consultantEvaluations"
-          :key="aspect.aspect"
-          class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-1 text-xs"
-        >
-          <div class="flex items-center justify-between font-bold">
-            <span class="text-neutral-800 dark:text-neutral-200 text-xs">{{ formatAspectTitle(aspect.aspect) }}</span>
-            <span class="text-primary-600 font-mono">{{ aspect.score }}</span>
-          </div>
-          <p class="text-[11px] text-neutral-500 line-clamp-2">
-            {{ aspect.finding }}
+      <!-- Store Info Body -->
+      <div class="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#13161F]">
+        <div class="space-y-1.5">
+          <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+            {{ item?.name }}
+          </h1>
+          <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+            <span>{{ item?.sector }}</span>
+            <span>•</span>
+            <span class="flex items-center gap-1">
+              <HugeiconsIcon :icon="Location01Icon" :size="13" />
+              {{ item?.city }}
+            </span>
+            <span>•</span>
+            <span>Berdiri Sejak {{ item?.establishedYear }}</span>
           </p>
         </div>
+
+        <div class="shrink-0 flex items-center gap-3">
+          <NuxtLink
+            v-if="item?.accessStatus === 'APPROVED'"
+            :to="`/investor/data-room/${item?.id}`"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all active:scale-95 cursor-pointer"
+          >
+            <HugeiconsIcon :icon="FileUnlockedIcon" :size="16" :stroke-width="2" />
+            <span>Buka Data Room Terproteksi</span>
+          </NuxtLink>
+
+          <div
+            v-else-if="item?.accessStatus === 'PENDING'"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border border-neutral-200 dark:border-neutral-700 select-none"
+          >
+            <HugeiconsIcon :icon="Clock01Icon" :size="14" class="text-amber-500" />
+            <span>Permintaan Sedang Ditinjau</span>
+          </div>
+
+          <NuxtLink
+            v-else
+            :to="`/investor/umkm/${item?.id}/ajukan-akses`"
+            class="btn-pill-action group cursor-pointer inline-flex items-center gap-2 text-xs py-2 px-4"
+          >
+            <span>Ajukan Akses Data Room Privat</span>
+            <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2.2" />
+          </NuxtLink>
+        </div>
       </div>
     </div>
 
-    <!-- 6. KOTAK AJAKAN BUKA LAPORAN -->
-    <div class="p-6 rounded-3xl bg-neutral-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base sm:text-lg font-heading font-bold">
-          Ingin Memeriksa Laporan Asli Toko Ini?
-        </h3>
-        <p class="text-xs text-neutral-400">
-          Bapak dapat meminta izin untuk membaca buku kas, rekening koran bank, dan bukti izin resmi.
-        </p>
+    <!-- 2. Key Ratio Metrics (4 Telemetry Cards - Unified Black Figures) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-1.5 text-center">
+        <span class="text-xs text-neutral-500 font-medium block">Margin Kotor Terverifikasi</span>
+        <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white block tabular-nums">
+          {{ item?.marginPercentage }}%
+        </span>
+        <span class="text-[11px] text-emerald-600 font-semibold block">Stabil 5 bulan terakhir</span>
       </div>
 
-      <NuxtLink
-        v-if="item.accessStatus === 'APPROVED'"
-        :to="`/investor/data-room/${item.id}`"
-      >
-        <BButton variant="success" size="md" class="flex items-center gap-2 shrink-0">
-          <HugeiconsIcon :icon="FileUnlockedIcon" :size="16" :stroke-width="2" />
-          <span>Buka Laporan Asli</span>
-        </BButton>
-      </NuxtLink>
+      <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-1.5 text-center">
+        <span class="text-xs text-neutral-500 font-medium block">Pertumbuhan Omzet YoY</span>
+        <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white block tabular-nums">
+          +{{ item?.growthYoY }}%
+        </span>
+        <span class="text-[11px] text-emerald-600 font-semibold block">Retensi Penjualan Tinggi</span>
+      </div>
 
-      <NuxtLink
-        v-else-if="item.accessStatus === 'PENDING'"
-        :to="`/investor/data-room/${item.id}`"
-      >
-        <BButton variant="secondary" size="md" class="shrink-0">
-          <span>Menunggu Persetujuan</span>
-        </BButton>
-      </NuxtLink>
+      <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-1.5 text-center">
+        <span class="text-xs text-neutral-500 font-medium block">Indeks Kesehatan Usaha</span>
+        <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white block tabular-nums">
+          {{ item?.healthScore }}/100
+        </span>
+        <span class="text-[11px] text-[#2091AA] font-semibold block">Grade A (Kelayakan Tinggi)</span>
+      </div>
 
-      <NuxtLink
-        v-else
-        :to="`/investor/umkm/${item.id}/ajukan-akses`"
-      >
-        <BButton variant="primary" size="md" class="flex items-center gap-2 shrink-0">
-          <span>Minta Izin Buka Laporan</span>
-          <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2" />
-        </BButton>
-      </NuxtLink>
+      <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-1.5 text-center">
+        <span class="text-xs text-neutral-500 font-medium block">Kebutuhan Modal Sindikasi</span>
+        <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white block tabular-nums">
+          Rp {{ ((item?.fundingTarget || 0) / 1000000) }} Juta
+        </span>
+        <span class="text-[11px] text-neutral-500 block">Ekspansi gerai & roastery</span>
+      </div>
+    </div>
+
+    <!-- 3. Business Story & Radar Assessment -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-poppins">
+      <!-- Story Narrative (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="card-tactile-gopay rounded-2xl p-6 border space-y-4">
+          <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
+            Cerita & Model Bisnis Toko
+          </h3>
+          <div class="text-xs sm:text-[13px] text-neutral-700 dark:text-neutral-300 space-y-3 leading-relaxed font-sans">
+            <p>
+              "{{ item?.pitchSummary }}"
+            </p>
+            <p>
+              Bisnis ini mengadopsi model gerai kompak (compact coffee bar) dengan efisiensi sewa lahan yang terbukti menekan rasio OPEX di bawah 25%. Standardisasi roasting biji lokal terpusat menjamin margin kotor tetap konsisten meskipun terjadi fluktuasi komoditas.
+            </p>
+
+            <div class="p-4 rounded-xl bg-neutral-100/70 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60 space-y-2">
+              <h4 class="font-poppins font-bold text-xs text-neutral-900 dark:text-white">
+                Rencana Alokasi Penggunaan Dana Investasi:
+              </h4>
+              <ul class="list-disc list-inside space-y-1 text-neutral-600 dark:text-neutral-400 text-xs">
+                <li>60% — Pembukaan 2 cabang cloud kitchen di area padat Bandung Utara.</li>
+                <li>25% — Pengadaan mesin roastery kapasitas 5kg/batch terpusat.</li>
+                <li>15% — Cadangan kas modal kerja (working capital buffer).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consultant Testimonial -->
+        <div class="card-tactile-gopay rounded-2xl p-6 border space-y-3">
+          <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white pb-2 border-b border-neutral-100 dark:border-neutral-800/80">
+            Opini Objektif Konsultan Pendamping BNSP
+          </h3>
+          <div class="flex items-start gap-3.5 text-xs">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#0066D6] dark:bg-blue-950 dark:text-blue-300 font-bold flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
+              MS
+            </div>
+            <div class="space-y-1">
+              <p class="italic text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+                "Kami telah mendampingi pendiri selama 6 bulan terakhir. Disiplin pelaporan kas harian sangat mengesankan, kartu stok opname mingguan ditaati, dan izin NIB serta Halal lengkap. Sangat layak dipertimbangkan untuk sindikasi tahap awal."
+              </p>
+              <div class="pt-1">
+                <strong class="font-bold text-neutral-900 dark:text-white block">{{ item?.consultantName }}</strong>
+                <span class="text-[11px] text-neutral-500">Konsultan Keuangan Berlisensi BNSP • Audit {{ item?.certifiedAt }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radar Overview (5 cols) -->
+      <div class="lg:col-span-5 card-tactile-gopay rounded-2xl p-6 border flex flex-col items-center">
+        <h3 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white mb-4 w-full text-center">
+          Radar Hasil Audit 5 Aspek Fundamental
+        </h3>
+        <BRadarChart :items="radarData" :size="280" show-target />
+      </div>
     </div>
   </div>
 </template>
@@ -249,16 +194,16 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useInvestorStore } from '~/stores/investor'
-import BButton from '~/components/base/BButton.vue'
-import BLineAreaChart from '~/components/base/BLineAreaChart.vue'
+import BRadarChart from '~/components/base/BRadarChart.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  Bookmark01Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  StarIcon,
   CheckmarkCircle01Icon,
   FileUnlockedIcon,
   Clock01Icon,
-  ArrowRight01Icon,
-  ArrowLeft02Icon
+  Location01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -274,34 +219,11 @@ const item = computed(() => {
   return investorStore.marketplaceList.find(m => m.id === umkmId.value) || investorStore.marketplaceList[0]
 })
 
-function formatAspectTitle(name: string) {
-  if (name.includes('Finansial')) return 'Keuangan'
-  if (name.includes('Operasional')) return 'Operasional'
-  if (name.includes('Pasar')) return 'Penjualan'
-  if (name.includes('Legalitas')) return 'Surat Izin'
-  if (name.includes('Tata Kelola') || name.includes('SDM')) return 'Karyawan'
-  return name.split(' ')[0]
-}
-
-// Data grafik dengan istilah mudah dipahami orang awam
-const chartCategories = computed(() => {
-  return item.value.journey.map(j => (j.month === 'Baseline' ? 'Bulan Awal' : j.month))
-})
-
-const chartSeries = computed(() => {
-  return [
-    {
-      id: 'margin',
-      name: 'Untung Kotor (%)',
-      color: '#10B981',
-      data: item.value.journey.map(j => j.marginPercentage)
-    },
-    {
-      id: 'hpp',
-      name: 'Biaya Bahan (%)',
-      color: '#F43F5E',
-      data: item.value.journey.map(j => j.hppPercentage)
-    }
-  ]
-})
+const radarData = [
+  { name: 'Finansial', score: 78, maxScore: 100, targetScore: 85 },
+  { name: 'Operasional', score: 85, maxScore: 100, targetScore: 80 },
+  { name: 'Pemasaran', score: 64, maxScore: 100, targetScore: 75 },
+  { name: 'Legalitas', score: 92, maxScore: 100, targetScore: 90 },
+  { name: 'Tata Kelola', score: 75, maxScore: 100, targetScore: 80 }
+]
 </script>

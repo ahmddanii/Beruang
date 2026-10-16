@@ -9,8 +9,8 @@
       <defs>
         <!-- Primary subtle fill for polygon -->
         <radialGradient id="radarFillGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#1F52EB" stop-opacity="0.25" />
-          <stop offset="100%" stop-color="#1F52EB" stop-opacity="0.08" />
+          <stop offset="0%" stop-color="#2091AA" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#2091AA" stop-opacity="0.08" />
         </radialGradient>
         <!-- Benchmark gradient -->
         <radialGradient id="radarTargetGrad" cx="50%" cy="50%" r="50%">
@@ -63,7 +63,7 @@
       <polygon
         :points="scorePoints"
         fill="url(#radarFillGrad)"
-        stroke="#1F52EB"
+        stroke="#2091AA"
         stroke-width="2"
         stroke-linejoin="round"
         class="transition-all duration-300 ease-out"
@@ -82,14 +82,14 @@
           :cx="point.x"
           :cy="point.y"
           r="6"
-          class="fill-primary-500/20 group-hover:fill-primary-500/30 transition-all"
+          class="fill-[#2091AA]/20 group-hover:fill-[#2091AA]/35 transition-all"
         />
         <!-- Inner dot -->
         <circle
           :cx="point.x"
           :cy="point.y"
           r="4"
-          fill="#1F52EB"
+          fill="#2091AA"
           stroke="#FFFFFF"
           stroke-width="2"
           class="transition-transform duration-200 group-hover:scale-125"
@@ -108,7 +108,7 @@
           class="fill-neutral-800 dark:fill-neutral-200 font-bold cursor-default"
         >
           {{ label.name }}
-          <tspan class="fill-primary-600 dark:fill-primary-400 font-extrabold ml-1">
+          <tspan class="fill-[#2091AA] dark:fill-[#50AABF] font-extrabold ml-1">
             ({{ items[index]?.score ?? 0 }}/{{ items[index]?.maxScore ?? 100 }})
           </tspan>
         </text>
@@ -120,7 +120,7 @@
       v-if="hoveredIndex !== null && items[hoveredIndex]"
       class="mt-3 px-3.5 py-2 rounded-xl bg-neutral-900 text-white text-xs sm:text-sm shadow-lg animate-fade-in flex items-center gap-2.5"
     >
-      <span class="w-2.5 h-2.5 rounded-full bg-primary-400" />
+      <span class="w-2.5 h-2.5 rounded-full bg-[#2091AA]" />
       <span class="font-semibold">{{ items[hoveredIndex].name }}:</span>
       <span class="font-bold text-gold tabular-nums">{{ items[hoveredIndex].score }} / {{ items[hoveredIndex].maxScore ?? 100 }}</span>
       <span class="text-neutral-300 text-xs font-semibold">({{ Math.round((items[hoveredIndex].score / (items[hoveredIndex].maxScore ?? 100)) * 100) }}%)</span>

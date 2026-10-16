@@ -70,22 +70,35 @@
         </div>
       </Transition>
 
-      <!-- 2. Top-Right Action: Circular Button with 3-Dots (MoreVerticalCircle02Icon) & Dropdown Menu -->
+      <!-- 2. Top-Right Action: Dedicated Action Button & Dropdown Menu -->
       <div class="absolute top-3 sm:top-4 right-3 sm:right-5 z-20 pointer-events-auto">
         <div ref="menuRef" class="relative">
-          <!-- Circular Action Trigger Button with MoreVerticalCircle02Icon -->
+          <!-- Dedicated Action Trigger Button with Camera Icon & Label -->
           <button
             type="button"
-            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/75 text-white backdrop-blur-md border border-white/25 flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer shadow-md hover:shadow-lg"
-            aria-label="Opsi Banner"
-            title="Opsi Banner"
+            class="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/30 text-xs sm:text-sm font-poppins font-medium transition-all duration-150 active:scale-95 cursor-pointer shadow-md hover:shadow-lg select-none"
+            aria-label="Kelola Sampul Toko"
+            title="Kelola & Ganti Sampul Toko"
             @click.stop="toggleMenu"
           >
             <HugeiconsIcon
-              :icon="MoreVerticalCircle02Icon"
-              :size="20"
-              :stroke-width="1.8"
+              :icon="Camera01Icon"
+              :size="16"
+              :stroke-width="2"
             />
+            <span class="font-poppins font-semibold">Ubah Sampul</span>
+            <svg
+              class="w-3.5 h-3.5 text-white/80 transition-transform duration-200 shrink-0"
+              :class="{ 'rotate-180': isMenuOpen }"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
           </button>
 
           <!-- Dropdown Menu for Banner -->

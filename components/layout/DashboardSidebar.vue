@@ -20,7 +20,7 @@
           <!-- Category label when expanded -->
           <span
             :class="[
-              'text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins uppercase tracking-wider pl-1 overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+              'text-xs font-bold text-neutral-600 dark:text-neutral-400 font-poppins uppercase tracking-wider pl-1 overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
               isCollapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[140px] opacity-100'
             ]"
           >
@@ -68,7 +68,7 @@
               >
                 <span
                   :class="[
-                    'text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider transition-opacity duration-300 px-1',
+                    'text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider transition-opacity duration-300 px-1',
                     isCollapsed ? 'opacity-0' : 'opacity-100'
                   ]"
                 >
@@ -86,29 +86,40 @@
                   :class="[
                     'w-full h-11 flex items-center font-poppins transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] group relative border overflow-hidden rounded-xl p-0',
                     isActive(item.to)
-                      ? 'bg-[#E1F4FD] hover:bg-[#D5EEFA] dark:bg-[#0081A0]/20 dark:hover:bg-[#0081A0]/30 text-[#0081A0] dark:text-[#38BDF8] font-semibold border-[#0081A0]/25 dark:border-[#38BDF8]/30 shadow-2xs'
+                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#2091AA]/20 dark:hover:bg-[#2091AA]/30 text-[#2091AA] dark:text-[#50AABF] font-semibold border-[#2091AA]/25 dark:border-[#50AABF]/30 shadow-2xs'
                       : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 border-transparent'
                   ]"
                 >
                   <!-- Icon Container: Always exactly 44x44px anchored on left, icon never moves or resizes -->
-                  <div class="w-11 h-11 shrink-0 flex items-center justify-center">
+                  <div class="w-11 h-11 shrink-0 flex items-center justify-center relative">
                     <SidebarNavIcon
                       :to="item.to"
                       :outline-icon="item.icon"
                       :active="isActive(item.to)"
+                    />
+                    <!-- Collapsed unread dot -->
+                    <span
+                      v-if="item.badge && isCollapsed"
+                      class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#13161F]"
                     />
                   </div>
 
                   <!-- Label Container: Fluid horizontal collapse, NO vertical movement, NO text wrapping -->
                   <div
                     :class="[
-                      'overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] flex items-center text-[15px]',
+                      'overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] flex items-center justify-between text-[15px] flex-1 min-w-0',
                       isCollapsed
                         ? 'max-w-0 opacity-0 pointer-events-none'
                         : 'max-w-[190px] opacity-100 pl-1 pr-3 pointer-events-auto'
                     ]"
                   >
                     <span class="truncate leading-none">{{ item.label }}</span>
+                    <span
+                      v-if="item.badge"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0"
+                    >
+                      {{ item.badge }}
+                    </span>
                   </div>
                 </NuxtLink>
               </div>
@@ -148,7 +159,7 @@
                 class="h-6 w-auto object-contain"
               />
               <span class="font-heading font-extrabold text-base tracking-tight leading-none select-none">
-                <span class="text-[#0081A0] dark:text-[#00A5CC]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+                <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>
               </span>
             </NuxtLink>
             <button
@@ -178,7 +189,7 @@
                 <!-- Section Category Title -->
                 <div
                   v-if="section.title"
-                  class="px-5 pb-1 text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins uppercase tracking-wider"
+                  class="px-5 pb-1 text-xs font-bold text-neutral-600 dark:text-neutral-400 font-poppins uppercase tracking-wider"
                 >
                   {{ section.title }}
                 </div>
@@ -192,7 +203,7 @@
                     :class="[
                       'flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-poppins text-[15px] transition-all duration-150 group border',
                       isActive(item.to)
-                        ? 'bg-[#E1F4FD] hover:bg-[#D5EEFA] dark:bg-[#0081A0]/20 dark:hover:bg-[#0081A0]/30 text-[#0081A0] dark:text-[#38BDF8] font-semibold border-[#0081A0]/25 dark:border-[#38BDF8]/30 shadow-2xs'
+                        ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#2091AA]/20 dark:hover:bg-[#2091AA]/30 text-[#2091AA] dark:text-[#50AABF] font-semibold border-[#2091AA]/25 dark:border-[#50AABF]/30 shadow-2xs'
                         : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 border-transparent'
                     ]"
                     @click="$emit('closeMobile')"
@@ -202,7 +213,13 @@
                       :outline-icon="item.icon"
                       :active="isActive(item.to)"
                     />
-                    <span class="truncate">{{ item.label }}</span>
+                    <span class="truncate flex-1">{{ item.label }}</span>
+                    <span
+                      v-if="item.badge"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0"
+                    >
+                      {{ item.badge }}
+                    </span>
                   </NuxtLink>
                 </div>
               </div>
@@ -219,6 +236,8 @@ import { computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
+import { useNotificationStore } from '~/stores/notification'
+import { useChatStore } from '~/stores/chat'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import SidebarNavIcon from './SidebarNavIcon.vue'
 import {
@@ -237,7 +256,9 @@ import {
   Cancel01Icon,
   RubiksCubeIcon,
   UserCircleIcon,
-  SidebarLeft01Icon
+  SidebarLeft01Icon,
+  Notification01Icon,
+  Message01Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -251,6 +272,8 @@ const emit = defineEmits<{
 const route = useRoute()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+const notificationStore = useNotificationStore()
+const chatStore = useChatStore()
 
 // State Collapse & Mobile Drawer from useSidebar composable
 const { isCollapsed, isMobileOpen, closeMobile, toggleCollapse } = useSidebar()
@@ -316,6 +339,7 @@ interface NavItem {
   to: string
   label: string
   icon: any
+  badge?: number | string
 }
 
 interface NavSection {
@@ -346,7 +370,18 @@ const navigationSections = computed<NavSection[]>(() => {
         title: 'Permodalan',
         items: [
           { to: '/dashboard/pendanaan', label: 'Cari Modal', icon: Award01Icon },
-          { to: '/dashboard/permintaan-investor', label: 'Tawaran Masuk', icon: UserGroupIcon }
+          {
+            to: '/dashboard/pesan',
+            label: 'Pesan',
+            icon: Message01Icon,
+            badge: chatStore.unreadCountUmkm > 0 ? chatStore.unreadCountUmkm : undefined
+          },
+          {
+            to: '/dashboard/notifikasi',
+            label: 'Notifikasi',
+            icon: Notification01Icon,
+            badge: notificationStore.unreadCount > 0 ? notificationStore.unreadCount : undefined
+          }
         ]
       }
     ]
@@ -373,6 +408,12 @@ const navigationSections = computed<NavSection[]>(() => {
       {
         items: [
           { to: '/investor', label: 'Katalog Usaha', icon: Store01Icon },
+          {
+            to: '/investor/pesan',
+            label: 'Pesan',
+            icon: Message01Icon,
+            badge: chatStore.unreadCountInvestor > 0 ? chatStore.unreadCountInvestor : undefined
+          },
           { to: '/investor/watchlist', label: 'Disimpan', icon: StarIcon }
         ]
       }

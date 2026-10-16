@@ -221,21 +221,21 @@ input, textarea, select, button {
    3D TACTILE BUTTONS (Inspirasi: Tombol Fisik QRIS & Top-up GoPay)
    ========================================================================== */
 
-/* 1. 3D Blue Button (Tombol Transaksi Utama & Action Anchor) */
+/* 1. 3D Blue Button (Warna Biru Khas Beranda: #50AABF -> #2091AA) */
 .btn-3d-blue {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(180deg, #1A8EFF 0%, #0066D6 100%);
+  background: linear-gradient(180deg, #50AABF 0%, #2091AA 100%);
   color: #FFFFFF !important;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   box-shadow: 
-    0 6px 16px -2px rgba(0, 102, 214, 0.42),
+    0 6px 16px -2px rgba(32, 145, 170, 0.42),
     0 2px 4px -1px rgba(0, 0, 0, 0.1),
     inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.45),
     inset 0 -2.5px 2px 0 rgba(0, 0, 0, 0.22);
@@ -245,39 +245,39 @@ input, textarea, select, button {
 }
 
 .btn-3d-blue:hover:not(:disabled) {
-  background: linear-gradient(180deg, #2B96FF 0%, #0070E8 100%);
+  background: linear-gradient(180deg, #62BDD2 0%, #28A2BC 100%);
   box-shadow: 
-    0 8px 20px -2px rgba(0, 102, 214, 0.52),
+    0 8px 20px -2px rgba(32, 145, 170, 0.52),
     0 3px 6px -1px rgba(0, 0, 0, 0.12),
     inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.6),
     inset 0 -2px 2px 0 rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .btn-3d-blue:active:not(:disabled) {
   transform: translateY(2px);
   box-shadow: 
-    0 2px 6px -1px rgba(0, 102, 214, 0.35),
+    0 2px 6px -1px rgba(32, 145, 170, 0.35),
     0 1px 2px 0 rgba(0, 0, 0, 0.1),
     inset 0 1px 1px 0 rgba(0, 0, 0, 0.25),
     inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* 2. 3D Green Button (Tombol Kesiapan, Audit, & Pertumbuhan) */
+/* 2. 3D Green Button (Warna Hijau Khas Beranda: #00C058 -> #00A62A -> #007D13) */
 .btn-3d-green {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(180deg, #00C853 0%, #009624 100%);
+  background: linear-gradient(180deg, #00C058 0%, #00A62A 55%, #007D13 100%);
   color: #FFFFFF !important;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.32);
   box-shadow: 
-    0 6px 16px -2px rgba(0, 150, 36, 0.42),
+    0 6px 16px -2px rgba(0, 166, 42, 0.42),
     0 2px 4px -1px rgba(0, 0, 0, 0.1),
     inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -2.5px 2px 0 rgba(0, 0, 0, 0.22);
@@ -287,19 +287,19 @@ input, textarea, select, button {
 }
 
 .btn-3d-green:hover:not(:disabled) {
-  background: linear-gradient(180deg, #10D862 0%, #00A62A 100%);
+  background: linear-gradient(180deg, #10D862 0%, #00B830 55%, #008F18 100%);
   box-shadow: 
-    0 8px 20px -2px rgba(0, 150, 36, 0.52),
+    0 8px 20px -2px rgba(0, 166, 42, 0.52),
     0 3px 6px -1px rgba(0, 0, 0, 0.12),
     inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.65),
     inset 0 -2px 2px 0 rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
+  transform: none;
 }
 
 .btn-3d-green:active:not(:disabled) {
   transform: translateY(2px);
   box-shadow: 
-    0 2px 6px -1px rgba(0, 150, 36, 0.35),
+    0 2px 6px -1px rgba(0, 166, 42, 0.35),
     0 1px 2px 0 rgba(0, 0, 0, 0.1),
     inset 0 1px 1px 0 rgba(0, 0, 0, 0.25),
     inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2);
@@ -341,7 +341,7 @@ input, textarea, select, button {
 
 .btn-3d-surface:hover:not(:disabled) {
   background: linear-gradient(180deg, #FFFFFF 0%, #EDF2F7 100%);
-  transform: translateY(-1px);
+  transform: none;
   box-shadow: 
     0 6px 14px -2px rgba(0, 0, 0, 0.09),
     0 2px 4px 0 rgba(0, 0, 0, 0.05),
@@ -367,9 +367,9 @@ input, textarea, select, button {
   align-items: center !important;
   justify-content: center !important;
   gap: 0.625rem !important;
-  height: 2.375rem !important;
-  min-height: 2.375rem !important;
-  max-height: 2.375rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  max-height: 2.75rem !important;
   padding: 0 1.25rem !important;
   border-radius: 9999px !important;
   background: linear-gradient(180deg, #F6FBF7 0%, #ECF8EF 45%, #D6F1DF 100%) !important;
@@ -377,7 +377,7 @@ input, textarea, select, button {
   color: #000000 !important;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600 !important;
-  font-size: 0.8125rem !important;
+  font-size: 0.875rem !important;
   line-height: 1 !important;
   letter-spacing: normal !important;
   white-space: nowrap !important;
@@ -394,7 +394,7 @@ input, textarea, select, button {
 .btn-pill-action > span {
   display: inline-block !important;
   line-height: 1 !important;
-  font-size: 0.8125rem !important;
+  font-size: 0.875rem !important;
   font-weight: 600 !important;
   color: inherit !important;
   white-space: nowrap !important;
@@ -780,6 +780,124 @@ input, textarea, select, button {
 .dark .segmented-pill-item-inactive:hover {
   color: #FFFFFF !important;
   background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 9. Segmented Pill Container - GoPay Green Edition (Full Width & Vibrant Green Indicator) */
+.segmented-pill-container.is-gopay-green {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+  padding: 0.3125rem !important;
+  border-radius: 9999px !important;
+  background-color: #EAEFF5 !important;
+  border: 1px solid #D6DCE5 !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04) !important;
+  user-select: none !important;
+  overflow: visible !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green {
+  background-color: #151821 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Green Active Indicator matching user image */
+.segmented-pill-container.is-gopay-green .segmented-pill-indicator {
+  position: absolute !important;
+  top: 0.3125rem !important;
+  left: 0 !important;
+  height: calc(100% - 0.625rem) !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, #00BA28 0%, #009B1A 50%, #007D13 100%) !important;
+  border: 1px solid rgba(0, 110, 15, 0.25) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+    0 3px 12px 0 rgba(0, 160, 25, 0.35),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  transition: none !important;
+  will-change: transform, width !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-indicator {
+  background: linear-gradient(180deg, #00C82B 0%, #00A822 50%, #008712 100%) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+    0 4px 16px 0 rgba(0, 200, 35, 0.3) !important;
+}
+
+/* Tab button items - full width distribution */
+.segmented-pill-container.is-gopay-green .segmented-pill-btn {
+  position: relative !important;
+  z-index: 2 !important;
+  flex: 1 1 0% !important;
+  width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  max-height: 2.75rem !important;
+  padding: 0 1rem !important;
+  border-radius: 9999px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 0.875rem !important;
+  letter-spacing: normal !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Active State: Pure Crisp White Text and Icons */
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active {
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+}
+
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Inactive State: Refined Slate/Charcoal Gray matching reference image */
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive {
+  color: #475569 !important;
+  font-weight: 500 !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive {
+  color: #94A3B8 !important;
+}
+
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive svg {
+  color: #475569 !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive svg {
+  color: #94A3B8 !important;
+}
+
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover {
+  color: #0F172A !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover {
+  color: #FFFFFF !important;
+}
+
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover svg {
+  color: #0F172A !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover svg {
+  color: #FFFFFF !important;
 }
 
 

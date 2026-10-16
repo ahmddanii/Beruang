@@ -4,7 +4,7 @@
 
     <!-- 2. EXECUTIVE CONSULTANT BANNER -->
     <div class="p-1.5 sm:p-2 rounded-3xl bg-neutral-200/50 dark:bg-neutral-800/40 border border-neutral-300/40 dark:border-neutral-700/30 shadow-xs">
-      <div class="p-6 sm:p-8 lg:p-10 rounded-[calc(1.5rem-0.25rem)] bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+      <div class="p-6 sm:p-8 lg:p-10 rounded-[calc(1.5rem-0.25rem)] bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-white/10 relative overflow-hidden">
         <div class="space-y-3 max-w-2xl relative z-10 text-left">
 
           <h1 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
@@ -14,24 +14,6 @@
           <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-xl">
             Bimbing dan pantau perkembangan usaha klien binaanmu, berikan <strong>action plan taktis</strong>, dan sertifikasi kelayakan usaha untuk membuka akses pendanaan investor.
           </p>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-          <NuxtLink
-            to="/konsultan/request"
-            class="px-4 py-2.5 rounded-full border border-neutral-200 dark:border-white/10 hover:border-[#0081A0] text-neutral-700 dark:text-neutral-200 text-xs font-bold transition-all bg-white dark:bg-[#1A1D26] flex items-center gap-2"
-          >
-            <HugeiconsIcon :icon="UserAdd01Icon" :size="15" :stroke-width="2" />
-            <span>Permintaan Masuk ({{ konsultanStore.pendingRequestsCount }})</span>
-          </NuxtLink>
-
-          <NuxtLink
-            to="/konsultan/rencana-aksi"
-            class="px-5 py-2.5 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white text-xs font-bold shadow-[0_4px_14px_rgba(0,129,160,0.25)] transition-all active:scale-[0.98] inline-flex items-center gap-2"
-          >
-            <HugeiconsIcon :icon="Task01Icon" :size="15" :stroke-width="2" />
-            <span>Kelola Action Plan</span>
-          </NuxtLink>
         </div>
       </div>
     </div>
@@ -297,7 +279,6 @@ import {
   Search01Icon,
   CheckmarkCircle01Icon,
   ArrowRight01Icon,
-  UserAdd01Icon,
   UserCircleIcon
 } from '@hugeicons/core-free-icons'
 

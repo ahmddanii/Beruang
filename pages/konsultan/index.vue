@@ -116,58 +116,56 @@
 
     <!-- 5. DAFTAR PORTOFOLIO KLIEN BINAAN -->
     <div class="card-tactile-gopay p-6 sm:p-8 rounded-3xl space-y-6 text-left">
-      <!-- Section Header & Filter Toolbar -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-neutral-200/70 dark:border-white/10">
-        <div>
-          <span class="text-xs font-bold text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider block">
-            Daftar Usaha Binaan
-          </span>
-          <h2 class="text-xl sm:text-2xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight mt-0.5">
-            Daftar Klien yang Kamu Bina
-          </h2>
-          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 font-sans">
-            Kelola arahan perbaikan, pantau kepatuhan laporan kas harian, dan validasi kelayakan bisnis binaan.
-          </p>
+      <!-- Section Header: Teks judul & deskripsi di atas -->
+      <div class="space-y-1">
+        <span class="text-xs font-bold text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider block">
+          Daftar Usaha Binaan
+        </span>
+        <h2 class="text-xl sm:text-2xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight">
+          Daftar Klien yang Kamu Bina
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans">
+          Kelola arahan perbaikan, pantau kepatuhan laporan kas harian, dan validasi kelayakan bisnis binaan.
+        </p>
+      </div>
+
+      <!-- Search & Filter Controls: Search memanjang penuh ke kiri, Filter di kanan -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1 pb-4 border-b border-neutral-200/70 dark:border-white/10">
+        <!-- 1. Search Field (Memanjang penuh ke kiri) -->
+        <div class="relative flex-1">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
+            <HugeiconsIcon :icon="Search01Icon" :size="16" :stroke-width="1.8" />
+          </div>
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Cari nama usaha, pemilik, atau kota binaan..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-full text-xs border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#1A1D26] text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20 transition-all shadow-2xs"
+          />
         </div>
 
-        <!-- Search & Filter Controls (Pencarian lebih panjang di kiri, Filter dropdown di kanan) -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <!-- 1. Search Field (Posisi di depan, ukuran lebih panjang) -->
-          <div class="relative w-full sm:w-72 md:w-80 lg:w-96">
-            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
-              <HugeiconsIcon :icon="Search01Icon" :size="16" :stroke-width="1.8" />
-            </div>
-            <input
-              v-model="search"
-              type="text"
-              placeholder="Cari nama usaha, pemilik, atau kota..."
-              class="w-full pl-10 pr-4 py-2 rounded-full text-xs border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#1A1D26] text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20 transition-all shadow-2xs"
-            />
+        <!-- 2. Filter Dropdown (Di kanan) -->
+        <div class="relative shrink-0 min-w-[180px]">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
+            <HugeiconsIcon :icon="FilterIcon" :size="14" :stroke-width="2" />
           </div>
-
-          <!-- 2. Filter Dropdown (Posisi di kanan, format dropdown) -->
-          <div class="relative shrink-0 min-w-[170px]">
-            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400">
-              <HugeiconsIcon :icon="FilterIcon" :size="14" :stroke-width="2" />
-            </div>
-            <select
-              v-model="selectedFilter"
-              class="w-full pl-9 pr-8 py-2 rounded-full text-xs font-semibold border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#1A1D26] text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20 transition-all shadow-2xs appearance-none cursor-pointer"
+          <select
+            v-model="selectedFilter"
+            class="w-full pl-9 pr-8 py-2.5 rounded-full text-xs font-semibold border border-neutral-200 dark:border-white/10 bg-white dark:bg-[#1A1D26] text-neutral-800 dark:text-neutral-100 focus:outline-none focus:border-[#0081A0] focus:ring-2 focus:ring-[#0081A0]/20 transition-all shadow-2xs appearance-none cursor-pointer"
+          >
+            <option
+              v-for="f in filterOptions"
+              :key="f.key"
+              :value="f.key"
             >
-              <option
-                v-for="f in filterOptions"
-                :key="f.key"
-                :value="f.key"
-              >
-                {{ f.label }}
-              </option>
-            </select>
-            <!-- Chevron Down Icon -->
-            <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-neutral-400">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
+              {{ f.label }}
+            </option>
+          </select>
+          <!-- Chevron Down Icon -->
+          <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-neutral-400">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
         </div>
       </div>

@@ -27,10 +27,13 @@
             class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
           />
           <span class="font-heading font-extrabold text-lg sm:text-xl tracking-tight leading-none select-none">
-            <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>
+            <span class="text-[#156374] dark:text-[#50AABF]">Ber</span><span class="text-[#00800e] dark:text-[#00C058]">uang</span>
           </span>
         </NuxtLink>
       </div>
+
+      <!-- Center: Advanced Search Bar in Top Navbar with Embedded Sector Filter -->
+      <AdvancedNavbarSearch class="flex-1 max-w-sm sm:max-w-md lg:max-w-xl mx-2 sm:mx-6 min-w-0" />
 
       <!-- Right Side: Notification + User Profile Trigger & Dropdown Menu (Sesuai Referensi Gambar) -->
       <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
@@ -165,28 +168,41 @@
       <DashboardSidebar class="h-full shrink-0" />
 
       <!-- Main Dashboard Workspace Content (Fluid full-width layout matching Trueform references) -->
-      <main class="flex-1 w-full min-w-0 overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:pl-16 lg:pr-12 xl:pl-20 xl:pr-16 py-7 sm:py-9">
+      <main
+        :class="[
+          'flex-1 w-full min-w-0 transition-all',
+          isFixedLayout
+            ? 'overflow-hidden flex flex-col h-full py-4 sm:py-5 px-4 sm:px-8 lg:px-10 xl:px-12'
+            : 'overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:pl-16 lg:pr-12 xl:pl-20 xl:pr-16 py-7 sm:py-9'
+        ]"
+      >
         <!-- Page Header: Current Page Name & Icon at the Very Top of Main Container -->
-        <div class="flex items-start gap-3 sm:gap-3.5 mb-6 sm:mb-8 select-none">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center text-[#2091AA] dark:text-[#50AABF] shadow-xs shrink-0 mt-0.5">
+        <div
+          :class="[
+            'select-none',
+            isFixedLayout ? 'mb-3 sm:mb-4 shrink-0' : 'mb-6 sm:mb-8'
+          ]"
+        >
+          <div class="flex items-center gap-2.5 sm:gap-3">
             <SidebarNavIcon
               :to="route.path"
               :outline-icon="currentPageInfo.icon"
               :active="true"
-              :size="22"
+              :size="26"
+              class="shrink-0 text-[#2091AA] dark:text-[#50AABF]"
             />
-          </div>
-          <div>
-            <h1 class="font-heading font-bold text-xl sm:text-2xl lg:text-[28px] text-neutral-900 dark:text-white tracking-tight leading-tight">
+            <h1 class="font-heading font-bold text-xl sm:text-2xl lg:text-[28px] text-neutral-900 dark:text-white tracking-tight leading-none">
               {{ currentPageInfo.title }}
             </h1>
-            <p v-if="currentPageInfo.description" class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1 font-poppins leading-relaxed max-w-3xl">
-              {{ currentPageInfo.description }}
-            </p>
           </div>
+          <p v-if="currentPageInfo.description" class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-2 sm:mt-2.5 font-poppins leading-relaxed max-w-3xl">
+            {{ currentPageInfo.description }}
+          </p>
         </div>
 
-        <slot />
+        <div :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : ''">
+          <slot />
+        </div>
       </main>
     </div>
   </div>
@@ -200,6 +216,7 @@ import { useUmkmStore } from '~/stores/umkm'
 import DashboardSidebar from '~/components/layout/DashboardSidebar.vue'
 import NotificationDropdown from '~/components/layout/NotificationDropdown.vue'
 import SidebarNavIcon from '~/components/layout/SidebarNavIcon.vue'
+import AdvancedNavbarSearch from '~/components/search/AdvancedNavbarSearch.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Menu01Icon,
@@ -219,19 +236,47 @@ import {
   UserCircleIcon,
   PreferenceHorizontalIcon,
   ArrowUpRight01Icon,
-  Logout01Icon
+  Logout01Icon,
+  FileUnlockedIcon,
+  Message01Icon,
+  Search01Icon
 } from '@hugeicons/core-free-icons'
+import { useInvestorStore } from '~/stores/investor'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+const investorStore = useInvestorStore()
 const { isCollapsed, toggleCollapse, toggleMobile } = useSidebar()
+
+const searchPlaceholder = computed(() => {
+  if (route.path.startsWith('/investor')) {
+    return 'Cari toko UMKM, sektor, kota, atau kata kunci...'
+  }
+  return 'Cari toko, catatan kas, atau laporan...'
+})
+
+function handleNavbarSearchEnter() {
+  if (!route.path.startsWith('/investor')) {
+    router.push('/investor')
+  }
+}
 
 const isProfileDropdownOpen = ref(false)
 
 watch(() => route.path, () => {
   isProfileDropdownOpen.value = false
+})
+
+const isFixedLayout = computed(() => {
+  const p = route.path
+  return (
+    p === '/investor' ||
+    p === '/investor/' ||
+    p.startsWith('/investor/pesan') ||
+    p.startsWith('/dashboard/pesan')
+  )
 })
 
 const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
@@ -323,6 +368,13 @@ const currentPageInfo = computed(() => {
   if (p.startsWith('/dashboard/pendanaan')) {
     return { title: 'Cari Modal', icon: Award01Icon }
   }
+  if (p.startsWith('/dashboard/pesan')) {
+    return {
+      title: 'Pesan',
+      icon: Message01Icon,
+      description: 'Ruang komunikasi dan diskusi pendanaan langsung dengan calon investor tokomu.'
+    }
+  }
   if (p.startsWith('/dashboard/permintaan-investor') || p.startsWith('/dashboard/notifikasi')) {
     return { title: 'Notifikasi', icon: Notification01Icon }
   }
@@ -350,6 +402,20 @@ const currentPageInfo = computed(() => {
   // Investor pages
   if (p === '/investor' || p === '/investor/') {
     return { title: 'Katalog Usaha', icon: Store01Icon }
+  }
+  if (p.startsWith('/investor/pesan')) {
+    return {
+      title: 'Pesan',
+      icon: Message01Icon,
+      description: 'Diskusi langsung dengan pendiri UMKM dan tindak lanjut pendanaan usaha.'
+    }
+  }
+  if (p.startsWith('/investor/data-room')) {
+    return {
+      title: 'Virtual Data Room',
+      icon: FileUnlockedIcon,
+      description: 'Ruang audit finansial privat terenkripsi dengan laporan laba rugi riil, rekening koran bank, dan bukti legalitas usaha.'
+    }
   }
   if (p.startsWith('/investor/watchlist')) {
     return { title: 'Disimpan', icon: StarIcon }

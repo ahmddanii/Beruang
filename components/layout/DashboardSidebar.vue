@@ -20,7 +20,7 @@
           <!-- Category label when expanded -->
           <span
             :class="[
-              'text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins uppercase tracking-wider pl-1 overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+              'text-xs font-bold text-neutral-600 dark:text-neutral-400 font-poppins uppercase tracking-wider pl-1 overflow-hidden whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
               isCollapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[140px] opacity-100'
             ]"
           >
@@ -68,7 +68,7 @@
               >
                 <span
                   :class="[
-                    'text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider transition-opacity duration-300 px-1',
+                    'text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider transition-opacity duration-300 px-1',
                     isCollapsed ? 'opacity-0' : 'opacity-100'
                   ]"
                 >
@@ -116,7 +116,7 @@
                     <span class="truncate leading-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white tabular-nums leading-none shrink-0"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0"
                     >
                       {{ item.badge }}
                     </span>
@@ -189,7 +189,7 @@
                 <!-- Section Category Title -->
                 <div
                   v-if="section.title"
-                  class="px-5 pb-1 text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins uppercase tracking-wider"
+                  class="px-5 pb-1 text-xs font-bold text-neutral-600 dark:text-neutral-400 font-poppins uppercase tracking-wider"
                 >
                   {{ section.title }}
                 </div>
@@ -216,7 +216,7 @@
                     <span class="truncate flex-1">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white tabular-nums leading-none shrink-0"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0"
                     >
                       {{ item.badge }}
                     </span>
@@ -237,6 +237,7 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useNotificationStore } from '~/stores/notification'
+import { useChatStore } from '~/stores/chat'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import SidebarNavIcon from './SidebarNavIcon.vue'
 import {
@@ -255,7 +256,8 @@ import {
   RubiksCubeIcon,
   UserCircleIcon,
   SidebarLeft01Icon,
-  Notification01Icon
+  Notification01Icon,
+  Message01Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -270,6 +272,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const notificationStore = useNotificationStore()
+const chatStore = useChatStore()
 
 // State Collapse & Mobile Drawer from useSidebar composable
 const { isCollapsed, isMobileOpen, closeMobile, toggleCollapse } = useSidebar()
@@ -362,6 +365,12 @@ const navigationSections = computed<NavSection[]>(() => {
         items: [
           { to: '/dashboard/pendanaan', label: 'Cari Modal', icon: Award01Icon },
           {
+            to: '/dashboard/pesan',
+            label: 'Pesan',
+            icon: Message01Icon,
+            badge: chatStore.unreadCountUmkm > 0 ? chatStore.unreadCountUmkm : undefined
+          },
+          {
             to: '/dashboard/notifikasi',
             label: 'Notifikasi',
             icon: Notification01Icon,
@@ -390,6 +399,12 @@ const navigationSections = computed<NavSection[]>(() => {
       {
         items: [
           { to: '/investor', label: 'Katalog Usaha', icon: Store01Icon },
+          {
+            to: '/investor/pesan',
+            label: 'Pesan',
+            icon: Message01Icon,
+            badge: chatStore.unreadCountInvestor > 0 ? chatStore.unreadCountInvestor : undefined
+          },
           { to: '/investor/watchlist', label: 'Disimpan', icon: StarIcon }
         ]
       }

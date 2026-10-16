@@ -1,26 +1,42 @@
 <template>
-  <div class="space-y-8 pb-10">
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-2 text-xs text-neutral-500 mb-2">
-          <NuxtLink to="/investor" class="hover:text-primary-600 transition-colors flex items-center gap-1.5">
-            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="14" :stroke-width="2" />
-            <span>Katalog Marketplace</span>
-          </NuxtLink>
-        </div>
-        <h1 class="text-2xl sm:text-3xl font-heading font-extrabold text-neutral-900 dark:text-neutral-50 tracking-tight">
-          Simpanan Bisnis Pilihan Saya
-        </h1>
-        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-          Daftar pantau (watchlist) UMKM potensial yang Anda tandai untuk evaluasi dan due diligence portofolio.
+  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100 select-none">
+    <!-- Toast Feedback Notification -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 -translate-y-2 scale-95"
+      enter-to-class="opacity-100 translate-y-0 scale-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 translate-y-0 scale-100"
+      leave-to-class="opacity-0 -translate-y-2 scale-95"
+    >
+      <div
+        v-if="toastMessage"
+        class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-full bg-neutral-900/90 dark:bg-neutral-800/90 text-white border border-neutral-700/60 backdrop-blur-md text-xs font-poppins font-semibold shadow-xl flex items-center gap-2 pointer-events-none"
+      >
+        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-emerald-400 shrink-0" />
+        <span>{{ toastMessage }}</span>
+      </div>
+    </Transition>
+
+    <!-- Top Sub-Header & Breadcrumb Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-neutral-100 dark:border-neutral-800/80">
+      <div class="space-y-1">
+        <NuxtLink
+          to="/investor"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline transition-colors"
+        >
+          <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2.2" />
+          <span>Kembali ke Venture Social Feed</span>
+        </NuxtLink>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans">
+          Daftar pantau UMKM terakreditasi yang Anda tandai untuk due diligence & permohonan akses data room privat.
         </p>
       </div>
 
-      <div class="flex items-center gap-2">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-xs font-heading font-semibold">
-          <HugeiconsIcon :icon="StarIcon" :size="14" :stroke-width="2" class="fill-amber-400 text-amber-500" />
-          <span>{{ investorStore.watchlist.length }} Usaha Tersimpan</span>
+      <div class="flex items-center gap-2.5 shrink-0">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-xs font-semibold">
+          <HugeiconsIcon :icon="StarIcon" :size="14" class="fill-amber-400 text-amber-500" />
+          <span class="tabular-nums">{{ investorStore.watchlist.length }} Usaha Tersimpan</span>
         </span>
       </div>
     </div>
@@ -28,25 +44,26 @@
     <!-- Empty State if empty -->
     <div
       v-if="investorStore.watchlist.length === 0"
-      class="p-12 sm:p-16 bg-white dark:bg-[#151519] rounded-2xl border border-[#E4E7EC] dark:border-[#2B2B31] text-center max-w-lg mx-auto space-y-4"
+      class="card-tactile-gopay rounded-2xl p-12 sm:p-16 border text-center max-w-lg mx-auto space-y-4"
     >
-      <div class="w-14 h-14 rounded-2xl bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center mx-auto">
-        <HugeiconsIcon :icon="StarIcon" :size="24" :stroke-width="1.75" />
+      <div class="w-14 h-14 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-500 flex items-center justify-center mx-auto">
+        <HugeiconsIcon :icon="StarIcon" :size="24" :stroke-width="1.8" />
       </div>
       <div>
-        <h3 class="font-heading font-bold text-lg text-neutral-900 dark:text-white">
+        <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
           Belum Ada Bisnis Tersimpan
         </h3>
-        <p class="text-xs sm:text-sm text-neutral-500 max-w-sm mx-auto mt-1 leading-relaxed">
-          Jelajahi katalog marketplace UMKM dan klik tombol bintang untuk menyimpan bisnis potensial ke daftar pantau Anda.
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto mt-1 leading-relaxed font-sans">
+          Jelajahi Venture Social Feed dan klik ikon bintang pada kartu UMKM untuk menyimpan bisnis potensial ke daftar pantau Anda.
         </p>
       </div>
       <div class="pt-2">
-        <NuxtLink to="/investor">
-          <BButton variant="primary" size="md" class="flex items-center gap-2 mx-auto">
-            <span>Buka Katalog Marketplace</span>
-            <HugeiconsIcon :icon="ArrowRight02Icon" :size="15" :stroke-width="2" />
-          </BButton>
+        <NuxtLink
+          to="/investor"
+          class="btn-pill-action group cursor-pointer inline-flex items-center gap-2"
+        >
+          <span>Eksplorasi Feed UMKM</span>
+          <HugeiconsIcon :icon="ArrowRight01Icon" :size="15" :stroke-width="2.2" />
         </NuxtLink>
       </div>
     </div>
@@ -56,81 +73,99 @@
       <div
         v-for="item in investorStore.watchlist"
         :key="item.id"
-        class="bg-white dark:bg-[#151519] rounded-2xl border border-[#E4E7EC] dark:border-[#2B2B31] p-6 flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all hover:shadow-xs group"
+        class="card-tactile-gopay rounded-2xl p-5 sm:p-6 border flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all font-poppins space-y-4.5 group"
       >
         <div class="space-y-4">
-          <!-- Top Tag & Star Toggle -->
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md">
+          <!-- Top Row: Code Pill, Badge & Star Toggle -->
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700">
                 {{ item.code }}
               </span>
-              <span class="text-xs text-neutral-500 font-medium">
-                {{ item.sector }}
+              <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="11" :stroke-width="2.5" />
+                <span>Ready for Funding</span>
               </span>
             </div>
 
+            <!-- Remove from Watchlist -->
             <button
               type="button"
-              class="p-1.5 rounded-lg text-amber-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              class="p-1.5 rounded-lg text-amber-500 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 transition-colors cursor-pointer"
               title="Hapus dari Simpanan"
-              @click="investorStore.toggleBookmark(item.id)"
+              @click="removeFromWatchlist(item)"
             >
-              <HugeiconsIcon :icon="StarIcon" :size="18" :stroke-width="2" class="fill-amber-400 text-amber-500" />
+              <HugeiconsIcon :icon="StarIcon" :size="17" :stroke-width="2" class="fill-amber-400 text-amber-500" />
             </button>
           </div>
 
-          <!-- Title & Location -->
+          <!-- Store Identity & Location -->
           <div>
-            <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors">
+            <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white group-hover:text-[#2091AA] transition-colors leading-tight">
               {{ item.name }}
             </h3>
-            <p class="text-xs text-neutral-500 mt-0.5">
-              {{ item.city }} • Operasional Sehat
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 flex items-center gap-2">
+              <span>{{ item.sector }}</span>
+              <span>•</span>
+              <span class="flex items-center gap-1">
+                <HugeiconsIcon :icon="Location01Icon" :size="12" />
+                {{ item.city }}
+              </span>
             </p>
           </div>
 
-          <!-- Summary pitch -->
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2 leading-relaxed">
+          <!-- Pitch Summary -->
+          <p class="text-xs text-neutral-600 dark:text-neutral-300 line-clamp-2 leading-relaxed font-sans">
             "{{ item.pitchSummary }}"
           </p>
 
           <!-- Key Metrics Bento Grid -->
-          <div class="grid grid-cols-2 gap-2.5 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-100 dark:border-neutral-800">
+          <div class="grid grid-cols-2 gap-2 p-3 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60 text-center font-poppins">
             <div>
-              <span class="text-[10px] text-neutral-400 block font-medium">Margin Kotor</span>
-              <span class="font-heading font-bold text-sm text-emerald-600 tabular-nums">
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Margin Kotor</span>
+              <span class="font-poppins font-bold text-sm text-emerald-600 dark:text-emerald-400 tabular-nums">
                 {{ item.marginPercentage }}%
               </span>
             </div>
             <div>
-              <span class="text-[10px] text-neutral-400 block font-medium">Skor Audit BNSP</span>
-              <span class="font-heading font-bold text-sm text-neutral-900 dark:text-white tabular-nums">
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Skor Audit BNSP</span>
+              <span class="font-poppins font-bold text-sm text-[#2091AA] dark:text-[#50AABF] tabular-nums">
                 {{ item.healthScore }}/100
               </span>
             </div>
           </div>
 
-          <!-- Health Score Bar -->
-          <div>
-            <div class="flex items-center justify-between text-[11px] mb-1">
-              <span class="text-neutral-500">Kelayakan Investasi</span>
-              <span class="font-heading font-semibold text-neutral-700 dark:text-neutral-300">{{ item.healthScore }}%</span>
-            </div>
-            <div class="h-1.5 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
-              <div
-                class="h-full bg-emerald-500 rounded-full transition-all"
-                :style="{ width: `${item.healthScore}%` }"
-              />
-            </div>
+          <!-- Status Akses Data Room Indicator -->
+          <div class="p-2.5 rounded-xl bg-neutral-50 dark:bg-[#18191E] border border-neutral-200/60 dark:border-neutral-700/60 flex items-center justify-between text-xs">
+            <span class="text-neutral-500 text-[11px]">Status Akses Data:</span>
+            <span
+              v-if="item.accessStatus === 'APPROVED'"
+              class="font-bold text-[#00AA13] flex items-center gap-1 text-[11px]"
+            >
+              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" />
+              <span>Izin Aktif</span>
+            </span>
+            <span
+              v-else-if="item.accessStatus === 'PENDING'"
+              class="font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1 text-[11px]"
+            >
+              <HugeiconsIcon :icon="Clock01Icon" :size="12" />
+              <span>Menunggu UMKM</span>
+            </span>
+            <span
+              v-else
+              class="font-medium text-neutral-500 text-[11px]"
+            >
+              Belum Diajukan
+            </span>
           </div>
         </div>
 
         <!-- Footer Actions -->
-        <div class="pt-5 mt-5 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-3">
+        <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3">
           <NuxtLink
             :to="`/investor/umkm/${item.id}`"
-            class="text-xs text-neutral-600 dark:text-neutral-300 font-heading font-semibold hover:text-primary-600 transition-colors"
+            class="text-xs text-neutral-600 dark:text-neutral-300 font-semibold hover:text-[#2091AA] transition-colors"
           >
             Lihat Profil
           </NuxtLink>
@@ -138,20 +173,26 @@
           <NuxtLink
             v-if="item.accessStatus === 'APPROVED'"
             :to="`/investor/data-room/${item.id}`"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all active:scale-95 cursor-pointer"
           >
-            <BButton variant="success" size="sm" class="flex items-center gap-1.5">
-              <HugeiconsIcon :icon="FileUnlockedIcon" :size="14" :stroke-width="2" />
-              <span>Data Room</span>
-            </BButton>
+            <HugeiconsIcon :icon="FileUnlockedIcon" :size="14" :stroke-width="2" />
+            <span>Data Room</span>
           </NuxtLink>
+
+          <div
+            v-else-if="item.accessStatus === 'PENDING'"
+            class="text-[11px] font-medium text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-2.5 py-1 rounded-lg"
+          >
+            Proses Review
+          </div>
+
           <NuxtLink
             v-else
             :to="`/investor/umkm/${item.id}/ajukan-akses`"
+            class="btn-pill-action group cursor-pointer inline-flex items-center gap-1.5 text-xs py-1 px-3"
           >
-            <BButton variant="primary" size="sm" class="flex items-center gap-1.5">
-              <span>Ajukan Akses</span>
-              <HugeiconsIcon :icon="ArrowRight02Icon" :size="13" :stroke-width="2" />
-            </BButton>
+            <span>Ajukan Akses</span>
+            <HugeiconsIcon :icon="ArrowRight01Icon" :size="13" :stroke-width="2" />
           </NuxtLink>
         </div>
       </div>
@@ -160,14 +201,17 @@
 </template>
 
 <script setup lang="ts">
-import { useInvestorStore } from '~/stores/investor'
-import BButton from '~/components/base/BButton.vue'
+import { ref } from 'vue'
+import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  ArrowLeft02Icon,
-  ArrowRight02Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
   StarIcon,
-  FileUnlockedIcon
+  FileUnlockedIcon,
+  CheckmarkCircle01Icon,
+  Location01Icon,
+  Clock01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -175,4 +219,21 @@ definePageMeta({
 })
 
 const investorStore = useInvestorStore()
+
+// Toast State
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function triggerToast(msg: string) {
+  toastMessage.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toastMessage.value = ''
+  }, 2500)
+}
+
+function removeFromWatchlist(item: MarketplaceUmkm) {
+  investorStore.toggleBookmark(item.id)
+  triggerToast(`${item.name} dihapus dari Portofolio Pantau.`)
+}
 </script>

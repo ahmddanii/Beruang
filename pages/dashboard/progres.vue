@@ -92,7 +92,7 @@
           <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] px-5 sm:px-6 pt-4.5 pb-5 sm:pt-5 sm:pb-5.5 flex flex-col gap-3.5 sm:gap-4 flex-1">
             <!-- Middle Value Row -->
             <div>
-              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-emerald-600 dark:text-emerald-400 tabular-nums tracking-tight block leading-tight">
+              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight block leading-tight">
                 + Rp {{ totalIncome.toLocaleString('id-ID') }}
               </span>
               <!-- Subtext Row -->
@@ -140,7 +140,7 @@
           <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] px-5 sm:px-6 pt-4.5 pb-5 sm:pt-5 sm:pb-5.5 flex flex-col gap-3.5 sm:gap-4 flex-1">
             <!-- Middle Value Row -->
             <div>
-              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-[#0066D6] dark:text-blue-400 tabular-nums tracking-tight block leading-tight">
+              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight block leading-tight">
                 - Rp {{ totalHppExpense.toLocaleString('id-ID') }}
               </span>
               <!-- Subtext Row -->

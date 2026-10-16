@@ -6,10 +6,6 @@
     <div class="p-1.5 sm:p-2 rounded-3xl bg-neutral-200/50 dark:bg-neutral-800/40 border border-neutral-300/40 dark:border-neutral-700/30 shadow-xs">
       <div class="p-6 sm:p-8 lg:p-10 rounded-[calc(1.5rem-0.25rem)] bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
         <div class="space-y-3 max-w-2xl relative z-10 text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00AA13]/10 text-[#00AA13] dark:bg-[#00AA13]/20 dark:text-[#22C55E] text-xs font-bold border border-[#00AA13]/20">
-            <HugeiconsIcon :icon="Award01Icon" :size="14" :stroke-width="2" />
-            <span>KONSULTAN BISNIS LISENSI RESMI BNSP</span>
-          </div>
 
           <h1 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
             Pusat Diagnosa & Binaan UMKM

@@ -26,10 +26,6 @@
               <h1 class="text-xl sm:text-2xl lg:text-[26px] font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
                 {{ profileData.name }}
               </h1>
-              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#00AA13]/10 dark:bg-[#00AA13]/20 text-[#00AA13] dark:text-[#22C55E] border border-[#00AA13]/20">
-                <HugeiconsIcon :icon="Award01Icon" :size="12" :stroke-width="2" />
-                <span>Lisensi Terverifikasi</span>
-              </span>
             </div>
 
             <p class="text-xs sm:text-sm font-semibold text-[#0081A0] dark:text-[#2091AA]">
@@ -441,16 +437,6 @@
                   <h4 class="font-heading font-bold text-xs sm:text-sm text-neutral-900 dark:text-white truncate">
                     {{ doc.name }}
                   </h4>
-                  <span
-                    :class="[
-                      'px-2 py-0.2 rounded-full text-[10px] font-bold border',
-                      doc.status === 'VERIFIED'
-                        ? 'bg-[#00AA13]/10 text-[#00AA13] dark:text-[#22C55E] border-[#00AA13]/20'
-                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
-                    ]"
-                  >
-                    {{ doc.status === 'VERIFIED' ? 'Terverifikasi' : 'Dalam Peninjauan' }}
-                  </span>
                 </div>
                 <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
                   {{ doc.filename }} • {{ doc.fileSize }} • Diunggah {{ doc.uploadedAt }}
@@ -508,7 +494,6 @@ import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   UserCircleIcon,
   CheckmarkCircle01Icon,
-  Award01Icon,
   Location01Icon,
   File01Icon,
   Upload01Icon,

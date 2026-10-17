@@ -250,7 +250,6 @@ import {
   UserIcon,
   Store01Icon,
   CheckmarkCircle01Icon,
-  Alert01Icon,
   StarIcon,
   UserAdd01Icon,
   Cancel01Icon,
@@ -398,7 +397,6 @@ const navigationSections = computed<NavSection[]>(() => {
       {
         title: 'Manajemen',
         items: [
-          { to: '/konsultan/alert', label: 'Peringatan Masalah', icon: Alert01Icon },
           { to: '/konsultan/profil', label: 'Profil & Dokumen', icon: UserCircleIcon }
         ]
       }

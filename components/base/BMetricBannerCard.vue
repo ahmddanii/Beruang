@@ -29,12 +29,12 @@
             </span>
           </div>
           <!-- Subtext Row -->
-          <div v-if="subtitle || subvalue" class="mt-2 text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 leading-normal truncate">
+          <div v-if="subtitle || subvalue" class="mt-2 text-[11px] sm:text-xs font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 leading-normal truncate" :title="`${subtitle} ${subvalue}`.trim()">
             <span v-if="subtitle" class="shrink-0">{{ subtitle }}</span>
             <span
               v-if="subvalue"
               :class="[
-                'font-semibold tabular-nums shrink-0',
+                'font-semibold tabular-nums truncate',
                 subvalueColor === 'green' ? 'text-emerald-600 dark:text-emerald-400' :
                 subvalueColor === 'amber' ? 'text-amber-600 dark:text-amber-400' :
                 subvalueColor === 'blue' ? 'text-[#0081A0] dark:text-[#2091AA]' :

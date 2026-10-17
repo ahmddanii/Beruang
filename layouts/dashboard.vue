@@ -178,6 +178,7 @@
       >
         <!-- Page Header: Current Page Name & Icon at the Very Top of Main Container -->
         <div
+          v-if="!route.meta.hideHeader"
           :class="[
             'select-none',
             isFixedLayout ? 'mb-3 sm:mb-4 shrink-0' : 'mb-6 sm:mb-8'

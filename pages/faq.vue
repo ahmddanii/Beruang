@@ -15,18 +15,38 @@
     <!-- Main Content: Category selector & Accordions -->
     <div class="flex flex-col gap-8 max-w-3xl mx-auto w-full">
       
-      <!-- Category Selector Pills -->
+      <!-- Category Selector Pills & Expand All Actions -->
       <div class="space-y-3">
-        <p class="text-[11px] font-poppins font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 text-center">
-          Pilih Kategori Bantuan:
-        </p>
-        <div class="flex flex-wrap justify-center gap-2">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <p class="text-[11px] font-poppins font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+            Pilih Kategori Bantuan:
+          </p>
+          <div class="flex items-center gap-2.5">
+            <button
+              type="button"
+              class="text-xs font-poppins font-bold text-[#0081A0] dark:text-[#2091AA] hover:underline cursor-pointer"
+              @click="toggleAll(true)"
+            >
+              Buka Semua
+            </button>
+            <span class="text-neutral-300 dark:text-neutral-700">•</span>
+            <button
+              type="button"
+              class="text-xs font-poppins font-medium text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:underline cursor-pointer"
+              @click="toggleAll(false)"
+            >
+              Tutup Semua
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
           <button
             v-for="cat in categories"
             :key="cat.id"
             type="button"
             :class="[
-              'px-4 py-1.5 rounded-full text-xs font-poppins font-semibold transition-all duration-150',
+              'px-4 py-1.5 rounded-full text-xs font-poppins font-semibold transition-all duration-150 cursor-pointer',
               selectedCategory === cat.id
                 ? 'bg-[#0081A0] text-white shadow-xs'
                 : 'bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-600'
@@ -48,7 +68,7 @@
               Untuk Pemilik Usaha (UMKM)
             </h2>
           </div>
-          <BAccordion :items="umkmFaqs" default-open-id="umkm-1" />
+          <BAccordion ref="umkmAccordionRef" :items="umkmFaqs" default-open-id="umkm-1" :multiple="true" />
         </div>
 
         <!-- Section: Investor FAQs -->
@@ -59,7 +79,7 @@
               Untuk Calon Investor & Pendana
             </h2>
           </div>
-          <BAccordion :items="investorFaqs" />
+          <BAccordion ref="investorAccordionRef" :items="investorFaqs" :multiple="true" />
         </div>
 
         <!-- Section: Konsultan FAQs -->
@@ -70,7 +90,7 @@
               Untuk Konsultan Pendamping Mitra
             </h2>
           </div>
-          <BAccordion :items="konsultanFaqs" />
+          <BAccordion ref="konsultanAccordionRef" :items="konsultanFaqs" :multiple="true" />
         </div>
       </div>
     </div>
@@ -95,6 +115,22 @@ const categories = [
 ]
 
 const selectedCategory = ref('all')
+
+const umkmAccordionRef = ref<InstanceType<typeof BAccordion> | null>(null)
+const investorAccordionRef = ref<InstanceType<typeof BAccordion> | null>(null)
+const konsultanAccordionRef = ref<InstanceType<typeof BAccordion> | null>(null)
+
+function toggleAll(open: boolean) {
+  if (open) {
+    umkmAccordionRef.value?.openAll()
+    investorAccordionRef.value?.openAll()
+    konsultanAccordionRef.value?.openAll()
+  } else {
+    umkmAccordionRef.value?.closeAll()
+    investorAccordionRef.value?.closeAll()
+    konsultanAccordionRef.value?.closeAll()
+  }
+}
 
 const umkmFaqs: AccordionItem[] = [
   {

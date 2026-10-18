@@ -1,6 +1,6 @@
 <template>
   <footer class="bg-white dark:bg-[#0C121D] border-t border-neutral-200/80 dark:border-neutral-800/80 pt-12 pb-8 transition-colors font-sans">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 pb-10 border-b border-neutral-200/80 dark:border-neutral-800">
         
         <!-- Brand column -->

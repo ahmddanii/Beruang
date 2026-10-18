@@ -124,6 +124,32 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     actionLabel: 'Validasi Sekarang',
     roleTarget: 'CONSULTANT'
   },
+  {
+    id: 'notif-kon-2',
+    title: 'Perhatian: Lonjakan Biaya Logistik (+30%)',
+    message: 'Katering Berkah Jogja mencatat kenaikan biaya logistik tanpa penyesuaian harga menu. Skor kesehatan turun ke 54/100.',
+    category: 'KESEHATAN',
+    priority: 'HIGH',
+    timestamp: '45 menit lalu',
+    date: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+    isRead: false,
+    link: '/konsultan/klien/umkm-04',
+    actionLabel: 'Diagnosa Klien',
+    roleTarget: 'CONSULTANT'
+  },
+  {
+    id: 'notif-kon-3',
+    title: 'Peringatan Margin: Lonjakan HPP Bahan Baku',
+    message: 'Kopi Senja Nusantara mengalami lonjakan HPP biji kopi dari 38% ke 47.2% omzet pada September 2026.',
+    category: 'KAS',
+    priority: 'NORMAL',
+    timestamp: '2 jam lalu',
+    date: new Date(Date.now() - 120 * 60 * 1000).toISOString(),
+    isRead: false,
+    link: '/konsultan/klien/umkm-01',
+    actionLabel: 'Diagnosa Klien',
+    roleTarget: 'CONSULTANT'
+  },
   // Notifications for Investor role
   {
     id: 'notif-inv-1',

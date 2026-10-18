@@ -1,13 +1,13 @@
 <template>
-  <div class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10 sm:space-y-12 font-sans">
+  <div class="py-8 sm:py-14 w-full max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 space-y-12 sm:space-y-16 font-sans">
     
     <!-- Header -->
-    <div class="max-w-3xl space-y-3">
-      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
+    <div class="max-w-4xl space-y-3.5">
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight">
         Mendorong 100.000 UMKM Indonesia Naik Kelas dan Terpercaya.
       </h1>
 
-      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-poppins leading-relaxed max-w-2xl">
+      <p class="text-xs sm:text-base text-neutral-600 dark:text-neutral-300 font-poppins leading-relaxed max-w-3xl">
         <strong>Beruang (Ber-Uang)</strong> lahir dari keresahan nyata: jutaan pengusaha lokal memiliki produk hebat dan pelanggan loyal, namun tersandung pencatatan arus kas dan minimnya tata kelola sehingga gagal mengakses modal ekspansi yang layak.
       </p>
     </div>

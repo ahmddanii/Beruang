@@ -194,7 +194,6 @@ const filledKey = computed(() => {
     return 'user-group'
   if (p.startsWith('/konsultan/request') || p.startsWith('/admin/penugasan')) return 'user-add'
   if (p.startsWith('/konsultan/validasi')) return 'checkmark-circle'
-  if (p.startsWith('/konsultan/alert')) return 'alert'
   if (p.startsWith('/investor/watchlist')) return 'star'
   return null
 })

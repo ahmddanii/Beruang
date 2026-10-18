@@ -106,10 +106,10 @@
             <span class="text-[11px] text-neutral-400">Yogyakarta</span>
             <div class="flex items-center gap-2">
               <NuxtLink
-                to="/konsultan/alert"
+                to="/konsultan/klien/umkm-04"
                 class="px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 hover:border-rose-500 text-rose-600 dark:text-rose-400 font-bold text-xs transition-colors"
               >
-                Tinjau Masalah
+                Diagnosa Usaha
               </NuxtLink>
               <NuxtLink
                 to="/konsultan/rencana-aksi?client=umkm-04"
@@ -143,10 +143,10 @@
             <span class="text-[11px] text-neutral-400">Bandung</span>
             <div class="flex items-center gap-2">
               <NuxtLink
-                to="/konsultan/alert"
+                to="/konsultan/klien/umkm-01"
                 class="px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 hover:border-amber-500 text-amber-600 dark:text-amber-400 font-bold text-xs transition-colors"
               >
-                Detail Anomali
+                Diagnosa Usaha
               </NuxtLink>
               <NuxtLink
                 to="/konsultan/rencana-aksi?client=umkm-01"

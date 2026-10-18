@@ -192,45 +192,32 @@
               <span>Tenggat: <strong class="text-neutral-700 dark:text-neutral-200 font-semibold">{{ plan.targetDate }}</strong></span>
             </span>
 
-            <!-- Status Toggle Segmented Pill (Identik dengan Roadmap) -->
-            <div class="flex items-center p-0.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-[11px]">
-              <button
-                type="button"
-                :class="[
-                  'px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer',
-                  plan.status === 'TODO'
-                    ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-2xs font-bold'
-                    : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
-                ]"
-                @click="updateStatus(plan.id, 'TODO')"
+            <!-- Status Eksekusi oleh UMKM (Read-Only Monitoring Badge untuk Konsultan) -->
+            <div class="flex items-center shrink-0">
+              <span
+                v-if="plan.status === 'DONE'"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-poppins font-bold bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 shadow-2xs"
+                title="Telah diselesaikan oleh pelaku usaha"
               >
-                Belum
-              </button>
-              <button
-                type="button"
-                :class="[
-                  'px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer',
-                  plan.status === 'IN_PROGRESS'
-                    ? 'bg-amber-500 text-white shadow-2xs font-bold'
-                    : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
-                ]"
-                @click="updateStatus(plan.id, 'IN_PROGRESS')"
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" :stroke-width="2.5" />
+                <span>Selesai Dikerjakan</span>
+              </span>
+              <span
+                v-else-if="plan.status === 'IN_PROGRESS'"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-poppins font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800 shadow-2xs"
+                title="Sedang dikerjakan oleh pelaku usaha"
               >
-                Proses
-              </button>
-              <button
-                type="button"
-                :class="[
-                  'px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1',
-                  plan.status === 'DONE'
-                    ? 'bg-[#00AA13] text-white shadow-2xs font-bold'
-                    : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
-                ]"
-                @click="updateStatus(plan.id, 'DONE')"
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                <span>Sedang Dikerjakan</span>
+              </span>
+              <span
+                v-else
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-poppins font-semibold bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700"
+                title="Menunggu tindakan dari pelaku usaha"
               >
-                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" :stroke-width="2.5" />
-                <span>Selesai</span>
-              </button>
+                <span class="w-1.5 h-1.5 rounded-full bg-neutral-400" />
+                <span>Belum Dimulai</span>
+              </span>
             </div>
 
             <!-- Delete Plan Trigger -->

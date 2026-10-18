@@ -209,20 +209,67 @@
               </button>
 
               <div class="min-w-0 flex-1 space-y-1">
-                <!-- Category Eyebrow Pill -->
-                <div class="flex items-center gap-2">
-                  <span
-                    :class="[
-                      'px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-poppins font-semibold border shrink-0',
-                      getCategoryBadgeClass(task.category)
-                    ]"
-                  >
-                    {{ task.category }}
-                  </span>
-                  <span v-if="task.completed" class="text-[11px] text-[#00AA13] dark:text-emerald-400 font-semibold flex items-center gap-1">
-                    <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" />
-                    <span>Langkah Selesai</span>
-                  </span>
+                <!-- Category & Status Control Row for UMKM -->
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center gap-2">
+                    <span
+                      :class="[
+                        'px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-poppins font-semibold border shrink-0',
+                        getCategoryBadgeClass(task.category)
+                      ]"
+                    >
+                      {{ task.category }}
+                    </span>
+                    <span v-if="task.completed || task.status === 'DONE'" class="text-[11px] text-[#00AA13] dark:text-emerald-400 font-semibold flex items-center gap-1">
+                      <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" />
+                      <span>Langkah Selesai</span>
+                    </span>
+                    <span v-else-if="task.status === 'IN_PROGRESS'" class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      <span>Sedang Dikerjakan</span>
+                    </span>
+                  </div>
+
+                  <!-- Status Action Selector untuk UMKM (Pelaku Usaha) -->
+                  <div class="flex items-center p-0.5 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-[11px]">
+                    <button
+                      type="button"
+                      :class="[
+                        'px-2.5 py-0.5 rounded-lg font-semibold transition-all cursor-pointer',
+                        (task.status === 'TODO' || (!task.status && !task.completed))
+                          ? 'bg-white dark:bg-neutral-700 text-neutral-800 dark:text-white shadow-2xs font-bold'
+                          : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                      ]"
+                      @click.stop="umkmStore.setTaskStatus(task.id, 'TODO')"
+                    >
+                      Belum
+                    </button>
+                    <button
+                      type="button"
+                      :class="[
+                        'px-2.5 py-0.5 rounded-lg font-semibold transition-all cursor-pointer',
+                        task.status === 'IN_PROGRESS'
+                          ? 'bg-amber-500 text-white shadow-2xs font-bold'
+                          : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                      ]"
+                      @click.stop="umkmStore.setTaskStatus(task.id, 'IN_PROGRESS')"
+                    >
+                      Proses
+                    </button>
+                    <button
+                      type="button"
+                      :class="[
+                        'px-2.5 py-0.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1',
+                        (task.status === 'DONE' || task.completed)
+                          ? 'bg-[#00AA13] text-white shadow-2xs font-bold'
+                          : 'text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300'
+                      ]"
+                      @click.stop="umkmStore.setTaskStatus(task.id, 'DONE')"
+                    >
+                      <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="11" :stroke-width="2.5" />
+                      <span>Selesai</span>
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Title Headline -->

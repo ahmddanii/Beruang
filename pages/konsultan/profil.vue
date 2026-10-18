@@ -105,36 +105,54 @@
       </div>
     </div>
 
-    <!-- 3. NAVIGATION TABS: DATA PRIBADI & UPLOAD DOKUMEN -->
-    <div class="flex items-center gap-2 p-1 rounded-2xl bg-neutral-100 dark:bg-[#13161F] border border-neutral-200/80 dark:border-white/10 w-fit">
+    <!-- 3. Macro Segmented Pill Switcher (Tab Navigasi Makro - GoPay Green Edition Sesuai Klien Aktif & Permintaan Masuk) -->
+    <div class="segmented-pill-container is-gopay-green w-full relative">
+      <!-- GSAP Animated Sliding Pill Indicator -->
+      <div
+        ref="tabIndicatorRef"
+        class="segmented-pill-indicator"
+        aria-hidden="true"
+      />
+
+      <!-- Tab 1: Data Pribadi & Keahlian -->
       <button
         type="button"
-        :class="[
-          'px-5 py-2.5 rounded-xl text-xs sm:text-sm font-heading font-bold transition-all duration-150 cursor-pointer flex items-center gap-2',
-          activeTab === 'personal'
-            ? 'bg-white dark:bg-[#1A1D26] text-[#0081A0] dark:text-[#2091AA] shadow-xs'
-            : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-        ]"
-        @click="activeTab = 'personal'"
+        :ref="el => setTabButtonRef('personal', el)"
+        class="segmented-pill-btn group"
+        :class="activeTab === 'personal' ? 'is-active' : 'is-inactive'"
+        @click="setTab('personal')"
       >
-        <HugeiconsIcon :icon="UserCircleIcon" :size="16" :stroke-width="2" />
-        <span>Data Pribadi & Keahlian</span>
+        <HugeiconsIcon
+          :icon="UserCircleIcon"
+          :size="16"
+          :stroke-width="activeTab === 'personal' ? 2.2 : 1.8"
+          class="mr-2 shrink-0 transition-colors"
+        />
+        <span class="truncate">Data Pribadi & Keahlian</span>
       </button>
 
+      <!-- Tab 2: Kelola & Upload Dokumen -->
       <button
         type="button"
-        :class="[
-          'px-5 py-2.5 rounded-xl text-xs sm:text-sm font-heading font-bold transition-all duration-150 cursor-pointer flex items-center gap-2',
-          activeTab === 'documents'
-            ? 'bg-white dark:bg-[#1A1D26] text-[#0081A0] dark:text-[#2091AA] shadow-xs'
-            : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-        ]"
-        @click="activeTab = 'documents'"
+        :ref="el => setTabButtonRef('documents', el)"
+        class="segmented-pill-btn group"
+        :class="activeTab === 'documents' ? 'is-active' : 'is-inactive'"
+        @click="setTab('documents')"
       >
-        <HugeiconsIcon :icon="File01Icon" :size="16" :stroke-width="2" />
-        <span>Kelola & Upload Dokumen</span>
+        <HugeiconsIcon
+          :icon="File01Icon"
+          :size="16"
+          :stroke-width="activeTab === 'documents' ? 2.2 : 1.8"
+          class="mr-2 shrink-0 transition-colors"
+        />
+        <span class="truncate">Kelola & Upload Dokumen</span>
         <span
-          class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-[#0081A0]/10 text-[#0081A0] dark:bg-[#0081A0]/20 dark:text-[#2091AA] tabular-nums"
+          :class="[
+            'ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold tabular-nums leading-none transition-colors',
+            activeTab === 'documents'
+              ? 'bg-white/25 text-white'
+              : 'bg-neutral-300/60 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300'
+          ]"
         >
           {{ konsultanStore.profile.documents.length }}
         </span>
@@ -142,7 +160,7 @@
     </div>
 
     <!-- 4. TAB 1: FORM DATA PRIBADI & KEAHLIAN -->
-    <div v-if="activeTab === 'personal'" class="card-tactile-gopay p-6 sm:p-8 rounded-3xl text-left">
+    <div v-if="activeTab === 'personal'" class="card-tactile-gopay p-6 sm:p-8 rounded-3xl text-left gsap-profil-tab-content">
       <form @submit.prevent="handleSaveProfile" class="space-y-6">
         <div class="border-b border-neutral-200/80 dark:border-white/10 pb-4">
           <h3 class="font-heading font-bold text-lg text-neutral-900 dark:text-white">
@@ -318,7 +336,7 @@
     </div>
 
     <!-- 5. TAB 2: UPLOAD & KELOLA DOKUMEN -->
-    <div v-else-if="activeTab === 'documents'" class="space-y-6 text-left">
+    <div v-else-if="activeTab === 'documents'" class="space-y-6 text-left gsap-profil-tab-content">
       <!-- Upload Dropzone Card -->
       <div class="card-tactile-gopay p-6 sm:p-8 rounded-3xl space-y-5">
         <div>
@@ -488,7 +506,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import gsap from 'gsap'
 import { useKonsultanStore, type ConsultantDocument } from '~/stores/konsultan'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -505,10 +525,94 @@ definePageMeta({
   layout: 'dashboard'
 })
 
+const route = useRoute()
+const router = useRouter()
 const konsultanStore = useKonsultanStore()
 
 const activeTab = ref<'personal' | 'documents'>('personal')
 const toastMessage = ref('')
+
+// State Navigasi Tab & GSAP Sliding Pill Indicator (Identik dengan Klien Aktif & Permintaan Masuk)
+const tabIndicatorRef = ref<HTMLElement | null>(null)
+const tabButtonsRef = ref<Record<string, HTMLElement>>({})
+let handleResizeTabs: (() => void) | null = null
+
+function setTabButtonRef(id: string, el: any) {
+  if (el) {
+    tabButtonsRef.value[id] = el
+  }
+}
+
+function updateTabIndicatorPosition(immediate = false) {
+  const current = activeTab.value
+  const indicatorEl = tabIndicatorRef.value
+  if (!indicatorEl) return
+
+  let targetEl = tabButtonsRef.value[current]
+  if (!targetEl && indicatorEl.parentElement) {
+    targetEl = (indicatorEl.parentElement.querySelector('.segmented-pill-btn.is-active') ||
+      indicatorEl.parentElement.querySelector('.segmented-pill-btn')) as HTMLElement
+  }
+  if (!targetEl) return
+
+  const targetLeft = targetEl.offsetLeft
+  const targetWidth = targetEl.offsetWidth
+
+  if (immediate) {
+    gsap.set(indicatorEl, {
+      x: targetLeft,
+      width: targetWidth,
+      opacity: 1
+    })
+  } else {
+    // Animasi geser dengan tactile bounce back.out(1.5) khas Beruang UMKM
+    gsap.to(indicatorEl, {
+      x: targetLeft,
+      width: targetWidth,
+      opacity: 1,
+      duration: 0.42,
+      ease: 'back.out(1.5)',
+      overwrite: 'auto'
+    })
+  }
+}
+
+function setTab(tab: 'personal' | 'documents') {
+  activeTab.value = tab
+  router.replace({
+    query: {
+      ...route.query,
+      tab: tab === 'documents' ? 'dokumen' : undefined
+    }
+  })
+  nextTick(() => {
+    updateTabIndicatorPosition(false)
+    gsap.fromTo(
+      '.gsap-profil-tab-content',
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out', clearProps: 'all' }
+    )
+  })
+}
+
+onMounted(() => {
+  if (route.query.tab === 'dokumen' || route.query.tab === 'documents') {
+    activeTab.value = 'documents'
+  }
+  nextTick(() => {
+    updateTabIndicatorPosition(true)
+  })
+  handleResizeTabs = () => {
+    updateTabIndicatorPosition(true)
+  }
+  window.addEventListener('resize', handleResizeTabs)
+})
+
+onBeforeUnmount(() => {
+  if (handleResizeTabs) {
+    window.removeEventListener('resize', handleResizeTabs)
+  }
+})
 
 // Form State for Profile
 const profileData = ref({

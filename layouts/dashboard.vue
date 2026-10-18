@@ -411,8 +411,8 @@ const currentPageInfo = computed(() => {
   if (p.startsWith('/konsultan/validasi')) {
     return { title: 'Validasi Kas', icon: CheckmarkCircle01Icon }
   }
-  if (p.startsWith('/konsultan/alert')) {
-    return { title: 'Peringatan Masalah', icon: Alert01Icon }
+  if (p.startsWith('/konsultan/klien/perjanjian')) {
+    return { title: 'Perjanjian Pendampingan', icon: Award01Icon }
   }
   if (p.startsWith('/konsultan/klien/')) {
     return { title: 'Diagnosa Klien UMKM', icon: AnalyticsUpIcon }

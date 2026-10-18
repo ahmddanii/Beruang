@@ -1,6 +1,6 @@
 <template>
   <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#0C121D]/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 transition-colors shadow-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 h-[72px] sm:h-20 flex items-center justify-between gap-6">
+    <div class="w-full max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 h-[72px] sm:h-20 flex items-center justify-between gap-6">
       <!-- Brand Logo -->
       <NuxtLink to="/" class="flex items-center gap-2.5 group shrink-0" title="Beranda Beruang">
         <img

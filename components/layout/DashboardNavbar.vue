@@ -202,10 +202,10 @@ const navItems = computed(() => {
         badge: `${konsultanStore.validationsQueue.length}`
       },
       {
-        to: '/konsultan/alert',
-        label: 'Peringatan Anomali',
-        icon: Alert01Icon,
-        badge: `${konsultanStore.alerts.filter(a => !a.dismissed).length}`
+        to: '/konsultan/rencana-aksi',
+        label: 'Rencana Aksi',
+        icon: Task01Icon,
+        badge: `${konsultanStore.actionPlans.filter(p => p.status === 'TODO').length}`
       }
     ]
   } else {

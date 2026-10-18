@@ -16,6 +16,7 @@ export interface ActionPlanTask {
   description: string
   category: 'Finansial' | 'Operasional' | 'Pemasaran' | 'Legalitas' | 'Tata Kelola'
   completed: boolean
+  status?: 'TODO' | 'IN_PROGRESS' | 'DONE'
   dueDate: string
   milestoneId: string
   consultantNote?: string
@@ -167,6 +168,7 @@ export const useUmkmStore = defineStore('umkm', {
         description: 'Buka rekening giro khusus operasional warung dan integrasikan mutasi kas.',
         category: 'Finansial',
         completed: true,
+        status: 'DONE',
         dueDate: '10 Juli 2026',
         milestoneId: 'm1',
         consultantNote: 'Terverifikasi per rekening koran Bank Mandiri.'
@@ -177,6 +179,7 @@ export const useUmkmStore = defineStore('umkm', {
         description: 'Pastikan KBLI sesuai dan sertifikasi halal gerai terpasang di dinding kasir.',
         category: 'Legalitas',
         completed: true,
+        status: 'DONE',
         dueDate: '25 Juli 2026',
         milestoneId: 'm1'
       },
@@ -186,6 +189,7 @@ export const useUmkmStore = defineStore('umkm', {
         description: 'Terapkan formulir opname bahan baku setiap Minggu malam di seluruh 3 outlet.',
         category: 'Operasional',
         completed: true,
+        status: 'DONE',
         dueDate: '15 Agustus 2026',
         milestoneId: 'm2',
         consultantNote: 'Selisih stok bahan baku kini di bawah batas wajar 2%.'
@@ -196,6 +200,7 @@ export const useUmkmStore = defineStore('umkm', {
         description: 'Kunci harga bahan baku 6 bulan ke depan untuk cegah lonjakan modal produksi mendadak.',
         category: 'Finansial',
         completed: true,
+        status: 'DONE',
         dueDate: '30 Agustus 2026',
         milestoneId: 'm2'
       },
@@ -205,6 +210,7 @@ export const useUmkmStore = defineStore('umkm', {
         description: 'Unggah rekapitulasi penjualan POS dan bukti rekening koran bulan September.',
         category: 'Finansial',
         completed: true,
+        status: 'DONE',
         dueDate: '05 Oktober 2026',
         milestoneId: 'm3'
       },
@@ -214,6 +220,7 @@ export const useUmkmStore = defineStore('umkm', {
         description: 'Diskusi bersama konsultan mengenai data privat yang dibuka untuk investor.',
         category: 'Tata Kelola',
         completed: false,
+        status: 'IN_PROGRESS',
         dueDate: '12 Oktober 2026',
         milestoneId: 'm3',
         consultantNote: 'Fokus pada proyeksi payback period 18 bulan.'
@@ -462,10 +469,19 @@ export const useUmkmStore = defineStore('umkm', {
   },
 
   actions: {
+    setTaskStatus(taskId: string, status: 'TODO' | 'IN_PROGRESS' | 'DONE') {
+      const task = this.tasks.find(t => t.id === taskId)
+      if (task) {
+        task.status = status
+        task.completed = status === 'DONE'
+      }
+    },
+
     toggleTask(taskId: string) {
       const task = this.tasks.find(t => t.id === taskId)
       if (task) {
         task.completed = !task.completed
+        task.status = task.completed ? 'DONE' : 'TODO'
       }
     },
 

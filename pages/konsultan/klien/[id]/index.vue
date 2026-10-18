@@ -321,12 +321,8 @@
 
       <!-- Riwayat Kinerja Historis Bulanan (Omzet vs HPP) -->
       <div class="card-tactile-gopay rounded-3xl p-6 sm:p-7 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0081A0]/10 text-[#0081A0] dark:bg-[#0081A0]/20 dark:text-[#2091AA] text-xs font-poppins font-semibold border border-[#0081A0]/20 mb-2">
-              <HugeiconsIcon :icon="AnalyticsUpIcon" :size="14" :stroke-width="2" />
-              <span>Tren Pertumbuhan Keuangan</span>
-            </div>
             <h3 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
               Riwayat Kinerja Historis Bulanan
             </h3>
@@ -334,19 +330,30 @@
               Tren omzet penjualan dan modal jualan (HPP) riil yang telah diverifikasi oleh konsultan pendamping.
             </p>
           </div>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-[#00AA13] dark:text-emerald-400 text-xs font-poppins font-semibold border border-emerald-200/60 dark:border-emerald-800/60 self-start sm:self-auto">
-            <span class="w-2 h-2 rounded-full bg-[#00AA13] animate-pulse" />
-            Terverifikasi 5 Bulan Terakhir
-          </span>
+
+          <!-- Filter Range Waktu -->
+          <div class="inline-flex items-center p-1 rounded-2xl bg-neutral-100 dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 self-start sm:self-auto shadow-2xs gap-0.5">
+            <button
+              v-for="range in timeRangeOptions"
+              :key="range.value"
+              type="button"
+              :class="[
+                'px-3 py-1.5 rounded-xl text-xs font-poppins font-semibold transition-all duration-150 cursor-pointer select-none',
+                selectedTimeRange === range.value
+                  ? 'bg-white dark:bg-[#232733] text-[#0081A0] dark:text-[#50AABF] shadow-xs'
+                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
+              ]"
+              @click="selectedTimeRange = range.value"
+            >
+              {{ range.label }}
+            </button>
+          </div>
         </div>
 
         <BLineAreaChart
           title="Omzet vs HPP (Juta Rp)"
-          :categories="['Mei', 'Jun', 'Jul', 'Agu', 'Sep']"
-          :series="[
-            { id: 'omzet', name: 'Omzet Penjualan', color: '#0081A0', data: [46, 52, 58, 65, 73] },
-            { id: 'hpp', name: 'Modal Jualan (HPP)', color: '#FF4B4B', data: [21, 23.5, 26, 29, 34.5] }
-          ]"
+          :categories="chartDataByRange.categories"
+          :series="chartSeries"
           :value-formatter="(v) => `Rp ${v} Juta`"
         />
       </div>
@@ -521,39 +528,32 @@
                     <span>Tenggat: <strong>{{ task.dueDate }}</strong></span>
                   </span>
 
-                  <!-- Status Toggle Segmented Pill -->
-                  <div class="flex items-center p-0.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-[11px]">
-                    <button
-                      type="button"
-                      :class="[
-                        'px-2 py-0.5 rounded-lg font-semibold transition-all cursor-pointer',
-                        task.status === 'TODO' ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-2xs' : 'text-neutral-400 hover:text-neutral-600'
-                      ]"
-                      @click="konsultanStore.updateTaskStatus(task.id, 'TODO')"
+                  <!-- Status Eksekusi oleh UMKM (Read-Only Monitoring Badge untuk Konsultan) -->
+                  <div class="flex items-center">
+                    <span
+                      v-if="task.status === 'DONE' || task.completed"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-poppins font-bold bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 shadow-2xs"
+                      title="Telah diselesaikan oleh pelaku usaha"
                     >
-                      Belum
-                    </button>
-                    <button
-                      type="button"
-                      :class="[
-                        'px-2 py-0.5 rounded-lg font-semibold transition-all cursor-pointer',
-                        task.status === 'IN_PROGRESS' ? 'bg-amber-500 text-white shadow-2xs' : 'text-neutral-400 hover:text-neutral-600'
-                      ]"
-                      @click="konsultanStore.updateTaskStatus(task.id, 'IN_PROGRESS')"
+                      <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" :stroke-width="2.5" />
+                      <span>Selesai Dikerjakan</span>
+                    </span>
+                    <span
+                      v-else-if="task.status === 'IN_PROGRESS'"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-poppins font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800 shadow-2xs"
+                      title="Sedang dalam proses pengerjaan oleh pelaku usaha"
                     >
-                      Proses
-                    </button>
-                    <button
-                      type="button"
-                      :class="[
-                        'px-2 py-0.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1',
-                        task.status === 'DONE' ? 'bg-[#00AA13] text-white shadow-2xs' : 'text-neutral-400 hover:text-neutral-600'
-                      ]"
-                      @click="konsultanStore.updateTaskStatus(task.id, 'DONE')"
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      <span>Sedang Dikerjakan</span>
+                    </span>
+                    <span
+                      v-else
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-poppins font-semibold bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700"
+                      title="Menunggu tindakan dari pelaku usaha"
                     >
-                      <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="11" :stroke-width="2.5" />
-                      <span>Selesai</span>
-                    </button>
+                      <span class="w-1.5 h-1.5 rounded-full bg-neutral-400" />
+                      <span>Belum Dimulai</span>
+                    </span>
                   </div>
 
                   <button
@@ -1101,18 +1101,6 @@
       <div class="space-y-4 text-left">
         <div>
           <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-poppins">
-            Nomor Urut Tahapan <span class="text-rose-500">*</span>
-          </label>
-          <input
-            v-model.number="newMilestone.order"
-            type="number"
-            min="1"
-            class="w-24 px-3 py-2 rounded-xl text-xs border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#0081A0]"
-          />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-poppins">
             Judul Milestone <span class="text-rose-500">*</span>
           </label>
           <input
@@ -1411,6 +1399,52 @@ const historicalCashLogs = [
   { month: 'Mei 2026', omzet: 46, hpp: 21, net: 13, auditDate: '10 Mei 2026' }
 ]
 
+// Filter Range Waktu untuk Riwayat Kinerja Historis Bulanan
+type TimeRangeKey = '3M' | '6M' | '1Y' | 'ALL'
+const selectedTimeRange = ref<TimeRangeKey>('6M')
+
+const timeRangeOptions = [
+  { label: '3 Bulan', value: '3M' },
+  { label: '6 Bulan', value: '6M' },
+  { label: '1 Tahun', value: '1Y' },
+  { label: 'Semua', value: 'ALL' }
+]
+
+const chartDataByRange = computed(() => {
+  switch (selectedTimeRange.value) {
+    case '3M':
+      return {
+        categories: ['Jul', 'Agu', 'Sep'],
+        omzet: [58, 65, 73],
+        hpp: [26, 29, 34.5]
+      }
+    case '6M':
+      return {
+        categories: ['Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep'],
+        omzet: [42, 46, 52, 58, 65, 73],
+        hpp: [19, 21, 23.5, 26, 29, 34.5]
+      }
+    case '1Y':
+      return {
+        categories: ['Okt', 'Nov', 'Des', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep'],
+        omzet: [28, 30, 33, 35, 37, 39, 42, 46, 52, 58, 65, 73],
+        hpp: [13, 14, 15.5, 16, 17, 18, 19, 21, 23.5, 26, 29, 34.5]
+      }
+    case 'ALL':
+    default:
+      return {
+        categories: ['2025 Q3', '2025 Q4', '2026 Q1', '2026 Q2', '2026 Q3'],
+        omzet: [85, 96, 111, 156, 196],
+        hpp: [41, 46, 51, 70.5, 89.5]
+      }
+  }
+})
+
+const chartSeries = computed(() => [
+  { id: 'omzet', name: 'Omzet Penjualan', color: '#0081A0', data: chartDataByRange.value.omzet },
+  { id: 'hpp', name: 'Modal Jualan (HPP)', color: '#FF4B4B', data: chartDataByRange.value.hpp }
+])
+
 function confirmValidateCash() {
   clientCashStatus.value = 'VERIFIED'
   validationSuccessMsg.value = true
@@ -1600,11 +1634,14 @@ const newMilestone = ref({
 })
 
 function openAddMilestoneModal() {
+  const nextOrder = clientMilestones.value.length > 0
+    ? Math.max(...clientMilestones.value.map(m => m.order || 0)) + 1
+    : 1
   newMilestone.value = {
-    order: clientMilestones.value.length + 1,
+    order: nextOrder,
     title: '',
     description: '',
-    targetDate: `Bulan ${clientMilestones.value.length + 1}`
+    targetDate: `Bulan ${nextOrder}`
   }
   isAddMilestoneModalOpen.value = true
 }
@@ -1612,9 +1649,13 @@ function openAddMilestoneModal() {
 function submitNewMilestone() {
   if (!newMilestone.value.title || !newMilestone.value.description) return
 
+  const autoOrder = clientMilestones.value.length > 0
+    ? Math.max(...clientMilestones.value.map(m => m.order || 0)) + 1
+    : 1
+
   konsultanStore.addMilestone({
     clientId: clientId.value,
-    order: newMilestone.value.order,
+    order: newMilestone.value.order || autoOrder,
     title: newMilestone.value.title,
     description: newMilestone.value.description,
     targetDate: newMilestone.value.targetDate

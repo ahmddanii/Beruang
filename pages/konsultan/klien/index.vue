@@ -390,14 +390,14 @@
                 {{ req.requestedAt }}
               </span>
 
-              <!-- Tombol Aksi Tunggal: Lihat Pengajuan -->
+              <!-- Tombol Aksi Tunggal: Lihat Detail -->
               <button
                 type="button"
                 class="px-3.5 sm:px-4 py-1.5 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-[0.98] shrink-0"
                 @click="openDetailModal(req)"
               >
                 <HugeiconsIcon :icon="ViewIcon" :size="13" :stroke-width="2" />
-                <span>Lihat Pengajuan</span>
+                <span>Lihat Detail</span>
                 <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2" />
               </button>
             </div>
@@ -596,8 +596,8 @@
               class="px-5 py-2 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white text-xs font-bold shadow-xs transition-all active:scale-[0.98] cursor-pointer flex items-center gap-1.5"
               @click="acceptFromDetail(selectedRequestDetail)"
             >
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" :stroke-width="2.2" />
-              <span>Terima Permintaan</span>
+              <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="14" :stroke-width="2.2" />
+              <span>Buka Perjanjian & Terima</span>
             </button>
           </div>
 
@@ -616,338 +616,62 @@
     </BModal>
 
     <!-- ===================================================================== -->
-    <!-- MODAL: PERJANJIAN & KOMITMEN PENDAMPINGAN (KONTRAK RESMI)            -->
+    <!-- MODAL: POPUP SUKSES PENERIMAAN KLIEN UMKM                            -->
     <!-- ===================================================================== -->
     <BModal
-      v-model="showContractModal"
-      size="xl"
-      title="Perjanjian & Komitmen Pendampingan UMKM"
-      subtitle="Pastikan seluruh klausul dan komitmen bimbingan disepakati sebelum menerima UMKM binaan secara resmi."
+      v-model="showAcceptedSuccessModal"
+      size="md"
+      title="Kemitraan Resmi Disepakati"
+      subtitle="Klien UMKM binaan telah berhasil diterima & disahkan."
+      @close="closeAcceptedSuccessModal"
     >
-      <div v-if="selectedRequestForContract" class="space-y-6 text-left py-1">
-        
-        <!-- 1. Ringkasan Pihak & Kontrak Bimbingan (Bento Header) -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#F0F8FF] to-[#E6F3FA] dark:from-[#131B2A] dark:to-[#0C121D] border border-[#0081A0]/25 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#0081A0]/15 pb-3">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-md bg-[#0081A0] text-white text-[10px] font-bold tracking-wider uppercase">
-                Kontrak Bimbingan
-              </span>
-              <span class="text-xs font-mono font-bold text-[#0081A0] dark:text-[#2091AA]">
-                NO: KTR-BRU/{{ selectedRequestForContract.id.toUpperCase() }}/2026
-              </span>
-            </div>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 w-fit">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-              Menunggu Tanda Tangan Konsultan
+      <div class="space-y-5 text-center py-2">
+        <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-[#0081A0] to-[#00AA13] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#00AA13]/20">
+          <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="32" :stroke-width="2.2" />
+        </div>
+
+        <div class="space-y-1.5">
+          <h3 class="font-heading font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-white leading-tight">
+            Klien <span class="text-[#0081A0] dark:text-[#2091AA]">{{ acceptedClientName }}</span> Diterima!
+          </h3>
+          <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-sm mx-auto">
+            Perjanjian komitmen pendampingan telah resmi ditandatangani. Pelaku usaha kini resmi menjadi UMKM binaan aktifmu.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-[#F6F8FA] dark:bg-[#1A1D26] border border-[#E2E8F0] dark:border-white/10 text-left space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-neutral-500 dark:text-neutral-400">Status Pembinaan:</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#00AA13]/10 text-[#00AA13] dark:text-[#22C55E]">
+              Binaan Aktif Baru
             </span>
           </div>
-
-          <!-- Pihak 1 & Pihak 2 -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Pihak Pertama: Konsultan -->
-            <div class="p-3.5 rounded-xl bg-white dark:bg-[#1A1D26] border border-neutral-200/80 dark:border-white/10 space-y-1">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
-                Pihak Pertama (Konsultan Pendamping)
-              </span>
-              <div class="flex items-center gap-2.5 pt-0.5">
-                <div class="w-9 h-9 rounded-full bg-[#0081A0]/10 text-[#0081A0] flex items-center justify-center font-bold text-xs shrink-0">
-                  <HugeiconsIcon :icon="Award01Icon" :size="18" :stroke-width="2" />
-                </div>
-                <div class="min-w-0">
-                  <h4 class="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-white truncate">
-                    {{ konsultanStore.profile.name }}
-                  </h4>
-                  <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
-                    Lisensi BNSP: <span class="font-mono text-neutral-700 dark:text-neutral-300">{{ konsultanStore.profile.bnspLicense }}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pihak Kedua: UMKM -->
-            <div class="p-3.5 rounded-xl bg-white dark:bg-[#1A1D26] border border-neutral-200/80 dark:border-white/10 space-y-1">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-400 block">
-                Pihak Kedua (Pelaku UMKM Binaan)
-              </span>
-              <div class="flex items-center gap-2.5 pt-0.5">
-                <div class="w-9 h-9 rounded-full bg-[#00AA13]/10 text-[#00AA13] flex items-center justify-center font-bold text-xs shrink-0">
-                  <HugeiconsIcon :icon="Store01Icon" :size="18" :stroke-width="2" />
-                </div>
-                <div class="min-w-0">
-                  <h4 class="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-white truncate">
-                    {{ selectedRequestForContract.businessName }}
-                  </h4>
-                  <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
-                    Pemilik: <span class="font-semibold text-neutral-700 dark:text-neutral-300">{{ selectedRequestForContract.ownerName }}</span> • {{ selectedRequestForContract.city }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Parameter Kesepakatan (4 Grid) -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-            <div class="p-2.5 rounded-xl bg-white/80 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/10">
-              <span class="text-[10px] text-neutral-400 font-semibold uppercase block">Honor Bimbingan</span>
-              <span class="text-xs sm:text-sm font-extrabold text-[#0081A0] dark:text-[#2091AA] tabular-nums">
-                Rp {{ (((selectedRequestForContract.offeredFee || (selectedRequestForContract.revenue >= 35000000 ? 2000000 : selectedRequestForContract.revenue >= 25000000 ? 1500000 : 1200000))) / 1000000).toFixed(1) }} Jt<span class="text-[10px] font-normal text-neutral-400">/bln</span>
-              </span>
-            </div>
-            <div class="p-2.5 rounded-xl bg-white/80 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/10">
-              <span class="text-[10px] text-neutral-400 font-semibold uppercase block">Durasi Kontrak</span>
-              <span class="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-white tabular-nums">
-                {{ selectedRequestForContract.durationMonths || 3 }} Bulan Kalender
-              </span>
-            </div>
-            <div class="p-2.5 rounded-xl bg-white/80 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/10">
-              <span class="text-[10px] text-neutral-400 font-semibold uppercase block">Omzet Saat Ini</span>
-              <span class="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-white tabular-nums">
-                Rp {{ (selectedRequestForContract.revenue / 1000000).toFixed(0) }} Juta/bln
-              </span>
-            </div>
-            <div class="p-2.5 rounded-xl bg-white/80 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/10">
-              <span class="text-[10px] text-neutral-400 font-semibold uppercase block">Target Kinerja</span>
-              <span class="text-xs sm:text-sm font-extrabold text-emerald-600 dark:text-emerald-400">
-                Siap Modal & Audit
-              </span>
-            </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-neutral-500 dark:text-neutral-400">Rekomendasi Pertama:</span>
+            <span class="font-bold text-neutral-800 dark:text-neutral-200">
+              Susun Action Plan 30 Hari
+            </span>
           </div>
         </div>
-
-        <!-- 2. Klausul Integritas & Standar Etika Pendampingan -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">
-              <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="16" :stroke-width="2" class="text-[#0081A0]" />
-              <span>Klausul Integritas & Komitmen Kerja Sama Bimbingan</span>
-            </h4>
-            <span class="text-[11px] text-neutral-400 font-medium">Standar Etika Beruang & BNSP</span>
-          </div>
-
-          <div class="space-y-2.5 text-xs text-neutral-700 dark:text-neutral-300">
-            <!-- Klausul 1 -->
-            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/5 space-y-1">
-              <div class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-[#0081A0]/10 text-[#0081A0] text-[10px] font-extrabold flex items-center justify-center shrink-0">1</span>
-                <span>Penyusunan Rencana Aksi (Action Plan) Strategis</span>
-              </div>
-              <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed pl-7 text-[11px] sm:text-xs">
-                Konsultan berkomitmen melakukan diagnosa awal 5 pilar dan merumuskan minimal <strong>3 Rencana Aksi terstruktur setiap bulannya</strong> untuk menyelesaikan hambatan operasional, keuangan, dan tata kelola kas UMKM binaan.
-              </p>
-            </div>
-
-            <!-- Klausul 2 -->
-            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/5 space-y-1">
-              <div class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-[#0081A0]/10 text-[#0081A0] text-[10px] font-extrabold flex items-center justify-center shrink-0">2</span>
-                <span>Evaluasi Kas Berkala & Responsif (SLA 48 Jam)</span>
-              </div>
-              <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed pl-7 text-[11px] sm:text-xs">
-                Konsultan wajib memantau catatan kas usaha binaan minimal <strong>1x setiap 2 minggu</strong>, serta memberikan tanggapan bimbingan atau validasi progres maksimal <strong>2x24 jam</strong> sejak kendala diajukan oleh UMKM.
-              </p>
-            </div>
-
-            <!-- Klausul 3 -->
-            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/5 space-y-1">
-              <div class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-[#0081A0]/10 text-[#0081A0] text-[10px] font-extrabold flex items-center justify-center shrink-0">3</span>
-                <span>Kerahasiaan Data Usaha & Keuangan (Non-Disclosure)</span>
-              </div>
-              <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed pl-7 text-[11px] sm:text-xs">
-                Konsultan menjamin kerahasiaan penuh seluruh laporan keuangan, omzet, margin keuntungan, resep/formula, dan data pemasok UMKM. Dilarang keras membagikan data internal UMKM kepada pihak manapun tanpa izin tertulis.
-              </p>
-            </div>
-
-            <!-- Klausul 4 -->
-            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#13161F] border border-neutral-200/70 dark:border-white/5 space-y-1">
-              <div class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 text-[10px] font-extrabold flex items-center justify-center shrink-0">4</span>
-                <span>Akuntabilitas & Larangan Penelantaran Klien Binaan</span>
-              </div>
-              <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed pl-7 text-[11px] sm:text-xs">
-                Apabila konsultan tidak aktif melakukan bimbingan selama <strong>14 hari kerja berturut-turut</strong> tanpa konfirmasi darurat yang sah, platform Beruang dan UMKM berhak menangguhkan kontrak, memotong honor bimbingan, dan mengalihkan binaan ke konsultan lain.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Lembar Tanda Tangan Digital Konsultan -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-neutral-50 dark:bg-[#13161F] border border-neutral-200/80 dark:border-white/10 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h4 class="text-xs sm:text-sm font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">
-                <HugeiconsIcon :icon="PencilEdit01Icon" :size="15" :stroke-width="2" class="text-[#0081A0]" />
-                <span>Pengesahan Tanda Tangan Konsultan</span>
-              </h4>
-              <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">
-                Tanda tangani dokumen ini sebagai bukti komitmen resmi pembinaan.
-              </p>
-            </div>
-
-            <!-- Switcher Mode Tanda Tangan -->
-            <div class="inline-flex p-1 rounded-full bg-neutral-200/80 dark:bg-[#1A1D26] border border-neutral-300/50 dark:border-white/10 text-xs shrink-0 self-start sm:self-auto">
-              <button
-                type="button"
-                :class="[
-                  'px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5',
-                  signatureMode === 'draw'
-                    ? 'bg-white dark:bg-[#0C121D] text-[#0081A0] shadow-xs'
-                    : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200'
-                ]"
-                @click="switchSignatureMode('draw')"
-              >
-                <HugeiconsIcon :icon="PencilEdit01Icon" :size="12" :stroke-width="2" />
-                <span>Gores Tangan</span>
-              </button>
-              <button
-                type="button"
-                :class="[
-                  'px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5',
-                  signatureMode === 'type'
-                    ? 'bg-white dark:bg-[#0C121D] text-[#0081A0] shadow-xs'
-                    : 'text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200'
-                ]"
-                @click="switchSignatureMode('type')"
-              >
-                <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="12" :stroke-width="2" />
-                <span>Tanda Tangan Otomatis</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Signature Pad: Mode Gores Tangan (Canvas) -->
-          <div v-show="signatureMode === 'draw'" class="space-y-2">
-            <div class="relative w-full h-36 rounded-xl bg-white dark:bg-[#0C121D] border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-[#0081A0]/60 transition-colors overflow-hidden select-none touch-none">
-              <canvas
-                ref="signatureCanvasRef"
-                class="w-full h-full cursor-crosshair"
-                @mousedown="startDrawing"
-                @mousemove="drawSignature"
-                @mouseup="stopDrawing"
-                @mouseleave="stopDrawing"
-                @touchstart="startDrawing"
-                @touchmove="drawSignature"
-                @touchend="stopDrawing"
-              />
-
-              <!-- Helper Watermark Background -->
-              <div
-                v-if="!hasDrawnSignature"
-                class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-neutral-300 dark:text-neutral-600 gap-1"
-              >
-                <HugeiconsIcon :icon="PencilEdit01Icon" :size="20" :stroke-width="1.8" />
-                <span class="text-xs font-medium">Goreskan tanda tanganmu di sini menggunakan mouse / stylus / jari</span>
-                <span class="text-[10px] text-neutral-400 dark:text-neutral-500">Garis bawah panduan penandatanganan</span>
-              </div>
-
-              <!-- Baselines -->
-              <div class="absolute bottom-6 left-8 right-8 border-b border-dashed border-neutral-200 dark:border-neutral-800 pointer-events-none flex justify-between text-[10px] text-neutral-400 pt-1">
-                <span>Area Tanda Tangan Konsultan</span>
-                <span class="font-mono">{{ currentDateFormatted }}</span>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between text-xs px-1">
-              <div class="flex items-center gap-1.5">
-                <span
-                  v-if="hasDrawnSignature"
-                  class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400"
-                >
-                  <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" :stroke-width="2.5" />
-                  <span>Tanda tangan telah terekam</span>
-                </span>
-                <span v-else class="text-[11px] text-neutral-400">
-                  Wajib mengisi tanda tangan sebelum konfirmasi.
-                </span>
-              </div>
-
-              <button
-                type="button"
-                class="inline-flex items-center gap-1 text-[11px] font-bold text-neutral-500 hover:text-red-500 transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                @click="clearCanvas"
-              >
-                <HugeiconsIcon :icon="Delete02Icon" :size="12" :stroke-width="2" />
-                <span>Hapus & Ulangi</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Signature Pad: Mode Otomatis / Digital Stamp -->
-          <div v-show="signatureMode === 'type'" class="p-4 rounded-xl bg-white dark:bg-[#0C121D] border border-neutral-200 dark:border-neutral-800 space-y-2">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div class="space-y-1">
-                <span class="text-[10px] font-mono text-[#0081A0] dark:text-[#2091AA] uppercase tracking-wider block font-bold">
-                  [BERUANG CERTIFIED E-SIGNATURE]
-                </span>
-                <p class="font-serif italic text-2xl text-[#0081A0] dark:text-[#2091AA] tracking-wide select-none">
-                  {{ konsultanStore.profile.name }}
-                </p>
-                <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans">
-                  Sertifikasi BNSP Konsultan: <strong class="text-neutral-700 dark:text-neutral-300 font-mono">{{ konsultanStore.profile.bnspLicense }}</strong>
-                </p>
-              </div>
-
-              <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-right space-y-0.5 shrink-0">
-                <div class="flex items-center sm:justify-end gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
-                  <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="14" :stroke-width="2.2" />
-                  <span>Sah & Tervalidasi</span>
-                </div>
-                <p class="text-[10px] font-mono text-neutral-500 dark:text-neutral-400">
-                  {{ currentDateFormatted }} • {{ currentTimeFormatted }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Checkbox Pernyataan Komitmen (Wajib) -->
-          <div class="pt-2">
-            <button
-              type="button"
-              class="w-full text-left flex items-start gap-3 p-3.5 rounded-xl border transition-all select-none cursor-pointer"
-              :class="agreementChecked ? 'border-[#0081A0] ring-1 ring-[#0081A0]/30 bg-[#0081A0]/5' : 'border-neutral-200 dark:border-white/10 hover:border-[#0081A0]/60 bg-white dark:bg-[#1A1D26]'"
-              @click="agreementChecked = !agreementChecked"
-            >
-              <div
-                class="mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center transition-all shrink-0"
-                :class="agreementChecked ? 'bg-[#0081A0] border-[#0081A0] text-white shadow-2xs' : 'border-neutral-300 dark:border-neutral-600 bg-white dark:bg-[#1A1D26]'"
-              >
-                <HugeiconsIcon v-if="agreementChecked" :icon="CheckmarkCircle01Icon" :size="14" :stroke-width="2.5" />
-              </div>
-              <span class="text-xs text-neutral-700 dark:text-neutral-200 leading-relaxed font-sans flex-1">
-                Saya, <strong class="text-neutral-900 dark:text-white">{{ konsultanStore.profile.name }}</strong>, menyatakan telah membaca dan menyetujui seluruh klausul perjanjian serta siap menjalankan pendampingan bimbingan untuk <strong>{{ selectedRequestForContract.businessName }}</strong> secara jujur, aktif, dan profesional.
-              </span>
-            </button>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Modal Footer -->
       <template #footer>
-        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 w-full">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
           <button
             type="button"
             class="w-full sm:w-auto px-5 py-2.5 rounded-full border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-bold text-neutral-700 dark:text-neutral-300 transition-colors cursor-pointer text-center"
-            @click="showContractModal = false"
+            @click="closeAcceptedSuccessModal"
           >
-            Batal
+            Lihat Daftar Binaan
           </button>
-
-          <button
-            type="button"
-            :disabled="!canSubmitContract"
-            :class="[
-              'w-full sm:w-auto px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2',
-              canSubmitContract
-                ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-md active:scale-[0.98] cursor-pointer'
-                : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
-            ]"
-            @click="confirmContractAndAccept"
+          <NuxtLink
+            :to="`/konsultan/rencana-aksi?client=${acceptedClientId}`"
+            class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white text-xs sm:text-sm font-bold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            @click="closeAcceptedSuccessModal"
           >
-            <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="16" :stroke-width="2.2" />
-            <span>Tandatangani & Terima Menjadi Binaan</span>
-          </button>
+            <HugeiconsIcon :icon="Task01Icon" :size="15" :stroke-width="2" />
+            <span>Susun Rencana Aksi</span>
+          </NuxtLink>
         </div>
       </template>
     </BModal>
@@ -1059,6 +783,7 @@ onMounted(() => {
   if (route.query.tab === 'permintaan') {
     currentTab.value = 'permintaan'
   }
+  checkAcceptedQuery()
   nextTick(() => {
     updateTabIndicatorPosition(true)
   })
@@ -1164,13 +889,38 @@ const requestSortOptions = [
 
 const showRejectModal = ref(false)
 const showDetailModal = ref(false)
-const showContractModal = ref(false)
-const selectedRequestForContract = ref<ClientMentorshipRequest | null>(null)
-const agreementChecked = ref(false)
-const signatureMode = ref<'type' | 'draw'>('draw')
-const signatureCanvasRef = ref<HTMLCanvasElement | null>(null)
-const isDrawing = ref(false)
-const hasDrawnSignature = ref(false)
+const showAcceptedSuccessModal = ref(false)
+const acceptedClientName = ref('')
+const acceptedClientId = ref('')
+const selectedRequestDetail = ref<ClientMentorshipRequest | null>(null)
+const activeRequestModal = ref<ClientMentorshipRequest | null>(null)
+const rejectReason = ref('Kapasitas kuota bimbingan konsultan saat ini sedang penuh.')
+
+function checkAcceptedQuery() {
+  if (route.query.acceptedClient || route.query.acceptedName) {
+    acceptedClientName.value = (route.query.acceptedName as string) || 'UMKM Binaan'
+    acceptedClientId.value = (route.query.acceptedClient as string) || ''
+    showAcceptedSuccessModal.value = true
+    currentTab.value = 'aktif'
+  }
+}
+
+watch(() => route.query.acceptedClient, (val) => {
+  if (val) {
+    checkAcceptedQuery()
+  }
+})
+
+function closeAcceptedSuccessModal() {
+  showAcceptedSuccessModal.value = false
+  router.replace({
+    query: {
+      ...route.query,
+      acceptedClient: undefined,
+      acceptedName: undefined
+    }
+  })
+}
 
 const showToast = ref(false)
 const toastMessage = ref('')
@@ -1185,109 +935,6 @@ function triggerToast(msg: string) {
   }, 4500)
 }
 
-const currentDateFormatted = computed(() => {
-  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }
-  return new Date().toLocaleDateString('id-ID', options)
-})
-
-const currentTimeFormatted = computed(() => {
-  const now = new Date()
-  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`
-})
-
-const canSubmitContract = computed(() => {
-  if (!agreementChecked.value) return false
-  if (signatureMode.value === 'draw') {
-    return hasDrawnSignature.value
-  }
-  return true
-})
-
-function initSignatureCanvas() {
-  const canvas = signatureCanvasRef.value
-  if (!canvas) return
-  const rect = canvas.getBoundingClientRect()
-  if (rect.width === 0) return
-  const dpr = window.devicePixelRatio || 1
-  canvas.width = rect.width * dpr
-  canvas.height = 144 * dpr
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-  ctx.scale(dpr, dpr)
-  ctx.lineWidth = 2.5
-  ctx.lineCap = 'round'
-  ctx.lineJoin = 'round'
-  ctx.strokeStyle = '#0081A0'
-  hasDrawnSignature.value = false
-}
-
-function getCanvasCoords(e: MouseEvent | TouchEvent) {
-  const canvas = signatureCanvasRef.value
-  if (!canvas) return { x: 0, y: 0 }
-  const rect = canvas.getBoundingClientRect()
-  const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX
-  const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY
-  return {
-    x: clientX - rect.left,
-    y: clientY - rect.top
-  }
-}
-
-function startDrawing(e: MouseEvent | TouchEvent) {
-  if (e.cancelable && 'touches' in e) e.preventDefault()
-  isDrawing.value = true
-  const canvas = signatureCanvasRef.value
-  if (!canvas) return
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-  const { x, y } = getCanvasCoords(e)
-  ctx.beginPath()
-  ctx.moveTo(x, y)
-}
-
-function drawSignature(e: MouseEvent | TouchEvent) {
-  if (!isDrawing.value) return
-  if (e.cancelable && 'touches' in e) e.preventDefault()
-  const canvas = signatureCanvasRef.value
-  if (!canvas) return
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-  const { x, y } = getCanvasCoords(e)
-  ctx.lineTo(x, y)
-  ctx.stroke()
-  hasDrawnSignature.value = true
-}
-
-function stopDrawing() {
-  isDrawing.value = false
-}
-
-function clearCanvas() {
-  const canvas = signatureCanvasRef.value
-  if (!canvas) return
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-  const dpr = window.devicePixelRatio || 1
-  ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr)
-  hasDrawnSignature.value = false
-}
-
-function switchSignatureMode(mode: 'draw' | 'type') {
-  signatureMode.value = mode
-  if (mode === 'draw') {
-    nextTick(() => {
-      setTimeout(() => {
-        initSignatureCanvas()
-      }, 100)
-    })
-  }
-}
-
-const selectedRequestDetail = ref<ClientMentorshipRequest | null>(null)
-const activeRequestModal = ref<ClientMentorshipRequest | null>(null)
-const newlyAcceptedClientId = ref<string | null>(null)
-const rejectReason = ref('Kapasitas kuota bimbingan konsultan saat ini sedang penuh.')
-
 function openDetailModal(req: ClientMentorshipRequest) {
   selectedRequestDetail.value = req
   showDetailModal.value = true
@@ -1300,31 +947,7 @@ function openRejectModalFromDetail(req: ClientMentorshipRequest) {
 
 function acceptFromDetail(req: ClientMentorshipRequest) {
   showDetailModal.value = false
-  openContractModal(req)
-}
-
-function openContractModal(req: ClientMentorshipRequest) {
-  selectedRequestForContract.value = req
-  agreementChecked.value = false
-  signatureMode.value = 'draw'
-  hasDrawnSignature.value = false
-  showContractModal.value = true
-  nextTick(() => {
-    setTimeout(() => {
-      initSignatureCanvas()
-    }, 150)
-  })
-}
-
-function confirmContractAndAccept() {
-  if (!canSubmitContract.value || !selectedRequestForContract.value) return
-  const req = selectedRequestForContract.value
-  activeRequestModal.value = req
-  newlyAcceptedClientId.value = req.umkmId
-  konsultanStore.acceptRequest(req.id)
-  showContractModal.value = false
-  setTab('aktif')
-  triggerToast(`Kontrak disahkan! ${req.businessName} resmi menjadi binaanmu.`)
+  router.push(`/konsultan/klien/perjanjian/${req.id}`)
 }
 
 const filteredRequests = computed(() => {
@@ -1364,7 +987,7 @@ const filteredRequests = computed(() => {
 })
 
 function handleAccept(req: ClientMentorshipRequest) {
-  openContractModal(req)
+  router.push(`/konsultan/klien/perjanjian/${req.id}`)
 }
 
 function openRejectModal(req: ClientMentorshipRequest) {

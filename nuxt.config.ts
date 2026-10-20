@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: false }, // reload trigger
+  devtools: { enabled: false }, // reload trigger 2
 
   experimental: {
     appManifest: false

@@ -12,6 +12,9 @@ export default {
   ],
   theme: {
     extend: {
+      spacing: {
+        13: '3.25rem', // 52px
+      },
       colors: {
         canvas: {
           dark: '#0F1014',
@@ -42,18 +45,18 @@ export default {
           'muted-light': '#9CA3AF',
         },
         primary: {
-          50: '#EFF6FF',
-          100: '#DBEAFE',
-          200: '#BFDBFE',
-          300: '#93C5FD',
-          400: '#60A5FA',
-          500: '#0066D6', // GoPay Vibrant Trust Blue (60% Dominan)
-          600: '#0052B3',
-          700: '#003E8A',
-          800: '#002C66',
-          900: '#001E47',
-          950: '#001330',
-          tint: 'rgba(0, 102, 214, 0.08)',
+          50: '#EBF6F9',
+          100: '#D4ECF2',
+          200: '#A9D8E5',
+          300: '#7DC4D7',
+          400: '#50AABF',
+          500: '#2091AA', // Beruang Primary Blue (Container Biru Beranda)
+          600: '#1A7A8F',
+          700: '#156374',
+          800: '#104D5A',
+          900: '#0C3943',
+          950: '#07232A',
+          tint: 'rgba(32, 145, 170, 0.08)',
         },
         success: {
           DEFAULT: '#00AA13', // GoPay Fresh Growth Green (30% Sekunder)
@@ -61,11 +64,11 @@ export default {
           dark: '#00880C',
         },
         gopay: {
-          blue: '#0066D6',
-          'blue-deep': '#0052B3',
+          blue: '#2091AA',
+          'blue-deep': '#1A7A8F',
           green: '#00AA13',
           'green-deep': '#00880C',
-          cyan: '#00A5CF',
+          cyan: '#50AABF',
           canvas: '#F3F8FC',
         },
         warning: {

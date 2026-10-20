@@ -416,12 +416,9 @@
             </thead>
             <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
               <tr
-                v-for="(tx, idx) in filteredDailyTransactions"
+                v-for="tx in filteredDailyTransactions"
                 :key="tx.id"
-                :class="[
-                  idx % 2 === 0 ? 'bg-white dark:bg-[#13161F]' : 'bg-neutral-50/60 dark:bg-neutral-800/30',
-                  'hover:bg-blue-50/50 dark:hover:bg-neutral-800/70 transition-colors'
-                ]"
+                class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
                 <!-- 1. Tanggal (Ringkas '15 Okt') -->
                 <td class="py-3.5 px-4 text-left font-poppins whitespace-nowrap">
@@ -556,12 +553,9 @@
             </thead>
             <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
               <tr
-                v-for="(rec, idx) in umkmStore.monthlyRecords"
+                v-for="rec in umkmStore.monthlyRecords"
                 :key="`${rec.month}-${rec.year}`"
-                :class="[
-                  idx % 2 === 0 ? 'bg-white dark:bg-[#13161F]' : 'bg-neutral-50/60 dark:bg-neutral-800/30',
-                  'hover:bg-blue-50/50 dark:hover:bg-neutral-800/70 transition-colors'
-                ]"
+                class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
                 <td class="py-3.5 px-4 text-left font-poppins font-semibold text-neutral-900 dark:text-white">
                   {{ rec.month }} {{ rec.year }}
@@ -824,14 +818,9 @@
             </thead>
             <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
               <tr
-                v-for="(rec, idx) in sortedFilteredRecords"
+                v-for="rec in sortedFilteredRecords"
                 :key="`${rec.month}-${rec.year}`"
-                :class="[
-                  idx % 2 === 0
-                    ? 'bg-white dark:bg-[#13161F]'
-                    : 'bg-neutral-50/60 dark:bg-neutral-800/30',
-                  'hover:bg-blue-50/60 dark:hover:bg-neutral-800/80 transition-colors'
-                ]"
+                class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
                 <td class="py-3.5 px-4 text-left font-poppins font-semibold text-neutral-900 dark:text-white text-sm sm:text-base">
                   {{ rec.month }} {{ rec.year }}

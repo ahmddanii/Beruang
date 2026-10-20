@@ -1,0 +1,201 @@
+<template>
+  <div class="relative select-none font-poppins">
+    <!-- Trigger Button in Navbar: Avatar & Name Only (Dicoding Style) -->
+    <button
+      type="button"
+      class="flex items-center gap-2 sm:gap-2.5 py-1 px-1.5 sm:px-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 active:scale-[0.98] cursor-pointer group border border-transparent hover:border-[#E2E8F0] dark:hover:border-neutral-800"
+      :aria-expanded="isOpen"
+      aria-haspopup="true"
+      aria-label="Menu Akun Pengguna"
+      @click="isOpen = !isOpen"
+    >
+      <!-- User Avatar -->
+      <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 transition-transform duration-150 group-hover:scale-105">
+        <img
+          :src="userAvatarUrl"
+          :alt="userName"
+          class="w-full h-full object-cover"
+          @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
+        />
+      </div>
+
+      <!-- User Name -->
+      <span class="hidden sm:inline-block text-[13px] sm:text-[14px] font-semibold text-neutral-800 dark:text-neutral-200 truncate max-w-[130px] lg:max-w-[160px] tracking-tight">
+        {{ userName }}
+      </span>
+
+      <!-- Subtle Chevron Indicator -->
+      <svg
+        :class="[
+          'w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-transform duration-200 shrink-0',
+          isOpen ? 'rotate-180 text-[#156374]' : ''
+        ]"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </button>
+
+    <!-- Backdrop Click Overlay -->
+    <div
+      v-if="isOpen"
+      class="fixed inset-0 z-40 bg-transparent"
+      @click="isOpen = false"
+    />
+
+    <!-- Dicoding-Style Floating Popover Dropdown -->
+    <div
+      v-if="isOpen"
+      class="absolute right-0 top-full mt-2 w-72 bg-[#FDFDFD] dark:bg-[#18191E] border border-[#E2E8F0] dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
+    >
+      <!-- User Identity Header -->
+      <div class="p-3.5 border-b border-[#E2E8F0] dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-neutral-100">
+            <img
+              :src="userAvatarUrl"
+              :alt="userName"
+              class="w-full h-full object-cover"
+              @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
+            />
+          </div>
+          <div class="flex flex-col min-w-0 flex-1">
+            <span class="text-[14px] font-bold text-neutral-900 dark:text-white truncate leading-tight">
+              {{ userName }}
+            </span>
+            <span class="text-[12px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5 font-normal">
+              {{ authStore.currentUser?.email || 'fikri@kopisenja.id' }}
+            </span>
+            <div class="mt-1.5 flex items-center gap-1.5">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#E6F4F7] text-[#156374] dark:bg-[#156374]/30 dark:text-[#50AABF]">
+                {{ currentRoleLabel }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action: Profil Usaha -->
+      <div class="p-2 border-b border-[#E2E8F0] dark:border-neutral-800">
+        <NuxtLink
+          to="/dashboard/profile"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          @click="isOpen = false"
+        >
+          <HugeiconsIcon :icon="UserCircleIcon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
+          <span>Lihat Profil Usaha</span>
+        </NuxtLink>
+      </div>
+
+      <!-- RBAC Switcher Menu -->
+      <div class="p-2.5">
+        <div class="px-2 py-1 flex items-center justify-between mb-1">
+          <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+            Pindah Peran (Uji RBAC)
+          </span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-medium">
+            RBAC
+          </span>
+        </div>
+        <div class="space-y-1">
+          <button
+            v-for="role in rolesList"
+            :key="role.id"
+            type="button"
+            :class="[
+              'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 cursor-pointer text-left',
+              authStore.currentUser?.role === role.id
+                ? 'bg-[#E6F4F7] dark:bg-neutral-800 text-[#156374] dark:text-[#50AABF] font-semibold'
+                : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-white'
+            ]"
+            @click="handleSwitchRole(role.id, role.path)"
+          >
+            <span class="truncate">{{ role.name }}</span>
+            <span
+              v-if="authStore.currentUser?.role === role.id"
+              class="w-2 h-2 rounded-full bg-[#156374] dark:bg-[#50AABF] shrink-0 ml-2"
+            />
+          </button>
+        </div>
+      </div>
+
+      <!-- Logout Action -->
+      <div class="border-t border-[#E2E8F0] dark:border-neutral-800/80 p-2 bg-neutral-50/30 dark:bg-neutral-900/20">
+        <button
+          type="button"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50/80 dark:hover:bg-red-950/25 transition-colors cursor-pointer text-left"
+          @click="handleLogout"
+        >
+          <HugeiconsIcon :icon="Logout01Icon" :size="17" :stroke-width="2.2" class="text-red-500" />
+          <span>Keluar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore, type UserRole } from '~/stores/auth'
+import { useUmkmStore } from '~/stores/umkm'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { UserCircleIcon, Logout01Icon } from '@hugeicons/core-free-icons'
+
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+const umkmStore = useUmkmStore()
+
+const isOpen = ref(false)
+
+watch(() => route.path, () => {
+  isOpen.value = false
+})
+
+const userName = computed(() => authStore.currentUser?.name || 'Fikri Setiawan')
+
+const userAvatarUrl = computed(() => {
+  if (authStore.currentUser?.role === 'UMKM') {
+    return (
+      umkmStore.profile.ownerAvatarUrl ||
+      authStore.currentUser?.avatar ||
+      '/images/user-profile.png'
+    )
+  }
+  return authStore.currentUser?.avatar || '/images/user-profile.png'
+})
+
+const currentRoleLabel = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return 'Konsultan Ahli'
+    case 'INVESTOR': return 'Investor / Funder'
+    case 'ADMIN': return 'Admin Platform'
+    default: return 'Pelaku Usaha (UMKM)'
+  }
+})
+
+const rolesList: { id: UserRole; name: string; path: string }[] = [
+  { id: 'UMKM', name: 'Pelaku Usaha (UMKM)', path: '/dashboard' },
+  { id: 'CONSULTANT', name: 'Konsultan Ahli', path: '/konsultan' },
+  { id: 'INVESTOR', name: 'Investor / Funder', path: '/investor' },
+  { id: 'ADMIN', name: 'Admin Platform', path: '/admin' }
+]
+
+function handleSwitchRole(newRole: UserRole, targetPath: string) {
+  authStore.setRole(newRole)
+  isOpen.value = false
+  router.push(targetPath)
+}
+
+function handleLogout() {
+  isOpen.value = false
+  authStore.logout()
+  router.push('/masuk')
+}
+</script>

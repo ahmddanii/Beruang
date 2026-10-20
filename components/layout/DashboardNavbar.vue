@@ -4,8 +4,8 @@
       <div class="flex items-center justify-between h-16 gap-4">
         <!-- Left: Brand Logo & Role Pill -->
         <div class="flex items-center gap-3 shrink-0">
-          <NuxtLink to="/" class="flex items-center gap-2 group">
-            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain transition-transform group-hover:scale-105" />
+          <NuxtLink to="/" class="flex items-center gap-2">
+            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain" />
             <div>
               <div class="flex items-center gap-1.5">
                 <span class="font-heading font-extrabold text-lg tracking-tight leading-none select-none">

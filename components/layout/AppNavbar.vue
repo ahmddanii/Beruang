@@ -2,11 +2,11 @@
   <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#0A0A0C]/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
       <!-- Brand Logo -->
-      <NuxtLink to="/" class="flex items-center gap-2 group shrink-0" title="Beranda Beruang">
+      <NuxtLink to="/" class="flex items-center gap-2 shrink-0" title="Beranda Beruang">
         <img
           src="/logo/logoSmall.svg"
           alt="Beruang Logo"
-          class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
+          class="h-7 w-auto object-contain"
         />
         <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none">
           <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>

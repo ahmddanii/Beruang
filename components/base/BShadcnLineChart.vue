@@ -9,7 +9,7 @@
   >
     <!-- Main Chart Area (SVG Canvas + Y-Axis HTML Labels) -->
     <div class="relative w-full flex-1 min-h-[210px]">
-      <!-- Y-Axis Labels Track (HTML: 100% Crisp Poppins, Tabular Nums, Never Distorted) -->
+      <!-- Y-Axis Labels Track (HTML: 100% Crisp Poppins, Tabular Nums, Never Distorted - Full Left-Aligned) -->
       <div
         v-if="showYAxis"
         class="absolute left-0 top-0 bottom-0 pointer-events-none select-none z-10"
@@ -18,7 +18,7 @@
         <div
           v-for="(tick, idx) in yTicks"
           :key="`ytick-${idx}`"
-          class="absolute right-3.5 -translate-y-1/2 font-poppins text-xs font-semibold text-neutral-500 dark:text-neutral-400 tabular-nums whitespace-nowrap"
+          class="absolute left-0 -translate-y-1/2 font-poppins text-xs font-medium text-neutral-500 dark:text-neutral-400 tabular-nums whitespace-nowrap"
           :style="{ top: `${(tick.y / svgHeight) * 100}%` }"
         >
           {{ tick.label }}
@@ -33,7 +33,7 @@
         preserveAspectRatio="none"
       >
         <defs>
-          <!-- Optional Area Fill Gradient if showArea is enabled -->
+          <!-- Area Fill Gradient (Gradasi biru/toska primary yang halus dan memudar ke bawah) -->
           <linearGradient
             v-for="cat in categories"
             :id="`shadcn-line-linear-grad-${cat}`"
@@ -43,9 +43,24 @@
             x2="0"
             y2="1"
           >
-            <stop offset="0%" :stop-color="getCategoryColor(cat)" stop-opacity="0.25" />
-            <stop offset="60%" :stop-color="getCategoryColor(cat)" stop-opacity="0.05" />
+            <stop offset="0%" :stop-color="getCategoryColor(cat)" stop-opacity="0.32" />
+            <stop offset="35%" :stop-color="getCategoryColor(cat)" stop-opacity="0.18" />
+            <stop offset="70%" :stop-color="getCategoryColor(cat)" stop-opacity="0.06" />
             <stop offset="100%" :stop-color="getCategoryColor(cat)" stop-opacity="0.00" />
+          </linearGradient>
+
+          <!-- Bar Gradient -->
+          <linearGradient
+            v-for="cat in categories"
+            :id="`shadcn-bar-grad-${cat}`"
+            :key="`bar-grad-${cat}`"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+            <stop offset="0%" :stop-color="getCategoryColor(cat)" stop-opacity="0.95" />
+            <stop offset="100%" :stop-color="getCategoryColor(cat)" stop-opacity="0.65" />
           </linearGradient>
         </defs>
 
@@ -66,17 +81,56 @@
           />
         </g>
 
-        <!-- Series Lines & Points -->
-        <g v-for="cat in categories" :key="`series-${cat}`" class="series-group">
-          <!-- Optional Area fill (only if showArea is true) -->
+        <!-- Mode Bar & Cashflow: Vertical Rounded Bars -->
+        <g v-if="mode === 'bar' || mode === 'cashflow'" class="chart-bars-group">
+          <!-- Single category: centered single bar -->
+          <g v-if="categories.length === 1">
+            <rect
+              v-for="(pt, pIdx) in seriesPaths[categories[0]]?.points || []"
+              :key="`bar-${categories[0]}-${pIdx}`"
+              :x="pt.x - (isShortPeriod ? 22 : 14)"
+              :y="pt.y"
+              :width="isShortPeriod ? 44 : 28"
+              :height="Math.max(4, svgHeight - padding.bottom - pt.y)"
+              rx="6"
+              :fill="`url(#shadcn-bar-grad-${categories[0]})`"
+              :fill-opacity="activeIndex === pIdx ? 1 : 0.85"
+              class="transition-all duration-150 cursor-pointer pointer-events-auto"
+              @mouseenter="activeIndex = pIdx"
+            />
+          </g>
+
+          <!-- Multiple categories (e.g. cashflow: Uang Masuk vs Uang Keluar) -->
+          <g v-else>
+            <g v-for="(cat, cIdx) in categories" :key="`bars-${cat}`">
+              <rect
+                v-for="(pt, pIdx) in seriesPaths[cat]?.points || []"
+                :key="`bar-${cat}-${pIdx}`"
+                :x="pt.x + (cIdx === 0 ? -(isShortPeriod ? 22 : 15) : 2)"
+                :y="pt.y"
+                :width="isShortPeriod ? 20 : 13"
+                :height="Math.max(4, svgHeight - padding.bottom - pt.y)"
+                rx="5"
+                :fill="`url(#shadcn-bar-grad-${cat})`"
+                :fill-opacity="activeIndex === pIdx ? 1 : 0.85"
+                class="transition-all duration-150 cursor-pointer pointer-events-auto"
+                @mouseenter="activeIndex = pIdx"
+              />
+            </g>
+          </g>
+        </g>
+
+        <!-- Mode Line & Area: Series Lines & Points -->
+        <g v-else v-for="cat in categories" :key="`series-${cat}`" class="series-group">
+          <!-- Optional Area fill (if showArea or mode is area) -->
           <path
-            v-if="showArea"
+            v-if="showArea || mode === 'area'"
             :d="seriesPaths[cat]?.area || ''"
             :fill="`url(#shadcn-line-linear-grad-${cat})`"
             class="chart-area-fill"
           />
 
-          <!-- Linear Stroke Line (type="linear" matching Shadcn UI Line Chart - Linear) -->
+          <!-- Stroke Line -->
           <path
             :d="seriesPaths[cat]?.line || ''"
             fill="none"
@@ -225,6 +279,7 @@ const props = withDefaults(
     index: string // Key for X-axis (e.g. 'month')
     categories: string[] // Keys for Y-axis (e.g. ['cashBalance'])
     config?: ChartConfig
+    mode?: 'area' | 'bar' | 'cashflow' | 'linear' // Chart preview mode
     curveType?: 'linear' | 'natural' | 'monotone' // Linear for straight lines (Shadcn Line Chart - Linear)
     showArea?: boolean // Default false for pure Line Chart
     showDots?: boolean // Default false (dots on vertices)
@@ -239,6 +294,7 @@ const props = withDefaults(
   }>(),
   {
     config: () => ({}),
+    mode: 'linear',
     curveType: 'linear',
     showArea: false,
     showDots: false,
@@ -587,6 +643,22 @@ function animateChart(isFilterChange = false) {
       } catch (e) {
         // Fallback gracefully
       }
+    })
+
+    // 1b. Area path smooth fade-in animation matching line stroke
+    const areaPaths = svgRef.value.querySelectorAll<SVGPathElement>('.chart-area-fill')
+    areaPaths.forEach(path => {
+      gsap.killTweensOf(path)
+      gsap.fromTo(
+        path,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: isFilterChange ? 0.65 : 0.85,
+          ease: 'power2.out',
+          delay: isFilterChange ? 0.05 : 0.08
+        }
+      )
     })
 
     // 2. Vertex dots animation (if showDots enabled)

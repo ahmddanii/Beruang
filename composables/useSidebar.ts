@@ -35,13 +35,6 @@ export function useSidebar() {
     isMobileOpen.value = false
   }
 
-  function handleKeydown(e: KeyboardEvent) {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-      e.preventDefault()
-      toggleCollapse()
-    }
-  }
-
   onMounted(() => {
     if (import.meta.client && !isInitialized) {
       isInitialized = true
@@ -51,7 +44,6 @@ export function useSidebar() {
           isCollapsed.value = saved === 'true'
         }
       } catch (_) {}
-      window.addEventListener('keydown', handleKeydown)
     }
   })
 

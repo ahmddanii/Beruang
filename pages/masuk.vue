@@ -100,6 +100,12 @@
         </div>
       </div>
 
+      <!-- Error Alert in Main Step -->
+      <div v-if="errorMessage && step === 'main'" class="mt-3 p-3 max-w-sm w-full rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2 text-left animate-in fade-in duration-200">
+        <span class="font-bold shrink-0">!</span>
+        <span>{{ errorMessage }}</span>
+      </div>
+
       <!-- Loading / Feedback Badge -->
       <div v-if="loadingMessage" class="mt-3 px-5 py-2.5 rounded-full bg-[#00AA13] text-white font-bold text-sm shadow-sm animate-pulse">
         {{ loadingMessage }}
@@ -466,6 +472,7 @@
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
+import { useGoogleAuth } from '~/composables/useGoogleAuth'
 import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
 import BCloudBackground from '~/components/base/BCloudBackground.vue'
 import BModal from '~/components/base/BModal.vue'
@@ -488,6 +495,7 @@ definePageMeta({
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const googleAuth = useGoogleAuth()
 
 // Step state: 'main' | 'phone' | 'otp' (identik dengan proses daftar)
 const step = ref<'main' | 'phone' | 'otp'>('main')
@@ -637,8 +645,31 @@ watch(() => route.query.step, (newStep) => {
   }
 })
 
-function handleGoogleLogin() {
-  openGoogleModal.value = true
+async function handleGoogleLogin() {
+  errorMessage.value = ''
+  await googleAuth.triggerGoogleLogin(
+    async (credential: string) => {
+      loading.value = true
+      loadingMessage.value = '✓ Menghubungkan akun Google...'
+      try {
+        await authStore.loginWithGoogle(credential)
+        const role = authStore.currentUser?.role || authStore.role || 'UMKM'
+        const targetRoute = role === 'INVESTOR' ? '/investor' : role === 'CONSULTANT' ? '/konsultan' : '/dashboard'
+        loadingMessage.value = `✓ Berhasil masuk! Mengalihkan ke ${role}...`
+        setTimeout(() => {
+          router.push(targetRoute)
+        }, 300)
+      } catch (err: any) {
+        errorMessage.value = err?.data?.message || err?.message || 'Login dengan Google gagal'
+      } finally {
+        loading.value = false
+        loadingMessage.value = ''
+      }
+    },
+    () => {
+      openGoogleModal.value = true
+    }
+  )
 }
 
 async function selectGoogleAccount(account: typeof googleAccounts[0]) {

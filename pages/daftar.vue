@@ -124,6 +124,12 @@
         </div>
       </div>
 
+      <!-- Error Alert in Step Role -->
+      <div v-if="errorMessage && step === 'role'" class="mt-3 p-3 max-w-sm w-full rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2 text-left animate-in fade-in duration-200">
+        <span class="font-bold shrink-0">!</span>
+        <span>{{ errorMessage }}</span>
+      </div>
+
       <!-- Loading / Feedback Badge -->
       <div v-if="loadingMessage" class="mt-4 px-5 py-2.5 rounded-full bg-[#00AA13] text-white font-bold text-sm shadow-sm animate-pulse">
         {{ loadingMessage }}
@@ -373,6 +379,7 @@
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
+import { useGoogleAuth } from '~/composables/useGoogleAuth'
 import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
 import BCloudBackground from '~/components/base/BCloudBackground.vue'
 import BStepper from '~/components/base/BStepper.vue'
@@ -395,6 +402,7 @@ definePageMeta({
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const googleAuth = useGoogleAuth()
 
 const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
 
@@ -695,7 +703,32 @@ function fillOtpDemo() {
   verifyAndRegister()
 }
 
-function handleGoogleRegister() {
+async function handleGoogleRegister() {
+  errorMessage.value = ''
+  await googleAuth.triggerGoogleLogin(
+    async (credential: string) => {
+      loading.value = true
+      loadingMessage.value = '✓ Menghubungkan akun Google...'
+      try {
+        await authStore.loginWithGoogle(credential, selectedRole.value)
+        loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
+        setTimeout(() => {
+          router.push(`/onboarding?role=${selectedRole.value}`)
+        }, 300)
+      } catch (err: any) {
+        errorMessage.value = err?.data?.message || err?.message || 'Pendaftaran dengan Google gagal'
+      } finally {
+        loading.value = false
+        loadingMessage.value = ''
+      }
+    },
+    () => {
+      executeDemoGoogleRegister()
+    }
+  )
+}
+
+function executeDemoGoogleRegister() {
   loading.value = true
   loadingMessage.value = '✓ Menghubungkan akun Google...'
 

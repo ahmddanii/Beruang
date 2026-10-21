@@ -90,7 +90,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://beruang-api.fly.dev/api'
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://beruang-api.fly.dev/api',
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID || ''
     }
   }
 })

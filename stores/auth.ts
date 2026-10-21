@@ -129,6 +129,47 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
+     * Login / Register via Google OAuth Token (POST /api/auth/google)
+     */
+    async loginWithGoogle(googleToken: string, role?: UserRole) {
+      this.loading = true
+      this.error = null
+      try {
+        const res = await useApi<{ token: string; user: UserProfile }>('/auth/google', {
+          method: 'POST',
+          body: {
+            token: googleToken,
+            ...(role ? { role } : {})
+          }
+        })
+
+        if (res.data?.token) {
+          const tokenCookie = useCookie<string | null>('beruang_token', {
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+            path: '/'
+          })
+
+          tokenCookie.value = res.data.token
+          this.token = res.data.token
+          this.currentUser = {
+            ...res.data.user,
+            businessName: res.data.user.businessName || res.data.user.orgName
+          }
+          this.isAuthenticated = true
+          await this.fetchMe()
+        }
+
+        return res.data
+      } catch (err: any) {
+        this.error = err?.message || 'Login dengan akun Google gagal'
+        throw err
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
      * Kirim OTP WhatsApp via gateway Fonnte (/api/otp/send)
      */
     async sendWhatsAppOtp(phone: string) {

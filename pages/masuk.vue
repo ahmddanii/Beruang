@@ -219,6 +219,12 @@
             </div>
           </div>
 
+          <!-- Error / Success Alert in Phone Step -->
+          <div v-if="errorMessage && step === 'phone'" class="p-3 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2">
+            <span class="font-bold shrink-0">!</span>
+            <span>{{ errorMessage }}</span>
+          </div>
+
           <!-- Bottom Navigation Action Bar -->
           <div class="flex items-center justify-between gap-3 pt-4 border-t border-neutral-100 dark:border-white/5">
             <button
@@ -247,7 +253,7 @@
           </div>
         </div>
 
-        <!-- STEP 2: 4-Digit OTP Input -->
+        <!-- STEP 2: 6-Digit OTP Input -->
         <div v-else-if="step === 'otp'" class="space-y-4">
           <!-- Step Title Header -->
           <div class="flex items-center gap-3 mb-2">
@@ -259,9 +265,20 @@
                 Verifikasi Kode Masuk
               </h3>
               <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                Kode 4 angka sudah dikirim via WhatsApp ke +62 {{ cleanPhone }}.
+                Kode 6 angka resmi telah dikirim via WhatsApp ke +62 {{ cleanPhone }}.
               </p>
             </div>
+          </div>
+
+          <!-- Error & Success Banners -->
+          <div v-if="errorMessage" class="p-3 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2">
+            <span class="font-bold shrink-0">!</span>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div v-if="successNotification" class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="shrink-0" />
+            <span>{{ successNotification }}</span>
           </div>
 
           <div class="text-center py-1">
@@ -277,8 +294,8 @@
             </div>
           </div>
 
-          <!-- 4-Digit Input Boxes -->
-          <div class="flex items-center justify-center gap-2.5 sm:gap-3 py-2">
+          <!-- 6-Digit Input Boxes -->
+          <div class="flex items-center justify-center gap-2 sm:gap-2.5 py-2">
             <input
               v-for="(digit, idx) in otpDigits"
               :key="idx"
@@ -290,7 +307,7 @@
               autocomplete="one-time-code"
               pattern="[0-9]*"
               :class="[
-                'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-[#0081A0]/15 caret-[#0081A0] shadow-2xs',
+                'w-10 h-13 sm:w-12 sm:h-15 shrink-0 rounded-2xl border-2 text-center text-xl sm:text-2xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-[#0081A0]/15 caret-[#0081A0] shadow-2xs',
                 otpDigits[idx]
                   ? 'border-[#0081A0] bg-[#0081A0]/5 dark:bg-[#0081A0]/15 text-[#0081A0] dark:text-[#2091AA]'
                   : 'border-neutral-200/90 dark:border-white/10 bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white hover:border-[#0081A0]/60 focus:border-[#0081A0]'
@@ -333,10 +350,10 @@
 
             <button
               type="button"
-              :disabled="loading || otpString.length < 4"
+              :disabled="loading || otpString.length !== 6"
               :class="[
                 'px-6 py-2.5 rounded-full font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
-                otpString.length === 4 && !loading
+                otpString.length === 6 && !loading
                   ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99]'
                   : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
               ]"
@@ -460,7 +477,8 @@ import {
   ShieldCheckIcon,
   Store01Icon,
   UserGroupIcon,
-  Coins01Icon
+  Coins01Icon,
+  CheckmarkCircle01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -549,14 +567,16 @@ const googleAccounts = [
 const selectedRole = ref<UserRole>('UMKM')
 const loading = ref(false)
 const loadingMessage = ref('')
+const errorMessage = ref('')
+const successNotification = ref('')
 const openGoogleModal = ref(false)
 const phoneInput = ref('812-3456-7890')
 const phoneInputRef = ref<HTMLInputElement | null>(null)
 
-// OTP State
-const otpDigits = ref(['', '', '', ''])
+// OTP State (6 Digits to match Fonnte Gateway)
+const otpDigits = ref(['', '', '', '', '', ''])
 const otpRefs = ref<(HTMLInputElement | null)[]>([])
-const resendCountdown = ref(30)
+const resendCountdown = ref(60)
 let timerInterval: any = null
 
 function setOtpRef(el: any, index: number) {
@@ -567,6 +587,8 @@ const otpString = computed(() => otpDigits.value.join(''))
 
 // Navigation Flow matching daftar.vue
 function goToPhoneStep() {
+  errorMessage.value = ''
+  successNotification.value = ''
   step.value = 'phone'
   router.push({ path: '/masuk', query: { step: 'phone' } })
   nextTick(() => {
@@ -575,16 +597,18 @@ function goToPhoneStep() {
 }
 
 function goToOtpStep() {
+  errorMessage.value = ''
   step.value = 'otp'
-  startResendTimer()
   router.push({ path: '/masuk', query: { step: 'otp' } })
-  otpDigits.value = ['', '', '', '']
+  otpDigits.value = ['', '', '', '', '', '']
   nextTick(() => {
     otpRefs.value[0]?.focus()
   })
 }
 
 function goToMainStep() {
+  errorMessage.value = ''
+  successNotification.value = ''
   step.value = 'main'
   router.push({ path: '/masuk' })
 }
@@ -595,7 +619,7 @@ onMounted(() => {
     step.value = 'phone'
   } else if (route.query.step === 'otp') {
     step.value = 'otp'
-    startResendTimer()
+    startResendTimer(60)
   }
 })
 
@@ -631,21 +655,8 @@ async function selectGoogleAccount(account: typeof googleAccounts[0]) {
   }
 }
 
-async function requestOtp() {
-  if (!isPhoneValid.value) return
-  loading.value = true
-  try {
-    await authStore.sendWhatsAppOtp(cleanPhone.value)
-  } catch (err: any) {
-    console.warn('Gagal request OTP WA via API:', err?.message)
-  } finally {
-    loading.value = false
-    goToOtpStep()
-  }
-}
-
-function startResendTimer() {
-  resendCountdown.value = 30
+function startResendTimer(seconds: number = 60) {
+  resendCountdown.value = seconds
   if (timerInterval) clearInterval(timerInterval)
   timerInterval = setInterval(() => {
     if (resendCountdown.value > 0) {
@@ -656,17 +667,40 @@ function startResendTimer() {
   }, 1000)
 }
 
-async function resendOtp() {
-  startResendTimer()
-  loadingMessage.value = '✓ Kode baru telah dikirimkan via WhatsApp!'
+async function requestOtp() {
+  if (!isPhoneValid.value) return
+  errorMessage.value = ''
+  successNotification.value = ''
+  loading.value = true
   try {
-    await authStore.sendWhatsAppOtp(cleanPhone.value)
+    const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
+    successNotification.value = res?.message || 'Kode OTP 6 digit berhasil dikirim via WhatsApp.'
+    goToOtpStep()
+    startResendTimer(res?.data?.cooldown || 60)
   } catch (err: any) {
-    console.warn('Gagal kirim ulang OTP WA via API:', err?.message)
+    errorMessage.value = err?.message || 'Gagal mengirim kode OTP. Silakan periksa koneksi atau nomor Anda.'
+  } finally {
+    loading.value = false
   }
-  setTimeout(() => {
-    loadingMessage.value = ''
-  }, 2500)
+}
+
+async function resendOtp() {
+  if (resendCountdown.value > 0) return
+  errorMessage.value = ''
+  successNotification.value = ''
+  loading.value = true
+  try {
+    const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
+    startResendTimer(res?.data?.cooldown || 60)
+    successNotification.value = res?.message || 'Kode baru telah dikirimkan via WhatsApp!'
+    setTimeout(() => {
+      successNotification.value = ''
+    }, 3500)
+  } catch (err: any) {
+    errorMessage.value = err?.message || 'Gagal mengirim ulang kode OTP.'
+  } finally {
+    loading.value = false
+  }
 }
 
 function onOtpInput(index: number, event: Event) {
@@ -674,25 +708,25 @@ function onOtpInput(index: number, event: Event) {
   const raw = target.value.replace(/\D/g, '')
 
   if (raw.length > 1) {
-    const digits = raw.slice(0, 4).split('')
+    const digits = raw.slice(0, 6).split('')
     digits.forEach((d, i) => {
-      if (index + i < 4) {
+      if (index + i < 6) {
         otpDigits.value[index + i] = d
       }
     })
-    const nextIdx = Math.min(index + digits.length, 3)
+    const nextIdx = Math.min(index + digits.length, 5)
     otpRefs.value[nextIdx]?.focus()
-    if (otpString.value.length === 4) {
+    if (otpString.value.length === 6) {
       verifyAndLogin()
     }
     return
   }
 
   otpDigits.value[index] = raw
-  if (raw && index < 3) {
+  if (raw && index < 5) {
     otpRefs.value[index + 1]?.focus()
   }
-  if (otpString.value.length === 4) {
+  if (otpString.value.length === 6) {
     verifyAndLogin()
   }
 }
@@ -707,7 +741,7 @@ function onOtpKeydown(index: number, event: KeyboardEvent) {
   } else if (event.key === 'ArrowLeft' && index > 0) {
     event.preventDefault()
     otpRefs.value[index - 1]?.focus()
-  } else if (event.key === 'ArrowRight' && index < 3) {
+  } else if (event.key === 'ArrowRight' && index < 5) {
     event.preventDefault()
     otpRefs.value[index + 1]?.focus()
   }
@@ -715,17 +749,17 @@ function onOtpKeydown(index: number, event: KeyboardEvent) {
 
 function onOtpPaste(event: ClipboardEvent) {
   event.preventDefault()
-  const text = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 4)
+  const text = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 6)
   if (!text) return
   const chars = text.split('')
   chars.forEach((c, i) => {
-    if (i < 4) {
+    if (i < 6) {
       otpDigits.value[i] = c
     }
   })
-  const nextIdx = Math.min(chars.length, 3)
+  const nextIdx = Math.min(chars.length, 5)
   otpRefs.value[nextIdx]?.focus()
-  if (otpString.value.length === 4) {
+  if (otpString.value.length === 6) {
     verifyAndLogin()
   }
 }
@@ -736,29 +770,42 @@ function onOtpFocus(event: Event) {
 }
 
 async function verifyAndLogin() {
-  if (otpString.value.length < 4) return
+  if (otpString.value.length !== 6) return
+  errorMessage.value = ''
   loading.value = true
   const account = resolveAccountRole(cleanPhone.value, selectedRole.value)
-  loadingMessage.value = `✓ Selamat datang kembali, ${account.name}! Mengarahkan...`
 
   try {
     await authStore.verifyPhoneOtp(cleanPhone.value, otpString.value)
+    loadingMessage.value = `✓ Verifikasi berhasil! Mengarahkan...`
     const targetRoute = authStore.currentRole === 'INVESTOR' ? '/investor' : authStore.currentRole === 'CONSULTANT' ? '/konsultan' : '/dashboard'
     setTimeout(() => {
       router.push(targetRoute)
     }, 400)
   } catch (err: any) {
-    try {
-      await authStore.login(account.email, 'password123')
-      setTimeout(() => {
-        router.push(account.route)
-      }, 400)
-    } catch (loginErr: any) {
-      authStore.setRole(account.role)
-      setTimeout(() => {
-        router.push(account.route)
-      }, 400)
+    // Jika nomor demo akun seeder, fallback login
+    if (cleanPhone.value.includes('987654321') || cleanPhone.value.endsWith('4321') || cleanPhone.value.endsWith('7890')) {
+      try {
+        await authStore.login(account.email, 'password123')
+        loadingMessage.value = `✓ Masuk sebagai akun demo: ${account.name}...`
+        setTimeout(() => {
+          router.push(account.route)
+        }, 400)
+        return
+      } catch (loginErr: any) {
+        authStore.setRole(account.role)
+        setTimeout(() => {
+          router.push(account.route)
+        }, 400)
+        return
+      }
     }
+
+    errorMessage.value = err?.message || 'Kode OTP salah atau sudah kedaluwarsa.'
+    otpDigits.value = ['', '', '', '', '', '']
+    nextTick(() => {
+      otpRefs.value[0]?.focus()
+    })
   } finally {
     loading.value = false
   }

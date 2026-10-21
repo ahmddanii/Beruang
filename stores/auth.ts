@@ -129,41 +129,69 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
-     * Kirim OTP WhatsApp
+     * Kirim OTP WhatsApp via gateway Fonnte (/api/otp/send)
      */
     async sendWhatsAppOtp(phone: string) {
-      return await useApi('/auth/send-whatsapp-otp', {
-        method: 'POST',
-        body: { phone }
-      })
+      this.loading = true
+      this.error = null
+      let normalized = phone.replace(/\D/g, '')
+      if (normalized.startsWith('0')) {
+        normalized = '62' + normalized.slice(1)
+      } else if (!normalized.startsWith('62')) {
+        normalized = '62' + normalized
+      }
+
+      try {
+        const res = await useApi<any>('/otp/send', {
+          method: 'POST',
+          body: { phone: normalized }
+        })
+        return res
+      } catch (err: any) {
+        this.error = err?.message || 'Gagal mengirim kode OTP WhatsApp'
+        throw err
+      } finally {
+        this.loading = false
+      }
     },
 
     /**
-     * Verifikasi OTP WhatsApp & Login
+     * Verifikasi OTP WhatsApp 6 Digit & Login (/api/otp/verify)
      */
     async verifyPhoneOtp(phone: string, otp: string) {
       this.loading = true
       this.error = null
+      let normalized = phone.replace(/\D/g, '')
+      if (normalized.startsWith('0')) {
+        normalized = '62' + normalized.slice(1)
+      } else if (!normalized.startsWith('62')) {
+        normalized = '62' + normalized
+      }
+
       try {
-        const res = await useApi<{ token: string; user: UserProfile }>('/auth/verify-phone-otp', {
+        const res = await useApi<any>('/otp/verify', {
           method: 'POST',
-          body: { phone, otp }
+          body: { phone: normalized, otp }
         })
 
-        const tokenCookie = useCookie<string | null>('beruang_token', {
-          maxAge: 60 * 60 * 24 * 7,
-          sameSite: 'lax',
-          path: '/'
-        })
+        if (res.data?.token) {
+          const tokenCookie = useCookie<string | null>('beruang_token', {
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+            path: '/'
+          })
 
-        tokenCookie.value = res.data.token
-        this.token = res.data.token
-        this.currentUser = {
-          ...res.data.user,
-          businessName: res.data.user.businessName || res.data.user.orgName
+          tokenCookie.value = res.data.token
+          this.token = res.data.token
+          this.isAuthenticated = true
+          await this.fetchMe()
         }
-        this.isAuthenticated = true
-        return res.data
+
+        if (this.currentUser) {
+          this.currentUser.verified = true
+        }
+
+        return res
       } catch (err: any) {
         this.error = err?.message || 'Verifikasi OTP gagal'
         throw err

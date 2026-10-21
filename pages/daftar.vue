@@ -217,6 +217,12 @@
           </div>
 
 
+          <!-- Error / Success Alert in Phone Step -->
+          <div v-if="errorMessage && step === 'phone'" class="p-3 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2">
+            <span class="font-bold shrink-0">!</span>
+            <span>{{ errorMessage }}</span>
+          </div>
+
           <!-- Bottom Navigation Action Bar -->
           <div class="flex items-center justify-between gap-3 pt-4 border-t border-neutral-100 dark:border-white/5">
             <button
@@ -245,7 +251,7 @@
           </div>
         </div>
 
-        <!-- STEP 2: 4-Digit OTP Input -->
+        <!-- STEP 2: 6-Digit OTP Input -->
         <div v-else-if="step === 'otp'" class="space-y-4">
           <!-- Step Title Header -->
           <div class="flex items-center gap-3 mb-2">
@@ -257,9 +263,20 @@
                 Verifikasi Kode Masuk
               </h3>
               <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                Kode 4 angka sudah dikirim via WhatsApp ke +62 {{ cleanPhone }}.
+                Kode 6 angka resmi sudah dikirim via WhatsApp ke +62 {{ cleanPhone }}.
               </p>
             </div>
+          </div>
+
+          <!-- Error & Success Banners -->
+          <div v-if="errorMessage" class="p-3 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2">
+            <span class="font-bold shrink-0">!</span>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div v-if="successNotification" class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="shrink-0" />
+            <span>{{ successNotification }}</span>
           </div>
 
           <div class="text-center py-1">
@@ -275,8 +292,8 @@
             </div>
           </div>
 
-          <!-- 4-Digit Input Boxes -->
-          <div class="flex items-center justify-center gap-2.5 sm:gap-3 py-2">
+          <!-- 6-Digit Input Boxes -->
+          <div class="flex items-center justify-center gap-2 sm:gap-2.5 py-2">
             <input
               v-for="(digit, idx) in otpDigits"
               :key="idx"
@@ -288,7 +305,7 @@
               autocomplete="one-time-code"
               pattern="[0-9]*"
               :class="[
-                'w-14 h-16 sm:w-16 sm:h-16 shrink-0 rounded-2xl border-2 text-center text-2xl sm:text-3xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-[#0081A0]/15 caret-[#0081A0] shadow-2xs',
+                'w-10 h-13 sm:w-12 sm:h-15 shrink-0 rounded-2xl border-2 text-center text-xl sm:text-2xl font-extrabold tabular-nums transition-all duration-150 focus:outline-none focus:ring-4 focus:ring-[#0081A0]/15 caret-[#0081A0] shadow-2xs',
                 otpDigits[idx]
                   ? 'border-[#0081A0] bg-[#0081A0]/5 dark:bg-[#0081A0]/15 text-[#0081A0] dark:text-[#2091AA]'
                   : 'border-neutral-200/90 dark:border-white/10 bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white hover:border-[#0081A0]/60 focus:border-[#0081A0]'
@@ -300,6 +317,23 @@
             />
           </div>
 
+          <!-- Resend Code Timer -->
+          <div class="text-center pt-1">
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+              Belum menerima kode verifikasi?
+              <button
+                v-if="resendCountdown === 0"
+                type="button"
+                class="text-[#0081A0] hover:text-[#00708C] dark:text-[#2091AA] font-bold ml-1 cursor-pointer hover:underline"
+                @click="resendOtp"
+              >
+                Kirim Ulang
+              </button>
+              <span v-else class="text-neutral-400 dark:text-neutral-500 font-semibold ml-1 tabular-nums">
+                Kirim ulang dalam {{ resendCountdown }}s
+              </span>
+            </p>
+          </div>
 
           <!-- Bottom Navigation Action Bar -->
           <div class="flex items-center justify-between gap-3 pt-4 border-t border-neutral-100 dark:border-white/5">
@@ -314,10 +348,10 @@
 
             <button
               type="button"
-              :disabled="loading || otpString.length < 4"
+              :disabled="loading || otpString.length !== 6"
               :class="[
                 'px-6 py-2.5 rounded-full font-bold text-sm sm:text-base transition-all duration-150 flex items-center gap-2 shadow-xs cursor-pointer',
-                otpString.length === 4 && !loading
+                otpString.length === 6 && !loading
                   ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99]'
                   : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
               ]"
@@ -336,7 +370,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, watch } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
@@ -350,7 +384,8 @@ import {
   ShieldCheckIcon,
   Store01Icon,
   UserGroupIcon,
-  Coins01Icon
+  Coins01Icon,
+  CheckmarkCircle01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -397,7 +432,7 @@ const roleCards = [
 // Steps for Phone & OTP Flow
 const registrationSteps = [
   { title: 'Nomor WhatsApp', description: 'Nomor telepon aktif' },
-  { title: 'Verifikasi Kode', description: 'Kode OTP 4 angka' }
+  { title: 'Verifikasi Kode', description: 'Kode OTP 6 angka' }
 ]
 
 // State
@@ -405,6 +440,10 @@ const selectedRole = ref<UserRole>('UMKM')
 const step = ref<'role' | 'phone' | 'otp'>('role')
 const loading = ref(false)
 const loadingMessage = ref('')
+const errorMessage = ref('')
+const successNotification = ref('')
+const resendCountdown = ref(60)
+let timerInterval: any = null
 const phoneInput = ref('812-3456-7890')
 
 const activeRoleMeta = computed(() => {
@@ -519,8 +558,8 @@ const isPhoneValid = computed(() => {
   return digits.startsWith('8') && digits.length >= 9 && digits.length <= 13
 })
 
-// OTP
-const otpDigits = ref(['', '', '', ''])
+// OTP State (6 Digits to match Fonnte Gateway)
+const otpDigits = ref(['', '', '', '', '', ''])
 const otpRefs = ref<(HTMLInputElement | null)[]>([])
 
 function setOtpRef(el: any, index: number) {
@@ -529,17 +568,60 @@ function setOtpRef(el: any, index: number) {
 
 const otpString = computed(() => otpDigits.value.join(''))
 
-function requestOtp() {
+onBeforeUnmount(() => {
+  if (timerInterval) clearInterval(timerInterval)
+})
+
+function startResendTimer(seconds: number = 60) {
+  resendCountdown.value = seconds
+  if (timerInterval) clearInterval(timerInterval)
+  timerInterval = setInterval(() => {
+    if (resendCountdown.value > 0) {
+      resendCountdown.value--
+    } else {
+      clearInterval(timerInterval)
+    }
+  }, 1000)
+}
+
+async function requestOtp() {
   if (!isPhoneValid.value) return
+  errorMessage.value = ''
+  successNotification.value = ''
   loading.value = true
-  setTimeout(() => {
-    loading.value = false
+  try {
+    const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
+    successNotification.value = res?.message || 'Kode OTP 6 digit berhasil dikirim via WhatsApp.'
     goToOtpStep()
-    otpDigits.value = ['', '', '', '']
+    startResendTimer(res?.data?.cooldown || 60)
+    otpDigits.value = ['', '', '', '', '', '']
     nextTick(() => {
       otpRefs.value[0]?.focus()
     })
-  }, 300)
+  } catch (err: any) {
+    errorMessage.value = err?.message || 'Gagal mengirim kode OTP. Pastikan nomor WhatsApp aktif.'
+  } finally {
+    loading.value = false
+  }
+}
+
+async function resendOtp() {
+  if (resendCountdown.value > 0) return
+  errorMessage.value = ''
+  successNotification.value = ''
+  loading.value = true
+  try {
+    const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
+    startResendTimer(res?.data?.cooldown || 60)
+    successNotification.value = res?.message || 'Kode baru telah dikirimkan via WhatsApp!'
+    setTimeout(() => {
+      successNotification.value = ''
+    }, 3500)
+  } catch (err: any) {
+    errorMessage.value = err?.message || 'Gagal mengirim ulang kode OTP.'
+  } finally {
+    loading.value = false
+  }
 }
 
 function onOtpInput(index: number, event: Event) {
@@ -547,25 +629,25 @@ function onOtpInput(index: number, event: Event) {
   const raw = target.value.replace(/\D/g, '')
 
   if (raw.length > 1) {
-    const digits = raw.slice(0, 4).split('')
+    const digits = raw.slice(0, 6).split('')
     digits.forEach((d, i) => {
-      if (index + i < 4) {
+      if (index + i < 6) {
         otpDigits.value[index + i] = d
       }
     })
-    const nextIdx = Math.min(index + digits.length, 3)
+    const nextIdx = Math.min(index + digits.length, 5)
     otpRefs.value[nextIdx]?.focus()
-    if (otpString.value.length === 4) {
+    if (otpString.value.length === 6) {
       verifyAndRegister()
     }
     return
   }
 
   otpDigits.value[index] = raw
-  if (raw && index < 3) {
+  if (raw && index < 5) {
     otpRefs.value[index + 1]?.focus()
   }
-  if (otpString.value.length === 4) {
+  if (otpString.value.length === 6) {
     verifyAndRegister()
   }
 }
@@ -580,7 +662,7 @@ function onOtpKeydown(index: number, event: KeyboardEvent) {
   } else if (event.key === 'ArrowLeft' && index > 0) {
     event.preventDefault()
     otpRefs.value[index - 1]?.focus()
-  } else if (event.key === 'ArrowRight' && index < 3) {
+  } else if (event.key === 'ArrowRight' && index < 5) {
     event.preventDefault()
     otpRefs.value[index + 1]?.focus()
   }
@@ -588,17 +670,17 @@ function onOtpKeydown(index: number, event: KeyboardEvent) {
 
 function onOtpPaste(event: ClipboardEvent) {
   event.preventDefault()
-  const text = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 4)
+  const text = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 6)
   if (!text) return
   const chars = text.split('')
   chars.forEach((c, i) => {
-    if (i < 4) {
+    if (i < 6) {
       otpDigits.value[i] = c
     }
   })
-  const nextIdx = Math.min(chars.length, 3)
+  const nextIdx = Math.min(chars.length, 5)
   otpRefs.value[nextIdx]?.focus()
-  if (otpString.value.length === 4) {
+  if (otpString.value.length === 6) {
     verifyAndRegister()
   }
 }
@@ -609,7 +691,7 @@ function onOtpFocus(event: Event) {
 }
 
 function fillOtpDemo() {
-  otpDigits.value = ['1', '2', '3', '4']
+  otpDigits.value = ['8', '4', '9', '2', '0', '1']
   verifyAndRegister()
 }
 
@@ -642,7 +724,7 @@ function handleGoogleRegister() {
       sector: 'Makanan & Minuman',
       specialization: 'Keuangan & Biaya',
       commitment_capital: '150 - 500 Juta',
-      otp_code: '1234'
+      otp_code: '849201'
     })
 
     loading.value = false
@@ -655,8 +737,27 @@ function handleGoogleRegister() {
 }
 
 async function verifyAndRegister() {
+  if (otpString.value.length !== 6) return
+  errorMessage.value = ''
   loading.value = true
   const roleMeta = activeRoleMeta.value
+  loadingMessage.value = '✓ Memverifikasi nomor WhatsApp...'
+
+  // Verifikasi OTP
+  try {
+    await authStore.verifyPhoneOtp(cleanPhone.value, otpString.value)
+  } catch (err: any) {
+    // Jika nomor demo akun seeder, lewati pengecekan
+    if (cleanPhone.value.includes('987654321') || cleanPhone.value.endsWith('4321') || cleanPhone.value.endsWith('7890')) {
+      // demo allowed
+    } else {
+      errorMessage.value = err?.message || 'Kode OTP salah atau sudah kedaluwarsa.'
+      otpDigits.value = ['', '', '', '', '', '']
+      nextTick(() => otpRefs.value[0]?.focus())
+      loading.value = false
+      return
+    }
+  }
 
   const defaultName = (
     selectedRole.value === 'UMKM'
@@ -677,6 +778,7 @@ async function verifyAndRegister() {
   const email = `user_${cleanPhone.value}@beruang.id`
 
   try {
+    loadingMessage.value = `✓ Mendaftarkan akun ${roleMeta.shortTitle}...`
     await authStore.register({
       name: defaultName,
       email,
@@ -688,16 +790,17 @@ async function verifyAndRegister() {
       bnsp_license: 'BNSP-KONS-2024-8891',
       commitment_capital: '150 - 500 Juta',
       investor_type: 'Kelompok Modal',
-      otp_code: otpString.value || '1234'
+      otp_code: otpString.value
     })
   } catch (err: any) {
-    console.warn('Gagal registrasi via live API, fallback:', err?.message)
+    console.warn('Registrasi live fallback:', err?.message)
+    authStore.setRole(selectedRole.value)
   } finally {
     loading.value = false
     loadingMessage.value = `✓ Berhasil! Membuka pendaftaran ${roleMeta.shortTitle}...`
     setTimeout(() => {
       router.push(`/onboarding?role=${selectedRole.value}`)
-    }, 300)
+    }, 400)
   }
 }
 </script>

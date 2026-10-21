@@ -245,13 +245,10 @@ async function handleSendOtp() {
 
   loading.value = true
   try {
-    const res = await useApi<any>('/otp/send', {
-      method: 'POST',
-      body: { phone }
-    })
+    const res = await authStore.sendWhatsAppOtp(phone)
 
     if (res.success) {
-      successMessage.value = 'Kode OTP 6 digit berhasil dikirim ke WhatsApp Anda.'
+      successMessage.value = res.message || 'Kode OTP 6 digit berhasil dikirim ke WhatsApp Anda.'
       step.value = 'input-otp'
       startCountdown(res.data?.cooldown || 60)
       setTimeout(() => {
@@ -277,32 +274,13 @@ async function handleVerifyOtp() {
 
   loading.value = true
   try {
-    const res = await useApi<any>('/otp/verify', {
-      method: 'POST',
-      body: {
-        phone: formattedPhone.value,
-        otp: otpString.value
-      }
-    })
+    const res = await authStore.verifyPhoneOtp(formattedPhone.value, otpString.value)
 
     if (res.success) {
       successMessage.value = 'Verifikasi berhasil! Mengalihkan...'
-      if (res.data?.token) {
-        authStore.token = res.data.token
-        const tokenCookie = useCookie<string | null>('beruang_token', {
-          maxAge: 60 * 60 * 24 * 7,
-          sameSite: 'lax',
-          path: '/'
-        })
-        tokenCookie.value = res.data.token
-      }
-      if (authStore.currentUser) {
-        authStore.currentUser.verified = true
-      }
-
       setTimeout(() => {
         router.push('/onboarding')
-      }, 1000)
+      }, 800)
     }
   } catch (err: any) {
     errorMessage.value = err?.message || 'Kode OTP tidak valid atau sudah kedaluwarsa.'

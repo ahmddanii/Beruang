@@ -59,6 +59,31 @@ export function useGoogleAuth() {
     try {
       await loadGsiScript()
 
+      // 1. Prioritaskan Google OAuth2 Token Client (Popup Resmi Google accounts.google.com)
+      if (window.google?.accounts?.oauth2) {
+        const tokenClient = window.google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId.value,
+          scope: 'email profile openid',
+          callback: async (response: any) => {
+            loading.value = false
+            if (response?.access_token) {
+              await onSuccess(response.access_token)
+            } else if (response?.error) {
+              error.value = response.error
+            }
+          },
+          error_callback: (err: any) => {
+            loading.value = false
+            console.warn('Google OAuth popup error:', err)
+            if (onFallbackDemo) onFallbackDemo()
+          }
+        })
+
+        tokenClient.requestAccessToken({ prompt: 'select_account' })
+        return true
+      }
+
+      // 2. Fallback ke Google Identity Services One-Tap jika oauth2 belum terinisialisasi
       if (window.google?.accounts?.id) {
         window.google.accounts.id.initialize({
           client_id: googleClientId.value,
@@ -76,7 +101,6 @@ export function useGoogleAuth() {
 
         window.google.accounts.id.prompt((notification: any) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Jika prompt One-Tap terblokir browser atau cool-down aktif
             loading.value = false
             if (onFallbackDemo) onFallbackDemo()
           } else if (notification.isDismissedMoment()) {

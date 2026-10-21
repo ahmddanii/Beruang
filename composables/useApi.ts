@@ -38,8 +38,20 @@ export const useApi = async <T = any>(
     path: '/'
   })
 
-  const baseUrl = config.public.apiBaseUrl || 'https://beruang-api.fly.dev/api'
-  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+  let normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+  // Prevent double /api prefix if caller passes '/api/...'
+  if (normalizedEndpoint.startsWith('/api/')) {
+    normalizedEndpoint = normalizedEndpoint.replace('/api/', '/')
+  }
+
+  let baseUrl = config.public.apiBaseUrl || 'https://beruang-api.fly.dev/api'
+
+  // If in browser on localhost / local IP, route through Nitro proxy (/api/proxy)
+  // to strip browser Origin and prevent Laravel Sanctum's stateful CSRF interception (HTTP 419)
+  if (import.meta.client && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    baseUrl = '/api/proxy'
+  }
+
   const url = `${baseUrl}${normalizedEndpoint}`
 
   const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData

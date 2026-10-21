@@ -407,90 +407,7 @@
       </div>
     </div>
 
-    <!-- ===================================================================== -->
-    <!-- GOOGLE ACCOUNT CHOOSER MODAL (Authentic Minimalist OAuth Flow)        -->
-    <!-- ===================================================================== -->
-    <BModal
-      v-model="openGoogleModal"
-      size="md"
-      title="Pilih Akun"
-      :hide-divider="true"
-    >
-      <template #header="{ close }">
-        <div class="flex items-start gap-3.5 flex-1 pr-1">
-          <div class="w-11 h-11 rounded-2xl bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-white/10 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
-            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
-            </svg>
-          </div>
-          <div class="min-w-0 flex-1 text-left">
-            <h3 class="font-extrabold text-xl sm:text-2xl text-neutral-900 dark:text-white tracking-tight leading-snug">
-              Pilih Akun
-            </h3>
-            <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-0.5 leading-relaxed">
-              Pilih akun Google untuk mendaftar sebagai <span class="font-bold text-[#0081A0] dark:text-[#2091AA]">{{ activeRoleMeta.shortTitle }}</span> di <span class="font-bold text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="font-bold text-[#00AA13] dark:text-[#22C55E]">uang</span>.
-            </p>
-          </div>
-        </div>
-      </template>
 
-      <!-- Account List -->
-      <div class="space-y-2 pt-1 pb-1 text-left">
-        <button
-          v-for="acc in googleAccounts"
-          :key="acc.email"
-          type="button"
-          :disabled="loading"
-          class="w-full p-3.5 rounded-2xl border border-[#E2E8F0] dark:border-white/10 bg-white dark:bg-[#13161F] hover:bg-neutral-50 dark:hover:bg-[#1A1E29] hover:border-[#0081A0]/60 dark:hover:border-[#0081A0]/60 flex items-center gap-3.5 transition-all duration-150 active:scale-[0.99] cursor-pointer text-left group shadow-xs"
-          @click="selectGoogleRegisterAccount(acc)"
-        >
-          <!-- Avatar Initial -->
-          <div :class="['w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs', acc.avatarBg]">
-            {{ acc.initial }}
-          </div>
-
-          <!-- Account Identity Info -->
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center justify-between gap-2">
-              <span class="font-bold text-sm text-neutral-900 dark:text-white truncate">
-                {{ acc.name }}
-              </span>
-              <span :class="['px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider', acc.badgeClass]">
-                {{ acc.roleLabel }}
-              </span>
-            </div>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-              {{ acc.email }}
-            </p>
-          </div>
-        </button>
-
-        <!-- Use Another Account Option -->
-        <button
-          type="button"
-          :disabled="loading"
-          class="w-full p-3.5 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-[#0081A0] dark:hover:border-[#0081A0] text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center gap-3.5 transition-all text-xs font-semibold cursor-pointer"
-          @click="selectGoogleRegisterAccount(googleAccounts[0])"
-        >
-          <div class="w-10 h-10 rounded-full border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-500 dark:text-neutral-400 shrink-0">
-            <HugeiconsIcon :icon="UserGroupIcon" :size="18" :stroke-width="1.8" />
-          </div>
-          <div class="text-left">
-            <span class="font-bold text-neutral-800 dark:text-neutral-200">Gunakan akun Google lain</span>
-            <p class="text-[11px] text-neutral-400">Daftar dengan email Google Anda yang lain</p>
-          </div>
-        </button>
-      </div>
-
-      <template #footer>
-        <p class="text-[11px] text-neutral-400 text-center w-full">
-          Dengan melanjutkan, Google membagikan nama, email, dan preferensi bahasa Anda ke Beruang.
-        </p>
-      </template>
-    </BModal>
 
   </div>
 </template>
@@ -571,41 +488,9 @@ const loading = ref(false)
 const loadingMessage = ref('')
 const errorMessage = ref('')
 const successNotification = ref('')
-const openGoogleModal = ref(false)
 const resendCountdown = ref(60)
 let timerInterval: any = null
 const phoneInput = ref('812-3456-7890')
-
-// Pre-configured Google Accounts for Realistic OAuth Flow
-const googleAccounts = [
-  {
-    role: 'UMKM' as UserRole,
-    name: 'Fikri Setiawan',
-    email: 'fikri.setiawan@gmail.com',
-    roleLabel: 'UMKM',
-    badgeClass: 'bg-[#0081A0]/10 text-[#0081A0] dark:bg-[#0081A0]/20 dark:text-[#2091AA] border border-[#0081A0]/20',
-    initial: 'F',
-    avatarBg: 'bg-[#0081A0] text-white'
-  },
-  {
-    role: 'CONSULTANT' as UserRole,
-    name: 'Dra. Maya Suryani, M.M.',
-    email: 'maya.suryani@gmail.com',
-    roleLabel: 'Konsultan',
-    badgeClass: 'bg-[#00AA13]/10 text-[#00AA13] dark:bg-[#00AA13]/20 dark:text-[#22C55E] border border-[#00AA13]/20',
-    initial: 'M',
-    avatarBg: 'bg-[#00AA13] text-white'
-  },
-  {
-    role: 'INVESTOR' as UserRole,
-    name: 'Hendro Wicaksono',
-    email: 'hendro.wicaksono@gmail.com',
-    roleLabel: 'Investor',
-    badgeClass: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20',
-    initial: 'H',
-    avatarBg: 'bg-[#F59E0B] text-white'
-  }
-]
 
 const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
@@ -863,69 +748,25 @@ function fillOtpDemo() {
 
 async function handleGoogleRegister() {
   errorMessage.value = ''
-  await googleAuth.triggerGoogleLogin(
-    async (credential: string) => {
-      loading.value = true
-      loadingMessage.value = '✓ Menghubungkan akun Google...'
-      try {
-        await authStore.loginWithGoogle(credential, selectedRole.value)
-        loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
-        setTimeout(() => {
-          router.push(`/onboarding?role=${selectedRole.value}`)
-        }, 300)
-      } catch (err: any) {
-        errorMessage.value = err?.data?.message || err?.message || 'Pendaftaran dengan Google gagal'
-      } finally {
-        loading.value = false
-        loadingMessage.value = ''
-      }
-    },
-    () => {
-      // Buka modal pemilih akun Google interaktif (jangan langsung lompat!)
-      openGoogleModal.value = true
-    }
-  )
-}
-
-async function selectGoogleRegisterAccount(account: typeof googleAccounts[0]) {
-  openGoogleModal.value = false
-  loading.value = true
-  loadingMessage.value = `✓ Menghubungkan Google: ${account.name}...`
-
-  let businessName = 'Kopi Senja Nusantara'
-  if (selectedRole.value === 'CONSULTANT') {
-    businessName = 'Maya Advisory Partner'
-  } else if (selectedRole.value === 'INVESTOR') {
-    businessName = 'Nusantara Angel Syndicate'
-  }
-
-  try {
-    // Coba daftarkan akun jika baru
-    await authStore.register({
-      name: account.name,
-      email: account.email,
-      phone: selectedRole.value === 'UMKM' ? '+62 812-3456-7890' : selectedRole.value === 'CONSULTANT' ? '+62 819-8765-4321' : '+62 811-2233-4455',
-      role: selectedRole.value,
-      orgName: businessName,
-      sector: 'Makanan & Minuman',
-      specialization: 'Keuangan & Biaya',
-      commitment_capital: '150 - 500 Juta',
-      otp_code: '849201'
-    })
-  } catch (err: any) {
-    console.warn('Google register fallback ke login jika sudah terdaftar:', err?.message)
-    // Jika email sudah pernah terdaftar, otomatis login dengan akun tersebut
+  await googleAuth.triggerGoogleLogin(async (credential: string) => {
+    loading.value = true
+    loadingMessage.value = '✓ Menghubungkan akun Google...'
     try {
-      await authStore.login(account.email, 'password123')
-    } catch {
-      await authStore.setRole(selectedRole.value)
+      await authStore.loginWithGoogle(credential, selectedRole.value)
+      loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
+      setTimeout(() => {
+        router.push(`/onboarding?role=${selectedRole.value}`)
+      }, 300)
+    } catch (err: any) {
+      errorMessage.value = err?.data?.message || err?.message || 'Pendaftaran dengan Google gagal'
+    } finally {
+      loading.value = false
+      loadingMessage.value = ''
     }
-  } finally {
-    loading.value = false
-    loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
-    setTimeout(() => {
-      router.push(`/onboarding?role=${selectedRole.value}`)
-    }, 300)
+  })
+
+  if (googleAuth.error.value) {
+    errorMessage.value = googleAuth.error.value
   }
 }
 

@@ -40,16 +40,14 @@ export function useGoogleAuth() {
   const error = ref<string | null>(null)
 
   /**
-   * Memicu alur Google OAuth.
-   * - Jika Google Client ID terisi di .env: memanggil Google Identity Services popup resmi.
-   * - Jika Client ID kosong: mengembalikan false agar UI menampilkan modal demo selection.
+   * Memicu alur Google OAuth (Google Identity Services popup resmi).
+   * Membuka popup Google resmi dan mengembalikan token kredensial untuk diteruskan ke backend.
    */
   async function triggerGoogleLogin(
-    onSuccess: (credential: string) => Promise<void> | void,
-    onFallbackDemo?: () => void
+    onSuccess: (credential: string) => Promise<void> | void
   ) {
     if (!hasGoogleClientId.value) {
-      if (onFallbackDemo) onFallbackDemo()
+      error.value = 'Kredensial Google Client ID belum disetel di .env (NUXT_PUBLIC_GOOGLE_CLIENT_ID)'
       return false
     }
 
@@ -69,13 +67,13 @@ export function useGoogleAuth() {
             if (response?.access_token) {
               await onSuccess(response.access_token)
             } else if (response?.error) {
-              error.value = response.error
+              error.value = response.error_description || response.error || 'Autentikasi Google dibatalkan'
             }
           },
           error_callback: (err: any) => {
             loading.value = false
+            error.value = err?.message || 'Gagal membuka jendela login Google. Pastikan popup tidak diblokir.'
             console.warn('Google OAuth popup error:', err)
-            if (onFallbackDemo) onFallbackDemo()
           }
         })
 
@@ -102,7 +100,7 @@ export function useGoogleAuth() {
         window.google.accounts.id.prompt((notification: any) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
             loading.value = false
-            if (onFallbackDemo) onFallbackDemo()
+            error.value = 'Google Sign-In prompt ditutup atau terblokir.'
           } else if (notification.isDismissedMoment()) {
             loading.value = false
           }
@@ -115,7 +113,6 @@ export function useGoogleAuth() {
     } catch (err: any) {
       loading.value = false
       error.value = err?.message || 'Gagal menginisialisasi Google Sign-In'
-      if (onFallbackDemo) onFallbackDemo()
       return false
     }
   }

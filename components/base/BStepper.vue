@@ -5,7 +5,7 @@
       <div class="absolute left-6 right-6 top-5 -translate-y-1/2 h-1 bg-neutral-200 dark:bg-neutral-800 -z-0">
         <!-- Completed line progress -->
         <div
-          class="h-full bg-primary-500 transition-all duration-300 ease-out"
+          class="h-full bg-[#0081A0] transition-all duration-300 ease-out"
           :style="{ width: `${(Math.max(0, currentStep - 1) / Math.max(1, steps.length - 1)) * 100}%` }"
         />
       </div>
@@ -19,12 +19,12 @@
         <!-- Step Bubble -->
         <div
           :class="[
-            'w-10 h-10 rounded-full flex items-center justify-center font-heading font-bold text-sm transition-all duration-200 border-2 select-none',
+            'w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-200 border-2 select-none',
             index + 1 < currentStep
-              ? 'bg-success text-white border-success-dark shadow-xs'
+              ? 'bg-[#00AA13] text-white border-[#00AA13] shadow-xs'
               : index + 1 === currentStep
-                ? 'bg-primary-500 text-white border-primary-700 shadow-chunky-sm scale-110'
-                : 'bg-white dark:bg-neutral-900 text-neutral-400 border-neutral-300 dark:border-neutral-700'
+                ? 'bg-[#0081A0] text-white border-[#0081A0] shadow-sm shadow-[#0081A0]/30 scale-105'
+                : 'bg-white dark:bg-[#18191E] text-neutral-400 dark:text-neutral-500 border-neutral-200 dark:border-neutral-700'
           ]"
         >
           <!-- Completed Checkmark -->
@@ -44,9 +44,9 @@
         <!-- Step Label -->
         <span
           :class="[
-            'mt-2 text-xs font-semibold tracking-tight text-center max-w-[90px] truncate transition-colors font-heading',
+            'mt-2 text-xs font-semibold tracking-tight text-center max-w-[90px] truncate transition-colors',
             index + 1 === currentStep
-              ? 'text-primary-600 dark:text-primary-400 font-bold'
+              ? 'text-[#0081A0] dark:text-[#2091AA] font-bold'
               : index + 1 < currentStep
                 ? 'text-neutral-800 dark:text-neutral-200'
                 : 'text-neutral-400 dark:text-neutral-600'

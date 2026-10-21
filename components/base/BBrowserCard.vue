@@ -16,7 +16,7 @@
 
       <!-- Address Bar Pill -->
       <div class="flex-1 max-w-xs mx-auto">
-        <div class="bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg px-3 py-1 flex items-center justify-center gap-1.5 text-[11px] font-mono text-neutral-500 dark:text-text-secondary-dark truncate">
+        <div class="bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg px-3 py-1 flex items-center justify-center gap-1.5 text-[11px]  text-neutral-500 dark:text-text-secondary-dark truncate">
           <svg class="w-3 h-3 text-neutral-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
@@ -27,7 +27,7 @@
       <!-- Optional Right Tag / Badge -->
       <div class="shrink-0 text-right min-w-[36px]">
         <slot name="badge">
-          <span v-if="badgeText" class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-primary-100 dark:bg-primary-tint text-primary-600 dark:text-primary-400 font-semibold">
+          <span v-if="badgeText" class="text-[10px]  px-2 py-0.5 rounded-md bg-primary-100 dark:bg-primary-tint text-primary-600 dark:text-primary-400 font-semibold">
             {{ badgeText }}
           </span>
         </slot>

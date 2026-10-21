@@ -4,8 +4,8 @@
       <div class="flex items-center justify-between h-16 gap-4">
         <!-- Left: Brand Logo & Role Pill -->
         <div class="flex items-center gap-3 shrink-0">
-          <NuxtLink to="/" class="flex items-center gap-2">
-            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain" />
+          <NuxtLink to="/" class="flex items-center gap-2 group">
+            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain transition-transform group-hover:scale-105" />
             <div>
               <div class="flex items-center gap-1.5">
                 <span class="font-heading font-extrabold text-lg tracking-tight leading-none select-none">
@@ -13,7 +13,7 @@
                 </span>
                 <span
                   :class="[
-                    'text-[10px] font-heading font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border',
+                    'text-[10px]  font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border',
                     roleBadgeClasses[currentRole]
                   ]"
                 >
@@ -34,7 +34,7 @@
             :key="item.to"
             :to="item.to"
             :class="[
-              'px-3.5 py-2 rounded-xl font-heading font-semibold text-xs transition-all duration-150 flex items-center gap-2 select-none relative',
+              'px-3.5 py-2 rounded-xl  font-semibold text-xs transition-all duration-150 flex items-center gap-2 select-none relative',
               isActive(item.to)
                 ? 'bg-primary-500 text-white'
                 : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800'
@@ -74,11 +74,11 @@
 
           <!-- User Avatar Pill -->
           <div class="flex items-center gap-2 pl-2 border-l border-neutral-200 dark:border-neutral-800">
-            <div class="w-8 h-8 rounded-xl bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300 font-heading font-bold text-xs flex items-center justify-center border border-primary-200 dark:border-primary-800">
+            <div class="w-8 h-8 rounded-xl bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300  font-bold text-xs flex items-center justify-center border border-primary-200 dark:border-primary-800">
               {{ (authStore.currentUser?.name || 'U').slice(0, 2).toUpperCase() }}
             </div>
             <div class="hidden xl:block text-left">
-              <span class="text-xs font-heading font-bold text-neutral-900 dark:text-neutral-100 block leading-tight truncate max-w-[130px]">
+              <span class="text-xs  font-bold text-neutral-900 dark:text-neutral-100 block leading-tight truncate max-w-[130px]">
                 {{ authStore.currentUser?.name }}
               </span>
               <span class="text-[10px] text-neutral-400 block truncate max-w-[130px]">
@@ -202,10 +202,10 @@ const navItems = computed(() => {
         badge: `${konsultanStore.validationsQueue.length}`
       },
       {
-        to: '/konsultan/alert',
-        label: 'Peringatan Anomali',
-        icon: Alert01Icon,
-        badge: `${konsultanStore.alerts.filter(a => !a.dismissed).length}`
+        to: '/konsultan/rencana-aksi',
+        label: 'Rencana Aksi',
+        icon: Task01Icon,
+        badge: `${konsultanStore.actionPlans.filter(p => p.status === 'TODO').length}`
       }
     ]
   } else {

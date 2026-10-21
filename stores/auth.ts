@@ -172,23 +172,33 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    /**
-     * Registrasi Akun Baru
-     */
     async register(payload: {
       name: string
       email: string
-      password: string
+      password?: string
       role: UserRole
       phone?: string
       orgName?: string
+      [key: string]: any
     }) {
       this.loading = true
       this.error = null
       try {
+        const password = payload.password || 'password123'
+        const org = payload.orgName || payload.org_name || payload.businessName
         const res = await useApi<{ token: string; user: UserProfile }>('/auth/register', {
           method: 'POST',
-          body: payload
+          body: {
+            name: payload.name,
+            email: payload.email,
+            password,
+            password_confirmation: password,
+            role: payload.role,
+            phone: payload.phone,
+            brand: org,
+            business_name: org,
+            firm_name: org
+          }
         })
 
         if (res.data?.token) {

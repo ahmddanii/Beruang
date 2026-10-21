@@ -9,7 +9,7 @@
       <!-- Avatar bubble -->
       <div
         :class="[
-          'rounded-full overflow-hidden border-2 border-white dark:border-neutral-900 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center font-heading font-semibold text-neutral-700 dark:text-neutral-200 shadow-xs transition-transform duration-150 group-hover:scale-110 group-hover:z-10',
+          'rounded-full overflow-hidden border-2 border-white dark:border-neutral-900 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center  font-semibold text-neutral-700 dark:text-neutral-200 shadow-xs transition-transform duration-150 group-hover:scale-110 group-hover:z-10',
           sizeClasses[size]
         ]"
       >
@@ -37,7 +37,7 @@
     <div
       v-if="remainingCount > 0"
       :class="[
-        'rounded-full border-2 border-white dark:border-neutral-900 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 font-heading font-bold flex items-center justify-center shadow-xs',
+        'rounded-full border-2 border-white dark:border-neutral-900 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300  font-bold flex items-center justify-center shadow-xs',
         sizeClasses[size]
       ]"
     >

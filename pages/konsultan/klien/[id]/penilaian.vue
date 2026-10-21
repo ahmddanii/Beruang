@@ -82,13 +82,10 @@
       <!-- Right: Real-time Radar Chart Preview (5 cols sticky) -->
       <div class="lg:col-span-5 sticky top-24 space-y-4">
         <div class="bg-surface-light dark:bg-surface-dark rounded-2xl border border-border-light dark:border-border-dark p-6 flex flex-col items-center">
-          <div class="w-full flex items-center justify-between pb-3 border-b border-border-light dark:border-border-dark mb-4">
+          <div class="w-full pb-3 border-b border-border-light dark:border-border-dark mb-4">
             <h3 class="font-heading font-bold text-sm text-neutral-900 dark:text-white">
               Pratinjau Radar Real-time
             </h3>
-            <span class="text-[10px] font-heading font-semibold px-2 py-0.5 rounded-md bg-primary-100 text-primary-700 dark:bg-primary-950 dark:text-primary-300">
-              Live Sync
-            </span>
           </div>
 
           <BRadarChart
@@ -137,32 +134,32 @@ const client = computed(() => {
   return konsultanStore.clients.find(c => c.id === clientId.value) || konsultanStore.clients[0]
 })
 
-const aspects = ref(JSON.parse(JSON.stringify(umkmStore.assessmentAspects)))
+const aspects = ref(JSON.parse(JSON.stringify(konsultanStore.getClientAssessment(clientId.value))))
 const saved = ref(false)
 
 const averageScore = computed(() => {
-  const sum = aspects.value.reduce((acc: number, a: { score: number }) => acc + a.score, 0)
-  return Math.round(sum / aspects.value.length)
+  const sum = aspects.value.reduce((acc: number, a: { score: number }) => acc + (Number(a.score) || 0), 0)
+  return Math.round(sum / (aspects.value.length || 1))
 })
 
 const radarData = computed(() => {
   return aspects.value.map((a: { name: string; score: number; maxScore: number; targetScore: number }) => ({
     name: a.name.split(' ')[0],
-    score: a.score,
-    maxScore: a.maxScore,
-    targetScore: a.targetScore
+    score: Number(a.score) || 0,
+    maxScore: a.maxScore || 100,
+    targetScore: a.targetScore || 85
   }))
 })
 
 function saveAssessment() {
-  umkmStore.assessmentAspects = JSON.parse(JSON.stringify(aspects.value))
-  if (client.value) {
-    client.value.healthScore = averageScore.value
+  konsultanStore.updateClientAssessment(clientId.value, aspects.value)
+  if (clientId.value === 'umkm-01') {
+    umkmStore.assessmentAspects = JSON.parse(JSON.stringify(aspects.value))
   }
   saved.value = true
   setTimeout(() => {
     saved.value = false
     router.push(`/konsultan/klien/${clientId.value}`)
-  }, 1000)
+  }, 900)
 }
 </script>

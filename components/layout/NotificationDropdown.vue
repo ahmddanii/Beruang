@@ -4,10 +4,10 @@
     <button
       type="button"
       :class="[
-        'relative w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer select-none',
+        'relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer select-none',
         isOpen
-          ? 'bg-[#E6F4F7] dark:bg-[#2091AA]/20 text-[#2091AA] dark:text-[#50AABF] border-[1.5px] border-[#2091AA]/50 dark:border-[#50AABF]/50 shadow-xs'
-          : 'bg-white dark:bg-[#18191E] hover:bg-neutral-100 dark:hover:bg-[#202128] border-[1.5px] border-slate-300 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white shadow-2xs'
+          ? 'bg-[#E6F4F7] dark:bg-[#2091AA]/20 text-[#2091AA] dark:text-[#50AABF] border-2 border-[#2091AA]/40 dark:border-[#50AABF]/40 shadow-xs'
+          : 'bg-white dark:bg-[#18191E] hover:bg-neutral-100 dark:hover:bg-[#202128] border border-neutral-200/90 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white shadow-2xs'
       ]"
       aria-label="Notifikasi & Pemberitahuan Usaha"
       :aria-expanded="isOpen"
@@ -16,15 +16,15 @@
     >
       <HugeiconsIcon
         :icon="Notification01Icon"
-        :size="16"
-        :stroke-width="2.2"
+        :size="19"
+        :stroke-width="isOpen ? 2.1 : 1.75"
         class="transition-transform duration-150"
       />
 
       <!-- Unread Indicator Dot (Standard Clean Dot) -->
       <span
         v-if="notificationStore.unreadCount > 0"
-        class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#18191E]"
+        class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#18191E]"
       />
     </button>
 

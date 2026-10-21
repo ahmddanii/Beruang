@@ -37,35 +37,35 @@
           <div class="flex items-center -space-x-2 overflow-hidden">
             <!-- Avatar 1 -->
             <div
-              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-neutral-900 text-white flex items-center justify-center font-heading font-bold text-xs shadow-xs"
+              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-neutral-900 text-white flex items-center justify-center  font-bold text-xs shadow-xs"
               title="Investor 1"
             >
               HW
             </div>
             <!-- Avatar 2 -->
             <div
-              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-[#0066FF] text-white flex items-center justify-center font-heading font-bold text-xs shadow-xs"
+              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-[#0066FF] text-white flex items-center justify-center  font-bold text-xs shadow-xs"
               title="Investor 2"
             >
               SC
             </div>
             <!-- Avatar 3 -->
             <div
-              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-emerald-600 text-white flex items-center justify-center font-heading font-bold text-xs shadow-xs"
+              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-emerald-600 text-white flex items-center justify-center  font-bold text-xs shadow-xs"
               title="Investor 3"
             >
               BN
             </div>
             <!-- Indicator +1 -->
             <div
-              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center font-mono font-bold text-[10px] shadow-xs"
+              class="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-[#15161A] bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center  font-bold text-[10px] shadow-xs"
             >
               +1
             </div>
           </div>
 
           <!-- Pulsing Unread Activity Pill -->
-          <span class="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 dark:bg-primary-950/80 dark:text-primary-300 border border-primary-200/80 dark:border-primary-800/60">
+          <span class="inline-flex items-center gap-1 text-[10px]  font-bold px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 dark:bg-primary-950/80 dark:text-primary-300 border border-primary-200/80 dark:border-primary-800/60">
             <span class="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
             Baru
           </span>
@@ -73,10 +73,10 @@
 
         <!-- Middle: Actionable Bold Text (Strictly "3 Permintaan Akses Data Room") -->
         <div>
-          <h2 class="text-sm sm:text-[15px] font-heading font-bold text-neutral-900 dark:text-white leading-snug tracking-tight">
+          <h2 class="text-sm sm:text-[15px]  font-bold text-neutral-900 dark:text-white leading-snug tracking-tight">
             3 Permintaan Akses Data Room
           </h2>
-          <p class="text-[11px] font-sans text-neutral-500 dark:text-neutral-400 mt-0.5">
+          <p class="text-[11px]  text-neutral-500 dark:text-neutral-400 mt-0.5">
             Investor menunggu izin berkas
           </p>
         </div>
@@ -84,7 +84,7 @@
         <!-- Bottom: Full-Width Solid-Fill High-Contrast Button -->
         <button
           type="button"
-          class="w-full py-2.5 px-3 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-950 font-heading font-bold text-xs sm:text-[13px] shadow-xs transition-all duration-150 flex items-center justify-center gap-1.5 group-hover:shadow-sm active:scale-[0.98] cursor-pointer"
+          class="w-full py-2.5 px-3 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-950  font-bold text-xs sm:text-[13px] shadow-xs transition-all duration-150 flex items-center justify-center gap-1.5 group-hover:shadow-sm active:scale-[0.98] cursor-pointer"
         >
           <span>Tinjau Permintaan Akses</span>
           <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">

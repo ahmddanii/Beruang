@@ -1,10 +1,9 @@
 <template>
-  <div class="relative flex flex-col items-center justify-center p-2 select-none">
+  <div class="relative flex flex-col items-center justify-center p-2 select-none w-full">
     <svg
-      :viewBox="`0 0 ${size} ${size}`"
-      :width="size"
-      :height="size"
-      class="overflow-visible max-w-full h-auto drop-shadow-sm"
+      :viewBox="`-70 -25 ${size + 140} ${size + 50}`"
+      class="w-full h-auto drop-shadow-sm overflow-visible transition-all duration-300"
+      :style="{ maxWidth: maxWidth ? `${maxWidth}px` : `${Math.max(size + 60, 420)}px` }"
     >
       <defs>
         <!-- Primary subtle fill for polygon -->
@@ -69,35 +68,46 @@
         class="transition-all duration-300 ease-out"
       />
 
-      <!-- Data Point Circles with hover tooltip trigger -->
+      <!-- Data Point Circles with click & hover trigger -->
       <g
         v-for="(point, index) in points"
         :key="index"
-        class="cursor-pointer group"
-        @mouseenter="hoveredIndex = index"
-        @mouseleave="hoveredIndex = null"
+        class="cursor-pointer"
+        @mouseenter="handleMouseEnter(index)"
+        @mouseleave="handleMouseLeave"
+        @click="handlePointClick(index)"
       >
-        <!-- Outer halo -->
+        <!-- Invisible generous hitbox for smooth hover and easy tap without flicker -->
         <circle
           :cx="point.x"
           :cy="point.y"
-          r="6"
-          class="fill-[#2091AA]/20 group-hover:fill-[#2091AA]/35 transition-all"
+          :r="Math.max(16, size * 0.042)"
+          fill="transparent"
         />
-        <!-- Inner dot -->
+
+        <!-- Outer halo (radius grows on hover/select without coordinate shift) -->
         <circle
           :cx="point.x"
           :cy="point.y"
-          r="4"
+          :r="activeIdx === index ? Math.max(11, size * 0.026) : Math.max(6.5, size * 0.016)"
+          :class="activeIdx === index ? 'fill-[#2091AA]/50' : 'fill-[#2091AA]/20'"
+          class="transition-all duration-200"
+        />
+
+        <!-- Inner dot (fixed center cx/cy, radius grows from center) -->
+        <circle
+          :cx="point.x"
+          :cy="point.y"
+          :r="activeIdx === index ? Math.max(6.5, size * 0.015) : Math.max(4.5, size * 0.011)"
           fill="#2091AA"
           stroke="#FFFFFF"
-          stroke-width="2"
-          class="transition-transform duration-200 group-hover:scale-125"
+          :stroke-width="activeIdx === index ? 2.5 : 2"
+          class="transition-all duration-200"
         />
       </g>
 
-      <!-- Axis Labels -->
-      <g class="labels font-heading font-semibold text-xs sm:text-sm">
+      <!-- Axis Labels (clickable and hoverable) -->
+      <g class="labels font-poppins font-semibold">
         <text
           v-for="(label, index) in labels"
           :key="index"
@@ -105,26 +115,25 @@
           :y="label.y"
           :text-anchor="label.anchor"
           :dominant-baseline="label.baseline"
-          class="fill-neutral-800 dark:fill-neutral-200 font-bold cursor-default"
+          class="cursor-pointer select-none transition-all duration-200"
+          :class="activeIdx === index ? 'fill-[#0081A0] dark:fill-[#2091AA] font-black' : 'fill-neutral-800 dark:fill-neutral-200 font-bold'"
+          :style="{ fontSize: `${Math.max(12, Math.round(size * 0.036))}px` }"
+          @mouseenter="handleMouseEnter(index)"
+          @mouseleave="handleMouseLeave"
+          @click="handlePointClick(index)"
         >
-          {{ label.name }}
-          <tspan class="fill-[#2091AA] dark:fill-[#50AABF] font-extrabold ml-1">
+          <tspan>{{ label.name }}</tspan>
+          <tspan
+            :x="label.x"
+            dy="1.25em"
+            class="fill-[#0081A0] dark:fill-[#2091AA] font-extrabold tabular-nums"
+            :style="{ fontSize: `${Math.max(10.5, Math.round(size * 0.03))}px` }"
+          >
             ({{ items[index]?.score ?? 0 }}/{{ items[index]?.maxScore ?? 100 }})
           </tspan>
         </text>
       </g>
     </svg>
-
-    <!-- Interactive hover tooltip card -->
-    <div
-      v-if="hoveredIndex !== null && items[hoveredIndex]"
-      class="mt-3 px-3.5 py-2 rounded-xl bg-neutral-900 text-white text-xs sm:text-sm shadow-lg animate-fade-in flex items-center gap-2.5"
-    >
-      <span class="w-2.5 h-2.5 rounded-full bg-[#2091AA]" />
-      <span class="font-semibold">{{ items[hoveredIndex].name }}:</span>
-      <span class="font-bold text-gold tabular-nums">{{ items[hoveredIndex].score }} / {{ items[hoveredIndex].maxScore ?? 100 }}</span>
-      <span class="text-neutral-300 text-xs font-semibold">({{ Math.round((items[hoveredIndex].score / (items[hoveredIndex].maxScore ?? 100)) * 100) }}%)</span>
-    </div>
   </div>
 </template>
 
@@ -136,21 +145,53 @@ export interface RadarAspect {
   score: number
   maxScore?: number
   targetScore?: number
+  notes?: string
 }
 
 const props = withDefaults(
   defineProps<{
     items: RadarAspect[]
     size?: number
+    maxWidth?: number
     showTarget?: boolean
+    selectedIndex?: number | null
   }>(),
   {
     size: 320,
-    showTarget: false
+    maxWidth: undefined,
+    showTarget: false,
+    selectedIndex: null
   }
 )
 
+const emit = defineEmits<{
+  (e: 'hover', index: number | null): void
+  (e: 'select', index: number | null): void
+  (e: 'update:selectedIndex', index: number | null): void
+}>()
+
 const hoveredIndex = ref<number | null>(null)
+
+const activeIdx = computed(() => {
+  if (hoveredIndex.value !== null) return hoveredIndex.value
+  return props.selectedIndex !== undefined ? props.selectedIndex : null
+})
+
+function handleMouseEnter(index: number) {
+  hoveredIndex.value = index
+  emit('hover', index)
+}
+
+function handleMouseLeave() {
+  hoveredIndex.value = null
+  emit('hover', null)
+}
+
+function handlePointClick(index: number) {
+  const next = props.selectedIndex === index ? null : index
+  emit('select', next)
+  emit('update:selectedIndex', next)
+}
 
 const center = computed(() => props.size / 2)
 const radius = computed(() => (props.size / 2) - 52) // margin for outer text labels

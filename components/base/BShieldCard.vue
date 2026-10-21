@@ -9,13 +9,13 @@
     <!-- TOP SECTION: HEADER DENGAN PILLS CEK SYARAT DI POJOK KANAN ATAS -->
     <div class="space-y-3.5">
       <div class="flex items-center justify-between gap-2">
-        <span class="text-xs sm:text-sm font-sans font-medium text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
+        <span class="text-xs sm:text-sm  font-medium text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
           4 dari 5 Syarat Lengkap
         </span>
 
         <!-- Cek Syarat dibuat menjadi pills di pojok kanan atas -->
         <span
-          class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-heading font-semibold bg-primary-50 text-primary-700 dark:bg-primary-950/70 dark:text-primary-300 border border-primary-200/80 dark:border-primary-800/60 hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-colors whitespace-nowrap cursor-pointer"
+          class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs  font-semibold bg-primary-50 text-primary-700 dark:bg-primary-950/70 dark:text-primary-300 border border-primary-200/80 dark:border-primary-800/60 hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-colors whitespace-nowrap cursor-pointer"
         >
           <span>Cek Syarat</span>
           <span class="text-[10px]">→</span>
@@ -39,7 +39,7 @@
     <!-- BOTTOM SECTION: KONSISTEN PATOKAN DENGAN CARD LABA BERSIH (LABEL & METRIC BESAR DI BAWAH) -->
     <div class="space-y-1 mt-auto pt-3">
       <!-- Label "Kesiapan Modal" -->
-      <p class="text-xs sm:text-sm font-sans font-semibold text-neutral-600 dark:text-neutral-300 leading-snug">
+      <p class="text-xs sm:text-sm  font-semibold text-neutral-600 dark:text-neutral-300 leading-snug">
         {{ label }}
       </p>
 

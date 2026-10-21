@@ -1,142 +1,152 @@
 <template>
-  <div class="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto font-sans">
-    <!-- Main Two-Column Layout (Sticky Left on desktop) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-      <!-- Left Column: Sticky Title, Description & Quick Nav -->
-      <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
-        <div class="space-y-3">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-950/60 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 text-xs font-heading font-semibold">
-            <span>Pusat Bantuan & FAQ</span>
-          </div>
+  <div class="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-10 sm:space-y-12 font-sans">
+    
+    <!-- Top Header -->
+    <div class="max-w-2xl space-y-2 text-center mx-auto">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
+        Pertanyaan yang Sering Diajukan.
+      </h1>
 
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.08]">
-            Pertanyaan yang Sering Diajukan.
-          </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-poppins leading-relaxed max-w-xl mx-auto">
+        Temukan jawaban lengkap seputar validasi audit, pendampingan konsultan, keamanan data room, dan alur pendanaan UMKM.
+      </p>
+    </div>
 
-          <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-md">
-            Temukan jawaban lengkap seputar validasi audit, pendampingan konsultan, keamanan data room, dan alur pendanaan UMKM.
-          </p>
-        </div>
-
-        <!-- Category Selector Pills -->
-        <div class="space-y-2">
-          <p class="text-xs font-heading font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+    <!-- Main Content: Category selector & Accordions -->
+    <div class="flex flex-col gap-8 max-w-3xl mx-auto w-full">
+      
+      <!-- Category Selector Pills & Expand All Actions -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <p class="text-[11px] font-poppins font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
             Pilih Kategori Bantuan:
           </p>
-          <div class="flex flex-wrap gap-2">
+          <div class="flex items-center gap-2.5">
             <button
-              v-for="cat in categories"
-              :key="cat.id"
               type="button"
-              :class="[
-                'px-3.5 py-2 rounded-xl text-xs font-heading font-semibold transition-all duration-150',
-                selectedCategory === cat.id
-                  ? 'bg-primary-500 text-white shadow-xs'
-                  : 'bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark text-neutral-600 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-600'
-              ]"
-              @click="selectedCategory = cat.id"
+              class="text-xs font-poppins font-bold text-[#0081A0] dark:text-[#2091AA] hover:underline cursor-pointer"
+              @click="toggleAll(true)"
             >
-              {{ cat.label }}
+              Buka Semua
+            </button>
+            <span class="text-neutral-300 dark:text-neutral-700">•</span>
+            <button
+              type="button"
+              class="text-xs font-poppins font-medium text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:underline cursor-pointer"
+              @click="toggleAll(false)"
+            >
+              Tutup Semua
             </button>
           </div>
         </div>
 
-        <!-- Help Card Contact Widget -->
-        <div class="p-6 rounded-2xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-950 text-primary-600 flex items-center justify-center">
-            <HugeiconsIcon :icon="HelpCircleIcon" :size="20" :stroke-width="1.75" />
-          </div>
-          <h4 class="font-heading font-bold text-sm text-neutral-900 dark:text-white">
-            Butuh Bantuan Lebih Lanjut?
-          </h4>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-            Tim kurator dan spesialis Beruang siap mendiskusikan kelayakan usaha Anda secara langsung tanpa pungutan biaya awal.
-          </p>
-          <div class="pt-1">
-            <NuxtLink to="/kontak">
-              <BButton variant="outline" size="sm" class="w-full justify-center">
-                Hubungi Tim Beruang
-              </BButton>
-            </NuxtLink>
-          </div>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="cat in categories"
+            :key="cat.id"
+            type="button"
+            :class="[
+              'px-4 py-1.5 rounded-full text-xs font-poppins font-semibold transition-all duration-150 cursor-pointer',
+              selectedCategory === cat.id
+                ? 'bg-[#0081A0] text-white shadow-xs'
+                : 'bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-600'
+            ]"
+            @click="selectedCategory = cat.id"
+          >
+            {{ cat.label }}
+          </button>
         </div>
       </div>
 
-      <!-- Right Column: Accordion Questions List -->
-      <div class="lg:col-span-7 space-y-8">
+      <!-- FAQ Accordions -->
+      <div class="space-y-8">
         <!-- Section: UMKM FAQs -->
-        <div v-if="selectedCategory === 'all' || selectedCategory === 'umkm'" class="space-y-4">
-          <div class="flex items-center gap-2 pb-2 border-b border-border-light dark:border-border-dark">
-            <span class="w-2 h-2 rounded-full bg-primary-500" />
-            <h2 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+        <div v-if="selectedCategory === 'all' || selectedCategory === 'umkm'" class="space-y-3">
+          <div class="flex items-center gap-2 pb-2 border-b border-neutral-200/80 dark:border-neutral-800">
+            <span class="w-2 h-2 rounded-full bg-[#0081A0]" />
+            <h2 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
               Untuk Pemilik Usaha (UMKM)
             </h2>
           </div>
-          <BAccordion :items="umkmFaqs" default-open-id="umkm-1" />
+          <BAccordion ref="umkmAccordionRef" :items="umkmFaqs" default-open-id="umkm-1" :multiple="true" />
         </div>
 
         <!-- Section: Investor FAQs -->
-        <div v-if="selectedCategory === 'all' || selectedCategory === 'investor'" class="space-y-4">
-          <div class="flex items-center gap-2 pb-2 border-b border-border-light dark:border-border-dark">
+        <div v-if="selectedCategory === 'all' || selectedCategory === 'investor'" class="space-y-3">
+          <div class="flex items-center gap-2 pb-2 border-b border-neutral-200/80 dark:border-neutral-800">
             <span class="w-2 h-2 rounded-full bg-emerald-500" />
-            <h2 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
+            <h2 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
               Untuk Calon Investor & Pendana
             </h2>
           </div>
-          <BAccordion :items="investorFaqs" :default-open-id="selectedCategory === 'investor' ? 'inv-1' : ''" />
+          <BAccordion ref="investorAccordionRef" :items="investorFaqs" :multiple="true" />
         </div>
 
         <!-- Section: Konsultan FAQs -->
-        <div v-if="selectedCategory === 'all' || selectedCategory === 'konsultan'" class="space-y-4">
-          <div class="flex items-center gap-2 pb-2 border-b border-border-light dark:border-border-dark">
+        <div v-if="selectedCategory === 'all' || selectedCategory === 'konsultan'" class="space-y-3">
+          <div class="flex items-center gap-2 pb-2 border-b border-neutral-200/80 dark:border-neutral-800">
             <span class="w-2 h-2 rounded-full bg-amber-500" />
-            <h2 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-              Untuk Konsultan & Mitra Mentor
+            <h2 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
+              Untuk Konsultan Pendamping Mitra
             </h2>
           </div>
-          <BAccordion :items="konsultanFaqs" :default-open-id="selectedCategory === 'konsultan' ? 'kon-1' : ''" />
+          <BAccordion ref="konsultanAccordionRef" :items="konsultanFaqs" :multiple="true" />
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import BAccordion, { type AccordionItem } from '~/components/base/BAccordion.vue'
-import BButton from '~/components/base/BButton.vue'
-import { HugeiconsIcon } from '@hugeicons/vue'
-import { HelpCircleIcon } from '@hugeicons/core-free-icons'
 
-const selectedCategory = ref('all')
+useSeoMeta({
+  title: 'Pusat Bantuan & FAQ - Beruang',
+  description: 'Pertanyaan seputar validasi audit, pendampingan konsultan, dan alur permodalan UMKM di platform Beruang.'
+})
 
 const categories = [
   { id: 'all', label: 'Semua Topik' },
-  { id: 'umkm', label: 'UMKM' },
+  { id: 'umkm', label: 'Pemilik UMKM' },
   { id: 'investor', label: 'Investor' },
-  { id: 'konsultan', label: 'Konsultan' }
+  { id: 'konsultan', label: 'Konsultan BNSP' }
 ]
+
+const selectedCategory = ref('all')
+
+const umkmAccordionRef = ref<InstanceType<typeof BAccordion> | null>(null)
+const investorAccordionRef = ref<InstanceType<typeof BAccordion> | null>(null)
+const konsultanAccordionRef = ref<InstanceType<typeof BAccordion> | null>(null)
+
+function toggleAll(open: boolean) {
+  if (open) {
+    umkmAccordionRef.value?.openAll()
+    investorAccordionRef.value?.openAll()
+    konsultanAccordionRef.value?.openAll()
+  } else {
+    umkmAccordionRef.value?.closeAll()
+    investorAccordionRef.value?.closeAll()
+    konsultanAccordionRef.value?.closeAll()
+  }
+}
 
 const umkmFaqs: AccordionItem[] = [
   {
     id: 'umkm-1',
-    title: 'Apakah pendaftaran dan pendampingan awal UMKM dipungut biaya?',
-    content: 'Pendaftaran akun, diagnosa mandiri kelayakan usaha, dan modul rencana aksi dasar 100% gratis tanpa biaya tersembunyi. Program pendampingan intensif bersama konsultan tersertifikasi didanai melalui skema hibah mitra inkubator dan bagi hasil sukses.'
+    title: 'Berapa biaya awal untuk mengikuti proses kurasi dan diagnosa awal?',
+    content: 'Diagnosa awal 5 pilar fundamental (arus kas, margin, legalitas, operasional, pasar) serta penerbitan ringkasan skor kelayakan tidak dipungut biaya (100% gratis). Biaya pendampingan intensif hanya berlaku jika Anda memilih bimbingan mingguan bersama konsultan berlisensi BNSP.'
   },
   {
     id: 'umkm-2',
-    title: 'Bagaimana cara mendapatkan predikat "Ready for Funding"?',
-    content: 'Usaha Anda harus melewati 4 tahapan validasi: (1) Skor kesehatan fundamental minimal 75 poin pada radar 5 aspek, (2) Rekonsiliasi kas dan arus kas rapi selama minimal 3 bulan berturut-turut, (3) Kelengkapan izin legalitas usaha (NIB, sertifikat Halal/P-IRT jika relevan), dan (4) Rekomendasi verifikasi resmi dari konsultan pembimbing.'
+    title: 'Apakah Beruang menjamin usahaku pasti mendapatkan dana dari investor?',
+    content: 'Beruang tidak menjamin pemberian modal langsung, melainkan menjamin bahwa profil usaha Anda memenuhi standar akuntabilitas permodalan (Ready for Funding). Dengan catatan keuangan yang diaudit dan tervariasi, peluang kesepakatan bagi hasil dengan investor di katalog kami meningkat signifikan dibanding pengajuan mandiri.'
   },
   {
     id: 'umkm-3',
-    title: 'Apakah nominal rupiah omzet dan laba usaha saya akan terlihat oleh publik?',
-    content: 'Tidak. Kami menerapkan perlindungan privasi mutlak. Di katalog publik, data keuangan Anda hanya disajikan dalam bentuk rasio persentase (margin kotor %, pertumbuhan YoY %, dan skor audit). Nominal riil Rupiah dan buku besar kas hanya dapat diakses di dalam Data Room ber-watermark oleh investor yang permohonan aksesnya telah Anda setujui secara sadar.'
-  },
-  {
-    id: 'umkm-4',
-    title: 'Berapa lama rata-rata proses pendampingan hingga siap didanai?',
-    content: 'Rata-rata UMKM yang aktif menyelesaikan rencana aksi mingguan membutuhkan waktu antara 6 hingga 10 minggu untuk merapikan pembukuan dan memvalidasi unit economics hingga diterbitkan sertifikat Ready for Funding.'
+    title: 'Bagaimana keamanan data pembukuan dan resep rahasia bisnis saya?',
+    content: 'Data detail P&L dan rekening koran hanya disimpan di Data Room terlindungi dengan enkripsi AES-256. Calon investor yang ingin melihat data lengkap wajib meminta izin secara eksplisit kepada founder, dan setiap lembar dokumen akan dibubuhi watermark digital identitas peminta.'
   }
 ]
 

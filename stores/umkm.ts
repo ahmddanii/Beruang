@@ -17,6 +17,7 @@ export interface ActionPlanTask {
   description: string
   category: 'Finansial' | 'Operasional' | 'Pemasaran' | 'Legalitas' | 'Tata Kelola'
   completed: boolean
+  status?: 'TODO' | 'IN_PROGRESS' | 'DONE'
   dueDate: string
   milestoneId: string
   consultantNote?: string
@@ -516,6 +517,14 @@ export const useUmkmStore = defineStore('umkm', {
       }
     },
 
+    setTaskStatus(taskId: string, status: 'TODO' | 'IN_PROGRESS' | 'DONE') {
+      const task = this.tasks.find(t => t.id === taskId)
+      if (task) {
+        task.status = status
+        task.completed = status === 'DONE'
+      }
+    },
+
     /**
      * PATCH /api/umkm/tasks/{id}/toggle
      */
@@ -523,11 +532,36 @@ export const useUmkmStore = defineStore('umkm', {
       const task = this.tasks.find(t => t.id === taskId)
       if (task) {
         task.completed = !task.completed
+        task.status = task.completed ? 'DONE' : 'TODO'
         try {
           await useApi(`/umkm/tasks/${taskId}/toggle`, { method: 'PATCH' })
         } catch (err: any) {
           console.warn('Gagal sinkron toggle task ke live API:', err?.message)
         }
+      }
+    },
+
+    /**
+     * PUT /api/umkm/profile
+     */
+    async updateProfile(payload: any) {
+      this.profile = {
+        ...this.profile,
+        ...payload
+      }
+      try {
+        const res = await useApi<any>('/umkm/profile', {
+          method: 'PUT',
+          body: payload
+        })
+        if (res.data) {
+          this.profile = {
+            ...this.profile,
+            ...res.data
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal perbarui profil UMKM ke live API:', err?.message)
       }
     },
 

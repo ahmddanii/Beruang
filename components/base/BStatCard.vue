@@ -11,7 +11,7 @@
     <div>
       <!-- Top Label & Badge/Action -->
       <div class="flex items-start justify-between gap-2 mb-3">
-        <span class="text-sm font-sans font-semibold text-neutral-700 dark:text-neutral-200 leading-snug">
+        <span class="text-sm  font-semibold text-neutral-700 dark:text-neutral-200 leading-snug">
           {{ label }}
         </span>
         <div v-if="$slots.badge || badgeText" class="shrink-0">
@@ -19,7 +19,7 @@
             <span
               v-if="badgeText"
               :class="[
-                'inline-flex items-center gap-1 text-xs font-sans font-semibold px-2.5 py-0.5 rounded-md border whitespace-nowrap',
+                'inline-flex items-center gap-1 text-xs  font-semibold px-2.5 py-0.5 rounded-md border whitespace-nowrap',
                 badgeVariantClass
               ]"
             >
@@ -32,7 +32,7 @@
       <!-- Main Metric Amount -->
       <div class="space-y-1.5">
         <div class="flex flex-wrap items-baseline gap-2">
-          <span class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-tight whitespace-nowrap">
+          <span class="text-2xl sm:text-3xl  font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-tight whitespace-nowrap">
             {{ value }}
           </span>
           <span
@@ -46,7 +46,7 @@
           </span>
         </div>
 
-        <p v-if="subtitle" class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
+        <p v-if="subtitle" class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300  leading-relaxed">
           {{ subtitle }}
         </p>
       </div>

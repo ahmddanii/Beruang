@@ -1,109 +1,167 @@
 <template>
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 space-y-10">
-    <div class="max-w-2xl space-y-2">
-      <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 block">
-        § 03 // ALUR PROTOKOL PENDAMPINGAN
-      </span>
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight">
-        Pipa Audit Bertahap Menuju Akses Permodalan
-      </h2>
-      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
-        Tahapan terstruktur yang dirancang agar usaha mikro dan kecil memiliki tata kelola akuntabel yang dipercaya oleh sindikasi angel investor.
-      </p>
-    </div>
-
-    <!-- Sequential Audit Pipeline Ledger (Anti-Slop: Structured pipeline instead of 3 identical white boxes) -->
-    <div class="rounded-3xl bg-white dark:bg-[#151519] border border-neutral-200/90 dark:border-neutral-800 divide-y divide-neutral-200/80 dark:divide-neutral-800 shadow-xs overflow-hidden">
-      <!-- Stage 1 -->
-      <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hover:bg-neutral-50/50 dark:hover:bg-neutral-900/40 transition-colors">
-        <div class="lg:col-span-3 space-y-1">
-          <span class="text-[10px] font-mono font-extrabold text-primary-600 dark:text-primary-400 uppercase tracking-wider">
-            FASE 01 // MINGGU 1 - 2
-          </span>
-          <h3 class="font-heading font-extrabold text-lg text-neutral-900 dark:text-white">
-            Diagnosis 5 Pilar
-          </h3>
-          <span class="inline-block text-[11px] font-mono text-neutral-400">Durasi: 14 Hari Kerja</span>
-        </div>
-
-        <div class="lg:col-span-5 space-y-2">
-          <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-            Konsultan pendamping BNSP memeriksa struktur biaya bahan baku, arus kas kasir, izin dasar (NIB), dan pembagian peran tim.
-          </p>
-          <div class="flex items-center gap-2 text-xs font-mono text-neutral-500">
-            <span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ Hasil:</span>
-            <span>Rapor skor kesehatan bisnis 5 pilar (0–100)</span>
-          </div>
-        </div>
-
-        <div class="lg:col-span-4 p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 text-xs font-mono space-y-1">
-          <span class="text-[10px] uppercase font-bold text-neutral-400 block">Deliverable Resmi</span>
-          <span class="font-bold text-neutral-900 dark:text-white block">Dokumen Audit Diagnosa Awal</span>
-          <span class="text-[11px] text-neutral-500 block font-sans">Menemukan titik kebocoran kas usaha</span>
-        </div>
+  <section class="w-full max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 pb-16 sm:pb-24 font-sans">
+    <div class="flex flex-col gap-10 sm:gap-12">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col items-center gap-2.5 text-center max-w-3xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+          Perjalanan Menuju Akses Permodalan
+        </h2>
+        <p class="text-xs sm:text-sm lg:text-base text-neutral-600 dark:text-neutral-400 font-poppins leading-relaxed max-w-xl">
+          Tahapan terstruktur yang dirancang agar usahamu memiliki tata kelola akuntabel dan siap dipercaya oleh investor.
+        </p>
       </div>
 
-      <!-- Stage 2 -->
-      <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hover:bg-neutral-50/50 dark:hover:bg-neutral-900/40 transition-colors">
-        <div class="lg:col-span-3 space-y-1">
-          <span class="text-[10px] font-mono font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
-            FASE 02 // BULAN 2 - 3
-          </span>
-          <h3 class="font-heading font-extrabold text-lg text-neutral-900 dark:text-white">
-            Validasi Pembukuan & SOP
-          </h3>
-          <span class="inline-block text-[11px] font-mono text-neutral-400">Durasi: 60 Hari Disiplin</span>
-        </div>
+      <!-- 3-Step Process Bento Cards (Mengikuti Card Tactile Banner Biru Beranda) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 lg:gap-8 items-stretch">
+        
+        <!-- Step 1 -->
+        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between select-none h-full shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04)] transition-all duration-200">
+          <!-- Top Blue Banner -->
+          <div class="w-full px-6 py-3.5 card-header-blue-banner flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+                TAHAP 01
+              </span>
+            </div>
+            <span class="text-[11px] font-poppins text-white/80 font-medium">Minggu 1-2</span>
+          </div>
 
-        <div class="lg:col-span-5 space-y-2">
-          <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-            Eksekusi checklist rencana aksi: pemisahan rekening bank usaha, pembuatan kartu stok harian, dan pencatatan kas bulanan via Beruang.
-          </p>
-          <div class="flex items-center gap-2 text-xs font-mono text-neutral-500">
-            <span class="text-amber-600 dark:text-amber-400 font-bold">⚠️ Syarat:</span>
-            <span>Konsistensi 3 bulan tanpa defisit arus kas</span>
+          <!-- Bottom Content Box -->
+          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-6 sm:p-7 flex flex-col justify-between flex-1 gap-5">
+            <div class="space-y-2.5">
+              <h3 class="text-base sm:text-lg lg:text-xl font-poppins font-bold text-neutral-900 dark:text-white leading-snug">
+                Diagnosa Awal & Skor Kesiapan
+              </h3>
+              <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Konsultan pendamping memeriksa struktur bisnismu secara objektif, mulai dari izin usaha, arus kas riil, hingga model unit economics.
+              </p>
+              <div class="pt-2 flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] sm:text-xs font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  Audit 5 Aspek
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] sm:text-xs font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  Deteksi Kebocoran
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <NuxtLink to="/daftar" class="btn-pill-action group">
+                <span>Mulai Diagnosa</span>
+                <svg class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
-        <div class="lg:col-span-4 p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 text-xs font-mono space-y-1">
-          <span class="text-[10px] uppercase font-bold text-neutral-400 block">Deliverable Resmi</span>
-          <span class="font-bold text-neutral-900 dark:text-white block">Buku Kas Tervalidasi BNSP</span>
-          <span class="text-[11px] text-neutral-500 block font-sans">Rekam jejak keuangan siap uji tuntas</span>
-        </div>
-      </div>
+        <!-- Step 2 -->
+        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between select-none h-full shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04)] transition-all duration-200">
+          <!-- Top Blue Banner -->
+          <div class="w-full px-6 py-3.5 card-header-blue-banner flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+                TAHAP 02
+              </span>
+            </div>
+            <span class="text-[11px] font-poppins text-white/80 font-medium">Minggu 3-8</span>
+          </div>
 
-      <!-- Stage 3 -->
-      <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hover:bg-neutral-50/50 dark:hover:bg-neutral-900/40 transition-colors">
-        <div class="lg:col-span-3 space-y-1">
-          <span class="text-[10px] font-mono font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-            FASE 03 // BULAN 4+
-          </span>
-          <h3 class="font-heading font-extrabold text-lg text-neutral-900 dark:text-white">
-            Sertifikasi & Data Room
-          </h3>
-          <span class="inline-block text-[11px] font-mono text-neutral-400">Funding Gate Lolos</span>
-        </div>
+          <!-- Bottom Content Box -->
+          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-6 sm:p-7 flex flex-col justify-between flex-1 gap-5">
+            <div class="space-y-2.5">
+              <h3 class="text-base sm:text-lg lg:text-xl font-poppins font-bold text-neutral-900 dark:text-white leading-snug">
+                Bina Usaha & Disiplin Kas
+              </h3>
+              <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Rancang dan jalankan SOP operasional, pisahkan kas pribadi dan kas warung, serta kontrol margin bahan baku secara harian.
+              </p>
+              <div class="pt-2 flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] sm:text-xs font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  SOP Gerai
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] sm:text-xs font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  Pendampingan BNSP
+                </span>
+              </div>
+            </div>
 
-        <div class="lg:col-span-5 space-y-2">
-          <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-            Penerbitan akreditasi <strong>Ready for Funding Grade A</strong>. Profil tokomu masuk ke kurasi marketplace sindikasi investor untuk temu modal ekspansi.
-          </p>
-          <div class="flex items-center gap-2 text-xs font-mono text-neutral-500">
-            <span class="text-emerald-600 dark:text-emerald-400 font-bold">🚀 Hasil:</span>
-            <span>Akses penawaran tiket modal Rp 50 Jt - Rp 500 Jt</span>
+            <div class="pt-2">
+              <NuxtLink to="/untuk-umkm" class="btn-pill-action group">
+                <span>Pelajari Pendampingan</span>
+                <svg class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
-        <div class="lg:col-span-4 p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs font-mono space-y-1">
-          <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block">Status Tertinggi</span>
-          <span class="font-bold text-emerald-900 dark:text-emerald-200 block">Sertifikat Grade A BNSP</span>
-          <span class="text-[11px] text-neutral-600 dark:text-neutral-300 block font-sans">Akses Data Room dibuka untuk investor</span>
+        <!-- Step 3 -->
+        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner overflow-hidden flex flex-col justify-between select-none h-full shadow-[0_4px_20px_-2px_rgba(15,23,42,0.04)] transition-all duration-200">
+          <!-- Top Blue Banner -->
+          <div class="w-full px-6 py-3.5 card-header-blue-banner flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-white">
+                TAHAP 03
+              </span>
+            </div>
+            <span class="text-[11px] font-poppins text-white/80 font-medium">Lolos Kurasi</span>
+          </div>
+
+          <!-- Bottom Content Box -->
+          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] p-6 sm:p-7 flex flex-col justify-between flex-1 gap-5">
+            <div class="space-y-2.5">
+              <h3 class="text-base sm:text-lg lg:text-xl font-poppins font-bold text-neutral-900 dark:text-white leading-snug">
+                Sertifikasi & Temui Investor
+              </h3>
+              <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                Raih sertifikasi Grade A, buka Data Room ber-watermark digital, dan terbitkan prospektus di katalog investasi tanpa skema utang riba.
+              </p>
+              <div class="pt-2 flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] sm:text-xs font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  Data Room Aman
+                </span>
+                <span class="px-2.5 py-1 rounded-md bg-white dark:bg-neutral-800 text-[11px] sm:text-xs font-poppins text-neutral-600 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                  Bagi Hasil Sehat
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <NuxtLink to="/investor" class="btn-pill-action group">
+                <span>Katalog Investor</span>
+                <svg class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-// Anti-slop sequential audit pipeline ledger
+// Tactile Process Steps aligned with Beranda UMKM design system
 </script>

@@ -1518,6 +1518,9 @@ onMounted(() => {
     authStore.updateAvatar(umkmStore.profile.ownerAvatarUrl)
   }
 
+  // Fetch live dashboard data from API
+  umkmStore.fetchDashboardData()
+
   // GSAP Entrance
   gsap.from('.gsap-header', {
     opacity: 0,

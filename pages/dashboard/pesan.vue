@@ -319,7 +319,8 @@ function sendQuickMessage(text: string) {
   scrollToBottom()
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await chatStore.fetchThreads()
   if (chatStore.activeThreadId) {
     chatStore.markAsRead(chatStore.activeThreadId, 'UMKM')
     scrollToBottom()

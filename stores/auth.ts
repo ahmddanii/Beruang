@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useApi } from '~/composables/useApi'
 
 export type UserRole = 'UMKM' | 'CONSULTANT' | 'INVESTOR' | 'ADMIN'
 
@@ -9,14 +10,45 @@ export interface UserProfile {
   role: UserRole
   avatar?: string
   businessName?: string
+  orgName?: string
   phone?: string
   verified?: boolean
+  emailVerified?: boolean
+  phoneVerified?: boolean
+  status?: string
+}
+
+const DEMO_CREDENTIALS: Record<UserRole, { email: string; pass: string; name: string; businessName: string }> = {
+  UMKM: {
+    email: 'fikri@kopisenja.id',
+    pass: 'password123',
+    name: 'Fikri Setiawan',
+    businessName: 'Kopi Senja Nusantara'
+  },
+  CONSULTANT: {
+    email: 'maya.suryani@beruang.id',
+    pass: 'password123',
+    name: 'Dra. Maya Suryani, M.M.',
+    businessName: 'Suryani Consulting & Advisory'
+  },
+  INVESTOR: {
+    email: 'hendro@nusantaraventures.com',
+    pass: 'password123',
+    name: 'Hendro Wicaksono',
+    businessName: 'Nusantara Angel Syndicate'
+  },
+  ADMIN: {
+    email: 'admin@beruang.id',
+    pass: 'password123',
+    name: 'Super Admin Beruang',
+    businessName: 'Operations Team'
+  }
 }
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     currentUser: {
-      id: 'usr-1',
+      id: '5',
       name: 'Fikri Setiawan',
       email: 'fikri@kopisenja.id',
       role: 'UMKM' as UserRole,
@@ -26,48 +58,212 @@ export const useAuthStore = defineStore('auth', {
       verified: true
     } as UserProfile | null,
     isAuthenticated: true,
-    token: 'mock-jwt-token-beruang-2026'
+    token: '' as string,
+    loading: false,
+    error: null as string | null
   }),
 
   actions: {
-    setRole(role: UserRole) {
-      if (!this.currentUser) return
-      this.currentUser.role = role
-      if (role === 'UMKM') {
-        this.currentUser.name = 'Fikri Setiawan'
-        this.currentUser.email = 'fikri@kopisenja.id'
-        this.currentUser.businessName = 'Kopi Senja Nusantara'
-      } else if (role === 'CONSULTANT') {
-        this.currentUser.name = 'Dra. Maya Suryani, M.M.'
-        this.currentUser.email = 'maya.suryani@beruang.id'
-        this.currentUser.businessName = 'Senior Business Consultant'
-      } else if (role === 'INVESTOR') {
-        this.currentUser.name = 'Hendro Wicaksono'
-        this.currentUser.email = 'hendro@nusantaraventures.com'
-        this.currentUser.businessName = 'Nusantara Angel Syndicate'
-      } else if (role === 'ADMIN') {
-        this.currentUser.name = 'Super Admin Beruang'
-        this.currentUser.email = 'admin@beruang.id'
-        this.currentUser.businessName = 'Operations Team'
+    /**
+     * Inisialisasi sesi dari cookie 'beruang_token' saat aplikasi dimuat
+     */
+    async initSession() {
+      const tokenCookie = useCookie<string | null>('beruang_token')
+      if (tokenCookie.value) {
+        this.token = tokenCookie.value
+        this.isAuthenticated = true
+        await this.fetchMe()
       }
     },
 
-    login(email: string, role: UserRole = 'UMKM') {
-      this.isAuthenticated = true
-      this.setRole(role)
-      if (this.currentUser) {
-        this.currentUser.email = email
+    /**
+     * Ambil data profil user terbaru dari token aktif
+     */
+    async fetchMe() {
+      try {
+        const res = await useApi<UserProfile>('/auth/me')
+        if (res.data) {
+          this.currentUser = {
+            ...res.data,
+            businessName: res.data.businessName || res.data.orgName || this.currentUser?.businessName
+          }
+          this.isAuthenticated = true
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat profil pengguna dari backend:', err?.message)
       }
     },
 
-    logout() {
-      this.isAuthenticated = false
-      this.token = ''
+    /**
+     * Login via Email & Password ke backend live Laravel Sanctum
+     */
+    async login(email: string, password: string = 'password123') {
+      this.loading = true
+      this.error = null
+      try {
+        const res = await useApi<{ token: string; user: UserProfile }>('/auth/login', {
+          method: 'POST',
+          body: { email, password }
+        })
+
+        const tokenCookie = useCookie<string | null>('beruang_token', {
+          maxAge: 60 * 60 * 24 * 7,
+          sameSite: 'lax',
+          path: '/'
+        })
+
+        tokenCookie.value = res.data.token
+        this.token = res.data.token
+        this.currentUser = {
+          ...res.data.user,
+          businessName: res.data.user.businessName || res.data.user.orgName
+        }
+        this.isAuthenticated = true
+        return res.data
+      } catch (err: any) {
+        this.error = err?.message || 'Login gagal'
+        throw err
+      } finally {
+        this.loading = false
+      }
     },
 
-    updateAvatar(avatarUrl: string) {
+    /**
+     * Kirim OTP WhatsApp
+     */
+    async sendWhatsAppOtp(phone: string) {
+      return await useApi('/auth/send-whatsapp-otp', {
+        method: 'POST',
+        body: { phone }
+      })
+    },
+
+    /**
+     * Verifikasi OTP WhatsApp & Login
+     */
+    async verifyPhoneOtp(phone: string, otp: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const res = await useApi<{ token: string; user: UserProfile }>('/auth/verify-phone-otp', {
+          method: 'POST',
+          body: { phone, otp }
+        })
+
+        const tokenCookie = useCookie<string | null>('beruang_token', {
+          maxAge: 60 * 60 * 24 * 7,
+          sameSite: 'lax',
+          path: '/'
+        })
+
+        tokenCookie.value = res.data.token
+        this.token = res.data.token
+        this.currentUser = {
+          ...res.data.user,
+          businessName: res.data.user.businessName || res.data.user.orgName
+        }
+        this.isAuthenticated = true
+        return res.data
+      } catch (err: any) {
+        this.error = err?.message || 'Verifikasi OTP gagal'
+        throw err
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * Registrasi Akun Baru
+     */
+    async register(payload: {
+      name: string
+      email: string
+      password: string
+      role: UserRole
+      phone?: string
+      orgName?: string
+    }) {
+      this.loading = true
+      this.error = null
+      try {
+        const res = await useApi<{ token: string; user: UserProfile }>('/auth/register', {
+          method: 'POST',
+          body: payload
+        })
+
+        if (res.data?.token) {
+          const tokenCookie = useCookie<string | null>('beruang_token', {
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+            path: '/'
+          })
+          tokenCookie.value = res.data.token
+          this.token = res.data.token
+          this.currentUser = res.data.user
+          this.isAuthenticated = true
+        }
+
+        return res.data
+      } catch (err: any) {
+        this.error = err?.message || 'Pendaftaran gagal'
+        throw err
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * Quick Role Switcher untuk keperluan simulasi dev / demo
+     * Otomatis login dengan akun seeder live yang relevan jika password default tersedia
+     */
+    async setRole(role: UserRole) {
+      const demo = DEMO_CREDENTIALS[role]
+      if (demo) {
+        try {
+          await this.login(demo.email, demo.pass)
+        } catch {
+          // Fallback lokal jika backend tidak terjangkau
+          if (this.currentUser) {
+            this.currentUser.role = role
+            this.currentUser.name = demo.name
+            this.currentUser.email = demo.email
+            this.currentUser.businessName = demo.businessName
+          }
+        }
+      }
+    },
+
+    /**
+     * Logout dan cabut token
+     */
+    async logout() {
+      try {
+        await useApi('/auth/logout', { method: 'POST' })
+      } catch {
+        // Abaikan error saat logout
+      } finally {
+        const tokenCookie = useCookie<string | null>('beruang_token')
+        tokenCookie.value = null
+        this.token = ''
+        this.currentUser = null
+        this.isAuthenticated = false
+      }
+    },
+
+    /**
+     * Perbarui Avatar Pengguna
+     */
+    async updateAvatar(avatarUrl: string) {
       if (this.currentUser) {
         this.currentUser.avatar = avatarUrl
+      }
+      try {
+        await useApi('/auth/me/avatar', {
+          method: 'PUT',
+          body: { avatarUrl }
+        })
+      } catch (err: any) {
+        console.warn('Gagal sinkronisasi avatar ke backend:', err?.message)
       }
     }
   }

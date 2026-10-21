@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useApi } from '~/composables/useApi'
 
 export interface ClientUmkm {
   id: string
@@ -153,7 +154,72 @@ export const useKonsultanStore = defineStore('konsultan', {
   }),
 
   actions: {
-    approveValidation(validationId: string) {
+    /**
+     * Memuat seluruh dataset dashboard konsultan dari live backend
+     */
+    async fetchDashboard() {
+      await Promise.allSettled([
+        this.fetchClients(),
+        this.fetchValidations(),
+        this.fetchAlerts()
+      ])
+    },
+
+    /**
+     * GET /api/consultant/clients
+     */
+    async fetchClients() {
+      try {
+        const res = await useApi<any>('/consultant/clients')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.clients = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat klien konsultan live:', err?.message)
+      }
+    },
+
+    /**
+     * GET /api/consultant/validations
+     */
+    async fetchValidations() {
+      try {
+        const res = await useApi<any>('/consultant/validations')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list)) {
+            this.validationsQueue = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat antrean validasi konsultan:', err?.message)
+      }
+    },
+
+    /**
+     * GET /api/consultant/alerts
+     */
+    async fetchAlerts() {
+      try {
+        const res = await useApi<any>('/consultant/alerts')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.alerts = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat alerts konsultan:', err?.message)
+      }
+    },
+
+    /**
+     * PATCH /api/consultant/validations/monthly/{id}/approve
+     */
+    async approveValidation(validationId: string) {
       const idx = this.validationsQueue.findIndex(v => v.id === validationId)
       if (idx !== -1) {
         const item = this.validationsQueue[idx]
@@ -161,23 +227,64 @@ export const useKonsultanStore = defineStore('konsultan', {
         if (client) client.monthlyStatus = 'VERIFIED'
         this.validationsQueue.splice(idx, 1)
       }
+
+      try {
+        await useApi(`/consultant/validations/monthly/${validationId}/approve`, { method: 'PATCH' })
+      } catch (err: any) {
+        console.warn('Gagal approve validasi ke live API:', err?.message)
+      }
     },
 
-    rejectValidation(validationId: string) {
+    /**
+     * PATCH /api/consultant/validations/monthly/{id}/reject
+     */
+    async rejectValidation(validationId: string) {
       this.validationsQueue = this.validationsQueue.filter(v => v.id !== validationId)
+      try {
+        await useApi(`/consultant/validations/monthly/${validationId}/reject`, { method: 'PATCH' })
+      } catch (err: any) {
+        console.warn('Gagal reject validasi ke live API:', err?.message)
+      }
     },
 
-    certifyClientReady(clientId: string) {
+    /**
+     * POST /api/consultant/clients/{clientId}/certify
+     */
+    async certifyClientReady(clientId: string, fundingTicket?: number, roiNote?: string) {
       const client = this.clients.find(c => c.id === clientId)
       if (client) {
         client.fundingStatus = 'READY_FOR_FUNDING'
         client.lastAuditDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
       }
+
+      try {
+        await useApi(`/consultant/clients/${clientId}/certify`, {
+          method: 'POST',
+          body: {
+            statementTransparency: true,
+            statementLegal: true,
+            statementRationalPlan: true,
+            recommendedFundingTicket: fundingTicket || 250000000,
+            expectedPaybackNote: roiNote || 'Bagi hasil terukur'
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal sertifikasi klien ke live API:', err?.message)
+      }
     },
 
-    dismissAlert(alertId: string) {
+    /**
+     * PATCH /api/consultant/alerts/{id}/dismiss
+     */
+    async dismissAlert(alertId: string) {
       const alert = this.alerts.find(a => a.id === alertId)
       if (alert) alert.dismissed = true
+
+      try {
+        await useApi(`/consultant/alerts/${alertId}/dismiss`, { method: 'PATCH' })
+      } catch (err: any) {
+        console.warn('Gagal dismiss alert ke live API:', err?.message)
+      }
     }
   }
 })

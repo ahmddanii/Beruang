@@ -329,10 +329,12 @@ const selectedFilter = ref<'ALL' | 'UNREAD' | NotificationCategory>('ALL')
 
 onMounted(() => {
   notificationStore.initNotifications()
+  notificationStore.fetchNotifications()
 })
 
 function handleRefresh() {
   notificationStore.initNotifications(true)
+  notificationStore.fetchNotifications()
 }
 
 function resetFilters() {

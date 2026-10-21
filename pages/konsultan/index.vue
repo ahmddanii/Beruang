@@ -359,7 +359,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useKonsultanStore } from '~/stores/konsultan'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -383,6 +383,13 @@ const search = ref('')
 const isAnomalyResolved = ref(false)
 const showValidationModal = ref(false)
 const isValidationApproved = ref(false)
+
+onMounted(() => {
+  konsultanStore.fetchDashboard()
+  konsultanStore.fetchClients()
+  konsultanStore.fetchValidations()
+  konsultanStore.fetchAlerts()
+})
 
 function resolveAnomaly() {
   isAnomalyResolved.value = true

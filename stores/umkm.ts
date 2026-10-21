@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useApi } from '~/composables/useApi'
 
 export interface AssessmentAspect {
   id: string
@@ -449,13 +450,90 @@ export const useUmkmStore = defineStore('umkm', {
   },
 
   actions: {
-    toggleTask(taskId: string) {
-      const task = this.tasks.find(t => t.id === taskId)
-      if (task) {
-        task.completed = !task.completed
+    /**
+     * Memuat seluruh dataset dashboard UMKM dari live backend
+     */
+    async fetchDashboardData() {
+      await Promise.allSettled([
+        this.fetchProfile(),
+        this.fetchAssessment(),
+        this.fetchTasks(),
+        this.fetchFinances(),
+        this.fetchInvestorRequests()
+      ])
+    },
+
+    /**
+     * GET /api/umkm/profile
+     */
+    async fetchProfile() {
+      try {
+        const res = await useApi<any>('/umkm/profile')
+        if (res.data) {
+          this.profile = {
+            ...this.profile,
+            ...res.data,
+            name: res.data.name || res.data.brand || this.profile.name
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat profil UMKM:', err?.message)
       }
     },
 
+    /**
+     * GET /api/umkm/assessment
+     */
+    async fetchAssessment() {
+      try {
+        const res = await useApi<any>('/umkm/assessment')
+        if (res.data?.aspects && Array.isArray(res.data.aspects)) {
+          this.assessmentAspects = res.data.aspects
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat assessment UMKM:', err?.message)
+      }
+    },
+
+    /**
+     * GET /api/umkm/tasks & /api/umkm/milestones
+     */
+    async fetchTasks() {
+      try {
+        const [tasksRes, milestonesRes] = await Promise.allSettled([
+          useApi<any[]>('/umkm/tasks'),
+          useApi<any[]>('/umkm/milestones')
+        ])
+
+        if (tasksRes.status === 'fulfilled' && tasksRes.value?.data && Array.isArray(tasksRes.value.data)) {
+          this.tasks = tasksRes.value.data
+        }
+        if (milestonesRes.status === 'fulfilled' && milestonesRes.value?.data && Array.isArray(milestonesRes.value.data)) {
+          this.milestones = milestonesRes.value.data
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat tasks UMKM:', err?.message)
+      }
+    },
+
+    /**
+     * PATCH /api/umkm/tasks/{id}/toggle
+     */
+    async toggleTask(taskId: string) {
+      const task = this.tasks.find(t => t.id === taskId)
+      if (task) {
+        task.completed = !task.completed
+        try {
+          await useApi(`/umkm/tasks/${taskId}/toggle`, { method: 'PATCH' })
+        } catch (err: any) {
+          console.warn('Gagal sinkron toggle task ke live API:', err?.message)
+        }
+      }
+    },
+
+    /**
+     * Tambah rencana aksi baru
+     */
     addTask(task: Omit<ActionPlanTask, 'id' | 'completed'>) {
       const newId = `t-${Date.now()}`
       this.tasks.push({
@@ -465,35 +543,132 @@ export const useUmkmStore = defineStore('umkm', {
       })
     },
 
-    addDailyTransaction(tx: Omit<DailyTransaction, 'id' | 'status'>) {
+    /**
+     * GET /api/finances/summary, /api/finances/daily, /api/umkm/monthly-reports
+     */
+    async fetchFinances() {
+      try {
+        const [dailyRes, monthlyRes] = await Promise.allSettled([
+          useApi<any>('/finances/daily'),
+          useApi<any>('/umkm/monthly-reports')
+        ])
+
+        if (dailyRes.status === 'fulfilled' && dailyRes.value?.data) {
+          const list = Array.isArray(dailyRes.value.data) ? dailyRes.value.data : (dailyRes.value.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.dailyTransactions = list
+          }
+        }
+
+        if (monthlyRes.status === 'fulfilled' && monthlyRes.value?.data) {
+          const mList = Array.isArray(monthlyRes.value.data) ? monthlyRes.value.data : (monthlyRes.value.data as any).data
+          if (Array.isArray(mList) && mList.length > 0) {
+            this.monthlyRecords = mList
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat data keuangan live:', err?.message)
+      }
+    },
+
+    /**
+     * POST /api/finances/daily
+     */
+    async addDailyTransaction(tx: Omit<DailyTransaction, 'id' | 'status'>) {
+      const localId = `tx-${Date.now()}`
       const newTx: DailyTransaction = {
         ...tx,
-        id: `tx-${Date.now()}`,
+        id: localId,
         status: 'VERIFIED'
       }
       this.dailyTransactions.unshift(newTx)
+
+      try {
+        const res = await useApi<DailyTransaction>('/finances/daily', {
+          method: 'POST',
+          body: tx
+        })
+        if (res.data) {
+          const idx = this.dailyTransactions.findIndex(t => t.id === localId)
+          if (idx !== -1) {
+            this.dailyTransactions[idx] = res.data
+          }
+          return res.data
+        }
+      } catch (err: any) {
+        console.warn('Gagal simpan transaksi ke backend, tersimpan di state lokal:', err?.message)
+      }
     },
 
-    deleteDailyTransaction(txId: string) {
+    /**
+     * DELETE /api/finances/daily/{id}
+     */
+    async deleteDailyTransaction(txId: string) {
       this.dailyTransactions = this.dailyTransactions.filter(t => t.id !== txId)
+      try {
+        await useApi(`/finances/daily/${txId}`, { method: 'DELETE' })
+      } catch (err: any) {
+        console.warn('Gagal hapus transaksi di backend:', err?.message)
+      }
     },
 
-    addMonthlyProgress(record: Omit<MonthlyRecord, 'status'>) {
+    /**
+     * POST /api/umkm/monthly-reports
+     */
+    async addMonthlyProgress(record: Omit<MonthlyRecord, 'status'>) {
       this.monthlyRecords.push({
         ...record,
         status: 'PENDING'
       })
+
+      try {
+        await useApi('/umkm/monthly-reports', {
+          method: 'POST',
+          body: record
+        })
+      } catch (err: any) {
+        console.warn('Gagal kirim laporan bulanan ke backend:', err?.message)
+      }
     },
 
-    updateInvestorRequestStatus(requestId: string, status: 'APPROVED' | 'REJECTED') {
+    /**
+     * GET /api/umkm/investor-requests
+     */
+    async fetchInvestorRequests() {
+      try {
+        const res = await useApi<any>('/umkm/investor-requests')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.investorRequests = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat permintaan investor:', err?.message)
+      }
+    },
+
+    /**
+     * PUT /api/umkm/investor-requests/{id}/respond
+     */
+    async updateInvestorRequestStatus(requestId: string, status: 'APPROVED' | 'REJECTED') {
       const req = this.investorRequests.find(r => r.id === requestId)
       if (req) {
         req.status = status
         req.reviewedAt = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
       }
+
+      try {
+        await useApi(`/umkm/investor-requests/${requestId}/respond`, {
+          method: 'PUT',
+          body: { status }
+        })
+      } catch (err: any) {
+        console.warn('Gagal perbarui status permintaan investor di live API:', err?.message)
+      }
     },
 
-    updateProfileBanner(bannerUrl: string) {
+    async updateProfileBanner(bannerUrl: string) {
       this.profile.bannerUrl = bannerUrl
       if (typeof window !== 'undefined') {
         try {
@@ -501,6 +676,14 @@ export const useUmkmStore = defineStore('umkm', {
         } catch (e) {
           console.warn('Gagal menyimpan banner ke localStorage', e)
         }
+      }
+      try {
+        await useApi('/umkm/profile/banner', {
+          method: 'POST',
+          body: { bannerUrl }
+        })
+      } catch (err: any) {
+        console.warn('Gagal sinkron banner ke backend:', err?.message)
       }
     },
 
@@ -528,7 +711,7 @@ export const useUmkmStore = defineStore('umkm', {
       }
     },
 
-    updateOwnerAvatar(avatarUrl: string) {
+    async updateOwnerAvatar(avatarUrl: string) {
       this.profile.ownerAvatarUrl = avatarUrl
       if (typeof window !== 'undefined') {
         try {
@@ -536,6 +719,14 @@ export const useUmkmStore = defineStore('umkm', {
         } catch (e) {
           console.warn('Gagal menyimpan avatar ke localStorage', e)
         }
+      }
+      try {
+        await useApi('/umkm/profile/avatar', {
+          method: 'POST',
+          body: { avatarUrl }
+        })
+      } catch (err: any) {
+        console.warn('Gagal sinkron avatar ke backend:', err?.message)
       }
     },
 
@@ -563,7 +754,7 @@ export const useUmkmStore = defineStore('umkm', {
       }
     },
 
-    updateQuickProfile(name: string, description: string) {
+    async updateQuickProfile(name: string, description: string) {
       if (name.trim()) {
         this.profile.name = name.trim()
       }
@@ -577,6 +768,15 @@ export const useUmkmStore = defineStore('umkm', {
         } catch (e) {
           console.warn('Gagal menyimpan profil UMKM ke localStorage', e)
         }
+      }
+
+      try {
+        await useApi('/umkm/profile/quick', {
+          method: 'PUT',
+          body: { name: this.profile.name, description: this.profile.description }
+        })
+      } catch (err: any) {
+        console.warn('Gagal sinkron quick edit ke backend:', err?.message)
       }
     },
 

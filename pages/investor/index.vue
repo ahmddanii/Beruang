@@ -818,7 +818,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
 import { useAuthStore } from '~/stores/auth'
@@ -862,6 +862,11 @@ function triggerToast(msg: string) {
     toastMessage.value = ''
   }, 2500)
 }
+
+onMounted(() => {
+  investorStore.fetchMarketplace()
+  investorStore.fetchWatchlist()
+})
 
 // Stories Bar Sektor Setup
 const sectorStories = [

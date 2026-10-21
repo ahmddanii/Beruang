@@ -322,11 +322,11 @@ function sendQuickMessage(text: string) {
   scrollToBottom()
 }
 
-// Support query parameter ?umkmId=... to auto-select thread
-onMounted(() => {
+onMounted(async () => {
+  await chatStore.fetchThreads()
   const umkmQuery = route.query.umkmId as string
   if (umkmQuery) {
-    const threadId = chatStore.startOrGetThread(umkmQuery)
+    const threadId = await chatStore.startOrGetThread(umkmQuery)
     selectThread(threadId)
   } else if (chatStore.activeThreadId) {
     chatStore.markAsRead(chatStore.activeThreadId, 'INVESTOR')

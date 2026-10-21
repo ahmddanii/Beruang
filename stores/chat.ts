@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useApi } from '~/composables/useApi'
 
 export interface ChatAttachment {
   type: 'METRIC' | 'DOCUMENT' | 'DEAL_OFFER'
@@ -18,22 +19,24 @@ export interface ChatMessage {
 
 export interface ChatThread {
   id: string
+  businessId?: string
   umkmId: string
   umkmName: string
   umkmOwner: string
   umkmSector: string
   umkmCity: string
   umkmAvatar: string
-  umkmHealthScore: number
-  umkmMargin: number
+  umkmHealthScore?: number
+  umkmMargin?: number
   investorId: string
   investorName: string
   investorLembaga: string
   investorAvatar: string
   dealStatus: string
   ticketDiscussed: number
-  unreadInvestor: number
-  unreadUmkm: number
+  unreadInvestor?: number
+  unreadUmkm?: number
+  unreadCount?: number
   lastMessage: string
   lastMessageAt: string
   messages: ChatMessage[]
@@ -208,11 +211,46 @@ export const useChatStore = defineStore('chat', {
   },
 
   actions: {
-    setActiveThread(threadId: string) {
-      this.activeThreadId = threadId
+    async fetchThreads() {
+      try {
+        const res = await useApi<ChatThread[]>('/chat/threads')
+        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+          this.threads = res.data.map(t => ({
+            ...t,
+            messages: t.messages || []
+          }))
+          if (!this.activeThreadId && this.threads.length > 0) {
+            this.activeThreadId = this.threads[0].id
+          }
+          if (this.activeThreadId) {
+            await this.fetchMessages(this.activeThreadId)
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat daftar obrolan live:', err?.message)
+      }
     },
 
-    markAsRead(threadId: string, role: 'INVESTOR' | 'UMKM') {
+    async fetchMessages(threadId: string) {
+      try {
+        const res = await useApi<ChatMessage[]>(`/chat/threads/${threadId}/messages`)
+        if (res.data && Array.isArray(res.data)) {
+          const thread = this.threads.find(t => t.id === threadId)
+          if (thread) {
+            thread.messages = res.data
+          }
+        }
+      } catch (err: any) {
+        console.warn(`Gagal memuat pesan thread ${threadId}:`, err?.message)
+      }
+    },
+
+    async setActiveThread(threadId: string) {
+      this.activeThreadId = threadId
+      await this.fetchMessages(threadId)
+    },
+
+    async markAsRead(threadId: string, role: 'INVESTOR' | 'UMKM') {
       const thread = this.threads.find(t => t.id === threadId)
       if (thread) {
         if (role === 'INVESTOR') {
@@ -220,22 +258,30 @@ export const useChatStore = defineStore('chat', {
         } else {
           thread.unreadUmkm = 0
         }
+        thread.unreadCount = 0
+      }
+      try {
+        await useApi(`/chat/threads/${threadId}/read`, { method: 'PATCH' })
+      } catch (err: any) {
+        console.warn('Gagal menandai pesan telah dibaca di API:', err?.message)
       }
     },
 
-    sendMessage(threadId: string, text: string, senderRole: 'INVESTOR' | 'UMKM') {
+    async sendMessage(threadId: string, text: string, senderRole: 'INVESTOR' | 'UMKM', attachment?: ChatAttachment) {
       const thread = this.threads.find(t => t.id === threadId)
       if (!thread || !text.trim()) return
 
       const now = new Date()
       const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 
+      const tempId = `msg-${Date.now()}`
       const newMsg: ChatMessage = {
-        id: `msg-${Date.now()}`,
+        id: tempId,
         senderRole,
         senderName: senderRole === 'INVESTOR' ? thread.investorName : thread.umkmOwner.split(' ')[0],
         text: text.trim(),
-        timestamp: timeStr
+        timestamp: timeStr,
+        attachment
       }
 
       thread.messages.push(newMsg)
@@ -248,20 +294,62 @@ export const useChatStore = defineStore('chat', {
       } else {
         thread.unreadInvestor = (thread.unreadInvestor || 0) + 1
       }
+
+      try {
+        const res = await useApi<ChatMessage>(`/chat/threads/${threadId}/messages`, {
+          method: 'POST',
+          body: {
+            text: text.trim(),
+            attachment,
+            attachment_type: attachment?.type
+          }
+        })
+        if (res.data) {
+          const idx = thread.messages.findIndex(m => m.id === tempId)
+          if (idx !== -1) {
+            thread.messages[idx] = res.data
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal mengirim pesan chat ke live API:', err?.message)
+      }
     },
 
-    startOrGetThread(umkmId: string, customTitle?: string): string {
-      const existing = this.threads.find(t => t.umkmId === umkmId)
+    async startOrGetThread(businessId: string, customTitle?: string): Promise<string> {
+      const existing = this.threads.find(t => t.umkmId === businessId || t.businessId === businessId)
       if (existing) {
         this.activeThreadId = existing.id
+        await this.fetchMessages(existing.id)
         return existing.id
       }
 
-      // Buat thread baru
+      try {
+        const res = await useApi<ChatThread>('/chat/threads', {
+          method: 'POST',
+          body: {
+            businessId,
+            initialMessage: 'Halo! Kami melihat profil usaha Anda di katalog Beruang dan tertarik untuk menjalin diskusi terkait kesiapan pendanaan.'
+          }
+        })
+        if (res.data) {
+          const newThread: ChatThread = {
+            ...res.data,
+            messages: res.data.messages || []
+          }
+          this.threads.unshift(newThread)
+          this.activeThreadId = newThread.id
+          await this.fetchMessages(newThread.id)
+          return newThread.id
+        }
+      } catch (err: any) {
+        console.warn('Gagal membuat thread baru via API:', err?.message)
+      }
+
+      // Buat thread baru secara lokal jika offline/gagal
       const newId = `thread-${Date.now()}`
       const newThread: ChatThread = {
         id: newId,
-        umkmId,
+        umkmId: businessId,
         umkmName: customTitle || 'UMKM Binaan Beruang',
         umkmOwner: 'Pengelola Toko',
         umkmSector: 'Sektor Potensial',

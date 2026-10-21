@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAuthStore, type UserRole } from './auth'
+import { useApi } from '~/composables/useApi'
 
 export type NotificationCategory = 'KONSULTAN' | 'INVESTOR' | 'KESEHATAN' | 'KAS' | 'AKSI'
 export type NotificationPriority = 'HIGH' | 'NORMAL'
@@ -200,15 +201,38 @@ export const useNotificationStore = defineStore('notification', {
       }
     },
 
-    markAsRead(id: string) {
+    /**
+     * GET /api/notifications
+     */
+    async fetchNotifications() {
+      try {
+        const res = await useApi<any>('/notifications')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data || (res.data as any).notifications
+          if (Array.isArray(list) && list.length > 0) {
+            this.notifications = list
+            this.saveToStorage()
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat notifikasi dari live API:', err?.message)
+      }
+    },
+
+    async markAsRead(id: string) {
       const item = this.notifications.find(n => n.id === id)
       if (item && !item.isRead) {
         item.isRead = true
         this.saveToStorage()
       }
+      try {
+        await useApi(`/notifications/${id}/read`, { method: 'PATCH' })
+      } catch (err: any) {
+        console.warn('Gagal tandai notifikasi dibaca di live API:', err?.message)
+      }
     },
 
-    markAllAsRead() {
+    async markAllAsRead() {
       const authStore = useAuthStore()
       const currentRole = authStore.currentUser?.role || 'UMKM'
       this.notifications.forEach(n => {
@@ -217,11 +241,23 @@ export const useNotificationStore = defineStore('notification', {
         }
       })
       this.saveToStorage()
+
+      try {
+        await useApi('/notifications/mark-all-read', { method: 'PATCH' })
+      } catch (err: any) {
+        console.warn('Gagal tandai semua dibaca di live API:', err?.message)
+      }
     },
 
-    deleteNotification(id: string) {
+    async deleteNotification(id: string) {
       this.notifications = this.notifications.filter(n => n.id !== id)
       this.saveToStorage()
+
+      try {
+        await useApi(`/notifications/${id}`, { method: 'DELETE' })
+      } catch (err: any) {
+        console.warn('Gagal hapus notifikasi di live API:', err?.message)
+      }
     },
 
     clearAllRoleNotifications() {

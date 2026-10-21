@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useApi } from '~/composables/useApi'
 
 export interface MarketplaceUmkm {
   id: string
@@ -179,21 +180,93 @@ export const useInvestorStore = defineStore('investor', {
   },
 
   actions: {
-    toggleBookmark(umkmId: string) {
-      const item = this.marketplaceList.find(m => m.id === umkmId)
-      if (item) item.bookmarked = !item.bookmarked
+    /**
+     * GET /api/investor/marketplace
+     */
+    async fetchMarketplace() {
+      try {
+        const params: Record<string, any> = {}
+        if (this.selectedSector && this.selectedSector !== 'ALL') params.sector = this.selectedSector
+        if (this.selectedCity && this.selectedCity !== 'ALL') params.city = this.selectedCity
+        if (this.minMargin > 0) params.min_margin = this.minMargin
+        if (this.selectedTicketSize && this.selectedTicketSize !== 'ALL') params.ticket_size = this.selectedTicketSize
+        if (this.searchQuery) params.search = this.searchQuery
+
+        const res = await useApi<any>('/investor/marketplace', { params })
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.marketplaceList = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat marketplace live:', err?.message)
+      }
     },
 
-    requestAccess(umkmId: string, ticketSize: number, notes: string) {
+    /**
+     * POST /api/investor/bookmark/{businessId}
+     */
+    async toggleBookmark(umkmId: string) {
+      const item = this.marketplaceList.find(m => m.id === umkmId)
+      if (item) {
+        item.bookmarked = !item.bookmarked
+      }
+      try {
+        await useApi(`/investor/bookmark/${umkmId}`, { method: 'POST' })
+      } catch (err: any) {
+        console.warn('Gagal sinkron bookmark ke live API:', err?.message)
+      }
+    },
+
+    /**
+     * GET /api/investor/watchlist
+     */
+    async fetchWatchlist() {
+      try {
+        const res = await useApi<any>('/investor/watchlist')
+        if (res.data && Array.isArray(res.data)) {
+          const bookmarkedIds = new Set(res.data.map((item: any) => item.id))
+          this.marketplaceList.forEach(item => {
+            if (bookmarkedIds.has(item.id)) {
+              item.bookmarked = true
+            }
+          })
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat watchlist live:', err?.message)
+      }
+    },
+
+    /**
+     * POST /api/investor/requests
+     */
+    async requestAccess(umkmId: string, ticketSize: number, notes: string, scheme: string = 'REVENUE_SHARE') {
       const item = this.marketplaceList.find(m => m.id === umkmId)
       if (item) {
         item.accessStatus = 'PENDING'
-        this.applications.push({
-          umkmId,
-          ticketSize,
-          notes,
-          submittedAt: new Date().toISOString()
+      }
+
+      this.applications.push({
+        umkmId,
+        ticketSize,
+        notes,
+        submittedAt: new Date().toISOString()
+      })
+
+      try {
+        await useApi('/investor/requests', {
+          method: 'POST',
+          body: {
+            businessId: umkmId,
+            proposedTicket: ticketSize,
+            scheme,
+            introMessage: notes,
+            ndaAgreed: true
+          }
         })
+      } catch (err: any) {
+        console.warn('Gagal kirim permohonan akses ke live API:', err?.message)
       }
     }
   }

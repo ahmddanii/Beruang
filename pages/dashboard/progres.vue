@@ -1534,6 +1534,7 @@ let handleResize: (() => void) | null = null
 let gsapCtx: gsap.Context | null = null
 
 onMounted(() => {
+  umkmStore.fetchFinances()
   nextTick(() => {
     updateTabIndicator(true)
     if (activeTab.value === 'tren') {

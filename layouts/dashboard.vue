@@ -1,171 +1,176 @@
 <template>
-  <div class="h-screen flex flex-col bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-sans transition-colors overflow-hidden">
-    <!-- Top Workspace Navbar (Full Width Rata Kiri-Kanan) -->
-    <header class="w-full h-14 sm:h-16 shrink-0 bg-[#F6F8FA]/95 dark:bg-[#13161F]/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 px-3.5 sm:px-6 flex items-center justify-between select-none shadow-xs z-40">
-      <!-- Left Side: Mobile Menu Button + Brand Logo (Branding tetap ada) -->
-      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-        <!-- Mobile Menu Toggle Button (Only on < lg) -->
-        <button
-          type="button"
-          class="lg:hidden p-2 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors active:scale-95 shrink-0"
-          aria-label="Buka Menu Navigasi"
-          @click="toggleMobile"
-        >
-          <HugeiconsIcon :icon="Menu01Icon" :size="20" :stroke-width="1.75" />
-        </button>
+  <div class="h-screen flex bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-sans transition-colors overflow-hidden">
+    <!-- Desktop & Mobile Drawer Sidebar (Stands Full Height, flush & level with top navbar) -->
+    <DashboardSidebar class="h-full shrink-0" />
 
-        <!-- Brand Logo & Name: Beruang -->
-        <NuxtLink
-          :to="homePath"
-          class="flex items-center gap-2 cursor-pointer select-none group shrink-0 pl-1"
-          title="Beranda Beruang"
-          @click="handleBrandClick"
-        >
-          <img
-            src="/logo/logoSmall.svg"
-            alt="Beruang Logo"
-            class="h-7 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
-          />
-          <span class="font-heading font-extrabold text-lg sm:text-xl tracking-tight leading-none select-none">
-            <span class="text-[#156374] dark:text-[#50AABF]">Ber</span><span class="text-[#00800e] dark:text-[#00C058]">uang</span>
-          </span>
-        </NuxtLink>
-      </div>
-
-      <!-- Center: Advanced Search Bar in Top Navbar with Embedded Sector Filter -->
-      <AdvancedNavbarSearch class="flex-1 max-w-sm sm:max-w-md lg:max-w-xl mx-2 sm:mx-6 min-w-0" />
-
-      <!-- Right Side: Notification + User Profile Trigger & Dropdown Menu (Sesuai Referensi Gambar) -->
-      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-        <!-- 1. Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
-        <NotificationDropdown />
-
-        <!-- 2. User Profile Trigger & Popover Dropdown Card -->
-        <div class="relative">
+    <!-- Right Workspace Column (Navbar on Top + Main Content Scrollable Below) -->
+    <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
+      <!-- Top Workspace Navbar (Placed next to sidebar) -->
+      <header class="w-full h-14 sm:h-16 shrink-0 bg-[#F6F8FA]/95 dark:bg-[#13161F]/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between select-none shadow-xs z-30">
+        <!-- Left Side: Mobile Menu Button + Page Title (Desktop) or Brand Logo (Mobile) -->
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <!-- Mobile Menu Toggle Button (Only on < lg) -->
           <button
             type="button"
-            class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-neutral-200/90 dark:border-neutral-700/80 p-0.5 hover:ring-2 hover:ring-[#2091AA]/30 dark:hover:ring-[#50AABF]/30 transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs overflow-hidden group bg-white dark:bg-[#18191E] flex items-center justify-center"
-            aria-label="Buka Menu Profil & Pengaturan"
-            title="Menu Akun & Pengaturan"
-            @click="isProfileDropdownOpen = !isProfileDropdownOpen"
+            class="lg:hidden p-2 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors active:scale-95 shrink-0"
+            aria-label="Buka Menu Navigasi"
+            @click="toggleMobile"
           >
-            <img
-              :src="userAvatarUrl"
-              :alt="authStore.currentUser?.name || 'Foto Profil'"
-              class="w-full h-full rounded-full object-cover"
-              @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
-            />
+            <HugeiconsIcon :icon="Menu01Icon" :size="20" :stroke-width="1.75" />
           </button>
 
-          <!-- Backdrop overlay to dismiss dropdown when clicked outside -->
-          <div
-            v-if="isProfileDropdownOpen"
-            class="fixed inset-0 z-40 bg-transparent"
-            @click="isProfileDropdownOpen = false"
-          />
-
-          <!-- Profile Dropdown Popover Card (Matching the Reference Image) -->
-          <div
-            v-if="isProfileDropdownOpen"
-            class="absolute top-full right-0 mt-2.5 w-72 sm:w-80 bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl shadow-2xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
+          <!-- On mobile: show Beruang brand logo; on desktop: show Page Title! -->
+          <NuxtLink
+            :to="homePath"
+            class="lg:hidden flex items-center gap-2 cursor-pointer select-none group shrink-0"
+            title="Beranda Beruang"
+            @click="handleBrandClick"
           >
-            <!-- Centered Avatar, Name & Email Header -->
-            <div class="pt-6 pb-4 px-4 flex flex-col items-center text-center">
-              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 bg-white dark:bg-[#151922] border border-neutral-200/80 dark:border-neutral-700 shadow-sm overflow-hidden mb-3">
-                <img
-                  :src="userAvatarUrl"
-                  :alt="authStore.currentUser?.name || 'Foto Profil'"
-                  class="w-full h-full rounded-full object-cover"
-                  @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
-                />
-              </div>
-              <h3 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white leading-tight">
-                {{ authStore.currentUser?.name || 'Fikri Setiawan' }}
-              </h3>
-              <p class="font-poppins text-xs text-neutral-500 dark:text-neutral-400 mt-1 truncate max-w-[240px]">
-                {{ authStore.currentUser?.email || 'fikrisnpmb2024@gmail.com' }}
-              </p>
-            </div>
+            <img
+              src="/logo/logoSmall.svg"
+              alt="Beruang Logo"
+              class="h-6 w-auto object-contain transition-transform duration-150 group-hover:scale-105"
+            />
+            <span class="font-heading font-extrabold text-base sm:text-lg tracking-tight leading-none select-none">
+              <span class="text-[#156374] dark:text-[#50AABF]">Ber</span><span class="text-[#00800e] dark:text-[#00C058]">uang</span>
+            </span>
+          </NuxtLink>
 
-            <!-- Menu Navigation Items (Profil & Pengaturan with Arrow ↗) -->
-            <div class="border-t border-neutral-100 dark:border-neutral-800/80 py-1 px-1.5">
-              <NuxtLink
-                :to="profileRoute"
-                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/70 transition-colors group cursor-pointer"
-                @click="isProfileDropdownOpen = false"
-              >
-                <div class="flex items-center gap-3">
-                  <HugeiconsIcon :icon="UserCircleIcon" :size="19" :stroke-width="1.8" class="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
-                  <span class="text-xs sm:text-sm font-medium">Profil</span>
-                </div>
-                <HugeiconsIcon :icon="ArrowUpRight01Icon" :size="16" :stroke-width="2" class="text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
-              </NuxtLink>
+          <!-- Page Title (Desktop: Apple body-strong) -->
+          <h1 class="hidden lg:block font-poppins font-semibold text-[16px] sm:text-[17px] text-neutral-900 dark:text-white leading-none truncate select-none pl-0.5">
+            {{ currentPageInfo.title }}
+          </h1>
+        </div>
 
-              <NuxtLink
-                :to="settingsRoute"
-                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/70 transition-colors group cursor-pointer"
-                @click="isProfileDropdownOpen = false"
-              >
-                <div class="flex items-center gap-3">
-                  <HugeiconsIcon :icon="PreferenceHorizontalIcon" :size="19" :stroke-width="1.8" class="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
-                  <span class="text-xs sm:text-sm font-medium">Pengaturan</span>
-                </div>
-                <HugeiconsIcon :icon="ArrowUpRight01Icon" :size="16" :stroke-width="2" class="text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
-              </NuxtLink>
-            </div>
+        <!-- Center: Advanced Search Bar in Top Navbar with Embedded Sector Filter -->
+        <AdvancedNavbarSearch class="flex-1 max-w-sm sm:max-w-md lg:max-w-xl mx-2 sm:mx-6 min-w-0" />
 
-            <!-- Debugging Role Switcher (Dipindah dari sidebar pojok kiri bawah untuk testing) -->
-            <div class="border-t border-neutral-100 dark:border-neutral-800/80 py-2 px-2 bg-neutral-50/70 dark:bg-neutral-900/40">
-              <div class="px-2.5 pb-1.5 flex items-center justify-between">
-                <span class="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-                  Ganti Peran (Debug & Test)
-                </span>
-                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-medium">
-                  DEBUG
-                </span>
-              </div>
-              <div class="space-y-0.5">
-                <button
-                  v-for="role in rolesList"
-                  :key="role.id"
-                  type="button"
-                  :class="[
-                    'w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer text-left',
-                    authStore.currentUser?.role === role.id
-                      ? 'bg-white dark:bg-neutral-800 text-[#2091AA] dark:text-[#50AABF] font-semibold shadow-2xs'
-                      : 'text-neutral-600 dark:text-neutral-400 hover:bg-white/80 dark:hover:bg-neutral-800/60'
-                  ]"
-                  @click="switchRole(role.id, role.path)"
-                >
-                  <span>{{ role.name }}</span>
-                  <span
-                    v-if="authStore.currentUser?.role === role.id"
-                    class="w-1.5 h-1.5 rounded-full bg-[#2091AA] dark:bg-[#50AABF]"
+        <!-- Right Side: Notification + User Profile Trigger & Dropdown Menu -->
+        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <!-- 1. Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
+          <NotificationDropdown />
+
+          <!-- 2. User Profile Trigger & Popover Dropdown Card -->
+          <div class="relative">
+            <button
+              type="button"
+              class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-neutral-200/90 dark:border-neutral-700/80 p-0.5 hover:ring-2 hover:ring-[#2091AA]/30 dark:hover:ring-[#50AABF]/30 transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs overflow-hidden group bg-white dark:bg-[#18191E] flex items-center justify-center"
+              aria-label="Buka Menu Profil & Pengaturan"
+              title="Menu Akun & Pengaturan"
+              @click="isProfileDropdownOpen = !isProfileDropdownOpen"
+            >
+              <img
+                :src="userAvatarUrl"
+                :alt="authStore.currentUser?.name || 'Foto Profil'"
+                class="w-full h-full rounded-full object-cover"
+                @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
+              />
+            </button>
+
+            <!-- Backdrop overlay to dismiss dropdown when clicked outside -->
+            <div
+              v-if="isProfileDropdownOpen"
+              class="fixed inset-0 z-40 bg-transparent"
+              @click="isProfileDropdownOpen = false"
+            />
+
+            <!-- Profile Dropdown Popover Card -->
+            <div
+              v-if="isProfileDropdownOpen"
+              class="absolute top-full right-0 mt-2.5 w-72 sm:w-80 bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl shadow-2xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
+            >
+              <!-- Centered Avatar, Name & Email Header -->
+              <div class="pt-6 pb-4 px-4 flex flex-col items-center text-center">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 bg-white dark:bg-[#151922] border border-neutral-200/80 dark:border-neutral-700 shadow-sm overflow-hidden mb-3">
+                  <img
+                    :src="userAvatarUrl"
+                    :alt="authStore.currentUser?.name || 'Foto Profil'"
+                    class="w-full h-full rounded-full object-cover"
+                    @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
                   />
-                </button>
+                </div>
+                <h3 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white leading-tight">
+                  {{ authStore.currentUser?.name || 'Fikri Setiawan' }}
+                </h3>
+                <p class="font-poppins text-xs text-neutral-500 dark:text-neutral-400 mt-1 truncate max-w-[240px]">
+                  {{ authStore.currentUser?.email || 'fikrisnpmb2024@gmail.com' }}
+                </p>
               </div>
-            </div>
 
-            <!-- Logout / Keluar -->
-            <div class="border-t border-neutral-100 dark:border-neutral-800/80 p-1.5">
-              <NuxtLink
-                to="/masuk"
-                class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50/80 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
-                @click="isProfileDropdownOpen = false"
-              >
-                <HugeiconsIcon :icon="Logout01Icon" :size="16" :stroke-width="2" class="text-red-500" />
-                <span>Keluar</span>
-              </NuxtLink>
+              <!-- Menu Navigation Items (Profil & Pengaturan with Arrow ↗) -->
+              <div class="border-t border-neutral-100 dark:border-neutral-800/80 py-1 px-1.5">
+                <NuxtLink
+                  :to="profileRoute"
+                  class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/70 transition-colors group cursor-pointer"
+                  @click="isProfileDropdownOpen = false"
+                >
+                  <div class="flex items-center gap-3">
+                    <HugeiconsIcon :icon="UserCircleIcon" :size="19" :stroke-width="1.8" class="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+                    <span class="text-xs sm:text-sm font-medium">Profil</span>
+                  </div>
+                  <HugeiconsIcon :icon="ArrowUpRight01Icon" :size="16" :stroke-width="2" class="text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
+                </NuxtLink>
+
+                <NuxtLink
+                  :to="settingsRoute"
+                  class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/70 transition-colors group cursor-pointer"
+                  @click="isProfileDropdownOpen = false"
+                >
+                  <div class="flex items-center gap-3">
+                    <HugeiconsIcon :icon="PreferenceHorizontalIcon" :size="19" :stroke-width="1.8" class="text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+                    <span class="text-xs sm:text-sm font-medium">Pengaturan</span>
+                  </div>
+                  <HugeiconsIcon :icon="ArrowUpRight01Icon" :size="16" :stroke-width="2" class="text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
+                </NuxtLink>
+              </div>
+
+              <!-- Debugging Role Switcher -->
+              <div class="border-t border-neutral-100 dark:border-neutral-800/80 py-2 px-2 bg-neutral-50/70 dark:bg-neutral-900/40">
+                <div class="px-2.5 pb-1.5 flex items-center justify-between">
+                  <span class="text-[10px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+                    Ganti Peran (Debug & Test)
+                  </span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-medium">
+                    DEBUG
+                  </span>
+                </div>
+                <div class="space-y-0.5">
+                  <button
+                    v-for="role in rolesList"
+                    :key="role.id"
+                    type="button"
+                    :class="[
+                      'w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer text-left',
+                      authStore.currentUser?.role === role.id
+                        ? 'bg-white dark:bg-neutral-800 text-[#2091AA] dark:text-[#50AABF] font-semibold shadow-2xs'
+                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-white/80 dark:hover:bg-neutral-800/60'
+                    ]"
+                    @click="switchRole(role.id, role.path)"
+                  >
+                    <span>{{ role.name }}</span>
+                    <span
+                      v-if="authStore.currentUser?.role === role.id"
+                      class="w-1.5 h-1.5 rounded-full bg-[#2091AA] dark:bg-[#50AABF]"
+                    />
+                  </button>
+                </div>
+              </div>
+
+              <!-- Logout / Keluar -->
+              <div class="border-t border-neutral-100 dark:border-neutral-800/80 p-1.5">
+                <NuxtLink
+                  to="/masuk"
+                  class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50/80 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
+                  @click="isProfileDropdownOpen = false"
+                >
+                  <HugeiconsIcon :icon="Logout01Icon" :size="16" :stroke-width="2" class="text-red-500" />
+                  <span>Keluar</span>
+                </NuxtLink>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
-
-    <!-- Body Layout: Sidebar placed below navbar on left + Main Content on right -->
-    <div class="flex-1 flex min-h-0 overflow-hidden relative">
-      <!-- Desktop & Mobile Drawer Sidebar (placed below navbar) -->
-      <DashboardSidebar class="h-full shrink-0" />
+      </header>
 
       <!-- Main Dashboard Workspace Content (Fluid full-width layout matching Trueform references) -->
       <main

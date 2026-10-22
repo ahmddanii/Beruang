@@ -872,10 +872,10 @@ const newTaskForm = ref({
   dueDate: '30 Oktober 2026'
 })
 
-function handleSaveNewTask() {
+async function handleSaveNewTask() {
   if (!newTaskForm.value.title.trim()) return
 
-  umkmStore.addTask({
+  await umkmStore.addTask({
     title: newTaskForm.value.title.trim(),
     description: newTaskForm.value.description.trim(),
     category: newTaskForm.value.category,
@@ -891,6 +891,7 @@ function handleSaveNewTask() {
     dueDate: '30 Oktober 2026'
   }
   isAddTaskModalOpen.value = false
+  triggerToast('Langkah aksi berhasil ditambahkan dan disinkronkan!')
 }
 
 // Toast State
@@ -1126,6 +1127,8 @@ let handleResize: (() => void) | null = null
 onMounted(() => {
   initEvidenceFromStorage()
   umkmStore.fetchTasks()
+  umkmStore.fetchAssessment()
+  umkmStore.fetchProfile()
 
   nextTick(() => {
     updateViewTabIndicator(true)

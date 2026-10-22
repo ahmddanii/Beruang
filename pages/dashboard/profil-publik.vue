@@ -157,6 +157,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useUmkmStore } from '~/stores/umkm'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -173,6 +174,10 @@ definePageMeta({
 })
 
 const umkmStore = useUmkmStore()
+
+onMounted(() => {
+  umkmStore.fetchProfile()
+})
 
 function handleCopyLink() {
   if (typeof navigator !== 'undefined' && navigator.clipboard) {

@@ -747,6 +747,11 @@ function handleExportProposal() {
 let handleResize: (() => void) | null = null
 
 onMounted(() => {
+  // Fetch live investor requests and fundamental scores
+  umkmStore.fetchInvestorRequests()
+  umkmStore.fetchAssessment()
+  umkmStore.fetchProfile()
+
   if (route.query.tab === 'requests') {
     activeTab.value = 'requests'
   } else if (route.query.tab === 'simulation') {

@@ -1534,25 +1534,33 @@ function handleCopyProfileLink() {
   }
 }
 
-function saveProfile() {
+async function saveProfile() {
   if (selectedSectorChoice.value === 'Lainnya' && customSectorInput.value.trim()) {
     formProfile.sector = customSectorInput.value.trim()
   } else {
     formProfile.sector = selectedSectorChoice.value
   }
 
-  umkmStore.profile.name = formProfile.name.trim() || 'Kopi Senja Nusantara'
-  umkmStore.profile.ownerName = formProfile.ownerName.trim() || 'Fikri Setiawan'
-  umkmStore.profile.sector = formProfile.sector
-  umkmStore.profile.city = formProfile.city.trim()
-  umkmStore.profile.establishedYear = formProfile.establishedYear
-  umkmStore.profile.outletsCount = formProfile.outletsCount
-  umkmStore.profile.employeesCount = formProfile.employeesCount
-  umkmStore.profile.fundingTarget = formProfile.fundingTarget
-  umkmStore.profile.description = formProfile.description.trim()
-  umkmStore.profile.pitchSummary = formProfile.description.trim()
-  umkmStore.profile.nib = formProfile.nib.trim()
-  umkmStore.profile.npwp = formProfile.npwp.trim()
+  await umkmStore.updateProfile({
+    name: formProfile.name.trim() || 'Kopi Senja Nusantara',
+    brand: formProfile.name.trim() || 'Kopi Senja Nusantara',
+    ownerName: formProfile.ownerName.trim() || 'Fikri Setiawan',
+    owner_name: formProfile.ownerName.trim() || 'Fikri Setiawan',
+    sector: formProfile.sector,
+    city: formProfile.city.trim(),
+    establishedYear: formProfile.establishedYear,
+    established_year: formProfile.establishedYear,
+    outletsCount: formProfile.outletsCount,
+    outlets_count: formProfile.outletsCount,
+    employeesCount: formProfile.employeesCount,
+    employees_count: formProfile.employeesCount,
+    fundingTarget: formProfile.fundingTarget,
+    funding_target: formProfile.fundingTarget,
+    description: formProfile.description.trim(),
+    pitchSummary: formProfile.description.trim(),
+    nib: formProfile.nib.trim(),
+    npwp: formProfile.npwp.trim()
+  })
 
   if (authStore.currentUser) {
     authStore.currentUser.businessName = formProfile.name.trim()
@@ -1572,10 +1580,12 @@ function saveProfile() {
     localStorage.setItem('umkm_profile_npwp', formProfile.npwp)
   }
 
-  triggerToast('Profil usaha berhasil disimpan & disinkronkan!')
+  triggerToast('Profil usaha berhasil disimpan & disinkronkan ke server!')
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await umkmStore.fetchProfile()
+
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
   umkmStore.initQuickProfileFromStorage()
@@ -1584,8 +1594,12 @@ onMounted(() => {
   initContactsFromStorage()
   initDocsFromStorage()
 
-  if (umkmStore.profile.name) formProfile.name = umkmStore.profile.name
-  if (umkmStore.profile.ownerName) formProfile.ownerName = umkmStore.profile.ownerName
+  if (umkmStore.profile.name || umkmStore.profile.brand) {
+    formProfile.name = umkmStore.profile.name || umkmStore.profile.brand
+  }
+  if (umkmStore.profile.ownerName || umkmStore.profile.owner_name) {
+    formProfile.ownerName = umkmStore.profile.ownerName || umkmStore.profile.owner_name
+  }
   if (umkmStore.profile.description || umkmStore.profile.pitchSummary) {
     formProfile.description = umkmStore.profile.description || umkmStore.profile.pitchSummary
   }
@@ -1594,6 +1608,18 @@ onMounted(() => {
     selectedSectorChoice.value = umkmStore.profile.sector
   }
   if (umkmStore.profile.city) formProfile.city = umkmStore.profile.city
+  if (umkmStore.profile.establishedYear || umkmStore.profile.established_year) {
+    formProfile.establishedYear = umkmStore.profile.establishedYear || umkmStore.profile.established_year
+  }
+  if (umkmStore.profile.outletsCount || umkmStore.profile.outlets_count) {
+    formProfile.outletsCount = umkmStore.profile.outletsCount || umkmStore.profile.outlets_count
+  }
+  if (umkmStore.profile.employeesCount || umkmStore.profile.employees_count) {
+    formProfile.employeesCount = umkmStore.profile.employeesCount || umkmStore.profile.employees_count
+  }
+  if (umkmStore.profile.fundingTarget || umkmStore.profile.funding_target) {
+    formProfile.fundingTarget = umkmStore.profile.fundingTarget || umkmStore.profile.funding_target
+  }
   if (umkmStore.profile.nib) formProfile.nib = umkmStore.profile.nib
   if (umkmStore.profile.npwp) formProfile.npwp = umkmStore.profile.npwp
 })

@@ -94,7 +94,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 32.600.000
+                {{ formatDisplayedAmount(calculatedProfitAmount) }}
               </span>
             </div>
 
@@ -131,14 +131,14 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>Hemat</span>
+                <span>{{ calculatedHppPercent }}%</span>
               </div>
             </div>
 
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 45.100.000
+                {{ formatDisplayedAmount(calculatedHppAmount) }}
               </span>
             </div>
 
@@ -173,14 +173,14 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>+9.8%</span>
+                <span>Penjualan</span>
               </div>
             </div>
 
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 100.000.000
+                {{ formatDisplayedAmount(totalCalculatedOmzet) }}
               </span>
             </div>
 
@@ -215,14 +215,14 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-red">
-                <span>-4%</span>
+                <span>Beban</span>
               </div>
             </div>
 
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 67.400.000
+                {{ formatDisplayedAmount(calculatedOutflowAmount) }}
               </span>
             </div>
 
@@ -684,36 +684,80 @@
             Tanggal Pembukuan
           </label>
           <input
+            v-model="quickTxDate"
             type="date"
             class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            :value="new Date().toISOString().substring(0, 10)"
           />
         </div>
 
         <div>
           <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Total Penjualan Hari Ini
+            Kategori Transaksi
           </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm text-neutral-500 font-mono font-semibold">Rp</span>
-            <input
-              type="text"
-              placeholder="3.500.000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-semibold"
-            />
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              :class="[
+                'py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                quickTxCategory === 'PEMASUKAN'
+                  ? 'bg-emerald-50 text-[#00AA13] border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-700'
+                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400'
+              ]"
+              @click="quickTxCategory = 'PEMASUKAN'"
+            >
+              Uang Masuk
+            </button>
+            <button
+              type="button"
+              :class="[
+                'py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                quickTxCategory === 'MODAL_JUALAN'
+                  ? 'bg-cyan-50 text-[#156374] border-cyan-300 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-700'
+                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400'
+              ]"
+              @click="quickTxCategory = 'MODAL_JUALAN'"
+            >
+              Modal Jualan
+            </button>
+            <button
+              type="button"
+              :class="[
+                'py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                quickTxCategory === 'OPERASIONAL'
+                  ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700'
+                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400'
+              ]"
+              @click="quickTxCategory = 'OPERASIONAL'"
+            >
+              Operasional
+            </button>
           </div>
         </div>
 
         <div>
           <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Biaya Belanja Bahan Baku (Kopi/Susu)
+            Keterangan Transaksi <span class="text-rose-500">*</span>
+          </label>
+          <input
+            v-model="quickTxTitle"
+            type="text"
+            placeholder="Contoh: Penjualan POS Kasir Shift Pagi"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-sans focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+            Nominal Transaksi (Rp) <span class="text-rose-500">*</span>
           </label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm text-neutral-500 font-mono font-semibold">Rp</span>
             <input
-              type="text"
-              placeholder="1.200.000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-semibold"
+              v-model.number="quickTxAmount"
+              type="number"
+              min="0"
+              placeholder="3500000"
+              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-semibold tabular-nums"
             />
           </div>
         </div>
@@ -723,8 +767,9 @@
             Catatan Tambahan
           </label>
           <textarea
+            v-model="quickTxNotes"
             rows="3"
-            placeholder="Contoh: Beli 2 karung biji kopi Temanggung di pasar induk..."
+            placeholder="Contoh: Pembelian biji kopi dari mitra supplier Lembang..."
             class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-sans focus:outline-none focus:ring-2 focus:ring-primary-500/20 leading-relaxed"
           ></textarea>
         </div>
@@ -734,17 +779,18 @@
         <div class="flex items-center justify-end gap-3 w-full">
           <button
             type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 transition-colors"
+            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 transition-colors cursor-pointer"
             @click="close"
           >
             Batal
           </button>
           <button
             type="button"
-            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors"
-            @click="close"
+            :disabled="quickTxLoading || !quickTxTitle.trim() || quickTxAmount <= 0"
+            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors cursor-pointer"
+            @click="handleSaveQuickTransaction"
           >
-            Simpan Catatan Kas
+            {{ quickTxLoading ? 'Menyimpan...' : 'Simpan Catatan Kas' }}
           </button>
         </div>
       </template>
@@ -1114,18 +1160,84 @@ function clearSparklineHover(type: 'profit' | 'inflow' | 'outflow') {
 
 const hppBarWidth = ref(0)
 
-// Total Riil Aliran Kas Bulan Ini (Oktober 2026)
-const calculatedHppPercent = computed(() => 45.1)
-const calculatedOpexPercent = computed(() => 22.3)
-const calculatedProfitPercent = computed(() => 32.6)
+// Quick Drawer Catat Kas State
+const quickTxDate = ref(new Date().toISOString().substring(0, 10))
+const quickTxTitle = ref('')
+const quickTxCategory = ref<'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL'>('PEMASUKAN')
+const quickTxAmount = ref<number>(0)
+const quickTxNotes = ref('')
+const quickTxLoading = ref(false)
 
-const calculatedHppAmount = computed(() => 45100000)
-const calculatedOpexAmount = computed(() => 22300000)
-const calculatedProfitAmount = computed(() => 32600000)
-const totalCalculatedOmzet = computed(() => 100000000)
+async function handleSaveQuickTransaction() {
+  if (!quickTxTitle.value.trim() || quickTxAmount.value <= 0) return
+  quickTxLoading.value = true
+  try {
+    await umkmStore.addDailyTransaction({
+      date: quickTxDate.value,
+      title: quickTxTitle.value.trim(),
+      category: quickTxCategory.value,
+      amount: quickTxAmount.value,
+      paymentMethod: 'QRIS',
+      notes: quickTxNotes.value.trim(),
+      receiptNumber: `NOTA/${Date.now().toString().slice(-6)}`
+    })
+    quickTxTitle.value = ''
+    quickTxAmount.value = 0
+    quickTxNotes.value = ''
+    isTransactionDrawerOpen.value = false
+    showToastSuccess.value = true
+    nextTick(() => {
+      initDonutChart()
+    })
+    setTimeout(() => {
+      showToastSuccess.value = false
+    }, 3000)
+  } finally {
+    quickTxLoading.value = false
+  }
+}
 
-function formatDisplayedAmount(val: number) {
-  return 'Rp ' + val.toLocaleString('id-ID')
+// Total Riil Aliran Kas Bulan Ini dari umkmStore.financeSummary
+const financeSummary = computed(() => umkmStore.financeSummary)
+
+const totalCalculatedOmzet = computed(() => {
+  return financeSummary.value?.totalIncomeMonth || 100000000
+})
+
+const calculatedHppAmount = computed(() => {
+  return financeSummary.value?.totalCogsMonth || 45100000
+})
+
+const calculatedOpexAmount = computed(() => {
+  return financeSummary.value?.totalOpexMonth || 22300000
+})
+
+const calculatedProfitAmount = computed(() => {
+  return financeSummary.value?.netProfitMonth || 32600000
+})
+
+const calculatedOutflowAmount = computed(() => {
+  return calculatedHppAmount.value + calculatedOpexAmount.value
+})
+
+const calculatedHppPercent = computed(() => {
+  if (!totalCalculatedOmzet.value) return '0.0'
+  return ((calculatedHppAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
+})
+
+const calculatedOpexPercent = computed(() => {
+  if (!totalCalculatedOmzet.value) return '0.0'
+  return ((calculatedOpexAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
+})
+
+const calculatedProfitPercent = computed(() => {
+  if (!totalCalculatedOmzet.value) return '0.0'
+  return ((calculatedProfitAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
+})
+
+function formatDisplayedAmount(val: number | { value: number }) {
+  const num = typeof val === 'object' && val !== null ? (val as any).value : val
+  return 'Rp ' + Number(num || 0).toLocaleString('id-ID')
 }
 
 // Donut Chart State & Controls (Gaya Minimalis Modern Referensi)

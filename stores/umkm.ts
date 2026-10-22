@@ -104,8 +104,28 @@ export interface UmkmBusinessProfile {
   [key: string]: any
 }
 
+export interface FinanceSummary {
+  cashBalance: number
+  totalIncomeMonth: number
+  totalCogsMonth: number
+  totalOpexMonth: number
+  netProfitMonth: number
+  marginPercentage: number
+  marginStatus: 'SEHAT' | 'WASPADA' | 'KRITIS' | string
+}
+
 export const useUmkmStore = defineStore('umkm', {
   state: () => ({
+    financeSummary: {
+      cashBalance: 75500000,
+      totalIncomeMonth: 100000000,
+      totalCogsMonth: 45100000,
+      totalOpexMonth: 22300000,
+      netProfitMonth: 32600000,
+      marginPercentage: 32.6,
+      marginStatus: 'SEHAT'
+    } as FinanceSummary,
+
     profile: {
       id: 'umkm-01',
       name: 'Kopi Senja Nusantara',
@@ -506,10 +526,28 @@ export const useUmkmStore = defineStore('umkm', {
       try {
         const res = await useApi<any>('/umkm/profile')
         if (res.data) {
+          const d = res.data
           this.profile = {
             ...this.profile,
-            ...res.data,
-            name: res.data.name || res.data.brand || this.profile.name
+            ...d,
+            name: d.name || d.brand || this.profile.name,
+            brand: d.brand || d.name || this.profile.brand,
+            ownerName: d.ownerName || d.owner_name || this.profile.ownerName,
+            owner_name: d.owner_name || d.ownerName || this.profile.owner_name,
+            sector: d.sector || this.profile.sector,
+            city: d.city || this.profile.city,
+            establishedYear: d.establishedYear || d.established_year || this.profile.establishedYear,
+            established_year: d.established_year || d.establishedYear || this.profile.established_year,
+            outletsCount: d.outletsCount || d.outlets_count || this.profile.outletsCount,
+            outlets_count: d.outlets_count || d.outletsCount || this.profile.outlets_count,
+            employeesCount: d.employeesCount || d.employees_count || this.profile.employeesCount,
+            employees_count: d.employees_count || d.employeesCount || this.profile.employees_count,
+            fundingTarget: d.fundingTarget || d.funding_target || this.profile.fundingTarget,
+            funding_target: d.funding_target || d.fundingTarget || this.profile.funding_target,
+            description: d.description || d.pitchSummary || d.pitch_summary || this.profile.description,
+            pitchSummary: d.pitchSummary || d.description || d.pitch_summary || this.profile.pitchSummary,
+            nib: d.nib || this.profile.nib,
+            npwp: d.npwp || this.profile.npwp
           }
         }
       } catch (err: any) {
@@ -560,11 +598,19 @@ export const useUmkmStore = defineStore('umkm', {
       }
     },
 
-    setTaskStatus(taskId: string, status: 'TODO' | 'IN_PROGRESS' | 'DONE') {
+    async setTaskStatus(taskId: string, status: 'TODO' | 'IN_PROGRESS' | 'DONE') {
       const task = this.tasks.find(t => t.id === taskId)
       if (task) {
         task.status = status
         task.completed = status === 'DONE'
+        try {
+          await useApi(`/umkm/tasks/${taskId}/toggle`, {
+            method: 'PATCH',
+            body: { status, completed: task.completed }
+          })
+        } catch (err: any) {
+          console.warn('Gagal sinkron status tugas ke live API:', err?.message)
+        }
       }
     },
 
@@ -593,14 +639,38 @@ export const useUmkmStore = defineStore('umkm', {
         ...payload
       }
       try {
+        const body = {
+          ...payload,
+          name: payload.name || payload.brand || this.profile.name,
+          brand: payload.brand || payload.name || this.profile.brand,
+          owner_name: payload.ownerName || payload.owner_name || this.profile.ownerName,
+          ownerName: payload.ownerName || payload.owner_name || this.profile.ownerName,
+          sector: payload.sector || this.profile.sector,
+          city: payload.city || this.profile.city,
+          established_year: payload.establishedYear || payload.established_year || this.profile.establishedYear,
+          establishedYear: payload.establishedYear || payload.established_year || this.profile.establishedYear,
+          outlets_count: payload.outletsCount || payload.outlets_count || this.profile.outletsCount,
+          outletsCount: payload.outletsCount || payload.outlets_count || this.profile.outletsCount,
+          employees_count: payload.employeesCount || payload.employees_count || this.profile.employeesCount,
+          employeesCount: payload.employeesCount || payload.employees_count || this.profile.employeesCount,
+          funding_target: payload.fundingTarget || payload.funding_target || this.profile.fundingTarget,
+          fundingTarget: payload.fundingTarget || payload.funding_target || this.profile.fundingTarget,
+          description: payload.description || payload.pitchSummary || this.profile.description,
+          pitch_summary: payload.description || payload.pitchSummary || this.profile.pitchSummary,
+          nib: payload.nib || this.profile.nib,
+          npwp: payload.npwp || this.profile.npwp
+        }
         const res = await useApi<any>('/umkm/profile', {
           method: 'PUT',
-          body: payload
+          body
         })
         if (res.data) {
+          const d = res.data
           this.profile = {
             ...this.profile,
-            ...res.data
+            ...d,
+            name: d.name || d.brand || this.profile.name,
+            ownerName: d.ownerName || d.owner_name || this.profile.ownerName
           }
         }
       } catch (err: any) {
@@ -611,13 +681,38 @@ export const useUmkmStore = defineStore('umkm', {
     /**
      * Tambah rencana aksi baru
      */
-    addTask(task: Omit<ActionPlanTask, 'id' | 'completed'>) {
+    async addTask(task: Omit<ActionPlanTask, 'id' | 'completed'>) {
       const newId = `t-${Date.now()}`
-      this.tasks.push({
+      const newTask: ActionPlanTask = {
         ...task,
         id: newId,
-        completed: false
-      })
+        completed: false,
+        status: 'TODO'
+      }
+      this.tasks.push(newTask)
+
+      try {
+        const res = await useApi<ActionPlanTask>('/umkm/tasks', {
+          method: 'POST',
+          body: {
+            title: task.title,
+            description: task.description,
+            category: task.category,
+            milestone_id: task.milestoneId || (this.milestones[0] ? this.milestones[0].id : null),
+            milestoneId: task.milestoneId,
+            due_date: task.dueDate,
+            dueDate: task.dueDate
+          }
+        })
+        if (res.data?.id) {
+          const idx = this.tasks.findIndex(t => t.id === newId)
+          if (idx !== -1) {
+            this.tasks[idx] = { ...this.tasks[idx], ...res.data }
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal simpan tugas baru ke live API, tersimpan lokal:', err?.message)
+      }
     },
 
     /**
@@ -631,6 +726,19 @@ export const useUmkmStore = defineStore('umkm', {
           useApi<any>('/umkm/monthly-reports'),
           useApi<any>('/finances/summary')
         ])
+
+        if (summaryRes.status === 'fulfilled' && summaryRes.value?.data) {
+          const s = summaryRes.value.data
+          this.financeSummary = {
+            cashBalance: Number(s.cashBalance ?? s.cash_balance ?? this.financeSummary.cashBalance),
+            totalIncomeMonth: Number(s.totalIncomeMonth ?? s.total_income_month ?? this.financeSummary.totalIncomeMonth),
+            totalCogsMonth: Number(s.totalCogsMonth ?? s.total_cogs_month ?? this.financeSummary.totalCogsMonth),
+            totalOpexMonth: Number(s.totalOpexMonth ?? s.total_opex_month ?? this.financeSummary.totalOpexMonth),
+            netProfitMonth: Number(s.netProfitMonth ?? s.net_profit_month ?? this.financeSummary.netProfitMonth),
+            marginPercentage: Number(s.marginPercentage ?? s.margin_percentage ?? this.financeSummary.marginPercentage),
+            marginStatus: s.marginStatus ?? s.margin_status ?? this.financeSummary.marginStatus
+          }
+        }
 
         if (dailyRes.status === 'fulfilled' && dailyRes.value?.data) {
           const list = Array.isArray(dailyRes.value.data) ? dailyRes.value.data : (dailyRes.value.data as any).data
@@ -668,10 +776,34 @@ export const useUmkmStore = defineStore('umkm', {
       }
       this.dailyTransactions.unshift(newTx)
 
+      // Segera mutasikan financeSummary agar angka kartu dan grafik langsung terupdate
+      if (tx.category === 'PEMASUKAN') {
+        this.financeSummary.totalIncomeMonth += tx.amount
+        this.financeSummary.netProfitMonth += tx.amount
+        this.financeSummary.cashBalance += tx.amount
+      } else if (tx.category === 'MODAL_JUALAN') {
+        this.financeSummary.totalCogsMonth += tx.amount
+        this.financeSummary.netProfitMonth -= tx.amount
+        this.financeSummary.cashBalance -= tx.amount
+      } else if (tx.category === 'OPERASIONAL') {
+        this.financeSummary.totalOpexMonth += tx.amount
+        this.financeSummary.netProfitMonth -= tx.amount
+        this.financeSummary.cashBalance -= tx.amount
+      }
+      if (this.financeSummary.totalIncomeMonth > 0) {
+        this.financeSummary.marginPercentage = Number(
+          ((this.financeSummary.netProfitMonth / this.financeSummary.totalIncomeMonth) * 100).toFixed(1)
+        )
+      }
+
       try {
         const res = await useApi<DailyTransaction>('/finances/daily', {
           method: 'POST',
-          body: tx
+          body: {
+            ...tx,
+            payment_method: tx.paymentMethod,
+            receipt_number: tx.receiptNumber
+          }
         })
         if (res.data) {
           const idx = this.dailyTransactions.findIndex(t => t.id === localId)
@@ -689,6 +821,22 @@ export const useUmkmStore = defineStore('umkm', {
      * DELETE /api/finances/daily/{id}
      */
     async deleteDailyTransaction(txId: string) {
+      const existing = this.dailyTransactions.find(t => t.id === txId)
+      if (existing) {
+        if (existing.category === 'PEMASUKAN') {
+          this.financeSummary.totalIncomeMonth -= existing.amount
+          this.financeSummary.netProfitMonth -= existing.amount
+          this.financeSummary.cashBalance -= existing.amount
+        } else if (existing.category === 'MODAL_JUALAN') {
+          this.financeSummary.totalCogsMonth -= existing.amount
+          this.financeSummary.netProfitMonth += existing.amount
+          this.financeSummary.cashBalance += existing.amount
+        } else if (existing.category === 'OPERASIONAL') {
+          this.financeSummary.totalOpexMonth -= existing.amount
+          this.financeSummary.netProfitMonth += existing.amount
+          this.financeSummary.cashBalance += existing.amount
+        }
+      }
       this.dailyTransactions = this.dailyTransactions.filter(t => t.id !== txId)
       try {
         await useApi(`/finances/daily/${txId}`, { method: 'DELETE' })
@@ -856,9 +1004,14 @@ export const useUmkmStore = defineStore('umkm', {
       }
 
       try {
-        await useApi('/umkm/profile/quick', {
+        await useApi('/umkm/profile', {
           method: 'PUT',
-          body: { name: this.profile.name, description: this.profile.description }
+          body: {
+            name: this.profile.name,
+            brand: this.profile.name,
+            description: this.profile.description,
+            pitch_summary: this.profile.description
+          }
         })
       } catch (err: any) {
         console.warn('Gagal sinkron quick edit ke backend:', err?.message)

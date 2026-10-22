@@ -1290,26 +1290,29 @@ const selectedMonthRecord = computed(() => {
 })
 
 const displayedCashBalance = computed(() => {
+  if (selectedMonthId.value === 'current' && umkmStore.financeSummary?.cashBalance) {
+    return umkmStore.financeSummary.cashBalance
+  }
   return selectedMonthRecord.value.cashBalance || 75500000
 })
 
 const displayedIncome = computed(() => {
   if (selectedMonthId.value === 'current') {
-    return totalIncome.value
+    return totalIncome.value > 0 ? totalIncome.value : (umkmStore.financeSummary?.totalIncomeMonth || selectedMonthRecord.value.omzet || 0)
   }
   return selectedMonthRecord.value.omzet || 0
 })
 
 const displayedHpp = computed(() => {
   if (selectedMonthId.value === 'current') {
-    return totalHppExpense.value
+    return totalHppExpense.value > 0 ? totalHppExpense.value : (umkmStore.financeSummary?.totalCogsMonth || selectedMonthRecord.value.hpp || 0)
   }
   return selectedMonthRecord.value.hpp || 0
 })
 
 const displayedOpex = computed(() => {
   if (selectedMonthId.value === 'current') {
-    return totalOpexExpense.value
+    return totalOpexExpense.value > 0 ? totalOpexExpense.value : (umkmStore.financeSummary?.totalOpexMonth || selectedMonthRecord.value.opex || 0)
   }
   return selectedMonthRecord.value.opex || 0
 })
@@ -1716,10 +1719,10 @@ const newTxForm = ref({
   notes: ''
 })
 
-function handleSaveTransaction() {
+async function handleSaveTransaction() {
   if (!newTxForm.value.title || newTxForm.value.amount <= 0) return
 
-  umkmStore.addDailyTransaction({
+  await umkmStore.addDailyTransaction({
     date: newTxForm.value.date,
     title: newTxForm.value.title,
     category: newTxForm.value.category,
@@ -1741,9 +1744,9 @@ function handleSaveTransaction() {
   isCashDrawerOpen.value = false
 }
 
-function handleDeleteTx(id: string) {
+async function handleDeleteTx(id: string) {
   if (confirm('Hapus catatan mutasi kas ini?')) {
-    umkmStore.deleteDailyTransaction(id)
+    await umkmStore.deleteDailyTransaction(id)
   }
 }
 

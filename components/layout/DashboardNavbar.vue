@@ -88,13 +88,14 @@
           </div>
 
           <!-- Logout Button -->
-          <NuxtLink
-            to="/masuk"
-            class="p-2 rounded-xl text-neutral-400 hover:text-danger hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+          <button
+            type="button"
+            class="p-2 rounded-xl text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer"
             title="Keluar Akun"
+            @click="handleLogout"
           >
             <HugeiconsIcon :icon="Logout01Icon" :size="18" :stroke-width="1.75" />
-          </NuxtLink>
+          </button>
         </div>
       </div>
     </div>
@@ -103,7 +104,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useKonsultanStore } from '~/stores/konsultan'
@@ -225,4 +226,11 @@ const navItems = computed(() => {
     ]
   }
 })
+
+const router = useRouter()
+
+async function handleLogout() {
+  await authStore.logout()
+  router.push('/masuk')
+}
 </script>

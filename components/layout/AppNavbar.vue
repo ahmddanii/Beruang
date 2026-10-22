@@ -101,21 +101,32 @@
           <HugeiconsIcon v-else :icon="Moon01Icon" :size="18" :stroke-width="1.8" />
         </button>
 
-        <!-- Masuk link: height 40px, rounded-full pill -->
-        <NuxtLink
-          to="/masuk"
-          class="hidden lg:inline-flex items-center justify-center h-10 px-4 rounded-full text-sm font-semibold text-neutral-700 dark:text-neutral-200 hover:text-[#0081A0] dark:hover:text-[#2091AA] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 whitespace-nowrap"
-        >
-          Masuk
-        </NuxtLink>
+        <!-- Auth Dependent Actions: Desktop -->
+        <template v-if="authStore.isAuthenticated">
+          <NuxtLink
+            :to="dashboardRoute"
+            class="hidden lg:inline-flex items-center justify-center h-10 px-5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
+          >
+            <span>Buka Dashboard</span>
+          </NuxtLink>
+        </template>
+        <template v-else>
+          <!-- Masuk link: height 40px, rounded-full pill -->
+          <NuxtLink
+            to="/masuk"
+            class="hidden lg:inline-flex items-center justify-center h-10 px-4 rounded-full text-sm font-semibold text-neutral-700 dark:text-neutral-200 hover:text-[#0081A0] dark:hover:text-[#2091AA] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 whitespace-nowrap"
+          >
+            Masuk
+          </NuxtLink>
 
-        <!-- Primary CTA Daftar: height 40px, generous px-6 pill -->
-        <NuxtLink
-          to="/daftar"
-          class="hidden lg:inline-flex items-center justify-center h-10 px-6 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
-        >
-          <span>Daftar</span>
-        </NuxtLink>
+          <!-- Primary CTA Daftar: height 40px, generous px-6 pill -->
+          <NuxtLink
+            to="/daftar"
+            class="hidden lg:inline-flex items-center justify-center h-10 px-6 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
+          >
+            <span>Daftar</span>
+          </NuxtLink>
+        </template>
 
         <!-- Mobile Menu Toggle: 40×40 touch target -->
         <button
@@ -209,27 +220,39 @@
       </NuxtLink>
       <!-- Mobile CTA row -->
       <div class="pt-4 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center gap-3">
-        <NuxtLink
-          to="/masuk"
-          class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-          @click="mobileMenuOpen = false"
-        >
-          Masuk
-        </NuxtLink>
-        <NuxtLink
-          to="/daftar"
-          class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white transition-colors shadow-sm"
-          @click="mobileMenuOpen = false"
-        >
-          Daftar
-        </NuxtLink>
+        <template v-if="authStore.isAuthenticated">
+          <NuxtLink
+            :to="dashboardRoute"
+            class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white transition-colors shadow-sm"
+            @click="mobileMenuOpen = false"
+          >
+            Buka Dashboard
+          </NuxtLink>
+        </template>
+        <template v-else>
+          <NuxtLink
+            to="/masuk"
+            class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            @click="mobileMenuOpen = false"
+          >
+            Masuk
+          </NuxtLink>
+          <NuxtLink
+            to="/daftar"
+            class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white transition-colors shadow-sm"
+            @click="mobileMenuOpen = false"
+          >
+            Daftar
+          </NuxtLink>
+        </template>
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '~/stores/auth'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Menu01Icon,
@@ -238,8 +261,16 @@ import {
   Moon01Icon
 } from '@hugeicons/core-free-icons'
 
+const authStore = useAuthStore()
 const mobileMenuOpen = ref(false)
 const isDark = ref(false)
+
+const dashboardRoute = computed(() => {
+  const role = authStore.currentUser?.role || authStore.currentRole
+  if (role === 'CONSULTANT') return '/konsultan'
+  if (role === 'INVESTOR') return '/investor'
+  return '/dashboard'
+})
 
 function toggleTheme() {
   isDark.value = !isDark.value

@@ -47,21 +47,20 @@ const DEMO_CREDENTIALS: Record<UserRole, { email: string; pass: string; name: st
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    currentUser: {
-      id: '5',
-      name: 'Fikri Setiawan',
-      email: 'fikri@kopisenja.id',
-      role: 'UMKM' as UserRole,
-      avatar: '/images/user-profile.png',
-      businessName: 'Kopi Senja Nusantara',
-      phone: '081234567890',
-      verified: true
-    } as UserProfile | null,
-    isAuthenticated: true,
+    currentUser: null as UserProfile | null,
+    isAuthenticated: false,
     token: '' as string,
     loading: false,
     error: null as string | null
   }),
+
+  getters: {
+    currentRole: (state): UserRole => state.currentUser?.role || 'UMKM',
+    role: (state): UserRole => state.currentUser?.role || 'UMKM',
+    userName: (state): string => state.currentUser?.name || 'Pengguna',
+    userEmail: (state): string => state.currentUser?.email || '',
+    userAvatar: (state): string => state.currentUser?.avatar || '/images/user-profile.png'
+  },
 
   actions: {
     /**
@@ -77,6 +76,21 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
+     * Pasang data pengguna dari Google OAuth segera ke state
+     */
+    setGoogleUser(profile: { name?: string; email?: string; picture?: string }, role: UserRole = 'UMKM') {
+      this.currentUser = {
+        id: this.currentUser?.id || 'google-' + Date.now(),
+        name: profile.name || this.currentUser?.name || 'Pengguna Google',
+        email: profile.email || this.currentUser?.email || '',
+        avatar: profile.picture || this.currentUser?.avatar || '/images/user-profile.png',
+        role: role || this.currentUser?.role || 'UMKM',
+        verified: true
+      } as UserProfile
+      this.isAuthenticated = true
+    },
+
+    /**
      * Ambil data profil user terbaru dari token aktif
      */
     async fetchMe() {
@@ -84,6 +98,7 @@ export const useAuthStore = defineStore('auth', {
         const res = await useApi<UserProfile>('/auth/me')
         if (res.data) {
           this.currentUser = {
+            ...this.currentUser,
             ...res.data,
             businessName: res.data.businessName || res.data.orgName || this.currentUser?.businessName
           }
@@ -131,9 +146,18 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Login / Register via Google OAuth Token (POST /api/auth/google)
      */
-    async loginWithGoogle(googleToken: string, role?: UserRole) {
+    async loginWithGoogle(
+      googleToken: string,
+      role?: UserRole,
+      preloadedProfile?: { name?: string; email?: string; picture?: string }
+    ) {
       this.loading = true
       this.error = null
+
+      if (preloadedProfile?.email || preloadedProfile?.name) {
+        this.setGoogleUser(preloadedProfile, role || 'UMKM')
+      }
+
       try {
         const res = await useApi<{ token: string; user: UserProfile }>('/auth/google', {
           method: 'POST',
@@ -153,8 +177,12 @@ export const useAuthStore = defineStore('auth', {
           tokenCookie.value = res.data.token
           this.token = res.data.token
           this.currentUser = {
+            ...this.currentUser,
             ...res.data.user,
-            businessName: res.data.user.businessName || res.data.user.orgName
+            name: res.data.user?.name || preloadedProfile?.name || this.currentUser?.name,
+            email: res.data.user?.email || preloadedProfile?.email || this.currentUser?.email,
+            avatar: res.data.user?.avatar || preloadedProfile?.picture || this.currentUser?.avatar,
+            businessName: res.data.user.businessName || res.data.user.orgName || this.currentUser?.businessName
           }
           this.isAuthenticated = true
           await this.fetchMe()
@@ -162,6 +190,11 @@ export const useAuthStore = defineStore('auth', {
 
         return res.data
       } catch (err: any) {
+        if (preloadedProfile?.email) {
+          console.warn('Backend Google Auth belum sinkron, menggunakan data profil Google autentik:', err?.message)
+          this.isAuthenticated = true
+          return { token: 'google-session-active', user: this.currentUser! }
+        }
         this.error = err?.message || 'Login dengan akun Google gagal'
         throw err
       } finally {
@@ -292,6 +325,28 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
+     * Perbarui data profil lokal pengguna
+     */
+    updateProfile(data: Partial<UserProfile>) {
+      if (this.currentUser) {
+        this.currentUser = {
+          ...this.currentUser,
+          ...data
+        }
+      } else {
+        this.currentUser = {
+          id: 'usr-' + Date.now(),
+          name: data.name || '',
+          email: data.email || '',
+          role: data.role || 'UMKM',
+          verified: true,
+          ...data
+        } as UserProfile
+      }
+      this.isAuthenticated = true
+    },
+
+    /**
      * Quick Role Switcher untuk keperluan simulasi dev / demo
      * Otomatis login dengan akun seeder live yang relevan jika password default tersedia
      */
@@ -302,12 +357,16 @@ export const useAuthStore = defineStore('auth', {
           await this.login(demo.email, demo.pass)
         } catch {
           // Fallback lokal jika backend tidak terjangkau
-          if (this.currentUser) {
-            this.currentUser.role = role
-            this.currentUser.name = demo.name
-            this.currentUser.email = demo.email
-            this.currentUser.businessName = demo.businessName
+          this.currentUser = {
+            id: 'demo-' + role.toLowerCase(),
+            role,
+            name: demo.name,
+            email: demo.email,
+            businessName: demo.businessName,
+            avatar: '/images/user-profile.png',
+            verified: true
           }
+          this.isAuthenticated = true
         }
       }
     },

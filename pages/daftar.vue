@@ -222,28 +222,36 @@
             </div>
           </div>
 
-          <!-- Fast Demo Account Selector Chips -->
-          <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#1A1D26]/70 border border-[#E2E8F0] dark:border-white/10 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-neutral-700 dark:text-neutral-300">Pilih Cepat Akun Demo:</span>
-              <span class="text-[11px] text-neutral-500 dark:text-neutral-400">1-Klik isi nomor</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <button
-                v-for="r in roleCards"
-                :key="r.key"
-                type="button"
-                :class="[
-                  'py-2 px-2.5 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
-                  cleanPhone === r.demoPhone.replace(/\D/g, '')
-                    ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/20 border-[#0081A0] text-[#0081A0] dark:text-[#2091AA] shadow-2xs ring-1 ring-[#0081A0]/30'
-                    : 'bg-white dark:bg-[#13161F] border-neutral-200/80 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
-                ]"
-                @click="setDemoPhone(r.demoPhone, r.key)"
-              >
-                <span class="block text-xs font-bold">{{ r.shortTitle }}</span>
-                <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate">{{ r.demoName }}</span>
-              </button>
+          <!-- Mode Pengujian / Akun Demo (Disembunyikan rapi di accordion) -->
+          <div class="pt-1 text-center">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 font-medium transition-colors cursor-pointer"
+              @click="showDemoAccounts = !showDemoAccounts"
+            >
+              <span>Mode Pengujian & Evaluasi</span>
+              <HugeiconsIcon :icon="showDemoAccounts ? ArrowUp01Icon : ArrowDown01Icon" :size="12" />
+            </button>
+
+            <div v-if="showDemoAccounts" class="mt-2.5 p-3 rounded-2xl bg-white/70 dark:bg-[#1A1D26]/70 border border-[#E2E8F0] dark:border-white/10 space-y-2 text-left animate-in fade-in duration-150">
+              <span class="text-[11px] font-bold text-neutral-600 dark:text-neutral-400 block">Isi Cepat Nomor Demo:</span>
+              <div class="grid grid-cols-3 gap-2">
+                <button
+                  v-for="r in roleCards"
+                  :key="r.key"
+                  type="button"
+                  :class="[
+                    'py-2 px-2 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
+                    cleanPhone === r.demoPhone.replace(/\D/g, '')
+                      ? 'bg-[#0081A0]/10 border-[#0081A0] text-[#0081A0]'
+                      : 'bg-white dark:bg-[#13161F] border-neutral-200/80 text-neutral-700 dark:text-neutral-300'
+                  ]"
+                  @click="setDemoPhone(r.demoPhone, r.key)"
+                >
+                  <span class="block text-xs font-bold">{{ r.shortTitle }}</span>
+                  <span class="block text-[10px] text-neutral-500 truncate">{{ r.demoName }}</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -430,7 +438,9 @@ import {
   Store01Icon,
   UserGroupIcon,
   Coins01Icon,
-  CheckmarkCircle01Icon
+  CheckmarkCircle01Icon,
+  ArrowDown01Icon,
+  ArrowUp01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -482,6 +492,7 @@ const registrationSteps = [
 ]
 
 // State
+const showDemoAccounts = ref(false)
 const selectedRole = ref<UserRole>('UMKM')
 const step = ref<'role' | 'phone' | 'otp'>('role')
 const loading = ref(false)
@@ -490,7 +501,7 @@ const errorMessage = ref('')
 const successNotification = ref('')
 const resendCountdown = ref(60)
 let timerInterval: any = null
-const phoneInput = ref('812-3456-7890')
+const phoneInput = ref('')
 
 const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
@@ -511,10 +522,6 @@ function setDemoPhone(phone: string, role?: UserRole) {
 
 function onRoleTabClick(role: UserRole) {
   selectedRole.value = role
-  const card = roleCards.find(r => r.key === role)
-  if (card?.demoPhone) {
-    phoneInput.value = formatIndonesianPhone(card.demoPhone)
-  }
 }
 
 function fillCurrentRoleDemoPhone() {
@@ -748,12 +755,12 @@ function fillOtpDemo() {
 
 async function handleGoogleRegister() {
   errorMessage.value = ''
-  await googleAuth.triggerGoogleLogin(async (credential: string) => {
+  await googleAuth.triggerGoogleLogin(async (credential: string, userProfile?: { name?: string; email?: string; picture?: string }) => {
     loading.value = true
     loadingMessage.value = '✓ Menghubungkan akun Google...'
     try {
-      await authStore.loginWithGoogle(credential, selectedRole.value)
-      loadingMessage.value = `✓ Masuk sebagai ${activeRoleMeta.value.shortTitle}...`
+      await authStore.loginWithGoogle(credential, selectedRole.value, userProfile)
+      loadingMessage.value = `✓ Mendaftar sebagai ${activeRoleMeta.value.shortTitle}...`
       setTimeout(() => {
         router.push(`/onboarding?role=${selectedRole.value}`)
       }, 300)
@@ -794,22 +801,8 @@ async function verifyAndRegister() {
     }
   }
 
-  const defaultName = (
-    selectedRole.value === 'UMKM'
-      ? 'Fikri Setiawan'
-      : selectedRole.value === 'CONSULTANT'
-        ? 'Dra. Maya Suryani, M.M.'
-        : 'Hendro Wicaksono'
-  )
-
-  const defaultOrg = (
-    selectedRole.value === 'UMKM'
-      ? 'Kopi Senja Nusantara'
-      : selectedRole.value === 'CONSULTANT'
-        ? 'Maya Advisory Partner'
-        : 'Nusantara Angel Syndicate'
-  )
-
+  const defaultName = authStore.currentUser?.name || ''
+  const defaultOrg = authStore.currentUser?.businessName || ''
   const email = `user_${cleanPhone.value}@beruang.id`
 
   try {

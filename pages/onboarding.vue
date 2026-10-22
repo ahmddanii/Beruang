@@ -35,23 +35,13 @@
           </div>
         </div>
 
-        <!-- Role Quick Switcher -->
+        <!-- Account Role Locked Badge & Step Counter -->
         <div class="flex items-center gap-2">
-          <div class="p-1 rounded-full bg-neutral-100/90 dark:bg-[#13161F]/90 border border-neutral-200/80 dark:border-white/10 flex gap-1 shadow-2xs">
-            <button
-              v-for="r in availableRoles"
-              :key="r.key"
-              type="button"
-              :class="[
-                'px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer',
-                activeRole === r.key
-                  ? 'bg-white dark:bg-[#1A1D26] text-[#0081A0] dark:text-[#2091AA] shadow-xs'
-                  : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
-              ]"
-              @click="switchRole(r.key)"
-            >
-              {{ r.label }}
-            </button>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 shadow-2xs">
+            <span class="w-2 h-2 rounded-full bg-[#00AA13]" />
+            <span class="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+              {{ activeRoleBadgeLabel }}
+            </span>
           </div>
           <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
             {{ currentStep }} / {{ currentStepsList.length }}
@@ -858,7 +848,13 @@
             <button
               v-if="currentStep < currentStepsList.length"
               type="button"
-              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-xs sm:text-sm shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] transition-all cursor-pointer"
+              :disabled="!isCurrentStepValid"
+              :class="[
+                'inline-flex items-center gap-2 h-10 px-6 rounded-full font-bold text-xs sm:text-sm transition-all',
+                isCurrentStepValid
+                  ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] cursor-pointer'
+                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed border border-neutral-200 dark:border-neutral-700'
+              ]"
               @click="currentStep++"
             >
               <span>Lanjut</span>
@@ -886,7 +882,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
@@ -973,13 +969,19 @@ const roleHeaderTitle = computed(() => {
   return 'Data Usaha'
 })
 
+const activeRoleBadgeLabel = computed(() => {
+  if (activeRole.value === 'CONSULTANT') return 'Akun Konsultan Mitra'
+  if (activeRole.value === 'INVESTOR') return 'Akun Investor Mitra'
+  return 'Akun Pemilik UMKM'
+})
+
 const finishButtonLabel = computed(() => {
   if (activeRole.value === 'CONSULTANT') return 'Buka Halaman Konsultan'
   if (activeRole.value === 'INVESTOR') return 'Mulai Cari Peluang Usaha'
   return 'Masuk ke Beranda Usaha'
 })
 
-// UMKM Form Data
+// UMKM Form Data (Dinamis dari Google OAuth / Pendaftaran Sebelumnya)
 const umkmSectors = [
   'Makanan & Minuman',
   'Pakaian & Kerajinan',
@@ -989,29 +991,29 @@ const umkmSectors = [
 ]
 
 const formUmkm = ref({
-  name: authStore.currentUser?.businessName || authStore.currentUser?.org_name || 'Kopi Senja Nusantara',
-  owner: authStore.currentUser?.name || 'Fikri Setiawan',
-  year: 2021,
-  startDate: '2021-08-17',
+  name: authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
+  owner: authStore.currentUser?.name || '',
+  year: (authStore.currentUser as any)?.establishedYear || null,
+  startDate: '',
   legalStatus: 'NIB_READY',
-  nib: '1209000123456',
-  npwp: '81.423.891.4-429.000',
+  nib: (authStore.currentUser as any)?.nib || '',
+  npwp: (authStore.currentUser as any)?.npwp || '',
   sector: authStore.currentUser?.sector || 'Makanan & Minuman',
-  city: authStore.currentUser?.city || 'Bandung, Jawa Barat',
-  outlets: 3,
-  employees: 14,
-  monthlyRevenue: 60000000,
+  city: authStore.currentUser?.city || '',
+  outlets: (authStore.currentUser as any)?.outletsCount || 1,
+  employees: (authStore.currentUser as any)?.employeesCount || 1,
+  monthlyRevenue: (authStore.currentUser as any)?.monthlyRevenue || null,
   hppPercentage: 40,
-  targetFunding: 150000000,
+  targetFunding: (authStore.currentUser as any)?.fundingTarget || null,
   equityOffered: '10% Bagi Hasil',
   description: authStore.currentUser?.businessProfile?.description || ''
 })
 
 const displayMonthlyRevenue = ref(
-  formUmkm.value.monthlyRevenue ? Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID') : '60.000.000'
+  formUmkm.value.monthlyRevenue ? Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID') : ''
 )
 const displayTargetFunding = ref(
-  formUmkm.value.targetFunding ? Number(formUmkm.value.targetFunding).toLocaleString('id-ID') : '150.000.000'
+  formUmkm.value.targetFunding ? Number(formUmkm.value.targetFunding).toLocaleString('id-ID') : ''
 )
 
 function handleMonthlyRevenueInput(e: Event) {
@@ -1054,7 +1056,7 @@ onClickOutside(yearPickerRef, () => {
   isYearPickerOpen.value = false
 })
 
-// Consultant Form Data
+// Consultant Form Data (Dinamis dari Akun)
 const consultantSpecializations = [
   'Keuangan & Biaya',
   'Operasional & Stok',
@@ -1063,16 +1065,16 @@ const consultantSpecializations = [
 ]
 
 const formConsultant = ref({
-  name: authStore.currentUser?.name || 'Dra. Maya Suryani, M.M.',
-  institution: authStore.currentUser?.institution || authStore.currentUser?.org_name || 'Maya Advisory Partner',
-  bnspLicense: authStore.currentUser?.bnspLicense || 'BNSP-KONS-2024-8891',
-  city: authStore.currentUser?.city || 'Jakarta Selatan',
+  name: authStore.currentUser?.name || '',
+  institution: authStore.currentUser?.institution || authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
+  bnspLicense: (authStore.currentUser as any)?.bnspLicense || '',
+  city: authStore.currentUser?.city || '',
   specialization: authStore.currentUser?.specialization || 'Keuangan & Biaya',
-  experience: '5+ Tahun',
-  maxClients: 10
+  experience: '3 - 5 Tahun',
+  maxClients: 5
 })
 
-// Investor Form Data
+// Investor Form Data (Dinamis dari Akun)
 const ticketRanges = [
   '50 - 150 Juta',
   '150 - 500 Juta',
@@ -1089,13 +1091,13 @@ const investorTargetSectors = [
 ]
 
 const formInvestor = ref({
-  name: authStore.currentUser?.name || 'Hendro Wicaksono',
-  entityName: authStore.currentUser?.businessName || authStore.currentUser?.org_name || 'Nusantara Angel Syndicate',
-  investorType: authStore.currentUser?.investorType || 'Kelompok Modal',
-  city: authStore.currentUser?.city || 'Jakarta Pusat',
-  ticketRange: authStore.currentUser?.ticketRange || '150 - 500 Juta',
-  sectors: ['Makanan & Minuman', 'Pakaian & Kerajinan'],
-  minMargin: '35%'
+  name: authStore.currentUser?.name || '',
+  entityName: authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
+  investorType: (authStore.currentUser as any)?.investorType || 'Perorangan (Angel Investor)',
+  city: authStore.currentUser?.city || '',
+  ticketRange: (authStore.currentUser as any)?.ticketRange || '50 - 150 Juta',
+  sectors: ['Makanan & Minuman'],
+  minMargin: '30%'
 })
 
 function toggleInvestorSector(sec: string) {
@@ -1106,6 +1108,44 @@ function toggleInvestorSector(sec: string) {
     formInvestor.value.sectors.push(sec)
   }
 }
+
+// Validasi Form per Langkah
+const isCurrentStepValid = computed(() => {
+  if (activeRole.value === 'UMKM') {
+    if (currentStep.value === 1) {
+      return Boolean(formUmkm.value.name?.trim() && formUmkm.value.owner?.trim())
+    }
+  } else if (activeRole.value === 'CONSULTANT') {
+    if (currentStep.value === 1) {
+      return Boolean(formConsultant.value.name?.trim())
+    }
+  } else if (activeRole.value === 'INVESTOR') {
+    if (currentStep.value === 1) {
+      return Boolean(formInvestor.value.name?.trim())
+    }
+  }
+  return true
+})
+
+// Sinkronkan data saat dimuat jika ada data baru dari OAuth
+onMounted(() => {
+  if (authStore.currentUser) {
+    if (authStore.currentUser.name) {
+      if (!formUmkm.value.owner) formUmkm.value.owner = authStore.currentUser.name
+      if (!formConsultant.value.name) formConsultant.value.name = authStore.currentUser.name
+      if (!formInvestor.value.name) formInvestor.value.name = authStore.currentUser.name
+    }
+    const businessOrOrg = authStore.currentUser.businessName || authStore.currentUser.org_name
+    if (businessOrOrg) {
+      if (!formUmkm.value.name) formUmkm.value.name = businessOrOrg
+      if (!formConsultant.value.institution) formConsultant.value.institution = businessOrOrg
+      if (!formInvestor.value.entityName) formInvestor.value.entityName = businessOrOrg
+    }
+    if (authStore.currentUser.role && !route.query.role) {
+      activeRole.value = authStore.currentUser.role
+    }
+  }
+})
 
 async function finishOnboarding() {
   submitting.value = true

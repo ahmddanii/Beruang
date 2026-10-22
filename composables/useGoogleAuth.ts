@@ -41,10 +41,10 @@ export function useGoogleAuth() {
 
   /**
    * Memicu alur Google OAuth (Google Identity Services popup resmi).
-   * Membuka popup Google resmi dan mengembalikan token kredensial untuk diteruskan ke backend.
+   * Membuka popup Google resmi dan mengembalikan token kredensial beserta data profil dasar (nama, email, avatar).
    */
   async function triggerGoogleLogin(
-    onSuccess: (credential: string) => Promise<void> | void
+    onSuccess: (credential: string, userProfile?: { name?: string; email?: string; picture?: string }) => Promise<void> | void
   ) {
     if (!hasGoogleClientId.value) {
       error.value = 'Kredensial Google Client ID belum disetel di .env (NUXT_PUBLIC_GOOGLE_CLIENT_ID)'
@@ -65,7 +65,23 @@ export function useGoogleAuth() {
           callback: async (response: any) => {
             loading.value = false
             if (response?.access_token) {
-              await onSuccess(response.access_token)
+              let userProfile: { name?: string; email?: string; picture?: string } | undefined
+              try {
+                const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${response.access_token}` }
+                })
+                if (profileRes.ok) {
+                  const data = await profileRes.json()
+                  userProfile = {
+                    name: data.name,
+                    email: data.email,
+                    picture: data.picture
+                  }
+                }
+              } catch (profileErr) {
+                console.warn('Gagal memuat profil Google userinfo:', profileErr)
+              }
+              await onSuccess(response.access_token, userProfile)
             } else if (response?.error) {
               error.value = response.error_description || response.error || 'Autentikasi Google dibatalkan'
             }
@@ -88,7 +104,28 @@ export function useGoogleAuth() {
           callback: async (response: any) => {
             loading.value = false
             if (response?.credential) {
-              await onSuccess(response.credential)
+              let userProfile: { name?: string; email?: string; picture?: string } | undefined
+              try {
+                const base64Url = response.credential.split('.')[1]
+                if (base64Url) {
+                  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+                  const jsonPayload = decodeURIComponent(
+                    atob(base64)
+                      .split('')
+                      .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                      .join('')
+                  )
+                  const parsed = JSON.parse(jsonPayload)
+                  userProfile = {
+                    name: parsed.name,
+                    email: parsed.email,
+                    picture: parsed.picture
+                  }
+                }
+              } catch (jwtErr) {
+                console.warn('Gagal decode JWT Google:', jwtErr)
+              }
+              await onSuccess(response.credential, userProfile)
             } else {
               error.value = 'Tidak ada kredensial yang diterima dari Google.'
             }

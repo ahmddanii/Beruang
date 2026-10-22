@@ -40,8 +40,8 @@
       <BStoreBanner
         :store-name="formProfile.name"
         :owner-name="ownerFirstName"
-        :owner-avatar-url="umkmStore.profile.ownerAvatarUrl || authStore.currentUser?.avatar || '/images/user-profile.png'"
-        :banner-url="umkmStore.profile.bannerUrl"
+        :owner-avatar-url="umkmStore.profile.ownerAvatarUrl || authStore.currentUser?.avatar || ''"
+        :banner-url="umkmStore.profile.bannerUrl || ''"
         @update:banner-url="onBannerUpdated"
         @reset:banner-url="onBannerReset"
         @update:owner-avatar-url="onAvatarUpdated"
@@ -1186,7 +1186,7 @@ function onBannerUpdated(newUrl: string) {
 
 function onBannerReset() {
   umkmStore.resetProfileBanner()
-  triggerToast('Sampul toko dikembalikan ke setelan awal.')
+  triggerToast('Sampul toko berhasil dihapus.')
 }
 
 function onAvatarUpdated(newUrl: string) {
@@ -1200,9 +1200,9 @@ function onAvatarUpdated(newUrl: string) {
 function onAvatarReset() {
   umkmStore.resetOwnerAvatar()
   if (authStore.currentUser) {
-    authStore.updateAvatar('/images/user-profile.png')
+    authStore.updateAvatar('')
   }
-  triggerToast('Foto profil dikembalikan ke setelan awal.')
+  triggerToast('Foto profil pemilik berhasil dihapus.')
 }
 
 // Featured Products Traction

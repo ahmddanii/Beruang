@@ -132,7 +132,7 @@ export const useUmkmStore = defineStore('umkm', {
       brand: 'Kopi Senja Nusantara',
       ownerName: 'Fikri Setiawan',
       owner_name: 'Fikri Setiawan',
-      ownerAvatarUrl: '/images/user-profile.png',
+      ownerAvatarUrl: '',
       sector: 'Kuliner & Minuman (F&B)',
       city: 'Bandung, Jawa Barat',
       establishedYear: 2021,
@@ -142,7 +142,7 @@ export const useUmkmStore = defineStore('umkm', {
       pitchSummary: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
       description: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
       logoUrl: '/logo.svg',
-      bannerUrl: '/images/default-store-banner.jpg',
+      bannerUrl: '',
       nib: '1209000123456',
       npwp: '81.423.891.4-429.000',
       fundingStatus: 'READY_FOR_FUNDING' as 'DRAFT' | 'IN_REVIEW' | 'READY_FOR_FUNDING',
@@ -921,7 +921,7 @@ export const useUmkmStore = defineStore('umkm', {
     },
 
     resetProfileBanner() {
-      this.profile.bannerUrl = '/images/default-store-banner.jpg'
+      this.profile.bannerUrl = ''
       if (typeof window !== 'undefined') {
         try {
           localStorage.removeItem('umkm_banner_url')
@@ -964,7 +964,7 @@ export const useUmkmStore = defineStore('umkm', {
     },
 
     resetOwnerAvatar() {
-      this.profile.ownerAvatarUrl = '/images/user-profile.png'
+      this.profile.ownerAvatarUrl = ''
       if (typeof window !== 'undefined') {
         try {
           localStorage.removeItem('umkm_avatar_url')

@@ -29,16 +29,30 @@
       @dragleave.prevent="onDragLeave"
       @drop.prevent="onDrop"
     >
+      <!-- Banner Image (If present) -->
       <img
+        v-if="currentBannerUrl"
         :src="currentBannerUrl"
         :alt="`Banner Toko ${storeName}`"
         class="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover/banner:scale-105"
         @error="handleImageError"
       />
+      <!-- Default Empty Banner State (Clean aesthetic pattern with camera icon & prompt) -->
+      <div
+        v-else
+        class="w-full h-full bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#090D16] flex flex-col items-center justify-center text-slate-300 select-none relative"
+      >
+        <div class="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-2.5 shadow-inner">
+          <HugeiconsIcon :icon="Camera01Icon" :size="28" class="text-slate-300" />
+        </div>
+        <p class="font-poppins font-semibold text-xs sm:text-sm text-slate-200">Belum Ada Sampul Toko</p>
+        <p class="text-[11px] text-slate-400 font-sans mt-0.5">Unggah foto gerai atau produk untuk melengkapi profil tokomu</p>
+      </div>
 
       <!-- Dual Gradient Vignette (Preserves Contrast for Header Elements) -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
-      <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30 pointer-events-none" />
+      <div v-if="currentBannerUrl" class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
+      <div v-if="currentBannerUrl" class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30 pointer-events-none" />
 
       <!-- Drag & Drop Active Overlay for Banner -->
       <div
@@ -86,7 +100,7 @@
               :size="16"
               :stroke-width="2"
             />
-            <span class="font-poppins font-semibold">Ubah Sampul</span>
+            <span class="font-poppins font-semibold">{{ currentBannerUrl ? 'Ubah Sampul' : 'Tambah Sampul' }}</span>
             <svg
               class="w-3.5 h-3.5 text-white/80 transition-transform duration-200 shrink-0"
               :class="{ 'rotate-180': isMenuOpen }"
@@ -115,7 +129,7 @@
               class="absolute right-0 top-full mt-2 w-48 sm:w-52 rounded-2xl bg-white/95 dark:bg-[#18191E]/95 backdrop-blur-xl border border-neutral-200/90 dark:border-neutral-800 shadow-xl p-1.5 z-50 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-sans"
               @click.stop
             >
-              <!-- Option 1: Ganti Banner -->
+              <!-- Option 1: Unggah / Ganti Banner -->
               <button
                 type="button"
                 class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
@@ -125,40 +139,56 @@
                   <HugeiconsIcon :icon="Camera01Icon" :size="14" :stroke-width="2" />
                 </div>
                 <div class="flex-1">
-                  <span class="font-heading font-medium block">Ganti Banner</span>
+                  <span class="font-heading font-medium block">{{ currentBannerUrl ? 'Ganti Banner' : 'Unggah Banner' }}</span>
                 </div>
               </button>
 
-              <!-- Option 2: Atur Ulang Banner -->
-              <button
-                type="button"
-                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
-                @click="onSelectCropBanner"
-              >
-                <div class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                  <HugeiconsIcon :icon="CropIcon" :size="14" :stroke-width="2" />
-                </div>
-                <div class="flex-1">
-                  <span class="font-heading font-medium block">Atur Ulang Banner</span>
-                </div>
-              </button>
+              <template v-if="currentBannerUrl">
+                <!-- Option 2: Atur Ulang Banner -->
+                <button
+                  type="button"
+                  class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
+                  @click="onSelectCropBanner"
+                >
+                  <div class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                    <HugeiconsIcon :icon="CropIcon" :size="14" :stroke-width="2" />
+                  </div>
+                  <div class="flex-1">
+                    <span class="font-heading font-medium block">Atur Ulang Banner</span>
+                  </div>
+                </button>
 
-              <!-- Divider -->
-              <div class="my-1 border-t border-neutral-100 dark:border-neutral-800/80" />
+                <!-- Option 3: Lihat Foto Penuh -->
+                <button
+                  type="button"
+                  class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
+                  @click="onSelectViewFullBanner"
+                >
+                  <div class="w-6 h-6 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center shrink-0">
+                    <HugeiconsIcon :icon="EyeIcon" :size="14" :stroke-width="2" />
+                  </div>
+                  <div class="flex-1">
+                    <span class="font-heading font-medium block">Lihat Foto Penuh</span>
+                  </div>
+                </button>
 
-              <!-- Option 3: Lihat Foto Penuh -->
-              <button
-                type="button"
-                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
-                @click="onSelectViewFullBanner"
-              >
-                <div class="w-6 h-6 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center shrink-0">
-                  <HugeiconsIcon :icon="EyeIcon" :size="14" :stroke-width="2" />
-                </div>
-                <div class="flex-1">
-                  <span class="font-heading font-medium block">Lihat Foto Penuh</span>
-                </div>
-              </button>
+                <!-- Divider -->
+                <div class="my-1 border-t border-neutral-100 dark:border-neutral-800/80" />
+
+                <!-- Option 4: Hapus Banner -->
+                <button
+                  type="button"
+                  class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-rose-50 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 transition-colors cursor-pointer group"
+                  @click="onSelectResetBanner"
+                >
+                  <div class="w-6 h-6 rounded-lg bg-rose-100/70 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                    <HugeiconsIcon :icon="Delete02Icon" :size="14" :stroke-width="2" />
+                  </div>
+                  <div class="flex-1">
+                    <span class="font-heading font-medium block">Hapus Sampul</span>
+                  </div>
+                </button>
+              </template>
             </div>
           </Transition>
         </div>
@@ -173,7 +203,7 @@
       <div class="relative group/avatar">
         <!-- Main Circular Avatar with Drag & Drop, Hover State, and Click Action -->
         <div
-          class="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-full border-4 sm:border-[5px] border-white dark:border-[#0F1014] bg-neutral-100 dark:bg-[#18191E] overflow-hidden flex items-center justify-center cursor-pointer select-none transition-all duration-200"
+          class="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-full border-4 sm:border-[5px] border-white dark:border-[#0F1014] bg-neutral-100 dark:bg-[#18191E] overflow-hidden flex items-center justify-center cursor-pointer select-none transition-all duration-200 shadow-md"
           :class="[
             isAvatarDragging ? 'ring-4 ring-primary-500 ring-offset-2' : ''
           ]"
@@ -183,17 +213,32 @@
           @drop.prevent="onAvatarDrop"
           @click="toggleAvatarMenu"
         >
+          <!-- If avatar exists -->
           <img
+            v-if="currentOwnerAvatarUrl"
             :src="currentOwnerAvatarUrl"
             :alt="`Foto Profil ${ownerName}`"
             class="w-full h-full object-cover object-center transition-transform duration-300 group-hover/avatar:scale-105"
             @error="handleAvatarError"
           />
 
+          <!-- Default Empty Avatar: Initials with high aesthetic dark slate & cyan accent -->
+          <div
+            v-else
+            class="w-full h-full bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#0A0E1A] flex flex-col items-center justify-center text-white select-none relative"
+          >
+            <div class="absolute inset-0 opacity-[0.08] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_12px] pointer-events-none" />
+            <span class="font-poppins font-bold text-2xl sm:text-3xl md:text-4xl text-[#50AABF] dark:text-[#50AABF] tracking-tight">
+              {{ ownerInitials }}
+            </span>
+          </div>
+
           <!-- Hover Overlay with Camera Icon -->
-          <div class="absolute inset-0 bg-black/45 backdrop-blur-[1px] opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1 pointer-events-none">
+          <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1 pointer-events-none">
             <HugeiconsIcon :icon="Camera01Icon" :size="24" :stroke-width="2" />
-            <span class="text-[10px] sm:text-xs font-heading font-medium tracking-wide">Ubah Foto</span>
+            <span class="text-[10px] sm:text-xs font-heading font-medium tracking-wide">
+              {{ currentOwnerAvatarUrl ? 'Ubah Foto' : 'Tambah Foto' }}
+            </span>
           </div>
 
           <!-- Drag & Drop Active Overlay on Avatar -->
@@ -231,7 +276,7 @@
             class="absolute left-0 sm:left-4 top-full mt-2.5 w-52 sm:w-56 rounded-2xl bg-white dark:bg-[#16171C] border border-neutral-200 dark:border-neutral-800 shadow-2xl p-1.5 z-50 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-sans ring-1 ring-black/5"
             @click.stop
           >
-            <!-- Option 1: Ganti Foto Profil -->
+            <!-- Option 1: Unggah / Ganti Foto Profil -->
             <button
               type="button"
               class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
@@ -241,40 +286,58 @@
                 <HugeiconsIcon :icon="Camera01Icon" :size="14" :stroke-width="2" />
               </div>
               <div class="flex-1">
-                <span class="font-heading font-medium block">Ganti Foto Profil</span>
+                <span class="font-heading font-medium block">
+                  {{ currentOwnerAvatarUrl ? 'Ganti Foto Profil' : 'Unggah Foto Profil' }}
+                </span>
               </div>
             </button>
 
-            <!-- Option 2: Atur Ulang Foto Profil -->
-            <button
-              type="button"
-              class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
-              @click="onSelectCropAvatar"
-            >
-              <div class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                <HugeiconsIcon :icon="CropIcon" :size="14" :stroke-width="2" />
-              </div>
-              <div class="flex-1">
-                <span class="font-heading font-medium block">Atur Ulang Foto</span>
-              </div>
-            </button>
+            <template v-if="currentOwnerAvatarUrl">
+              <!-- Option 2: Atur Ulang Foto Profil -->
+              <button
+                type="button"
+                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
+                @click="onSelectCropAvatar"
+              >
+                <div class="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                  <HugeiconsIcon :icon="CropIcon" :size="14" :stroke-width="2" />
+                </div>
+                <div class="flex-1">
+                  <span class="font-heading font-medium block">Atur Ulang Foto</span>
+                </div>
+              </button>
 
-            <!-- Divider -->
-            <div class="my-1 border-t border-neutral-100 dark:border-neutral-800/80" />
+              <!-- Option 3: Lihat Foto Penuh -->
+              <button
+                type="button"
+                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
+                @click="onSelectViewFullAvatar"
+              >
+                <div class="w-6 h-6 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center shrink-0">
+                  <HugeiconsIcon :icon="EyeIcon" :size="14" :stroke-width="2" />
+                </div>
+                <div class="flex-1">
+                  <span class="font-heading font-medium block">Lihat Foto Penuh</span>
+                </div>
+              </button>
 
-            <!-- Option 3: Lihat Foto Penuh -->
-            <button
-              type="button"
-              class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-colors cursor-pointer group"
-              @click="onSelectViewFullAvatar"
-            >
-              <div class="w-6 h-6 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center shrink-0">
-                <HugeiconsIcon :icon="EyeIcon" :size="14" :stroke-width="2" />
-              </div>
-              <div class="flex-1">
-                <span class="font-heading font-medium block">Lihat Foto Penuh</span>
-              </div>
-            </button>
+              <!-- Divider -->
+              <div class="my-1 border-t border-neutral-100 dark:border-neutral-800/80" />
+
+              <!-- Option 4: Hapus Foto Profil -->
+              <button
+                type="button"
+                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left hover:bg-rose-50 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 transition-colors cursor-pointer group"
+                @click="onSelectResetAvatar"
+              >
+                <div class="w-6 h-6 rounded-lg bg-rose-100/70 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                  <HugeiconsIcon :icon="Delete02Icon" :size="14" :stroke-width="2" />
+                </div>
+                <div class="flex-1">
+                  <span class="font-heading font-medium block">Hapus Foto Profil</span>
+                </div>
+              </button>
+            </template>
           </div>
         </Transition>
       </div>
@@ -517,7 +580,9 @@ import {
   ZoomOutIcon,
   ArrowReloadHorizontalIcon,
   CheckmarkBadge01Icon,
-  Cancel01Icon
+  Cancel01Icon,
+  Delete02Icon,
+  UserCircleIcon
 } from '@hugeicons/core-free-icons'
 
 const props = withDefaults(
@@ -532,10 +597,10 @@ const props = withDefaults(
   {
     storeName: 'Kopi Senja Nusantara',
     ownerName: 'Fikri Setiawan',
-    ownerAvatarUrl: '/images/user-profile.png',
-    defaultOwnerAvatarUrl: '/images/user-profile.png',
-    bannerUrl: '/images/default-store-banner.jpg',
-    defaultBannerUrl: '/images/default-store-banner.jpg'
+    ownerAvatarUrl: '',
+    defaultOwnerAvatarUrl: '',
+    bannerUrl: '',
+    defaultBannerUrl: ''
   }
 )
 
@@ -569,13 +634,22 @@ let toastTimeout: any = null
 const rawBannerSource = ref<string>('')
 const rawAvatarSource = ref<string>('')
 
-// Computed Display Sources
+// Computed Display Sources & Initials
+const ownerInitials = computed(() => {
+  const name = props.ownerName?.trim() || props.storeName?.trim() || 'BU'
+  const parts = name.split(/\s+/).filter(Boolean)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase()
+  }
+  return name.slice(0, 2).toUpperCase()
+})
+
 const currentBannerUrl = computed(() => {
-  return props.bannerUrl || props.defaultBannerUrl
+  return props.bannerUrl || props.defaultBannerUrl || ''
 })
 
 const currentOwnerAvatarUrl = computed(() => {
-  return props.ownerAvatarUrl || props.defaultOwnerAvatarUrl
+  return props.ownerAvatarUrl || props.defaultOwnerAvatarUrl || ''
 })
 
 // Full Preview Modal State
@@ -649,6 +723,12 @@ function onSelectViewFullBanner() {
   isViewingFullPhoto.value = true
 }
 
+function onSelectResetBanner() {
+  closeMenu()
+  emit('reset:bannerUrl')
+  triggerToast('Sampul toko dihapus.')
+}
+
 // Avatar Options Handlers
 function onSelectChangeAvatar() {
   closeAvatarMenu()
@@ -667,6 +747,12 @@ function onSelectViewFullAvatar() {
   fullPhotoTitle.value = `Foto Profil ${props.ownerName}`
   fullPhotoIsAvatar.value = true
   isViewingFullPhoto.value = true
+}
+
+function onSelectResetAvatar() {
+  closeAvatarMenu()
+  emit('reset:ownerAvatarUrl')
+  triggerToast('Foto profil dihapus.')
 }
 
 function triggerToast(msg: string) {
@@ -728,10 +814,7 @@ function onDrop(event: DragEvent) {
 }
 
 function handleImageError(event: Event) {
-  const img = event.target as HTMLImageElement
-  if (img && img.src !== props.defaultBannerUrl) {
-    img.src = props.defaultBannerUrl
-  }
+  emit('reset:bannerUrl')
 }
 
 // File Processing: Profile Avatar
@@ -784,10 +867,7 @@ function onAvatarDrop(event: DragEvent) {
 }
 
 function handleAvatarError(event: Event) {
-  const img = event.target as HTMLImageElement
-  if (img && img.src !== props.defaultOwnerAvatarUrl) {
-    img.src = props.defaultOwnerAvatarUrl
-  }
+  emit('reset:ownerAvatarUrl')
 }
 
 // -------------------------------------------------------------

@@ -136,7 +136,7 @@ export const useAuthStore = defineStore('auth', {
     role: (state): UserRole => state.currentUser?.role || 'UMKM',
     userName: (state): string => state.currentUser?.name || 'Pengguna',
     userEmail: (state): string => state.currentUser?.email || '',
-    userAvatar: (state): string => state.currentUser?.avatar || '/images/user-profile.png',
+    userAvatar: (state): string => state.currentUser?.avatar || '',
     isOnboarded: (state): boolean => {
       if (!state.isAuthenticated || !state.currentUser) return false
       if (state.currentUser.onboardingCompleted) return true
@@ -179,7 +179,7 @@ export const useAuthStore = defineStore('auth', {
         id: this.currentUser?.id || 'google-' + Date.now(),
         name: profile.name || this.currentUser?.name || 'Pengguna Google',
         email: profile.email || this.currentUser?.email || '',
-        avatar: profile.picture || this.currentUser?.avatar || '/images/user-profile.png',
+        avatar: profile.picture || this.currentUser?.avatar || '',
         role: role || this.currentUser?.role || 'UMKM',
         verified: true
       } as UserProfile
@@ -245,7 +245,7 @@ export const useAuthStore = defineStore('auth', {
           name: demo?.name || 'Fikri Setiawan',
           email: email || demo?.email || 'fikri@kopisenja.id',
           businessName: demo?.businessName || 'Kopi Senja Nusantara',
-          avatar: '/images/user-profile.png',
+          avatar: '',
           verified: true
         }
         this.isAuthenticated = true
@@ -490,7 +490,7 @@ export const useAuthStore = defineStore('auth', {
           name: demo.name,
           email: demo.email,
           businessName: demo.businessName,
-          avatar: '/images/user-profile.png',
+          avatar: '',
           verified: true
         }
         this.isAuthenticated = true

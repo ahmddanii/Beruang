@@ -15,13 +15,20 @@
       @click="isOpen = !isOpen"
     >
       <!-- User Avatar -->
-      <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 transition-transform duration-150 group-hover:scale-105">
+      <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-[#E6F4F7] dark:bg-[#156374]/30 transition-transform duration-150 group-hover:scale-105 flex items-center justify-center">
         <img
+          v-if="userAvatarUrl && !avatarHasError"
           :src="userAvatarUrl"
           :alt="userName"
           class="w-full h-full object-cover"
-          @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
+          @error="avatarHasError = true"
         />
+        <span
+          v-else
+          class="text-xs font-bold font-poppins text-[#156374] dark:text-[#50AABF]"
+        >
+          {{ userInitials }}
+        </span>
       </div>
 
       <!-- User Name -->
@@ -54,13 +61,20 @@
       <!-- User Identity Header -->
       <div class="p-3.5 border-b border-[#E2E8F0] dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-neutral-100">
+          <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center">
             <img
+              v-if="userAvatarUrl && !avatarHasError"
               :src="userAvatarUrl"
               :alt="userName"
               class="w-full h-full object-cover"
-              @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
+              @error="avatarHasError = true"
             />
+            <span
+              v-else
+              class="text-sm font-bold font-poppins text-[#156374] dark:text-[#50AABF]"
+            >
+              {{ userInitials }}
+            </span>
           </div>
           <div class="flex flex-col min-w-0 flex-1">
             <span class="text-[14px] font-bold text-neutral-900 dark:text-white truncate leading-tight">
@@ -183,17 +197,32 @@ watch(() => route.path, () => {
   isOpen.value = false
 })
 
+const avatarHasError = ref(false)
+
 const userName = computed(() => authStore.currentUser?.name || 'Fikri Setiawan')
+
+const userInitials = computed(() => {
+  const name = userName.value.trim()
+  const parts = name.split(/\s+/).filter(Boolean)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase()
+  }
+  return name.slice(0, 2).toUpperCase()
+})
 
 const userAvatarUrl = computed(() => {
   if (authStore.currentUser?.role === 'UMKM') {
     return (
       umkmStore.profile.ownerAvatarUrl ||
       authStore.currentUser?.avatar ||
-      '/images/user-profile.png'
+      ''
     )
   }
-  return authStore.currentUser?.avatar || '/images/user-profile.png'
+  return authStore.currentUser?.avatar || ''
+})
+
+watch(userAvatarUrl, () => {
+  avatarHasError.value = false
 })
 
 const currentRoleLabel = computed(() => {

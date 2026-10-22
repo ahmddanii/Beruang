@@ -882,7 +882,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
@@ -912,15 +912,9 @@ const route = useRoute()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
-const availableRoles = [
-  { key: 'UMKM' as UserRole, label: 'UMKM' },
-  { key: 'CONSULTANT' as UserRole, label: 'Konsultan' },
-  { key: 'INVESTOR' as UserRole, label: 'Investor' }
-]
-
+// Role aktif terkunci sesuai akun pendaftaran / Google Auth
 const activeRole = ref<UserRole>('UMKM')
 
-// Read role from query or authStore
 const initialRole = (route.query.role as string)?.toUpperCase() as UserRole
 if (initialRole && ['UMKM', 'CONSULTANT', 'INVESTOR'].includes(initialRole)) {
   activeRole.value = initialRole
@@ -928,16 +922,10 @@ if (initialRole && ['UMKM', 'CONSULTANT', 'INVESTOR'].includes(initialRole)) {
   activeRole.value = authStore.currentUser.role
 }
 
-function switchRole(role: UserRole) {
-  activeRole.value = role
-  currentStep.value = 1
-  router.replace({ query: { ...route.query, role } })
-}
-
 const currentStep = ref(1)
 const submitting = ref(false)
 
-// Simple step titles
+// Step navigasi terstruktur per peran akun
 const stepsUmkm = [
   { title: 'Data Usaha' },
   { title: 'Lokasi Usaha' },
@@ -981,7 +969,28 @@ const finishButtonLabel = computed(() => {
   return 'Masuk ke Beranda Usaha'
 })
 
-// UMKM Form Data (Dinamis dari Google OAuth / Pendaftaran Sebelumnya)
+// ============================================================================
+// DATA & STATE: UMKM
+// ============================================================================
+export interface UmkmFormData {
+  name: string
+  owner: string
+  year: number | null
+  startDate: string
+  legalStatus: string
+  nib: string
+  npwp: string
+  sector: string
+  city: string
+  outlets: number
+  employees: number
+  monthlyRevenue: number | null
+  hppPercentage: number
+  targetFunding: number | null
+  equityOffered: string
+  description: string
+}
+
 const umkmSectors = [
   'Makanan & Minuman',
   'Pakaian & Kerajinan',
@@ -990,21 +999,21 @@ const umkmSectors = [
   'Teknologi'
 ]
 
-const formUmkm = ref({
+const formUmkm = ref<UmkmFormData>({
   name: authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
   owner: authStore.currentUser?.name || '',
-  year: (authStore.currentUser as any)?.establishedYear || null,
+  year: authStore.currentUser?.establishedYear || null,
   startDate: '',
   legalStatus: 'NIB_READY',
-  nib: (authStore.currentUser as any)?.nib || '',
-  npwp: (authStore.currentUser as any)?.npwp || '',
+  nib: authStore.currentUser?.nib || '',
+  npwp: authStore.currentUser?.npwp || '',
   sector: authStore.currentUser?.sector || 'Makanan & Minuman',
   city: authStore.currentUser?.city || '',
-  outlets: (authStore.currentUser as any)?.outletsCount || 1,
-  employees: (authStore.currentUser as any)?.employeesCount || 1,
-  monthlyRevenue: (authStore.currentUser as any)?.monthlyRevenue || null,
+  outlets: authStore.currentUser?.outletsCount || 1,
+  employees: authStore.currentUser?.employeesCount || 1,
+  monthlyRevenue: authStore.currentUser?.monthlyRevenue ? Number(authStore.currentUser.monthlyRevenue) : null,
   hppPercentage: 40,
-  targetFunding: (authStore.currentUser as any)?.fundingTarget || null,
+  targetFunding: authStore.currentUser?.fundingTarget ? Number(authStore.currentUser.fundingTarget) : null,
   equityOffered: '10% Bagi Hasil',
   description: authStore.currentUser?.businessProfile?.description || ''
 })
@@ -1032,7 +1041,7 @@ function handleTargetFundingInput(e: Event) {
   displayTargetFunding.value = rawDigits ? Number(rawDigits).toLocaleString('id-ID') : ''
 }
 
-// Year Picker (Tanggalan Khusus Tahun)
+// Year Picker (Kalender Pemilih Tahun Usaha)
 const isYearPickerOpen = ref(false)
 const yearPickerRef = ref<HTMLElement | null>(null)
 const pickerDecadeStart = ref(2015)
@@ -1056,7 +1065,19 @@ onClickOutside(yearPickerRef, () => {
   isYearPickerOpen.value = false
 })
 
-// Consultant Form Data (Dinamis dari Akun)
+// ============================================================================
+// DATA & STATE: KONSULTAN
+// ============================================================================
+export interface ConsultantFormData {
+  name: string
+  institution: string
+  bnspLicense: string
+  city: string
+  specialization: string
+  experience: string
+  maxClients: number
+}
+
 const consultantSpecializations = [
   'Keuangan & Biaya',
   'Operasional & Stok',
@@ -1064,17 +1085,29 @@ const consultantSpecializations = [
   'Izin Usaha'
 ]
 
-const formConsultant = ref({
+const formConsultant = ref<ConsultantFormData>({
   name: authStore.currentUser?.name || '',
   institution: authStore.currentUser?.institution || authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
-  bnspLicense: (authStore.currentUser as any)?.bnspLicense || '',
+  bnspLicense: authStore.currentUser?.bnspLicense || '',
   city: authStore.currentUser?.city || '',
   specialization: authStore.currentUser?.specialization || 'Keuangan & Biaya',
   experience: '3 - 5 Tahun',
   maxClients: 5
 })
 
-// Investor Form Data (Dinamis dari Akun)
+// ============================================================================
+// DATA & STATE: INVESTOR
+// ============================================================================
+export interface InvestorFormData {
+  name: string
+  entityName: string
+  investorType: string
+  city: string
+  ticketRange: string
+  sectors: string[]
+  minMargin: string
+}
+
 const ticketRanges = [
   '50 - 150 Juta',
   '150 - 500 Juta',
@@ -1090,12 +1123,12 @@ const investorTargetSectors = [
   'Teknologi'
 ]
 
-const formInvestor = ref({
+const formInvestor = ref<InvestorFormData>({
   name: authStore.currentUser?.name || '',
   entityName: authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
-  investorType: (authStore.currentUser as any)?.investorType || 'Perorangan (Angel Investor)',
+  investorType: authStore.currentUser?.investorType || 'Perorangan (Angel Investor)',
   city: authStore.currentUser?.city || '',
-  ticketRange: (authStore.currentUser as any)?.ticketRange || '50 - 150 Juta',
+  ticketRange: authStore.currentUser?.ticketRange || '50 - 150 Juta',
   sectors: ['Makanan & Minuman'],
   minMargin: '30%'
 })
@@ -1109,7 +1142,9 @@ function toggleInvestorSector(sec: string) {
   }
 }
 
-// Validasi Form per Langkah
+// ============================================================================
+// VALIDASI & HYDRATION
+// ============================================================================
 const isCurrentStepValid = computed(() => {
   if (activeRole.value === 'UMKM') {
     if (currentStep.value === 1) {
@@ -1127,111 +1162,154 @@ const isCurrentStepValid = computed(() => {
   return true
 })
 
-// Sinkronkan data saat dimuat jika ada data baru dari OAuth
-onMounted(() => {
-  if (authStore.currentUser) {
-    if (authStore.currentUser.name) {
-      if (!formUmkm.value.owner) formUmkm.value.owner = authStore.currentUser.name
-      if (!formConsultant.value.name) formConsultant.value.name = authStore.currentUser.name
-      if (!formInvestor.value.name) formInvestor.value.name = authStore.currentUser.name
-    }
-    const businessOrOrg = authStore.currentUser.businessName || authStore.currentUser.org_name
-    if (businessOrOrg) {
-      if (!formUmkm.value.name) formUmkm.value.name = businessOrOrg
-      if (!formConsultant.value.institution) formConsultant.value.institution = businessOrOrg
-      if (!formInvestor.value.entityName) formInvestor.value.entityName = businessOrOrg
-    }
-    if (authStore.currentUser.role && !route.query.role) {
-      activeRole.value = authStore.currentUser.role
-    }
+function syncAuthToForms() {
+  const u = authStore.currentUser
+  if (!u) return
+
+  // Sinkronkan Nama
+  if (u.name) {
+    if (!formUmkm.value.owner) formUmkm.value.owner = u.name
+    if (!formConsultant.value.name) formConsultant.value.name = u.name
+    if (!formInvestor.value.name) formInvestor.value.name = u.name
   }
+
+  // Sinkronkan Nama Usaha / Lembaga / Entitas
+  const businessOrOrg = u.businessName || u.org_name || u.orgName
+  if (businessOrOrg) {
+    if (!formUmkm.value.name) formUmkm.value.name = businessOrOrg
+    if (!formConsultant.value.institution) formConsultant.value.institution = businessOrOrg
+    if (!formInvestor.value.entityName) formInvestor.value.entityName = businessOrOrg
+  }
+
+  // Sinkronkan Domisili Kota
+  if (u.city) {
+    if (!formUmkm.value.city) formUmkm.value.city = u.city
+    if (!formConsultant.value.city) formConsultant.value.city = u.city
+    if (!formInvestor.value.city) formInvestor.value.city = u.city
+  }
+
+  // Format angka jika tersedia dari profil
+  if (formUmkm.value.monthlyRevenue && !displayMonthlyRevenue.value) {
+    displayMonthlyRevenue.value = Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID')
+  }
+  if (formUmkm.value.targetFunding && !displayTargetFunding.value) {
+    displayTargetFunding.value = Number(formUmkm.value.targetFunding).toLocaleString('id-ID')
+  }
+
+  // Kunci role jika ada di profil dan tidak dioverride oleh query
+  if (u.role && !route.query.role) {
+    activeRole.value = u.role
+  }
+}
+
+onMounted(() => {
+  syncAuthToForms()
 })
 
+// Pastikan sinkron bila data user terhidrasi secara asinkron dari Google OAuth / Cookie
+watch(() => authStore.currentUser, () => {
+  syncAuthToForms()
+}, { deep: true })
+
+// ============================================================================
+// SIMPAN ONBOARDING & LANJUT KE BERANDA
+// ============================================================================
 async function finishOnboarding() {
   submitting.value = true
-  authStore.setRole(activeRole.value)
 
   try {
-    if (activeRole.value === 'UMKM') {
-    const establishedYear = formUmkm.value.startDate
-      ? new Date(formUmkm.value.startDate).getFullYear()
-      : (formUmkm.value.year || 2021)
+    // Kunci role pada state sesi pengguna aktif saat ini
+    if (authStore.currentUser) {
+      authStore.currentUser.role = activeRole.value
+    }
 
-    // Call live API
-    try {
-      await useApi('/umkm/onboarding', {
-        method: 'POST',
-        body: {
+    if (activeRole.value === 'UMKM') {
+      const establishedYear = formUmkm.value.startDate
+        ? new Date(formUmkm.value.startDate).getFullYear()
+        : (formUmkm.value.year || 2021)
+
+      // Kirim ke backend live API jika endpoint tersedia
+      try {
+        await useApi('/umkm/onboarding', {
+          method: 'POST',
+          body: {
+            brand: formUmkm.value.name,
+            owner_name: formUmkm.value.owner,
+            sector: formUmkm.value.sector,
+            city: formUmkm.value.city,
+            established_year: establishedYear,
+            outlets_count: formUmkm.value.outlets || 1,
+            employees_count: formUmkm.value.employees || 1,
+            funding_target: formUmkm.value.targetFunding || 0,
+            equity_offered: formUmkm.value.equityOffered || '10% Bagi Hasil',
+            description: formUmkm.value.description || 'UMKM terkurasi Beruang',
+            nib: formUmkm.value.nib,
+            npwp: formUmkm.value.npwp
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan onboarding ke live API, tetap lanjut ke dashboard:', err?.message)
+      }
+
+      // Sinkronkan ke umkmStore
+      umkmStore.profile.brand = formUmkm.value.name
+      umkmStore.profile.name = formUmkm.value.name
+      umkmStore.profile.owner_name = formUmkm.value.owner
+      umkmStore.profile.ownerName = formUmkm.value.owner
+      umkmStore.profile.sector = formUmkm.value.sector
+      umkmStore.profile.city = formUmkm.value.city
+      umkmStore.profile.established_year = establishedYear
+      umkmStore.profile.establishedYear = establishedYear
+      umkmStore.profile.outlets_count = formUmkm.value.outlets
+      umkmStore.profile.outletsCount = formUmkm.value.outlets
+      umkmStore.profile.employees_count = formUmkm.value.employees
+      umkmStore.profile.employeesCount = formUmkm.value.employees
+      umkmStore.profile.funding_target = formUmkm.value.targetFunding || 0
+      umkmStore.profile.fundingTarget = formUmkm.value.targetFunding || 0
+      umkmStore.profile.nib = formUmkm.value.nib
+      umkmStore.profile.npwp = formUmkm.value.npwp
+      umkmStore.profile.equity_offered = formUmkm.value.equityOffered
+      umkmStore.profile.description = formUmkm.value.description
+      umkmStore.profile.fundingStatus = 'READY_FOR_FUNDING'
+
+      // Simpan ke authStore
+      authStore.updateProfile({
+        name: formUmkm.value.owner,
+        businessName: formUmkm.value.name,
+        org_name: formUmkm.value.name,
+        sector: formUmkm.value.sector,
+        city: formUmkm.value.city,
+        establishedYear,
+        outletsCount: formUmkm.value.outlets,
+        employeesCount: formUmkm.value.employees,
+        monthlyRevenue: formUmkm.value.monthlyRevenue,
+        fundingTarget: formUmkm.value.targetFunding,
+        nib: formUmkm.value.nib,
+        npwp: formUmkm.value.npwp,
+        equityOffered: formUmkm.value.equityOffered,
+        description: formUmkm.value.description,
+        onboardingCompleted: true,
+        businessProfile: {
+          id: `bp-${authStore.currentUser?.id || 1}`,
+          user_id: Number(authStore.currentUser?.id || 1),
           brand: formUmkm.value.name,
           owner_name: formUmkm.value.owner,
           sector: formUmkm.value.sector,
           city: formUmkm.value.city,
           established_year: establishedYear,
-          outlets_count: formUmkm.value.outlets || 1,
-          employees_count: formUmkm.value.employees || 1,
-          funding_target: formUmkm.value.targetFunding || 0,
-          equity_offered: formUmkm.value.equityOffered || '10% Bagi Hasil',
-          description: formUmkm.value.description || 'UMKM terkurasi Beruang',
+          outlets_count: formUmkm.value.outlets,
+          employees_count: formUmkm.value.employees,
+          funding_target: formUmkm.value.targetFunding,
           nib: formUmkm.value.nib,
-          npwp: formUmkm.value.npwp
+          npwp: formUmkm.value.npwp,
+          equity_offered: formUmkm.value.equityOffered,
+          description: formUmkm.value.description,
+          status: 'READY_FOR_FUNDING'
         }
       })
-    } catch (err: any) {
-      console.warn('Gagal simpan onboarding ke live API, tetap lanjut ke dashboard:', err?.message)
-    }
 
-    // Sinkronkan ke umkmStore (kompatibel skema business_profiles)
-    umkmStore.profile.brand = formUmkm.value.name
-    umkmStore.profile.name = formUmkm.value.name
-    umkmStore.profile.owner_name = formUmkm.value.owner
-    umkmStore.profile.ownerName = formUmkm.value.owner
-    umkmStore.profile.sector = formUmkm.value.sector
-    umkmStore.profile.city = formUmkm.value.city
-    umkmStore.profile.established_year = establishedYear
-    umkmStore.profile.establishedYear = establishedYear
-    umkmStore.profile.outlets_count = formUmkm.value.outlets
-    umkmStore.profile.outletsCount = formUmkm.value.outlets
-    umkmStore.profile.employees_count = formUmkm.value.employees
-    umkmStore.profile.employeesCount = formUmkm.value.employees
-    umkmStore.profile.funding_target = formUmkm.value.targetFunding
-    umkmStore.profile.fundingTarget = formUmkm.value.targetFunding
-    umkmStore.profile.nib = formUmkm.value.nib
-    umkmStore.profile.npwp = formUmkm.value.npwp
-    umkmStore.profile.equity_offered = formUmkm.value.equityOffered
-    umkmStore.profile.description = formUmkm.value.description
-    umkmStore.profile.status = 'READY_FOR_FUNDING'
-
-    // Simpan ke authStore dengan entitas tabel business_profiles
-    authStore.updateProfile({
-      name: formUmkm.value.owner,
-      businessName: formUmkm.value.name,
-      org_name: formUmkm.value.name,
-      sector: formUmkm.value.sector,
-      city: formUmkm.value.city,
-      onboardingCompleted: true,
-      businessProfile: {
-        id: `bp-${authStore.currentUser?.id || 1}`,
-        user_id: Number(authStore.currentUser?.id || 1),
-        brand: formUmkm.value.name,
-        owner_name: formUmkm.value.owner,
-        sector: formUmkm.value.sector,
-        city: formUmkm.value.city,
-        established_year: establishedYear,
-        outlets_count: formUmkm.value.outlets,
-        employees_count: formUmkm.value.employees,
-        funding_target: formUmkm.value.targetFunding,
-        nib: formUmkm.value.nib,
-        npwp: formUmkm.value.npwp,
-        equity_offered: formUmkm.value.equityOffered,
-        description: formUmkm.value.description,
-        status: 'READY_FOR_FUNDING'
-      }
-    })
-
-    submitting.value = false
-    router.push('/dashboard')
-  } else if (activeRole.value === 'CONSULTANT') {
-      // Simpan ke authStore dengan entitas tabel consultant_profiles
+      router.push('/dashboard')
+    } else if (activeRole.value === 'CONSULTANT') {
       authStore.updateProfile({
         name: formConsultant.value.name,
         businessName: formConsultant.value.institution,
@@ -1240,39 +1318,43 @@ async function finishOnboarding() {
         bnspLicense: formConsultant.value.bnspLicense,
         specialization: formConsultant.value.specialization,
         city: formConsultant.value.city,
+        experience: formConsultant.value.experience,
+        maxClients: formConsultant.value.maxClients,
         onboardingCompleted: true,
         consultantProfile: {
           id: `cp-${authStore.currentUser?.id || 2}`,
           user_id: Number(authStore.currentUser?.id || 2),
           firm_name: formConsultant.value.institution,
+          institution: formConsultant.value.institution,
           specialization: formConsultant.value.specialization,
           is_certified: true,
           active_clients_count: 0
         }
       })
 
-      submitting.value = false
       router.push('/konsultan')
     } else if (activeRole.value === 'INVESTOR') {
-      // Simpan ke authStore dengan entitas tabel investor_profiles
       authStore.updateProfile({
         name: formInvestor.value.name,
         businessName: formInvestor.value.entityName,
         org_name: formInvestor.value.entityName,
+        entityName: formInvestor.value.entityName,
         investorType: formInvestor.value.investorType,
         ticketRange: formInvestor.value.ticketRange,
+        sectors: formInvestor.value.sectors,
+        minMargin: formInvestor.value.minMargin,
         city: formInvestor.value.city,
         onboardingCompleted: true,
         investorProfile: {
           id: `ip-${authStore.currentUser?.id || 3}`,
           user_id: Number(authStore.currentUser?.id || 3),
           firm_name: formInvestor.value.entityName,
+          entity_name: formInvestor.value.entityName,
           commitment_capital: formInvestor.value.ticketRange,
           is_verified: true
         }
       })
 
-      submitting.value = false
       router.push('/investor')
     }
   } catch (err: any) {

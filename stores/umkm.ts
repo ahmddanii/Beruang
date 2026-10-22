@@ -71,12 +71,46 @@ export interface InvestorRequest {
   reviewedAt?: string
 }
 
+export interface UmkmBusinessProfile {
+  id: string
+  name: string
+  brand?: string
+  ownerName: string
+  owner_name?: string
+  ownerAvatarUrl?: string
+  sector: string
+  city: string
+  establishedYear: number
+  established_year?: number
+  outletsCount: number
+  outlets_count?: number
+  employeesCount: number
+  employees_count?: number
+  fundingTarget: number
+  funding_target?: number
+  equityOffered?: string
+  equity_offered?: string
+  pitchSummary?: string
+  description?: string
+  logoUrl?: string
+  bannerUrl?: string
+  nib?: string
+  npwp?: string
+  fundingStatus?: 'DRAFT' | 'IN_REVIEW' | 'READY_FOR_FUNDING' | string
+  status?: string
+  certifiedAt?: string
+  consultantName?: string
+  [key: string]: any
+}
+
 export const useUmkmStore = defineStore('umkm', {
   state: () => ({
     profile: {
       id: 'umkm-01',
       name: 'Kopi Senja Nusantara',
+      brand: 'Kopi Senja Nusantara',
       ownerName: 'Fikri Setiawan',
+      owner_name: 'Fikri Setiawan',
       ownerAvatarUrl: '/images/user-profile.png',
       sector: 'Kuliner & Minuman (F&B)',
       city: 'Bandung, Jawa Barat',
@@ -93,7 +127,7 @@ export const useUmkmStore = defineStore('umkm', {
       fundingStatus: 'READY_FOR_FUNDING' as 'DRAFT' | 'IN_REVIEW' | 'READY_FOR_FUNDING',
       certifiedAt: '18 September 2026',
       consultantName: 'Dra. Maya Suryani, M.M.'
-    },
+    } as UmkmBusinessProfile,
 
     assessmentAspects: [
       {

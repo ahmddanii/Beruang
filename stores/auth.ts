@@ -3,6 +3,47 @@ import { useApi } from '~/composables/useApi'
 
 export type UserRole = 'UMKM' | 'CONSULTANT' | 'INVESTOR' | 'ADMIN'
 
+export interface BusinessProfileEntity {
+  id?: string
+  user_id?: number
+  brand?: string
+  owner_name?: string
+  sector?: string
+  city?: string
+  established_year?: number
+  outlets_count?: number
+  employees_count?: number
+  funding_target?: number | null
+  nib?: string
+  npwp?: string
+  equity_offered?: string
+  description?: string
+  status?: string
+  [key: string]: any
+}
+
+export interface ConsultantProfileEntity {
+  id?: string
+  user_id?: number
+  firm_name?: string
+  institution?: string
+  specialization?: string
+  is_certified?: boolean
+  active_clients_count?: number
+  [key: string]: any
+}
+
+export interface InvestorProfileEntity {
+  id?: string
+  user_id?: number
+  firm_name?: string
+  entity_name?: string
+  investor_type?: string
+  commitment_capital?: string
+  is_verified?: boolean
+  [key: string]: any
+}
+
 export interface UserProfile {
   id: string
   name: string
@@ -11,11 +52,47 @@ export interface UserProfile {
   avatar?: string
   businessName?: string
   orgName?: string
+  org_name?: string
   phone?: string
   verified?: boolean
   emailVerified?: boolean
   phoneVerified?: boolean
   status?: string
+  onboardingCompleted?: boolean
+
+  // UMKM specific properties
+  sector?: string
+  city?: string
+  establishedYear?: number | null
+  nib?: string
+  npwp?: string
+  outletsCount?: number
+  employeesCount?: number
+  monthlyRevenue?: number | null
+  fundingTarget?: number | null
+  equityOffered?: string
+  description?: string
+
+  // Consultant specific properties
+  institution?: string
+  bnspLicense?: string
+  specialization?: string
+  experience?: string
+  maxClients?: number
+
+  // Investor specific properties
+  entityName?: string
+  investorType?: string
+  ticketRange?: string
+  sectors?: string[]
+  minMargin?: string
+
+  // Embedded profile entities
+  businessProfile?: BusinessProfileEntity
+  consultantProfile?: ConsultantProfileEntity
+  investorProfile?: InvestorProfileEntity
+
+  [key: string]: any
 }
 
 const DEMO_CREDENTIALS: Record<UserRole, { email: string; pass: string; name: string; businessName: string }> = {

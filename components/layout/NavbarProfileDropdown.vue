@@ -193,9 +193,9 @@ function handleSwitchRole(newRole: UserRole, targetPath: string) {
   router.push(targetPath)
 }
 
-function handleLogout() {
+async function handleLogout() {
   isOpen.value = false
-  authStore.logout()
+  await authStore.logout()
   router.push('/masuk')
 }
 </script>

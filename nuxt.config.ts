@@ -52,6 +52,9 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'id'
+      },
       title: 'Beruang - Naik Kelas & Siap Didanai',
       meta: [
         { charset: 'utf-8' },

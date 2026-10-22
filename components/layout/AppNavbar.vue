@@ -98,9 +98,9 @@
 
         <NuxtLink
           to="/daftar"
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-heading font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-150 active:scale-[0.98]"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-heading font-semibold bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-150"
         >
-          <span>Mulai Audit Usaha</span>
+          <span>Cek Kesiapan Usaha</span>
           <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2" />
         </NuxtLink>
 

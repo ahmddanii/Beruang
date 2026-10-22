@@ -1,9 +1,14 @@
 <template>
-  <div class="relative select-none font-poppins">
+  <div ref="dropdownRef" class="relative select-none font-poppins">
     <!-- Trigger Button in Navbar: Avatar & Name Only (Dicoding Style) -->
     <button
       type="button"
-      class="flex items-center gap-2 sm:gap-2.5 py-1 px-1.5 sm:px-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 active:scale-[0.98] cursor-pointer group border border-transparent hover:border-[#E2E8F0] dark:hover:border-neutral-800"
+      :class="[
+        'flex items-center gap-2 sm:gap-2.5 min-h-[44px] py-1 px-1.5 sm:px-2 rounded-[8px] transition-colors duration-150 cursor-pointer group border',
+        isOpen
+          ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs'
+          : 'border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800/80 hover:border-[#E2E8F0] dark:hover:border-neutral-800'
+      ]"
       :aria-expanded="isOpen"
       aria-haspopup="true"
       aria-label="Menu Akun Pengguna"
@@ -27,7 +32,7 @@
       <!-- Subtle Chevron Indicator -->
       <svg
         :class="[
-          'w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-transform duration-200 shrink-0',
+          'w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-transform duration-200 shrink-0',
           isOpen ? 'rotate-180 text-[#156374]' : ''
         ]"
         viewBox="0 0 24 24"
@@ -41,17 +46,10 @@
       </svg>
     </button>
 
-    <!-- Backdrop Click Overlay -->
-    <div
-      v-if="isOpen"
-      class="fixed inset-0 z-40 bg-transparent"
-      @click="isOpen = false"
-    />
-
     <!-- Dicoding-Style Floating Popover Dropdown -->
     <div
       v-if="isOpen"
-      class="absolute right-0 top-full mt-2 w-72 bg-[#FDFDFD] dark:bg-[#18191E] border border-[#E2E8F0] dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
+      class="absolute right-0 top-full mt-2 w-72 bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 rounded-[8px] shadow-xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
     >
       <!-- User Identity Header -->
       <div class="p-3.5 border-b border-[#E2E8F0] dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30">
@@ -84,7 +82,7 @@
       <div class="p-2 border-b border-[#E2E8F0] dark:border-neutral-800">
         <NuxtLink
           to="/dashboard/profile"
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
           @click="isOpen = false"
         >
           <HugeiconsIcon :icon="UserCircleIcon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
@@ -108,10 +106,10 @@
             :key="role.id"
             type="button"
             :class="[
-              'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 cursor-pointer text-left',
+              'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 cursor-pointer text-left',
               authStore.currentUser?.role === role.id
-                ? 'bg-[#E6F4F7] dark:bg-neutral-800 text-[#156374] dark:text-[#50AABF] font-semibold'
-                : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-white'
+                ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
             ]"
             @click="handleSwitchRole(role.id, role.path)"
           >
@@ -128,7 +126,7 @@
       <div class="border-t border-[#E2E8F0] dark:border-neutral-800/80 p-2 bg-neutral-50/30 dark:bg-neutral-900/20">
         <button
           type="button"
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50/80 dark:hover:bg-red-950/25 transition-colors cursor-pointer text-left"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50/80 dark:hover:bg-red-950/25 transition-colors cursor-pointer text-left"
           @click="handleLogout"
         >
           <HugeiconsIcon :icon="Logout01Icon" :size="17" :stroke-width="2.2" class="text-red-500" />
@@ -140,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
@@ -152,7 +150,34 @@ const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
+const dropdownRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
+
+function handleClickOutside(e: MouseEvent) {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target as Node)) {
+    isOpen.value = false
+  }
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    isOpen.value = false
+  }
+}
+
+onMounted(() => {
+  if (import.meta.client) {
+    document.addEventListener('click', handleClickOutside)
+    document.addEventListener('keydown', handleKeydown)
+  }
+})
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    document.removeEventListener('click', handleClickOutside)
+    document.removeEventListener('keydown', handleKeydown)
+  }
+})
 
 watch(() => route.path, () => {
   isOpen.value = false

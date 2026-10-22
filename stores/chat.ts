@@ -35,8 +35,10 @@ export interface ChatThread {
   unreadInvestor: number
   unreadUmkm: number
   lastMessage: string
-  lastMessageAt: string
-  messages: ChatMessage[]
+  category?: 'prioritas' | 'lainnya'
+  contactName?: string
+  contactAvatar?: string
+  online?: boolean
 }
 
 export const useChatStore = defineStore('chat', {
@@ -55,129 +57,141 @@ export const useChatStore = defineStore('chat', {
         umkmHealthScore: 79,
         umkmMargin: 48.5,
         investorId: 'inv-01',
-        investorName: 'Fikri Setiawan',
-        investorLembaga: 'Nusantara Angel Syndicate',
-        investorAvatar: '/images/user-profile.png',
+        investorName: 'Franklyn Galvin Lodo',
+        investorLembaga: 'East Ventures Associate',
+        investorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces',
+        contactName: 'Franklyn Galvin Lodo',
+        contactAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces',
+        category: 'prioritas',
+        online: true,
         dealStatus: 'Tahap Due Diligence Kas',
         ticketDiscussed: 250000000,
         unreadInvestor: 0,
         unreadUmkm: 1,
-        lastMessage: 'Tentu Pak Fikri, izin akses ruang data sudah kami setujui.',
-        lastMessageAt: '10:24',
+        lastMessage: 'Franklyn: Kami sedang mengkaji proyeksi arus kas tokomu.',
+        lastMessageAt: '8 Agu',
         messages: [
           {
             id: 'm-01',
             senderRole: 'INVESTOR',
-            senderName: 'Fikri Setiawan',
-            text: 'Halo Mbak Dian, salam kenal. Kami dari Nusantara Angel Syndicate telah meninjau profil Kopi Senja di katalog Beruang. Pertumbuhan margin kotor 48.5% dengan 3 gerai di Bandung sangat menarik perhatian komite kami.',
+            senderName: 'Franklyn Galvin Lodo',
+            text: 'Halo, salam kenal. Kami dari komite investasi telah meninjau profil tokomu di Beruang.',
             timestamp: '09:45'
           },
           {
             id: 'm-02',
             senderRole: 'UMKM',
             senderName: 'Dian Sasmita',
-            text: 'Halo Pak Fikri, salam kenal kembali! Terima kasih banyak atas apresiasi dan ketertarikannya pada Kopi Senja. Kami memang sedang membuka penjajakan modal Rp 250 Juta untuk ekspansi 2 gerai baru di kawasan Buah Batu dan Dago.',
-            timestamp: '09:58',
-            attachment: {
-              type: 'METRIC',
-              title: 'Proposal Tiket Modal Kerja',
-              subtitle: 'Kopi Senja Nusantara • Skema Bagi Hasil 14% p.a.',
-              value: 'Rp 250.000.000'
-            }
+            text: 'Halo Mas Franklyn, salam kenal kembali! Terima kasih banyak atas apresiasinya.',
+            timestamp: '09:58'
           },
           {
             id: 'm-03',
             senderRole: 'INVESTOR',
-            senderName: 'Fikri Setiawan',
-            text: 'Bagus sekali. Kami ingin memastikan data rekonsiliasi kasir harian dan mutasi bank selama 5 bulan terakhir. Apakah sudah terlampir lengkap di Virtual Data Room?',
-            timestamp: '10:15'
-          },
-          {
-            id: 'm-04',
-            senderRole: 'UMKM',
-            senderName: 'Dian Sasmita',
-            text: 'Tentu Pak Fikri, izin akses ruang data sudah kami setujui. Seluruh mutasi kasir dan nota supplier sudah tervalidasi langsung oleh konsultan pendamping kami (Dra. Maya Suryani). Silakan ditinjau langsung.',
-            timestamp: '10:24'
+            senderName: 'Franklyn Galvin Lodo',
+            text: 'Franklyn: Kami sedang mengkaji proyeksi arus kas tokomu.',
+            timestamp: '8 Agu'
           }
         ]
       },
       {
         id: 'thread-02',
-        umkmId: 'umkm-03',
-        umkmName: 'Sambal Bu Rudy Asli',
-        umkmOwner: 'Tim Manajemen Bu Rudy',
-        umkmSector: 'F&B (Oleh-oleh & FMCG)',
-        umkmCity: 'Surabaya',
-        umkmAvatar: '/images/default-store-banner.jpg',
-        umkmHealthScore: 88,
-        umkmMargin: 52.0,
-        investorId: 'inv-01',
-        investorName: 'Fikri Setiawan',
-        investorLembaga: 'Nusantara Angel Syndicate',
-        investorAvatar: '/images/user-profile.png',
-        dealStatus: 'Penjajakan Awal',
-        ticketDiscussed: 500000000,
-        unreadInvestor: 1,
+        umkmId: 'umkm-02',
+        umkmName: 'Raihan Fariz N.',
+        umkmOwner: 'Raihan Fariz N.',
+        umkmSector: 'Financial Advisor',
+        umkmCity: 'Jakarta',
+        umkmAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces',
+        umkmHealthScore: 85,
+        umkmMargin: 40.0,
+        investorId: 'inv-02',
+        investorName: 'Raihan Fariz N.',
+        investorLembaga: 'Inkubator Bisnis UMKM',
+        investorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces',
+        contactName: 'Raihan Fariz N.',
+        contactAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces',
+        category: 'prioritas',
+        online: true,
+        dealStatus: 'Pendampingan Validasi',
+        ticketDiscussed: 150000000,
+        unreadInvestor: 0,
         unreadUmkm: 0,
-        lastMessage: 'Kapasitas produksi saat ini sudah 1.500 botol/hari, siap diskalakan.',
-        lastMessageAt: 'Kemarin',
+        lastMessage: 'Raihan Fariz: Kami mengenal satu sama lain dari program inkubasi.',
+        lastMessageAt: '4 Mei',
         messages: [
           {
-            id: 'm-21',
+            id: 'm-11',
             senderRole: 'INVESTOR',
-            senderName: 'Fikri Setiawan',
-            text: 'Selamat siang Bu Rudy dan tim, kami memantau distribusi produk sambal sudah menembus 120 toko ritel di Jatim. Berapa kapasitas produksi harian saat ini?',
-            timestamp: 'Kemarin 14:10'
-          },
-          {
-            id: 'm-22',
-            senderRole: 'UMKM',
-            senderName: 'Tim Manajemen Bu Rudy',
-            text: 'Selamat siang Pak Fikri! Kapasitas produksi saat ini sudah 1.500 botol/hari, siap diskalakan dengan pengadaan mesin filling otomatis dari pendanaan tahap ini.',
-            timestamp: 'Kemarin 14:35',
-            attachment: {
-              type: 'METRIC',
-              title: 'Target Alokasi Modal Mesin',
-              subtitle: 'Peningkatan kapasitas 3x lipat ke 4.500 botol/hari',
-              value: 'Rp 500.000.000'
-            }
+            senderName: 'Raihan Fariz N.',
+            text: 'Raihan Fariz: Kami mengenal satu sama lain dari program inkubasi.',
+            timestamp: '4 Mei 11:20'
           }
         ]
       },
       {
         id: 'thread-03',
-        umkmId: 'umkm-05',
-        umkmName: 'Keripik Tempe Marem',
-        umkmOwner: 'Sigit Purnomo (Owner)',
-        umkmSector: 'Agroindustri Camilan',
-        umkmCity: 'Malang',
-        umkmAvatar: '/images/default-store-banner.jpg',
-        umkmHealthScore: 76,
-        umkmMargin: 41.0,
-        investorId: 'inv-01',
-        investorName: 'Fikri Setiawan',
-        investorLembaga: 'Nusantara Angel Syndicate',
-        investorAvatar: '/images/user-profile.png',
-        dealStatus: 'Permintaan Akses Masuk',
-        ticketDiscussed: 175000000,
+        umkmId: 'umkm-03',
+        umkmName: 'Shafa Rizqi Nur Wahidah',
+        umkmOwner: 'Shafa Rizqi Nur Wahidah',
+        umkmSector: 'Konsultan Legalitas & NIB',
+        umkmCity: 'Yogyakarta',
+        umkmAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces',
+        umkmHealthScore: 92,
+        umkmMargin: 55.0,
+        investorId: 'inv-03',
+        investorName: 'Shafa Rizqi Nur Wahidah',
+        investorLembaga: 'Pusat Legalitas Usaha',
+        investorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces',
+        contactName: 'Shafa Rizqi Nur Wahidah',
+        contactAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces',
+        category: 'prioritas',
+        online: true,
+        dealStatus: 'Sertifikasi Terverifikasi',
+        ticketDiscussed: 0,
         unreadInvestor: 0,
         unreadUmkm: 0,
-        lastMessage: 'Permintaan akses ruang data Anda telah kami terima.',
-        lastMessageAt: '12 Okt',
+        lastMessage: 'Anda: halo, izin edar BPOM dan NIB sudah kami upload.',
+        lastMessageAt: '14 Mar',
+        messages: [
+          {
+            id: 'm-21',
+            senderRole: 'UMKM',
+            senderName: 'Anda',
+            text: 'Anda: halo, izin edar BPOM dan NIB sudah kami upload.',
+            timestamp: '14 Mar 09:15'
+          }
+        ]
+      },
+      {
+        id: 'thread-04',
+        umkmId: 'umkm-04',
+        umkmName: 'Dra. Maya Suryani',
+        umkmOwner: 'Dra. Maya Suryani',
+        umkmSector: 'Konsultan Keuangan Beruang',
+        umkmCity: 'Bandung',
+        umkmAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces',
+        umkmHealthScore: 95,
+        umkmMargin: 50.0,
+        investorId: 'inv-04',
+        investorName: 'Dra. Maya Suryani',
+        investorLembaga: 'Konsultan Pendamping UMKM',
+        investorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces',
+        contactName: 'Dra. Maya Suryani',
+        contactAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces',
+        category: 'lainnya',
+        online: false,
+        dealStatus: 'Konsultasi Rutin',
+        ticketDiscussed: 0,
+        unreadInvestor: 0,
+        unreadUmkm: 0,
+        lastMessage: 'Maya: Rapor keuangan bulan ini sudah selesai kami validasi.',
+        lastMessageAt: 'Kemarin',
         messages: [
           {
             id: 'm-31',
             senderRole: 'INVESTOR',
-            senderName: 'Fikri Setiawan',
-            text: 'Halo Mas Sigit, kami tertarik meninjau laporan pembukuan Keripik Tempe Marem untuk kemitraan ritel modern.',
-            timestamp: '12 Okt 11:20'
-          },
-          {
-            id: 'm-32',
-            senderRole: 'UMKM',
-            senderName: 'Sigit Purnomo',
-            text: 'Halo Pak Fikri, terima kasih! Permintaan akses ruang data Anda telah kami terima dan sedang ditinjau konsultan kami.',
-            timestamp: '12 Okt 11:45'
+            senderName: 'Dra. Maya Suryani',
+            text: 'Maya: Rapor keuangan bulan ini sudah selesai kami validasi.',
           }
         ]
       }
@@ -199,10 +213,10 @@ export const useChatStore = defineStore('chat', {
       const q = state.searchQuery.toLowerCase().trim()
       if (!q) return state.threads
       return state.threads.filter(t =>
-        t.umkmName.toLowerCase().includes(q) ||
-        t.umkmCity.toLowerCase().includes(q) ||
-        t.umkmSector.toLowerCase().includes(q) ||
-        t.lastMessage.toLowerCase().includes(q)
+        (t.contactName && t.contactName.toLowerCase().includes(q)) ||
+        (t.investorName && t.investorName.toLowerCase().includes(q)) ||
+        (t.umkmName && t.umkmName.toLowerCase().includes(q)) ||
+        (t.lastMessage && t.lastMessage.toLowerCase().includes(q))
       )
     }
   },

@@ -7,7 +7,7 @@
           § 04 // BUKTI LAPANGAN & TRANSFORMASI KAS
         </span>
         <span class="text-xs font-mono text-neutral-400">
-          STUDI KASUS AUDIT #0192
+          STUDI KASUS VALIDASI #0192
         </span>
       </div>
 
@@ -25,14 +25,14 @@
           <!-- Before vs After Financial Comparison Ledger (Anti-Slop: Real concrete business metrics) -->
           <div class="grid grid-cols-2 gap-3 font-mono text-xs pt-2">
             <div class="p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 space-y-1">
-              <span class="text-[10px] text-neutral-400 uppercase font-bold block">Sebelum Audit (April)</span>
-              <span class="font-extrabold text-neutral-800 dark:text-neutral-200 block text-sm">HPP 56.4% (Bocor)</span>
+              <span class="text-[10px] text-neutral-400 uppercase font-bold block">Sebelum Pendampingan (April)</span>
+              <span class="font-extrabold text-neutral-800 dark:text-neutral-200 block text-sm">Modal Jualan 56.4% (Bocor)</span>
               <span class="text-[11px] text-neutral-500 font-sans block">Rekening campur dompet pribadi</span>
             </div>
 
             <div class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-1">
-              <span class="text-[10px] text-emerald-700 dark:text-emerald-400 uppercase font-bold block">Sesudah Audit (September)</span>
-              <span class="font-extrabold text-emerald-700 dark:text-emerald-300 block text-sm">Laba Bersih 32.6%</span>
+              <span class="text-[10px] text-emerald-700 dark:text-emerald-400 uppercase font-bold block">Sesudah Pendampingan (September)</span>
+              <span class="font-extrabold text-emerald-700 dark:text-emerald-300 block text-sm">Untung Bersih 32.6%</span>
               <span class="text-[11px] text-emerald-800 dark:text-emerald-400 font-sans block">3.2 Bulan kas cadangan terpisah</span>
             </div>
           </div>
@@ -64,7 +64,7 @@
               <span class="font-bold text-neutral-900 dark:text-white">Nusantara Angel Syndicate</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-neutral-500 font-sans">Konsultan Audit:</span>
+              <span class="text-neutral-500 font-sans">Konsultan Ahli:</span>
               <span>Dra. Maya Suryani (BNSP #7281)</span>
             </div>
             <div class="flex justify-between">
@@ -75,9 +75,9 @@
 
           <NuxtLink
             to="/daftar"
-            class="block w-full py-3.5 rounded-xl font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all active:scale-[0.98]"
+            class="block w-full py-3.5 rounded-xl font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all"
           >
-            Mulai Audit Bisnismu Sendiri →
+            Cek Kesiapan Bisnismu Sendiri →
           </NuxtLink>
         </div>
       </div>

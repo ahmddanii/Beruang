@@ -173,7 +173,7 @@
           <NuxtLink
             v-if="item.accessStatus === 'APPROVED'"
             :to="`/investor/data-room/${item.id}`"
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all active:scale-95 cursor-pointer"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all cursor-pointer"
           >
             <HugeiconsIcon :icon="FileUnlockedIcon" :size="14" :stroke-width="2" />
             <span>Data Room</span>

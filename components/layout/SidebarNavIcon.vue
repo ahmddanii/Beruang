@@ -7,7 +7,7 @@
       'transition-colors duration-150 shrink-0',
       extraClass || (active
         ? 'text-[#156374] dark:text-[#50AABF]'
-        : 'text-[#64748B] dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white')
+        : 'text-[#64748B] dark:text-neutral-400 group-hover:text-[#156374] dark:group-hover:text-[#50AABF]')
     ]"
     aria-hidden="true"
   />

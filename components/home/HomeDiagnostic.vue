@@ -10,7 +10,7 @@
           Cek Kelayakan Pendanaan Usahamu dalam 1 Menit
         </h2>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed">
-          Pilih profil usahamu di bawah ini untuk melihat estimasi skor kesiapan audit 5 pilar dan rekomendasi tiket modal yang realistis.
+          Pilih profil usahamu di bawah ini untuk melihat estimasi skor kesiapan usaha 5 pilar dan rekomendasi tiket modal yang realistis.
         </p>
       </div>
 
@@ -45,7 +45,7 @@
           <!-- Step 2: Revenue Range -->
           <div class="space-y-2.5">
             <span class="text-xs font-heading font-bold text-neutral-900 dark:text-white uppercase tracking-wider block">
-              2. Omzet Rata-rata per Bulan
+              2. Total Pendapatan Rata-rata per Bulan
             </span>
             <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
               <button
@@ -137,9 +137,9 @@
 
             <NuxtLink
               to="/daftar"
-              class="block w-full text-center py-3 rounded-xl font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all active:scale-[0.98]"
+              class="block w-full text-center py-3 rounded-xl font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all"
             >
-              Daftarkan Usaha untuk Audit Lengkap →
+              Daftarkan Usaha untuk Penilaian Lengkap →
             </NuxtLink>
           </div>
         </div>

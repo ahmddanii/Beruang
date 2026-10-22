@@ -247,7 +247,7 @@
           <button
             type="submit"
             :disabled="!inputMessage.trim()"
-            class="h-10 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 bg-[#00800e] hover:bg-[#006e0c] text-white shadow-xs transition-all active:scale-95"
+            class="h-10 px-4 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0 bg-[#00800e] hover:bg-[#006e0c] text-white shadow-xs transition-all"
           >
             <span>Kirim</span>
             <HugeiconsIcon :icon="SendIcon" :size="16" />

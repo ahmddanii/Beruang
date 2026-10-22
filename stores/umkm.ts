@@ -34,6 +34,7 @@ export interface MonthlyRecord {
   omzet: number
   hpp: number
   opex: number
+  loss?: number
   netProfit: number
   cashBalance: number
   proofDocumentUrl?: string

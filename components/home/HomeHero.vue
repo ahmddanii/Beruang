@@ -7,7 +7,7 @@
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 text-[11px] font-mono font-semibold tracking-wide">
           <span class="text-primary-600 dark:text-primary-400 font-bold">§ 2026 PROTOKOL</span>
           <span class="text-neutral-300 dark:text-neutral-600">/</span>
-          <span>AUDIT 5 PILAR & SERTIFIKASI INVESTASI UMKM</span>
+          <span>PENILAIAN 5 PILAR & KESIAPAN PENDANAAN UMKM</span>
         </div>
 
         <h1 class="text-4xl sm:text-5xl lg:text-[56px] font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight leading-[1.05] text-balance">
@@ -15,16 +15,16 @@
         </h1>
 
         <p class="text-base sm:text-lg text-neutral-600 dark:text-neutral-300 max-w-[50ch] leading-relaxed font-sans">
-          Audit 5 pilar bersama konsultan bisnis profesional berlisensi BNSP. Rapikan arus kas riil, raih sertifikasi kelayakan resmi, dan terhubung langsung dengan sindikasi investor terakreditasi tanpa skema utang pinjol.
+          Penilaian 5 pilar bersama konsultan bisnis profesional. Rapikan catatan kas riil, raih validasi kelayakan resmi, dan terhubung langsung dengan sindikasi investor terakreditasi melalui skema kemitraan modal sehat.
         </p>
 
         <!-- Dual Tactile CTAs (Button-in-Button Island Architecture) -->
         <div class="pt-2 flex flex-wrap items-center gap-3.5">
           <NuxtLink
             to="/daftar"
-            class="group pl-6 pr-2 py-2 rounded-full font-heading font-bold text-xs sm:text-sm bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 active:scale-[0.98] inline-flex items-center gap-3 cursor-pointer"
+            class="group pl-6 pr-2 py-2 rounded-full font-heading font-bold text-xs sm:text-sm bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 inline-flex items-center gap-3 cursor-pointer"
           >
-            <span>Mulai Audit Usaha Gratis</span>
+            <span>Cek Kesiapan Usaha Gratis</span>
             <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
               <HugeiconsIcon :icon="ArrowRight01Icon" :size="15" :stroke-width="2" />
             </span>
@@ -32,7 +32,7 @@
 
           <NuxtLink
             to="/investor"
-            class="px-6 py-3 rounded-full font-heading font-semibold text-xs sm:text-sm border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-200 transition-all duration-150 active:scale-[0.98]"
+            class="px-6 py-3 rounded-full font-heading font-semibold text-xs sm:text-sm border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-200 transition-all duration-150"
           >
             <span>Katalog Direktori Usaha</span>
           </NuxtLink>
@@ -42,7 +42,7 @@
         <div class="pt-6 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-neutral-500 dark:text-neutral-400 border-t border-neutral-200/80 dark:border-neutral-800 font-sans">
           <div class="flex items-center gap-2">
             <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" :stroke-width="2" class="text-emerald-500" />
-            <span class="font-medium text-neutral-700 dark:text-neutral-300">Standar Audit Resmi BNSP</span>
+            <span class="font-medium text-neutral-700 dark:text-neutral-300">Standar Validasi Konsultan Ahli</span>
           </div>
           <div class="flex items-center gap-2">
             <HugeiconsIcon :icon="LockKeyIcon" :size="16" :stroke-width="2" class="text-primary-500" />
@@ -50,7 +50,7 @@
           </div>
           <div class="flex items-center gap-2">
             <HugeiconsIcon :icon="Coins01Icon" :size="16" :stroke-width="2" class="text-amber-500" />
-            <span class="font-medium text-neutral-700 dark:text-neutral-300">Bukan Pinjol • Bagi Hasil Sehat</span>
+            <span class="font-medium text-neutral-700 dark:text-neutral-300">Kemitraan Modal • Bagi Hasil Sehat</span>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
               <span class="text-lg font-heading font-extrabold text-emerald-600 dark:text-emerald-400 tabular-nums block">
                 Rp 32.600.000
               </span>
-              <span class="text-[10px] text-neutral-500 font-sans block">32.6% dari omzet bulanan</span>
+              <span class="text-[10px] text-neutral-500 font-sans block">32.6% dari total pendapatan</span>
             </div>
 
             <div class="p-3.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 space-y-1">
@@ -104,23 +104,23 @@
           <div class="space-y-2">
             <div class="flex items-center justify-between text-xs">
               <span class="font-heading font-semibold text-neutral-700 dark:text-neutral-300">
-                Aliran Uang per Rp 100.000 Omzet
+                Aliran Uang per Rp 100.000 Pendapatan
               </span>
               <span class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-                Laba 32.6%
+                Untung Bersih 32.6%
               </span>
             </div>
 
             <div class="w-full h-3 rounded-full overflow-hidden flex bg-neutral-100 dark:bg-neutral-800 gap-0.5">
-              <div class="h-full bg-amber-500 rounded-l-full" style="width: 45.1%" title="Bahan Baku 45.1%" />
-              <div class="h-full bg-blue-500" style="width: 22.3%" title="Gaji & Sewa 22.3%" />
-              <div class="h-full bg-emerald-500 rounded-r-full" style="width: 32.6%" title="Laba Bersih 32.6%" />
+              <div class="h-full bg-amber-500 rounded-l-full" style="width: 45.1%" title="Modal Jualan 45.1%" />
+              <div class="h-full bg-blue-500" style="width: 22.3%" title="Biaya Operasional 22.3%" />
+              <div class="h-full bg-emerald-500 rounded-r-full" style="width: 32.6%" title="Untung Bersih 32.6%" />
             </div>
 
             <div class="flex items-center justify-between text-[10px] text-neutral-500 dark:text-neutral-400 font-mono pt-0.5">
-              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500" />Bahan: 45.1%</span>
-              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500" />Opex: 22.3%</span>
-              <span class="flex items-center gap-1 font-semibold text-emerald-600"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500" />Laba: 32.6%</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500" />Modal Jualan: 45.1%</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500" />Operasional: 22.3%</span>
+              <span class="flex items-center gap-1 font-semibold text-emerald-600"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500" />Untung Bersih: 32.6%</span>
             </div>
           </div>
 

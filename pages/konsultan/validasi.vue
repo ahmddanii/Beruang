@@ -63,28 +63,28 @@
           <!-- Financial Breakdown Bento -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div class="p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark">
-              <span class="text-[11px] text-neutral-500 block font-medium">Omzet Dilaporkan</span>
+              <span class="text-[11px] text-neutral-500 block font-medium">Pendapatan Dilaporkan</span>
               <span class="font-heading font-bold text-sm text-neutral-900 dark:text-white tabular-nums">
                 Rp {{ item.omzet.toLocaleString('id-ID') }}
               </span>
             </div>
 
             <div class="p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark">
-              <span class="text-[11px] text-neutral-500 block font-medium">HPP Bahan Baku</span>
+              <span class="text-[11px] text-neutral-500 block font-medium">Modal Jualan Bahan Baku</span>
               <span class="font-heading font-bold text-sm text-danger tabular-nums">
                 Rp {{ item.hpp.toLocaleString('id-ID') }}
               </span>
             </div>
 
             <div class="p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark">
-              <span class="text-[11px] text-neutral-500 block font-medium">Beban Operasional</span>
+              <span class="text-[11px] text-neutral-500 block font-medium">Biaya Operasional</span>
               <span class="font-heading font-bold text-sm text-neutral-700 dark:text-neutral-300 tabular-nums">
                 Rp {{ item.opex.toLocaleString('id-ID') }}
               </span>
             </div>
 
             <div class="p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark">
-              <span class="text-[11px] text-neutral-500 block font-medium">Laba Bersih</span>
+              <span class="text-[11px] text-neutral-500 block font-medium">Untung Bersih</span>
               <span class="font-heading font-bold text-sm text-emerald-600 dark:text-emerald-400 tabular-nums">
                 Rp {{ (item.omzet - item.hpp - item.opex).toLocaleString('id-ID') }}
               </span>

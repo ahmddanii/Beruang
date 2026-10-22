@@ -40,18 +40,18 @@
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400">
-              AUDIT KAS BERKALA // 3 BULAN TERAKHIR
+              VALIDASI KAS BERKALA // 3 BULAN TERAKHIR
             </span>
             <span class="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>TERVALIDASI BNSP</span>
+              <span>TERVALIDASI KONSULTAN</span>
             </span>
           </div>
           <h3 class="font-heading font-extrabold text-xl text-neutral-900 dark:text-white">
             Telemetri Arus Kas & Deteksi Efisiensi Bahan Baku
           </h3>
           <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans max-w-xl">
-            Sistem otomatis memantau rasio belanja bahan baku, titik impas (BEP), dan memberi rekomendasi perbaikan sebelum terjadi kebocoran laba.
+            Sistem otomatis memantau rasio belanja bahan baku, titik impas (BEP), dan memberi rekomendasi perbaikan sebelum terjadi kebocoran untung bersih.
           </p>
         </div>
 
@@ -59,9 +59,9 @@
         <div class="p-4 sm:p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-2.5 font-mono text-xs">
           <div class="flex items-center justify-between font-heading font-bold text-neutral-400 pb-2 border-b border-neutral-200 dark:border-neutral-800 text-[11px]">
             <span>Periode</span>
-            <span class="text-right">Omzet Usaha</span>
+            <span class="text-right">Total Pendapatan</span>
             <span class="text-right">Bahan & Beban</span>
-            <span class="text-right">Uang Bersih</span>
+            <span class="text-right">Untung Bersih</span>
           </div>
 
           <div
@@ -94,7 +94,7 @@
             Indeks Skor: {{ currentBusiness.score }}/100
           </h3>
           <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
-            Audit komprehensif mencakup pilar Finansial, Operasional, Pemasaran, Legalitas Izin, dan Manajemen SDM.
+            Penilaian komprehensif mencakup pilar Finansial, Operasional, Pemasaran, Legalitas Izin, dan Manajemen SDM.
           </p>
         </div>
 
@@ -129,7 +129,7 @@
             <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ currentBusiness.marginRate }} (Tervalidasi)</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-neutral-500 font-sans">Laba Riil Bulanan:</span>
+            <span class="text-neutral-500 font-sans">Untung Bersih Bulanan:</span>
             <span class="text-neutral-700 dark:text-neutral-300 font-bold">[TERKUNCI DOKUMEN NDA]</span>
           </div>
           <div class="flex items-center justify-between">
@@ -172,7 +172,7 @@
           </div>
           <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 flex items-center justify-between text-xs">
             <span class="font-heading font-semibold text-neutral-800 dark:text-neutral-200">
-              Penyusunan SOP Kartu Stok & Rasio HPP di Bawah 50%
+              Penyusunan SOP Kartu Stok & Pengendalian Modal Jualan di Bawah 50%
             </span>
             <span class="text-emerald-600 dark:text-emerald-400 font-mono font-bold">✓ SELESAI</span>
           </div>

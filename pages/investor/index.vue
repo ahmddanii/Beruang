@@ -42,7 +42,7 @@
             >
               <div
                 :class="[
-                  'p-[2.5px] rounded-full transition-all duration-200 group-hover:scale-105 active:scale-95',
+                  'p-[2.5px] rounded-full transition-all duration-200 group-hover:scale-105',
                   investorStore.selectedSector === 'ALL'
                     ? 'bg-gradient-to-tr from-[#2091AA] via-[#00AA13] to-amber-400 shadow-sm ring-2 ring-[#2091AA]/20'
                     : 'bg-neutral-200 dark:bg-neutral-700 group-hover:bg-gradient-to-tr group-hover:from-[#2091AA]/60 group-hover:to-[#00AA13]/60'
@@ -76,7 +76,7 @@
             >
               <div
                 :class="[
-                  'p-[2.5px] rounded-full transition-all duration-200 group-hover:scale-105 active:scale-95',
+                  'p-[2.5px] rounded-full transition-all duration-200 group-hover:scale-105',
                   investorStore.selectedSector === sec.id
                     ? 'bg-gradient-to-tr from-[#2091AA] via-[#00AA13] to-amber-400 shadow-sm ring-2 ring-[#2091AA]/20'
                     : 'bg-neutral-200 dark:bg-neutral-700 group-hover:bg-gradient-to-tr group-hover:from-[#2091AA]/60 group-hover:to-[#00AA13]/60'
@@ -112,7 +112,7 @@
               :title="`Lihat postingan ${umkm.name}`"
               @click="handleUmkmStoryClick(umkm)"
             >
-              <div class="p-[2.5px] rounded-full bg-gradient-to-tr from-[#00AA13] via-[#2091AA] to-amber-400 shadow-2xs group-hover:scale-105 active:scale-95 transition-transform">
+              <div class="p-[2.5px] rounded-full bg-gradient-to-tr from-[#00AA13] via-[#2091AA] to-amber-400 shadow-2xs group-hover:scale-105 transition-transform">
                 <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-full p-1 bg-white dark:bg-[#13161F] flex items-center justify-center overflow-hidden">
                   <div class="w-full h-full rounded-full bg-amber-400 p-1 flex items-center justify-center">
                     <img src="/logo.svg" alt="Logo" class="w-full h-full object-contain" />
@@ -308,7 +308,7 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-black/20" />
                 <div class="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/65 backdrop-blur-md text-white text-xs font-semibold border border-white/20">
                   <HugeiconsIcon :icon="Store01Icon" :size="15" class="text-emerald-400" />
-                  <span>Audit Fisik Gerai Aktif</span>
+                  <span>Verifikasi Fisik Gerai Aktif</span>
                 </div>
                 <div class="absolute bottom-3 left-3 right-3 text-white">
                   <p class="font-poppins font-bold text-base tracking-tight drop-shadow-sm">
@@ -523,7 +523,7 @@
               <NuxtLink
                 v-if="item.accessStatus === 'APPROVED'"
                 :to="`/investor/data-room/${item.id}`"
-                class="inline-flex items-center gap-2 px-4 h-9 rounded-xl text-xs font-bold font-poppins bg-[#00800e] hover:bg-[#006e0c] text-white shadow-xs transition-all active:scale-95 cursor-pointer"
+                class="inline-flex items-center gap-2 px-4 h-9 rounded-xl text-xs font-bold font-poppins bg-[#00800e] hover:bg-[#006e0c] text-white shadow-xs transition-all cursor-pointer"
               >
                 <HugeiconsIcon :icon="FileUnlockedIcon" :size="16" :stroke-width="2" />
                 <span>Buka Data Room</span>

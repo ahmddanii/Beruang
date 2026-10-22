@@ -51,7 +51,7 @@
           Toolkit Cerdas AI Anomaly Alert
         </h3>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Tidak perlu memeriksa manual baris transaksi setiap hari. Algoritma kami memindai lonjakan HPP >10% dan deviasi margin kotor untuk langsung memberikan alert di dashboard Anda.
+          Tidak perlu memeriksa manual baris transaksi setiap hari. Algoritma kami memindai lonjakan modal jualan >10% dan deviasi margin kotor untuk langsung memberikan alert di dashboard Anda.
         </p>
       </BCard>
 
@@ -75,7 +75,7 @@
           Alur Kerja Konsultan Pendamping di Beruang
         </h2>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-          Framework terstruktur 4 langkah yang memudahkan supervisi multi-klien tanpa kehilangan kualitas kedalaman audit.
+          Framework terstruktur 4 langkah yang memudahkan supervisi multi-klien tanpa kehilangan kualitas kedalaman validasi.
         </p>
       </div>
 
@@ -109,7 +109,7 @@
             LANGKAH 03
           </span>
           <h4 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-            Audit Kas & Verifikasi
+            Validasi Kas & Verifikasi
           </h4>
           <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Memeriksa konsistensi rekonsiliasi kas riil 3 bulan berturut-turut dengan bantuan notifikasi AI anomaly.

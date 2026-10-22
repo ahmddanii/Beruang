@@ -185,7 +185,7 @@
 
           <div>
             <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
-              Rata-rata Omzet Penjualan Bulanan (Rp)
+              Rata-rata Pendapatan Penjualan Bulanan (Rp)
             </label>
             <input
               v-model.number="form.monthlyRevenue"
@@ -202,7 +202,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 font-heading">
-                Estimasi HPP (% dari Omzet)
+                Estimasi Modal Jualan (% dari Pendapatan)
               </label>
               <input
                 v-model.number="form.hppPercentage"
@@ -256,7 +256,7 @@
               <span class="font-semibold">{{ form.outlets }} Outlet • {{ form.employees }} Karyawan</span>
             </div>
             <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
-              <span class="text-neutral-500 font-medium">Omzet Bulanan:</span>
+              <span class="text-neutral-500 font-medium">Pendapatan Bulanan:</span>
               <span class="font-semibold tabular-nums">Rp {{ form.monthlyRevenue.toLocaleString('id-ID') }}</span>
             </div>
             <div class="flex justify-between">

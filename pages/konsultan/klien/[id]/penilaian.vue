@@ -7,15 +7,15 @@
           <NuxtLink :to="`/konsultan/klien/${clientId}`" class="hover:underline">← Kembali ke Detail Klien</NuxtLink>
         </div>
         <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
-          Form Audit Skor 5 Aspek Fundamental
+          Form Penilaian Skor 5 Aspek Fundamental
         </h1>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-          Klien: <strong>{{ client?.name }}</strong> • Skor terupdate secara real-time pada radar interaktif.
+          Klien: <strong>{{ client?.name }}</strong> • Skor terupdate secara langsung pada radar interaktif.
         </p>
       </div>
 
       <BButton variant="primary" size="md" @click="saveAssessment">
-        Simpan Hasil Audit
+        Simpan Penilaian
       </BButton>
     </div>
 
@@ -24,7 +24,7 @@
       v-if="saved"
       class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300"
     >
-      Audit penilaian berhasil disimpan! Radar skor dan catatan objektif telah diperbarui.
+      Hasil penilaian berhasil disimpan! Radar skor dan catatan objektif telah diperbarui.
     </div>
 
     <!-- Main Grid: Form Inputs (Left) and Real-time Radar Preview (Right) -->
@@ -71,7 +71,7 @@
               <textarea
                 v-model="aspect.notes"
                 rows="2"
-                placeholder="Tuliskan temuan audit atau hal yang perlu ditingkatkan..."
+                placeholder="Tuliskan catatan pendampingan atau hal yang perlu ditingkatkan..."
                 class="w-full px-3 py-2 text-xs rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark text-neutral-900 dark:text-neutral-100 focus:bg-white dark:focus:bg-neutral-900 focus:outline-none focus:ring-1 focus:ring-primary-500"
               />
             </div>

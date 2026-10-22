@@ -20,15 +20,15 @@
       <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
         <NuxtLink
           to="/daftar"
-          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-heading font-bold text-xs sm:text-sm bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all active:scale-[0.98]"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-heading font-bold text-xs sm:text-sm bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all"
         >
-          <span>Daftarkan Usaha untuk Audit Gratis</span>
+          <span>Daftarkan Usaha untuk Konsultasi Gratis</span>
           <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2" />
         </NuxtLink>
 
         <NuxtLink
           to="/untuk-konsultan"
-          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-heading font-semibold text-xs sm:text-sm border border-neutral-800 hover:bg-neutral-900 text-neutral-300 transition-all active:scale-[0.98]"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-heading font-semibold text-xs sm:text-sm border border-neutral-800 hover:bg-neutral-900 text-neutral-300 transition-all"
         >
           <span>Bergabung Sebagai Konsultan BNSP</span>
         </NuxtLink>

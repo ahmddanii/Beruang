@@ -130,8 +130,8 @@ const umkmFaqs: AccordionItem[] = [
   },
   {
     id: 'umkm-3',
-    title: 'Apakah nominal rupiah omzet dan laba usaha saya akan terlihat oleh publik?',
-    content: 'Tidak. Kami menerapkan perlindungan privasi mutlak. Di katalog publik, data keuangan Anda hanya disajikan dalam bentuk rasio persentase (margin kotor %, pertumbuhan YoY %, dan skor audit). Nominal riil Rupiah dan buku besar kas hanya dapat diakses di dalam Data Room ber-watermark oleh investor yang permohonan aksesnya telah Anda setujui secara sadar.'
+    title: 'Apakah nominal rupiah pendapatan dan untung usaha saya akan terlihat oleh publik?',
+    content: 'Tidak. Kami menerapkan perlindungan privasi mutlak. Di katalog publik, data keuangan Anda hanya disajikan dalam bentuk rasio persentase (margin kotor %, pertumbuhan YoY %, dan skor kesiapan usaha). Nominal riil Rupiah dan buku besar kas hanya dapat diakses di dalam Data Room ber-watermark oleh investor yang permohonan aksesnya telah Anda setujui secara sadar.'
   },
   {
     id: 'umkm-4',
@@ -149,7 +149,7 @@ const investorFaqs: AccordionItem[] = [
   {
     id: 'inv-2',
     title: 'Apakah transaksi pendanaan dieksekusi langsung di dalam platform?',
-    content: 'Beruang berperan sebagai platform penemuan deal (deal-flow), audit fundamental, dan kurasi kelayakan bisnis. Eksekusi perjanjian kemitraan, akad bagi hasil, atau investasi ekuitas dilakukan secara langsung antara investor dan pemilik usaha dengan bantuan notaris rekanan tanpa potongan komisi sepihak dari Beruang.'
+    content: 'Beruang berperan sebagai platform penemuan deal (deal-flow), validasi fundamental, dan kurasi kelayakan bisnis. Eksekusi perjanjian kemitraan, akad bagi hasil, atau investasi ekuitas dilakukan secara langsung antara investor dan pemilik usaha dengan bantuan notaris rekanan tanpa potongan komisi sepihak dari Beruang.'
   },
   {
     id: 'inv-3',
@@ -167,7 +167,7 @@ const konsultanFaqs: AccordionItem[] = [
   {
     id: 'kon-2',
     title: 'Bagaimana sistem AI Anomaly Alert membantu supervisi konsultan?',
-    content: 'Sistem cerdas Beruang memindai tren pencatatan transaksi harian klien setiap minggu. Jika terjadi penurunan margin kotor lebih dari 10%, lonjakan HPP tidak wajar, atau deviasi arus kas keluar, sistem langsung mengirimkan notifikasi ke dashboard Anda agar dapat segera dilakukan intervensi pembinaan.'
+    content: 'Sistem cerdas Beruang memindai tren pencatatan transaksi harian klien setiap minggu. Jika terjadi penurunan margin kotor lebih dari 10%, lonjakan modal jualan tidak wajar, atau deviasi arus kas keluar, sistem langsung mengirimkan notifikasi ke dashboard Anda agar dapat segera dilakukan intervensi pembinaan.'
   }
 ]
 </script>

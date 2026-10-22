@@ -287,7 +287,7 @@ const sampleFaqItems = [
   {
     id: 'faq-2',
     title: 'Bagaimana keamanan data keuangan UMKM dijaga?',
-    content: 'Angka nominal omzet dan kas riil (dalam Rupiah) tidak pernah dibuka ke publik. Investor hanya dapat membaca laporan keuangan lengkap di Data Room terproteksi setelah mengajukan permintaan dan disetujui oleh pemilik UMKM, dengan watermark digital beridentitas investor.'
+    content: 'Angka nominal pendapatan dan kas riil (dalam Rupiah) tidak pernah dibuka ke publik. Investor hanya dapat membaca laporan keuangan lengkap di Data Room terproteksi setelah mengajukan permintaan dan disetujui oleh pemilik UMKM, dengan watermark digital beridentitas investor.'
   },
   {
     id: 'faq-3',

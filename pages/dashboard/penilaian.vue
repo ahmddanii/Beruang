@@ -16,7 +16,7 @@
       <!-- Primary 3D Action: Lihat Sertifikat Validasi -->
       <button
         type="button"
-        class="btn-3d-green px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs active:scale-95 cursor-pointer"
+        class="btn-3d-green px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs cursor-pointer"
         @click="isCertificateModalOpen = true"
       >
         <HugeiconsIcon :icon="Award01Icon" :size="17" :stroke-width="2.2" />

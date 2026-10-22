@@ -49,7 +49,7 @@
             <stop offset="100%" :stop-color="getCategoryColor(cat)" stop-opacity="0.00" />
           </linearGradient>
 
-          <!-- Bar Gradient -->
+          <!-- Bar & Cashflow Gradient (Top: Full Vibrant Saturation, Bottom: Pure Transparent) -->
           <linearGradient
             v-for="cat in categories"
             :id="`shadcn-bar-grad-${cat}`"
@@ -59,8 +59,11 @@
             x2="0"
             y2="1"
           >
-            <stop offset="0%" :stop-color="getCategoryColor(cat)" stop-opacity="0.95" />
-            <stop offset="100%" :stop-color="getCategoryColor(cat)" stop-opacity="0.65" />
+            <stop offset="0%" :stop-color="getCategoryColor(cat)" stop-opacity="1" />
+            <stop offset="20%" :stop-color="getCategoryColor(cat)" stop-opacity="0.88" />
+            <stop offset="55%" :stop-color="getCategoryColor(cat)" stop-opacity="0.42" />
+            <stop offset="85%" :stop-color="getCategoryColor(cat)" stop-opacity="0.10" />
+            <stop offset="100%" :stop-color="getCategoryColor(cat)" stop-opacity="0" />
           </linearGradient>
         </defs>
 

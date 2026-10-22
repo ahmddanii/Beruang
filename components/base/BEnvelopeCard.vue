@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative flex flex-col justify-between cursor-pointer select-none h-full transition-all duration-150 ease-out active:scale-[0.99] transform-gpu"
+    class="group relative flex flex-col justify-between cursor-pointer select-none h-full transition-all duration-150 ease-out"
     @click="$emit('click')"
   >
     <!-- STRUCTURAL FRAME: THE ENVELOPE (Unified white bg, 1px border, subtle drop-shadow) -->
@@ -84,7 +84,7 @@
         <!-- Bottom: Full-Width Solid-Fill High-Contrast Button -->
         <button
           type="button"
-          class="w-full py-2.5 px-3 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-950 font-heading font-bold text-xs sm:text-[13px] shadow-xs transition-all duration-150 flex items-center justify-center gap-1.5 group-hover:shadow-sm active:scale-[0.98] cursor-pointer"
+          class="w-full py-2.5 px-3 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-950 font-heading font-bold text-xs sm:text-[13px] shadow-xs transition-all duration-150 flex items-center justify-center gap-1.5 group-hover:shadow-sm cursor-pointer"
         >
           <span>Tinjau Permintaan Akses</span>
           <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">

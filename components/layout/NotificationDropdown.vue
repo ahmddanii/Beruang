@@ -1,13 +1,13 @@
 <template>
-  <div class="relative">
-    <!-- Trigger Button in Navbar -->
+  <div ref="dropdownRef" class="relative">
+    <!-- Trigger Button in Navbar (GoPay Tactile consistent with profile button) -->
     <button
       type="button"
       :class="[
-        'relative w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer select-none',
+        'relative w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] flex items-center justify-center transition-all duration-150 cursor-pointer select-none border',
         isOpen
-          ? 'bg-[#E6F4F7] dark:bg-[#2091AA]/20 text-[#2091AA] dark:text-[#50AABF] border-[1.5px] border-[#2091AA]/50 dark:border-[#50AABF]/50 shadow-xs'
-          : 'bg-white dark:bg-[#18191E] hover:bg-neutral-100 dark:hover:bg-[#202128] border-[1.5px] border-slate-300 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white shadow-2xs'
+          ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs'
+          : 'bg-white dark:bg-[#13161F] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 border-[#CBD5E1] dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 shadow-2xs'
       ]"
       aria-label="Notifikasi & Pemberitahuan Usaha"
       :aria-expanded="isOpen"
@@ -16,102 +16,142 @@
     >
       <HugeiconsIcon
         :icon="Notification01Icon"
-        :size="16"
-        :stroke-width="2.2"
+        :size="19"
+        :stroke-width="2.0"
         class="transition-transform duration-150"
       />
 
-      <!-- Unread Indicator Dot (Standard Clean Dot) -->
+      <!-- Perfect Circle Notification Badge (Container Bulat Sempurna) -->
       <span
         v-if="notificationStore.unreadCount > 0"
-        class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#18191E]"
-      />
+        :class="[
+          'absolute -top-1 -right-1 rounded-full bg-[#00AA13] dark:bg-[#22C55E] text-white font-bold font-poppins flex items-center justify-center ring-2 ring-white dark:ring-[#13161F] tabular-nums leading-none shadow-xs pointer-events-none select-none shrink-0',
+          notificationStore.unreadCount > 9
+            ? 'min-w-[20px] h-5 px-1 text-[9.5px]'
+            : 'w-5 h-5 min-w-[20px] min-h-[20px] aspect-square text-[11px]'
+        ]"
+      >
+        {{ notificationStore.unreadCount > 99 ? '99+' : notificationStore.unreadCount }}
+      </span>
     </button>
 
-    <!-- Backdrop Overlay to close on outside click -->
+    <!-- Notification Popover Card (Stable Fixed Dimensions matching Linear & GitHub standards) -->
     <div
       v-if="isOpen"
-      class="fixed inset-0 z-40 bg-transparent"
-      @click="isOpen = false"
-    />
-
-    <!-- Notification Popover Card (GoPay Tactile / Trueform FinTech Style) -->
-    <div
-      v-if="isOpen"
-      class="absolute top-full right-0 mt-2.5 w-[360px] sm:w-[430px] max-w-[92vw] bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl shadow-2xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150 select-none"
+      class="absolute top-full right-0 mt-2.5 w-[calc(100vw-24px)] sm:w-[410px] bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150 select-none"
     >
-      <!-- Header: Title, Unread Count Pill, and Mark All Read Action -->
-      <div class="px-4 sm:px-5 py-3.5 border-b border-neutral-100 dark:border-neutral-800/80 bg-neutral-50/70 dark:bg-neutral-900/40 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <h3 class="font-heading font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-white tracking-tight">
+      <!-- ========================================================================= -->
+      <!-- 1. HEADER (Title, Unread Badge Pill, and 3-Dots Kebab Action Menu)         -->
+      <!-- ========================================================================= -->
+      <div class="px-5 py-3.5 bg-white dark:bg-[#13161F] flex items-center justify-between relative z-30">
+        <div class="flex items-center gap-2.5">
+          <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white tracking-tight">
             Notifikasi
           </h3>
+          <!-- Circle Badge Number (Replaces old '3 Baru' pill) -->
           <span
             v-if="notificationStore.unreadCount > 0"
-            class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-[#00AA13] dark:text-emerald-400 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 tabular-nums"
+            class="w-6 h-6 min-w-[24px] min-h-[24px] rounded-full bg-[#00AA13] dark:bg-[#22C55E] text-white text-[11px] font-bold font-poppins flex items-center justify-center tabular-nums shadow-2xs leading-none"
+            title="Jumlah notifikasi belum dibaca"
           >
-            {{ notificationStore.unreadCount }} Baru
+            {{ notificationStore.unreadCount > 99 ? '99+' : notificationStore.unreadCount }}
           </span>
         </div>
 
-        <button
-          v-if="notificationStore.unreadCount > 0"
-          type="button"
-          class="text-xs font-medium text-[#2091AA] dark:text-[#50AABF] hover:text-[#187286] dark:hover:text-[#62BDD2] transition-colors flex items-center gap-1 active:scale-95 cursor-pointer"
-          title="Tandai semua notifikasi sudah dibaca"
-          @click="handleMarkAllRead"
-        >
-          <HugeiconsIcon :icon="CheckmarkSquare02Icon" :size="15" :stroke-width="1.8" />
-          <span>Tandai Dibaca</span>
-        </button>
-      </div>
-
-      <!-- Filter Category Tabs -->
-      <div class="px-3.5 py-2 border-b border-neutral-100 dark:border-neutral-800 flex items-center gap-1 overflow-x-auto scrollbar-none bg-white dark:bg-[#18191E]">
-        <button
-          v-for="tab in filterTabs"
-          :key="tab.id"
-          type="button"
-          :class="[
-            'px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-150 cursor-pointer',
-            activeFilter === tab.id
-              ? 'bg-[#E6F4F7] dark:bg-[#2091AA]/25 text-[#2091AA] dark:text-[#50AABF] font-semibold shadow-2xs'
-              : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
-          ]"
-          @click="activeFilter = tab.id"
-        >
-          {{ tab.label }}
-          <span
-            v-if="tab.count !== undefined"
-            class="text-[10px] ml-1 opacity-80 tabular-nums"
+        <!-- 3-Dots Kebab Menu Button (Stacking Context z-40 so floating menu stays above all siblings) -->
+        <div class="relative z-40" ref="kebabMenuRef">
+          <button
+            type="button"
+            class="w-8 h-8 rounded-lg flex items-center justify-center border border-slate-200/80 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors cursor-pointer"
+            title="Menu Opsi Notifikasi"
+            @click.stop="isKebabOpen = !isKebabOpen"
           >
-            ({{ tab.count }})
-          </span>
-        </button>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="1.8" />
+              <circle cx="12" cy="12" r="1.8" />
+              <circle cx="12" cy="19" r="1.8" />
+            </svg>
+          </button>
+
+          <!-- Floating Kebab Action Menu -->
+          <div
+            v-if="isKebabOpen"
+            class="absolute right-0 top-full mt-1.5 w-52 bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.15)] py-1.5 z-50 text-xs font-poppins animate-in fade-in zoom-in-95 duration-100"
+          >
+            <button
+              v-if="notificationStore.unreadCount > 0"
+              type="button"
+              class="w-full px-3.5 py-2 text-left flex items-center gap-2 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              @click="handleMarkAllRead"
+            >
+              <HugeiconsIcon :icon="CheckmarkSquare02Icon" :size="14" :stroke-width="1.8" class="text-[#00AA13]" />
+              <span>Tandai Semua Dibaca</span>
+            </button>
+            <button
+              type="button"
+              class="w-full px-3.5 py-2 text-left flex items-center gap-2 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              @click="notificationStore.resetToDefault(); isKebabOpen = false"
+            >
+              <HugeiconsIcon :icon="Notification02Icon" :size="14" :stroke-width="1.8" class="text-[#2091AA]" />
+              <span>Segarkan Notifikasi</span>
+            </button>
+            <div class="h-px bg-slate-100 dark:bg-neutral-800 my-1" />
+            <NuxtLink
+              to="/dashboard/pengaturan"
+              class="w-full px-3.5 py-2 text-left flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              @click="isOpen = false; isKebabOpen = false"
+            >
+              <svg class="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83-2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+              <span>Pengaturan Notifikasi</span>
+            </NuxtLink>
+          </div>
+        </div>
       </div>
 
-      <!-- Notification List Container -->
-      <div class="max-h-[380px] sm:max-h-[440px] overflow-y-auto overscroll-contain divide-y divide-neutral-100 dark:divide-neutral-800/80">
-        <!-- Empty State -->
+      <!-- ========================================================================= -->
+      <!-- 2. SEGMENTED PILL TAB BAR (5 Segment Tabs: Semua, Pesanan, Kas, Investor, Sistem) -->
+      <!-- ========================================================================= -->
+      <div class="px-3 py-2.5 bg-white dark:bg-[#13161F] border-t border-[#E2E8F0] dark:border-neutral-800 relative z-10 overflow-x-auto no-scrollbar">
+        <BPillTabs
+          v-model="activeFilter"
+          :tabs="filterTabs"
+          size="sm"
+          :full-width="true"
+          custom-class="w-full min-w-[360px]"
+        />
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- 3. NOTIFICATION LIST CONTAINER (Stable Height across all tabs)            -->
+      <!-- ========================================================================= -->
+      <div class="min-h-[340px] max-h-[410px] sm:max-h-[430px] overflow-y-auto overscroll-contain divide-y divide-slate-100 dark:divide-neutral-800/80">
+        <!-- Empty State (Clean & Warm with contextual message, perfectly centered) -->
         <div
           v-if="filteredNotifications.length === 0"
-          class="py-12 px-6 text-center flex flex-col items-center justify-center space-y-3"
+          class="h-[340px] px-6 text-center flex flex-col items-center justify-center space-y-3"
         >
-          <div class="w-12 h-12 rounded-2xl bg-[#E6F4F7] dark:bg-[#2091AA]/15 text-[#2091AA] dark:text-[#50AABF] flex items-center justify-center">
-            <HugeiconsIcon :icon="Notification02Icon" :size="24" :stroke-width="1.8" />
+          <div class="w-13 h-13 rounded-2xl bg-[#E6F4F7] dark:bg-[#2091AA]/15 text-[#2091AA] dark:text-[#50AABF] flex items-center justify-center shadow-xs">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              <line x1="2" y1="2" x2="22" y2="22" />
+            </svg>
           </div>
           <div>
             <h4 class="font-heading font-semibold text-sm text-neutral-900 dark:text-white">
-              Tidak Ada Notifikasi Baru
+              {{ emptyStateInfo.title }}
             </h4>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-[260px] mx-auto leading-relaxed">
-              Semua laporan kas dan permodalan tokomu sudah terupdate. Semangat jualan hari ini!
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-[270px] mx-auto leading-relaxed">
+              {{ emptyStateInfo.desc }}
             </p>
           </div>
           <button
             v-if="activeFilter !== 'ALL'"
             type="button"
-            class="text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline cursor-pointer pt-1"
+            class="text-xs font-semibold text-[#156374] dark:text-[#50AABF] hover:underline cursor-pointer pt-1"
             @click="activeFilter = 'ALL'"
           >
             Tampilkan Semua Notifikasi
@@ -123,97 +163,143 @@
           v-for="item in filteredNotifications"
           :key="item.id"
           :class="[
-            'p-3.5 sm:p-4 transition-all duration-150 group relative cursor-pointer',
+            'p-4 sm:px-5 sm:py-4 transition-colors duration-150 group relative cursor-pointer',
             item.isRead
-              ? 'bg-white dark:bg-[#18191E] hover:bg-neutral-50 dark:hover:bg-[#1c1d24]'
-              : 'bg-[#E6F4F7]/40 dark:bg-[#2091AA]/10 hover:bg-[#E6F4F7]/70 dark:hover:bg-[#2091AA]/15'
+              ? 'bg-white dark:bg-[#13161F] hover:bg-neutral-50 dark:hover:bg-neutral-800/40'
+              : 'bg-[#F3F8FC] dark:bg-[#0C121D] hover:bg-[#EBF6F9] dark:hover:bg-[#131B2A]'
           ]"
           @click="handleNotificationClick(item)"
         >
-          <div class="flex items-start gap-3">
-            <!-- Category Icon Rosette Pill -->
+          <div class="flex items-start gap-3.5">
+            <!-- ----------------------------------------------------------------- -->
+            <!-- Item Visual: Avatar with Red Counter Pill OR Styled Squircle Icon  -->
+            <!-- ----------------------------------------------------------------- -->
+            <!-- CASE 1: Contact Avatar with Red Badge Count -->
             <div
-              :class="[
-                'w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-2xs',
-                categoryIconConfig[item.category].pillClass
-              ]"
+              v-if="item.avatar"
+              class="relative w-11 h-11 rounded-full shrink-0"
+            >
+              <img
+                :src="item.avatar"
+                :alt="item.title"
+                class="w-full h-full rounded-full object-cover border border-slate-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 shadow-2xs"
+                @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
+              />
+              <!-- Red Badge Count Pill on Top-Right -->
+              <span
+                v-if="item.badgeCount"
+                class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#EF4444] text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-[#13161F] tabular-nums shadow-xs leading-none"
+              >
+                {{ item.badgeCount }}
+              </span>
+            </div>
+
+            <!-- CASE 2: Squircle with Checkmark (Beruang Brand Cyan/Teal Palette) -->
+            <div
+              v-else-if="item.iconType === 'verified'"
+              class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-[#EBF6F9] dark:bg-[#156374]/20 border border-[#A9D8E5]/60 dark:border-[#2091AA]/30 text-[#156374] dark:text-[#50AABF] shadow-2xs"
+            >
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </div>
+
+            <!-- CASE 3: Squircle with Shield (System & Security - Beruang Brand Cyan/Teal Palette) -->
+            <div
+              v-else-if="item.iconType === 'shield'"
+              class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-[#EBF6F9] dark:bg-[#156374]/20 border border-[#A9D8E5]/60 dark:border-[#2091AA]/30 text-[#156374] dark:text-[#50AABF] shadow-2xs"
+            >
+              <HugeiconsIcon :icon="Shield01Icon" :size="20" :stroke-width="2.1" />
+            </div>
+
+            <!-- CASE 4: Squircle with Growth / Activity Wave (Beruang Brand Cyan/Teal Palette) -->
+            <div
+              v-else-if="item.iconType === 'growth'"
+              class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-[#EBF6F9] dark:bg-[#156374]/20 border border-[#A9D8E5]/60 dark:border-[#2091AA]/30 text-[#156374] dark:text-[#50AABF] shadow-2xs"
+            >
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
+            </div>
+
+            <!-- CASE 5: Fallback Squircle Icon (Beruang Brand Cyan/Teal Palette) -->
+            <div
+              v-else
+              class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-[#EBF6F9] dark:bg-[#156374]/20 border border-[#A9D8E5]/60 dark:border-[#2091AA]/30 text-[#156374] dark:text-[#50AABF] shadow-2xs"
             >
               <HugeiconsIcon
-                :icon="categoryIconConfig[item.category].icon"
-                :size="18"
-                :stroke-width="2"
+                :icon="categoryIconConfig[item.category]?.icon || Notification01Icon"
+                :size="19"
+                :stroke-width="2.1"
               />
             </div>
 
-            <!-- Content -->
-            <div class="flex-1 min-w-0 pr-5">
-              <div class="flex items-center gap-1.5">
-                <!-- Unread Blue Dot -->
-                <span
-                  v-if="!item.isRead"
-                  class="w-2 h-2 rounded-full bg-[#2091AA] dark:bg-[#50AABF] shrink-0"
-                  title="Belum Dibaca"
-                />
-                <h4
-                  :class="[
-                    'text-[13px] sm:text-sm tracking-tight leading-snug truncate',
-                    item.isRead
-                      ? 'font-medium text-neutral-800 dark:text-neutral-200'
-                      : 'font-bold text-neutral-900 dark:text-white'
-                  ]"
-                >
-                  {{ item.title }}
-                </h4>
-              </div>
+            <!-- ----------------------------------------------------------------- -->
+            <!-- Middle Column: Title, Subtitle / Description, Timestamp           -->
+            <!-- ----------------------------------------------------------------- -->
+            <div class="flex-1 min-w-0 pr-4">
+              <!-- Title (Semibold, matching reference) -->
+              <h4
+                :class="[
+                  'text-[14px] tracking-tight leading-snug truncate',
+                  item.isRead
+                    ? 'font-medium text-neutral-800 dark:text-neutral-200'
+                    : 'font-semibold text-neutral-900 dark:text-white'
+                ]"
+              >
+                {{ item.title }}
+              </h4>
 
-              <!-- Message Description -->
-              <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mt-1 line-clamp-2">
+              <!-- Message Description (Only shown when item has detailed body message) -->
+              <p
+                v-if="item.iconType === 'verified' || item.iconType === 'growth' || item.category === 'INVESTOR'"
+                class="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed mt-0.5 line-clamp-2"
+              >
                 {{ item.message }}
               </p>
 
-              <!-- Footer of item: Timestamp + Action Link Button -->
-              <div class="flex items-center justify-between gap-2 mt-2.5 pt-0.5">
-                <span class="text-[11px] text-neutral-400 dark:text-neutral-500 flex items-center gap-1 font-medium">
-                  <HugeiconsIcon :icon="Clock01Icon" :size="12" :stroke-width="1.8" />
-                  <span>{{ item.timestamp }}</span>
+              <!-- Timestamp -->
+              <div class="mt-1 flex items-center justify-between gap-2">
+                <span class="text-[12px] text-neutral-400 dark:text-neutral-500 font-normal tabular-nums">
+                  {{ item.timestamp }}
                 </span>
 
                 <span
-                  v-if="item.actionLabel"
-                  class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#2091AA] dark:text-[#50AABF] group-hover:text-[#187589] dark:group-hover:text-[#6ec2d5] transition-colors"
-                >
-                  <span>{{ item.actionLabel }}</span>
-                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="11" :stroke-width="2.2" />
-                </span>
+                  v-if="!item.isRead"
+                  class="w-1.5 h-1.5 rounded-full bg-[#00AA13] dark:bg-[#22C55E] shrink-0"
+                  title="Belum Dibaca"
+                />
               </div>
             </div>
 
-            <!-- Dismiss / Delete Single Notification Button -->
+            <!-- Single Item Dismiss / Delete Button (Appears on Row Hover) -->
             <button
               type="button"
-              class="absolute top-3 right-3 p-1 rounded-lg text-neutral-300 dark:text-neutral-600 hover:text-neutral-600 dark:hover:text-neutral-300 hover:bg-neutral-200/50 dark:hover:bg-neutral-800 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
-              title="Hapus pemberitahuan ini"
+              class="absolute top-3.5 right-3.5 w-6 h-6 rounded-md flex items-center justify-center text-neutral-400 dark:text-neutral-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+              title="Hapus notifikasi"
               @click.stop="handleDelete(item.id)"
             >
-              <HugeiconsIcon :icon="Cancel01Icon" :size="14" :stroke-width="2" />
+              <HugeiconsIcon :icon="Cancel01Icon" :size="13" :stroke-width="2.2" />
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Dropdown Bottom Footer: Button Lihat Semuanya (Mengarahkan ke Halaman Khusus Notifikasi) -->
-      <div class="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-xs">
-        <span class="text-neutral-500 dark:text-neutral-400 font-medium">
-          {{ notificationStore.roleNotifications.length }} notifikasi tersimpan
-        </span>
+      <!-- ========================================================================= -->
+      <!-- 4. BOTTOM FOOTER (Full-Width Tactile Container with Gray Hover Effect)     -->
+      <!-- ========================================================================= -->
+      <div class="border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#13161F]">
         <NuxtLink
           to="/dashboard/notifikasi"
-          class="font-heading font-semibold text-[#2091AA] dark:text-[#50AABF] hover:text-[#187589] dark:hover:text-[#6ec2d5] flex items-center gap-1.5 transition-colors cursor-pointer group/footer"
-          title="Buka Halaman Notifikasi"
+          class="w-full py-3.5 px-4 flex items-center justify-center gap-2 text-center font-poppins font-semibold text-xs sm:text-[13px] text-[#156374] dark:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 active:bg-neutral-200/70 dark:active:bg-neutral-700/60 transition-colors duration-150 cursor-pointer group/link select-none"
+          title="Buka Halaman Notifikasi Lengkap"
           @click="isOpen = false"
         >
-          <span>Lihat Semuanya</span>
-          <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2.2" class="transition-transform group-hover/footer:translate-x-0.5" />
+          <span>Lihat semua notifikasi</span>
+          <svg class="w-3.5 h-3.5 transition-transform duration-150 group-hover/link:translate-x-1 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
         </NuxtLink>
       </div>
     </div>
@@ -221,9 +307,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useNotificationStore, type AppNotification, type NotificationCategory } from '~/stores/notification'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import BPillTabs, { type PillTabItem } from '~/components/base/BPillTabs.vue'
+import { useNotificationStore, type AppNotification } from '~/stores/notification'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Notification01Icon,
@@ -233,77 +320,184 @@ import {
   Award01Icon,
   Coins01Icon,
   AnalyticsUpIcon,
+  Shield01Icon,
+  ShoppingBag01Icon,
   Task01Icon,
-  Clock01Icon,
-  ArrowRight01Icon,
   Cancel01Icon
 } from '@hugeicons/core-free-icons'
 
 const router = useRouter()
+const route = useRoute()
 const notificationStore = useNotificationStore()
 
+const dropdownRef = ref<HTMLElement | null>(null)
+const kebabMenuRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
-const activeFilter = ref<'ALL' | 'UNREAD' | NotificationCategory>('ALL')
+const isKebabOpen = ref(false)
+
+type FilterTabId = 'ALL' | 'ORDER' | 'CASH' | 'INVESTOR' | 'SYSTEM'
+const activeFilter = ref<FilterTabId>('ALL')
+
+function handleClickOutside(e: MouseEvent) {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target as Node)) {
+    isOpen.value = false
+    isKebabOpen.value = false
+  }
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    isOpen.value = false
+    isKebabOpen.value = false
+  }
+}
+
+function handleScroll(e: Event) {
+  if (!isOpen.value) return
+  // Prevent closing when user is scrolling the notification list or tabs inside the dropdown
+  if (dropdownRef.value && dropdownRef.value.contains(e.target as Node)) {
+    return
+  }
+  isOpen.value = false
+  isKebabOpen.value = false
+}
+
+watch(() => route.path, () => {
+  isOpen.value = false
+  isKebabOpen.value = false
+})
 
 onMounted(() => {
   notificationStore.initNotifications()
+  if (import.meta.client) {
+    document.addEventListener('click', handleClickOutside)
+    document.addEventListener('keydown', handleKeydown)
+    window.addEventListener('scroll', handleScroll, { capture: true, passive: true })
+  }
+})
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    document.removeEventListener('click', handleClickOutside)
+    document.removeEventListener('keydown', handleKeydown)
+    window.removeEventListener('scroll', handleScroll, { capture: true })
+  }
 })
 
 function toggleDropdown() {
   isOpen.value = !isOpen.value
+  if (!isOpen.value) {
+    isKebabOpen.value = false
+  }
 }
 
 const categoryIconConfig: Record<
-  NotificationCategory,
+  string,
   { icon: any; pillClass: string }
 > = {
   KONSULTAN: {
     icon: CheckmarkCircle01Icon,
-    pillClass: 'bg-[#E6F4F7] text-[#2091AA] border-[#2091AA]/20 dark:bg-[#2091AA]/20 dark:text-[#50AABF] dark:border-[#50AABF]/30'
+    pillClass: 'bg-[#EBF6F9] text-[#156374] border-[#A9D8E5]/60 dark:bg-[#156374]/20 dark:text-[#50AABF] dark:border-[#2091AA]/30'
   },
   INVESTOR: {
     icon: Award01Icon,
-    pillClass: 'bg-[#EFF6FF] text-[#0066D6] border-[#0066D6]/20 dark:bg-[#0066D6]/20 dark:text-[#60A5FA] dark:border-[#60A5FA]/30'
+    pillClass: 'bg-[#EBF6F9] text-[#156374] border-[#A9D8E5]/60 dark:bg-[#156374]/20 dark:text-[#50AABF] dark:border-[#2091AA]/30'
   },
   KESEHATAN: {
     icon: AnalyticsUpIcon,
-    pillClass: 'bg-[#F0FDF4] text-[#00AA13] border-[#00AA13]/20 dark:bg-[#00AA13]/20 dark:text-[#22C55E] dark:border-[#22C55E]/30'
+    pillClass: 'bg-[#EBF6F9] text-[#156374] border-[#A9D8E5]/60 dark:bg-[#156374]/20 dark:text-[#50AABF] dark:border-[#2091AA]/30'
   },
   KAS: {
     icon: Coins01Icon,
-    pillClass: 'bg-[#F0F9FF] text-[#0284C7] border-[#0284C7]/20 dark:bg-[#0284C7]/20 dark:text-[#38BDF8] dark:border-[#38BDF8]/30'
+    pillClass: 'bg-[#EBF6F9] text-[#156374] border-[#A9D8E5]/60 dark:bg-[#156374]/20 dark:text-[#50AABF] dark:border-[#2091AA]/30'
   },
   AKSI: {
     icon: Task01Icon,
-    pillClass: 'bg-[#FEF3C7] text-[#D97706] border-[#D97706]/20 dark:bg-[#D97706]/20 dark:text-[#FBBF24] dark:border-[#FBBF24]/30'
+    pillClass: 'bg-[#EBF6F9] text-[#156374] border-[#A9D8E5]/60 dark:bg-[#156374]/20 dark:text-[#50AABF] dark:border-[#2091AA]/30'
   }
 }
 
-const filterTabs = computed(() => {
-  const allCount = notificationStore.roleNotifications.length
-  const unreadCount = notificationStore.unreadCount
-  return [
-    { id: 'ALL' as const, label: 'Semua', count: allCount },
-    { id: 'UNREAD' as const, label: 'Belum Dibaca', count: unreadCount },
-    { id: 'KONSULTAN' as const, label: 'Konsultan' },
-    { id: 'INVESTOR' as const, label: 'Akses Modal' },
-    { id: 'KAS' as const, label: 'Kas Toko' }
-  ]
-})
+// 5 Segmented Tabs: Semua, Pesanan, Kas, Investor, Sistem
+const filterTabs = [
+  { id: 'ALL' as const, label: 'Semua', icon: Notification01Icon },
+  { id: 'ORDER' as const, label: 'Pesanan', icon: ShoppingBag01Icon },
+  { id: 'CASH' as const, label: 'Kas', icon: Coins01Icon },
+  { id: 'INVESTOR' as const, label: 'Investor', icon: Award01Icon },
+  { id: 'SYSTEM' as const, label: 'Sistem', icon: Shield01Icon }
+]
 
 const filteredNotifications = computed(() => {
   const list = notificationStore.roleNotifications
   if (activeFilter.value === 'ALL') {
     return list
   }
-  if (activeFilter.value === 'UNREAD') {
-    return list.filter(n => !n.isRead)
+  if (activeFilter.value === 'ORDER') {
+    return list.filter(n =>
+      n.title.toLowerCase().includes('pesanan') ||
+      n.badgeCount !== undefined ||
+      (n.avatar && n.category === 'KAS')
+    )
   }
-  return list.filter(n => n.category === activeFilter.value)
+  if (activeFilter.value === 'CASH') {
+    return list.filter(n =>
+      !n.title.toLowerCase().includes('pesanan') &&
+      n.badgeCount === undefined &&
+      (n.category === 'KAS' || n.category === 'KONSULTAN' || n.category === 'KESEHATAN' || n.iconType === 'wallet' || n.iconType === 'growth' || n.iconType === 'verified')
+    )
+  }
+  if (activeFilter.value === 'INVESTOR') {
+    return list.filter(n =>
+      n.category === 'INVESTOR' ||
+      n.iconType === 'deal' ||
+      n.title.toLowerCase().includes('investor') ||
+      n.title.toLowerCase().includes('modal')
+    )
+  }
+  if (activeFilter.value === 'SYSTEM') {
+    return list.filter(n =>
+      n.category === 'AKSI' ||
+      n.iconType === 'shield' ||
+      n.senderName?.toLowerCase().includes('sistem') ||
+      n.title.toLowerCase().includes('keamanan') ||
+      n.title.toLowerCase().includes('sandi')
+    )
+  }
+  return list
+})
+
+const emptyStateInfo = computed(() => {
+  switch (activeFilter.value) {
+    case 'ORDER':
+      return {
+        title: 'Tidak ada pesanan baru',
+        desc: 'Belum ada transaksi pesanan masuk saat ini. Pesanan baru dari pelanggan akan muncul di sini.'
+      }
+    case 'CASH':
+      return {
+        title: 'Tidak ada pembaruan kas',
+        desc: 'Catatan kas dan verifikasi pergerakan uang tokomu saat ini sudah rapi tervalidasi.'
+      }
+    case 'INVESTOR':
+      return {
+        title: 'Belum ada pesan investor',
+        desc: 'Tawaran akses modal, permohonan ruang data, dan respon investor akan tampil di segmen ini.'
+      }
+    case 'SYSTEM':
+      return {
+        title: 'Tidak ada pesan sistem',
+        desc: 'Semua sistem keamanan, akun toko, dan layanan Beruang berjalan normal tanpa kendala.'
+      }
+    default:
+      return {
+        title: 'Tidak ada notifikasi baru',
+        desc: 'Semua laporan kas dan permodalan tokomu sudah terupdate. Semangat jualan hari ini!'
+      }
+  }
 })
 
 function handleMarkAllRead() {
   notificationStore.markAllAsRead()
+  isKebabOpen.value = false
 }
 
 function handleDelete(id: string) {
@@ -313,6 +507,7 @@ function handleDelete(id: string) {
 function handleNotificationClick(item: AppNotification) {
   notificationStore.markAsRead(item.id)
   isOpen.value = false
+  isKebabOpen.value = false
   if (item.link) {
     router.push(item.link)
   }

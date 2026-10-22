@@ -194,8 +194,8 @@
           title="Verifikasi Kinerja Historis"
           :categories="['Mei', 'Jun', 'Jul', 'Agu', 'Sep']"
           :series="[
-            { id: 'omzet', name: 'Omzet (Juta Rp)', color: '#1F52EB', data: [46, 52, 58, 65, 73] },
-            { id: 'hpp', name: 'HPP (Juta Rp)', color: '#FF4B4B', data: [21, 23.5, 26, 29, 34.5] }
+            { id: 'omzet', name: 'Pendapatan (Juta Rp)', color: '#1F52EB', data: [46, 52, 58, 65, 73] },
+            { id: 'hpp', name: 'Modal Jualan (Juta Rp)', color: '#FF4B4B', data: [21, 23.5, 26, 29, 34.5] }
           ]"
           :value-formatter="(v) => `Rp ${v} Juta`"
         />

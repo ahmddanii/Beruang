@@ -4,7 +4,7 @@
     <div class="flex items-center justify-end gap-2.5 pb-2 shrink-0 flex-wrap">
       <NuxtLink
         to="/dashboard"
-        class="inline-flex items-center gap-2 px-4 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-neutral-100/80 dark:bg-[#18191E] dark:hover:bg-neutral-800/80 border border-neutral-200/90 hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs active:scale-95 cursor-pointer"
+        class="inline-flex items-center gap-2 px-4 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-neutral-100/80 dark:bg-[#18191E] dark:hover:bg-neutral-800/80 border border-neutral-200/90 hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs cursor-pointer"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
         <span>Kembali</span>
@@ -12,7 +12,7 @@
 
       <button
         type="button"
-        class="btn-3d-blue px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs active:scale-95 cursor-pointer"
+        class="btn-3d-blue px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs cursor-pointer"
         @click="handleSave"
       >
         <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" :stroke-width="2.2" />
@@ -178,7 +178,7 @@
       <div class="flex justify-end gap-3 pt-2">
         <button
           type="submit"
-          class="btn-3d-blue px-6 py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs active:scale-95 cursor-pointer"
+          class="btn-3d-blue px-6 py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs cursor-pointer"
         >
           Simpan Seluruh Pengaturan
         </button>

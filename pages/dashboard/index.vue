@@ -2,82 +2,47 @@
   <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
 
     <!-- Editorial Greeting & Profile Header (Without bottom border divider) -->
-    <header class="gsap-header pt-2 sm:pt-3 pb-2 relative z-10">
-      <div class="space-y-2 sm:space-y-3 w-full">
+    <header class="gsap-header relative z-10">
+      <div class="space-y-1.5 w-full">
         <!-- Top Row: Name + Verified Checkmark on Left, Edit Profil Button on Right -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 flex-wrap min-w-0">
-            <h1
-              class="text-2xl sm:text-[28px] lg:text-[30px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.15]"
-            >
-              {{ umkmName }}
-            </h1>
+          <div class="flex flex-col min-w-0 space-y-2 sm:space-y-2.5">
+            <!-- Ucapan Selamat sesuai Waktu (Pagi / Siang / Sore / Malam) tanpa nama dan emoji -->
+            <div class="flex items-center text-xs sm:text-[14px] font-poppins font-medium text-neutral-500 dark:text-neutral-400 select-none">
+              <span>{{ timeGreeting.text }}</span>
+            </div>
 
-            <!-- Verified Badge Rosette Green Gradient (matching Catat Kas button) placed beside UMKM name -->
-            <div
-              v-if="isVerified"
-              class="inline-flex items-center group/badge cursor-help relative"
-              title="Terverifikasi OSS RBA"
-            >
-              <svg
-                class="w-6 h-6 sm:w-6.5 sm:h-6.5 shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <!-- Nama UMKM + Verified Badge -->
+            <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap min-w-0">
+              <h1
+                class="text-3xl sm:text-[34px] lg:text-[38px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.15] truncate"
               >
-                <defs>
-                  <linearGradient id="name-verified-green-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#24C85E" />
-                    <stop offset="100%" stop-color="#16A34A" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M18.9905 19C18.3678 19.6175 17.2393 19.4637 16.4479 19.4637C15.4765 19.4637 15.0087 19.6537 14.3154 20.347C13.7251 20.9374 12.9337 22 12 22C11.0663 22 10.2749 20.9374 9.68457 20.347C8.99128 19.6537 8.52349 19.4637 7.55206 19.4637C6.76068 19.4637 5.63218 19.6175 5.00949 19C4.38181 18.3776 4.53628 17.2444 4.53628 16.4479C4.53628 15.4414 4.31616 14.9786 3.59938 14.2618C2.53314 13.1956 2.00002 12.6624 2 12C2.00001 11.3375 2.53312 10.8044 3.59935 9.73817C4.2392 9.09832 4.53628 8.46428 4.53628 7.55206C4.53628 6.76065 4.38249 5.63214 5 5.00944C5.62243 4.38178 6.7556 4.53626 7.55208 4.53626C8.46427 4.53626 9.09832 4.2392 9.73815 3.59937C10.8044 2.53312 11.3375 2 12 2C12.6625 2 13.1956 2.53312 14.2618 3.59937C14.9015 4.23907 15.5355 4.53626 16.4479 4.53626C17.2393 4.53626 18.3679 4.38247 18.9906 5C19.6182 5.62243 19.4637 6.75559 19.4637 7.55206C19.4637 8.55858 19.6839 9.02137 20.4006 9.73817C21.4669 10.8044 22 11.3375 22 12C22 12.6624 21.4669 13.1956 20.4006 14.2618C19.6838 14.9786 19.4637 15.4414 19.4637 16.4479C19.4637 17.2444 19.6182 18.3776 18.9905 19Z"
-                  fill="url(#name-verified-green-gradient)"
-                />
-                <path
-                  d="M8.75 12.5L10.8 14.5L15.25 9.75"
-                  stroke="#ffffff"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+                {{ umkmName }}
+              </h1>
 
-              <!-- Custom Floating Tooltip -->
-              <div
-                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-lg bg-neutral-900 dark:bg-neutral-800 text-white text-[11px] font-poppins font-medium whitespace-nowrap opacity-0 group-hover/badge:opacity-100 transition-all duration-150 pointer-events-none shadow-lg z-30 translate-y-1 group-hover/badge:translate-y-0 border border-neutral-700/60"
-              >
-                <span class="text-emerald-300 font-medium">Terverifikasi OSS RBA</span>
-                <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-neutral-900 dark:border-t-neutral-800" />
-              </div>
+              <!-- Verified Badge Rosette Green Gradient (matching Catat Kas button) placed beside UMKM name -->
+              <BVerifiedBadge v-if="isVerified" />
             </div>
           </div>
 
           <!-- Action Button: Edit Profil -->
           <NuxtLink
             to="/dashboard/profile"
-            class="btn-pill-action group shrink-0 self-start sm:self-auto focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden active:scale-[0.98] transition-all duration-150"
+            class="btn-pill-action group shrink-0 self-start sm:self-auto focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
             title="Edit Profil"
           >
             <span>Edit Profil</span>
-            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
+            <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </NuxtLink>
         </div>
-
-        <!-- Description: Rata kiri kanan (text-justify), ukuran sesuai body container (text-sm sm:text-[14px]) -->
-        <p class="text-justify text-sm sm:text-[14px] text-neutral-600 dark:text-neutral-400 font-poppins leading-relaxed">
-          {{ umkmDescription || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.' }}
-        </p>
       </div>
     </header>
 
     <!-- 1. Metric Container: 4 Equal Width Financial Cards (Apple Store Utility Card: rounded.lg 18px, spacing.lg 24px) -->
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch w-full"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch w-full"
       :aria-busy="isPageLoading"
     >
       <!-- Loading State: Zero-CLS Shimmer Skeletons -->
@@ -88,16 +53,16 @@
           class="stat-card-clean animate-pulse min-h-[190px]"
         >
           <div class="flex items-center justify-between w-full">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-neutral-200 dark:bg-neutral-800" />
-              <div class="h-4 w-24 rounded-md bg-neutral-200 dark:bg-neutral-800" />
+            <div class="flex items-center gap-2.5">
+              <div class="w-7.5 h-7.5 rounded-lg bg-neutral-200 dark:bg-neutral-800" />
+              <div class="h-4 w-20 rounded-md bg-neutral-200 dark:bg-neutral-800" />
             </div>
-            <div class="h-6 w-14 rounded-full bg-neutral-200 dark:bg-neutral-800" />
+            <div class="h-5 w-12 rounded-full bg-neutral-200 dark:bg-neutral-800" />
           </div>
-          <div class="my-auto py-4">
-            <div class="h-9 w-36 rounded-md bg-neutral-200 dark:bg-neutral-800" />
+          <div class="my-auto py-3">
+            <div class="h-8 w-32 rounded-md bg-neutral-200 dark:bg-neutral-800" />
           </div>
-          <div class="h-9 w-28 rounded-full bg-neutral-200 dark:bg-neutral-800" />
+          <div class="h-8 w-24 rounded-full bg-neutral-200 dark:bg-neutral-800" />
         </div>
       </template>
 
@@ -108,16 +73,16 @@
           <div class="stat-card-clean select-none transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
-              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
                 <div class="stat-card-icon-box">
                   <HugeiconsIcon
                     :icon="Coins01Icon"
-                    :size="18"
+                    :size="17"
                     :stroke-width="2.0"
                     class="text-[#156374] dark:text-[#50AABF] shrink-0"
                   />
                 </div>
-                <span class="text-sm sm:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
                   Untung Bersih
                 </span>
               </div>
@@ -126,9 +91,9 @@
               </div>
             </div>
 
-            <!-- 2. Middle Value Row: Apple lead scale (26px - 28px font-semibold) -->
+            <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
-              <span class="text-2xl sm:text-[26px] lg:text-[28px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] block leading-tight">
+              <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
                 Rp 32.600.000
               </span>
             </div>
@@ -152,16 +117,16 @@
           <div class="stat-card-clean select-none transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
-              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
                 <div class="stat-card-icon-box">
                   <HugeiconsIcon
                     :icon="MoneyBag01Icon"
-                    :size="18"
+                    :size="17"
                     :stroke-width="2.0"
                     class="text-[#156374] dark:text-[#50AABF] shrink-0"
                   />
                 </div>
-                <span class="text-sm sm:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
                   Modal Jualan
                 </span>
               </div>
@@ -170,9 +135,9 @@
               </div>
             </div>
 
-            <!-- 2. Middle Value Row: Apple lead scale (26px - 28px font-semibold) -->
+            <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
-              <span class="text-2xl sm:text-[26px] lg:text-[28px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] block leading-tight">
+              <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
                 Rp 45.100.000
               </span>
             </div>
@@ -196,14 +161,14 @@
           <div class="stat-card-clean select-none transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
-              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
                 <div class="stat-card-icon-box">
                   <svg class="w-4 h-4 text-[#156374] dark:text-[#50AABF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17 7 7 17" />
                     <path d="M17 17H7V7" />
                   </svg>
                 </div>
-                <span class="text-sm sm:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
                   Uang Masuk
                 </span>
               </div>
@@ -212,9 +177,9 @@
               </div>
             </div>
 
-            <!-- 2. Middle Value Row: Apple lead scale (26px - 28px font-semibold) -->
+            <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
-              <span class="text-2xl sm:text-[26px] lg:text-[28px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] block leading-tight">
+              <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
                 Rp 100.000.000
               </span>
             </div>
@@ -238,14 +203,14 @@
           <div class="stat-card-clean select-none transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
-              <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
                 <div class="stat-card-icon-box">
                   <svg class="w-4 h-4 text-[#156374] dark:text-[#50AABF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M7 17 17 7" />
                     <path d="M7 7h10v10" />
                   </svg>
                 </div>
-                <span class="text-sm sm:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
                   Uang Keluar
                 </span>
               </div>
@@ -254,30 +219,22 @@
               </div>
             </div>
 
-            <!-- 2. Middle Value Row: Apple lead scale (26px - 28px font-semibold) -->
+            <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
-              <span class="text-2xl sm:text-[26px] lg:text-[28px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] block leading-tight">
+              <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
                 Rp 67.400.000
               </span>
             </div>
 
-            <!-- 3. Bottom Action Buttons: Grid 2 Kolom -->
-            <div class="stat-card-actions grid-cols-2">
+            <!-- 3. Bottom Action Button: Catat Kas -->
+            <div class="stat-card-actions">
               <BActionButton
                 variant="green"
                 icon="plus"
                 @click="isTransactionDrawerOpen = true"
-                custom-class="w-full justify-center"
+                custom-class="shrink-0"
               >
                 Catat Kas
-              </BActionButton>
-              <BActionButton
-                variant="default"
-                icon="chevron"
-                @click="scrollToSection('table')"
-                custom-class="w-full justify-center"
-              >
-                Lihat Rincian
               </BActionButton>
             </div>
           </div>
@@ -286,16 +243,16 @@
     </div>
 
     <!-- 2. Hero Section: Clean Line Chart (Pergerakan Uang Toko) -->
-    <div class="gsap-hero-chart card-tactile-gopay rounded-[18px] p-6 sm:p-7 space-y-6">
+    <div class="gsap-hero-chart card-tactile-gopay rounded-[18px] p-6 sm:p-8 space-y-9 sm:space-y-11">
       <!-- Header: Title, Subtitle, and Right Actions (Dropdown Chart Type, Dropdown Period, Button Lihat Detail) -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 sm:pb-3">
         <!-- Left: Title & Subtitle -->
-        <div class="space-y-1.5 min-w-0 max-w-xl">
+        <div class="min-w-0 max-w-xl">
           <div class="gsap-hero-header-title">
             <h2 class="text-lg sm:text-[21px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
               Pergerakan Uang Toko
             </h2>
-            <p class="text-xs sm:text-[14px] font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-normal">
+            <p class="text-xs sm:text-[14px] font-poppins text-neutral-500 dark:text-neutral-400 mt-2 sm:mt-2.5 leading-normal">
               Grafik pemantauan akumulasi saldo kas riil tokomu dari waktu ke waktu yang selalu tersinkronisasi.
             </p>
           </div>
@@ -304,29 +261,18 @@
         <!-- Right: Actions Control (Dropdown Jenis Grafik + Dropdown Periode + Button Lihat Detail) -->
         <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap lg:flex-nowrap shrink-0">
           <!-- 1. Dropdown Jenis Grafik (Menggantikan Pill Tab View, Bergaya btn-pill-action) -->
-          <div class="relative">
+          <div ref="chartTypeDropdownRef" class="relative">
             <button
               type="button"
-              class="btn-pill-action group cursor-pointer"
+              :class="[
+                'btn-pill-action group cursor-pointer',
+                isChartTypeDropdownOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs' : ''
+              ]"
               aria-haspopup="true"
               :aria-expanded="isChartTypeDropdownOpen"
               title="Pilih Jenis Tampilan Grafik"
-              @click="isChartTypeDropdownOpen = !isChartTypeDropdownOpen"
+              @click="toggleChartTypeDropdown"
             >
-              <!-- Active Chart Type Icon -->
-              <svg v-if="chartPreviewMode === 'area'" class="w-3.5 h-3.5 text-[#156374] dark:text-[#50AABF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 20h18" />
-                <path d="m3 14 5-5 5 4 8-8v15H3z" />
-              </svg>
-              <svg v-else-if="chartPreviewMode === 'bar'" class="w-3.5 h-3.5 text-[#156374] dark:text-[#50AABF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="12" width="4" height="8" rx="1" />
-                <rect x="10" y="7" width="4" height="13" rx="1" />
-                <rect x="17" y="3" width="4" height="17" rx="1" />
-              </svg>
-              <svg v-else class="w-3.5 h-3.5 text-[#54DE63] dark:text-[#54DE63] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4" />
-              </svg>
-
               <span>{{ activeChartTypeLabel }}</span>
 
               <svg
@@ -340,59 +286,41 @@
               </svg>
             </button>
 
-            <!-- Backdrop -->
-            <div
-              v-if="isChartTypeDropdownOpen"
-              class="fixed inset-0 z-30 bg-transparent"
-              @click="isChartTypeDropdownOpen = false"
-            />
-
             <!-- Popover Dropdown Panel -->
             <div
               v-if="isChartTypeDropdownOpen"
-              class="absolute right-0 top-full mt-1.5 w-60 rounded-xl bg-[#FDFDFD] dark:bg-[#18191E] border border-[#E2E8F0] dark:border-neutral-700 p-1.5 shadow-xl z-40 font-poppins text-xs"
+              class="absolute right-0 top-full mt-1.5 w-44 rounded-[8px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 shadow-lg z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-100"
             >
               <button
                 v-for="opt in chartTypeOptions"
                 :key="opt.id"
                 type="button"
                 :class="[
-                  'w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-medium transition-colors text-left cursor-pointer',
+                  'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
                   chartPreviewMode === opt.id
-                    ? 'bg-[#E6F4F7] dark:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold'
-                    : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                    ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                    : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
                 ]"
                 @click="selectChartType(opt.id)"
               >
-                <div class="flex items-center gap-2.5 min-w-0">
-                  <svg v-if="opt.id === 'area'" class="w-3.5 h-3.5 shrink-0 text-[#156374] dark:text-[#50AABF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 20h18" />
-                    <path d="m3 14 5-5 5 4 8-8v15H3z" />
-                  </svg>
-                  <svg v-else-if="opt.id === 'bar'" class="w-3.5 h-3.5 shrink-0 text-[#156374] dark:text-[#50AABF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="12" width="4" height="8" rx="1" />
-                    <rect x="10" y="7" width="4" height="13" rx="1" />
-                    <rect x="17" y="3" width="4" height="17" rx="1" />
-                  </svg>
-                  <svg v-else class="w-3.5 h-3.5 shrink-0 text-[#54DE63] dark:text-[#54DE63]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4" />
-                  </svg>
-                  <span class="truncate">{{ opt.label }}</span>
-                </div>
+                <span class="truncate">{{ opt.label }}</span>
                 <span v-if="chartPreviewMode === opt.id" class="w-1.5 h-1.5 rounded-full bg-[#156374] dark:bg-[#50AABF] shrink-0 ml-2" />
               </button>
             </div>
           </div>
 
           <!-- 2. Dropdown Filter Periode (Bergaya btn-pill-action) -->
-          <div class="relative">
+          <div ref="periodDropdownRef" class="relative">
             <button
               type="button"
-              class="btn-pill-action group cursor-pointer"
+              :class="[
+                'btn-pill-action group cursor-pointer',
+                isPeriodDropdownOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs' : ''
+              ]"
               aria-haspopup="true"
               :aria-expanded="isPeriodDropdownOpen"
               title="Pilih Rentang Waktu"
-              @click="isPeriodDropdownOpen = !isPeriodDropdownOpen"
+              @click="togglePeriodDropdown"
             >
               <svg class="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
@@ -412,27 +340,20 @@
               </svg>
             </button>
 
-            <!-- Backdrop to close dropdown -->
-            <div
-              v-if="isPeriodDropdownOpen"
-              class="fixed inset-0 z-30 bg-transparent"
-              @click="isPeriodDropdownOpen = false"
-            />
-
             <!-- Popover Dropdown Panel -->
             <div
               v-if="isPeriodDropdownOpen"
-              class="absolute right-0 top-full mt-1.5 w-36 rounded-xl bg-[#FDFDFD] dark:bg-[#18191E] border border-[#E2E8F0] dark:border-neutral-700 p-1 shadow-xl z-40 font-poppins text-xs"
+              class="absolute right-0 top-full mt-1.5 w-44 rounded-[8px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 shadow-lg z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-100"
             >
               <button
                 v-for="opt in heroFilterOptions"
                 :key="opt.id"
                 type="button"
                 :class="[
-                  'w-full flex items-center justify-between px-3 py-2 rounded-lg font-medium transition-colors text-left cursor-pointer',
+                  'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
                   heroPeriodFilter === opt.id
-                    ? 'bg-[#E6F4F7] dark:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold'
-                    : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                    ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                    : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
                 ]"
                 @click="selectPeriodFilter(opt.id)"
               >
@@ -450,15 +371,14 @@
           >
             <span>Lihat Detail</span>
             <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </NuxtLink>
         </div>
       </div>
 
       <!-- Shadcn UI Line Chart - Linear / Bar / Area / Cashflow: Pergerakan Uang Toko -->
-      <div class="gsap-hero-chart-body relative w-full h-60 sm:h-64 pt-4 sm:pt-6">
+      <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
         <BShadcnLineChart
           :data="heroFilteredRecords"
           index="month"
@@ -472,12 +392,12 @@
     </div>
 
     <!-- 3. Telemetry Bento Row: Lihat Aliran Kas & Tugas Hari Ini -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
       <!-- Left: Container Kemana saja uang kamu? -->
-      <div id="cash-flow-breakdown" class="card-tactile-gopay rounded-[18px] p-6 sm:p-7 flex flex-col justify-between space-y-6">
-        <!-- Header: Title & Action (No hairline border-b, ample bottom padding) -->
-        <div class="flex items-center justify-between pb-2 sm:pb-3 gap-4 sm:gap-5">
-          <div class="min-w-0 pr-2 space-y-1">
+      <div id="cash-flow-breakdown" class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <!-- Header: Title & Action -->
+        <div class="flex items-center justify-between gap-4 sm:gap-5">
+          <div class="min-w-0 pr-2 space-y-2">
             <h2 class="text-lg sm:text-[21px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
               Kemana saja uang kamu?
             </h2>
@@ -492,77 +412,70 @@
           >
             <span>Lihat Detail</span>
             <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </NuxtLink>
         </div>
 
-        <!-- Body: Ample padding, enlarged Donut Chart & 3 Stat Cards -->
-        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-7 items-center pt-2 sm:pt-4 pb-1">
-          <!-- Bagian 1: Donut Chart Besar & Info Total Pendapatan di Bawah Kiri -->
-          <div class="flex flex-col justify-between items-center sm:items-start h-full min-h-[230px]">
-            <!-- Donut Chart Ring di Bagian Tengah (Enlarged size, no top legend labels) -->
+        <!-- Body: Donut Chart on Left with Total Kas below it, Clean List on Right -->
+        <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 items-center pb-1">
+          <!-- Bagian 1 (Kiri): Donut Chart & Informasi Total Kas di Bawah Kiri -->
+          <div class="sm:col-span-5 flex flex-col justify-between items-center sm:items-start h-full min-h-[230px]">
+            <!-- Donut Chart Ring (Tanpa tulisan di tengah) -->
             <div class="relative w-40 h-40 sm:w-44 sm:h-44 my-auto mx-auto flex items-center justify-center">
               <canvas ref="donutCanvas" class="w-full h-full"></canvas>
             </div>
 
-            <!-- Informasi Total di Bagian Bawah Kiri -->
+            <!-- Informasi Total Kas di Bagian Bawah Kiri -->
             <div class="pt-3 select-none w-full text-center sm:text-left">
-              <div class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
-                Total: Rp 100.000.000 (100%)
+              <div class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
+                Rp {{ totalCalculatedOmzet.toLocaleString('id-ID') }}
               </div>
               <div class="text-xs sm:text-[13px] font-poppins font-medium text-neutral-500 dark:text-neutral-400 mt-1">
-                {{ currentActiveSliceIndex !== null ? displayedMetricLabel : 'Akumulasi pemasukan bulan berjalan' }}
+                Akumulasi pemasukan bulan berjalan
               </div>
             </div>
           </div>
 
-          <!-- Bagian 2: 3 Card Informasi (Title, Body Nominal, & Progress Bar) -->
-          <div class="space-y-3.5 flex-1 flex flex-col justify-center">
+          <!-- Bagian 2 (Kanan): 3 Cards Informasi dengan Tinggi, Font & Jarak yang Sama Persis dengan Tugas Hari Ini -->
+          <div class="sm:col-span-7 space-y-3.5 flex-1 flex flex-col justify-center">
             <div
               v-for="(item, idx) in breakdownItems"
               :key="item.label"
-              class="p-3.5 sm:p-4 rounded-[12px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#E2E8F0] dark:border-neutral-800 transition-all duration-150 cursor-pointer flex flex-col justify-center group"
-              :class="[
-                currentActiveSliceIndex === idx
-                  ? 'border-[#156374]! dark:border-[#50AABF]! ring-2 ring-[#156374]/20 bg-[#E6F4F7]/40! dark:bg-[#156374]/20!'
-                  : 'hover:border-neutral-400 dark:hover:border-neutral-600'
-              ]"
-              @mouseenter="highlightSlice(idx)"
-              @mouseleave="resetHighlight"
-              @click="toggleSelectSlice(idx)"
+              role="button"
+              tabindex="0"
+              :aria-label="`${item.label}: Rp ${item.amount.toLocaleString('id-ID')} (${item.percent}%)`"
+              class="card-btn-hover p-3.5 sm:p-4 rounded-[12px] flex items-center justify-between gap-3.5 group cursor-pointer select-none"
+              @mouseenter="activeHoveredItem = item; highlightDonutSegment(idx)"
+              @mouseleave="activeHoveredItem = null; highlightDonutSegment(null)"
+              @focus="activeHoveredItem = item; highlightDonutSegment(idx)"
+              @blur="activeHoveredItem = null; highlightDonutSegment(null)"
+              @keydown.enter="activeHoveredItem = item; highlightDonutSegment(idx)"
+              @keydown.space.prevent="activeHoveredItem = item; highlightDonutSegment(idx)"
             >
-              <!-- Title: Label Informasi -->
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span
-                    class="w-2.5 h-2.5 rounded-full shrink-0"
-                    :style="{ backgroundColor: item.color }"
-                  />
-                  <span class="font-poppins font-semibold text-xs sm:text-[14px] text-neutral-800 dark:text-neutral-200 truncate">
+              <!-- Left: Bullet dot + Label + Nominal Subtitle (Sama persis jarak dan ukuran font dengan Tugas Hari Ini) -->
+              <div class="flex items-center gap-3.5 min-w-0">
+                <span
+                  class="w-2.5 h-2.5 rounded-full shrink-0 transition-transform duration-200 group-hover:scale-125"
+                  :style="{ backgroundColor: item.color }"
+                />
+                <div class="min-w-0 flex flex-col items-start">
+                  <!-- Title: Sama persis dengan judul task (text-sm sm:text-[15px] font-semibold) -->
+                  <span class="font-poppins font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-white leading-snug line-clamp-1">
                     {{ item.label }}
                   </span>
+                  <!-- Nominal / Body: Sama persis dengan ukuran deadline task (text-xs sm:text-[14px] mt-1.5) -->
+                  <span class="text-xs sm:text-[14px] font-poppins font-normal text-neutral-500 dark:text-neutral-400 mt-1.5 tabular-nums">
+                    Rp {{ item.amount.toLocaleString('id-ID') }}
+                  </span>
                 </div>
-                <span class="text-xs sm:text-[12px] font-poppins font-semibold text-neutral-500 dark:text-neutral-400 tabular-nums shrink-0">
+              </div>
+
+              <!-- Right: Percentage (text-sm sm:text-[15px] font-semibold) -->
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="font-poppins font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-white tabular-nums">
                   {{ item.percent }}%
                 </span>
-              </div>
-
-              <!-- Body: Nominal dari Masing-Masing Informasi -->
-              <div class="mt-1 font-poppins font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-white tabular-nums tracking-tight">
-                Rp {{ item.amount.toLocaleString('id-ID') }}
-              </div>
-
-              <!-- Progress Bar Indikator Visual -->
-              <div class="mt-2 w-full h-1.5 rounded-full bg-neutral-200/70 dark:bg-neutral-800 overflow-hidden">
-                <div
-                  class="h-full rounded-full transition-all duration-300"
-                  :style="{
-                    width: `${item.percent}%`,
-                    backgroundColor: item.color
-                  }"
-                />
               </div>
             </div>
           </div>
@@ -570,10 +483,10 @@
       </div>
 
       <!-- Right: Container Tugas Hari Ini -->
-      <div id="daily-tasks-container" class="card-tactile-gopay rounded-[18px] p-6 sm:p-7 flex flex-col justify-between space-y-6">
-        <!-- Header: Title & Action (No hairline border-b, ample bottom padding) -->
-        <div class="flex items-center justify-between pb-2 sm:pb-3 gap-4 sm:gap-5">
-          <div class="min-w-0 pr-2 space-y-1">
+      <div id="daily-tasks-container" class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <!-- Header: Title & Action -->
+        <div class="flex items-center justify-between gap-4 sm:gap-5">
+          <div class="min-w-0 pr-2 space-y-2">
             <h2 class="text-lg sm:text-[21px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
               Tugas Hari Ini
             </h2>
@@ -589,29 +502,28 @@
           >
             <span>Lihat Semua</span>
             <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </NuxtLink>
         </div>
 
-        <!-- 4 Tasks Cards (Ample vertical padding & uniform neutral deadline color) -->
-        <div class="space-y-3 flex-1 flex flex-col justify-start pt-2 sm:pt-4 pb-1">
+        <!-- 3 Tasks Cards -->
+        <div class="space-y-3.5 flex-1 flex flex-col justify-start pb-1">
           <NuxtLink
             v-for="(task, idx) in displayedDailyTasks"
             :key="task.id"
             :to="task.link || '/dashboard/rencana-aksi'"
-            class="p-3.5 sm:p-4 rounded-[12px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#E2E8F0] dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors flex items-center justify-between gap-3.5 group cursor-pointer"
+            class="card-btn-hover p-3.5 sm:p-4 rounded-[12px] flex items-center justify-between gap-3.5 group cursor-pointer"
           >
             <div class="min-w-0 flex-1 flex flex-col items-start gap-1">
               <!-- Judul Task -->
-              <h3 class="font-poppins font-semibold text-xs sm:text-[14px] text-neutral-900 dark:text-white leading-snug line-clamp-1">
+              <h3 class="font-poppins font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-white leading-snug line-clamp-1">
                 {{ task.title }}
               </h3>
 
-              <!-- Deadline di Bagian Bawah: Uniform neutral text color (no special colors) -->
-              <div class="flex items-center gap-1.5 text-xs sm:text-[12px] font-poppins text-neutral-500 dark:text-neutral-400 mt-0.5">
-                <svg class="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Deadline di Bagian Bawah: Sama ukuran dan font weight dengan deskripsi container -->
+              <div class="flex items-center gap-1.5 text-xs sm:text-[14px] font-poppins font-normal text-neutral-500 dark:text-neutral-400 mt-1.5">
+                <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
                   <line x1="16" x2="16" y1="2" y2="6" />
                   <line x1="8" x2="8" y1="2" y2="6" />
@@ -621,7 +533,7 @@
               </div>
             </div>
 
-            <!-- Uncontained Green Arrow -->
+            <!-- Uncontained Green Chevron -->
             <svg
               class="w-4 h-4 text-[#54DE63] dark:text-[#54DE63] shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5"
               viewBox="0 0 24 24"
@@ -631,8 +543,7 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M5 12h14" />
-              <path d="m13 6 6 6-6 6" />
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </NuxtLink>
         </div>
@@ -641,8 +552,8 @@
 
     <!-- 4. Rapor Keuangan Bulanan -->
     <div id="verified-cashbook-table" class="card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
-      <div class="px-6 sm:px-7 pt-6 sm:pt-7 pb-5 sm:pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FDFDFD] dark:bg-[#13161F]">
-        <div class="space-y-1">
+      <div class="p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
+        <div class="space-y-2 sm:space-y-2.5">
           <h2 class="text-lg sm:text-[21px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
             Rapor Keuangan Bulanan
           </h2>
@@ -652,15 +563,15 @@
         </div>
 
         <div class="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
-          <!-- Button Unduh 3 Bulan Terakhir (CSV) -->
+          <!-- Button Unduh Laporan Terbaru (CSV) -->
           <button
             type="button"
-            class="btn-pill-action group shrink-0 cursor-pointer"
-            title="Unduh Laporan Keuangan 3 Bulan Terakhir (CSV)"
+            class="btn-pill-action-green group shrink-0 cursor-pointer"
+            title="Unduh Laporan Keuangan Terbaru (CSV)"
             @click="downloadThreeMonthsReport"
           >
-            <HugeiconsIcon :icon="ArrowDownToLineIcon" :size="15" :stroke-width="2.2" class="text-neutral-600 dark:text-neutral-300 transition-transform duration-200 group-hover:translate-y-0.5" />
-            <span>Unduh 3 Bulan Terakhir</span>
+            <HugeiconsIcon :icon="ArrowDownToLineIcon" :size="15" :stroke-width="2.2" class="text-white transition-transform duration-200 group-hover:translate-y-0.5" />
+            <span>Unduh Laporan Terbaru</span>
           </button>
 
           <!-- Button Lihat Semua (Renamed from Lihat Semua Laporan) -->
@@ -670,8 +581,7 @@
           >
             <span>Lihat Semua</span>
             <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
+              <path d="m9 18 6-6-6-6" />
             </svg>
           </NuxtLink>
         </div>
@@ -681,18 +591,19 @@
       <div class="overflow-x-auto w-full">
         <table class="w-full text-left text-xs sm:text-[14px] font-poppins">
           <thead>
-            <tr class="bg-[#FDFDFD] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 font-poppins text-xs sm:text-[12.5px] font-semibold uppercase tracking-wider">
-              <th class="py-3 px-5 text-left">Bulan</th>
-              <th class="py-3 px-4 text-left">Total Pendapatan</th>
-              <th class="py-3 px-4 text-left">Modal Jualan</th>
-              <th class="py-3 px-4 text-left">Biaya Operasional</th>
-              <th class="py-3 px-5 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
+            <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-[12.5px] font-bold uppercase tracking-wider">
+              <th class="py-4 sm:py-5 px-6 text-left font-bold">Bulan</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">Total Pendapatan</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">Modal Jualan</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">Biaya Operasional</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-800 dark:text-neutral-200">Rugi</th>
+              <th class="py-4 sm:py-5 px-6 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
             <!-- 5-State UX Matrix: Empty State -->
             <tr v-if="!latestMonthlyRecords || latestMonthlyRecords.length === 0">
-              <td colspan="5" class="py-12 text-center">
+              <td colspan="6" class="py-12 text-center">
                 <div class="flex flex-col items-center justify-center max-w-sm mx-auto space-y-2.5 px-4">
                   <div class="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 dark:text-neutral-500">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -711,10 +622,21 @@
                   </div>
                   <button
                     type="button"
-                    class="btn-pill-action mt-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2091AA] focus-visible:outline-hidden active:scale-[0.98] transition-all duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    class="btn-pill-action group mt-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2091AA] focus-visible:outline-hidden transition-all duration-150 ease-[cubic-bezier(0.22,1,0.36,1)]"
                     @click="isTransactionDrawerOpen = true"
                   >
                     <span>Catat Kas Pertama</span>
+                    <svg
+                      class="w-4 h-4 shrink-0 origin-center transition-transform duration-300 ease-out group-hover:rotate-180"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.0"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
                   </button>
                 </div>
               </td>
@@ -725,19 +647,22 @@
               :key="`${rec.month}-${rec.year}`"
               class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
             >
-              <td class="py-3 px-4 sm:px-5 text-left font-poppins font-semibold text-neutral-900 dark:text-white text-xs sm:text-[13px]">
+              <td class="py-4 sm:py-5 px-6 text-left font-poppins font-normal text-neutral-900 dark:text-white text-xs sm:text-[13px]">
                 {{ rec.month }} {{ rec.year }}
               </td>
-              <td class="py-3 px-3.5 sm:px-4 text-left font-poppins tabular-nums font-semibold text-neutral-900 dark:text-white">
+              <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-900 dark:text-white">
                 Rp {{ rec.omzet.toLocaleString('id-ID') }}
               </td>
-              <td class="py-3 px-3.5 sm:px-4 text-left font-poppins tabular-nums text-neutral-600 dark:text-neutral-300">
+              <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-600 dark:text-neutral-300">
                 Rp {{ rec.hpp.toLocaleString('id-ID') }}
               </td>
-              <td class="py-3 px-3.5 sm:px-4 text-left font-poppins tabular-nums text-neutral-600 dark:text-neutral-300">
+              <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-600 dark:text-neutral-300">
                 Rp {{ rec.opex.toLocaleString('id-ID') }}
               </td>
-              <td class="py-3 px-4 sm:px-5 text-left font-poppins tabular-nums font-bold text-[#00AA13] dark:text-emerald-400 text-xs sm:text-[13px]">
+              <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-rose-600 dark:text-rose-400 text-xs sm:text-[13px]">
+                Rp {{ ((rec as any).loss || 0).toLocaleString('id-ID') }}
+              </td>
+              <td class="py-4 sm:py-5 px-6 text-left font-poppins tabular-nums font-normal text-[#00AA13] dark:text-emerald-400 text-xs sm:text-[13px]">
                 Rp {{ rec.netProfit.toLocaleString('id-ID') }}
               </td>
             </tr>
@@ -767,7 +692,7 @@
 
         <div>
           <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Total Penjualan Hari Ini (Omzet)
+            Total Penjualan Hari Ini
           </label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm text-neutral-500 font-mono font-semibold">Rp</span>
@@ -809,14 +734,14 @@
         <div class="flex items-center justify-end gap-3 w-full">
           <button
             type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 transition-colors active:scale-[0.96]"
+            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 transition-colors"
             @click="close"
           >
             Batal
           </button>
           <button
             type="button"
-            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors active:scale-[0.96]"
+            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors"
             @click="close"
           >
             Simpan Catatan Kas
@@ -893,14 +818,14 @@
         <div class="flex items-center justify-end gap-3 w-full">
           <button
             type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors active:scale-[0.97]"
+            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             @click="close"
           >
             Batal
           </button>
           <button
             type="button"
-            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors active:scale-[0.97] flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors flex items-center gap-1.5"
             @click="saveQuickEdit"
           >
             <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" />
@@ -963,6 +888,7 @@ import BDropdown from '~/components/base/BDropdown.vue'
 import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BActionButton from '~/components/base/BActionButton.vue'
+import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
 
 definePageMeta({
   layout: 'dashboard'
@@ -989,6 +915,19 @@ const selectedPeriodLabel = computed(() => {
   return periodOptions.find(p => p.value === selectedPeriod.value)?.label || 'Bulan Ini'
 })
 
+const timeGreeting = computed(() => {
+  const hour = new Date().getHours()
+  if (hour >= 4 && hour < 11) {
+    return { text: 'Selamat pagi', emoji: '☀️' }
+  } else if (hour >= 11 && hour < 15) {
+    return { text: 'Selamat siang', emoji: '🌤️' }
+  } else if (hour >= 15 && hour < 18) {
+    return { text: 'Selamat sore', emoji: '🌅' }
+  } else {
+    return { text: 'Selamat malam', emoji: '🌙' }
+  }
+})
+
 const ownerFirstName = computed(() => {
   const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
   return name.split(' ')[0]
@@ -1008,22 +947,21 @@ const isVerified = computed(() => {
   return !!(umkmStore.profile?.certifiedAt || umkmStore.profile?.nib || umkmStore.profile?.fundingStatus === 'READY_FOR_FUNDING')
 })
 
-// 4 Task Harian untuk Container Tugas Hari Ini (dengan Deadline Tenggat Waktu Seragam)
+// 3 Task Harian untuk Container Tugas Hari Ini (dengan Deadline Tenggat Waktu Seragam)
 const displayedDailyTasks = computed(() => {
   const defaultTasks = [
     { id: 'task-1', title: 'Catat Penjualan & Modal Harian', deadline: 'Hari ini, 17:00 WIB', link: '/dashboard/progres' },
     { id: 'task-2', title: 'Perbarui Bukti Pembukuan Kas', deadline: 'Hari ini, 17:00 WIB', link: '/dashboard/rencana-aksi' },
-    { id: 'task-3', title: 'Cek Kelengkapan Izin Usaha NIB', deadline: 'Hari ini, 17:00 WIB', link: '/dashboard/penilaian' },
-    { id: 'task-4', title: 'Verifikasi Faktur Suplai Kopi', deadline: 'Hari ini, 17:00 WIB', link: '/dashboard/rencana-aksi' }
+    { id: 'task-3', title: 'Cek Kelengkapan Izin Usaha NIB', deadline: 'Hari ini, 17:00 WIB', link: '/dashboard/penilaian' }
   ]
-  const tasks = (umkmStore.tasks || []).slice(0, 4)
-  if (tasks.length < 4) {
+  const tasks = (umkmStore.tasks || []).slice(0, 3)
+  if (tasks.length < 3) {
     return defaultTasks
   }
   return tasks.map((t, idx) => ({
     ...t,
     deadline: 'Hari ini, 17:00 WIB',
-    link: idx === 0 ? '/dashboard/progres' : idx === 1 ? '/dashboard/rencana-aksi' : idx === 2 ? '/dashboard/penilaian' : '/dashboard/rencana-aksi'
+    link: idx === 0 ? '/dashboard/progres' : idx === 1 ? '/dashboard/rencana-aksi' : '/dashboard/penilaian'
   }))
 })
 
@@ -1190,83 +1128,51 @@ function formatDisplayedAmount(val: number) {
   return 'Rp ' + val.toLocaleString('id-ID')
 }
 
-// Donut Chart State & Controls (Gaya Referensi Donut Card)
+// Donut Chart State & Controls (Gaya Minimalis Modern Referensi)
 const donutCanvas = ref<HTMLCanvasElement | null>(null)
-const activeHoveredSlice = ref<number | null>(null)
-const activeSelectedSlice = ref<number | null>(null)
 let donutChartInstance: any = null
+const activeHoveredItem = ref<any | null>(null)
 
 const breakdownItems = computed(() => [
   {
     label: 'Modal Jualan',
     amount: calculatedHppAmount.value,
     percent: calculatedHppPercent.value,
-    color: '#3DD5FF',
+    color: '#156374',
     badgeClass: 'bg-cyan-50 text-[#156374] border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
   },
   {
     label: 'Biaya Operasional',
     amount: calculatedOpexAmount.value,
     percent: calculatedOpexPercent.value,
-    color: '#156374',
-    badgeClass: 'bg-cyan-50 text-[#156374] border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+    color: '#50AABF',
+    badgeClass: 'bg-sky-50 text-[#2091AA] border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800'
   },
   {
     label: 'Untung Bersih',
     amount: calculatedProfitAmount.value,
     percent: calculatedProfitPercent.value,
-    color: '#54DE63',
+    color: '#00AA13',
     badgeClass: 'bg-emerald-50 text-[#00880C] border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
   }
 ])
 
-function toggleSelectSlice(idx: number) {
-  if (activeSelectedSlice.value === idx) {
-    activeSelectedSlice.value = null
-    resetHighlight()
+function highlightDonutSegment(index: number | null) {
+  if (!donutChartInstance) return
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const mutedGrey = isDark ? '#334155' : '#CBD5E1'
+  const defaultColors = ['#156374', '#50AABF', '#00AA13']
+
+  if (index !== null && index >= 0 && index < defaultColors.length) {
+    donutChartInstance.data.datasets[0].backgroundColor = defaultColors.map((color, i) => (i === index ? color : mutedGrey))
   } else {
-    activeSelectedSlice.value = idx
-    highlightSlice(idx)
+    donutChartInstance.data.datasets[0].backgroundColor = [...defaultColors]
   }
+
+  // Slices do not pop-out / naik; only color changes to grey
+  donutChartInstance.setActiveElements([])
+  donutChartInstance.update('none')
 }
-
-const currentActiveSliceIndex = computed(() => {
-  if (activeHoveredSlice.value !== null) return activeHoveredSlice.value
-  if (activeSelectedSlice.value !== null) return activeSelectedSlice.value
-  return null
-})
-
-const displayedMetricAmount = computed(() => {
-  const idx = currentActiveSliceIndex.value
-  if (idx !== null && breakdownItems.value[idx]) {
-    return 'Rp ' + breakdownItems.value[idx].amount.toLocaleString('id-ID')
-  }
-  return formatDisplayedAmount(totalCalculatedOmzet.value)
-})
-
-const displayedMetricLabel = computed(() => {
-  const idx = currentActiveSliceIndex.value
-  if (idx !== null && breakdownItems.value[idx]) {
-    return `${breakdownItems.value[idx].label} (${breakdownItems.value[idx].percent}%)`
-  }
-  return 'Total Pendapatan'
-})
-
-const displayedMetricBadgeText = computed(() => {
-  const idx = currentActiveSliceIndex.value
-  if (idx !== null && breakdownItems.value[idx]) {
-    return `${breakdownItems.value[idx].percent}% Porsi`
-  }
-  return `+${calculatedProfitPercent.value}% Untung Bersih`
-})
-
-const displayedMetricBadgeClass = computed(() => {
-  const idx = currentActiveSliceIndex.value
-  if (idx !== null && breakdownItems.value[idx]) {
-    return breakdownItems.value[idx].badgeClass
-  }
-  return 'bg-emerald-50 text-[#00880C] border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
-})
 
 function initDonutChart() {
   if (!donutCanvas.value) return
@@ -1287,12 +1193,11 @@ function initDonutChart() {
             calculatedOpexAmount.value,
             calculatedProfitAmount.value
           ],
-          backgroundColor: ['#3DD5FF', '#156374', '#54DE63'],
-          hoverBackgroundColor: ['#28C4ED', '#0E4E5C', '#3EC54E'],
+          backgroundColor: ['#156374', '#50AABF', '#00AA13'],
           borderWidth: 0,
           hoverOffset: 0,
-          borderRadius: 8,
-          spacing: 5
+          borderRadius: 6,
+          spacing: 4
         }
       ]
     },
@@ -1301,41 +1206,28 @@ function initDonutChart() {
       maintainAspectRatio: false,
       layout: {
         padding: {
-          bottom: 4,
-          top: 4,
-          left: 4,
-          right: 4
+          bottom: 6,
+          top: 6,
+          left: 6,
+          right: 6
         }
       },
       rotation: -90,
       circumference: 360,
-      cutout: '66%',
-      onHover: (event: any, elements: any[]) => {
+      cutout: '68%',
+      onHover: (_event: any, elements: any[]) => {
         if (elements && elements.length > 0) {
-          activeHoveredSlice.value = elements[0].index
-        } else if (activeSelectedSlice.value === null) {
-          activeHoveredSlice.value = null
+          const index = elements[0].index
+          activeHoveredItem.value = breakdownItems.value[index] || null
+          highlightDonutSegment(index)
+        } else {
+          activeHoveredItem.value = null
+          highlightDonutSegment(null)
         }
       },
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: '#111827',
-          titleColor: '#FFFFFF',
-          bodyColor: '#E5E7EB',
-          padding: 12,
-          cornerRadius: 10,
-          titleFont: { family: 'Poppins', size: 12, weight: 'bold' },
-          bodyFont: { family: 'Poppins', size: 12 },
-          callbacks: {
-            label: (ctx: any) => {
-              const val = ctx.raw as number
-              const total = totalCalculatedOmzet.value
-              const pct = ((val / total) * 100).toFixed(1)
-              return ` ${ctx.label}: Rp ${val.toLocaleString('id-ID')} (${pct}%)`
-            }
-          }
-        }
+        tooltip: { enabled: false }
       },
       animation: {
         animateRotate: true,
@@ -1354,14 +1246,13 @@ function updateDonutChart() {
     calculatedOpexAmount.value,
     calculatedProfitAmount.value
   ]
-  donutChartInstance.data.datasets[0].backgroundColor = ['#3DD5FF', '#156374', '#54DE63']
-  donutChartInstance.data.datasets[0].hoverBackgroundColor = ['#28C4ED', '#0E4E5C', '#3EC54E']
+  donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
   donutChartInstance.data.datasets[0].borderWidth = 0
   donutChartInstance.data.datasets[0].hoverOffset = 0
-  donutChartInstance.data.datasets[0].borderRadius = 8
-  donutChartInstance.data.datasets[0].spacing = 5
+  donutChartInstance.data.datasets[0].borderRadius = 6
+  donutChartInstance.data.datasets[0].spacing = 4
   donutChartInstance.options.circumference = 360
-  donutChartInstance.options.cutout = '66%'
+  donutChartInstance.options.cutout = '68%'
   donutChartInstance.update()
 }
 
@@ -1373,37 +1264,53 @@ watch(donutCanvas, (newEl) => {
   }
 })
 
-function highlightSlice(index: number) {
-  activeHoveredSlice.value = index
-  if (!donutChartInstance) return
-  donutChartInstance.tooltip?.setActiveElements([{ datasetIndex: 0, index }], { x: 0, y: 0 })
-  donutChartInstance.update()
-}
-
-function resetHighlight() {
-  if (activeSelectedSlice.value !== null) {
-    activeHoveredSlice.value = null
-    return
-  }
-  activeHoveredSlice.value = null
-  if (!donutChartInstance) return
-  donutChartInstance.setActiveElements([])
-  donutChartInstance.tooltip?.setActiveElements([], { x: 0, y: 0 })
-  donutChartInstance.update()
-}
-
 // Hero Shadcn UI Chart Config, Preview Switcher & Period Logic
+const chartTypeDropdownRef = ref<HTMLElement | null>(null)
+const periodDropdownRef = ref<HTMLElement | null>(null)
+
 const chartPreviewMode = ref<'area' | 'bar' | 'cashflow'>('area')
 const isChartTypeDropdownOpen = ref(false)
+const isPeriodDropdownOpen = ref(false)
+
+function toggleChartTypeDropdown() {
+  isChartTypeDropdownOpen.value = !isChartTypeDropdownOpen.value
+  if (isChartTypeDropdownOpen.value) {
+    isPeriodDropdownOpen.value = false
+  }
+}
+
+function togglePeriodDropdown() {
+  isPeriodDropdownOpen.value = !isPeriodDropdownOpen.value
+  if (isPeriodDropdownOpen.value) {
+    isChartTypeDropdownOpen.value = false
+  }
+}
+
+function handleClickOutsideDashboard(event: MouseEvent) {
+  const target = event.target as Node
+  if (chartTypeDropdownRef.value && !chartTypeDropdownRef.value.contains(target)) {
+    isChartTypeDropdownOpen.value = false
+  }
+  if (periodDropdownRef.value && !periodDropdownRef.value.contains(target)) {
+    isPeriodDropdownOpen.value = false
+  }
+}
+
+function handleKeydownEscape(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    isChartTypeDropdownOpen.value = false
+    isPeriodDropdownOpen.value = false
+  }
+}
 
 const chartTypeOptions: { id: 'area' | 'bar' | 'cashflow'; label: string }[] = [
-  { id: 'area', label: 'Grafik Area (Saldo Kas)' },
-  { id: 'bar', label: 'Grafik Batang (Saldo Kas)' },
-  { id: 'cashflow', label: 'Arus Kas (Masuk vs Keluar)' }
+  { id: 'area', label: 'Grafik Area' },
+  { id: 'bar', label: 'Grafik Batang' },
+  { id: 'cashflow', label: 'Arus Kas' }
 ]
 
 const activeChartTypeLabel = computed(() => {
-  return chartTypeOptions.find(o => o.id === chartPreviewMode.value)?.label || 'Grafik Area (Saldo Kas)'
+  return chartTypeOptions.find(o => o.id === chartPreviewMode.value)?.label || 'Grafik Area'
 })
 
 function selectChartType(mode: 'area' | 'bar' | 'cashflow') {
@@ -1440,7 +1347,6 @@ const currentHeroChartConfig = computed(() => {
 })
 
 const heroPeriodFilter = ref<'3m' | '6m' | '1y'>('6m')
-const isPeriodDropdownOpen = ref(false)
 
 const heroChartConfig = {
   cashBalance: {
@@ -1480,13 +1386,14 @@ const heroFilteredRecords = computed(() => {
 // Unduh Rapor Keuangan 3 Bulan Terakhir (Agustus, September, Oktober 2026) format CSV
 function downloadThreeMonthsReport() {
   const records = latestMonthlyRecords.value.slice(0, 3)
-  const headers = ['Bulan', 'Tahun', 'Total Pendapatan (Omzet)', 'Modal Jualan (HPP)', 'Biaya Operasional (OPEX)', 'Untung Bersih (Net Profit)']
+  const headers = ['Bulan', 'Tahun', 'Total Pendapatan', 'Modal Jualan', 'Biaya Operasional', 'Rugi', 'Untung Bersih']
   const rows = records.map(r => [
     `"${r.month}"`,
     r.year,
     r.omzet,
     r.hpp,
     r.opex,
+    (r as any).loss || 0,
     r.netProfit
   ])
 
@@ -1499,7 +1406,7 @@ function downloadThreeMonthsReport() {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.setAttribute('href', url)
-  link.setAttribute('download', `Laporan_Keuangan_3Bulan_${umkmName.value.replace(/\s+/g, '_')}_2026.csv`)
+  link.setAttribute('download', `Laporan_Keuangan_Terbaru_${umkmName.value.replace(/\s+/g, '_')}_2026.csv`)
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -1571,12 +1478,21 @@ onMounted(() => {
 
   // Initialize Charts
   initDonutChart()
+
+  if (import.meta.client) {
+    document.addEventListener('click', handleClickOutsideDashboard)
+    document.addEventListener('keydown', handleKeydownEscape)
+  }
 })
 
 onBeforeUnmount(() => {
   if (donutChartInstance) {
     donutChartInstance.destroy()
     donutChartInstance = null
+  }
+  if (import.meta.client) {
+    document.removeEventListener('click', handleClickOutsideDashboard)
+    document.removeEventListener('keydown', handleKeydownEscape)
   }
 })
 
@@ -1603,10 +1519,10 @@ function scrollToSection(type: 'breakdown' | 'table') {
 </script>
 
 <style scoped>
-/* Hilangkan efek shadow, set background putih #FDFDFD & pertebal stroke konsisten pada container di halaman beranda */
+/* Hilangkan efek shadow, set background putih #FFFFFF & pertebal stroke konsisten pada container di halaman beranda */
 .card-tactile-gopay,
 :deep(.card-tactile-gopay) {
-  background-color: #FDFDFD !important;
+  background-color: #FFFFFF !important;
   box-shadow: none !important;
   border-width: 1.5px !important;
   border-color: #E2E8F0 !important;

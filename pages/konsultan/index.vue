@@ -10,11 +10,11 @@
           </div>
 
           <h1 class="text-3xl sm:text-4xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-[-0.03em] leading-tight text-balance">
-            Pusat Diagnosa & Matriks Audit Klien UMKM
+            Pusat Diagnosa & Matriks Penilaian Klien UMKM
           </h1>
 
           <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-xl">
-            Pantau stabilitas 5 pilar fundamental klien binaan, deteksi kebocoran HPP, dan terbitkan akreditasi resmi <strong class="text-neutral-900 dark:text-white">Ready for Funding</strong> untuk kurasi investor.
+            Pantau stabilitas 5 pilar fundamental klien binaan, deteksi kebocoran modal jualan, dan terbitkan akreditasi resmi <strong class="text-neutral-900 dark:text-white">Ready for Funding</strong> untuk kurasi investor.
           </p>
         </div>
 
@@ -22,7 +22,7 @@
           <!-- Button-in-Button Trailing Icon -->
           <button
             type="button"
-            class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 active:scale-[0.98] inline-flex items-center gap-3 cursor-pointer"
+            class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 inline-flex items-center gap-3 cursor-pointer"
             @click="showValidationModal = true"
           >
             <span>Tinjau Antrean Validasi ({{ isValidationApproved ? 0 : 1 }})</span>
@@ -86,7 +86,7 @@
               {{ isAnomalyResolved ? 0 : 1 }} <span class="text-xs font-normal text-neutral-400 font-sans">Kasus</span>
             </div>
             <span class="text-[11px] text-amber-600 dark:text-amber-400 font-bold block font-mono">
-              {{ isAnomalyResolved ? '✓ Telah Diberi Arahan' : '⚠️ Fluktuasi HPP Susu' }}
+              {{ isAnomalyResolved ? '✓ Telah Diberi Arahan' : '⚠️ Fluktuasi Modal Bahan' }}
             </span>
           </div>
         </div>
@@ -114,7 +114,7 @@
               Kenaikan Harga Susu Segar (+3.2%) pada Kopi Senja Nusantara
             </h4>
             <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-xl font-sans">
-              Terjadi lonjakan harga susu segar pada pekan ke-3 September. Porsi HPP naik tipis namun masih dalam batas aman terkendali (45.1%).
+              Terjadi lonjakan harga susu segar pada pekan ke-3 September. Porsi modal jualan naik tipis namun masih dalam batas aman terkendali (45.1%).
             </p>
           </div>
         </div>
@@ -122,7 +122,7 @@
         <!-- Button-in-Button Action -->
         <button
           type="button"
-          class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-amber-600 hover:bg-amber-700 text-white shrink-0 transition-all duration-300 active:scale-[0.98] shadow-xs inline-flex items-center gap-3 cursor-pointer"
+          class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-amber-600 hover:bg-amber-700 text-white shrink-0 transition-all duration-300 shadow-xs inline-flex items-center gap-3 cursor-pointer"
           @click="resolveAnomaly"
         >
           <span>Kirim Rekomendasi SOP</span>
@@ -267,14 +267,14 @@
               <!-- Footer Actions (Button-in-Button) -->
               <div class="flex items-center justify-between pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs">
                 <span class="text-neutral-400 font-mono text-[11px]">
-                  Audit: {{ client.lastAuditDate }}
+                  Validasi: {{ client.lastAuditDate }}
                 </span>
 
                 <NuxtLink
                   :to="`/konsultan/klien/${client.id}`"
                   class="group pl-3.5 pr-1.5 py-1 rounded-full text-xs font-heading font-semibold text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/60 inline-flex items-center gap-2 transition-all"
                 >
-                  <span>Periksa Detail Audit 5 Pilar</span>
+                  <span>Periksa Detail Penilaian 5 Pilar</span>
                   <span class="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900/60 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
                     <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2" />
                   </span>
@@ -299,7 +299,7 @@
                 <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="18" :stroke-width="2" />
               </div>
               <div>
-                <span class="text-[10px] font-mono uppercase tracking-wider text-primary-600 font-bold block">AUDIT BNSP VERIFIKASI</span>
+                <span class="text-[10px] font-mono uppercase tracking-wider text-primary-600 font-bold block">VALIDASI LAPORAN KAS</span>
                 <h3 class="font-heading font-extrabold text-lg text-neutral-900 dark:text-white leading-tight">
                   Validasi Laporan Kas Klien
                 </h3>
@@ -330,7 +330,7 @@
           </div>
 
           <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-            Dengan menekan tombol di bawah, Anda mengesahkan bahwa laporan kas ini telah memenuhi standar audit BNSP dan valid untuk dimasukkan ke data room investor.
+            Dengan menekan tombol di bawah, Anda mengesahkan bahwa laporan kas ini telah memenuhi standar verifikasi konsultan dan valid untuk dimasukkan ke data room investor.
           </p>
 
           <div class="flex items-center justify-end gap-3 pt-2">
@@ -343,7 +343,7 @@
             </button>
             <button
               type="button"
-              class="group pl-5 pr-2 py-2 rounded-full text-xs font-heading font-bold bg-primary-500 hover:bg-primary-600 text-white transition-all duration-300 active:scale-[0.98] shadow-xs cursor-pointer inline-flex items-center gap-2.5"
+              class="group pl-5 pr-2 py-2 rounded-full text-xs font-heading font-bold bg-primary-500 hover:bg-primary-600 text-white transition-all duration-300 shadow-xs cursor-pointer inline-flex items-center gap-2.5"
               @click="approveValidation"
             >
               <span>Sahkan & Validasi Laporan</span>

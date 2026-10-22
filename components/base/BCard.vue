@@ -5,7 +5,7 @@
       highlighted
         ? 'border-primary-500/50 bg-primary-50/20 dark:bg-primary-950/20'
         : 'border-neutral-200/90 dark:border-neutral-800 shadow-xs',
-      interactive ? 'hover:border-neutral-300 dark:hover:border-neutral-700 cursor-pointer active:scale-[0.99] transition-transform' : '',
+      interactive ? 'hover:border-neutral-300 dark:hover:border-neutral-700 cursor-pointer' : '',
       paddingClasses[padding],
       customClass
     ]"

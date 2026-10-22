@@ -18,7 +18,7 @@
       <div class="flex flex-wrap items-center gap-3 pt-2">
         <NuxtLink to="/daftar">
           <BButton variant="primary" size="lg" class="shadow-sm">
-            Mulai Audit Mandiri (Gratis)
+            Cek Kesiapan Mandiri (Gratis)
           </BButton>
         </NuxtLink>
         <NuxtLink to="/tentang">
@@ -109,7 +109,7 @@
             </li>
             <li class="flex items-start gap-2.5">
               <span class="text-red-500 font-bold">•</span>
-              <span>Tidak tahu persis berapa HPP dan margin riil sebenarnya dari tiap menu/produk.</span>
+              <span>Tidak tahu persis berapa modal jualan dan keuntungan riil sebenarnya dari tiap menu/produk.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <span class="text-red-500 font-bold">•</span>
@@ -117,7 +117,7 @@
             </li>
             <li class="flex items-start gap-2.5">
               <span class="text-red-500 font-bold">•</span>
-              <span>Mengajukan pinjaman ke bank atau pemodal ditolak karena tidak punya catatan keuangan rapi.</span>
+              <span>Mengajukan permodalan usaha ke investor ditolak karena tidak punya catatan keuangan rapi.</span>
             </li>
           </ul>
         </div>
@@ -143,7 +143,7 @@
             </li>
             <li class="flex items-start gap-2.5">
               <span class="text-emerald-500 font-bold">•</span>
-              <span>Dokumen perizinan lengkap dan diaudit langsung oleh konsultan bisnis terakreditasi.</span>
+              <span>Dokumen perizinan lengkap dan divalidasi langsung oleh konsultan bisnis terakreditasi.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <span class="text-emerald-500 font-bold">•</span>

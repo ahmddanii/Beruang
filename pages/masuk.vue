@@ -54,7 +54,7 @@
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-900 dark:text-white font-heading font-bold text-sm sm:text-base shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full bg-white dark:bg-[#18191E] border border-[#EAEAEA] dark:border-[#26272F] text-neutral-900 dark:text-white font-heading font-bold text-sm sm:text-base shadow-xs hover:bg-neutral-50 dark:hover:bg-[#22252E] hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-150 cursor-pointer"
           @click="handleGoogleLogin"
         >
           <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@
         <button
           type="button"
           :disabled="loading"
-          class="w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-heading font-bold text-sm sm:text-base shadow-sm shadow-primary-600/20 transition-colors duration-150 active:scale-[0.99] cursor-pointer"
+          class="w-full flex items-center justify-center gap-3 py-4 px-8 rounded-full bg-primary-600 hover:bg-primary-700 text-white font-heading font-bold text-sm sm:text-base shadow-sm shadow-primary-600/20 transition-colors duration-150 cursor-pointer"
           @click="openPhoneModal = true"
         >
           <HugeiconsIcon :icon="Call02Icon" :size="18" :stroke-width="2" />
@@ -241,7 +241,7 @@
           :class="[
             'w-full py-4 px-6 rounded-2xl font-heading font-bold text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             isPhoneValid && !loading
-              ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
+              ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
           @click="requestOtp"
@@ -303,7 +303,7 @@
           :class="[
             'w-full py-4 px-6 rounded-2xl font-heading font-bold text-base transition-all duration-150 flex items-center justify-center gap-2 shadow-xs',
             otpString.length === 4 && !loading
-              ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 active:scale-[0.99] cursor-pointer'
+              ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-primary-600/25 cursor-pointer'
               : 'bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/70 dark:border-neutral-700/60 text-neutral-400 dark:text-neutral-500 cursor-not-allowed'
           ]"
           @click="verifyAndLogin"

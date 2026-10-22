@@ -406,7 +406,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 const googleAuth = useGoogleAuth()
 
-const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
+const lottieAnimationUrl = '/animations/hero.lottie'
 
 // Role Definitions (Layman-Friendly)
 const roleCards = [

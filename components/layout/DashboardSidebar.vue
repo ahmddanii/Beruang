@@ -340,11 +340,11 @@ const brandHeaderRef = ref<HTMLElement | null>(null)
 const bannerRef = ref<HTMLElement | null>(null)
 const compactHeaderRef = ref<HTMLElement | null>(null)
 
-// Official Bear Mascot Lottie Animation URLs
+// Official Bear Mascot Lottie Animation URLs (Local Cached Assets)
 const lottieSources = {
-  siang: 'https://lottie.host/63a5f273-13ac-4b64-9e87-ae6a36839188/MLmYnGmMP7.lottie',
-  sore: 'https://lottie.host/4936cbe8-30e9-4930-963b-0d3bc1fd07b9/PVSi9YqIYP.lottie',
-  malam: 'https://lottie.host/bc55ce89-7c97-4e49-8988-848bc02b409e/g08gcLoaQt.lottie'
+  siang: '/animations/mascot-siang.lottie',
+  sore: '/animations/mascot-sore.lottie',
+  malam: '/animations/mascot-malam.lottie'
 }
 
 type TimeOfDay = 'siang' | 'sore' | 'malam'

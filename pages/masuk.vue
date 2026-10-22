@@ -392,8 +392,8 @@ const googleAuth = useGoogleAuth()
 // Step state: 'main' | 'phone' | 'otp' (identik dengan proses daftar)
 const step = ref<'main' | 'phone' | 'otp'>('main')
 
-// Official Lottie Animation URL
-const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
+// Official Lottie Animation URL (Local Cached Asset)
+const lottieAnimationUrl = '/animations/hero.lottie'
 
 // Role Definitions for Multi-Role Login
 const roleCards = [

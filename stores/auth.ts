@@ -130,7 +130,7 @@ export const useAuthStore = defineStore('auth', {
       email: 'fikri@kopisenja.id',
       role: 'UMKM' as UserRole,
       avatar: '/images/user-profile.png',
-      businessName: 'Kopi Senja Nusantara',
+      businessName: '',
       phone: '081234567890',
       verified: true
     } as UserProfile | null,

@@ -79,20 +79,20 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Nama Usaha
+                Nama Usaha <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
                 v-model="formUmkm.name"
                 type="text"
                 required
-                placeholder="contoh: Kopi Senja Nusantara"
+                placeholder="contoh: Toko Kopi Harapan"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
               />
             </div>
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Nama Pemilik
+                Nama Pemilik <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
                 v-model="formUmkm.owner"
@@ -106,7 +106,7 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div ref="yearPickerRef" class="space-y-1 relative">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Tahun Mulai Usaha
+                  Tahun Mulai Usaha <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <div
                   class="relative flex items-center cursor-pointer"
@@ -255,7 +255,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Kota Usaha
+                Kota Usaha <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
                 v-model="formUmkm.city"
@@ -268,7 +268,7 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Jumlah Cabang / Gerai
+                  Jumlah Cabang / Gerai <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <input
                   v-model.number="formUmkm.outlets"
@@ -279,7 +279,7 @@
               </div>
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Jumlah Karyawan
+                  Jumlah Karyawan <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <input
                   v-model.number="formUmkm.employees"
@@ -309,7 +309,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Rata-rata Penjualan / Bulan
+                Rata-rata Penjualan / Bulan <span class="text-rose-500 font-bold">*</span>
               </label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -329,7 +329,7 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Modal Bahan (%)
+                  Modal Bahan (%) <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <input
                   v-model.number="formUmkm.hppPercentage"
@@ -343,7 +343,7 @@
               </div>
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Kebutuhan Modal
+                  Kebutuhan Modal <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <div class="relative">
                   <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -364,7 +364,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Tawaran Bagi Hasil / Modal
+                Tawaran Bagi Hasil / Modal <span class="text-rose-500 font-bold">*</span>
               </label>
               <select
                 v-model="formUmkm.equityOffered"
@@ -836,6 +836,10 @@
           <div v-else />
 
           <div class="flex items-center gap-3">
+            <span v-if="!isCurrentStepValid && currentStep < currentStepsList.length" class="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
+              Lengkapi isian wajib (*) untuk lanjut
+            </span>
+
             <button
               v-if="activeRole === 'INVESTOR' && currentStep === 2"
               type="button"
@@ -999,23 +1003,29 @@ const umkmSectors = [
   'Teknologi'
 ]
 
+const initialBusinessName = (authStore.currentUser?.businessName || authStore.currentUser?.org_name || '').trim()
+const safeInitialName = initialBusinessName.toLowerCase().includes('kopi senja') ? '' : initialBusinessName
+
+const initialOwnerName = (authStore.currentUser?.name || '').trim()
+const safeInitialOwner = initialOwnerName.toLowerCase().includes('fikri setiawan') ? '' : initialOwnerName
+
 const formUmkm = ref<UmkmFormData>({
-  name: authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
-  owner: authStore.currentUser?.name || '',
-  year: authStore.currentUser?.establishedYear || null,
+  name: safeInitialName,
+  owner: safeInitialOwner,
+  year: null,
   startDate: '',
   legalStatus: 'NIB_READY',
-  nib: authStore.currentUser?.nib || '',
-  npwp: authStore.currentUser?.npwp || '',
-  sector: authStore.currentUser?.sector || 'Makanan & Minuman',
-  city: authStore.currentUser?.city || '',
-  outlets: authStore.currentUser?.outletsCount || 1,
-  employees: authStore.currentUser?.employeesCount || 1,
-  monthlyRevenue: authStore.currentUser?.monthlyRevenue ? Number(authStore.currentUser.monthlyRevenue) : null,
+  nib: '',
+  npwp: '',
+  sector: 'Makanan & Minuman',
+  city: '',
+  outlets: 1,
+  employees: 1,
+  monthlyRevenue: null,
   hppPercentage: 40,
-  targetFunding: authStore.currentUser?.fundingTarget ? Number(authStore.currentUser.fundingTarget) : null,
+  targetFunding: null,
   equityOffered: '10% Bagi Hasil',
-  description: authStore.currentUser?.businessProfile?.description || ''
+  description: ''
 })
 
 const displayMonthlyRevenue = ref(
@@ -1148,16 +1158,64 @@ function toggleInvestorSector(sec: string) {
 const isCurrentStepValid = computed(() => {
   if (activeRole.value === 'UMKM') {
     if (currentStep.value === 1) {
-      return Boolean(formUmkm.value.name?.trim() && formUmkm.value.owner?.trim())
+      return Boolean(
+        formUmkm.value.name?.trim() &&
+        formUmkm.value.owner?.trim() &&
+        formUmkm.value.year &&
+        formUmkm.value.year >= 1970 &&
+        formUmkm.value.year <= new Date().getFullYear()
+      )
     }
+    if (currentStep.value === 2) {
+      return Boolean(
+        formUmkm.value.sector?.trim() &&
+        formUmkm.value.city?.trim() &&
+        formUmkm.value.outlets &&
+        formUmkm.value.outlets >= 1 &&
+        formUmkm.value.employees &&
+        formUmkm.value.employees >= 1
+      )
+    }
+    if (currentStep.value === 3) {
+      return Boolean(
+        formUmkm.value.monthlyRevenue &&
+        formUmkm.value.monthlyRevenue > 0 &&
+        formUmkm.value.targetFunding &&
+        formUmkm.value.targetFunding > 0 &&
+        formUmkm.value.hppPercentage &&
+        formUmkm.value.hppPercentage >= 1 &&
+        formUmkm.value.hppPercentage <= 99 &&
+        formUmkm.value.equityOffered?.trim()
+      )
+    }
+    return true
   } else if (activeRole.value === 'CONSULTANT') {
     if (currentStep.value === 1) {
-      return Boolean(formConsultant.value.name?.trim())
+      return Boolean(
+        formConsultant.value.name?.trim() &&
+        formConsultant.value.institution?.trim() &&
+        formConsultant.value.city?.trim()
+      )
     }
+    if (currentStep.value === 2) {
+      return Boolean(
+        formConsultant.value.specialization?.trim() &&
+        formConsultant.value.maxClients &&
+        formConsultant.value.maxClients >= 1
+      )
+    }
+    return true
   } else if (activeRole.value === 'INVESTOR') {
     if (currentStep.value === 1) {
-      return Boolean(formInvestor.value.name?.trim())
+      return Boolean(
+        formInvestor.value.name?.trim() &&
+        formInvestor.value.city?.trim()
+      )
     }
+    if (currentStep.value === 2) {
+      return Boolean(formInvestor.value.ticketRange?.trim())
+    }
+    return true
   }
   return true
 })
@@ -1166,16 +1224,16 @@ function syncAuthToForms() {
   const u = authStore.currentUser
   if (!u) return
 
-  // Sinkronkan Nama
-  if (u.name) {
+  // Sinkronkan Nama Pemilik (abaikan nama dummy seeder)
+  if (u.name && !u.name.toLowerCase().includes('fikri setiawan')) {
     if (!formUmkm.value.owner) formUmkm.value.owner = u.name
     if (!formConsultant.value.name) formConsultant.value.name = u.name
     if (!formInvestor.value.name) formInvestor.value.name = u.name
   }
 
-  // Sinkronkan Nama Usaha / Lembaga / Entitas
-  const businessOrOrg = u.businessName || u.org_name || u.orgName
-  if (businessOrOrg) {
+  // Sinkronkan Nama Usaha (Abaikan nama dummy Kopi Senja Nusantara)
+  const businessOrOrg = (u.businessName || u.org_name || u.orgName || '').trim()
+  if (businessOrOrg && !businessOrOrg.toLowerCase().includes('kopi senja')) {
     if (!formUmkm.value.name) formUmkm.value.name = businessOrOrg
     if (!formConsultant.value.institution) formConsultant.value.institution = businessOrOrg
     if (!formInvestor.value.entityName) formInvestor.value.entityName = businessOrOrg

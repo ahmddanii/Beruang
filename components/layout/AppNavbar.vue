@@ -102,7 +102,8 @@
         </button>
 
         <!-- Auth Dependent Actions: Desktop -->
-        <template v-if="authStore.isAuthenticated">
+        <!-- 1. Sudah Login & Sudah Selesai Onboarding: Buka Dashboard -->
+        <template v-if="authStore.isAuthenticated && authStore.isOnboarded">
           <NuxtLink
             :to="dashboardRoute"
             class="hidden lg:inline-flex items-center justify-center h-10 px-5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
@@ -110,6 +111,18 @@
             <span>Buka Dashboard</span>
           </NuxtLink>
         </template>
+
+        <!-- 2. Sudah Mendaftar tapi Belum Menyelesaikan Onboarding: Lengkapi Profil -->
+        <template v-else-if="authStore.isAuthenticated && !authStore.isOnboarded">
+          <NuxtLink
+            :to="`/onboarding?role=${authStore.currentRole}`"
+            class="hidden lg:inline-flex items-center justify-center h-10 px-5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
+          >
+            <span>Lengkapi Profil</span>
+          </NuxtLink>
+        </template>
+
+        <!-- 3. Belum Login / Pengunjung Tamu: Masuk & Daftar -->
         <template v-else>
           <!-- Masuk link: height 40px, rounded-full pill -->
           <NuxtLink
@@ -220,13 +233,22 @@
       </NuxtLink>
       <!-- Mobile CTA row -->
       <div class="pt-4 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center gap-3">
-        <template v-if="authStore.isAuthenticated">
+        <template v-if="authStore.isAuthenticated && authStore.isOnboarded">
           <NuxtLink
             :to="dashboardRoute"
             class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white transition-colors shadow-sm"
             @click="mobileMenuOpen = false"
           >
             Buka Dashboard
+          </NuxtLink>
+        </template>
+        <template v-else-if="authStore.isAuthenticated && !authStore.isOnboarded">
+          <NuxtLink
+            :to="`/onboarding?role=${authStore.currentRole}`"
+            class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white transition-colors shadow-sm"
+            @click="mobileMenuOpen = false"
+          >
+            Lengkapi Profil
           </NuxtLink>
         </template>
         <template v-else>

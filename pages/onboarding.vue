@@ -1294,9 +1294,17 @@ async function finishOnboarding() {
   submitting.value = true
 
   try {
+    const onboardedCookie = useCookie<string | null>('beruang_onboarded', {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+      path: '/'
+    })
+    onboardedCookie.value = 'true'
+
     // Kunci role pada state sesi pengguna aktif saat ini
     if (authStore.currentUser) {
       authStore.currentUser.role = activeRole.value
+      authStore.currentUser.onboardingCompleted = true
     }
 
     if (activeRole.value === 'UMKM') {

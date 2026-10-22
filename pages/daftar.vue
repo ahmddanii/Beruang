@@ -726,47 +726,22 @@ async function verifyAndRegister() {
     }
   }
 
-  const defaultName = (
-    selectedRole.value === 'UMKM'
-      ? 'Fikri Setiawan'
-      : selectedRole.value === 'CONSULTANT'
-        ? 'Dra. Maya Suryani, M.M.'
-        : 'Hendro Wicaksono'
-  )
-
-  const defaultOrg = (
-    selectedRole.value === 'UMKM'
-      ? 'Kopi Senja Nusantara'
-      : selectedRole.value === 'CONSULTANT'
-        ? 'Maya Advisory Partner'
-        : 'Nusantara Angel Syndicate'
-  )
-
   const email = `user_${cleanPhone.value}@beruang.id`
 
   try {
     loadingMessage.value = `✓ Mendaftarkan akun ${roleMeta.shortTitle}...`
     await authStore.register({
-      name: defaultName,
+      name: '',
       email,
       phone: `+62 ${cleanPhone.value}`,
       role: selectedRole.value,
-      orgName: defaultOrg,
-      sector: 'Makanan & Minuman',
-      specialization: 'Keuangan & Biaya',
-      bnsp_license: 'BNSP-KONS-2024-8891',
-      commitment_capital: '150 - 500 Juta',
-      investor_type: 'Kelompok Modal',
+      orgName: '',
+      sector: '',
+      specialization: '',
       otp_code: otpString.value
     })
   } catch (err: any) {
-    console.warn('Registrasi live fallback / sudah terdaftar:', err?.message)
-    // Jika email/nomor sudah terdaftar, login langsung
-    try {
-      await authStore.login(email, 'password123')
-    } catch {
-      await authStore.setRole(selectedRole.value)
-    }
+    console.warn('Registrasi live fallback / demo session:', err?.message)
   } finally {
     loading.value = false
     loadingMessage.value = `✓ Berhasil! Membuka pendaftaran ${roleMeta.shortTitle}...`

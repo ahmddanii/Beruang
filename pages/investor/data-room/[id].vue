@@ -121,12 +121,12 @@
             </p>
           </div>
 
-          <!-- Sesi Audit Status & Action -->
+          <!-- Sesi Validasi Status & Action -->
           <div class="flex flex-col sm:items-end gap-3 shrink-0">
             <div class="p-3 rounded-2xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200/70 dark:border-neutral-700/70 text-xs space-y-1">
               <div class="flex items-center gap-1.5 font-semibold text-neutral-900 dark:text-white">
                 <HugeiconsIcon :icon="Clock01Icon" :size="14" class="text-[#2091AA] dark:text-[#50AABF]" />
-                <span>Sesi Audit Aktif:</span>
+                <span>Sesi Validasi Aktif:</span>
               </div>
               <p class="text-[11px] text-neutral-500 font-mono">
                 {{ authStore.currentUser?.name || 'Fikri Setiawan' }} • {{ accessTimestamp }}
@@ -172,7 +172,7 @@
         <!-- 4 Key Metric Cards (Unified Black Figures as Requested) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
-            <span class="text-xs text-neutral-500 font-medium">Omzet Riil (30 Hari)</span>
+            <span class="text-xs text-neutral-500 font-medium">Total Pendapatan (30 Hari)</span>
             <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
               Rp 100.000.000
             </div>
@@ -180,7 +180,7 @@
           </div>
 
           <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
-            <span class="text-xs text-neutral-500 font-medium">Modal Jualan (HPP Bahan)</span>
+            <span class="text-xs text-neutral-500 font-medium">Modal Jualan Bahan Baku</span>
             <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
               Rp 45.100.000
             </div>
@@ -188,7 +188,7 @@
           </div>
 
           <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
-            <span class="text-xs text-neutral-500 font-medium">Beban Operasional Toko</span>
+            <span class="text-xs text-neutral-500 font-medium">Biaya Operasional Toko</span>
             <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
               Rp 22.300.000
             </div>
@@ -196,7 +196,7 @@
           </div>
 
           <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-2">
-            <span class="text-xs text-neutral-500 font-medium">Untung Bersih (Net Profit)</span>
+            <span class="text-xs text-neutral-500 font-medium">Untung Bersih</span>
             <div class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
               Rp 32.600.000
             </div>
@@ -209,7 +209,7 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
             <div>
               <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white">
-                1. Laporan Laba Rugi Riil (P&L Audited 5 Bulan)
+                1. Laporan Untung Rugi Riil (Tervalidasi 5 Bulan)
               </h3>
               <p class="text-xs text-neutral-500 mt-0.5 font-sans">
                 Terekonsiliasi mutasi kasir harian & rekening giro oleh konsultan: {{ item?.consultantName }}
@@ -231,11 +231,11 @@
               <thead class="bg-neutral-50 dark:bg-neutral-900/80 text-neutral-600 dark:text-neutral-400 font-semibold uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-800">
                 <tr>
                   <th class="py-3 px-4">Periode</th>
-                  <th class="py-3 px-4">Omzet Riil (Rp)</th>
-                  <th class="py-3 px-4">Modal Jualan (HPP)</th>
-                  <th class="py-3 px-4">Laba Kotor</th>
+                  <th class="py-3 px-4">Total Pendapatan (Rp)</th>
+                  <th class="py-3 px-4">Modal Jualan (Rp)</th>
+                  <th class="py-3 px-4">Untung Kotor</th>
                   <th class="py-3 px-4">Margin %</th>
-                  <th class="py-3 px-4">Beban OPEX</th>
+                  <th class="py-3 px-4">Biaya Operasional</th>
                   <th class="py-3 px-4">Untung Bersih</th>
                   <th class="py-3 px-4 text-right">Saldo Kas</th>
                 </tr>
@@ -556,7 +556,7 @@
 
             <button
               type="submit"
-              class="px-5 py-2 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs cursor-pointer transition-all active:scale-95"
+              class="px-5 py-2 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs cursor-pointer transition-all"
             >
               Kirim Surat Minat Resmi →
             </button>
@@ -614,7 +614,7 @@ const accessTimestamp = new Date().toLocaleString('id-ID', {
 
 // Tab Navigation
 const dataRoomTabs = [
-  { id: 'pnl', label: 'Laporan Laba Rugi Riil', icon: AnalyticsUpIcon },
+  { id: 'pnl', label: 'Laporan Untung Rugi Riil', icon: AnalyticsUpIcon },
   { id: 'docs', label: 'Vault Berkas & Legalitas', icon: File01Icon },
   { id: 'actions', label: 'Rekam Jejak Rencana Aksi', icon: Task01Icon }
 ]
@@ -633,14 +633,14 @@ function triggerToast(msg: string) {
 }
 
 function downloadCsvFeedback() {
-  triggerToast('Berkas CSV Laporan P&L Audited berhasil diekspor!')
+  triggerToast('Berkas CSV Laporan Untung Rugi Tervalidasi berhasil diekspor!')
 }
 
 // Vault Documents
 const bankDocsList = [
-  { name: 'Rekening Koran Mandiri Giro Usaha (Sep 2026)', size: '2.4 MB PDF', verifiedDate: 'Audit 20 Sep 2026' },
-  { name: 'Rekening Koran Mandiri Giro Usaha (Agu 2026)', size: '2.1 MB PDF', verifiedDate: 'Audit 18 Agu 2026' },
-  { name: 'Rekapitulasi Arus Kas POS Kasir (Mei-Sep)', size: '1.2 MB PDF', verifiedDate: 'Audit 22 Sep 2026' }
+  { name: 'Rekening Koran Mandiri Giro Usaha (Sep 2026)', size: '2.4 MB PDF', verifiedDate: 'Validasi 20 Sep 2026' },
+  { name: 'Rekening Koran Mandiri Giro Usaha (Agu 2026)', size: '2.1 MB PDF', verifiedDate: 'Validasi 18 Agu 2026' },
+  { name: 'Rekapitulasi Arus Kas POS Kasir (Mei-Sep)', size: '1.2 MB PDF', verifiedDate: 'Validasi 22 Sep 2026' }
 ]
 
 const legalDocsList = [
@@ -669,14 +669,14 @@ const executedActionsList = [
     id: 'act-3',
     category: 'Operasional',
     title: 'Standardisasi Resep Bahan Baku & SOP Barista',
-    impact: 'Menurunkan porsi modal jualan (HPP) menjadi stabil 45.1%.',
+    impact: 'Menurunkan porsi modal jualan menjadi stabil 45.1%.',
     date: '02 Sep 2026'
   },
   {
     id: 'act-4',
     category: 'Tata Kelola Kas',
     title: 'Digitalisasi Kasir POS & Rekonsiliasi Nota QRIS',
-    impact: 'Seluruh penjualan harian tercatat akurat dan siap audit.',
+    impact: 'Seluruh penjualan harian tercatat akurat dan siap diverifikasi pemodal.',
     date: '25 Agu 2026'
   }
 ]

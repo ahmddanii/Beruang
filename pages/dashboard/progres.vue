@@ -1,215 +1,267 @@
 <template>
-  <div class="space-y-6 pb-20 font-sans text-neutral-900 dark:text-neutral-100 select-none">
-    <!-- 1. Top Page Actions -->
-    <div class="flex items-center justify-end gap-2.5 pb-2 shrink-0 flex-wrap">
-      <!-- Unduh Buku Kas Button (Sesuai Desain Button Kembali di Halaman Profil Usaha) -->
-      <button
-        type="button"
-        class="inline-flex items-center gap-2 px-4 py-2 sm:py-2.5 rounded-xl bg-white hover:bg-neutral-100/80 dark:bg-[#18191E] dark:hover:bg-neutral-800/80 border border-neutral-200/90 hover:border-neutral-400 dark:border-neutral-800 dark:hover:border-neutral-600 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs active:scale-95 cursor-pointer"
-        title="Unduh Rekapitulasi Kas"
-        @click="handleExportPdf"
-      >
-        <HugeiconsIcon :icon="Download01Icon" :size="16" :stroke-width="2" />
-        <span>Unduh Buku Kas</span>
-      </button>
+  <div class="space-y-5 sm:space-y-6 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+    <!-- 1. Top Header: Title on Left & Action Controls (Month Filter + Unduh) on Right (Same Row) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none">
+      <div class="flex items-center gap-2 sm:gap-2.5">
+        <HugeiconsIcon
+          :icon="Coins01Icon"
+          :size="20"
+          :stroke-width="2.2"
+          class="text-neutral-900 dark:text-white shrink-0"
+        />
+        <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Catatan Kas
+        </h1>
+      </div>
 
-      <!-- Primary 3D Action: Catat Kas Hari Ini -->
-      <button
-        type="button"
-        class="btn-3d-blue px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs active:scale-95 cursor-pointer hover:translate-y-0"
-        @click="isCashDrawerOpen = true"
-      >
-        <HugeiconsIcon :icon="Coins01Icon" :size="17" :stroke-width="2.2" />
-        <span>+ Catat Kas Hari Ini</span>
-      </button>
+      <!-- Action Controls: Month Filter Dropdown & Download PDF Button (Right-aligned, on the same row as Title) -->
+      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+        <!-- Month Filter Dropdown (Pilih Bulan: "Sekarang", "September 2026", ...) -->
+        <div ref="monthDropdownRef" class="relative inline-block text-left shrink-0">
+          <button
+            type="button"
+            class="btn-pill-action group shrink-0"
+            :aria-expanded="isMonthDropdownOpen"
+            title="Pilih Periode Bulan Catatan Keuangan"
+            @click="isMonthDropdownOpen = !isMonthDropdownOpen"
+          >
+            <!-- Calendar Icon -->
+            <svg
+              class="w-4 h-4 text-neutral-500 dark:text-neutral-400 transition-colors group-hover:text-neutral-800 dark:group-hover:text-white shrink-0 mr-1"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.0"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="18" height="18" x="3" y="4" rx="2" />
+              <path d="M16 2v4M8 2v4M3 10h18" />
+            </svg>
+
+            <span>{{ selectedMonthButtonLabel }}</span>
+
+            <!-- Arrow Down Icon -->
+            <svg
+              class="w-4 h-4 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 shrink-0 group-hover:text-neutral-800 dark:group-hover:text-white ml-0.5"
+              :class="{ 'rotate-180': isMonthDropdownOpen }"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.0"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+
+          <!-- Dropdown Menu Popover -->
+          <div
+            v-if="isMonthDropdownOpen"
+            class="absolute right-0 mt-2 w-48 max-h-72 overflow-y-auto rounded-[8px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
+          >
+            <div class="space-y-0.5">
+              <button
+                v-for="m in monthOptions"
+                :key="m.id"
+                type="button"
+                :class="[
+                  'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                  selectedMonthId === m.id
+                    ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                    : 'text-[#475569] dark:text-neutral-300 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                ]"
+                @click="selectMonth(m.id)"
+              >
+                <span>{{ m.label }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unduh Buku Kas Button (Green CTA) -->
+        <BActionButton
+          variant="green"
+          icon="download"
+          title="Unduh Rekapitulasi Kas"
+          @click="handleExportPdf"
+        >
+          Unduh Buku Kas
+        </BActionButton>
+      </div>
     </div>
 
-    <!-- 2. Metric Grid: 4 Horizontal Financial Cards (Sesuai Referensi Beranda: Saldo, Uang Masuk, Modal Jualan, Biaya Operasional) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+    <!-- 2. Metric Container: 4 Equal Width Financial Cards (Apple Store Utility Card: rounded.lg 18px, spacing.lg 24px) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch w-full">
       <!-- Card 1: Saldo Kas Toko -->
-      <div class="gsap-stat-card flex-1">
-        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden flex flex-col justify-between select-none h-full transition-all duration-200">
-          <!-- 1. Top: Container Biru untuk Title -->
-          <div class="w-full px-5 sm:px-6 py-3 sm:py-3.5 card-header-blue-banner flex items-center gap-2.5 sm:gap-3">
-            <HugeiconsIcon
-              :icon="Coins01Icon"
-              :size="20"
-              :stroke-width="2.2"
-              class="text-white shrink-0"
-            />
-            <span class="text-xs sm:text-sm font-poppins font-semibold uppercase tracking-wider text-white truncate">
-              SALDO KAS TOKO
+      <div class="gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean select-none transition-all duration-200">
+          <!-- 1. Top Header: Icon + Title & Badge -->
+          <div class="flex items-center justify-between w-full gap-1.5">
+            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <div class="stat-card-icon-box shrink-0">
+                <HugeiconsIcon
+                  :icon="Coins01Icon"
+                  :size="16"
+                  :stroke-width="2.0"
+                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
+                />
+              </div>
+              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
+                Saldo Kas Toko
+              </span>
+            </div>
+            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+              <span>Sehat</span>
+            </div>
+          </div>
+
+          <!-- 2. Middle Value Row: font-semibold matching Beranda -->
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              Rp {{ displayedCashBalance.toLocaleString('id-ID') }}
             </span>
           </div>
 
-          <!-- 2. Bottom: Container Informasi dengan Rounded Corner di Atas -->
-          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] px-5 sm:px-6 pt-4.5 pb-5 sm:pt-5 sm:pb-5.5 flex flex-col gap-3.5 sm:gap-4 flex-1">
-            <!-- Middle Value Row -->
-            <div>
-              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight block leading-tight">
-                Rp {{ (latestMonthRecord.cashBalance || 75500000).toLocaleString('id-ID') }}
-              </span>
-              <!-- Subtext Row -->
-              <div class="mt-2 text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 leading-normal">
-                <span>Kas Aktif</span>
-                <span class="text-emerald-600 dark:text-emerald-400 font-semibold tabular-nums">Margin Sehat 32.6%</span>
-              </div>
-            </div>
-
-            <!-- Bottom Action Button Row -->
-            <div class="pt-0.5">
-              <button
-                type="button"
-                class="btn-pill-action group cursor-pointer"
-                @click="isCashDrawerOpen = true"
-              >
-                <span>+ Catat Kas</span>
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+          <!-- 3. Bottom Action Button: Catat Kas -->
+          <div class="stat-card-actions">
+            <BActionButton
+              variant="green"
+              icon="plus"
+              @click="isCashDrawerOpen = true"
+              custom-class="shrink-0"
+            >
+              Catat Kas
+            </BActionButton>
           </div>
         </div>
       </div>
 
-      <!-- Card 2: Uang Masuk -->
-      <div class="gsap-stat-card flex-1">
-        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden flex flex-col justify-between select-none h-full transition-all duration-200">
-          <!-- 1. Top: Container Biru untuk Title -->
-          <div class="w-full px-5 sm:px-6 py-3 sm:py-3.5 card-header-blue-banner flex items-center gap-2.5 sm:gap-3">
-            <svg class="w-5 h-5 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 7 7 17" />
-              <path d="M17 17H7V7" />
-            </svg>
-            <span class="text-xs sm:text-sm font-poppins font-semibold uppercase tracking-wider text-white truncate">
-              UANG MASUK
+      <!-- Card 2: Modal Jualan (Diposisikan di sebelah kanan Saldo Kas Toko) -->
+      <div class="gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean select-none transition-all duration-200">
+          <!-- 1. Top Header: Icon + Title & Badge -->
+          <div class="flex items-center justify-between w-full gap-1.5">
+            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <div class="stat-card-icon-box shrink-0">
+                <HugeiconsIcon
+                  :icon="MoneyBag01Icon"
+                  :size="16"
+                  :stroke-width="2.0"
+                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
+                />
+              </div>
+              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
+                Modal Jualan
+              </span>
+            </div>
+            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+              <span>Hemat</span>
+            </div>
+          </div>
+
+          <!-- 2. Middle Value Row: font-semibold matching Beranda -->
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              - Rp {{ displayedHpp.toLocaleString('id-ID') }}
             </span>
           </div>
 
-          <!-- 2. Bottom: Container Informasi dengan Rounded Corner di Atas -->
-          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] px-5 sm:px-6 pt-4.5 pb-5 sm:pt-5 sm:pb-5.5 flex flex-col gap-3.5 sm:gap-4 flex-1">
-            <!-- Middle Value Row -->
-            <div>
-              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight block leading-tight">
-                + Rp {{ totalIncome.toLocaleString('id-ID') }}
-              </span>
-              <!-- Subtext Row -->
-              <div class="mt-2 text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 leading-normal">
-                <span>Penjualan Harian</span>
-                <span class="text-emerald-600 dark:text-emerald-400 font-semibold tabular-nums">+9.8% (MoM)</span>
-              </div>
-            </div>
-
-            <!-- Bottom Action Button Row -->
-            <div class="pt-0.5">
-              <button
-                type="button"
-                class="btn-pill-action group cursor-pointer"
-                @click="setActiveTab('mutasi'); activeCategoryFilter = 'PEMASUKAN'"
-              >
-                <span>Filter Masuk</span>
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+          <!-- 3. Bottom Action Button: Cek Modal Jualan -->
+          <div class="stat-card-actions">
+            <BActionButton
+              variant="default"
+              icon="chevron"
+              @click="setActiveTab('mutasi'); activeCategoryFilter = 'MODAL_JUALAN'"
+              custom-class="shrink-0"
+            >
+              Cek Modal Jualan
+            </BActionButton>
           </div>
         </div>
       </div>
 
-      <!-- Card 3: Modal Jualan -->
-      <div class="gsap-stat-card flex-1">
-        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden flex flex-col justify-between select-none h-full transition-all duration-200">
-          <!-- 1. Top: Container Biru untuk Title -->
-          <div class="w-full px-5 sm:px-6 py-3 sm:py-3.5 card-header-blue-banner flex items-center gap-2.5 sm:gap-3">
-            <HugeiconsIcon
-              :icon="MoneyBag01Icon"
-              :size="20"
-              :stroke-width="2.2"
-              class="text-white shrink-0"
-            />
-            <span class="text-xs sm:text-sm font-poppins font-semibold uppercase tracking-wider text-white truncate">
-              MODAL JUALAN
+      <!-- Card 3: Uang Masuk -->
+      <div class="gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean select-none transition-all duration-200">
+          <!-- 1. Top Header: Icon + Title & Badge -->
+          <div class="flex items-center justify-between w-full gap-1.5">
+            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <div class="stat-card-icon-box shrink-0">
+                <svg class="w-4 h-4 text-[#156374] dark:text-[#50AABF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 7 7 17" />
+                  <path d="M17 17H7V7" />
+                </svg>
+              </div>
+              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
+                Uang Masuk
+              </span>
+            </div>
+            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+              <span>+9.8%</span>
+            </div>
+          </div>
+
+          <!-- 2. Middle Value Row: font-semibold matching Beranda -->
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              + Rp {{ displayedIncome.toLocaleString('id-ID') }}
             </span>
           </div>
 
-          <!-- 2. Bottom: Container Informasi dengan Rounded Corner di Atas -->
-          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] px-5 sm:px-6 pt-4.5 pb-5 sm:pt-5 sm:pb-5.5 flex flex-col gap-3.5 sm:gap-4 flex-1">
-            <!-- Middle Value Row -->
-            <div>
-              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight block leading-tight">
-                - Rp {{ totalHppExpense.toLocaleString('id-ID') }}
-              </span>
-              <!-- Subtext Row -->
-              <div class="mt-2 text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 leading-normal">
-                <span>Bahan Baku Toko</span>
-                <span class="text-emerald-600 dark:text-emerald-400 font-semibold">(Hemat)</span>
-              </div>
-            </div>
-
-            <!-- Bottom Action Button Row -->
-            <div class="pt-0.5">
-              <button
-                type="button"
-                class="btn-pill-action group cursor-pointer"
-                @click="setActiveTab('mutasi'); activeCategoryFilter = 'MODAL_JUALAN'"
-              >
-                <span>Kelola Modal</span>
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+          <!-- 3. Bottom Action Button: Lihat Uang Masuk -->
+          <div class="stat-card-actions">
+            <BActionButton
+              variant="default"
+              icon="chevron"
+              @click="setActiveTab('mutasi'); activeCategoryFilter = 'PEMASUKAN'"
+              custom-class="shrink-0"
+            >
+              Lihat Uang Masuk
+            </BActionButton>
           </div>
         </div>
       </div>
 
       <!-- Card 4: Biaya Operasional -->
-      <div class="gsap-stat-card flex-1">
-        <div class="group relative rounded-2xl card-tactile-gopay has-blue-banner hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden flex flex-col justify-between select-none h-full transition-all duration-200">
-          <!-- 1. Top: Container Biru untuk Title -->
-          <div class="w-full px-5 sm:px-6 py-3 sm:py-3.5 card-header-blue-banner flex items-center gap-2.5 sm:gap-3">
-            <svg class="w-5 h-5 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M7 17 17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
-            <span class="text-xs sm:text-sm font-poppins font-semibold uppercase tracking-wider text-white truncate">
-              BIAYA OPERASIONAL
+      <div class="gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean select-none transition-all duration-200">
+          <!-- 1. Top Header: Icon + Title & Badge -->
+          <div class="flex items-center justify-between w-full gap-1.5">
+            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <div class="stat-card-icon-box shrink-0">
+                <svg class="w-4 h-4 text-[#156374] dark:text-[#50AABF] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </div>
+              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
+                Biaya Operasional
+              </span>
+            </div>
+            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100/90 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 shrink-0">
+              <span>Terkontrol</span>
+            </div>
+          </div>
+
+          <!-- 2. Middle Value Row: font-semibold matching Beranda -->
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              - Rp {{ displayedOpex.toLocaleString('id-ID') }}
             </span>
           </div>
 
-          <!-- 2. Bottom: Container Informasi dengan Rounded Corner di Atas -->
-          <div class="w-full rounded-t-2xl bg-[#F6F8FA] dark:bg-[#13161F] px-5 sm:px-6 pt-4.5 pb-5 sm:pt-5 sm:pb-5.5 flex flex-col gap-3.5 sm:gap-4 flex-1">
-            <!-- Middle Value Row -->
-            <div>
-              <span class="text-2xl sm:text-[28px] lg:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight block leading-tight">
-                - Rp {{ totalOpexExpense.toLocaleString('id-ID') }}
-              </span>
-              <!-- Subtext Row -->
-              <div class="mt-2 text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 leading-normal">
-                <span>Sewa, Listrik, Wi-Fi</span>
-                <span class="text-[#2091AA] dark:text-[#50AABF] font-semibold">(Terkontrol)</span>
-              </div>
-            </div>
-
-            <!-- Bottom Action Button Row -->
-            <div class="pt-0.5">
-              <button
-                type="button"
-                class="btn-pill-action group cursor-pointer"
-                @click="setActiveTab('mutasi'); activeCategoryFilter = 'OPERASIONAL'"
-              >
-                <span>Rincian Beban</span>
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+          <!-- 3. Bottom Action Button: Cek Beban Toko -->
+          <div class="stat-card-actions">
+            <BActionButton
+              variant="default"
+              icon="chevron"
+              @click="setActiveTab('mutasi'); activeCategoryFilter = 'OPERASIONAL'"
+              custom-class="shrink-0"
+            >
+              Cek Beban Toko
+            </BActionButton>
           </div>
         </div>
       </div>
@@ -232,7 +284,7 @@
         @click="setActiveTab('mutasi')"
       >
         <HugeiconsIcon :icon="Coins01Icon" :size="17" :stroke-width="activeTab === 'mutasi' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
-        <span class="truncate">Buku Mutasi Kas Harian</span>
+        <span class="truncate leading-normal pb-0.5">Buku Mutasi Kas Harian</span>
       </button>
 
       <button
@@ -243,7 +295,7 @@
         @click="setActiveTab('bulanan')"
       >
         <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="17" :stroke-width="activeTab === 'bulanan' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
-        <span class="truncate">Rapor Bulanan & Rekonsiliasi</span>
+        <span class="truncate leading-normal pb-0.5">Rekap Kas Bulanan</span>
       </button>
 
       <button
@@ -254,243 +306,200 @@
         @click="setActiveTab('tren')"
       >
         <HugeiconsIcon :icon="AnalyticsUpIcon" :size="17" :stroke-width="activeTab === 'tren' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
-        <span class="truncate">Grafik Tren & Aliran Kas</span>
+        <span class="truncate leading-normal pb-0.5">Grafik Pergerakan Uang</span>
       </button>
     </div>
 
     <!-- 4. TAB 1: BUKU MUTASI KAS HARIAN -->
-    <div v-if="activeTab === 'mutasi'" class="gsap-tab-content space-y-6">
+    <div v-if="activeTab === 'mutasi'" class="gsap-tab-content space-y-6 sm:space-y-8">
 
-      <!-- Interactive Daily Ledger Table Card -->
-      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 space-y-5 border font-poppins">
-        <!-- Filter & Search Controls Bar -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100 dark:border-neutral-800/80">
-          <div>
-            <h2 class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white">
-              Daftar Mutasi Transaksi Kas Harian
-            </h2>
-            <p class="text-xs text-neutral-500 font-poppins mt-0.5">
-              Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota kasir.
-            </p>
+      <!-- Interactive Daily Ledger Table Card (Matched with Beranda's Rapor Keuangan Bulanan container concept) -->
+      <div id="daily-ledger-table" class="card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
+        <!-- Container Header Bar -->
+        <div class="p-6 sm:p-8 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1.5 sm:space-y-2">
+              <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+                Daftar Mutasi Transaksi Kas Harian
+              </h2>
+              <p class="text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
+                Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota kasir.
+              </p>
+            </div>
+
+            <!-- Category Filter Dropdown (Using Beranda's btn-pill-action) -->
+            <div ref="categoryDropdownRef" class="relative inline-block text-left shrink-0">
+              <!-- Dropdown Trigger Button (Clean label only, no dots, no count) -->
+              <button
+                type="button"
+                class="btn-pill-action group shrink-0"
+                :aria-expanded="isCategoryDropdownOpen"
+                title="Filter Kategori Kas"
+                @click="isCategoryDropdownOpen = !isCategoryDropdownOpen"
+              >
+                <span>{{ activeCategoryLabel }}</span>
+
+                <!-- Arrow Down Icon -->
+                <svg
+                  class="w-4 h-4 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 shrink-0 group-hover:text-neutral-800 dark:group-hover:text-white ml-0.5"
+                  :class="{ 'rotate-180': isCategoryDropdownOpen }"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.0"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+
+              <!-- Dropdown Menu Popover -->
+              <div
+                v-if="isCategoryDropdownOpen"
+                class="absolute right-0 sm:right-0 mt-2 w-52 rounded-[8px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
+              >
+                <div class="space-y-0.5">
+                  <button
+                    v-for="opt in categoryFilterOptions"
+                    :key="opt.id"
+                    type="button"
+                    :class="[
+                      'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                      activeCategoryFilter === opt.id
+                        ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                        : 'text-[#475569] dark:text-neutral-300 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                    ]"
+                    @click="selectCategoryFilter(opt.id)"
+                  >
+                    <span>{{ opt.label }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Category Filter Dropdown (Pill Gradient Style with Arrow Down) -->
-          <div class="relative inline-block text-left shrink-0">
-            <!-- Dropdown Trigger Button -->
-            <button
-              type="button"
-              class="btn-pill-gradient group flex items-center gap-2 cursor-pointer transition-all duration-150 active:scale-95 select-none"
-              :aria-expanded="isCategoryDropdownOpen"
-              title="Filter Kategori Mutasi"
-              @click="isCategoryDropdownOpen = !isCategoryDropdownOpen"
-            >
-              <!-- Category Indicator Dot -->
-              <span
-                :class="[
-                  'w-2 h-2 rounded-full shrink-0',
-                  activeCategoryFilter === 'PEMASUKAN' ? 'bg-[#00AA13]' :
-                  activeCategoryFilter === 'MODAL_JUALAN' ? 'bg-[#0066D6]' :
-                  activeCategoryFilter === 'OPERASIONAL' ? 'bg-[#2091AA]' : 'bg-neutral-400'
-                ]"
+          <!-- Search Input: Melebar rata kiri kanan di bawah teks, rounded-[8px] sesuai konsep design sistem -->
+          <div class="w-full pt-3 sm:pt-4">
+            <div class="relative w-full">
+              <HugeiconsIcon
+                :icon="Search01Icon"
+                :size="16"
+                :stroke-width="1.8"
+                class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 pointer-events-none"
               />
-
-              <span class="font-poppins font-medium text-xs sm:text-sm text-neutral-900 dark:text-white">
-                {{ activeCategoryLabel }}
-              </span>
-
-              <span class="text-[11px] font-semibold tabular-nums text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded-full">
-                {{ getCategoryCount(activeCategoryFilter) }}
-              </span>
-
-              <!-- Arrow Down Icon -->
-              <svg
-                class="w-4 h-4 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 shrink-0 group-hover:text-neutral-800 dark:group-hover:text-white ml-0.5"
-                :class="{ 'rotate-180': isCategoryDropdownOpen }"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <input
+                v-model="searchQuery"
+                type="text"
+                aria-label="Cari transaksi kasir, nota, atau bahan baku"
+                placeholder="Cari transaksi kasir, nota, bahan baku, atau keterangan..."
+                class="w-full pl-10 pr-9 py-2.5 rounded-[8px] text-base min-h-[44px] bg-white dark:bg-[#1A1A1A] border border-[#CBD5E1] dark:border-neutral-700 text-[#18181b] dark:text-[#FDFDFD] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:border-[#156374] dark:focus:border-[#50AABF] focus:ring-2 focus:ring-[#156374]/20 transition-all font-poppins"
+              />
+              <button
+                v-if="searchQuery"
+                type="button"
+                aria-label="Hapus pencarian"
+                class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer"
+                title="Hapus pencarian"
+                @click="searchQuery = ''"
               >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-
-            <!-- Backdrop for Outside Click -->
-            <div
-              v-if="isCategoryDropdownOpen"
-              class="fixed inset-0 z-40 bg-transparent"
-              @click="isCategoryDropdownOpen = false"
-            />
-
-            <!-- Dropdown Menu Popover (GoPay Tactile Style) -->
-            <div
-              v-if="isCategoryDropdownOpen"
-              class="absolute right-0 sm:right-0 mt-2 w-60 rounded-2xl bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 shadow-2xl p-1.5 z-50 font-poppins animate-in fade-in zoom-in-95 duration-150 select-none"
-            >
-              <div class="px-3 py-2 border-b border-neutral-100 dark:border-neutral-800/80 mb-1 flex items-center justify-between text-[11px]">
-                <span class="font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-                  Kategori Kas
-                </span>
-                <span class="text-neutral-400 font-medium">
-                  {{ umkmStore.dailyTransactions.length }} Total
-                </span>
-              </div>
-
-              <div class="space-y-0.5">
-                <button
-                  v-for="opt in categoryFilterOptions"
-                  :key="opt.id"
-                  type="button"
-                  :class="[
-                    'w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all cursor-pointer',
-                    activeCategoryFilter === opt.id
-                      ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold shadow-2xs'
-                      : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-white font-medium'
-                  ]"
-                  @click="selectCategoryFilter(opt.id)"
-                >
-                  <div class="flex items-center gap-2.5">
-                    <span
-                      :class="[
-                        'w-2 h-2 rounded-full shrink-0',
-                        opt.id === 'PEMASUKAN' ? 'bg-[#00AA13]' :
-                        opt.id === 'MODAL_JUALAN' ? 'bg-[#0066D6]' :
-                        opt.id === 'OPERASIONAL' ? 'bg-[#2091AA]' : 'bg-neutral-400'
-                      ]"
-                    />
-                    <span>{{ opt.label }}</span>
-                  </div>
-
-                  <div class="flex items-center gap-2">
-                    <span class="text-[11px] font-semibold tabular-nums text-neutral-400">
-                      {{ getCategoryCount(opt.id) }}
-                    </span>
-                    <svg
-                      v-if="activeCategoryFilter === opt.id"
-                      class="w-3.5 h-3.5 text-[#2091AA] dark:text-[#50AABF] shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                  </div>
-                </button>
-              </div>
+                <HugeiconsIcon :icon="Cancel01Icon" :size="16" :stroke-width="2" />
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Search Input -->
-        <div class="relative">
-          <HugeiconsIcon
-            :icon="Search01Icon"
-            :size="16"
-            :stroke-width="1.8"
-            class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
-          />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Cari transaksi berdasarkan nama bahan, kasir, nota, atau keterangan..."
-            class="w-full pl-9 pr-4 py-2.5 rounded-xl text-xs sm:text-sm bg-neutral-50 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700/80 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 transition-all font-poppins"
-          />
-        </div>
-
-        <!-- Table -->
-        <div class="overflow-x-auto rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#13161F] shadow-2xs">
+        <!-- Table Langsung (Edge-to-edge inside container) -->
+        <div class="overflow-x-auto w-full">
           <table class="w-full text-left text-sm font-poppins">
             <thead>
-              <tr class="bg-neutral-50/90 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 text-xs font-semibold uppercase tracking-wider font-poppins">
-                <th class="py-3.5 px-4 text-left font-poppins w-28">Tanggal</th>
-                <th class="py-3.5 px-4 text-left font-poppins w-40">Kategori</th>
-                <th class="py-3.5 px-4 text-left font-poppins">Keterangan Transaksi</th>
-                <th class="py-3.5 px-4 text-left font-bold font-poppins text-neutral-900 dark:text-white w-52">Nominal Kas</th>
-                <th class="py-3.5 px-4 text-right font-poppins w-24">Tindakan</th>
+              <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
+                <th class="py-4 sm:py-5 px-6 text-left font-bold w-28">Tanggal</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold w-40">Kategori</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Keterangan Transaksi</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-900 dark:text-white w-52">Nominal Kas</th>
+                <th class="py-4 sm:py-5 px-6 text-right font-bold w-28">Tindakan</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
+            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
               <tr
                 v-for="tx in filteredDailyTransactions"
                 :key="tx.id"
                 class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
-                <!-- 1. Tanggal (Ringkas '15 Okt') -->
-                <td class="py-3.5 px-4 text-left font-poppins whitespace-nowrap">
-                  <span class="text-xs sm:text-sm font-semibold font-poppins text-neutral-900 dark:text-white tabular-nums">
+                <!-- 1. Tanggal -->
+                <td class="py-4 sm:py-5 px-6 text-left font-poppins whitespace-nowrap">
+                  <span class="text-sm font-normal font-poppins text-neutral-900 dark:text-white tabular-nums">
                     {{ formatShortDate(tx.date) }}
                   </span>
                 </td>
 
-                <!-- 2. Kategori (Badge Label Tunggal) -->
-                <td class="py-3.5 px-4 text-left font-poppins whitespace-nowrap">
+                <!-- 2. Kategori -->
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins whitespace-nowrap">
                   <span
                     :class="[
-                      'inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border font-poppins',
+                      'inline-flex items-center px-2.5 py-1 rounded-[8px] text-xs font-semibold border font-poppins',
                       tx.category === 'PEMASUKAN'
-                        ? 'bg-emerald-50 text-[#00AA13] border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800'
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
                         : tx.category === 'MODAL_JUALAN'
-                          ? 'bg-blue-50 text-[#0066D6] border-blue-200 dark:bg-blue-950/60 dark:text-blue-400 dark:border-blue-800'
-                          : 'bg-cyan-50 text-[#2091AA] border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-400 dark:border-cyan-800'
+                          ? 'bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+                          : 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800'
                     ]"
                   >
                     {{ tx.category === 'PEMASUKAN' ? 'Uang Masuk' : tx.category === 'MODAL_JUALAN' ? 'Modal Jualan' : 'Biaya Operasional' }}
                   </span>
                 </td>
 
-                <!-- 3. Keterangan Transaksi (1 Baris Padat + No. Nota Muted di Bawahnya) -->
-                <td class="py-3.5 px-4 text-left font-poppins min-w-[200px]">
-                  <p class="text-xs sm:text-sm font-semibold font-poppins text-neutral-900 dark:text-white truncate max-w-sm" :title="tx.title">
+                <!-- 3. Keterangan Transaksi -->
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins min-w-[200px]">
+                  <p class="text-sm font-medium font-poppins text-neutral-900 dark:text-white truncate max-w-sm" :title="tx.title">
                     {{ tx.title }}
                   </p>
-                  <span class="text-[11px] font-mono text-neutral-400 dark:text-neutral-500 block truncate mt-0.5">
+                  <span class="text-xs font-mono font-medium text-neutral-600 dark:text-neutral-400 block truncate mt-0.5">
                     {{ tx.receiptNumber || 'NOTA/KASIR/AUTO' }}
                   </span>
                 </td>
 
-                <!-- 4. Nominal Kas & Metode Bayar Monokrom (Bebas Polusi Badge) -->
-                <td class="py-3.5 px-4 text-left font-poppins whitespace-nowrap">
+                <!-- 4. Nominal Kas -->
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins whitespace-nowrap">
                   <div class="flex flex-col items-start">
                     <span
                       :class="[
-                        'font-bold text-sm sm:text-base tabular-nums',
+                        'font-semibold text-sm tabular-nums',
                         tx.category === 'PEMASUKAN'
-                          ? 'text-[#00AA13] dark:text-emerald-400'
+                          ? 'text-emerald-800 dark:text-emerald-400'
                           : 'text-neutral-900 dark:text-white'
                       ]"
                     >
                       {{ tx.category === 'PEMASUKAN' ? '+ ' : '- ' }}Rp {{ tx.amount.toLocaleString('id-ID') }}
                     </span>
-                    <span class="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 font-poppins flex items-center gap-1 mt-0.5">
-                      <HugeiconsIcon :icon="CreditCardIcon" :size="12" class="opacity-60 shrink-0" />
+                    <span class="text-xs font-medium text-neutral-600 dark:text-neutral-400 font-poppins flex items-center gap-1.5 mt-0.5">
+                      <HugeiconsIcon :icon="CreditCardIcon" :size="16" class="opacity-75 shrink-0" />
                       <span>{{ tx.paymentMethod }}</span>
                     </span>
                   </div>
                 </td>
 
                 <!-- 5. Tindakan -->
-                <td class="py-3.5 px-4 text-right font-poppins whitespace-nowrap">
-                  <div class="flex items-center justify-end gap-1.5">
+                <td class="py-4 sm:py-5 px-6 text-right font-poppins whitespace-nowrap">
+                  <div class="flex items-center justify-end gap-3">
                     <button
                       type="button"
-                      class="p-1.5 rounded-lg text-neutral-500 hover:text-[#2091AA] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                      aria-label="Lihat bukti nota transaksi"
+                      class="inline-flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] text-neutral-600 hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-[#E6F4F7] dark:hover:bg-[#156374]/20 transition-all cursor-pointer"
                       title="Lihat Bukti Nota Transaksi"
                       @click="openReceiptModal(tx)"
                     >
-                      <HugeiconsIcon :icon="ViewIcon" :size="16" />
+                      <HugeiconsIcon :icon="ViewIcon" :size="20" :stroke-width="2.0" />
                     </button>
                     <button
                       type="button"
-                      class="p-1.5 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                      aria-label="Hapus catatan mutasi kas"
+                      class="inline-flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] text-neutral-600 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-all cursor-pointer"
                       title="Hapus Catatan Ini"
                       @click="handleDeleteTx(tx.id)"
                     >
-                      <HugeiconsIcon :icon="Delete02Icon" :size="16" />
+                      <HugeiconsIcon :icon="Delete02Icon" :size="20" :stroke-width="2.0" />
                     </button>
                   </div>
                 </td>
@@ -500,10 +509,10 @@
               <tr v-if="filteredDailyTransactions.length === 0">
                 <td colspan="5" class="py-12 text-center text-neutral-500 dark:text-neutral-400">
                   <HugeiconsIcon :icon="Coins01Icon" :size="32" class="mx-auto mb-2 text-neutral-300 dark:text-neutral-600" />
-                  <p class="font-poppins font-medium text-sm">Tidak ada transaksi yang cocok dengan filter atau kata kunci.</p>
+                  <p class="font-poppins font-normal text-xs sm:text-sm">Tidak ada transaksi yang cocok dengan filter atau kata kunci.</p>
                   <button
                     type="button"
-                    class="mt-2 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline cursor-pointer"
+                    class="mt-2 text-xs font-semibold text-[#156374] dark:text-[#50AABF] hover:underline cursor-pointer"
                     @click="activeCategoryFilter = 'ALL'; searchQuery = ''"
                   >
                     Reset Filter & Pencarian
@@ -516,70 +525,73 @@
       </div>
     </div>
 
-    <!-- 5. TAB 2: RAPOR BULANAN & REKONSILIASI KAS -->
-    <div v-else-if="activeTab === 'bulanan'" class="gsap-tab-content space-y-6">
-      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 space-y-5 border">
+    <!-- 5. TAB 2: REKAP KAS BULANAN TOKO -->
+    <div v-else-if="activeTab === 'bulanan'" class="gsap-tab-content space-y-6 sm:space-y-8">
+      <div class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 space-y-6 font-poppins">
+        <!-- Header Bar: Title on Left, Unduh Rekap CTA on Right (Sejajar) -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100 dark:border-neutral-800/80">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              Rapor Rekonsiliasi Kas Bulanan Lengkap
+          <div class="min-w-0 pr-2 space-y-1.5 flex-1">
+            <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+              Rekap Kas Bulanan Toko
             </h2>
-            <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-normal">
-              Histori seluruh laporan keuangan toko dari Januari hingga Oktober 2026 yang telah dicek langsung oleh konsultan pendamping tokomu.
+            <p class="text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal w-full">
+              Histori seluruh catatan keuangan toko dari bulan ke bulan untuk memantau pendapatan, modal jualan, dan beban operasional secara berkala.
             </p>
           </div>
 
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-poppins font-bold bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200">
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" />
-              <span>10 Bulan Terverifikasi Bersih</span>
-            </span>
+          <!-- Unduh Rekap Button (Green CTA, top right aligned with title) -->
+          <div class="flex items-center gap-2.5 shrink-0 self-start sm:self-center">
+            <BActionButton
+              variant="green"
+              icon="download"
+              title="Unduh Rekap Kas Bulanan"
+              @click="handleExportPdf"
+            >
+              Unduh Rekap
+            </BActionButton>
           </div>
         </div>
 
-        <!-- Monthly Full Ledger Table -->
-        <div class="overflow-x-auto rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#13161F] shadow-2xs">
+        <!-- Monthly Full Ledger Table (Edge-to-edge inside container, matching Buku Mutasi Kas Harian) -->
+        <div class="overflow-x-auto w-full">
           <table class="w-full text-left text-sm font-poppins">
             <thead>
-              <tr class="bg-neutral-50/90 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 text-xs font-semibold uppercase tracking-wider">
-                <th class="py-3.5 px-4 text-left">Periode Bulan</th>
-                <th class="py-3.5 px-4 text-left">Total Pendapatan</th>
-                <th class="py-3.5 px-4 text-left">Modal Jualan (HPP)</th>
-                <th class="py-3.5 px-4 text-left">Biaya Operasional</th>
-                <th class="py-3.5 px-4 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
-                <th class="py-3.5 px-4 text-left">Saldo Kas Akhir</th>
-                <th class="py-3.5 px-4 text-center">Status Validasi</th>
+              <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
+                <th class="py-4 sm:py-5 px-6 text-left font-bold">Periode Bulan</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Total Pendapatan</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Modal Jualan</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Biaya Operasional</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-800 dark:text-neutral-200">Rugi</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
+                <th class="py-4 sm:py-5 px-6 text-left font-bold">Saldo Kas Akhir</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
+            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
               <tr
                 v-for="rec in umkmStore.monthlyRecords"
                 :key="`${rec.month}-${rec.year}`"
                 class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
-                <td class="py-3.5 px-4 text-left font-poppins font-semibold text-neutral-900 dark:text-white">
+                <td class="py-4 sm:py-5 px-6 text-left font-poppins font-normal text-sm text-neutral-900 dark:text-white">
                   {{ rec.month }} {{ rec.year }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums font-semibold text-neutral-900 dark:text-white">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-900 dark:text-white text-sm">
                   Rp {{ rec.omzet.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums text-neutral-600 dark:text-neutral-300">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-600 dark:text-neutral-300 text-sm">
                   Rp {{ rec.hpp.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums text-neutral-600 dark:text-neutral-300">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-600 dark:text-neutral-300 text-sm">
                   Rp {{ rec.opex.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums font-bold text-[#00AA13] dark:text-emerald-400">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-rose-600 dark:text-rose-400 text-sm">
+                  Rp {{ ((rec as any).loss || 0).toLocaleString('id-ID') }}
+                </td>
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-semibold text-emerald-800 dark:text-emerald-400 text-sm">
                   Rp {{ rec.netProfit.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums font-semibold text-[#2091AA] dark:text-[#50AABF]">
+                <td class="py-4 sm:py-5 px-6 text-left font-poppins tabular-nums font-medium text-[#156374] dark:text-[#50AABF] text-sm">
                   Rp {{ rec.cashBalance.toLocaleString('id-ID') }}
-                </td>
-                <td class="py-3.5 px-4 text-center font-poppins">
-                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200">
-                    <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
-                    <span>Terverifikasi</span>
-                  </span>
                 </td>
               </tr>
             </tbody>
@@ -588,263 +600,312 @@
       </div>
     </div>
 
-    <!-- 6. TAB 3: GRAFIK TREN & ALIRAN KAS -->
-    <div v-else-if="activeTab === 'tren'" class="gsap-tab-content space-y-6">
-      <!-- 1. Hero Line Chart: Tren Pergerakan & Aliran Kas (Sesuai Desain Halaman Beranda) -->
-      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 space-y-5 border font-poppins">
-        <!-- Header: Title, Subtitle, and Right Macro Time Period Filters -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-5 border-b border-neutral-100 dark:border-neutral-800/80">
-          <div class="space-y-1.5 min-w-0 max-w-xl">
-            <h2 class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              Tren Pergerakan & Aliran Kas Toko
-            </h2>
-            <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-normal">
-              Histori akumulasi pendapatan, modal belanja bahan baku, biaya operasional, dan saldo kas toko secara komprehensif.
-            </p>
+    <!-- 6. TAB 3: GRAFIK PERGERAKAN UANG -->
+    <div v-else-if="activeTab === 'tren'" class="gsap-tab-content space-y-6 sm:space-y-8">
+      <!-- 1. Hero Line Chart: Pergerakan Uang Toko (Sesuai Desain Halaman Beranda) -->
+      <div class="gsap-hero-chart card-tactile-gopay rounded-[18px] p-6 sm:p-8 space-y-9 sm:space-y-11">
+        <!-- Header: Title, Subtitle, and Right Actions (Dropdown Chart Type, Dropdown Period) -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 sm:pb-3">
+          <!-- Left: Title & Subtitle -->
+          <div class="min-w-0 max-w-xl">
+            <div class="gsap-hero-header-title">
+              <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+                Pergerakan Uang Toko
+              </h2>
+              <p class="text-xs sm:text-[14px] font-poppins text-neutral-500 dark:text-neutral-400 mt-2 sm:mt-2.5 leading-normal">
+                Grafik pemantauan akumulasi saldo kas riil tokomu dari waktu ke waktu yang selalu tersinkronisasi.
+              </p>
+            </div>
           </div>
 
-          <!-- Macro Time Period Filters (3 Bulan, 6 Bulan, 1 Tahun) with GSAP Sliding Pill Indicator -->
-          <div class="segmented-pill-container relative shrink-0">
-            <div
-              ref="periodIndicatorRef"
-              class="segmented-pill-indicator"
-              aria-hidden="true"
-            />
-            <button
-              v-for="opt in timeFilterOptions"
-              :key="opt.id"
-              :ref="el => setPeriodButtonRef(opt.id, el)"
-              type="button"
-              class="segmented-pill-btn"
-              :class="selectedPeriod === opt.id ? 'is-active' : 'is-inactive'"
-              @click="setPeriodFilter(opt.id)"
-            >
-              <span>{{ opt.label }}</span>
-            </button>
-          </div>
-        </div>
+          <!-- Right: Actions Control (Dropdown Jenis Grafik + Dropdown Periode) -->
+          <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap lg:flex-nowrap shrink-0">
+            <!-- 1. Dropdown Jenis Grafik (Menggantikan Pill Tab View, Bergaya btn-pill-action) -->
+            <div ref="chartTypeDropdownRef" class="relative">
+              <button
+                type="button"
+                :class="[
+                  'btn-pill-action group cursor-pointer',
+                  isChartTypeDropdownOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs' : ''
+                ]"
+                aria-haspopup="true"
+                :aria-expanded="isChartTypeDropdownOpen"
+                title="Pilih Jenis Tampilan Grafik"
+                @click="toggleChartTypeDropdown"
+              >
+                <span>{{ activeChartTypeLabel }}</span>
 
-        <!-- Linear Trend Chart Body -->
-        <div class="relative w-full h-72 sm:h-80 pt-1">
-          <BShadcnLineChart
-            :data="filteredMonthlyRecords"
-            index="month"
-            :categories="['omzet', 'cashBalance', 'netProfit', 'hpp']"
-            :config="progresChartConfig"
-            curve-type="linear"
-          />
-        </div>
+                <svg
+                  :class="['w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0', isChartTypeDropdownOpen ? 'rotate-180' : '']"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
 
-        <!-- Quick Summary Footer of Current Filter -->
-        <div class="pt-3.5 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-sans text-neutral-500 dark:text-neutral-400">
-          <!-- Left: Guide text with pulse dot -->
-          <div class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#2091AA] animate-pulse shrink-0" />
-            <span class="font-poppins">Arahkan kursor pada kurva garis untuk melihat rincian saldo kas & mutasi bulanan.</span>
-          </div>
-
-          <!-- Right: Legend Indicators & Periode Aktif -->
-          <div class="flex items-center gap-4 flex-wrap sm:flex-nowrap">
-            <div class="flex items-center gap-3 flex-wrap">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#0066D6] shrink-0" />
-                <span class="text-[11px] font-poppins font-medium text-neutral-700 dark:text-neutral-300">Pendapatan</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#2091AA] shrink-0" />
-                <span class="text-[11px] font-poppins font-medium text-neutral-700 dark:text-neutral-300">Saldo Kas</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#00AA13] shrink-0" />
-                <span class="text-[11px] font-poppins font-medium text-neutral-700 dark:text-neutral-300">Untung Bersih</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B] shrink-0" />
-                <span class="text-[11px] font-poppins font-medium text-neutral-700 dark:text-neutral-300">Modal Jualan</span>
+              <!-- Popover Dropdown Panel -->
+              <div
+                v-if="isChartTypeDropdownOpen"
+                class="absolute right-0 top-full mt-1.5 w-44 rounded-[8px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 shadow-lg z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-100"
+              >
+                <button
+                  v-for="opt in chartTypeOptions"
+                  :key="opt.id"
+                  type="button"
+                  :class="[
+                    'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                    chartPreviewMode === opt.id
+                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                      : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                  ]"
+                  @click="selectChartType(opt.id)"
+                >
+                  <span class="truncate">{{ opt.label }}</span>
+                </button>
               </div>
             </div>
-            <span class="tabular-nums font-poppins shrink-0">
-              Periode: <strong class="text-neutral-900 dark:text-white font-semibold">{{ currentActivePeriodLabel }}</strong>
-            </span>
+
+            <!-- 2. Dropdown Filter Periode (Bergaya btn-pill-action) -->
+            <div ref="periodDropdownRef" class="relative">
+              <button
+                type="button"
+                :class="[
+                  'btn-pill-action group cursor-pointer',
+                  isPeriodDropdownOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs' : ''
+                ]"
+                aria-haspopup="true"
+                :aria-expanded="isPeriodDropdownOpen"
+                title="Pilih Rentang Waktu"
+                @click="togglePeriodDropdown"
+              >
+                <svg class="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                  <line x1="16" x2="16" y1="2" y2="6" />
+                  <line x1="8" x2="8" y1="2" y2="6" />
+                  <line x1="3" x2="21" y1="10" y2="10" />
+                </svg>
+                <span>{{ activePeriodLabel }}</span>
+                <svg
+                  :class="['w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0', isPeriodDropdownOpen ? 'rotate-180' : '']"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+
+              <!-- Popover Dropdown Panel -->
+              <div
+                v-if="isPeriodDropdownOpen"
+                class="absolute right-0 top-full mt-1.5 w-44 rounded-[8px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 shadow-lg z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-100"
+              >
+                <button
+                  v-for="opt in heroFilterOptions"
+                  :key="opt.id"
+                  type="button"
+                  :class="[
+                    'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                    selectedPeriod === opt.id
+                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                      : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                  ]"
+                  @click="selectPeriodFilter(opt.id)"
+                >
+                  <span>{{ opt.label }}</span>
+                </button>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <!-- Shadcn UI Line Chart - Linear / Bar / Area / Cashflow: Pergerakan Uang Toko -->
+        <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
+          <BShadcnLineChart
+            :data="heroFilteredRecords"
+            index="month"
+            :categories="currentHeroChartCategories"
+            :config="currentHeroChartConfig"
+            curve-type="linear"
+            :show-area="chartPreviewMode === 'area'"
+            :mode="chartPreviewMode"
+          />
         </div>
       </div>
 
       <!-- 2. Bento Row: Komposisi Aliran Kas (Sesuai Desain Halaman Beranda) -->
-      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 space-y-4 border font-poppins">
+      <div class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 flex flex-col justify-between space-y-6 font-poppins">
         <!-- Header -->
         <div class="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800/80 gap-5">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              Komposisi Aliran Kas Toko
+          <div class="min-w-0 pr-2 space-y-1.5">
+            <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+              Komposisi Pengeluaran & Pendapatan Toko
             </h2>
-            <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-normal">
-              Rasio pembagian perputaran uang: modal belanja jualan, biaya operasional, dan sisa untung bersih tokomu.
+            <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 leading-normal max-w-sm sm:max-w-md">
+              Rincian proporsi perputaran uang: alokasi modal jualan, beban operasional, serta saldo untung bersih tokomu.
             </p>
           </div>
         </div>
 
-        <!-- Body: 2-Column Layout (Donut on Left, Vertical Breakdown on Right) -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
-          <!-- Left Column: Donut Chart with Centered Total -->
-          <div class="relative w-full md:w-[46%] lg:w-[45%] flex items-center justify-center h-[260px] sm:h-[280px] max-w-[280px] sm:max-w-[310px] mx-auto md:mx-0 shrink-0">
-            <canvas ref="donutCanvas" class="w-full h-full"></canvas>
+        <!-- Body: 2-Column Layout (Donut on Left with Total below it, Clean List on Right) -->
+        <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 sm:gap-8 items-center pb-1">
+          <!-- Bagian 1 (Kiri): Donut Chart & Informasi Total Kas di Bawah Kiri -->
+          <div class="sm:col-span-5 flex flex-col justify-between items-center sm:items-start h-full min-h-[280px]">
+            <!-- Donut Chart Ring (Ukuran lebih besar, gagah, dan nyaman dilihat) -->
+            <div class="relative w-52 h-52 sm:w-60 sm:h-60 my-auto mx-auto flex items-center justify-center">
+              <canvas ref="donutCanvas" class="w-full h-full"></canvas>
+            </div>
 
-            <!-- Center Overlay: Total Pendapatan -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none w-full px-2 z-10">
-              <span class="font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight text-xl sm:text-2xl whitespace-nowrap leading-tight">
+            <!-- Informasi Total Kas di Bagian Bawah Kiri -->
+            <div class="pt-3 select-none w-full text-center sm:text-left">
+              <div class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
                 Rp {{ calculatedPeriodOmzet.toLocaleString('id-ID') }}
-              </span>
-              <span class="text-xs sm:text-sm font-poppins font-medium text-neutral-500 dark:text-neutral-400 mt-1">
+              </div>
+              <div class="text-xs sm:text-[13px] font-poppins font-medium text-neutral-500 dark:text-neutral-400 mt-1">
                 Total Pendapatan ({{ selectedPeriodLabel }})
-              </span>
+              </div>
+
+              <!-- Quick Summary Metrics Pill -->
+              <div class="mt-3 flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[8px] text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                  <span class="w-2 h-2 rounded-full bg-[#156374]"></span>
+                  Beban: <strong class="tabular-nums">Rp {{ (calculatedPeriodHpp + calculatedPeriodOpex).toLocaleString('id-ID') }}</strong>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[8px] text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+                  <span class="w-2 h-2 rounded-full bg-[#00AA13]"></span>
+                  Untung: <strong class="tabular-nums">{{ calculatedProfitPercent }}%</strong>
+                </span>
+              </div>
             </div>
           </div>
 
-          <!-- Right Column: Vertical Breakdown Cards -->
-          <div class="w-full md:w-[54%] lg:w-[55%] space-y-2.5 flex-1 flex flex-col justify-start py-0.5">
-            <!-- 1. Modal Jualan -->
+          <!-- Bagian 2 (Kanan): 3 Cards Informasi dengan Progress Bar Halus -->
+          <div class="sm:col-span-7 space-y-3 flex-1 flex flex-col justify-center">
             <div
-              class="p-3.5 sm:p-4 rounded-xl card-tactile-gopay hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors flex items-center justify-between gap-4 group cursor-pointer"
-              @mouseenter="highlightSlice(0)"
-              @mouseleave="resetHighlight"
+              v-for="(item, idx) in progresBreakdownItems"
+              :key="item.label"
+              role="button"
+              tabindex="0"
+              :aria-label="`${item.label}: Rp ${item.amount.toLocaleString('id-ID')} (${item.percent}%)`"
+              class="card-btn-hover p-4 rounded-[12px] flex flex-col gap-2.5 group cursor-pointer select-none transition-all"
+              @mouseenter="activeHoveredItem = item; highlightDonutSegment(idx)"
+              @mouseleave="activeHoveredItem = null; highlightDonutSegment(null)"
+              @focus="activeHoveredItem = item; highlightDonutSegment(idx)"
+              @blur="activeHoveredItem = null; highlightDonutSegment(null)"
+              @keydown.enter="activeHoveredItem = item; highlightDonutSegment(idx)"
+              @keydown.space.prevent="activeHoveredItem = item; highlightDonutSegment(idx)"
             >
-              <div class="min-w-0 flex-1 flex flex-col items-start gap-1">
-                <span class="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-poppins font-semibold border shrink-0 inline-flex items-center bg-blue-100/90 text-[#0066D6] border-blue-300 dark:bg-blue-950/70 dark:text-blue-300 dark:border-blue-800">
-                  Modal Jualan (Bahan Baku)
-                </span>
-                <h3 class="font-poppins font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-white tabular-nums tracking-tight leading-snug">
-                  Rp {{ calculatedPeriodHpp.toLocaleString('id-ID') }}
-                </h3>
-                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-poppins text-neutral-500 dark:text-neutral-400 mt-0.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#0066D6] shrink-0" />
-                  <span>Porsi kas: <span class="font-medium text-neutral-700 dark:text-neutral-300 tabular-nums">{{ calculatedHppPercent }}% dari total</span></span>
+              <!-- Top Row: Icon/Dot + Title + Subtitle on Left, Nominal + Percent on Right -->
+              <div class="flex items-center justify-between gap-3 w-full">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span
+                    class="w-3 h-3 rounded-full shrink-0 transition-transform duration-200 group-hover:scale-125 shadow-2xs"
+                    :style="{ backgroundColor: item.color }"
+                  />
+                  <div class="min-w-0 flex flex-col items-start">
+                    <span class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight">
+                      {{ item.label }}
+                    </span>
+                    <span class="text-xs font-poppins text-neutral-500 dark:text-neutral-400 mt-0.5 line-clamp-1">
+                      {{ item.desc }}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-full bg-blue-50 text-[#0066D6] border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800 text-xs sm:text-[13px] font-poppins font-bold tabular-nums shrink-0 shadow-xs">
-                {{ calculatedHppPercent }}%
-              </span>
-            </div>
 
-            <!-- 2. Biaya Operasional -->
-            <div
-              class="p-3.5 sm:p-4 rounded-xl card-tactile-gopay hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors flex items-center justify-between gap-4 group cursor-pointer"
-              @mouseenter="highlightSlice(1)"
-              @mouseleave="resetHighlight"
-            >
-              <div class="min-w-0 flex-1 flex flex-col items-start gap-1">
-                <span class="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-poppins font-semibold border shrink-0 inline-flex items-center bg-cyan-100/90 text-[#2091AA] border-cyan-300 dark:bg-cyan-950/70 dark:text-cyan-300 dark:border-cyan-800">
-                  Biaya Operasional (Sewa & Beban)
-                </span>
-                <h3 class="font-poppins font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-white tabular-nums tracking-tight leading-snug">
-                  Rp {{ calculatedPeriodOpex.toLocaleString('id-ID') }}
-                </h3>
-                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-poppins text-neutral-500 dark:text-neutral-400 mt-0.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#2091AA] shrink-0" />
-                  <span>Porsi kas: <span class="font-medium text-neutral-700 dark:text-neutral-300 tabular-nums">{{ calculatedOpexPercent }}% dari total</span></span>
+                <div class="flex flex-col items-end shrink-0">
+                  <span class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white tabular-nums">
+                    Rp {{ item.amount.toLocaleString('id-ID') }}
+                  </span>
+                  <span
+                    class="text-xs font-semibold px-2 py-0.5 rounded-full mt-0.5 tabular-nums"
+                    :class="item.badgeClass"
+                  >
+                    {{ item.percent }}%
+                  </span>
                 </div>
               </div>
-              <span class="px-2.5 py-1 rounded-full bg-cyan-50 text-[#2091AA] border border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800 text-xs sm:text-[13px] font-poppins font-bold tabular-nums shrink-0 shadow-xs">
-                {{ calculatedOpexPercent }}%
-              </span>
-            </div>
 
-            <!-- 3. Untung Bersih -->
-            <div
-              class="p-3.5 sm:p-4 rounded-xl card-tactile-gopay hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors flex items-center justify-between gap-4 group cursor-pointer"
-              @mouseenter="highlightSlice(2)"
-              @mouseleave="resetHighlight"
-            >
-              <div class="min-w-0 flex-1 flex flex-col items-start gap-1">
-                <span class="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-poppins font-semibold border shrink-0 inline-flex items-center bg-emerald-100/90 text-[#00880C] border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800">
-                  Untung Bersih (Laba Bersih)
-                </span>
-                <h3 class="font-poppins font-bold text-sm sm:text-[15px] text-[#00AA13] dark:text-emerald-400 tabular-nums tracking-tight leading-snug">
-                  Rp {{ calculatedPeriodProfit.toLocaleString('id-ID') }}
-                </h3>
-                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-poppins text-neutral-500 dark:text-neutral-400 mt-0.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#00AA13] shrink-0" />
-                  <span>Margin untung: <span class="font-medium text-emerald-700 dark:text-emerald-300 tabular-nums">{{ calculatedProfitPercent }}% dari total</span></span>
-                </div>
+              <!-- Bottom Row: Sleek Progress Bar -->
+              <div class="w-full h-1.5 rounded-full bg-neutral-200/70 dark:bg-neutral-800 overflow-hidden">
+                <div
+                  class="h-full rounded-full transition-all duration-500 ease-out"
+                  :style="{ width: `${item.percent}%`, backgroundColor: item.color }"
+                />
               </div>
-              <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-[#00880C] border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 text-xs sm:text-[13px] font-poppins font-bold tabular-nums shrink-0 shadow-xs">
-                {{ calculatedProfitPercent }}%
-              </span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- 3. Tabel Rekapitulasi Arus Kas Bulanan (Sesuai Desain Halaman Beranda) -->
-      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 space-y-5 border font-poppins">
+      <div class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 space-y-6 font-poppins">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-100 dark:border-neutral-800/80">
-          <div>
-            <h2 class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              Tabel Rekapitulasi Arus Kas Bulanan
+          <div class="min-w-0 pr-2 space-y-1.5">
+            <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+              Tabel Rekapitulasi Pergerakan Uang Bulanan
             </h2>
-            <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-normal">
-              Rincian pembagian pendapatan, biaya, serta akumulasi saldo kas toko sesuai periode yang dipilih.
+            <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 leading-normal max-w-sm sm:max-w-md">
+              Rincian pembagian pendapatan, biaya, serta saldo kas tokomu sesuai periode yang dipilih.
             </p>
           </div>
 
-          <!-- Periode badge & Ekspor Button -->
+          <!-- Ekspor Button -->
           <div class="flex items-center gap-2.5 shrink-0">
-            <span class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-              {{ filteredMonthlyRecords.length }} Bulan Terekam
-            </span>
-            <button
-              type="button"
-              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white hover:bg-neutral-100/80 dark:bg-[#18191E] dark:hover:bg-neutral-800/80 border border-neutral-200/90 dark:border-neutral-800 text-xs font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all shadow-2xs cursor-pointer active:scale-95"
+            <BActionButton
+              variant="green"
+              icon="download"
+              title="Unduh Tabel Rekapitulasi"
               @click="handleExportPdf"
             >
-              <HugeiconsIcon :icon="Download01Icon" :size="15" />
-              <span>Ekspor Tabel</span>
-            </button>
+              Unduh Tabel
+            </BActionButton>
           </div>
         </div>
 
-        <div class="overflow-x-auto rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#13161F] shadow-2xs">
+        <!-- Monthly Breakdown Table (Edge-to-edge inside container, matching Buku Mutasi Kas Harian) -->
+        <div class="overflow-x-auto w-full">
           <table class="w-full text-left text-sm font-poppins">
             <thead>
-              <tr class="bg-neutral-50/90 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 font-poppins text-xs font-semibold uppercase tracking-wider">
-                <th class="py-3.5 px-4 text-left">Bulan</th>
-                <th class="py-3.5 px-4 text-left">Total Pendapatan</th>
-                <th class="py-3.5 px-4 text-left">Modal Jualan (HPP)</th>
-                <th class="py-3.5 px-4 text-left">Biaya Operasional</th>
-                <th class="py-3.5 px-4 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
-                <th class="py-3.5 px-4 text-left">Saldo Kas Akhir</th>
-                <th class="py-3.5 px-4 text-center">Status Validasi</th>
+              <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
+                <th class="py-4 sm:py-5 px-6 text-left font-bold">Periode Bulan</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Total Pendapatan</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Modal Jualan</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Biaya Operasional</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-800 dark:text-neutral-200">Rugi</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
+                <th class="py-4 sm:py-5 px-6 text-left font-bold">Saldo Kas Akhir</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
+            <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
               <tr
                 v-for="rec in sortedFilteredRecords"
                 :key="`${rec.month}-${rec.year}`"
                 class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
-                <td class="py-3.5 px-4 text-left font-poppins font-semibold text-neutral-900 dark:text-white text-sm sm:text-base">
+                <td class="py-4 sm:py-5 px-6 text-left font-poppins font-normal text-sm text-neutral-900 dark:text-white">
                   {{ rec.month }} {{ rec.year }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums font-semibold text-neutral-900 dark:text-white">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-900 dark:text-white text-sm">
                   Rp {{ rec.omzet.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums text-neutral-600 dark:text-neutral-300">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-600 dark:text-neutral-300 text-sm">
                   Rp {{ rec.hpp.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums text-neutral-600 dark:text-neutral-300">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-600 dark:text-neutral-300 text-sm">
                   Rp {{ rec.opex.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums font-bold text-[#00AA13] dark:text-emerald-400 text-sm sm:text-base">
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-rose-600 dark:text-rose-400 text-sm">
+                  Rp {{ ((rec as any).loss || 0).toLocaleString('id-ID') }}
+                </td>
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-semibold text-emerald-800 dark:text-emerald-400 text-sm">
                   Rp {{ rec.netProfit.toLocaleString('id-ID') }}
                 </td>
-                <td class="py-3.5 px-4 text-left font-poppins tabular-nums font-semibold text-[#2091AA] dark:text-[#50AABF]">
+                <td class="py-4 sm:py-5 px-6 text-left font-poppins tabular-nums font-medium text-[#156374] dark:text-[#50AABF] text-sm">
                   Rp {{ rec.cashBalance.toLocaleString('id-ID') }}
-                </td>
-                <td class="py-3.5 px-4 text-center font-poppins">
-                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200">
-                    <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
-                    <span>Terverifikasi</span>
-                  </span>
                 </td>
               </tr>
             </tbody>
@@ -885,41 +946,41 @@
             <button
               type="button"
               :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer',
+                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
                 newTxForm.category === 'PEMASUKAN'
-                  ? 'bg-emerald-50 text-[#00AA13] border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700 shadow-2xs'
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700 shadow-2xs'
                   : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
               ]"
               @click="newTxForm.category = 'PEMASUKAN'"
             >
               <span>Uang Masuk</span>
-              <span class="text-[10px] text-neutral-400 font-normal">Penjualan</span>
+              <span class="text-xs text-neutral-500 font-normal">Penjualan</span>
             </button>
             <button
               type="button"
               :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer',
+                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
                 newTxForm.category === 'MODAL_JUALAN'
-                  ? 'bg-blue-50 text-[#0066D6] border-blue-300 dark:bg-blue-950/60 dark:border-blue-700 shadow-2xs'
+                  ? 'bg-blue-50 text-blue-800 border-blue-300 dark:bg-blue-950/60 dark:border-blue-700 shadow-2xs'
                   : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
               ]"
               @click="newTxForm.category = 'MODAL_JUALAN'"
             >
               <span>Modal Jualan</span>
-              <span class="text-[10px] text-neutral-400 font-normal">Bahan Baku</span>
+              <span class="text-xs text-neutral-500 font-normal">Bahan Baku</span>
             </button>
             <button
               type="button"
               :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer',
+                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
                 newTxForm.category === 'OPERASIONAL'
-                  ? 'bg-cyan-50 text-[#2091AA] border-cyan-300 dark:bg-cyan-950/60 dark:border-cyan-700 shadow-2xs'
+                  ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-950/60 dark:border-cyan-700 shadow-2xs'
                   : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
               ]"
               @click="newTxForm.category = 'OPERASIONAL'"
             >
               <span>Operasional</span>
-              <span class="text-[10px] text-neutral-400 font-normal">Sewa/Listrik</span>
+              <span class="text-xs text-neutral-500 font-normal">Sewa/Listrik</span>
             </button>
           </div>
         </div>
@@ -992,12 +1053,13 @@
           >
             Batal
           </button>
-          <button
+          <BActionButton
+            variant="green"
+            icon="plus"
             type="submit"
-            class="btn-3d-blue px-5 py-2.5 text-xs sm:text-sm font-poppins font-semibold cursor-pointer"
           >
             Simpan ke Buku Kas
-          </button>
+          </BActionButton>
         </div>
       </form>
     </BDrawer>
@@ -1006,19 +1068,19 @@
     <BModal
       v-model="isReceiptModalOpen"
       title="Rincian Bukti Transaksi"
-      subtitle="Dokumen resmi pencatatan kas toko yang telah diverifikasi"
+      subtitle="Dokumen resmi pencatatan kas toko yang telah divalidasi"
       size="md"
     >
       <div v-if="selectedTx" class="space-y-4 pt-1 font-poppins">
         <div class="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 space-y-3">
           <div class="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-3">
             <div>
-              <span class="text-xs text-neutral-400 font-medium">Nomor Nota Rekonsiliasi</span>
+              <span class="text-xs text-neutral-500 font-medium">Nomor Nota Rekonsiliasi</span>
               <p class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
                 {{ selectedTx.receiptNumber || 'NOTA/KASIR/AUTO' }}
               </p>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200">
               Tervalidasi
             </span>
           </div>
@@ -1038,7 +1100,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="text-neutral-500">Kategori Kas</span>
-              <span class="font-semibold text-[#2091AA] dark:text-[#50AABF]">
+              <span class="font-semibold text-cyan-800 dark:text-cyan-400">
                 {{ selectedTx.category === 'PEMASUKAN' ? 'Uang Masuk' : selectedTx.category === 'MODAL_JUALAN' ? 'Modal Jualan' : 'Biaya Operasional' }}
               </span>
             </div>
@@ -1050,15 +1112,15 @@
 
           <div class="pt-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
             <span class="font-bold text-sm text-neutral-900 dark:text-white">Total Nominal</span>
-            <span class="font-bold text-lg text-[#00AA13] dark:text-emerald-400 tabular-nums">
+            <span class="font-bold text-lg text-emerald-800 dark:text-emerald-400 tabular-nums">
               Rp {{ selectedTx.amount.toLocaleString('id-ID') }}
             </span>
           </div>
         </div>
 
         <div class="p-3.5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/40 text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
-          <p class="font-semibold text-[#2091AA] dark:text-[#50AABF] mb-0.5">Catatan Konsultan Pendamping:</p>
-          <p>Dokumen bukti transaksi ini telah dicocokkan dengan mutasi rekening giro toko dan dinyatakan sah untuk rekam jejak investor.</p>
+          <p class="font-semibold text-cyan-800 dark:text-cyan-400 mb-0.5">Catatan Konsultan Pendamping:</p>
+          <p>Dokumen bukti transaksi ini telah dicocokkan dengan mutasi rekening toko dan dinyatakan tervalidasi untuk rekam jejak pemodal.</p>
         </div>
       </div>
     </BModal>
@@ -1077,6 +1139,7 @@ import {
   MoneyBag01Icon,
   Download01Icon,
   Search01Icon,
+  Cancel01Icon,
   CheckmarkCircle01Icon,
   CreditCardIcon,
   Delete02Icon,
@@ -1085,12 +1148,14 @@ import {
 } from '@hugeicons/core-free-icons'
 
 // Base components
+import BActionButton from '~/components/base/BActionButton.vue'
 import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const umkmStore = useUmkmStore()
@@ -1121,8 +1186,8 @@ function updateTabIndicator(immediate = false) {
       x: targetLeft,
       width: targetWidth,
       opacity: 1,
-      duration: 0.45,
-      ease: 'back.out(1.5)',
+      duration: 0.28,
+      ease: 'power2.out',
       overwrite: 'auto'
     })
   }
@@ -1140,7 +1205,6 @@ function setActiveTab(tab: 'mutasi' | 'bulanan' | 'tren') {
     )
     if (tab === 'tren') {
       setTimeout(() => {
-        updatePeriodIndicator(true)
         initDonutChart()
       }, 50)
     }
@@ -1181,54 +1245,155 @@ const totalOpexExpense = computed(() => {
     .reduce((acc, t) => acc + t.amount, 0)
 })
 
-// Trend Chart Filter State & Sliding Pill Indicator
-const timeFilterOptions = [
+// Month Selector State & Controls
+const selectedMonthId = ref<string>('current')
+const isMonthDropdownOpen = ref(false)
+const monthDropdownRef = ref<HTMLElement | null>(null)
+
+const monthOptions = computed(() => {
+  const records = umkmStore.monthlyRecords || []
+  if (!records.length) {
+    return [{ id: 'current', label: 'Sekarang', isCurrent: true, month: 'Oktober', year: 2026 }]
+  }
+
+  // Reverse chronological list: Oktober 2026 (Sekarang), September 2026, ...
+  return [...records].reverse().map((r, idx) => {
+    const isCurrent = idx === 0
+    return {
+      id: isCurrent ? 'current' : `${r.month}-${r.year}`,
+      label: isCurrent ? 'Sekarang' : `${r.month} ${r.year}`,
+      month: r.month,
+      year: r.year,
+      isCurrent,
+      record: r
+    }
+  })
+})
+
+const selectedMonthButtonLabel = computed(() => {
+  const selected = monthOptions.value.find(m => m.id === selectedMonthId.value)
+  return selected ? selected.label : 'Sekarang'
+})
+
+function selectMonth(id: string) {
+  selectedMonthId.value = id
+  isMonthDropdownOpen.value = false
+}
+
+const selectedMonthRecord = computed(() => {
+  const current = latestMonthRecord.value
+  if (selectedMonthId.value === 'current') {
+    return current
+  }
+  const found = (umkmStore.monthlyRecords || []).find(r => `${r.month}-${r.year}` === selectedMonthId.value)
+  return found || current
+})
+
+const displayedCashBalance = computed(() => {
+  return selectedMonthRecord.value.cashBalance || 75500000
+})
+
+const displayedIncome = computed(() => {
+  if (selectedMonthId.value === 'current') {
+    return totalIncome.value
+  }
+  return selectedMonthRecord.value.omzet || 0
+})
+
+const displayedHpp = computed(() => {
+  if (selectedMonthId.value === 'current') {
+    return totalHppExpense.value
+  }
+  return selectedMonthRecord.value.hpp || 0
+})
+
+const displayedOpex = computed(() => {
+  if (selectedMonthId.value === 'current') {
+    return totalOpexExpense.value
+  }
+  return selectedMonthRecord.value.opex || 0
+})
+
+// Trend Chart Filter & Type State (Matched 100% with Beranda)
+const chartTypeDropdownRef = ref<HTMLElement | null>(null)
+const periodDropdownRef = ref<HTMLElement | null>(null)
+const chartPreviewMode = ref<'area' | 'bar' | 'cashflow'>('area')
+const isChartTypeDropdownOpen = ref(false)
+const isPeriodDropdownOpen = ref(false)
+
+function toggleChartTypeDropdown() {
+  isChartTypeDropdownOpen.value = !isChartTypeDropdownOpen.value
+  if (isChartTypeDropdownOpen.value) {
+    isPeriodDropdownOpen.value = false
+  }
+}
+
+function togglePeriodDropdown() {
+  isPeriodDropdownOpen.value = !isPeriodDropdownOpen.value
+  if (isPeriodDropdownOpen.value) {
+    isChartTypeDropdownOpen.value = false
+  }
+}
+
+const chartTypeOptions: { id: 'area' | 'bar' | 'cashflow'; label: string }[] = [
+  { id: 'area', label: 'Grafik Area' },
+  { id: 'bar', label: 'Grafik Batang' },
+  { id: 'cashflow', label: 'Arus Kas' }
+]
+
+const activeChartTypeLabel = computed(() => {
+  return chartTypeOptions.find(o => o.id === chartPreviewMode.value)?.label || 'Grafik Area'
+})
+
+function selectChartType(mode: 'area' | 'bar' | 'cashflow') {
+  chartPreviewMode.value = mode
+  isChartTypeDropdownOpen.value = false
+}
+
+const currentHeroChartCategories = computed(() => {
+  if (chartPreviewMode.value === 'cashflow') {
+    return ['omzet', 'outflow']
+  }
+  return ['cashBalance']
+})
+
+const currentHeroChartConfig = computed(() => {
+  if (chartPreviewMode.value === 'cashflow') {
+    return {
+      omzet: {
+        label: 'Uang Masuk',
+        color: '#54DE63'
+      },
+      outflow: {
+        label: 'Uang Keluar',
+        color: '#156374'
+      }
+    }
+  }
+  return {
+    cashBalance: {
+      label: 'Saldo Kas',
+      color: '#156374'
+    }
+  }
+})
+
+const heroFilterOptions: { id: '3m' | '6m' | '1y'; label: string }[] = [
   { id: '3m', label: '3 Bulan' },
   { id: '6m', label: '6 Bulan' },
   { id: '1y', label: '1 Tahun' }
-] as const
+]
 
 const selectedPeriod = ref<'3m' | '6m' | '1y'>('6m')
-const periodIndicatorRef = ref<HTMLElement | null>(null)
-const periodButtonsRef = ref<Record<string, HTMLElement | null>>({})
 
-function setPeriodButtonRef(id: string, el: any) {
-  if (el) {
-    periodButtonsRef.value[id] = el
-  }
-}
+const activePeriodLabel = computed(() => {
+  const opt = heroFilterOptions.find(o => o.id === selectedPeriod.value)
+  return opt ? opt.label : '6 Bulan'
+})
 
-function updatePeriodIndicator(immediate = false) {
-  const indicatorEl = periodIndicatorRef.value
-  if (!indicatorEl) return
-
-  let targetEl = periodButtonsRef.value[selectedPeriod.value]
-  if (!targetEl && indicatorEl.parentElement) {
-    targetEl = (indicatorEl.parentElement.querySelector('.segmented-pill-btn.is-active') ||
-      indicatorEl.parentElement.querySelector('.segmented-pill-btn')) as HTMLElement
-  }
-  if (!targetEl) return
-
-  const targetLeft = targetEl.offsetLeft
-  const targetWidth = targetEl.offsetWidth
-
-  if (immediate) {
-    gsap.set(indicatorEl, { x: targetLeft, width: targetWidth, opacity: 1 })
-  } else {
-    gsap.to(indicatorEl, {
-      x: targetLeft,
-      width: targetWidth,
-      opacity: 1,
-      duration: 0.35,
-      ease: 'power2.out',
-      overwrite: 'auto'
-    })
-  }
-}
-
-function setPeriodFilter(periodId: '3m' | '6m' | '1y') {
-  selectedPeriod.value = periodId
-  updatePeriodIndicator(false)
+function selectPeriodFilter(filter: '3m' | '6m' | '1y') {
+  selectedPeriod.value = filter
+  isPeriodDropdownOpen.value = false
 }
 
 const selectedPeriodLabel = computed(() => {
@@ -1237,12 +1402,20 @@ const selectedPeriodLabel = computed(() => {
   return '1 Tahun Terakhir'
 })
 
-const filteredMonthlyRecords = computed(() => {
-  const records = umkmStore.monthlyRecords || []
-  if (selectedPeriod.value === '3m') return records.slice(-3)
-  if (selectedPeriod.value === '6m') return records.slice(-6)
+const heroFilteredRecords = computed(() => {
+  const records = (umkmStore.monthlyRecords || []).map(r => ({
+    ...r,
+    outflow: (r.hpp || 0) + (r.opex || 0)
+  }))
+  if (selectedPeriod.value === '3m') {
+    return records.slice(-3)
+  } else if (selectedPeriod.value === '6m') {
+    return records.slice(-6)
+  }
   return records
 })
+
+const filteredMonthlyRecords = heroFilteredRecords
 
 const sortedFilteredRecords = computed(() => {
   const records = [...filteredMonthlyRecords.value]
@@ -1257,28 +1430,10 @@ const currentActivePeriodLabel = computed(() => {
   return `${first.month} - ${last.month} ${last.year}`
 })
 
-const progresChartConfig = {
-  omzet: {
-    label: 'Total Pendapatan',
-    color: '#0066D6'
-  },
-  cashBalance: {
-    label: 'Saldo Kas Toko',
-    color: '#2091AA'
-  },
-  netProfit: {
-    label: 'Untung Bersih',
-    color: '#00AA13'
-  },
-  hpp: {
-    label: 'Modal Jualan (Bahan)',
-    color: '#F59E0B'
-  }
-}
-
 // Donut Chart State & Controls (Aliran Kas)
 const donutCanvas = ref<HTMLCanvasElement | null>(null)
 let donutChartInstance: any = null
+const activeHoveredItem = ref<any | null>(null)
 
 const calculatedPeriodOmzet = computed(() => {
   return filteredMonthlyRecords.value.reduce((acc, r) => acc + (r.omzet || 0), 0)
@@ -1306,6 +1461,50 @@ const calculatedProfitPercent = computed(() => {
   return ((calculatedPeriodProfit.value / total) * 100).toFixed(1)
 })
 
+const progresBreakdownItems = computed(() => [
+  {
+    label: 'Modal Jualan',
+    desc: 'Belanja bahan baku & persediaan stok',
+    amount: calculatedPeriodHpp.value,
+    percent: calculatedHppPercent.value,
+    color: '#156374',
+    badgeClass: 'bg-cyan-50 text-[#156374] border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+  },
+  {
+    label: 'Biaya Operasional',
+    desc: 'Sewa toko, utilitas, listrik & beban usaha',
+    amount: calculatedPeriodOpex.value,
+    percent: calculatedOpexPercent.value,
+    color: '#50AABF',
+    badgeClass: 'bg-sky-50 text-[#2091AA] border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800'
+  },
+  {
+    label: 'Untung Bersih',
+    desc: 'Untung bersih kas yang aman diputarkan',
+    amount: calculatedPeriodProfit.value,
+    percent: calculatedProfitPercent.value,
+    color: '#00AA13',
+    badgeClass: 'bg-emerald-50 text-[#00880C] border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
+  }
+])
+
+function highlightDonutSegment(index: number | null) {
+  if (!donutChartInstance) return
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const mutedGrey = isDark ? '#334155' : '#CBD5E1'
+  const defaultColors = ['#156374', '#50AABF', '#00AA13']
+
+  if (index !== null && index >= 0 && index < defaultColors.length) {
+    donutChartInstance.data.datasets[0].backgroundColor = defaultColors.map((color, i) => (i === index ? color : mutedGrey))
+  } else {
+    donutChartInstance.data.datasets[0].backgroundColor = [...defaultColors]
+  }
+
+  // Slices do not pop-out / naik; only color changes to grey
+  donutChartInstance.setActiveElements([])
+  donutChartInstance.update('none')
+}
+
 function initDonutChart() {
   if (!donutCanvas.value) return
 
@@ -1325,8 +1524,7 @@ function initDonutChart() {
             calculatedPeriodOpex.value,
             calculatedPeriodProfit.value
           ],
-          backgroundColor: ['#0066D6', '#2091AA', '#00AA13'],
-          hoverBackgroundColor: ['#0052B3', '#1A7A8F', '#008F10'],
+          backgroundColor: ['#156374', '#50AABF', '#00AA13'],
           borderWidth: 0,
           hoverOffset: 0,
           borderRadius: 6,
@@ -1347,26 +1545,20 @@ function initDonutChart() {
       },
       rotation: -90,
       circumference: 360,
-      cutout: '76%',
+      cutout: '64%',
+      onHover: (_event: any, elements: any[]) => {
+        if (elements && elements.length > 0) {
+          const index = elements[0].index
+          activeHoveredItem.value = progresBreakdownItems.value[index] || null
+          highlightDonutSegment(index)
+        } else {
+          activeHoveredItem.value = null
+          highlightDonutSegment(null)
+        }
+      },
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: '#111827',
-          titleColor: '#FFFFFF',
-          bodyColor: '#E5E7EB',
-          padding: 12,
-          cornerRadius: 10,
-          titleFont: { family: 'Poppins', size: 12, weight: 'bold' },
-          bodyFont: { family: 'Poppins', size: 12 },
-          callbacks: {
-            label: (ctx: any) => {
-              const val = ctx.raw as number
-              const total = calculatedPeriodOmzet.value
-              const pct = ((val / total) * 100).toFixed(1)
-              return ` ${ctx.label}: Rp ${val.toLocaleString('id-ID')} (${pct}%)`
-            }
-          }
-        }
+        tooltip: { enabled: false }
       },
       animation: {
         animateRotate: true,
@@ -1379,11 +1571,19 @@ function initDonutChart() {
 
 function updateDonutChart() {
   if (!donutChartInstance) return
+  donutChartInstance.data.labels = ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
   donutChartInstance.data.datasets[0].data = [
     calculatedPeriodHpp.value,
     calculatedPeriodOpex.value,
     calculatedPeriodProfit.value
   ]
+  donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
+  donutChartInstance.data.datasets[0].borderWidth = 0
+  donutChartInstance.data.datasets[0].hoverOffset = 0
+  donutChartInstance.data.datasets[0].borderRadius = 8
+  donutChartInstance.data.datasets[0].spacing = 4
+  donutChartInstance.options.circumference = 360
+  donutChartInstance.options.cutout = '64%'
   donutChartInstance.update()
 }
 
@@ -1403,23 +1603,53 @@ watch(filteredMonthlyRecords, () => {
   }
 })
 
-function highlightSlice(index: number) {
-  if (!donutChartInstance) return
-  donutChartInstance.tooltip?.setActiveElements([{ datasetIndex: 0, index }], { x: 0, y: 0 })
-  donutChartInstance.update()
-}
-
-function resetHighlight() {
-  if (!donutChartInstance) return
-  donutChartInstance.setActiveElements([])
-  donutChartInstance.tooltip?.setActiveElements([], { x: 0, y: 0 })
-  donutChartInstance.update()
-}
-
 // Daily Transaction Filter & Search
 const activeCategoryFilter = ref<'ALL' | 'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL'>('ALL')
 const searchQuery = ref('')
 const isCategoryDropdownOpen = ref(false)
+const categoryDropdownRef = ref<HTMLElement | null>(null)
+
+function handleClickOutsideProgres(event: MouseEvent) {
+  const target = event.target as Node | null
+  if (!target) return
+  if (
+    isCategoryDropdownOpen.value &&
+    categoryDropdownRef.value &&
+    !categoryDropdownRef.value.contains(target)
+  ) {
+    isCategoryDropdownOpen.value = false
+  }
+  if (
+    isMonthDropdownOpen.value &&
+    monthDropdownRef.value &&
+    !monthDropdownRef.value.contains(target)
+  ) {
+    isMonthDropdownOpen.value = false
+  }
+  if (
+    isPeriodDropdownOpen.value &&
+    periodDropdownRef.value &&
+    !periodDropdownRef.value.contains(target)
+  ) {
+    isPeriodDropdownOpen.value = false
+  }
+  if (
+    isChartTypeDropdownOpen.value &&
+    chartTypeDropdownRef.value &&
+    !chartTypeDropdownRef.value.contains(target)
+  ) {
+    isChartTypeDropdownOpen.value = false
+  }
+}
+
+function handleEscapeKeyProgres(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    isCategoryDropdownOpen.value = false
+    isMonthDropdownOpen.value = false
+    isPeriodDropdownOpen.value = false
+    isChartTypeDropdownOpen.value = false
+  }
+}
 
 const categoryFilterOptions = [
   { id: 'ALL' as const, label: 'Semua Transaksi' },
@@ -1527,7 +1757,7 @@ function openReceiptModal(tx: DailyTransaction) {
 }
 
 function handleExportPdf() {
-  alert('Menyiapkan berkas Buku Kas Resmi (PDF) Kopi Senja Nusantara untuk ekspor investor...')
+  alert('Menyiapkan berkas Buku Kas Resmi (PDF) Kopi Senja Nusantara untuk laporan pemodal...')
 }
 
 let handleResize: (() => void) | null = null
@@ -1538,23 +1768,18 @@ onMounted(() => {
   nextTick(() => {
     updateTabIndicator(true)
     if (activeTab.value === 'tren') {
-      updatePeriodIndicator(true)
       initDonutChart()
     }
   })
   setTimeout(() => {
     updateTabIndicator(true)
     if (activeTab.value === 'tren') {
-      updatePeriodIndicator(true)
       initDonutChart()
     }
   }, 150)
 
   handleResize = () => {
     updateTabIndicator(true)
-    if (activeTab.value === 'tren') {
-      updatePeriodIndicator(true)
-    }
   }
   window.addEventListener('resize', handleResize)
 
@@ -1590,9 +1815,18 @@ onMounted(() => {
       clearProps: 'all'
     })
   })
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', handleClickOutsideProgres)
+    document.addEventListener('keydown', handleEscapeKeyProgres)
+  }
 })
 
 onBeforeUnmount(() => {
+  if (typeof document !== 'undefined') {
+    document.removeEventListener('click', handleClickOutsideProgres)
+    document.removeEventListener('keydown', handleEscapeKeyProgres)
+  }
   if (handleResize) {
     window.removeEventListener('resize', handleResize)
     handleResize = null
@@ -1607,3 +1841,27 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+
+<style scoped>
+/* Hilangkan efek shadow, set background putih #FFFFFF & pertebal stroke konsisten pada container seperti di halaman beranda */
+.card-tactile-gopay,
+:deep(.card-tactile-gopay) {
+  background-color: #FFFFFF !important;
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+  border-color: #E2E8F0 !important;
+}
+
+.dark .card-tactile-gopay,
+:deep(.dark .card-tactile-gopay),
+:deep(.dark) .card-tactile-gopay {
+  background-color: #13161F !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.card-tactile-gopay::before,
+:deep(.card-tactile-gopay::before) {
+  display: none !important;
+  box-shadow: none !important;
+}
+</style>

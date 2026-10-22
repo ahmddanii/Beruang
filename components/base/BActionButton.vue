@@ -5,7 +5,8 @@
     :type="to ? undefined : type"
     :disabled="disabled"
     :class="[
-      variant === 'green' ? 'btn-pill-action-green' : 'btn-pill-action',
+      variant === 'green' ? 'btn-pill-action-green' : variant === 'blue' ? 'btn-pill-action-blue' : 'btn-pill-action',
+      'group',
       disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
       customClass
     ]"
@@ -23,12 +24,12 @@
         :icon="hugeIcon"
         :size="iconSize || 16"
         :stroke-width="strokeWidth || 2.0"
-        class="shrink-0"
+        class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
       />
       <!-- Chevron Right (Figma Node 172:333) -->
       <svg
         v-else-if="icon === 'chevron'"
-        class="w-4 h-4 shrink-0"
+        class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -42,7 +43,7 @@
       <!-- Plus Icon (Mockup Catat Kas) -->
       <svg
         v-else-if="icon === 'plus'"
-        class="w-4 h-4 shrink-0"
+        class="w-4 h-4 shrink-0 origin-center transition-transform duration-300 ease-out group-hover:rotate-180"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -56,7 +57,7 @@
       <!-- Download / Arrow Down to Line (Figma Node 172:347) -->
       <svg
         v-else-if="icon === 'download'"
-        class="w-4 h-4 shrink-0"
+        class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -80,8 +81,8 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 withDefaults(
   defineProps<{
-    variant?: 'default' | 'green'
-    icon?: 'chevron' | 'download' | 'plus' | 'none'
+    variant?: 'default' | 'green' | 'blue'
+    icon?: 'chevron' | 'download' | 'plus' | 'check' | 'none'
     hugeIcon?: any
     iconSize?: number
     strokeWidth?: number

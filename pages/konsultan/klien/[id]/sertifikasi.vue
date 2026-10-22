@@ -49,7 +49,7 @@
             <input type="checkbox" v-model="check1" class="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 mt-0.5" />
             <div class="text-xs">
               <strong class="font-heading block text-neutral-900 dark:text-white">Transparansi Laporan Finansial:</strong>
-              <span class="text-neutral-500">Klien telah membuktikan minimal 3 bulan pelaporan kas & HPP tanpa ada rekayasa atau anomali fatal.</span>
+              <span class="text-neutral-500">Klien telah membuktikan minimal 3 bulan pelaporan kas & modal jualan tanpa ada rekayasa atau anomali fatal.</span>
             </div>
           </label>
 

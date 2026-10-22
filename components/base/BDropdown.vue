@@ -5,10 +5,19 @@
       <slot name="trigger" :is-open="isOpen">
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs  font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/20 active:scale-[0.96]"
+          :class="[
+            'btn-pill-action group cursor-pointer',
+            isOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! shadow-2xs' : ''
+          ]"
         >
           <span>{{ label }}</span>
-          <svg class="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            :class="['w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0', isOpen ? 'rotate-180' : '']"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -27,7 +36,7 @@
       <div
         v-if="isOpen"
         :class="[
-          'absolute z-40 mt-1.5 w-48 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/90 dark:border-neutral-800 p-1 shadow-dropdown focus:outline-none',
+          'absolute z-40 mt-1.5 w-48 rounded-[8px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 shadow-lg focus:outline-none font-poppins text-sm',
           align === 'right' ? 'right-0' : 'left-0'
         ]"
       >
@@ -37,24 +46,14 @@
             :key="item.value"
             type="button"
             :class="[
-              'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs  font-medium transition-colors text-left',
+              'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
               modelValue === item.value
-                ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white'
-                : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/60'
+                ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
             ]"
             @click="select(item.value)"
           >
             <span>{{ item.label }}</span>
-            <svg
-              v-if="modelValue === item.value"
-              class="w-3.5 h-3.5 text-primary-500"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
           </button>
         </slot>
       </div>

@@ -76,7 +76,7 @@
           <!-- Dedicated Action Trigger Button with Camera Icon & Label -->
           <button
             type="button"
-            class="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/30 text-xs sm:text-sm font-poppins font-medium transition-all duration-150 active:scale-95 cursor-pointer shadow-md hover:shadow-lg select-none"
+            class="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/30 text-xs sm:text-sm font-poppins font-medium transition-all duration-150 cursor-pointer shadow-md hover:shadow-lg select-none"
             aria-label="Kelola Sampul Toko"
             title="Kelola & Ganti Sampul Toko"
             @click.stop="toggleMenu"
@@ -209,7 +209,7 @@
         <!-- Floating Circular Camera Badge Button (bottom-right of avatar) -->
         <button
           type="button"
-          class="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white dark:bg-[#1E2026] text-neutral-700 dark:text-neutral-200 shadow-md hover:shadow-lg border border-neutral-200/90 dark:border-neutral-700 flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 transition-all cursor-pointer active:scale-95 z-10"
+          class="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white dark:bg-[#1E2026] text-neutral-700 dark:text-neutral-200 shadow-md hover:shadow-lg border border-neutral-200/90 dark:border-neutral-700 flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 transition-all cursor-pointer z-10"
           aria-label="Opsi Foto Profil"
           title="Opsi Foto Profil"
           @click.stop="toggleAvatarMenu"
@@ -442,14 +442,14 @@
             <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
               <button
                 type="button"
-                class="px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer active:scale-95"
+                class="px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
                 @click="cancelCrop"
               >
                 Batal
               </button>
               <button
                 type="button"
-                class="px-5 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors cursor-pointer active:scale-95 flex items-center gap-1.5"
+                class="px-5 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors cursor-pointer flex items-center gap-1.5"
                 @click="applyCroppedImage"
               >
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="15" />

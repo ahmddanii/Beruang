@@ -133,7 +133,7 @@
                 </h3>
                 <span class="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
                   <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="10" />
-                  <span>Audit Lolos</span>
+                  <span>Lolos Penilaian</span>
                 </span>
               </div>
               <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
@@ -288,7 +288,7 @@ const isMobileChatOpen = ref(false)
 const quickChips = [
   'Minta laporan mutasi kas bulan lalu',
   'Kapan jadwal pitching tatap muka?',
-  'Berapa proyeksi omzet gerai baru?',
+  'Berapa proyeksi pendapatan gerai baru?',
   'Kami tertarik memproses term sheet'
 ]
 

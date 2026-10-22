@@ -4,35 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ================================================================
-   BERUANG DESIGN SYSTEM TOKENS
-   Spatial: 8px grid (4px for micro-elements)
-   Typography: Golden Ratio 1.618 (base 16px)
-   Line-height: WCAG (body ×1.5, heading ×1.25, rounded to ×4/×8)
-   Corner Radius: Nested = container_radius - padding
-   ================================================================ */
-
 /* Universal letter-spacing and font-family normalization */
 *, *::before, *::after {
   letter-spacing: normal !important;
 }
 
-
 :root {
-  /* Surface & Canvas Palette */
-  --bg-canvas: #FAFAFA;
+  /* Canvas & Structured FinTech Surfaces: Pure White */
+  --bg-canvas: #FFFFFF;
   --bg-sidebar: #FAFCFE;
   --bg-surface: #FFFFFF;
-  --bg-surface-subtle: #F4F4F6;
-  --bg-surface-hover: #EEEEF0;
+  --bg-surface-subtle: #F0F6FB;
+  --bg-surface-hover: #E8F2FA;
   --border: #DCE8F2;
-  --border-default: #EAEAEA;
-  --border-subtle: #F0F0F2;
-  --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
+  --border-subtle: #E8F1F8;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
 
-  /* Primary Brand (Solid Blue - GoPay Vibrant Trust Blue) */
+  /* 60% Core Blue Brand: GoPay/Fintech Vibrant Blue */
   --color-primary-50: #EFF6FF;
   --color-primary-100: #DBEAFE;
   --color-primary-200: #BFDBFE;
@@ -41,70 +31,42 @@
   --color-primary-700: #003E8A;
   --color-primary-tint: rgba(0, 102, 214, 0.08);
 
-  /* Growth & Verified Green */
+  /* 30% Growth & Verified Green: GoPay/Gojek Fresh Green */
   --color-green-50: #F0FDF4;
   --color-green-100: #DCFCE7;
   --color-green-200: #BBF7D0;
   --color-green-500: #00AA13;
   --color-green-600: #00880C;
   --color-green-700: #006609;
-  --color-success: #10B981;
+  --color-success: #00AA13;
+
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
-  --color-info: #1F52EB;
 
-  /* ── Golden Ratio Type Scale (base 16px × 1.618) ── */
-  --text-caption: 0.75rem;    /* 12px — captions, badges, micro-labels */
-  --text-body: 1rem;          /* 16px — body text (base) */
-  --text-subhead: 1.625rem;   /* 26px — h4, sub-headings */
-  --text-heading: 2.625rem;   /* 42px — h3, section headings */
-  --text-display: 4.25rem;    /* 68px — h1/h2, hero display */
-
-  /* ── WCAG Line Heights (body ×1.5, heading ×1.25, rounded ×4) ── */
-  --lh-caption: 1rem;         /* 12×1.5=18 → 16px (×8) */
-  --lh-body: 1.5rem;          /* 16×1.5=24px (×8) ✓ */
-  --lh-subhead: 2rem;         /* 26×1.25=32.5 → 32px (×8) */
-  --lh-heading: 3.25rem;      /* 42×1.25=52.5 → 52px (×4) */
-  --lh-display: 5.25rem;      /* 68×1.25=85 → 84px (×4) */
-
-  /* ── 8px Spatial Grid (4px for micro) ── */
-  --sp-1: 0.25rem;   /* 4px — icon gaps, micro */
-  --sp-2: 0.5rem;    /* 8px — small gaps, inner padding */
-  --sp-3: 0.75rem;   /* 12px — icon-to-text gap */
-  --sp-4: 1rem;      /* 16px — paragraph gap ≈ body size */
-  --sp-5: 1.5rem;    /* 24px — card padding, between elements */
-  --sp-6: 2rem;      /* 32px — above headings, section inner gap */
-  --sp-8: 3rem;      /* 48px — between-section spacing */
-  --sp-10: 4rem;     /* 64px — section vertical padding */
-  --sp-12: 5rem;     /* 80px — hero/cta section padding */
-  --sp-16: 6rem;     /* 96px — extra-large spacing */
-
-  /* ── Corner Radius System ── */
-  --radius-xs: 4px;
+  /* Concentric Border Radii Tokens */
+  --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
   --radius-2xl: 24px;
-  --radius-full: 9999px;
 }
 
 .dark {
-  --bg-canvas: #0F1014;
+  --bg-canvas: #0C121D;
   --bg-sidebar: #101726;
-  --bg-surface: #15161A;
-  --bg-surface-subtle: #141519;
-  --bg-surface-hover: #1F2026;
-  --border: #26272F;
-  --border-default: #26272F;
-  --border-subtle: #1E1F25;
-  --text-primary: #F9FAFB;
-  --text-secondary: #D4D4D8;
-  --text-muted: #A1A1AA;
+  --bg-surface: #141D2E;
+  --bg-surface-subtle: #111A2B;
+  --bg-surface-hover: #19253B;
+  --border: #1E2E48;
+  --border-subtle: #172439;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+
   --color-primary-tint: rgba(0, 102, 214, 0.16);
 }
 
-/* ── Base Reset ── */
 html {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: normal !important;
@@ -122,8 +84,8 @@ body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: normal !important;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  font-size: var(--text-body);
-  line-height: var(--lh-body);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .dark html,
@@ -148,12 +110,12 @@ input, textarea, select, button {
   letter-spacing: normal !important;
 }
 
-/* ── Tabular Nums (currency, metrics, scores) ── */
+/* Tabular nums for all currency, counters & metrics */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Modern Button Base ── */
+/* Modern Flat Button Transition Effect */
 .btn-modern {
   position: relative;
   display: inline-flex !important;
@@ -189,7 +151,7 @@ input, textarea, select, button {
 }
 
 .btn-modern:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: none;
 }
 
 .btn-modern:disabled {
@@ -198,7 +160,7 @@ input, textarea, select, button {
   transform: none;
 }
 
-/* ── Custom Scrollbar ── */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -215,6 +177,15 @@ input, textarea, select, button {
 
 .dark ::-webkit-scrollbar-thumb {
   background: #2B2B31;
+}
+
+/* No scrollbar utility */
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -255,12 +226,7 @@ input, textarea, select, button {
 }
 
 .btn-3d-blue:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: 
-    0 2px 6px -1px rgba(32, 145, 170, 0.35),
-    0 1px 2px 0 rgba(0, 0, 0, 0.1),
-    inset 0 1px 1px 0 rgba(0, 0, 0, 0.25),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2);
+  transform: none;
 }
 
 /* 2. 3D Green Button (Warna Hijau Khas Beranda: #00C058 -> #00A62A -> #007D13) */
@@ -297,12 +263,7 @@ input, textarea, select, button {
 }
 
 .btn-3d-green:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: 
-    0 2px 6px -1px rgba(0, 166, 42, 0.35),
-    0 1px 2px 0 rgba(0, 0, 0, 0.1),
-    inset 0 1px 1px 0 rgba(0, 0, 0, 0.25),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.2);
+  transform: none;
 }
 
 /* 3. 3D Surface / White Tactile Button (Tombol secondary bervolume) */
@@ -354,47 +315,44 @@ input, textarea, select, button {
 }
 
 .btn-3d-surface:active:not(:disabled) {
-  transform: translateY(1.5px);
-  box-shadow: 
-    0 1px 3px 0 rgba(0, 0, 0, 0.06),
-    inset 0 1px 1px 0 rgba(0, 0, 0, 0.08);
+  transform: none;
 }
 
-/* 4. Pill Action Button (Gaya Refrensi UMKM Card: Soft Sage-Mint Gradient Pill with Gentle Border & Black Font/Icon) */
+/* 4. Pill Action Button (Gaya Refrensi UMKM Card: Soft Clean Pill with Gentle Border & Black Font/Icon) */
+/* 4. Pill Action Button (Apple Design: Pill CTA with Action/Neutral Style & 14px Font) */
 .btn-pill-action {
   position: relative;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 0.625rem !important;
+  gap: 0.5rem !important;
   height: 2.75rem !important;
   min-height: 2.75rem !important;
   max-height: 2.75rem !important;
-  padding: 0 1.25rem !important;
-  border-radius: 9999px !important;
-  background: linear-gradient(180deg, #F6FBF7 0%, #ECF8EF 45%, #D6F1DF 100%) !important;
-  border: 1px solid #A6D9B7 !important;
-  color: #000000 !important;
+  padding: 0 1rem !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: 0 1.5px 0px 0 rgba(0, 0, 0, 0.06) !important;
+  color: #171717 !important;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600 !important;
   font-size: 0.875rem !important;
   line-height: 1 !important;
-  letter-spacing: normal !important;
+  letter-spacing: -0.01em !important;
   white-space: nowrap !important;
   vertical-align: middle !important;
   box-sizing: border-box !important;
-  transition: all 0.2s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
   user-select: none;
   cursor: pointer;
   text-decoration: none !important;
-  box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.6) !important;
-  transform: none !important;
 }
 
 .btn-pill-action > span {
   display: inline-block !important;
   line-height: 1 !important;
-  font-size: 0.875rem !important;
+  font-size: inherit !important;
   font-weight: 600 !important;
   color: inherit !important;
   white-space: nowrap !important;
@@ -405,68 +363,456 @@ input, textarea, select, button {
   width: 1rem !important;
   height: 1rem !important;
   flex-shrink: 0 !important;
-  color: #000000 !important;
+  color: #1d1d1f !important;
 }
 
 .dark .btn-pill-action {
-  background: linear-gradient(180deg, rgba(34, 197, 94, 0.08) 0%, rgba(16, 185, 129, 0.16) 100%) !important;
-  border: 1px solid rgba(52, 211, 153, 0.28) !important;
-  color: #FFFFFF !important;
-  box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.15) !important;
+  background: #1A1A1A !important;
+  border: 1.5px solid rgba(253, 253, 253, 0.16) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+  color: #FDFDFD !important;
 }
 
 .dark .btn-pill-action > svg {
-  color: #FFFFFF !important;
+  color: #FDFDFD !important;
 }
 
-/* Hover: Inner highlight putih lembut muncul, tanpa shadow luar & tanpa zoom */
+/* Hover: subtle tint without translation/lift */
 .btn-pill-action:hover:not(:disabled) {
-  background: linear-gradient(180deg, #FFFFFF 0%, #F5FBF6 25%, #E6F6EB 55%, #CEEED8 100%) !important;
-  border-color: #8FCFA6 !important;
-  box-shadow: 
-    inset 0 0 10px 2px rgba(255, 255, 255, 0.85),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95) !important;
-  transform: none !important;
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.10) !important;
 }
 
 .dark .btn-pill-action:hover:not(:disabled) {
-  background: linear-gradient(180deg, rgba(34, 197, 94, 0.14) 0%, rgba(16, 185, 129, 0.24) 100%) !important;
-  border-color: rgba(52, 211, 153, 0.45) !important;
-  box-shadow: 
-    inset 0 0 10px 2px rgba(255, 255, 255, 0.18),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.3) !important;
+  background: #262626 !important;
+  border-color: rgba(253, 253, 253, 0.28) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* No press shrinking animation (Hover effect only) */
+.btn-pill-action:active:not(:disabled) {
   transform: none !important;
 }
 
-.btn-pill-action:active:not(:disabled) {
-  transform: scale(0.98) !important;
+/* 4b. Card with Flat Background Hover (Tugas Hari Ini & Kemana saja uang kamu info cards) */
+.card-btn-hover {
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: none !important;
+  transition: background 0.18s ease !important;
 }
 
-/* 5. Tactile Container & Card (Gaya Referensi GoPay: Base abu-abu muda, soft hairline inner highlight, soft drop shadow) */
+.card-btn-hover:hover {
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: none !important;
+}
+
+.dark .card-btn-hover {
+  background: #18191E !important;
+  border: 1px solid rgba(253, 253, 253, 0.16) !important;
+  box-shadow: none !important;
+  transition: background 0.18s ease !important;
+}
+
+.dark .card-btn-hover:hover {
+  background: #262626 !important;
+  border-color: rgba(253, 253, 253, 0.16) !important;
+  box-shadow: none !important;
+}
+
+/* 4b. Pill / Card Action Button - Green Gradient Variant (Apple Pill Radius 9999px) */
+.btn-pill-action.btn-pill-action-green,
+.btn-pill-action-green {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  max-height: 2.75rem !important;
+  padding: 0 1rem !important;
+  border-radius: 8px !important;
+  background: linear-gradient(180deg, #24C85E 0%, #16A34A 100%) !important;
+  border: 1px solid rgba(22, 163, 74, 0.75) !important;
+  box-shadow: 0 1.5px 0px 0 rgba(0, 0, 0, 0.08) !important;
+  color: #FFFFFF !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  transition: background 0.18s ease, border-color 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.btn-pill-action.btn-pill-action-green > span,
+.btn-pill-action-green > span {
+  display: inline-block !important;
+  line-height: 1 !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important;
+  white-space: nowrap !important;
+}
+
+.btn-pill-action.btn-pill-action-green > svg,
+.btn-pill-action-green > svg {
+  display: inline-block !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+  color: #FFFFFF !important;
+}
+
+.btn-pill-action.btn-pill-action-green:hover:not(:disabled),
+.btn-pill-action-green:hover:not(:disabled) {
+  filter: brightness(1.06) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.10) !important;
+}
+
+.dark .btn-pill-action.btn-pill-action-green,
+.dark .btn-pill-action-green {
+  background: linear-gradient(180deg, #1FB855 0%, #118C3B 100%) !important;
+  border: 1px solid #22C55E !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+  color: #FFFFFF !important;
+}
+
+.dark .btn-pill-action.btn-pill-action-green:hover:not(:disabled),
+.dark .btn-pill-action-green:hover:not(:disabled) {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-pill-action.btn-pill-action-green:active:not(:disabled),
+.btn-pill-action-green:active:not(:disabled) {
+  transform: none !important;
+}
+
+/* 4c. Pill / Card Action Button - Blue Gradient Variant (Linear Gradient Biru) */
+.btn-pill-action.btn-pill-action-blue,
+.btn-pill-action-blue {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  max-height: 2.75rem !important;
+  padding: 0 1rem !important;
+  border-radius: 8px !important;
+  background: linear-gradient(180deg, #50AABF 0%, #2091AA 100%) !important;
+  border: 1px solid rgba(32, 145, 170, 0.85) !important;
+  box-shadow: 0 1.5px 0px 0 rgba(0, 0, 0, 0.08) !important;
+  color: #FFFFFF !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  transition: background 0.18s ease, border-color 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.btn-pill-action.btn-pill-action-blue > span,
+.btn-pill-action-blue > span {
+  display: inline-block !important;
+  line-height: 1 !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important;
+  white-space: nowrap !important;
+}
+
+.btn-pill-action.btn-pill-action-blue > svg,
+.btn-pill-action-blue > svg {
+  display: inline-block !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+  color: #FFFFFF !important;
+}
+
+.btn-pill-action.btn-pill-action-blue:hover:not(:disabled),
+.btn-pill-action-blue:hover:not(:disabled) {
+  background: linear-gradient(180deg, #62BDD2 0%, #28A2BC 100%) !important;
+  border-color: #28A2BC !important;
+  filter: brightness(1.06) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.10) !important;
+}
+
+.dark .btn-pill-action.btn-pill-action-blue,
+.dark .btn-pill-action-blue {
+  background: linear-gradient(180deg, #2091AA 0%, #156374 100%) !important;
+  border: 1px solid #50AABF !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+  color: #FFFFFF !important;
+}
+
+.dark .btn-pill-action.btn-pill-action-blue:hover:not(:disabled),
+.dark .btn-pill-action-blue:hover:not(:disabled) {
+  background: linear-gradient(180deg, #28A2BC 0%, #1A768B 100%) !important;
+  filter: brightness(1.08) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-pill-action.btn-pill-action-blue:active:not(:disabled),
+.btn-pill-action-blue:active:not(:disabled) {
+  transform: none !important;
+}
+
+/* ==========================================================================
+   4c. Metric / Stat Cards - Apple Store Utility Card Geometry (rounded.lg 18px, spacing.lg 24px)
+   ========================================================================== */
+.gsap-stat-card {
+  flex: 1 1 0% !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.stat-card-clean {
+  position: relative;
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #E2E8F0 !important;
+  border-radius: 18px !important;
+  padding: 1.125rem 1.125rem !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  letter-spacing: -0.01em !important;
+  transition: border-color 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .stat-card-clean {
+    padding: 1.25rem 1.125rem !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .stat-card-clean {
+    padding: 1.25rem 1.25rem !important;
+  }
+}
+
+.dark .stat-card-clean {
+  background-color: #13161F !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: none !important;
+}
+
+.stat-card-clean,
+.stat-card-clean * {
+  letter-spacing: -0.01em !important;
+}
+
+/* Kotak icon: Apple rounded.sm 8px, 30px × 30px */
+.stat-card-icon-box,
+.card-untung-icon-box {
+  background-color: rgba(61, 213, 255, 0.16) !important;
+  border-radius: 8px !important;
+  width: 1.875rem !important;
+  height: 1.875rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  color: #156374 !important;
+}
+
+.dark .stat-card-icon-box,
+.dark .card-untung-icon-box {
+  background-color: rgba(61, 213, 255, 0.20) !important;
+  color: #50AABF !important;
+}
+
+.stat-card-icon-box svg,
+.card-untung-icon-box svg {
+  color: #156374 !important;
+}
+
+.dark .stat-card-icon-box svg,
+.dark .card-untung-icon-box svg {
+  color: #50AABF !important;
+}
+
+/* Badge Pill: Apple fine-print 11px, weight 600, rounded.pill */
+.stat-card-badge,
+.badge-pill-profit {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.6875rem !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  padding: 0.15rem 0.5rem !important;
+  border-radius: 9999px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .stat-card-badge,
+  .badge-pill-profit {
+    font-size: 0.6875rem !important;
+    padding: 0.15rem 0.5rem !important;
+  }
+}
+
+.stat-card-badge.badge-green,
+.badge-pill-profit {
+  background-color: rgba(0, 255, 80, 0.12) !important;
+  border: 1px solid rgba(0, 141, 44, 0.24) !important;
+  color: #008D2C !important;
+}
+
+.dark .stat-card-badge.badge-green,
+.dark .badge-pill-profit {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #34D399 !important;
+}
+
+/* Badge minus warna merah pastel sesuai refrensi (-4%) */
+.stat-card-badge.badge-red,
+.badge-pill-loss {
+  background-color: rgba(239, 68, 68, 0.10) !important;
+  border: 1px solid rgba(239, 68, 68, 0.22) !important;
+  color: #EF4444 !important;
+}
+
+.dark .stat-card-badge.badge-red,
+.dark .badge-pill-loss {
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #F87171 !important;
+}
+
+.stat-card-badge.badge-neutral {
+  background-color: #F1F5F9 !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #64748B !important;
+}
+
+.dark .stat-card-badge.badge-neutral {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #94A3B8 !important;
+}
+
+/* Action Button Row: Jarak antar btn proporsional 8px sesuai refrensi */
+.stat-card-actions,
+.card-untung-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.5rem !important; /* 8px */
+  padding-top: 0.25rem !important;
+  width: 100% !important;
+}
+
+@media (min-width: 640px) {
+  .stat-card-actions,
+  .card-untung-actions {
+    gap: 0.5rem !important; /* 8px */
+  }
+}
+
+/* Tombol di dalam stat card: Dibuat HUG (auto width, flex: 0 0 auto) dengan ukuran sama persis seperti Edit Profil (38px, font 14px, px 16px) */
+.stat-card-clean .btn-pill-action,
+.stat-card-clean .btn-pill-action-green {
+  width: auto !important;
+  max-width: max-content !important;
+  flex: 0 0 auto !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  height: 2.75rem !important;
+  min-height: 2.75rem !important;
+  max-height: 2.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+
+@media (min-width: 640px) {
+  .stat-card-clean .btn-pill-action,
+  .stat-card-clean .btn-pill-action-green {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+    max-height: 2.75rem !important;
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Tombol di dalam stat card: Efek hover tanpa naik, tanpa stroke/font change */
+.stat-card-clean .btn-pill-action:hover:not(:disabled) {
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.10) !important;
+  transform: none !important;
+}
+
+.dark .stat-card-clean .btn-pill-action:hover:not(:disabled) {
+  background: #262626 !important;
+  border-color: rgba(253, 253, 253, 0.28) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+  transform: none !important;
+}
+
+.stat-card-clean .btn-pill-action-green:hover:not(:disabled) {
+  filter: brightness(1.06) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.10) !important;
+  transform: none !important;
+}
+
+.dark .stat-card-clean .btn-pill-action-green:hover:not(:disabled) {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3) !important;
+  transform: none !important;
+}
+
+/* 5. Tactile Container & Card (Clean Pure White Surface with Soft Stroke & Clean Shadow) */
 .card-tactile-gopay {
   position: relative;
-  background-color: #F6F8FA !important;
-  border: 1px solid #E2E8F0 !important;
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  border-radius: 18px !important;
   box-shadow: 
     0 4px 20px -2px rgba(15, 23, 42, 0.04),
-    0 2px 6px -1px rgba(15, 23, 42, 0.02),
-    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.45) !important;
+    0 2px 6px -1px rgba(15, 23, 42, 0.02) !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-tactile-gopay::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 10;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  display: none !important;
 }
 
 .dark .card-tactile-gopay {
   background-color: #13161F !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
   box-shadow: 
     0 4px 24px -2px rgba(0, 0, 0, 0.45),
     0 2px 8px -1px rgba(0, 0, 0, 0.25),
@@ -477,16 +823,16 @@ input, textarea, select, button {
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
-/* 6. Card Metric dengan Header Biru & Rounded Info Container */
+/* 6. Card Metric dengan Header Biru (Gradien Kiri Cerah ke Kanan Sedikit Gelap) & Rounded Info Container */
 .card-tactile-gopay.has-blue-banner {
-  background: linear-gradient(180deg, #50AABF 0%, #2091AA 100%) !important;
-  border: 1px solid #E2E8F0 !important;
+  background: linear-gradient(90deg, #54B0C5 0%, #2091AA 45%, #1E869E 100%) !important;
+  border: 1.5px solid #CBD5E1 !important;
   overflow: hidden !important;
 }
 
 .dark .card-tactile-gopay.has-blue-banner {
-  background: linear-gradient(180deg, #1D6F80 0%, #114F5D 100%) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: linear-gradient(90deg, #208CA4 0%, #1A768B 50%, #166476 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .card-tactile-gopay.has-blue-banner::before {
@@ -555,7 +901,7 @@ input, textarea, select, button {
 }
 
 .btn-pill-gradient:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: none;
 }
 
 .btn-pill-gradient-muted {
@@ -605,10 +951,10 @@ input, textarea, select, button {
 }
 
 .btn-pill-gradient-muted:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: none;
 }
 
-/* 8. Segmented Pill Container (Gaya Referensi GoPay/UMKM Segmented Switch: Outer grey pill container with floating active pill) */
+/* 8. Segmented Pill Container (Clean Flat Segmented Switch) */
 .segmented-pill-container {
   position: relative;
   display: inline-flex;
@@ -616,31 +962,28 @@ input, textarea, select, button {
   gap: 0.25rem;
   padding: 0.25rem;
   border-radius: 9999px;
-  background-color: #E2E5EA !important;
-  border: 1px solid #D2D7E0 !important;
-  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: #F1F3F5 !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: none !important;
   user-select: none;
 }
 
 .dark .segmented-pill-container {
   background-color: #171B24 !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: none !important;
 }
 
-/* Sliding active pill indicator (animated with GSAP) */
+/* Sliding active pill indicator (Pure flat white, animated with GSAP) */
 .segmented-pill-indicator {
   position: absolute;
   top: 0.25rem;
   left: 0;
   height: 2.375rem;
   border-radius: 9999px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 45%, #F0F2F6 100%) !important;
-  border: 1px solid rgba(0, 0, 0, 0.04) !important;
-  box-shadow: 
-    0 2px 6px -1px rgba(0, 0, 0, 0.08),
-    0 1px 2px 0 rgba(0, 0, 0, 0.04),
-    inset 0 1.5px 0 0 #FFFFFF !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
   pointer-events: none;
   z-index: 1;
   opacity: 1;
@@ -649,11 +992,9 @@ input, textarea, select, button {
 }
 
 .dark .segmented-pill-indicator {
-  background: linear-gradient(180deg, #252A36 0%, #191D26 100%) !important;
+  background: #252A36 !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 
-    0 2px 6px -1px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
 }
 
 /* Tab button items (relative z-index so text sits above sliding indicator) */
@@ -673,16 +1014,49 @@ input, textarea, select, button {
   box-shadow: none !important;
   font-family: 'Poppins', sans-serif !important;
   font-size: 0.8125rem !important;
-  line-height: 1 !important;
+  line-height: 1.35 !important;
   letter-spacing: normal !important;
   white-space: nowrap !important;
   cursor: pointer;
   user-select: none;
-  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.15s cubic-bezier(0.22, 1, 0.36, 1), transform 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.segmented-pill-btn:active {
+  transform: none;
+}
+
+/* Global enforcement: No press shrink animation for all buttons and dropdowns (Hover effect only) */
+button:active,
+[role="button"]:active,
+a:active,
+select:active,
+summary:active,
+.btn:active,
+.btn-modern:active,
+.btn-3d-blue:active,
+.btn-3d-green:active,
+.btn-3d-surface:active,
+.btn-pill-action:active,
+.btn-pill-action-green:active,
+.btn-pill-gradient:active,
+.btn-pill-gradient-muted:active,
+.segmented-pill-btn:active,
+.sidebar-toggle-btn:active,
+[class*="active:scale"]:active,
+[class*="active:translate"]:active,
+[data-state="open"]:active,
+[aria-expanded]:active {
+  transform: none !important;
+}
+
+.segmented-pill-btn:focus-visible {
+  outline: 2px solid #2091AA !important;
+  outline-offset: 2px !important;
 }
 
 .segmented-pill-btn.is-active {
-  color: #000000 !important;
+  color: #0F172A !important;
   font-weight: 600 !important;
 }
 
@@ -717,7 +1091,7 @@ input, textarea, select, button {
   max-height: 2.375rem !important;
   padding: 0 1.25rem !important;
   border-radius: 9999px !important;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFC 45%, #F0F2F6 100%) !important;
+  background: #FFFFFF !important;
   color: #000000 !important;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600 !important;
@@ -725,23 +1099,18 @@ input, textarea, select, button {
   line-height: 1 !important;
   letter-spacing: normal !important;
   white-space: nowrap !important;
-  border: 1px solid rgba(0, 0, 0, 0.04) !important;
-  box-shadow: 
-    0 2px 6px -1px rgba(0, 0, 0, 0.08),
-    0 1px 2px 0 rgba(0, 0, 0, 0.04),
-    inset 0 1.5px 0 0 #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
   cursor: pointer;
 }
 
 .dark .segmented-pill-item-active {
-  background: linear-gradient(180deg, #252A36 0%, #191D26 100%) !important;
+  background: #252A36 !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   color: #FFFFFF !important;
-  box-shadow: 
-    0 2px 6px -1px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
 }
 
 .segmented-pill-item-inactive {
@@ -782,56 +1151,58 @@ input, textarea, select, button {
   background-color: rgba(255, 255, 255, 0.06) !important;
 }
 
-/* 9. Segmented Pill Container - GoPay Green Edition (Full Width & Vibrant Green Indicator) */
-.segmented-pill-container.is-gopay-green {
+/* 9. Segmented Pill Container - Reference Card Style (Subtle Grey Track & Pure White Floating Active Card) */
+.segmented-pill-container.is-gopay-green,
+.segmented-pill-container.is-card-pill-ref {
   width: 100% !important;
   display: flex !important;
   align-items: center !important;
   gap: 0.25rem !important;
-  padding: 0.3125rem !important;
-  border-radius: 9999px !important;
-  background-color: #EAEFF5 !important;
-  border: 1px solid #D6DCE5 !important;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04) !important;
+  padding: 0.25rem !important;
+  border-radius: 14px !important;
+  background-color: #F1F3F6 !important;
+  border: 1.5px solid #CBD5E1 !important;
+  box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
   user-select: none !important;
   overflow: visible !important;
 }
 
-.dark .segmented-pill-container.is-gopay-green {
-  background-color: #151821 !important;
+.dark .segmented-pill-container.is-gopay-green,
+.dark .segmented-pill-container.is-card-pill-ref {
+  background-color: #121620 !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35) !important;
+  box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Green Active Indicator matching user image */
-.segmented-pill-container.is-gopay-green .segmented-pill-indicator {
+/* Crisp Pure White Floating Active Indicator matching reference image */
+.segmented-pill-container.is-gopay-green .segmented-pill-indicator,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-indicator {
   position: absolute !important;
-  top: 0.3125rem !important;
+  top: 0.25rem !important;
   left: 0 !important;
-  height: calc(100% - 0.625rem) !important;
-  border-radius: 9999px !important;
-  background: linear-gradient(180deg, #00BA28 0%, #009B1A 50%, #007D13 100%) !important;
-  border: 1px solid rgba(0, 110, 15, 0.25) !important;
+  height: calc(100% - 0.5rem) !important;
+  border-radius: 10px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
-    0 3px 12px 0 rgba(0, 160, 25, 0.35),
-    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+    0 1px 3px 0 rgba(0, 0, 0, 0.07),
+    0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
   pointer-events: none !important;
   z-index: 1 !important;
   transition: none !important;
   will-change: transform, width !important;
 }
 
-.dark .segmented-pill-container.is-gopay-green .segmented-pill-indicator {
-  background: linear-gradient(180deg, #00C82B 0%, #00A822 50%, #008712 100%) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
-    0 4px 16px 0 rgba(0, 200, 35, 0.3) !important;
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-indicator,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-indicator {
+  background: #1E2533 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.35) !important;
 }
 
 /* Tab button items - full width distribution */
-.segmented-pill-container.is-gopay-green .segmented-pill-btn {
+.segmented-pill-container.is-gopay-green .segmented-pill-btn,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn {
   position: relative !important;
   z-index: 2 !important;
   flex: 1 1 0% !important;
@@ -839,65 +1210,138 @@ input, textarea, select, button {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  height: 2.75rem !important;
-  min-height: 2.75rem !important;
-  max-height: 2.75rem !important;
+  height: 3.125rem !important;
+  min-height: 3.125rem !important;
+  max-height: 3.125rem !important;
   padding: 0 1rem !important;
-  border-radius: 9999px !important;
+  border-radius: 11px !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   font-family: 'Poppins', sans-serif !important;
   font-size: 0.875rem !important;
+  line-height: 1.4 !important;
   letter-spacing: normal !important;
   cursor: pointer !important;
   user-select: none !important;
-  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: color 0.15s ease !important;
 }
 
-/* Active State: Pure Crisp White Text and Icons */
-.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active {
-  color: #FFFFFF !important;
+.segmented-pill-container.is-gopay-green .segmented-pill-btn span,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn span {
+  display: inline-block !important;
+  line-height: 1.4 !important;
+  padding-bottom: 2px !important;
+}
+
+/* Compact / Small size for popovers & navbars */
+.segmented-pill-container.is-gopay-green.is-size-sm,
+.segmented-pill-container.is-card-pill-ref.is-size-sm {
+  border-radius: 10px !important;
+  padding: 0.2rem !important;
+  gap: 0.2rem !important;
+}
+
+.segmented-pill-container.is-gopay-green.is-size-sm .segmented-pill-indicator,
+.segmented-pill-container.is-card-pill-ref.is-size-sm .segmented-pill-indicator {
+  top: 0.2rem !important;
+  height: calc(100% - 0.4rem) !important;
+  border-radius: 7px !important;
+}
+
+.segmented-pill-container.is-gopay-green.is-size-sm .segmented-pill-btn,
+.segmented-pill-container.is-card-pill-ref.is-size-sm .segmented-pill-btn {
+  height: 2.125rem !important;
+  min-height: 2.125rem !important;
+  max-height: 2.125rem !important;
+  padding: 0 0.25rem !important;
+  border-radius: 7px !important;
+  font-size: 0.725rem !important;
+  letter-spacing: normal !important;
+}
+
+/* Explicit Hug mode for segmented-pill-container */
+.segmented-pill-container.is-hug {
+  width: max-content !important;
+  max-width: 100% !important;
+  display: inline-flex !important;
+}
+
+.segmented-pill-container.is-hug .segmented-pill-btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 0.5rem !important;
+}
+
+/* Active State: Clean Crisp Dark Charcoal Text and Icons (matching reference image) */
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-active {
+  color: #0F172A !important;
   font-weight: 600 !important;
 }
 
-.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active svg {
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-active {
+  color: #FFFFFF !important;
+}
+
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active svg,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-active svg {
+  color: #0F172A !important;
+  stroke: #0F172A !important;
+}
+
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-active svg,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-active svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
 
-/* Inactive State: Refined Slate/Charcoal Gray matching reference image */
-.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive {
-  color: #475569 !important;
-  font-weight: 500 !important;
+/* Inactive State: High contrast slate-700 (#334155 on #F1F3F6 = 7.4:1 contrast, WCAG AA compliant) */
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive {
+  color: #334155 !important;
+  font-weight: 600 !important;
 }
 
-.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive {
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive {
   color: #94A3B8 !important;
 }
 
-.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive svg {
-  color: #475569 !important;
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive svg,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive svg {
+  color: #334155 !important;
+  stroke: #64748B !important;
 }
 
-.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive svg {
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive svg,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive svg {
   color: #94A3B8 !important;
+  stroke: #94A3B8 !important;
 }
 
-.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover {
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive:hover {
   color: #0F172A !important;
 }
 
-.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover {
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive:hover {
   color: #FFFFFF !important;
 }
 
-.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover svg {
+.segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover svg,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive:hover svg {
   color: #0F172A !important;
+  stroke: #0F172A !important;
 }
 
-.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover svg {
+.dark .segmented-pill-container.is-gopay-green .segmented-pill-btn.is-inactive:hover svg,
+.dark .segmented-pill-container.is-card-pill-ref .segmented-pill-btn.is-inactive:hover svg {
   color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 

@@ -5,7 +5,7 @@
       <!-- Primary 3D Action: Tambah Rencana Baru -->
       <button
         type="button"
-        class="btn-3d-blue px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs active:scale-95 cursor-pointer flex items-center gap-2"
+        class="btn-3d-blue px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs cursor-pointer flex items-center gap-2"
         @click="isAddTaskModalOpen = true"
       >
         <HugeiconsIcon :icon="Add01Icon" :size="16" :stroke-width="2.2" />
@@ -611,7 +611,7 @@
         <div class="flex items-center justify-between w-full">
           <button
             type="button"
-            class="btn-pill-gradient inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 cursor-pointer transition-all active:scale-95 shadow-2xs"
+            class="btn-pill-gradient inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 cursor-pointer transition-all shadow-2xs"
             @click="triggerEvidenceUpload(selectedTaskForPreview?.id)"
           >
             <HugeiconsIcon :icon="Upload04Icon" :size="14" :stroke-width="2" />
@@ -939,7 +939,7 @@ const defaultTaskEvidence: Record<string, any> = {
     title: 'Lembar Opname Kartu Stok Bahan Baku',
     issuer: 'SOP Manajemen Persediaan Gerai Kopi Senja',
     regNo: 'SOP-STOK-WK42/2026',
-    classification: 'Pengendalian Biaya Bahan & Efisiensi HPP',
+    classification: 'Pengendalian Biaya Bahan & Efisiensi Modal Jualan',
     date: '15 Agustus 2026',
     file: {
       name: 'Kartu_Stok_Mingguan_Outlet_1-3.pdf',

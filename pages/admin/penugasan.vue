@@ -40,7 +40,7 @@
             Warung Soto Banjar H. Kadir
           </h4>
           <span class="text-xs text-neutral-500">
-            Sektor: Kuliner (F&B) • Banjarmasin • Omzet ~Rp 45.000.000 / bln • 1 Outlet
+            Sektor: Kuliner (F&B) • Banjarmasin • Pendapatan ~Rp 45.000.000 / bln • 1 Outlet
           </span>
         </div>
         <BBadge variant="warning" size="sm">Menunggu Konsultan</BBadge>
@@ -80,7 +80,7 @@
           </label>
           <textarea
             rows="2"
-            placeholder="Contoh: Fokuskan pendampingan pada kalkulasi HPP porsi soto dan pembukuan kas harian POS..."
+            placeholder="Contoh: Fokuskan pendampingan pada kalkulasi modal jualan porsi soto dan pembukuan kas harian POS..."
             class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
           />
         </div>

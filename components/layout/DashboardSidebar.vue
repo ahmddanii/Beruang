@@ -1,72 +1,53 @@
 <template>
   <div class="h-full flex flex-col shrink-0">
-    <!-- Desktop Sidebar (Full-height flush on left) -->
+    <!-- Desktop Sidebar (Placed directly below Top Navbar) -->
     <aside
       ref="asideRef"
       :class="[
-        'hidden lg:flex flex-col shrink-0 h-full z-20 select-none border-r transition-[width] duration-300 ease-[cubic-bezier(0.2,0,0,1)] will-change-[width]',
+        'hidden lg:flex flex-col shrink-0 h-full z-40 select-none border-r transition-[width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-[width]',
         isCollapsed ? 'w-[72px]' : 'w-64',
         'bg-[#FFFFFF] dark:bg-[#13161F] border-[#E2E8F0] dark:border-neutral-800/80 shadow-[1px_0_10px_rgba(0,0,0,0.02)]'
       ]"
     >
       <div class="flex flex-col h-full overflow-hidden">
-        <!-- 1. Top of Sidebar: Branding Header (Expanded: Logo + Text; Compact: Logo Only) -->
+        <!-- 1. Compact Mode: Expand Toggle Container (Solid container directly at top of collapsed sidebar with stroke below) -->
         <div
-          ref="brandHeaderRef"
-          class="sidebar-brand-header w-full h-[52px] shrink-0 flex items-center border-b border-[#E2E8F0] dark:border-neutral-800/80 select-none overflow-hidden relative px-3"
-          :class="isCollapsed ? 'justify-center' : 'justify-between'"
+          ref="compactHeaderRef"
+          :class="[
+            'sidebar-compact-toggle-container w-full shrink-0 flex items-center justify-center border-[#E2E8F0] dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.25,1,0.5,1)]',
+            isCollapsed
+              ? 'max-h-[52px] h-[52px] opacity-100 pointer-events-auto border-b'
+              : 'max-h-0 h-0 opacity-0 pointer-events-none border-b-0'
+          ]"
         >
-          <!-- Brand Logo & Name Link (Expanded Mode) -->
-          <NuxtLink
-            v-if="!isCollapsed"
-            :to="homePath"
-            class="flex items-center gap-2.5 cursor-pointer select-none group min-w-0 h-full px-1 flex-1"
-            title="Beranda Beruang"
-            @click="handleBrandClick"
-          >
-            <!-- Logo Box: Always centered on icon axis -->
-            <div class="w-10 h-10 shrink-0 flex items-center justify-center">
-              <img
-                src="/logo/logoSmall.svg"
-                alt="Beruang Logo"
-                class="h-6.5 w-auto object-contain shrink-0 transition-transform duration-150 group-hover:scale-105"
-              />
-            </div>
-            <!-- Bolder font weight, letter spacing -2% (-0.02em), no clipping/overflow-visible -->
-            <span class="sidebar-brand-text font-heading font-bold text-[18px] tracking-[-0.02em] leading-none select-none overflow-visible whitespace-nowrap">
-              <span class="text-[#156374] dark:text-[#50AABF]">Ber</span><span class="text-[#00800e] dark:text-[#00C058]">uang</span>
-            </span>
-          </NuxtLink>
-
-          <!-- Compact Mode: LogoSmall as interactive toggle button to expand sidebar -->
           <button
-            v-else
             type="button"
-            class="w-10 h-10 rounded-lg flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200 active:scale-95 cursor-pointer mx-auto group"
+            class="sidebar-toggle-btn w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-neutral-800 hover:bg-[#156374] text-[#156374] hover:text-white dark:text-neutral-300 dark:hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer border border-[#E2E8F0] dark:border-neutral-700 shadow-2xs group"
             title="Perluas Sidebar (Ctrl+B)"
             aria-label="Perluas Sidebar"
             @click="handleToggleCollapse"
           >
-            <img
-              src="/logo/logoSmall.svg"
-              alt="Beruang Logo"
-              class="h-6.5 w-auto object-contain shrink-0 transition-transform duration-150 group-hover:scale-110"
+            <HugeiconsIcon
+              :icon="ArrowRight01Icon"
+              :size="15"
+              :stroke-width="2.4"
+              class="transition-transform duration-150 group-hover:translate-x-0.5"
             />
           </button>
         </div>
 
-        <!-- 2. Lottie Animation Banner with Mascot Bear (Visible in expanded, smoothly collapses in compact) -->
+        <!-- 2. Expanded Mode: Lottie Mascot Banner with Compact Icon inside (Stroke below) -->
         <div
           ref="bannerRef"
           :class="[
-            'sidebar-banner relative w-full shrink-0 overflow-hidden select-none transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)]',
+            'sidebar-banner relative w-full shrink-0 overflow-hidden select-none border-[#E2E8F0] dark:border-neutral-800/80 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]',
             isCollapsed
-              ? 'h-0 max-h-0 opacity-0 pointer-events-none border-b-0 m-0 p-0'
-              : 'h-32 opacity-100 border-b border-[#E2E8F0] dark:border-neutral-800/80',
+              ? 'max-h-0 h-0 opacity-0 pointer-events-none border-b-0'
+              : 'max-h-36 h-32 opacity-100 pointer-events-auto border-b',
             timeBackgroundClasses
           ]"
         >
-          <!-- 1:1 Aspect-Square Container Centered Vertically so Lottie animation stays a perfect round circle and never stretches -->
+          <!-- 1:1 Aspect-Square Container Centered Vertically so Lottie animation stays a perfect round circle and never stretches/gepeng -->
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
             <div class="w-full aspect-square shrink-0 flex items-center justify-center">
               <ClientOnly>
@@ -74,6 +55,8 @@
                   :src="currentLottieSrc"
                   :autoplay="true"
                   :loop="true"
+                  :use-frame-interpolation="true"
+                  :render-config="lottieRenderConfig"
                   :layout="{ fit: 'cover', align: [0.5, 0.5] }"
                   class="w-full h-full"
                 />
@@ -81,50 +64,43 @@
             </div>
           </div>
 
-          <!-- Subtle overlay to ensure crisp contrast on any background -->
-          <div class="absolute inset-0 bg-black/15 pointer-events-none" />
-
-          <!-- Compact Sidebar Button inside Lottie Animation Banner (Dicoding Style) -->
+          <!-- Compact Sidebar Button inside Lottie Animation Banner (Dicoding Style with Brand Color) -->
           <button
-            v-if="!isCollapsed"
             type="button"
-            class="sidebar-toggle-btn absolute top-2.5 right-2.5 w-7.5 h-7.5 rounded-lg bg-black/45 hover:bg-black/70 text-white flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer shadow-sm border border-white/20 backdrop-blur-md z-10"
+            :class="[
+              'sidebar-toggle-btn absolute top-3 right-3 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white/90 hover:bg-[#156374] text-[#156374] hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md border border-white/60 backdrop-blur-md z-10 group',
+              isCollapsed ? 'opacity-0 scale-75 pointer-events-none' : 'opacity-100 scale-100'
+            ]"
             title="Ciutkan Sidebar (Ctrl+B)"
             aria-label="Ciutkan Sidebar"
             @click="handleToggleCollapse"
           >
             <HugeiconsIcon
-              :icon="SidebarLeft01Icon"
+              :icon="ArrowLeft01Icon"
               :size="16"
-              :stroke-width="2.0"
-              class="text-white"
+              :stroke-width="2.4"
+              class="transition-transform duration-150 group-hover:-translate-x-0.5"
             />
           </button>
         </div>
 
-        <!-- Navigation Items List (Categorized, Constant Y Coordinates, Fluid Horizontal Shrink) -->
-        <div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none py-3 px-3 overscroll-contain">
-          <nav class="space-y-1" aria-label="Menu Utama">
+        <!-- Navigation Items List (Segmented Modular Containers with bottom stroke only) -->
+        <div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none overscroll-contain">
+          <nav aria-label="Menu Utama">
             <div
               v-for="(section, sIdx) in navigationSections"
               :key="`sec-${sIdx}`"
-              class="space-y-1"
+              :class="[
+                'sidebar-container-module border-b border-[#E2E8F0] dark:border-neutral-800/80 transition-all duration-200',
+                isCollapsed ? 'px-3.5 py-2.5' : 'px-3.5 py-3'
+              ]"
             >
-              <!-- Hairline section divider between groups -->
-              <div
-                v-if="sIdx > 0"
-                class="h-px bg-slate-200/70 dark:bg-neutral-800/80 my-2 mx-1 shrink-0"
-              />
-
-              <!-- Section Category Title: Apple fine-print 11px uppercase tracking-wider -->
+              <!-- Section Category Title: Apple fine-print 12px uppercase tracking-wider -->
               <div
                 v-if="section.title"
-                :class="[
-                  'sidebar-section-title flex items-center overflow-hidden whitespace-nowrap font-poppins transition-all duration-200 ease-in-out',
-                  isCollapsed ? 'max-h-0 mb-0 opacity-0 pointer-events-none' : 'max-h-5 h-4 mb-1.5 opacity-100'
-                ]"
+                class="sidebar-section-title sidebar-anim-target flex items-center overflow-hidden whitespace-nowrap font-poppins"
               >
-                <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 font-poppins px-2 uppercase tracking-wider">
+                <span class="text-xs font-semibold text-neutral-600 dark:text-neutral-400 font-poppins px-2 uppercase tracking-wider">
                   {{ section.title }}
                 </span>
               </div>
@@ -137,17 +113,18 @@
                   :to="item.to"
                   :title="isCollapsed ? item.label : undefined"
                   :class="[
-                    'sidebar-nav-item h-11 flex items-center font-poppins group relative overflow-hidden rounded-[10px] transition-all duration-200',
+                    'sidebar-nav-item h-11 flex items-center font-poppins group relative overflow-hidden rounded-[10px] transition-colors duration-200 cursor-pointer',
                     isCollapsed
-                      ? 'w-11 mx-auto justify-center px-0'
+                      ? 'w-11 justify-start px-0'
                       : 'w-full px-0 justify-start',
                     isActive(item.to)
                       ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
-                      : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                      : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
                   ]"
+                  @click="handleNavigate(item.to)"
                 >
-                  <!-- Icon Container: Anchored at 44px Box -->
-                  <div class="sidebar-icon-box w-11 h-11 shrink-0 flex items-center justify-center relative">
+                  <!-- Icon Container: Anchored at 44px Box with -ml-px to compensate 1px border so center is exactly 36.0px -->
+                  <div class="sidebar-icon-box w-11 h-11 shrink-0 -ml-px flex items-center justify-center relative pointer-events-none">
                     <SidebarNavIcon
                       :to="item.to"
                       :outline-icon="item.icon"
@@ -163,19 +140,14 @@
                     />
                   </div>
 
-                  <!-- Label Container: Apple 14px typography with fluid horizontal collapse -->
+                  <!-- Label Container: Apple 14px typography with GSAP stagger animation -->
                   <div
-                    :class="[
-                      'sidebar-label overflow-hidden whitespace-nowrap flex items-center justify-between text-[14px] flex-1 min-w-0 transition-all duration-250 ease-in-out',
-                      isCollapsed
-                        ? 'max-w-0 opacity-0 pointer-events-none -translate-x-2'
-                        : 'max-w-[190px] opacity-100 pl-0.5 pr-3 pointer-events-auto translate-x-0'
-                    ]"
+                    class="sidebar-label sidebar-anim-target overflow-hidden whitespace-nowrap flex items-center justify-between text-[14px] flex-1 min-w-0 pl-1 pr-3 pointer-events-none will-change-[transform,opacity]"
                   >
                     <span class="truncate leading-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-600 text-white tabular-nums leading-none shrink-0"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-600 text-white tabular-nums leading-none shrink-0"
                     >
                       {{ item.badge }}
                     </span>
@@ -203,9 +175,9 @@
         />
 
         <!-- Slide-out Drawer Panel in Tactile Background -->
-        <div class="relative w-80 max-w-[88vw] bg-[#FDFDFD] dark:bg-[#13161F] h-full flex flex-col shadow-2xl z-10 pb-6 overflow-hidden border-r border-slate-200/80 dark:border-neutral-800">
+        <div class="relative w-80 max-w-[88vw] bg-[#FFFFFF] dark:bg-[#13161F] h-full flex flex-col shadow-2xl z-10 pb-6 overflow-hidden border-r border-slate-200/80 dark:border-neutral-800">
           <!-- Mobile Drawer Branding Header (Placed ABOVE Lottie animation banner) -->
-          <div class="w-full h-14 shrink-0 px-4 flex items-center justify-between border-b border-slate-200/80 dark:border-neutral-800/80 bg-[#FDFDFD] dark:bg-[#13161F] select-none">
+          <div class="w-full h-14 shrink-0 px-4 flex items-center justify-between border-b border-slate-200/80 dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none">
             <NuxtLink
               :to="homePath"
               class="flex items-center gap-2.5 cursor-pointer select-none group"
@@ -225,7 +197,7 @@
             <!-- Close Button: Square Rounded Corner (Solid Black, No Drop Shadow, rounded-[8px]) -->
             <button
               type="button"
-              class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-black text-white flex items-center justify-center transition-colors duration-150 active:scale-95 cursor-pointer shadow-none"
+              class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-black text-white flex items-center justify-center transition-colors duration-150 cursor-pointer shadow-none"
               aria-label="Tutup Menu"
               @click="$emit('closeMobile')"
             >
@@ -248,33 +220,28 @@
                     :src="currentLottieSrc"
                     :autoplay="true"
                     :loop="true"
+                    :use-frame-interpolation="true"
+                    :render-config="lottieRenderConfig"
                     :layout="{ fit: 'cover', align: [0.5, 0.5] }"
                     class="w-full h-full"
                   />
                 </ClientOnly>
               </div>
             </div>
-            <div class="absolute inset-0 bg-black/15 pointer-events-none" />
           </div>
 
-          <!-- Mobile Nav Items -->
-          <div class="flex-1 overflow-y-auto scrollbar-none py-3 px-3">
-            <nav class="space-y-1">
+          <!-- Mobile Nav Items (Segmented Modular Containers with bottom stroke only) -->
+          <div class="flex-1 overflow-y-auto scrollbar-none">
+            <nav aria-label="Menu Mobile">
               <div
                 v-for="(section, sIdx) in navigationSections"
                 :key="`mob-sec-${sIdx}`"
-                class="space-y-1"
+                class="sidebar-container-module px-4 py-3 border-b border-slate-200/80 dark:border-neutral-800/80"
               >
-                <!-- Hairline section divider between groups -->
-                <div
-                  v-if="sIdx > 0"
-                  class="h-px bg-slate-200/70 dark:bg-neutral-800/80 my-2 mx-1 shrink-0"
-                />
-
                 <!-- Section Category Title -->
                 <div
                   v-if="section.title"
-                  class="px-2 pt-1.5 pb-1 text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider font-poppins"
+                  class="px-2 pt-0.5 pb-2 text-xs font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider font-poppins"
                 >
                   {{ section.title }}
                 </div>
@@ -286,22 +253,23 @@
                     :key="`mob-${item.to}`"
                     :to="item.to"
                     :class="[
-                      'flex items-center gap-3.5 px-3.5 py-2.5 rounded-[10px] font-poppins text-[15px] transition-all duration-150 group border',
+                      'flex items-center gap-3.5 px-3.5 py-2.5 rounded-[10px] font-poppins text-[15px] transition-all duration-150 group border cursor-pointer',
                       isActive(item.to)
                         ? 'bg-[#E6F4F7] dark:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] font-semibold border-[#156374]/20 shadow-2xs'
-                        : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 border-transparent'
+                        : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 border-transparent'
                     ]"
-                    @click="$emit('closeMobile')"
+                    @click="handleNavigate(item.to)"
                   >
                     <SidebarNavIcon
                       :to="item.to"
                       :outline-icon="item.icon"
                       :active="isActive(item.to)"
+                      class="pointer-events-none"
                     />
-                    <span class="truncate flex-1">{{ item.label }}</span>
+                    <span class="truncate flex-1 pointer-events-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0 pointer-events-none"
                     >
                       {{ item.badge }}
                     </span>
@@ -309,96 +277,6 @@
                 </div>
               </div>
             </nav>
-          </div>
-
-          <!-- Bottom Profile Container (Mobile Drawer) -->
-          <div class="shrink-0 border-t border-slate-200/80 dark:border-neutral-800/80 px-4 py-2.5 relative bg-transparent mt-auto">
-            <button
-              type="button"
-              class="w-full flex items-center justify-between px-2 py-2 rounded-[8px] hover:bg-[#F1F3F5] dark:hover:bg-neutral-800/80 transition-colors duration-150 text-left group cursor-pointer"
-              aria-label="Menu Pengguna & Peran"
-              @click="isMobileProfileMenuOpen = !isMobileProfileMenuOpen"
-            >
-              <div class="flex items-center gap-3 min-w-0 flex-1">
-                <div class="w-9.5 h-9.5 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700/80 bg-neutral-100 dark:bg-neutral-800">
-                  <img
-                    :src="userAvatarUrl"
-                    :alt="authStore.currentUser?.name || 'Foto Profil'"
-                    class="w-full h-full object-cover"
-                    @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
-                  />
-                </div>
-                <div class="flex flex-col min-w-0 flex-1">
-                  <span class="text-[15px] font-semibold text-neutral-900 dark:text-white truncate font-poppins leading-tight">
-                    {{ authStore.currentUser?.name || 'Fikri Setiawan' }}
-                  </span>
-                  <span class="text-xs text-neutral-500 dark:text-neutral-400 truncate font-poppins mt-0.5 font-normal">
-                    {{ authStore.currentUser?.email || 'fikri@kopisenja.id' }}
-                  </span>
-                </div>
-              </div>
-              <div class="shrink-0 text-neutral-400 dark:text-neutral-500 ml-2">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m7 15 5 5 5-5"/>
-                  <path d="m7 9 5-5 5 5"/>
-                </svg>
-              </div>
-            </button>
-
-            <!-- Backdrop overlay -->
-            <div
-              v-if="isMobileProfileMenuOpen"
-              class="fixed inset-0 z-40 bg-transparent"
-              @click="isMobileProfileMenuOpen = false"
-            />
-
-            <!-- Mobile Popover Menu -->
-            <div
-              v-if="isMobileProfileMenuOpen"
-              class="absolute bottom-full mb-2 left-3 right-3 bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden font-poppins"
-            >
-              <div class="p-2.5">
-                <div class="px-2 py-1 flex items-center justify-between mb-1">
-                  <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-                    Pindah Peran (Uji RBAC)
-                  </span>
-                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-medium">
-                    RBAC
-                  </span>
-                </div>
-                <div class="space-y-1">
-                  <button
-                    v-for="role in rolesList"
-                    :key="`mob-role-${role.id}`"
-                    type="button"
-                    :class="[
-                      'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-xs font-medium transition-all duration-150 cursor-pointer text-left',
-                      authStore.currentUser?.role === role.id
-                        ? 'bg-[#F1F3F5] dark:bg-neutral-800 text-[#156374] dark:text-[#50AABF] font-semibold'
-                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-[#F8FAFC] dark:hover:bg-neutral-800/60'
-                    ]"
-                    @click="handleSwitchRole(role.id, role.path)"
-                  >
-                    <span class="truncate">{{ role.name }}</span>
-                    <span
-                      v-if="authStore.currentUser?.role === role.id"
-                      class="w-2 h-2 rounded-full bg-[#156374] dark:bg-[#50AABF] shrink-0 ml-2"
-                    />
-                  </button>
-                </div>
-              </div>
-
-              <div class="border-t border-[#CBD5E1] dark:border-neutral-800/80 p-1.5">
-                <button
-                  type="button"
-                  class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[8px] text-xs sm:text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50/80 dark:hover:bg-red-950/20 transition-colors cursor-pointer text-left"
-                  @click="handleLogout"
-                >
-                  <HugeiconsIcon :icon="Logout01Icon" :size="17" :stroke-width="2.2" class="text-red-500" />
-                  <span>Keluar</span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -424,18 +302,19 @@ import {
   Coins01Icon,
   Award01Icon,
   UserGroupIcon,
-  UserIcon,
   Store01Icon,
   CheckmarkCircle01Icon,
   Alert01Icon,
   StarIcon,
   UserAdd01Icon,
   Cancel01Icon,
+  RubiksCubeIcon,
   UserCircleIcon,
   SidebarLeft01Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
   Notification01Icon,
-  Message01Icon,
-  Logout01Icon
+  Message01Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -456,55 +335,10 @@ const chatStore = useChatStore()
 // State Collapse & Mobile Drawer from useSidebar composable
 const { isCollapsed, isMobileOpen, closeMobile, setCollapsed, toggleCollapse } = useSidebar()
 
-const isProfileMenuOpen = ref(false)
-const isMobileProfileMenuOpen = ref(false)
-
-watch(() => route.path, () => {
-  isProfileMenuOpen.value = false
-  isMobileProfileMenuOpen.value = false
-})
-
-const userAvatarUrl = computed(() => {
-  if (authStore.currentUser?.role === 'UMKM') {
-    return (
-      umkmStore.profile.ownerAvatarUrl ||
-      authStore.currentUser?.avatar ||
-      '/images/user-profile.png'
-    )
-  }
-  return authStore.currentUser?.avatar || '/images/user-profile.png'
-})
-
-const rolesList: { id: UserRole; name: string; path: string }[] = [
-  { id: 'UMKM', name: 'Pelaku Usaha (UMKM)', path: '/dashboard' },
-  { id: 'CONSULTANT', name: 'Konsultan Ahli', path: '/konsultan' },
-  { id: 'INVESTOR', name: 'Investor / Funder', path: '/investor' },
-  { id: 'ADMIN', name: 'Admin Platform', path: '/admin' }
-]
-
-function handleSwitchRole(newRole: UserRole, targetPath: string) {
-  authStore.setRole(newRole)
-  isProfileMenuOpen.value = false
-  isMobileProfileMenuOpen.value = false
-  emit('closeMobile')
-  router.push(targetPath)
-}
-
-function handleLogout() {
-  isProfileMenuOpen.value = false
-  isMobileProfileMenuOpen.value = false
-  emit('closeMobile')
-  authStore.logout()
-  router.push('/masuk')
-}
-
-function handleProfileClick() {
-  isProfileMenuOpen.value = !isProfileMenuOpen.value
-}
-
 const asideRef = ref<HTMLElement | null>(null)
 const brandHeaderRef = ref<HTMLElement | null>(null)
 const bannerRef = ref<HTMLElement | null>(null)
+const compactHeaderRef = ref<HTMLElement | null>(null)
 
 // Official Bear Mascot Lottie Animation URLs
 const lottieSources = {
@@ -539,11 +373,120 @@ const timeBackgroundClasses = computed(() => {
   }
 })
 
-let timeInterval: any = null
+// Ultra HD Rendering Configuration for DotLottie WASM Canvas
+const lottieRenderConfig = computed(() => {
+  const dpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1
+  return {
+    devicePixelRatio: Math.max(dpr * 2, 3), // Ensure >= 3x super-sampling for razor-sharp vector graphics
+    autoResize: true,
+    quality: 100
+  }
+})
+
+function animateSidebarContent(collapsed: boolean) {
+  if (!asideRef.value) return
+  const targets = asideRef.value.querySelectorAll('.sidebar-anim-target')
+  const sectionTitles = asideRef.value.querySelectorAll('.sidebar-section-title')
+  const iconBoxes = asideRef.value.querySelectorAll('.sidebar-icon-box')
+
+  gsap.killTweensOf([
+    ...targets,
+    ...sectionTitles,
+    ...iconBoxes,
+    compactHeaderRef.value,
+    bannerRef.value
+  ].filter(Boolean))
+
+  if (collapsed) {
+    // Mode Compact: Reveal perlahan bertahap dari atas ke bawah
+    // 1. Header tombol expand di bagian atas muncul duluan
+    if (compactHeaderRef.value) {
+      gsap.fromTo(
+        compactHeaderRef.value,
+        { autoAlpha: 0, y: -8, scale: 0.88 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.3)' }
+      )
+    }
+
+    // 2. Seluruh elemen (label dan judul kategori) ditutup berurutan dari atas ke bawah
+    gsap.to(targets, {
+      autoAlpha: 0,
+      x: -12,
+      height: (i, target: any) => target.classList.contains('sidebar-section-title') ? 0 : '',
+      marginBottom: (i, target: any) => target.classList.contains('sidebar-section-title') ? 0 : '',
+      duration: 0.28,
+      stagger: 0.035, // Reveal/tutup bertahap dari atas ke bawah
+      ease: 'power2.in'
+    })
+
+    // 3. Icon box di setiap menu navigasi reveal perlahan dari atas ke bawah
+    if (iconBoxes.length) {
+      gsap.fromTo(
+        iconBoxes,
+        { scale: 0.8, opacity: 0.3, y: 6 },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          duration: 0.48,
+          stagger: 0.05, // Reveal bertahap perlahan dari atas ke bawah
+          ease: 'power2.out',
+          delay: 0.08,
+          clearProps: 'transform'
+        }
+      )
+    }
+  } else {
+    // Mode Expand: Reveal perlahan bertahap dari atas ke bawah
+    // 1. Banner maskot Lottie di bagian paling atas muncul perlahan duluan
+    if (bannerRef.value) {
+      gsap.fromTo(
+        bannerRef.value,
+        { autoAlpha: 0, y: -10 },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out', delay: 0.05 }
+      )
+    }
+
+    // 2. Seluruh elemen navigasi reveal berurutan secara terpadu dari atas ke bawah:
+    //    1. Beranda -> 2. Catatan Kas -> 3. KELOLA USAHA -> 4. Profil Usaha -> 5. Rencana Aksi -> 6. Cek Kesehatan -> 7. PEMODALAN -> 8. Cari Modal -> 9. Notifikasi
+    gsap.fromTo(
+      targets,
+      {
+        autoAlpha: 0,
+        x: -16,
+        height: (i, target: any) => target.classList.contains('sidebar-section-title') ? 0 : '',
+        marginBottom: (i, target: any) => target.classList.contains('sidebar-section-title') ? 0 : ''
+      },
+      {
+        autoAlpha: 1,
+        x: 0,
+        height: (i, target: any) => target.classList.contains('sidebar-section-title') ? 16 : '',
+        marginBottom: (i, target: any) => target.classList.contains('sidebar-section-title') ? 8 : '',
+        duration: 0.48,
+        stagger: 0.075, // Mengalir halus satu per satu dari urutan 1 sampai 10
+        ease: 'power2.out',
+        delay: 0.08,
+        clearProps: 'transform'
+      }
+    )
+  }
+}
+
+watch(isCollapsed, async (newVal) => {
+  await nextTick()
+  animateSidebarContent(newVal)
+})
 
 function handleToggleCollapse() {
-  isProfileMenuOpen.value = false
   toggleCollapse()
+}
+
+function handleNavigate(to: string) {
+  closeMobile()
+  emit('closeMobile')
+  if (route.path !== to) {
+    router.push(to)
+  }
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -558,6 +501,8 @@ function handleCloseMobile() {
   emit('closeMobile')
 }
 
+let timeInterval: any = null
+
 onMounted(() => {
   if (import.meta.client) {
     window.addEventListener('keydown', handleKeydown)
@@ -567,6 +512,19 @@ onMounted(() => {
     }
     if (umkmStore.profile.ownerAvatarUrl && authStore.currentUser) {
       authStore.updateAvatar(umkmStore.profile.ownerAvatarUrl)
+    }
+
+    // Set initial GSAP state for desktop sidebar content
+    if (asideRef.value) {
+      const targets = asideRef.value.querySelectorAll('.sidebar-anim-target')
+      const sectionTitles = asideRef.value.querySelectorAll('.sidebar-section-title')
+      if (isCollapsed.value) {
+        gsap.set(targets, { autoAlpha: 0, x: -12 })
+        gsap.set(sectionTitles, { height: 0, marginBottom: 0 })
+      } else {
+        // Jalankan animasi reveal bertahap dari atas ke bawah saat pertama kali dimuat
+        animateSidebarContent(false)
+      }
     }
 
     // Refresh time of day every 60 seconds
@@ -582,19 +540,11 @@ onUnmounted(() => {
     if (timeInterval) {
       clearInterval(timeInterval)
     }
-    gsap.killTweensOf([
-      '.sidebar-label',
-      '.sidebar-brand-text',
-      '.sidebar-banner',
-      '.sidebar-section-title',
-      '.sidebar-toggle-btn',
-      '.sidebar-icon-box',
-      '.sidebar-nav-item',
-      '.sidebar-divider',
-      asideRef.value,
-      brandHeaderRef.value,
-      bannerRef.value
-    ])
+    if (asideRef.value) {
+      const targets = asideRef.value.querySelectorAll('.sidebar-anim-target')
+      const sectionTitles = asideRef.value.querySelectorAll('.sidebar-section-title')
+      gsap.killTweensOf([...targets, ...sectionTitles, asideRef.value, bannerRef.value, compactHeaderRef.value])
+    }
   }
 })
 
@@ -608,12 +558,7 @@ watch(
   }
 )
 
-const currentRole = computed(() => {
-  if (route.path.startsWith('/konsultan')) return 'CONSULTANT'
-  if (route.path.startsWith('/investor')) return 'INVESTOR'
-  if (route.path.startsWith('/admin')) return 'ADMIN'
-  return authStore.currentUser?.role || 'UMKM'
-})
+const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
 
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'
@@ -665,8 +610,7 @@ const navigationSections = computed<NavSection[]>(() => {
         items: [
           { to: '/dashboard/profile', label: 'Profil Usaha', icon: UserCircleIcon },
           { to: '/dashboard/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
-          { to: '/dashboard/penilaian', label: 'Cek Kesehatan', icon: AnalyticsUpIcon },
-          { to: '/dashboard/profil-publik', label: 'Toko Publik', icon: Store01Icon }
+          { to: '/dashboard/penilaian', label: 'Cek Kesehatan', icon: AnalyticsUpIcon }
         ]
       },
       {
@@ -675,7 +619,7 @@ const navigationSections = computed<NavSection[]>(() => {
           { to: '/dashboard/pendanaan', label: 'Cari Modal', icon: Award01Icon },
           {
             to: '/dashboard/pesan',
-            label: 'Pesan',
+            label: 'Pesan Diskusi',
             icon: Message01Icon,
             badge: chatStore.unreadCountUmkm > 0 ? chatStore.unreadCountUmkm : undefined
           },
@@ -692,16 +636,14 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/konsultan', label: 'Dashboard', icon: Home03Icon },
-          { to: '/konsultan/klien', label: 'Klien', icon: UserIcon },
-          { to: '/konsultan/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
+          { to: '/konsultan', label: 'Daftar Klien', icon: UserGroupIcon },
           { to: '/konsultan/validasi', label: 'Validasi Kas', icon: CheckmarkCircle01Icon }
         ]
       },
       {
-        title: 'Manajemen',
+        title: 'Pengawasan',
         items: [
-          { to: '/konsultan/profil', label: 'Profil & Dokumen', icon: UserCircleIcon }
+          { to: '/konsultan/alert', label: 'Peringatan', icon: Alert01Icon }
         ]
       }
     ]
@@ -710,12 +652,6 @@ const navigationSections = computed<NavSection[]>(() => {
       {
         items: [
           { to: '/investor', label: 'Katalog Usaha', icon: Store01Icon },
-          {
-            to: '/investor/pesan',
-            label: 'Pesan',
-            icon: Message01Icon,
-            badge: chatStore.unreadCountInvestor > 0 ? chatStore.unreadCountInvestor : undefined
-          },
           { to: '/investor/watchlist', label: 'Disimpan', icon: StarIcon }
         ]
       }

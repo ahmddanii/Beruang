@@ -14,7 +14,7 @@
           </h1>
 
           <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-xl">
-            Monitor perputaran modal UMKM nasional, kepatuhan audit konsultan berlisensi BNSP, dan alokasi tiket modal investasi terverifikasi tanpa gagal bayar.
+            Monitor perputaran modal UMKM nasional, pendampingan konsultan berlisensi BNSP, dan alokasi tiket modal investasi terverifikasi tanpa gagal bayar.
           </p>
         </div>
 
@@ -22,7 +22,7 @@
           <!-- Button-in-Button Trailing Icon -->
           <button
             type="button"
-            class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 active:scale-[0.98] inline-flex items-center gap-3 cursor-pointer"
+            class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 inline-flex items-center gap-3 cursor-pointer"
             @click="showAssignModal = true"
           >
             <span>Tugaskan Konsultan</span>
@@ -114,7 +114,7 @@
         <!-- Button-in-Button Action -->
         <button
           type="button"
-          class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shrink-0 transition-all duration-300 active:scale-[0.98] shadow-xs inline-flex items-center gap-3 cursor-pointer"
+          class="group pl-5 pr-2 py-2 rounded-full font-heading font-bold text-xs bg-primary-500 hover:bg-primary-600 text-white shrink-0 transition-all duration-300 shadow-xs inline-flex items-center gap-3 cursor-pointer"
           @click="showAssignModal = true"
         >
           <span>Tugaskan Sekarang</span>
@@ -283,7 +283,7 @@
             </button>
             <button
               type="button"
-              class="group pl-5 pr-2 py-2 rounded-full text-xs font-heading font-bold bg-primary-500 hover:bg-primary-600 text-white cursor-pointer transition-all duration-300 active:scale-[0.98] shadow-xs inline-flex items-center gap-2.5"
+              class="group pl-5 pr-2 py-2 rounded-full text-xs font-heading font-bold bg-primary-500 hover:bg-primary-600 text-white cursor-pointer transition-all duration-300 shadow-xs inline-flex items-center gap-2.5"
               @click="confirmAssignment"
             >
               <span>Konfirmasi & Tugaskan Konsultan</span>
@@ -331,7 +331,7 @@ const activityList = [
   },
   {
     id: 2,
-    title: 'Dra. Maya Suryani Memvalidasi Audit Legalitas',
+    title: 'Dra. Maya Suryani Memvalidasi Legalitas Usaha',
     desc: 'Sertifikat Halal dan NIB RBA milik Kopi Senja diverifikasi valid 100%.',
     time: '45 menit lalu'
   },
@@ -344,7 +344,7 @@ const activityList = [
   {
     id: 4,
     title: 'Sambal Bu Rudy Asli Meraih Grade A',
-    desc: 'Lolos uji audit 5 pilar dengan skor 88/100, siap kurasi sindikasi modal.',
+    desc: 'Lolos uji kesiapan 5 pilar dengan skor 88/100, siap kurasi sindikasi modal.',
     time: '5 jam lalu'
   }
 ]

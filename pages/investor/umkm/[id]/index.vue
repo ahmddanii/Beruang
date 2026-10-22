@@ -67,7 +67,7 @@
           <NuxtLink
             v-if="item?.accessStatus === 'APPROVED'"
             :to="`/investor/data-room/${item?.id}`"
-            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all active:scale-95 cursor-pointer"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all cursor-pointer"
           >
             <HugeiconsIcon :icon="FileUnlockedIcon" :size="16" :stroke-width="2" />
             <span>Buka Data Room Terproteksi</span>
@@ -104,7 +104,7 @@
       </div>
 
       <div class="card-tactile-gopay rounded-2xl p-4.5 border space-y-1.5 text-center">
-        <span class="text-xs text-neutral-500 font-medium block">Pertumbuhan Omzet YoY</span>
+        <span class="text-xs text-neutral-500 font-medium block">Pertumbuhan Pendapatan YoY</span>
         <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white block tabular-nums">
           +{{ item?.growthYoY }}%
         </span>
@@ -141,7 +141,7 @@
               "{{ item?.pitchSummary }}"
             </p>
             <p>
-              Bisnis ini mengadopsi model gerai kompak (compact coffee bar) dengan efisiensi sewa lahan yang terbukti menekan rasio OPEX di bawah 25%. Standardisasi roasting biji lokal terpusat menjamin margin kotor tetap konsisten meskipun terjadi fluktuasi komoditas.
+              Bisnis ini mengadopsi model gerai kompak (compact coffee bar) dengan efisiensi sewa lahan yang terbukti menekan biaya operasional di bawah 25%. Standardisasi roasting biji lokal terpusat menjamin margin kotor tetap konsisten meskipun terjadi fluktuasi komoditas.
             </p>
 
             <div class="p-4 rounded-xl bg-neutral-100/70 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60 space-y-2">
@@ -172,7 +172,7 @@
               </p>
               <div class="pt-1">
                 <strong class="font-bold text-neutral-900 dark:text-white block">{{ item?.consultantName }}</strong>
-                <span class="text-[11px] text-neutral-500">Konsultan Keuangan Berlisensi BNSP • Audit {{ item?.certifiedAt }}</span>
+                <span class="text-[11px] text-neutral-500">Konsultan Keuangan Berlisensi BNSP • Validasi {{ item?.certifiedAt }}</span>
               </div>
             </div>
           </div>

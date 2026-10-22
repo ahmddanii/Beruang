@@ -210,7 +210,7 @@
               class="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
             />
             <span class="text-xs text-neutral-700 dark:text-neutral-300">
-              Kirimkan buletin mingguan ringkasan tren omzet dan analisis makro industri UMKM binaan.
+              Kirimkan buletin mingguan ringkasan tren pendapatan dan analisis makro industri UMKM binaan.
             </span>
           </label>
         </div>

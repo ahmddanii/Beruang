@@ -612,13 +612,15 @@ export const useUmkmStore = defineStore('umkm', {
     },
 
     /**
-     * GET /api/finances/summary, /api/finances/daily, /api/umkm/monthly-reports
+     * GET /api/finances/summary, /api/finances/daily, /api/finances/monthly
      */
     async fetchFinances() {
       try {
-        const [dailyRes, monthlyRes] = await Promise.allSettled([
+        const [dailyRes, monthlyRes, monthlyAltRes, summaryRes] = await Promise.allSettled([
           useApi<any>('/finances/daily'),
-          useApi<any>('/umkm/monthly-reports')
+          useApi<any>('/finances/monthly'),
+          useApi<any>('/umkm/monthly-reports'),
+          useApi<any>('/finances/summary')
         ])
 
         if (dailyRes.status === 'fulfilled' && dailyRes.value?.data) {
@@ -628,8 +630,14 @@ export const useUmkmStore = defineStore('umkm', {
           }
         }
 
-        if (monthlyRes.status === 'fulfilled' && monthlyRes.value?.data) {
-          const mList = Array.isArray(monthlyRes.value.data) ? monthlyRes.value.data : (monthlyRes.value.data as any).data
+        const validMonthly = (monthlyRes.status === 'fulfilled' && monthlyRes.value?.data)
+          ? monthlyRes.value.data
+          : (monthlyAltRes.status === 'fulfilled' && monthlyAltRes.value?.data)
+            ? monthlyAltRes.value.data
+            : null
+
+        if (validMonthly) {
+          const mList = Array.isArray(validMonthly) ? validMonthly : (validMonthly as any).data
           if (Array.isArray(mList) && mList.length > 0) {
             this.monthlyRecords = mList
           }

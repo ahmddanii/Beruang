@@ -124,8 +124,17 @@ const DEMO_CREDENTIALS: Record<UserRole, { email: string; pass: string; name: st
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    currentUser: null as UserProfile | null,
-    isAuthenticated: false,
+    currentUser: {
+      id: '5',
+      name: 'Fikri Setiawan',
+      email: 'fikri@kopisenja.id',
+      role: 'UMKM' as UserRole,
+      avatar: '/images/user-profile.png',
+      businessName: 'Kopi Senja Nusantara',
+      phone: '081234567890',
+      verified: true
+    } as UserProfile | null,
+    isAuthenticated: true,
     token: '' as string,
     loading: false,
     error: null as string | null
@@ -218,10 +227,16 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = true
         return res.data
       } catch (err: any) {
-        // Fallback demo/mock login jika live API gagal atau mode demo
-        await this.setRole(role)
-        if (this.currentUser) {
-          this.currentUser.email = email
+        // Fallback demo/mock login jika live API gagal atau mode demo tanpa rekursi
+        const demo = DEMO_CREDENTIALS[role]
+        this.currentUser = {
+          id: 'demo-' + role.toLowerCase(),
+          role,
+          name: demo?.name || 'Fikri Setiawan',
+          email: email || demo?.email || 'fikri@kopisenja.id',
+          businessName: demo?.businessName || 'Kopi Senja Nusantara',
+          avatar: '/images/user-profile.png',
+          verified: true
         }
         this.isAuthenticated = true
         return { user: this.currentUser, token: 'demo-token' }
@@ -440,20 +455,38 @@ export const useAuthStore = defineStore('auth', {
     async setRole(role: UserRole) {
       const demo = DEMO_CREDENTIALS[role]
       if (demo) {
+        this.currentUser = {
+          id: 'demo-' + role.toLowerCase(),
+          role,
+          name: demo.name,
+          email: demo.email,
+          businessName: demo.businessName,
+          avatar: '/images/user-profile.png',
+          verified: true
+        }
+        this.isAuthenticated = true
+
         try {
-          await this.login(demo.email, demo.pass)
-        } catch {
-          // Fallback lokal jika backend tidak terjangkau
-          this.currentUser = {
-            id: 'demo-' + role.toLowerCase(),
-            role,
-            name: demo.name,
-            email: demo.email,
-            businessName: demo.businessName,
-            avatar: '/images/user-profile.png',
-            verified: true
+          const res = await useApi<{ token: string; user: UserProfile }>('/auth/login', {
+            method: 'POST',
+            body: { email: demo.email, password: demo.pass }
+          })
+          if (res.data?.token) {
+            const tokenCookie = useCookie<string | null>('beruang_token', {
+              maxAge: 60 * 60 * 24 * 7,
+              sameSite: 'lax',
+              path: '/'
+            })
+            tokenCookie.value = res.data.token
+            this.token = res.data.token
+            this.currentUser = {
+              ...this.currentUser,
+              ...res.data.user,
+              businessName: res.data.user.businessName || res.data.user.orgName || demo.businessName
+            }
           }
-          this.isAuthenticated = true
+        } catch {
+          // Tetap gunakan sesi demo lokal jika live backend offline
         }
       }
     },

@@ -67,7 +67,7 @@
               {{ userName }}
             </span>
             <span class="text-[12px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5 font-normal">
-              {{ authStore.currentUser?.email || 'fikri@kopisenja.id' }}
+              {{ authStore.currentUser?.email || 'user@beruang.id' }}
             </span>
             <div class="mt-1.5 flex items-center gap-1.5">
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#E6F4F7] text-[#156374] dark:bg-[#156374]/30 dark:text-[#50AABF]">

@@ -124,17 +124,8 @@ const DEMO_CREDENTIALS: Record<UserRole, { email: string; pass: string; name: st
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    currentUser: {
-      id: '5',
-      name: '',
-      email: '',
-      role: 'UMKM' as UserRole,
-      avatar: '/images/user-profile.png',
-      businessName: '',
-      phone: '',
-      verified: true
-    } as UserProfile | null,
-    isAuthenticated: true,
+    currentUser: null as UserProfile | null,
+    isAuthenticated: false,
     token: '' as string,
     loading: false,
     error: null as string | null
@@ -163,12 +154,9 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = true
         await this.fetchMe()
       } else {
-        // Otomatis mint token live ke deployed backend
-        try {
-          await this.login('fikri@kopisenja.id', 'password123')
-        } catch (err: any) {
-          console.warn('Backend live login fallback:', err?.message)
-        }
+        this.token = ''
+        this.currentUser = null
+        this.isAuthenticated = false
       }
     },
 
@@ -511,11 +499,21 @@ export const useAuthStore = defineStore('auth', {
       } catch {
         // Abaikan error saat logout
       } finally {
-        const tokenCookie = useCookie<string | null>('beruang_token')
+        const tokenCookie = useCookie<string | null>('beruang_token', {
+          path: '/'
+        })
         tokenCookie.value = null
         this.token = ''
         this.currentUser = null
         this.isAuthenticated = false
+        if (import.meta.client) {
+          try {
+            localStorage.removeItem('beruang_token')
+            sessionStorage.clear()
+          } catch {
+            // ignore
+          }
+        }
       }
     },
 

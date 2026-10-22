@@ -14,6 +14,17 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    optimizeDeps: {
+      include: [
+        '@hugeicons/vue',
+        '@hugeicons/core-free-icons',
+        '@lottiefiles/dotlottie-vue',
+        'pinia',
+        'gsap',
+        'chart.js',
+        'vue-chartjs'
+      ]
+    },
     resolve: {
       alias: {
         '#app-manifest': fileURLToPath(new URL('./stubs/app-manifest.mjs', import.meta.url))

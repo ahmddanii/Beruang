@@ -233,7 +233,7 @@
 
             <div class="text-left space-y-1.5">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Bidang Usaha
+                Bidang Usaha <span class="text-rose-500 font-bold">*</span>
               </label>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 <button
@@ -442,7 +442,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Nama Lengkap & Gelar
+                Nama Lengkap & Gelar <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
                 v-model="formConsultant.name"
@@ -455,7 +455,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Nama Kantor / Lembaga
+                Nama Kantor / Lembaga <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
                 v-model="formConsultant.institution"
@@ -468,7 +468,7 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Nomor Sertifikat BNSP
+                  Nomor Sertifikat BNSP <span class="text-neutral-400 font-normal">(Bila ada)</span>
                 </label>
                 <input
                   v-model="formConsultant.bnspLicense"
@@ -479,7 +479,7 @@
               </div>
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Kota Tinggal
+                  Kota Tinggal <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <input
                   v-model="formConsultant.city"
@@ -509,7 +509,7 @@
 
             <div class="text-left space-y-1.5">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Bidang Keahlian
+                Bidang Keahlian <span class="text-rose-500 font-bold">*</span>
               </label>
               <div class="grid grid-cols-2 gap-2">
                 <button
@@ -532,7 +532,7 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Lama Pengalaman
+                  Lama Pengalaman <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <select
                   v-model="formConsultant.experience"
@@ -545,7 +545,7 @@
               </div>
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Maksimal UMKM yang Dibantu
+                  Maksimal UMKM yang Dibantu <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <select
                   v-model.number="formConsultant.maxClients"
@@ -625,7 +625,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Nama Lengkap
+                Nama Lengkap <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
                 v-model="formInvestor.name"
@@ -638,7 +638,7 @@
 
             <div class="text-left space-y-1">
               <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                Nama Perusahaan / Kelompok
+                Nama Perusahaan / Kelompok <span class="text-neutral-400 font-normal">(Bila ada / Pribadi)</span>
               </label>
               <input
                 v-model="formInvestor.entityName"
@@ -651,7 +651,7 @@
             <div class="grid grid-cols-2 gap-3 text-left">
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Jenis Investor
+                  Jenis Investor <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <select
                   v-model="formInvestor.investorType"
@@ -665,7 +665,7 @@
               </div>
               <div class="space-y-1">
                 <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Kota Asal
+                  Kota Asal <span class="text-rose-500 font-bold">*</span>
                 </label>
                 <input
                   v-model="formInvestor.city"
@@ -1003,14 +1003,28 @@ const umkmSectors = [
   'Teknologi'
 ]
 
-const initialBusinessName = (authStore.currentUser?.businessName || authStore.currentUser?.org_name || '').trim()
-const safeInitialName = initialBusinessName.toLowerCase().includes('kopi senja') ? '' : initialBusinessName
+function cleanInitialText(val?: string, demoWords: string[] = []): string {
+  if (!val) return ''
+  const trimmed = val.trim()
+  const lower = trimmed.toLowerCase()
+  for (const w of demoWords) {
+    if (lower.includes(w.toLowerCase())) return ''
+  }
+  return trimmed
+}
 
-const initialOwnerName = (authStore.currentUser?.name || '').trim()
-const safeInitialOwner = initialOwnerName.toLowerCase().includes('fikri setiawan') ? '' : initialOwnerName
+const safeInitialBusiness = cleanInitialText(
+  authStore.currentUser?.businessName || authStore.currentUser?.org_name,
+  ['kopi senja', 'suryani consulting', 'nusantara angel', 'operations team']
+)
+
+const safeInitialOwner = cleanInitialText(
+  authStore.currentUser?.name,
+  ['fikri', 'setiawan', 'maya suryani', 'hendro wicaksono', 'super admin', 'pengguna']
+)
 
 const formUmkm = ref<UmkmFormData>({
-  name: safeInitialName,
+  name: safeInitialBusiness,
   owner: safeInitialOwner,
   year: null,
   startDate: '',
@@ -1096,11 +1110,11 @@ const consultantSpecializations = [
 ]
 
 const formConsultant = ref<ConsultantFormData>({
-  name: authStore.currentUser?.name || '',
-  institution: authStore.currentUser?.institution || authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
-  bnspLicense: authStore.currentUser?.bnspLicense || '',
+  name: safeInitialOwner,
+  institution: safeInitialBusiness,
+  bnspLicense: '',
   city: authStore.currentUser?.city || '',
-  specialization: authStore.currentUser?.specialization || 'Keuangan & Biaya',
+  specialization: 'Keuangan & Biaya',
   experience: '3 - 5 Tahun',
   maxClients: 5
 })
@@ -1134,11 +1148,11 @@ const investorTargetSectors = [
 ]
 
 const formInvestor = ref<InvestorFormData>({
-  name: authStore.currentUser?.name || '',
-  entityName: authStore.currentUser?.businessName || authStore.currentUser?.org_name || '',
-  investorType: authStore.currentUser?.investorType || 'Perorangan (Angel Investor)',
+  name: safeInitialOwner,
+  entityName: safeInitialBusiness,
+  investorType: 'Pribadi',
   city: authStore.currentUser?.city || '',
-  ticketRange: authStore.currentUser?.ticketRange || '50 - 150 Juta',
+  ticketRange: '50 - 150 Juta',
   sectors: ['Makanan & Minuman'],
   minMargin: '30%'
 })
@@ -1200,6 +1214,7 @@ const isCurrentStepValid = computed(() => {
     if (currentStep.value === 2) {
       return Boolean(
         formConsultant.value.specialization?.trim() &&
+        formConsultant.value.experience?.trim() &&
         formConsultant.value.maxClients &&
         formConsultant.value.maxClients >= 1
       )
@@ -1209,11 +1224,12 @@ const isCurrentStepValid = computed(() => {
     if (currentStep.value === 1) {
       return Boolean(
         formInvestor.value.name?.trim() &&
+        formInvestor.value.investorType?.trim() &&
         formInvestor.value.city?.trim()
       )
     }
     if (currentStep.value === 2) {
-      return Boolean(formInvestor.value.ticketRange?.trim())
+      return true
     }
     return true
   }
@@ -1225,18 +1241,20 @@ function syncAuthToForms() {
   if (!u) return
 
   // Sinkronkan Nama Pemilik (abaikan nama dummy seeder)
-  if (u.name && !u.name.toLowerCase().includes('fikri setiawan')) {
-    if (!formUmkm.value.owner) formUmkm.value.owner = u.name
-    if (!formConsultant.value.name) formConsultant.value.name = u.name
-    if (!formInvestor.value.name) formInvestor.value.name = u.name
+  const cleanName = cleanInitialText(u.name, ['fikri', 'setiawan', 'maya suryani', 'hendro wicaksono', 'super admin', 'pengguna'])
+  if (cleanName) {
+    if (!formUmkm.value.owner) formUmkm.value.owner = cleanName
+    if (!formConsultant.value.name) formConsultant.value.name = cleanName
+    if (!formInvestor.value.name) formInvestor.value.name = cleanName
   }
 
   // Sinkronkan Nama Usaha (Abaikan nama dummy Kopi Senja Nusantara)
-  const businessOrOrg = (u.businessName || u.org_name || u.orgName || '').trim()
-  if (businessOrOrg && !businessOrOrg.toLowerCase().includes('kopi senja')) {
-    if (!formUmkm.value.name) formUmkm.value.name = businessOrOrg
-    if (!formConsultant.value.institution) formConsultant.value.institution = businessOrOrg
-    if (!formInvestor.value.entityName) formInvestor.value.entityName = businessOrOrg
+  const businessOrOrg = (u.businessName || u.org_name || u.orgName || u.institution || u.entityName || '').trim()
+  const cleanBusiness = cleanInitialText(businessOrOrg, ['kopi senja', 'suryani consulting', 'nusantara angel', 'operations team'])
+  if (cleanBusiness) {
+    if (!formUmkm.value.name) formUmkm.value.name = cleanBusiness
+    if (!formConsultant.value.institution) formConsultant.value.institution = cleanBusiness
+    if (!formInvestor.value.entityName) formInvestor.value.entityName = cleanBusiness
   }
 
   // Sinkronkan Domisili Kota

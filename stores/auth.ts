@@ -126,12 +126,12 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     currentUser: {
       id: '5',
-      name: 'Fikri Setiawan',
-      email: 'fikri@kopisenja.id',
+      name: '',
+      email: '',
       role: 'UMKM' as UserRole,
       avatar: '/images/user-profile.png',
       businessName: '',
-      phone: '081234567890',
+      phone: '',
       verified: true
     } as UserProfile | null,
     isAuthenticated: true,

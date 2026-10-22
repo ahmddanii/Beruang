@@ -536,12 +536,20 @@ export const useUmkmStore = defineStore('umkm', {
     async fetchTasks() {
       try {
         const [tasksRes, milestonesRes] = await Promise.allSettled([
-          useApi<any[]>('/umkm/tasks'),
-          useApi<any[]>('/umkm/milestones')
+          useApi<any>('/umkm/tasks'),
+          useApi<any>('/umkm/milestones')
         ])
 
-        if (tasksRes.status === 'fulfilled' && tasksRes.value?.data && Array.isArray(tasksRes.value.data)) {
-          this.tasks = tasksRes.value.data
+        if (tasksRes.status === 'fulfilled' && tasksRes.value?.data) {
+          const d = tasksRes.value.data
+          if (Array.isArray(d)) {
+            this.tasks = d
+          } else if (d.tasks && Array.isArray(d.tasks)) {
+            this.tasks = d.tasks
+            if (d.milestones && Array.isArray(d.milestones) && d.milestones.length > 0) {
+              this.milestones = d.milestones
+            }
+          }
         }
         if (milestonesRes.status === 'fulfilled' && milestonesRes.value?.data && Array.isArray(milestonesRes.value.data)) {
           this.milestones = milestonesRes.value.data

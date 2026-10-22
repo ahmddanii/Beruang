@@ -386,6 +386,7 @@ function handleExportReport() {
 }
 
 onMounted(() => {
+  umkmStore.fetchAssessment()
   // GSAP Entrance
   gsap.from('.gsap-header-card', {
     opacity: 0,

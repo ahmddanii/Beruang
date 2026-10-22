@@ -222,7 +222,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useKonsultanStore } from '~/stores/konsultan'
 import BMetricBannerCard from '~/components/base/BMetricBannerCard.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -239,6 +239,10 @@ definePageMeta({
 })
 
 const konsultanStore = useKonsultanStore()
+
+onMounted(() => {
+  konsultanStore.fetchDashboard()
+})
 
 const readyCount = computed(() => {
   return konsultanStore.clients.filter(c => c.fundingStatus === 'READY_FOR_FUNDING').length

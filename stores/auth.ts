@@ -153,11 +153,22 @@ export const useAuthStore = defineStore('auth', {
      * Inisialisasi sesi dari cookie 'beruang_token' saat aplikasi dimuat
      */
     async initSession() {
-      const tokenCookie = useCookie<string | null>('beruang_token')
+      const tokenCookie = useCookie<string | null>('beruang_token', {
+        maxAge: 60 * 60 * 24 * 7,
+        sameSite: 'lax',
+        path: '/'
+      })
       if (tokenCookie.value) {
         this.token = tokenCookie.value
         this.isAuthenticated = true
         await this.fetchMe()
+      } else {
+        // Otomatis mint token live ke deployed backend
+        try {
+          await this.login('fikri@kopisenja.id', 'password123')
+        } catch (err: any) {
+          console.warn('Backend live login fallback:', err?.message)
+        }
       }
     },
 

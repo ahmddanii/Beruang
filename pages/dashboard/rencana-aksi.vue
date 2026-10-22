@@ -1125,6 +1125,7 @@ let handleResize: (() => void) | null = null
 
 onMounted(() => {
   initEvidenceFromStorage()
+  umkmStore.fetchTasks()
 
   nextTick(() => {
     updateViewTabIndicator(true)

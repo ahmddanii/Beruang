@@ -75,8 +75,8 @@ export const useApi = async <T = any>(
     const message = err?.response?._data?.message || err?.data?.message || err?.message || 'Terjadi kesalahan pada server.'
     const errorData = err?.response?._data || err?.data
 
-    // If unauthorized, clear token and redirect to login
-    if (status === 401) {
+    // Hanya bersihkan token dan redirect ke login jika sesi auth utama (/auth/me) yang 401
+    if (status === 401 && normalizedEndpoint === '/auth/me') {
       token.value = null
       if (import.meta.client) {
         const currentPath = window.location.pathname

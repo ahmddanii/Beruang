@@ -178,6 +178,7 @@ export const useNotificationStore = defineStore('notification', {
             const parsed = JSON.parse(saved)
             if (Array.isArray(parsed) && parsed.length > 0) {
               this.notifications = parsed
+              this.fetchNotifications()
               return
             }
           }
@@ -189,6 +190,7 @@ export const useNotificationStore = defineStore('notification', {
       // Default mock if none stored or forced reset
       this.notifications = [...DEFAULT_NOTIFICATIONS]
       this.saveToStorage()
+      this.fetchNotifications()
     },
 
     saveToStorage() {

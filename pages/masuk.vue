@@ -200,31 +200,6 @@
             </div>
           </div>
 
-          <!-- Fast Demo Account Selector Chips -->
-          <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#1A1D26]/70 border border-[#E2E8F0] dark:border-white/10 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-neutral-700 dark:text-neutral-300">Pilih Cepat Akun Demo:</span>
-              <span class="text-[11px] text-neutral-500 dark:text-neutral-400">1-Klik isi nomor</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <button
-                v-for="r in roleCards"
-                :key="r.key"
-                type="button"
-                :class="[
-                  'py-2 px-2.5 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
-                  cleanPhone === r.demoPhone.replace(/\D/g, '')
-                    ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/20 border-[#0081A0] text-[#0081A0] dark:text-[#2091AA] shadow-2xs ring-1 ring-[#0081A0]/30'
-                    : 'bg-white dark:bg-[#13161F] border-neutral-200/80 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
-                ]"
-                @click="setDemoPhone(r.demoPhone, r.key)"
-              >
-                <span class="block text-xs font-bold">{{ r.shortTitle }}</span>
-                <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate">{{ r.demoName }}</span>
-              </button>
-            </div>
-          </div>
-
           <!-- Error / Success Alert in Phone Step -->
           <div v-if="errorMessage && step === 'phone'" class="p-3 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2">
             <span class="font-bold shrink-0">!</span>
@@ -420,36 +395,30 @@ const step = ref<'main' | 'phone' | 'otp'>('main')
 // Official Lottie Animation URL
 const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
 
-// Role Definitions for Multi-Role Login & Quick Demo Selection
+// Role Definitions for Multi-Role Login
 const roleCards = [
   {
     key: 'UMKM' as UserRole,
     title: 'Pemilik UMKM',
     shortTitle: 'UMKM',
-    demoName: 'Fikri Setiawan',
     desc: 'Pantau laporan kas, performa harian & kesiapan modal.',
     icon: Store01Icon,
-    demoPhone: '812-3456-7890',
     targetRoute: '/dashboard'
   },
   {
     key: 'CONSULTANT' as UserRole,
     title: 'Konsultan Bisnis',
     shortTitle: 'Konsultan',
-    demoName: 'Dra. Maya Suryani',
     desc: 'Buka sesi pendampingan, validasi audit & bina UMKM.',
     icon: UserGroupIcon,
-    demoPhone: '819-8765-4321',
     targetRoute: '/konsultan'
   },
   {
     key: 'INVESTOR' as UserRole,
     title: 'Investor Mitra',
     shortTitle: 'Investor',
-    demoName: 'Hendro Wicaksono',
     desc: 'Akses portofolio UMKM kurasi & pantau imbal hasil modal.',
     icon: Coins01Icon,
-    demoPhone: '811-2233-4455',
     targetRoute: '/investor'
   }
 ]
@@ -460,7 +429,7 @@ const loading = ref(false)
 const loadingMessage = ref('')
 const errorMessage = ref('')
 const successNotification = ref('')
-const phoneInput = ref('812-3456-7890')
+const phoneInput = ref('')
 const phoneInputRef = ref<HTMLInputElement | null>(null)
 
 // OTP State (6 Digits to match Fonnte Gateway)
@@ -749,11 +718,6 @@ function onPhoneKeydown(event: KeyboardEvent) {
   if (!/^\d$/.test(event.key)) {
     event.preventDefault()
   }
-}
-
-function setDemoPhone(phone: string, role?: UserRole) {
-  if (role) selectedRole.value = role
-  phoneInput.value = formatIndonesianPhone(phone)
 }
 
 const cleanPhone = computed(() => {

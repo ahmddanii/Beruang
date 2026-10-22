@@ -222,31 +222,6 @@
             </div>
           </div>
 
-          <!-- Fast Demo Account Selector Chips -->
-          <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#1A1D26]/70 border border-[#E2E8F0] dark:border-white/10 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-neutral-700 dark:text-neutral-300">Pilih Cepat Akun Demo:</span>
-              <span class="text-[11px] text-neutral-500 dark:text-neutral-400">1-Klik isi nomor</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <button
-                v-for="r in roleCards"
-                :key="r.key"
-                type="button"
-                :class="[
-                  'py-2 px-2.5 rounded-xl border text-center transition-all duration-150 cursor-pointer flex flex-col items-center justify-center gap-0.5',
-                  cleanPhone === r.demoPhone.replace(/\D/g, '')
-                    ? 'bg-[#0081A0]/10 dark:bg-[#0081A0]/20 border-[#0081A0] text-[#0081A0] dark:text-[#2091AA] shadow-2xs ring-1 ring-[#0081A0]/30'
-                    : 'bg-white dark:bg-[#13161F] border-neutral-200/80 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600'
-                ]"
-                @click="setDemoPhone(r.demoPhone, r.key)"
-              >
-                <span class="block text-xs font-bold">{{ r.shortTitle }}</span>
-                <span class="block text-[10px] text-neutral-500 dark:text-neutral-400 truncate">{{ r.demoName }}</span>
-              </button>
-            </div>
-          </div>
-
           <!-- Error / Success Alert in Phone Step -->
           <div v-if="errorMessage && step === 'phone'" class="p-3 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-xs text-red-600 dark:text-red-400 flex items-start gap-2">
             <span class="font-bold shrink-0">!</span>
@@ -347,17 +322,6 @@
             />
           </div>
 
-          <!-- Fast Fill OTP Demo Helper -->
-          <div class="text-center pt-0.5">
-            <button
-              type="button"
-              class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#0081A0]/10 hover:bg-[#0081A0]/20 dark:bg-[#0081A0]/20 dark:hover:bg-[#0081A0]/30 text-[#0081A0] dark:text-[#2091AA] text-xs font-bold transition-all cursor-pointer shadow-2xs"
-              @click="fillOtpDemo"
-            >
-              <span>⚡ Isi Cepat OTP Demo (849201)</span>
-            </button>
-          </div>
-
           <!-- Resend Code Timer -->
           <div class="text-center pt-1">
             <p class="text-xs text-neutral-500 dark:text-neutral-400">
@@ -450,8 +414,6 @@ const roleCards = [
     key: 'UMKM' as UserRole,
     title: 'Pemilik Usaha',
     shortTitle: 'UMKM',
-    demoName: 'Fikri S.',
-    demoPhone: '812-3456-7890',
     desc: 'Kembangkan usaha dan siap dapat modal.',
     icon: Store01Icon
   },
@@ -459,8 +421,6 @@ const roleCards = [
     key: 'CONSULTANT' as UserRole,
     title: 'Konsultan',
     shortTitle: 'Konsultan',
-    demoName: 'Dra. Maya',
-    demoPhone: '819-8765-4321',
     desc: 'Bantu bimbing UMKM agar usahanya maju.',
     icon: UserGroupIcon
   },
@@ -468,8 +428,6 @@ const roleCards = [
     key: 'INVESTOR' as UserRole,
     title: 'Investor',
     shortTitle: 'Investor',
-    demoName: 'Hendro W.',
-    demoPhone: '811-2233-4455',
     desc: 'Cari usaha pilihan untuk diberi modal.',
     icon: Coins01Icon
   }
@@ -490,35 +448,18 @@ const errorMessage = ref('')
 const successNotification = ref('')
 const resendCountdown = ref(60)
 let timerInterval: any = null
-const phoneInput = ref('812-3456-7890')
+const phoneInput = ref('')
 
 const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
-})
-
-const activeRoleDemoPhone = computed(() => {
-  return activeRoleMeta.value.demoPhone || '812-3456-7890'
 })
 
 const currentStepNumber = computed(() => {
   return step.value === 'otp' ? 2 : 1
 })
 
-function setDemoPhone(phone: string, role?: UserRole) {
-  if (role) selectedRole.value = role
-  phoneInput.value = formatIndonesianPhone(phone)
-}
-
 function onRoleTabClick(role: UserRole) {
   selectedRole.value = role
-  const card = roleCards.find(r => r.key === role)
-  if (card?.demoPhone) {
-    phoneInput.value = formatIndonesianPhone(card.demoPhone)
-  }
-}
-
-function fillCurrentRoleDemoPhone() {
-  phoneInput.value = formatIndonesianPhone(activeRoleDemoPhone.value)
 }
 
 function goToPhoneStep() {
@@ -540,10 +481,6 @@ function goToOtpStep() {
 onMounted(() => {
   if (route.query.role && ['UMKM', 'CONSULTANT', 'INVESTOR'].includes(route.query.role as string)) {
     selectedRole.value = route.query.role as UserRole
-    const card = roleCards.find(r => r.key === selectedRole.value)
-    if (card?.demoPhone) {
-      phoneInput.value = formatIndonesianPhone(card.demoPhone)
-    }
   }
   if (route.query.step === 'phone' || route.query.step === 'otp') {
     step.value = route.query.step as 'phone' | 'otp'
@@ -739,11 +676,6 @@ function onOtpPaste(event: ClipboardEvent) {
 function onOtpFocus(event: Event) {
   const target = event.target as HTMLInputElement
   target.select()
-}
-
-function fillOtpDemo() {
-  otpDigits.value = ['8', '4', '9', '2', '0', '1']
-  verifyAndRegister()
 }
 
 async function handleGoogleRegister() {

@@ -7,15 +7,16 @@
     <!-- Atmospheric Layered Cloud Horizon -->
     <BCloudBackground :fixed="true" />
 
-    <!-- TOP-LEFT: Pill Button "Kembali ke Beranda" -->
+    <!-- TOP-LEFT: Pill Button "Kembali ke Halaman Masuk" -->
     <div class="fixed top-6 left-6 sm:top-8 sm:left-8 z-30">
-      <NuxtLink
-        to="/"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150"
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150 cursor-pointer"
+        @click="handleBackToLogin"
       >
         <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
-        <span>Kembali ke Beranda</span>
-      </NuxtLink>
+        <span>Kembali ke Halaman Masuk</span>
+      </button>
     </div>
 
     <!-- Center Flow Container -->
@@ -833,7 +834,15 @@
             <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
             <span>Kembali</span>
           </button>
-          <div v-else />
+          <button
+            v-else
+            type="button"
+            class="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-[0.99]"
+            @click="handleBackToLogin"
+          >
+            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
+            <span>Kembali ke Masuk</span>
+          </button>
 
           <div class="flex items-center gap-3">
             <span v-if="!isCurrentStepValid && currentStep < currentStepsList.length" class="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
@@ -1446,5 +1455,10 @@ async function finishOnboarding() {
   } finally {
     submitting.value = false
   }
+}
+
+async function handleBackToLogin() {
+  await authStore.logout()
+  router.push('/masuk')
 }
 </script>

@@ -112,8 +112,14 @@
           </NuxtLink>
         </template>
 
-        <!-- 2. Sudah Mendaftar tapi Belum Menyelesaikan Onboarding: Lengkapi Profil -->
+        <!-- 2. Sudah Mendaftar tapi Belum Menyelesaikan Onboarding: Tetap sediakan tombol Masuk -->
         <template v-else-if="authStore.isAuthenticated && !authStore.isOnboarded">
+          <NuxtLink
+            to="/masuk"
+            class="hidden lg:inline-flex items-center justify-center h-10 px-4 rounded-full text-sm font-semibold text-neutral-700 dark:text-neutral-200 hover:text-[#0081A0] dark:hover:text-[#2091AA] hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors duration-150 whitespace-nowrap"
+          >
+            Masuk
+          </NuxtLink>
           <NuxtLink
             :to="`/onboarding?role=${authStore.currentRole}`"
             class="hidden lg:inline-flex items-center justify-center h-10 px-5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_2px_8px_rgba(0,129,160,0.22)] transition-all duration-150 active:scale-[0.98] whitespace-nowrap"
@@ -243,6 +249,13 @@
           </NuxtLink>
         </template>
         <template v-else-if="authStore.isAuthenticated && !authStore.isOnboarded">
+          <NuxtLink
+            to="/masuk"
+            class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            @click="mobileMenuOpen = false"
+          >
+            Masuk
+          </NuxtLink>
           <NuxtLink
             :to="`/onboarding?role=${authStore.currentRole}`"
             class="flex-1 text-center py-2.5 rounded-full text-sm font-semibold bg-[#0081A0] hover:bg-[#00708C] text-white transition-colors shadow-sm"

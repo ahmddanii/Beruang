@@ -26,6 +26,7 @@ model User {
   accessRequests    AccessRequest[]
   notifications     Notification[]
   watchlists        InvestorWatchlist[]
+  vdrAuditLogs      VdrAuditLog[]
 }
 
 model ConsultantProfile {
@@ -197,6 +198,8 @@ model DataRoomDocument {
   isConfidential Boolean         @default(true)
   verifiedAt     DateTime        @default(now())
   createdAt      DateTime        @default(now())
+
+  auditLogs      VdrAuditLog[]
 }
 
 model AccessRequest {
@@ -305,5 +308,22 @@ model ConsultantAgreement {
   agreementText        String?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
+}
+
+model VdrAuditLog {
+  id          String            @id @default(cuid())
+  documentId  String?
+  document    DataRoomDocument? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName    String?           @default("Hendro Wicaksono")
+  userRole    String?           @default("INVESTOR")
+  userLembaga String?           @default("Nusantara Impact Angel Syndicate")
+  businessId  String
+  docTitle    String            @default("Laporan Keuangan Audit")
+  action      String            @default("VIEW") // VIEW, DOWNLOAD, PREVIEW
+  ipAddress   String?           @default("127.0.0.1")
+  userAgent   String?
+  accessedAt  DateTime          @default(now())
 }
 

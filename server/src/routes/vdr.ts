@@ -2,7 +2,7 @@ import { Router, Response } from "express";
 import fs from "fs";
 import path from "path";
 import { prisma } from "../index.js";
-import { requireAuth, AuthenticatedRequest } from "../middleware/auth.js";
+import { requireAuth, optionalAuth, AuthenticatedRequest } from "../middleware/auth.js";
 import { uploadVdr } from "../middleware/upload.js";
 
 const router = Router();
@@ -179,9 +179,9 @@ router.delete("/documents/:id", requireAuth, async (req: AuthenticatedRequest, r
 
 /**
  * GET /api/vdr/documents/:id/download
- * Mengunduh berkas fisik resmi atau melayani file biner
+ * Mengunduh berkas fisik resmi atau melayani file biner + pencatatan audit log
  */
-router.get("/documents/:id/download", async (req: AuthenticatedRequest, res: Response) => {
+router.get("/documents/:id/download", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const doc = await prisma.dataRoomDocument.findUnique({
@@ -195,6 +195,26 @@ router.get("/documents/:id/download", async (req: AuthenticatedRequest, res: Res
         message: "Dokumen tidak ditemukan.",
       });
     }
+
+    // Catat audit log unduhan secara otomatis
+    const rawIp = (req.headers["x-forwarded-for"] as string) || req.socket.remoteAddress || "127.0.0.1";
+    const clientIp = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : "127.0.0.1";
+    const user = req.user;
+
+    await prisma.vdrAuditLog.create({
+      data: {
+        documentId: doc.id,
+        userId: user?.id || null,
+        userName: user?.name || "Hendro Wicaksono",
+        userRole: user?.role || "INVESTOR",
+        userLembaga: "Nusantara Impact Angel Syndicate",
+        businessId: doc.businessId,
+        docTitle: doc.name,
+        action: "DOWNLOAD",
+        ipAddress: clientIp,
+        userAgent: req.headers["user-agent"] || "Browser Client",
+      },
+    }).catch((err) => console.warn("Failed to create VDR audit log:", err?.message));
 
     // Jika file fisik tersimpan di disk
     if (doc.storagePath && fs.existsSync(doc.storagePath)) {
@@ -274,6 +294,92 @@ startxref
       success: false,
       message: "Gagal mengunduh berkas: " + error.message,
     });
+  }
+});
+
+/**
+ * POST /api/vdr/documents/:id/log-view
+ * Mencatat log aktivitas saat investor melihat pratinjau dokumen di data room
+ */
+router.post("/documents/:id/log-view", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { action } = req.body;
+
+    const doc = await prisma.dataRoomDocument.findUnique({
+      where: { id },
+      include: { business: true },
+    });
+
+    if (!doc) {
+      return res.status(404).json({ success: false, message: "Dokumen tidak ditemukan." });
+    }
+
+    const rawIp = (req.headers["x-forwarded-for"] as string) || req.socket.remoteAddress || "127.0.0.1";
+    const clientIp = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : "127.0.0.1";
+    const user = req.user;
+
+    const log = await prisma.vdrAuditLog.create({
+      data: {
+        documentId: doc.id,
+        userId: user?.id || null,
+        userName: user?.name || "Hendro Wicaksono",
+        userRole: user?.role || "INVESTOR",
+        userLembaga: "Nusantara Impact Angel Syndicate",
+        businessId: doc.businessId,
+        docTitle: doc.name,
+        action: action === "PREVIEW" ? "PREVIEW" : "VIEW",
+        ipAddress: clientIp,
+        userAgent: req.headers["user-agent"] || "Browser Client",
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: "Aktivitas akses VDR berhasil dicatat dalam audit trail keamanan.",
+      data: log,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal mencatat audit log: " + err.message });
+  }
+});
+
+/**
+ * GET /api/vdr/:businessId/audit-logs
+ * Menampilkan catatan audit trail keamanan akses dokumen VDR untuk UMKM atau Investor
+ */
+router.get("/:businessId/audit-logs", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { businessId } = req.params;
+
+    let targetBizId = businessId;
+    if (businessId === "umkm-01") targetBizId = "biz-kopisenja-01";
+
+    const logs = await prisma.vdrAuditLog.findMany({
+      where: {
+        OR: [{ businessId: targetBizId }, { businessId }],
+      },
+      orderBy: { accessedAt: "desc" },
+    });
+
+    return res.json({
+      success: true,
+      message: "Daftar log audit VDR berhasil dimuat.",
+      data: logs.map((l) => ({
+        id: l.id,
+        documentId: l.documentId,
+        docTitle: l.docTitle,
+        userName: l.userName,
+        userRole: l.userRole,
+        userLembaga: l.userLembaga,
+        action: l.action,
+        ipAddress: l.ipAddress,
+        userAgent: l.userAgent,
+        accessedAt: l.accessedAt,
+      })),
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat log audit VDR: " + err.message });
   }
 });
 

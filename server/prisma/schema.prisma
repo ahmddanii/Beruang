@@ -214,17 +214,25 @@ model AccessRequest {
 }
 
 model Notification {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title       String
-  message     String
-  category    String   @default("KAS") // KONSULTAN, INVESTOR, KESEHATAN, KAS, AKSI
-  priority    String   @default("NORMAL") // HIGH, NORMAL
-  isRead      Boolean  @default(false)
-  link        String   @default("/dashboard/progres")
-  actionLabel String?  @default("Lihat Kas")
-  createdAt   DateTime @default(now())
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  message      String
+  category     String   @default("KAS") // KONSULTAN, INVESTOR, KESEHATAN, KAS, AKSI
+  priority     String   @default("NORMAL") // HIGH, NORMAL
+  isRead       Boolean  @default(false)
+  link         String   @default("/dashboard/progres")
+  actionLabel  String?  @default("Lihat Kas")
+  roleTarget   String   @default("ALL") // UMKM, CONSULTANT, INVESTOR, ALL
+  senderName   String?
+  actionDetail String?
+  quoteSnippet String?
+  avatar       String?
+  badgeCount   Int?     @default(0)
+  iconType     String?  @default("avatar") // avatar, verified, shield, growth, deal, wallet
+  sectionGroup String?  @default("today") // today, yesterday
+  createdAt    DateTime @default(now())
 }
 
 model InvestorWatchlist {

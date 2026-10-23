@@ -62,6 +62,7 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Penawaran Investasi (Deal Offer)** | `/dashboard/pesan` | ✅ Siap Attachment Card| ✅ Selesai (Attachment `DEAL_OFFER`, `METRIC`, `DOCUMENT`, tiket modal & bagi hasil) | Selesai |
 | **Penugasan Konsultan oleh Admin** | `/admin/penugasan` | ✅ Siap Dropdown & Form | ✅ Selesai (`POST /api/admin/assignments` & riwayat penugasan) | Selesai |
 | **Statistik Global Ekosistem** | `/admin` | ✅ Siap Telemetri Card | ✅ Selesai (`GET /api/admin/stats` kalkulasi agregat nasional) | Selesai |
+| **Pusat Notifikasi Terpadu** | `/dashboard/notifikasi` | ✅ Siap Interactive List | ✅ Selesai (`GET /api/notifications`, `PATCH /read`, `PATCH /mark-all-read`, `DELETE /:id`) | Selesai |
 
 ---
 

@@ -62,10 +62,82 @@ router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
         bankName: biz.bankName,
         bankAccountNumber: biz.bankAccountNumber,
         bankAccountHolder: biz.bankAccountHolder,
+        whatsapp: (biz as any).whatsapp || biz.user?.phone || "+62 812-3456-7890",
+        instagram: (biz as any).instagram || "kopisenja.nusantara",
       },
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: "Gagal memuat profil: " + err.message });
+  }
+});
+
+/**
+ * GET /api/umkm/products
+ */
+router.get("/products", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    if (!biz) {
+      return res.status(404).json({ success: false, message: "Profil usaha belum ditemukan." });
+    }
+    const products = await (prisma as any).featuredProduct.findMany({
+      where: { businessId: biz.id },
+      orderBy: { createdAt: "desc" },
+    });
+    return res.json({
+      success: true,
+      data: products,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat produk: " + err.message });
+  }
+});
+
+/**
+ * POST /api/umkm/products
+ */
+router.post("/products", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    if (!biz) {
+      return res.status(404).json({ success: false, message: "Profil usaha belum ditemukan." });
+    }
+    const { name, categoryBadge, price, grossMargin, monthlyVolume, description, imageUrl } = req.body;
+    if (!name || !String(name).trim()) {
+      return res.status(422).json({ success: false, message: "Nama produk wajib diisi." });
+    }
+    const product = await (prisma as any).featuredProduct.create({
+      data: {
+        businessId: biz.id,
+        name: String(name).trim(),
+        categoryBadge: categoryBadge || "Menu Andalan",
+        price: Number(price) || 0,
+        grossMargin: Number(grossMargin) || 45.0,
+        monthlyVolume: Number(monthlyVolume) || 100,
+        description: description ? String(description).trim() : null,
+        imageUrl: imageUrl || "https://images.unsplash.com/photo-1509785307050-d4066910ec1e?w=350&auto=format&fit=crop&q=80",
+      },
+    });
+    return res.status(201).json({
+      success: true,
+      message: "Produk unggulan berhasil ditambahkan ke database.",
+      data: product,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal membuat produk: " + err.message });
+  }
+});
+
+/**
+ * DELETE /api/umkm/products/:id
+ */
+router.delete("/products/:id", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    await (prisma as any).featuredProduct.delete({ where: { id } });
+    return res.json({ success: true, message: "Produk berhasil dihapus dari database." });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menghapus produk: " + err.message });
   }
 });
 
@@ -106,10 +178,19 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
       employeesCount,
       employees_count,
       phone,
+      whatsapp,
+      instagram,
+      address,
     } = req.body;
 
     const resolvedOwner = ownerName || owner_name;
     const resolvedBrand = brand || name;
+    const resolvedPhone = phone || whatsapp;
+    const resolvedLocation = address
+      ? `${String(address).trim()}, ${city || biz.city || 'Indonesia'}`
+      : city
+      ? `${String(city).trim()}, Indonesia`
+      : undefined;
 
     const updated = await prisma.businessProfile.update({
       where: { id: biz.id },
@@ -119,7 +200,10 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
         ...(description ? { description: String(description).trim() } : {}),
         ...(pitchSummary || pitch_summary ? { description: String(pitchSummary || pitch_summary).trim() } : {}),
         ...(sector ? { sector: String(sector).trim() } : {}),
-        ...(city ? { city: String(city).trim(), location: `${String(city).trim()}, Indonesia` } : {}),
+        ...(city ? { city: String(city).trim() } : {}),
+        ...(resolvedLocation ? { location: resolvedLocation } : {}),
+        ...(whatsapp ? { whatsapp: String(whatsapp).trim() } : {}),
+        ...(instagram ? { instagram: String(instagram).trim() } : {}),
         ...(fundingTarget != null ? { fundingTarget: parseFloat(fundingTarget) } : funding_target != null ? { fundingTarget: parseFloat(funding_target) } : {}),
         ...(equityOffered || equity_offered ? { equityOffered: String(equityOffered || equity_offered).trim() } : {}),
         ...(nib ? { nib: String(nib).trim() } : {}),
@@ -132,12 +216,12 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
       },
     });
 
-    if (biz.userId && (resolvedOwner || phone)) {
+    if (biz.userId && (resolvedOwner || resolvedPhone)) {
       await prisma.user.update({
         where: { id: biz.userId },
         data: {
           ...(resolvedOwner ? { name: String(resolvedOwner).trim() } : {}),
-          ...(phone ? { phone: String(phone).trim() } : {}),
+          ...(resolvedPhone ? { phone: String(resolvedPhone).trim() } : {}),
         },
       });
     }

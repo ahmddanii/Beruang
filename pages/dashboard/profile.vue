@@ -1317,10 +1317,11 @@ function openAddProductModal() {
   isAddProductModalOpen.value = true
 }
 
-function handleAddProduct() {
+async function handleAddProduct() {
   if (!newProductForm.name.trim()) return
-  featuredProducts.value.push({
-    id: `prod-${Date.now()}`,
+  const tempId = `prod-${Date.now()}`
+  const newProdItem = {
+    id: tempId,
     name: newProductForm.name.trim(),
     categoryBadge: newProductForm.categoryBadge.trim() || 'Menu Andalan',
     price: newProductForm.price || 0,
@@ -1328,10 +1329,38 @@ function handleAddProduct() {
     monthlyVolume: newProductForm.monthlyVolume || 0,
     description: newProductForm.description.trim() || 'Produk andalan toko.',
     imageUrl: 'https://images.unsplash.com/photo-1509785307050-d4066910ec1e?w=350&auto=format&fit=crop&q=80'
-  })
+  }
+  featuredProducts.value.push(newProdItem)
   isAddProductModalOpen.value = false
   saveProductsToStorage()
   triggerToast('Produk unggulan baru berhasil ditambahkan!')
+
+  try {
+    const res = await useApi<any>('/umkm/products', {
+      method: 'POST',
+      body: newProdItem
+    })
+    if (res.data?.id) {
+      const idx = featuredProducts.value.findIndex(p => p.id === tempId)
+      if (idx !== -1) {
+        featuredProducts.value[idx] = { ...featuredProducts.value[idx], ...res.data }
+        saveProductsToStorage()
+      }
+    }
+  } catch (err: any) {
+    console.warn('Gagal simpan produk ke database backend:', err?.message)
+  }
+}
+
+async function removeProduct(id: string) {
+  featuredProducts.value = featuredProducts.value.filter(p => p.id !== id)
+  saveProductsToStorage()
+  triggerToast('Produk berhasil dihapus.')
+  try {
+    await useApi(`/umkm/products/${id}`, { method: 'DELETE' })
+  } catch (err: any) {
+    console.warn('Gagal hapus produk di backend:', err?.message)
+  }
 }
 
 function saveProductsToStorage() {
@@ -1344,7 +1373,7 @@ function saveProductsToStorage() {
   }
 }
 
-function initProductsFromStorage() {
+async function initProductsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
       const saved = localStorage.getItem('umkm_featured_products')
@@ -1357,6 +1386,16 @@ function initProductsFromStorage() {
     } catch (e) {
       // ignore
     }
+  }
+
+  try {
+    const res = await useApi<any[]>('/umkm/products')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      featuredProducts.value = res.data
+      saveProductsToStorage()
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat produk dari database backend:', err?.message)
   }
 }
 
@@ -1697,7 +1736,11 @@ async function saveProfile() {
       description: formProfile.description.trim(),
       pitchSummary: formProfile.description.trim(),
       nib: formProfile.nib.trim(),
-      npwp: formProfile.npwp.trim()
+      npwp: formProfile.npwp.trim(),
+      whatsapp: storeContacts.whatsapp.trim(),
+      instagram: storeContacts.instagram.trim(),
+      address: storeContacts.address.trim(),
+      phone: storeContacts.whatsapp.trim()
     })
 
     if (authStore.currentUser) {
@@ -1767,6 +1810,11 @@ onMounted(async () => {
   }
   if (umkmStore.profile.nib) formProfile.nib = umkmStore.profile.nib
   if (umkmStore.profile.npwp) formProfile.npwp = umkmStore.profile.npwp
+  if ((umkmStore.profile as any).whatsapp) storeContacts.whatsapp = (umkmStore.profile as any).whatsapp
+  if ((umkmStore.profile as any).instagram) storeContacts.instagram = (umkmStore.profile as any).instagram
+  if (umkmStore.profile.location && umkmStore.profile.location.includes(',')) {
+    storeContacts.address = umkmStore.profile.location.split(',')[0].trim()
+  }
 })
 </script>
 

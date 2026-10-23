@@ -84,21 +84,39 @@ model BusinessProfile {
   bankName          String?  @default("Bank Mandiri")
   bankAccountNumber String?  @default("1300098765432")
   bankAccountHolder String?  @default("Kopi Senja Nusantara")
+  whatsapp          String?  @default("+62 812-3456-7890")
+  instagram         String?  @default("kopisenja.nusantara")
   outletsCount      Int      @default(1)
   employeesCount    Int      @default(10)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  assessment     Assessment?
-  tasks          ActionPlanTask[]
-  dailyTxs       DailyTransaction[]
-  monthlyReports MonthlyReport[]
-  documents      DataRoomDocument[]
-  accessRequests AccessRequest[]
-  watchlists     InvestorWatchlist[]
-  assignments    ConsultantAssignment[]
-  chatThreads    ChatThread[]
-  agreements     ConsultantAgreement[]
+  assessment       Assessment?
+  tasks            ActionPlanTask[]
+  dailyTxs         DailyTransaction[]
+  monthlyReports   MonthlyReport[]
+  documents        DataRoomDocument[]
+  accessRequests   AccessRequest[]
+  watchlists       InvestorWatchlist[]
+  assignments      ConsultantAssignment[]
+  chatThreads      ChatThread[]
+  agreements       ConsultantAgreement[]
+  featuredProducts FeaturedProduct[]
+}
+
+model FeaturedProduct {
+  id            String          @id @default(cuid())
+  businessId    String
+  business      BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name          String
+  categoryBadge String          @default("Makanan & Minuman")
+  price         Float
+  grossMargin   Float           @default(45.0)
+  monthlyVolume Int             @default(500)
+  description   String?
+  imageUrl      String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 model ConsultantAssignment {

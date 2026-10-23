@@ -763,7 +763,8 @@ function setTab(tab: 'queue' | 'history') {
 
 let handleResizeTabs: (() => void) | null = null
 
-onMounted(() => {
+onMounted(async () => {
+  await konsultanStore.fetchValidations()
   nextTick(() => {
     updateTabIndicatorPosition(true)
   })
@@ -915,7 +916,16 @@ function openDocModal(item: ProgressValidationItem) {
 }
 
 function downloadSampleProof(item: ProgressValidationItem) {
-  alert(`Mengunduh berkas keuangan terenkripsi: ${item.proofDocument}`)
+  const downloadUrl = (item as any).proofDocumentUrl?.startsWith('/')
+    ? `/api/proxy${(item as any).proofDocumentUrl}`
+    : `/api/proxy/finances/monthly/${item.id}/download`
+
+  const link = document.createElement('a')
+  link.href = downloadUrl
+  link.download = item.proofDocument || `Laporan_Kas_${item.month}.pdf`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
   showDocModal.value = false
 }
 

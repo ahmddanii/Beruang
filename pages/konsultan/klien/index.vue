@@ -779,11 +779,15 @@ function updateTabIndicatorPosition(immediate = false) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (route.query.tab === 'permintaan') {
     currentTab.value = 'permintaan'
   }
   checkAcceptedQuery()
+  await Promise.all([
+    konsultanStore.fetchClients(),
+    konsultanStore.fetchRequests()
+  ])
   nextTick(() => {
     updateTabIndicatorPosition(true)
   })

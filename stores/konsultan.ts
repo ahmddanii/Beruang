@@ -1,4 +1,4 @@
-﻿import { defineStore } from 'pinia'
+import { defineStore } from 'pinia'
 import { useApi } from '~/composables/useApi'
 
 export interface ClientUmkm {
@@ -879,8 +879,22 @@ export const useKonsultanStore = defineStore('konsultan', {
       }
     },
 
+    async fetchRequests() {
+      try {
+        const res = await useApi<any>('/consultant/requests')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.clientRequests = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat requests konsultan:', err?.message)
+      }
+    },
+
     // 1. Terima Permintaan Bimbingan dari UMKM -> Resmi Pindah ke Klien Aktif
-    acceptRequest(requestId: string) {
+    async acceptRequest(requestId: string) {
       const reqIndex = this.clientRequests.findIndex(r => r.id === requestId)
       if (reqIndex === -1) return
       const req = this.clientRequests[reqIndex]
@@ -930,13 +944,28 @@ export const useKonsultanStore = defineStore('konsultan', {
 
       // Hapus dari daftar permintaan masuk karena sudah resmi pindah ke klien aktif
       this.clientRequests.splice(reqIndex, 1)
+
+      try {
+        await useApi(`/consultant/requests/${requestId}/accept`, { method: 'POST' })
+      } catch (err: any) {
+        console.warn('Gagal accept request di backend:', err?.message)
+      }
     },
 
     // 2. Tolak Permintaan Bimbingan dari UMKM
-    rejectRequest(requestId: string, reason?: string) {
+    async rejectRequest(requestId: string, reason?: string) {
       const reqIndex = this.clientRequests.findIndex(r => r.id === requestId)
       if (reqIndex === -1) return
       this.clientRequests.splice(reqIndex, 1)
+
+      try {
+        await useApi(`/consultant/requests/${requestId}/reject`, {
+          method: 'POST',
+          body: { reason }
+        })
+      } catch (err: any) {
+        console.warn('Gagal reject request di backend:', err?.message)
+      }
     },
 
     // 3. Tambah Action Plan untuk UMKM Binaan
@@ -1045,7 +1074,7 @@ export const useKonsultanStore = defineStore('konsultan', {
     },
 
     // Validasi Kas Bulanan
-    approveValidation(validationId: string, notes?: string) {
+    async approveValidation(validationId: string, notes?: string) {
       const idx = this.validationsQueue.findIndex(v => v.id === validationId)
       if (idx !== -1) {
         const item = this.validationsQueue[idx]
@@ -1054,7 +1083,7 @@ export const useKonsultanStore = defineStore('konsultan', {
           client.monthlyStatus = 'VERIFIED'
           client.lastAuditDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
         }
-        
+
         // Simpan ke riwayat validasi
         this.validatedHistory.unshift({
           id: `hist-${Date.now()}`,
@@ -1070,10 +1099,19 @@ export const useKonsultanStore = defineStore('konsultan', {
         })
 
         this.validationsQueue.splice(idx, 1)
+
+        try {
+          await useApi(`/consultant/validations/${validationId}/verify`, {
+            method: 'POST',
+            body: { notes }
+          })
+        } catch (err: any) {
+          console.warn('Gagal memverifikasi di backend:', err?.message)
+        }
       }
     },
 
-    rejectValidation(validationId: string, reason?: string) {
+    async rejectValidation(validationId: string, reason?: string) {
       const idx = this.validationsQueue.findIndex(v => v.id === validationId)
       if (idx !== -1) {
         const item = this.validationsQueue[idx]
@@ -1097,14 +1135,29 @@ export const useKonsultanStore = defineStore('konsultan', {
         })
 
         this.validationsQueue.splice(idx, 1)
+
+        try {
+          await useApi(`/consultant/validations/${validationId}/request-revision`, {
+            method: 'POST',
+            body: { reason }
+          })
+        } catch (err: any) {
+          console.warn('Gagal meminta revisi di backend:', err?.message)
+        }
       }
     },
 
-    certifyClientReady(clientId: string) {
+    async certifyClientReady(clientId: string) {
       const client = this.clients.find(c => c.id === clientId)
       if (client) {
         client.fundingStatus = 'READY_FOR_FUNDING'
         client.lastAuditDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+      }
+
+      try {
+        await useApi(`/consultant/clients/${clientId}/certify`, { method: 'POST' })
+      } catch (err: any) {
+        console.warn('Gagal sertifikasi klien di backend:', err?.message)
       }
     },
 
@@ -1132,7 +1185,7 @@ export const useKonsultanStore = defineStore('konsultan', {
     },
 
     // 10. Memperbarui 5 Aspek Fundamental Radar Klien
-    updateClientAssessment(clientId: string, aspects: ClientAssessmentAspect[]) {
+    async updateClientAssessment(clientId: string, aspects: ClientAssessmentAspect[]) {
       this.clientAssessments[clientId] = JSON.parse(JSON.stringify(aspects))
       const avg = Math.round(aspects.reduce((sum, a) => sum + (Number(a.score) || 0), 0) / (aspects.length || 1))
       const client = this.clients.find(c => c.id === clientId)
@@ -1143,6 +1196,27 @@ export const useKonsultanStore = defineStore('konsultan', {
         if (avg >= 80 && (client.tasksCompleted || 0) >= (client.totalTasks || 1)) {
           client.fundingStatus = 'READY_FOR_FUNDING'
         }
+      }
+
+      try {
+        const fin = aspects.find(a => a.id === 'fin')?.score
+        const ops = aspects.find(a => a.id === 'ops')?.score
+        const mkt = aspects.find(a => a.id === 'mkt')?.score
+        const gov = aspects.find(a => a.id === 'gov')?.score
+        const leg = aspects.find(a => a.id === 'leg')?.score
+
+        await useApi(`/consultant/clients/${clientId}/assessment`, {
+          method: 'PUT',
+          body: {
+            financial: fin,
+            operations: ops,
+            marketing: mkt,
+            governance: gov,
+            legal: leg
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan skor asesmen ke backend:', err?.message)
       }
     },
 

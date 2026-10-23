@@ -151,8 +151,8 @@ const radarData = computed(() => {
   }))
 })
 
-function saveAssessment() {
-  konsultanStore.updateClientAssessment(clientId.value, aspects.value)
+async function saveAssessment() {
+  await konsultanStore.updateClientAssessment(clientId.value, aspects.value)
   if (clientId.value === 'umkm-01') {
     umkmStore.assessmentAspects = JSON.parse(JSON.stringify(aspects.value))
   }

@@ -9,6 +9,7 @@ import authRouter from "./routes/auth.js";
 import financesRouter from "./routes/finances.js";
 import vdrRouter from "./routes/vdr.js";
 import umkmRouter from "./routes/umkm.js";
+import consultantRouter from "./routes/consultant.js";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use("/api/umkm/monthly-reports", financesRouter);
 app.use("/api/vdr", vdrRouter);
 app.use("/api/umkm/documents", vdrRouter);
 app.use("/api/umkm", umkmRouter);
+app.use("/api/consultant", consultantRouter);
 
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

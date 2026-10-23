@@ -1517,8 +1517,8 @@ const liveRadarData = computed(() => {
   }))
 })
 
-function saveAuditAssessment() {
-  konsultanStore.updateClientAssessment(clientId.value, auditAspects.value)
+async function saveAuditAssessment() {
+  await konsultanStore.updateClientAssessment(clientId.value, auditAspects.value)
   auditSavedSuccess.value = true
   setTimeout(() => {
     auditSavedSuccess.value = false
@@ -1536,8 +1536,8 @@ const certRecommendationText = ref(
 )
 const certifiedSuccess = ref(false)
 
-function certifyNow() {
-  konsultanStore.certifyClientReady(clientId.value)
+async function certifyNow() {
+  await konsultanStore.certifyClientReady(clientId.value)
   certifiedSuccess.value = true
 
   confetti({
@@ -1553,7 +1553,8 @@ function certifyNow() {
 
 let handleResize: (() => void) | null = null
 
-onMounted(() => {
+onMounted(async () => {
+  await konsultanStore.fetchClients()
   nextTick(() => {
     updateTabIndicator(true)
   })

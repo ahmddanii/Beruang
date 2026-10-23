@@ -41,8 +41,8 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Registrasi Pengguna** | `/daftar` | ✅ Siap | ✅ Terhubung (`POST /auth/register`) | Selesai |
 | **Google OAuth Asli** | `/masuk`, `/daftar` | ✅ Siap UI Google | ⚠️ Fallback lokal jika token exchange gagal | **P0 (Kritis)** |
 | **OTP WhatsApp Gateway** | `/verifikasi` | ✅ Siap | ⚠️ Mock dev mode (`otp_dev: null`), belum kirim WA riil | **P1 (Tinggi)** |
-| **Onboarding UMKM** | `/onboarding` | ✅ Siap (Wizard) | ⚠️ Endpoint ada, tapi field relasi bank/rekening belum lengkap | **P0 (Kritis)** |
-| **Onboarding Konsultan & Investor**| `/onboarding` | ✅ Siap | ❌ **404 Not Found** (`/onboarding/consultant`, `/investor`) | **P0 (Kritis)** |
+| **Onboarding UMKM** | `/onboarding` | ✅ Siap (Wizard) | ✅ Selesai (`POST /api/onboarding/umkm` & relasi bank/NIB/NPWP) | Selesai |
+| **Onboarding Konsultan & Investor**| `/onboarding` | ✅ Siap | ✅ Selesai (`POST /api/onboarding/consultant` & `/investor`) | Selesai |
 | **Buku Kas Harian (Mutasi POS)** | `/dashboard/progres` | ✅ Siap | ✅ Terhubung (`GET & POST /finances/daily`) | Selesai |
 | **Kalkulasi Otomatis Saldo Kas** | `/dashboard/progres` | ✅ Siap | ⚠️ Saldo & margin belum dihitung ulang otomatis di DB | **P0 (Kritis)** |
 | **Upload Bukti Kas & Rekening Koran** | `/dashboard/progres` | ✅ Siap Modal & Form | ❌ Belum ada penyimpanan berkas fisik (S3/Supabase) | **P0 (Kritis)** |

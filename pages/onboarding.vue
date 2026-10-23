@@ -1403,6 +1403,24 @@ async function finishOnboarding() {
 
       router.push('/dashboard')
     } else if (activeRole.value === 'CONSULTANT') {
+      try {
+        await useApi('/onboarding/consultant', {
+          method: 'POST',
+          body: {
+            name: formConsultant.value.name,
+            institution: formConsultant.value.institution,
+            firmName: formConsultant.value.institution,
+            bnspLicense: formConsultant.value.bnspLicense,
+            specialization: formConsultant.value.specialization,
+            city: formConsultant.value.city,
+            experience: formConsultant.value.experience,
+            maxClients: formConsultant.value.maxClients,
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan onboarding konsultan ke live API:', err?.message)
+      }
+
       authStore.updateProfile({
         name: formConsultant.value.name,
         businessName: formConsultant.value.institution,
@@ -1427,6 +1445,24 @@ async function finishOnboarding() {
 
       router.push('/konsultan')
     } else if (activeRole.value === 'INVESTOR') {
+      try {
+        await useApi('/onboarding/investor', {
+          method: 'POST',
+          body: {
+            name: formInvestor.value.name,
+            entityName: formInvestor.value.entityName,
+            firmName: formInvestor.value.entityName,
+            investorType: formInvestor.value.investorType,
+            ticketRange: formInvestor.value.ticketRange,
+            sectors: formInvestor.value.sectors,
+            minMargin: formInvestor.value.minMargin,
+            city: formInvestor.value.city,
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan onboarding investor ke live API:', err?.message)
+      }
+
       authStore.updateProfile({
         name: formInvestor.value.name,
         businessName: formInvestor.value.entityName,

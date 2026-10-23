@@ -12,12 +12,13 @@ model User {
   name         String
   email        String    @unique
   passwordHash String
-  role         String    @default("UMKM") // UMKM, CONSULTANT, INVESTOR, ADMIN
-  phone        String?
-  avatar       String?
-  verified     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  role                String   @default("UMKM") // UMKM, CONSULTANT, INVESTOR, ADMIN
+  phone               String?
+  avatar              String?
+  verified            Boolean  @default(true)
+  onboardingCompleted Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   businessProfile   BusinessProfile?
   consultantProfile ConsultantProfile?
@@ -33,6 +34,10 @@ model ConsultantProfile {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   firmName           String
   specialization     String?  @default("F&B & Ritel")
+  bnspLicense        String?  @default("BNSP-KM-2026-9812")
+  city               String?  @default("Bandung")
+  experience         String?  @default("8 Tahun")
+  maxClients         Int      @default(10)
   isCertified        Boolean  @default(true)
   activeClientsCount Int      @default(0)
   createdAt          DateTime @default(now())
@@ -46,32 +51,40 @@ model InvestorProfile {
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   firmName          String
   commitmentCapital String   @default("Rp 1.5 Miliar")
+  investorType      String?  @default("Angel Syndicate")
+  sectors           String?  @default("F&B, FMCG, Agroindustri")
+  minMargin         Float?   @default(40.0)
+  city              String?  @default("Jakarta")
   isVerified        Boolean  @default(true)
   createdAt         DateTime @default(now())
 }
 
 model BusinessProfile {
-  id             String   @id @default(cuid())
-  userId         String   @unique
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  brand          String
-  name           String
-  sector         String
-  location       String
-  city           String?  @default("Bandung")
-  description    String?  @default("")
-  fundingTarget  Float    @default(250000000)
-  equityOffered  String   @default("12%")
-  status         String   @default("ACTION_PLAN_ACTIVE") // PROFILE_INCOMPLETE, PROFILE_COMPLETE, CONSULTANT_ASSIGNED, ACTION_PLAN_ACTIVE, READY_FOR_FUNDING
-  consultantId   String?
-  consultant     ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
-  nextMentoring  String   @default("Kamis, 14:00 WIB")
-  nib            String?  @default("1209000123456")
-  npwp           String?  @default("81.423.891.4-429.000")
-  outletsCount   Int      @default(1)
-  employeesCount Int      @default(10)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand             String
+  name              String
+  ownerName         String?  @default("Fikri Setiawan")
+  sector            String
+  location          String
+  city              String?  @default("Bandung")
+  description       String?  @default("")
+  fundingTarget     Float    @default(250000000)
+  equityOffered     String   @default("12%")
+  status            String   @default("ACTION_PLAN_ACTIVE") // PROFILE_INCOMPLETE, PROFILE_COMPLETE, CONSULTANT_ASSIGNED, ACTION_PLAN_ACTIVE, READY_FOR_FUNDING
+  consultantId      String?
+  consultant        ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
+  nextMentoring     String   @default("Kamis, 14:00 WIB")
+  nib               String?  @default("1209000123456")
+  npwp              String?  @default("81.423.891.4-429.000")
+  bankName          String?  @default("Bank Mandiri")
+  bankAccountNumber String?  @default("1300098765432")
+  bankAccountHolder String?  @default("Kopi Senja Nusantara")
+  outletsCount      Int      @default(1)
+  employeesCount    Int      @default(10)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   assessment     Assessment?
   tasks          ActionPlanTask[]

@@ -11,6 +11,7 @@ import vdrRouter from "./routes/vdr.js";
 import umkmRouter from "./routes/umkm.js";
 import consultantRouter from "./routes/consultant.js";
 import investorRouter from "./routes/investor.js";
+import onboardingRouter, { handleUmkmOnboarding, handleConsultantOnboarding, handleInvestorOnboarding } from "./routes/onboarding.js";
 
 dotenv.config();
 
@@ -41,7 +42,10 @@ app.get("/api/health", (_req: Request, res: Response) => {
 
 // Mounted Routes
 app.use("/api/auth", authRouter);
-app.use("/api/onboarding", authRouter);
+app.use("/api/onboarding", onboardingRouter);
+app.post("/api/umkm/onboarding", handleUmkmOnboarding);
+app.post("/api/consultant/onboarding", handleConsultantOnboarding);
+app.post("/api/investor/onboarding", handleInvestorOnboarding);
 app.use("/api/finances", financesRouter);
 app.use("/api/umkm/monthly-reports", financesRouter);
 app.use("/api/vdr", vdrRouter);

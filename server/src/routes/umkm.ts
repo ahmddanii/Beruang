@@ -255,7 +255,7 @@ router.get("/assessment", requireAuth, async (req: AuthenticatedRequest, res: Re
 /**
  * GET /api/umkm/tasks
  */
-router.get("/tasks", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/tasks", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const biz = await resolveBusiness(req);
     if (!biz) {
@@ -277,30 +277,196 @@ router.get("/tasks", requireAuth, async (req: AuthenticatedRequest, res: Respons
 });
 
 /**
- * PUT /api/umkm/tasks/:id
+ * GET /api/umkm/milestones
  */
-router.put("/tasks/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { id } = req.params;
-    const { completed, status, evidenceName, evidenceUrl } = req.body;
+router.get("/milestones", optionalAuth, async (_req: AuthenticatedRequest, res: Response) => {
+  return res.json({
+    success: true,
+    data: [
+      { id: "m1", order: 1, title: "Fondasi Pencatatan & Legalitas", description: "Standardisasi rekening usaha, NIB, dan kartu stok" },
+      { id: "m2", order: 2, title: "Efisiensi Biaya & HPP", description: "Negosiasi supplier bahan baku dan pengendalian efisiensi produksi" },
+      { id: "m3", order: 3, title: "Validasi & Sertifikasi Investor", description: "3 bulan pelaporan bersih dan audit kesiapan pendanaan" },
+    ],
+  });
+});
 
-    const task = await prisma.actionPlanTask.update({
-      where: { id },
+/**
+ * POST /api/umkm/tasks
+ * Menambah tugas rencana aksi baru ke database
+ */
+router.post("/tasks", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    if (!biz) {
+      return res.status(404).json({ success: false, message: "Profil belum ditemukan." });
+    }
+
+    const {
+      title,
+      description,
+      category,
+      priority,
+      dueDate,
+      due_date,
+      status,
+      completed,
+    } = req.body;
+
+    if (!title || !String(title).trim()) {
+      return res.status(422).json({ success: false, message: "Judul rencana aksi wajib diisi." });
+    }
+
+    const newTask = await prisma.actionPlanTask.create({
       data: {
-        ...(completed !== undefined ? { completed: Boolean(completed) } : {}),
-        ...(status ? { status: String(status) } : {}),
-        ...(evidenceName ? { evidenceName: String(evidenceName) } : {}),
-        ...(evidenceUrl ? { evidenceUrl: String(evidenceUrl) } : {}),
+        businessId: biz.id,
+        title: String(title).trim(),
+        description: description ? String(description).trim() : null,
+        category: category || "Finansial",
+        priority: priority || "Sedang",
+        dueDate: dueDate || due_date || "30 Hari ke Depan",
+        status: status || "TODO",
+        completed: Boolean(completed) || false,
+      },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Rencana aksi berhasil ditambahkan ke database.",
+      data: newTask,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal membuat tugas: " + err.message });
+  }
+});
+
+/**
+ * PATCH /api/umkm/tasks/:id/toggle
+ * Toggle status penyelesaian tugas (menyelesaikan error 404 pada checkbox rencana aksi)
+ */
+router.patch("/tasks/:id/toggle", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    const { id } = req.params;
+    const { completed, status } = req.body;
+
+    let targetId = id;
+    let existing = await prisma.actionPlanTask.findUnique({ where: { id: targetId } });
+
+    // Fallback defensif jika ID frontend berupa indeks lokal (misal: 't-1', 't-4')
+    if (!existing && biz && id.startsWith("t-")) {
+      const allTasks = await prisma.actionPlanTask.findMany({
+        where: { businessId: biz.id },
+        orderBy: { createdAt: "asc" },
+      });
+      const idx = parseInt(id.replace("t-", "")) - 1;
+      if (idx >= 0 && idx < allTasks.length) {
+        targetId = allTasks[idx].id;
+        existing = allTasks[idx];
+      }
+    }
+
+    if (!existing) {
+      return res.status(404).json({ success: false, message: "Tugas tidak ditemukan." });
+    }
+
+    const resolvedCompleted = completed !== undefined ? Boolean(completed) : !existing.completed;
+    const resolvedStatus = status || (resolvedCompleted ? "DONE" : "TODO");
+
+    const updated = await prisma.actionPlanTask.update({
+      where: { id: targetId },
+      data: {
+        completed: resolvedCompleted,
+        status: resolvedStatus,
       },
     });
 
     return res.json({
       success: true,
-      message: "Tugas berhasil diperbarui.",
+      message: "Status tugas berhasil diperbarui di database.",
+      data: updated,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memperbarui status tugas: " + err.message });
+  }
+});
+
+/**
+ * PUT /api/umkm/tasks/:id
+ */
+router.put("/tasks/:id", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    const { id } = req.params;
+    const {
+      title,
+      description,
+      completed,
+      status,
+      priority,
+      dueDate,
+      due_date,
+      evidenceName,
+      evidenceUrl,
+      evidenceSize,
+      notes,
+      umkmNotes,
+    } = req.body;
+
+    let targetId = id;
+    let existing = await prisma.actionPlanTask.findUnique({ where: { id: targetId } });
+
+    if (!existing && biz && id.startsWith("t-")) {
+      const allTasks = await prisma.actionPlanTask.findMany({
+        where: { businessId: biz.id },
+        orderBy: { createdAt: "asc" },
+      });
+      const idx = parseInt(id.replace("t-", "")) - 1;
+      if (idx >= 0 && idx < allTasks.length) {
+        targetId = allTasks[idx].id;
+        existing = allTasks[idx];
+      }
+    }
+
+    if (!existing) {
+      return res.status(404).json({ success: false, message: "Tugas tidak ditemukan." });
+    }
+
+    const task = await prisma.actionPlanTask.update({
+      where: { id: targetId },
+      data: {
+        ...(title ? { title: String(title).trim() } : {}),
+        ...(description !== undefined ? { description: String(description).trim() } : {}),
+        ...(completed !== undefined ? { completed: Boolean(completed) } : {}),
+        ...(status ? { status: String(status) } : {}),
+        ...(priority ? { priority: String(priority) } : {}),
+        ...(dueDate || due_date ? { dueDate: String(dueDate || due_date) } : {}),
+        ...(evidenceName ? { evidenceName: String(evidenceName) } : {}),
+        ...(evidenceUrl ? { evidenceUrl: String(evidenceUrl) } : {}),
+        ...(evidenceSize ? { evidenceSize: String(evidenceSize) } : {}),
+        ...(notes || umkmNotes ? { umkmNotes: String(notes || umkmNotes).trim() } : {}),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: "Tugas berhasil diperbarui di database.",
       data: task,
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: "Gagal memperbarui tugas: " + err.message });
+  }
+});
+
+/**
+ * DELETE /api/umkm/tasks/:id
+ */
+router.delete("/tasks/:id", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    await prisma.actionPlanTask.delete({ where: { id } });
+    return res.json({ success: true, message: "Tugas berhasil dihapus dari database." });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menghapus tugas: " + err.message });
   }
 });
 

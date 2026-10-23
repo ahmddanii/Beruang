@@ -76,19 +76,68 @@ router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
       return res.status(404).json({ success: false, message: "Profil usaha tidak ditemukan." });
     }
 
-    const { name, brand, description, pitchSummary, pitch_summary, sector, city, fundingTarget, funding_target } = req.body;
+    const {
+      name,
+      brand,
+      ownerName,
+      owner_name,
+      description,
+      pitchSummary,
+      pitch_summary,
+      sector,
+      city,
+      fundingTarget,
+      funding_target,
+      equityOffered,
+      equity_offered,
+      nib,
+      npwp,
+      bankName,
+      bank_name,
+      bankAccountNumber,
+      bank_account_number,
+      bankAccountHolder,
+      bank_account_holder,
+      outletsCount,
+      outlets_count,
+      employeesCount,
+      employees_count,
+      phone,
+    } = req.body;
+
+    const resolvedOwner = ownerName || owner_name;
+    const resolvedBrand = brand || name;
+
     const updated = await prisma.businessProfile.update({
       where: { id: biz.id },
       data: {
-        ...(name ? { name: String(name).trim() } : {}),
-        ...(brand ? { brand: String(brand).trim() } : {}),
+        ...(resolvedBrand ? { brand: String(resolvedBrand).trim(), name: String(resolvedBrand).trim() } : {}),
+        ...(resolvedOwner ? { ownerName: String(resolvedOwner).trim() } : {}),
         ...(description ? { description: String(description).trim() } : {}),
         ...(pitchSummary || pitch_summary ? { description: String(pitchSummary || pitch_summary).trim() } : {}),
         ...(sector ? { sector: String(sector).trim() } : {}),
-        ...(city ? { city: String(city).trim() } : {}),
+        ...(city ? { city: String(city).trim(), location: `${String(city).trim()}, Indonesia` } : {}),
         ...(fundingTarget || funding_target ? { fundingTarget: parseFloat(fundingTarget || funding_target) } : {}),
+        ...(equityOffered || equity_offered ? { equityOffered: String(equityOffered || equity_offered).trim() } : {}),
+        ...(nib ? { nib: String(nib).trim() } : {}),
+        ...(npwp ? { npwp: String(npwp).trim() } : {}),
+        ...(bankName || bank_name ? { bankName: String(bankName || bank_name).trim() } : {}),
+        ...(bankAccountNumber || bank_account_number ? { bankAccountNumber: String(bankAccountNumber || bank_account_number).trim() } : {}),
+        ...(bankAccountHolder || bank_account_holder ? { bankAccountHolder: String(bankAccountHolder || bank_account_holder).trim() } : {}),
+        ...(outletsCount || outlets_count ? { outletsCount: Number(outletsCount || outlets_count) } : {}),
+        ...(employeesCount || employees_count ? { employeesCount: Number(employeesCount || employees_count) } : {}),
       },
     });
+
+    if (biz.userId && (resolvedOwner || phone)) {
+      await prisma.user.update({
+        where: { id: biz.userId },
+        data: {
+          ...(resolvedOwner ? { name: String(resolvedOwner).trim() } : {}),
+          ...(phone ? { phone: String(phone).trim() } : {}),
+        },
+      });
+    }
 
     return res.json({
       success: true,

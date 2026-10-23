@@ -15,6 +15,7 @@ import onboardingRouter, { handleUmkmOnboarding, handleConsultantOnboarding, han
 import adminRouter from "./routes/admin.js";
 import chatRouter from "./routes/chat.js";
 import notificationsRouter from "./routes/notifications.js";
+import userRouter from "./routes/user.js";
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use("/api/investor", investorRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/notifications", notificationsRouter);
+app.use("/api/user", userRouter);
 
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

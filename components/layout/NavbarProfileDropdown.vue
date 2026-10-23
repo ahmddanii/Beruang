@@ -92,15 +92,24 @@
         </div>
       </div>
 
-      <!-- Quick Action: Profil Usaha -->
-      <div class="p-2 border-b border-[#E2E8F0] dark:border-neutral-800">
+      <!-- Quick Action: Profil & Pengaturan Sesuai Peran -->
+      <div class="p-2 border-b border-[#E2E8F0] dark:border-neutral-800 space-y-0.5">
         <NuxtLink
-          to="/dashboard/profile"
+          :to="profileLink.path"
           class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
           @click="isOpen = false"
         >
           <HugeiconsIcon :icon="UserCircleIcon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
-          <span>Lihat Profil Usaha</span>
+          <span>{{ profileLink.label }}</span>
+        </NuxtLink>
+
+        <NuxtLink
+          :to="settingsLink"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          @click="isOpen = false"
+        >
+          <HugeiconsIcon :icon="Settings01Icon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
+          <span>Pengaturan & Keamanan</span>
         </NuxtLink>
       </div>
 
@@ -157,12 +166,30 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { HugeiconsIcon } from '@hugeicons/vue'
-import { UserCircleIcon, Logout01Icon } from '@hugeicons/core-free-icons'
+import { UserCircleIcon, Logout01Icon, Settings01Icon } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+const profileLink = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return { path: '/konsultan/profil', label: 'Profil & Lisensi Konsultan' }
+    case 'INVESTOR': return { path: '/investor/pengaturan', label: 'Tesis & Identitas Investor' }
+    case 'ADMIN': return { path: '/admin/pengguna', label: 'Kelola Pengguna Platform' }
+    default: return { path: '/dashboard/profile', label: 'Lihat Profil Usaha' }
+  }
+})
+
+const settingsLink = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return '/konsultan/pengaturan'
+    case 'INVESTOR': return '/investor/pengaturan'
+    case 'ADMIN': return '/admin/penugasan'
+    default: return '/dashboard/pengaturan'
+  }
+})
 
 const dropdownRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)

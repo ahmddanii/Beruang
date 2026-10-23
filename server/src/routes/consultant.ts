@@ -821,4 +821,157 @@ router.post("/agreements/:id/sign", requireAuth, async (req: AuthenticatedReques
   }
 });
 
+/**
+ * In-memory preferences store for consultant
+ */
+const consultantPreferencesStore = new Map<string, { acceptNewRequests: boolean; whatsappNotification: boolean; anomalyAlerts: boolean }>();
+
+/**
+ * GET /api/consultant/profile
+ */
+router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    const consultant = await prisma.consultantProfile.findFirst({
+      where: consultantId ? { id: consultantId } : {},
+      include: { user: true },
+    });
+
+    if (!consultant) {
+      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
+    }
+
+    const prefs = consultantPreferencesStore.get(consultant.id) || {
+      acceptNewRequests: true,
+      whatsappNotification: true,
+      anomalyAlerts: true,
+    };
+
+    return res.json({
+      success: true,
+      data: {
+        id: consultant.id,
+        userId: consultant.userId,
+        name: consultant.user.name,
+        email: consultant.user.email,
+        phone: consultant.user.phone || "0812-3456-7890",
+        avatar: consultant.user.avatar,
+        firmName: consultant.firmName,
+        institution: consultant.firmName,
+        specialization: consultant.specialization,
+        bnspLicense: consultant.bnspLicense,
+        city: consultant.city,
+        experience: consultant.experience,
+        maxClients: consultant.maxClients,
+        isCertified: consultant.isCertified,
+        activeClientsCount: consultant.activeClientsCount,
+        preferences: prefs,
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat profil konsultan: " + err.message });
+  }
+});
+
+/**
+ * PUT /api/consultant/profile
+ */
+router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    const consultant = await prisma.consultantProfile.findFirst({
+      where: consultantId ? { id: consultantId } : {},
+      include: { user: true },
+    });
+
+    if (!consultant) {
+      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
+    }
+
+    const {
+      name,
+      phone,
+      firmName,
+      institution,
+      specialization,
+      bnspLicense,
+      city,
+      experience,
+      maxClients,
+      preferences,
+    } = req.body;
+
+    const resolvedFirm = firmName || institution;
+
+    const updated = await prisma.consultantProfile.update({
+      where: { id: consultant.id },
+      data: {
+        ...(resolvedFirm ? { firmName: String(resolvedFirm).trim() } : {}),
+        ...(specialization ? { specialization: String(specialization).trim() } : {}),
+        ...(bnspLicense ? { bnspLicense: String(bnspLicense).trim() } : {}),
+        ...(city ? { city: String(city).trim() } : {}),
+        ...(experience ? { experience: String(experience).trim() } : {}),
+        ...(maxClients ? { maxClients: Number(maxClients) } : {}),
+      },
+      include: { user: true },
+    });
+
+    if (name || phone) {
+      await prisma.user.update({
+        where: { id: consultant.userId },
+        data: {
+          ...(name ? { name: String(name).trim() } : {}),
+          ...(phone ? { phone: String(phone).trim() } : {}),
+        },
+      });
+    }
+
+    if (preferences && typeof preferences === "object") {
+      const prev = consultantPreferencesStore.get(consultant.id) || {
+        acceptNewRequests: true,
+        whatsappNotification: true,
+        anomalyAlerts: true,
+      };
+      consultantPreferencesStore.set(consultant.id, { ...prev, ...preferences });
+    }
+
+    return res.json({
+      success: true,
+      message: "Profil dan preferensi konsultan berhasil diperbarui.",
+      data: updated,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memperbarui profil konsultan: " + err.message });
+  }
+});
+
+/**
+ * GET & PUT /api/consultant/preferences
+ */
+router.get("/preferences", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  const consultantId = (await resolveConsultantId(req)) || "cons-prof-01";
+  const prefs = consultantPreferencesStore.get(consultantId) || {
+    acceptNewRequests: true,
+    whatsappNotification: true,
+    anomalyAlerts: true,
+  };
+  return res.json({ success: true, data: prefs });
+});
+
+router.put("/preferences", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  const consultantId = (await resolveConsultantId(req)) || "cons-prof-01";
+  const prev = consultantPreferencesStore.get(consultantId) || {
+    acceptNewRequests: true,
+    whatsappNotification: true,
+    anomalyAlerts: true,
+  };
+  const updated = { ...prev, ...req.body };
+  consultantPreferencesStore.set(consultantId, updated);
+  return res.json({
+    success: true,
+    message: "Preferensi bimbingan konsultan berhasil disimpan.",
+    data: updated,
+  });
+});
+
 export default router;

@@ -712,4 +712,141 @@ router.get("/stats", optionalAuth, async (req: AuthenticatedRequest, res: Respon
   }
 });
 
+/**
+ * In-memory preferences store for investor
+ */
+const investorPreferencesStore = new Map<string, { notifyWhatsapp: boolean; notifyEmailReport: boolean; preferredScheme: string; ticketRange: string }>();
+
+/**
+ * GET /api/investor/profile
+ */
+router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const investorUserId = await resolveInvestorUserId(req);
+    const investor = await prisma.investorProfile.findFirst({
+      where: { userId: investorUserId },
+      include: { user: true },
+    });
+
+    if (!investor) {
+      return res.status(404).json({ success: false, message: "Profil investor tidak ditemukan." });
+    }
+
+    const prefs = investorPreferencesStore.get(investor.id) || {
+      notifyWhatsapp: true,
+      notifyEmailReport: true,
+      preferredScheme: "REVENUE_SHARE",
+      ticketRange: "150M-500M",
+    };
+
+    const parsedSectors = investor.sectors ? investor.sectors.split(",").map((s) => s.trim()) : ["Kuliner & Minuman (F&B)", "Ritel & FMCG"];
+
+    return res.json({
+      success: true,
+      data: {
+        id: investor.id,
+        userId: investor.userId,
+        name: investor.user.name,
+        syndicate: investor.firmName,
+        firmName: investor.firmName,
+        email: investor.user.email,
+        phone: investor.user.phone || "081198765432",
+        avatar: investor.user.avatar,
+        sectors: parsedSectors,
+        minMargin: `${investor.minMargin || 35}%`,
+        city: investor.city,
+        commitmentCapital: investor.commitmentCapital,
+        investorType: investor.investorType || "Kelompok Modal",
+        preferredScheme: prefs.preferredScheme,
+        ticketRange: prefs.ticketRange,
+        notifyWhatsapp: prefs.notifyWhatsapp,
+        notifyEmailReport: prefs.notifyEmailReport,
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat profil investor: " + err.message });
+  }
+});
+
+/**
+ * PUT /api/investor/profile
+ */
+router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const investorUserId = await resolveInvestorUserId(req);
+    const investor = await prisma.investorProfile.findFirst({
+      where: { userId: investorUserId },
+      include: { user: true },
+    });
+
+    if (!investor) {
+      return res.status(404).json({ success: false, message: "Profil investor tidak ditemukan." });
+    }
+
+    const {
+      name,
+      syndicate,
+      firmName,
+      email,
+      phone,
+      sectors,
+      preferredScheme,
+      ticketRange,
+      minMargin,
+      investorType,
+      city,
+      notifyWhatsapp,
+      notifyEmailReport,
+    } = req.body;
+
+    const resolvedFirm = syndicate || firmName;
+    const sectorsStr = Array.isArray(sectors) ? sectors.join(", ") : (sectors ? String(sectors).trim() : undefined);
+
+    const updated = await prisma.investorProfile.update({
+      where: { id: investor.id },
+      data: {
+        ...(resolvedFirm ? { firmName: String(resolvedFirm).trim() } : {}),
+        ...(sectorsStr ? { sectors: sectorsStr } : {}),
+        ...(minMargin ? { minMargin: parseFloat(String(minMargin).replace(/[^0-9.]/g, "")) } : {}),
+        ...(investorType ? { investorType: String(investorType).trim() } : {}),
+        ...(city ? { city: String(city).trim() } : {}),
+      },
+      include: { user: true },
+    });
+
+    if (name || phone || email) {
+      await prisma.user.update({
+        where: { id: investor.userId },
+        data: {
+          ...(name ? { name: String(name).trim() } : {}),
+          ...(phone ? { phone: String(phone).trim() } : {}),
+          ...(email ? { email: String(email).trim().toLowerCase() } : {}),
+        },
+      });
+    }
+
+    const prev = investorPreferencesStore.get(investor.id) || {
+      notifyWhatsapp: true,
+      notifyEmailReport: true,
+      preferredScheme: "REVENUE_SHARE",
+      ticketRange: "150M-500M",
+    };
+
+    investorPreferencesStore.set(investor.id, {
+      notifyWhatsapp: notifyWhatsapp ?? prev.notifyWhatsapp,
+      notifyEmailReport: notifyEmailReport ?? prev.notifyEmailReport,
+      preferredScheme: preferredScheme || prev.preferredScheme,
+      ticketRange: ticketRange || prev.ticketRange,
+    });
+
+    return res.json({
+      success: true,
+      message: "Profil dan preferensi investor berhasil disimpan.",
+      data: updated,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memperbarui profil investor: " + err.message });
+  }
+});
+
 export default router;

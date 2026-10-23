@@ -54,10 +54,10 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Penerbitan Sertifikat Pendanaan** | `/konsultan/klien/[id]/sertifikasi`| ✅ Siap Generator PDF | ❌ Belum ada endpoint resmi penerbitan lisensi/sertifikat | **P1 (Tinggi)** |
 | **Kontrak Perjanjian Konsultan** | `/konsultan/klien/perjanjian/[id]`| ✅ Siap Draft & TTD | ❌ Belum ada tabel & endpoint penyimpanan kontrak MoU | **P1 (Tinggi)** |
 | **AI Anomaly Detection (Gemini)** | `/konsultan/alert` | ✅ Siap UI Alert Card | ❌ Belum ada worker pembanding rasio HPP & trigger AI | **P1 (Tinggi)** |
-| **Katalog Investor Marketplace** | `/investor` | ✅ Siap Social Feed | ⚠️ Hanya 1 data, filter sektor/kota/margin belum query DB | **P0 (Kritis)** |
-| **Simpan Watchlist Investor** | `/investor/watchlist` | ✅ Siap Toggle Bookmark| ❌ Belum tersimpan persisten ke tabel pivot database | **P1 (Tinggi)** |
-| **Pengajuan Akses Ruang Data Privat**| `/investor/umkm/[id]` | ✅ Siap Form Tiket Modal| ❌ **404 Not Found** (`POST /api/vdr/requests`) | **P0 (Kritis)** |
-| **Signed URL Dokumen VDR** | `/investor/data-room/[id]` | ✅ Siap Viewer | ❌ Belum ada generator temporary signed URL ber-watermark | **P1 (Tinggi)** |
+| **Katalog Investor Marketplace** | `/investor` | ✅ Siap Social Feed | ✅ Selesai (`GET /api/investor/marketplace` query DB & filter) | Selesai |
+| **Simpan Watchlist Investor** | `/investor/watchlist` | ✅ Siap Toggle Bookmark| ✅ Selesai (`GET /investor/watchlist`, `POST /bookmark/:id`) | Selesai |
+| **Pengajuan Akses Ruang Data Privat**| `/investor/umkm/[id]` | ✅ Siap Form Tiket Modal| ✅ Selesai (`POST /api/investor/requests`, approval UMKM) | Selesai |
+| **Signed URL Dokumen VDR** | `/investor/data-room/[id]` | ✅ Siap Viewer | ✅ Selesai (`GET /api/investor/data-room/:id` & VDR stream) | Selesai |
 | **Chat Deal Room Real-Time** | `/dashboard/pesan`, `/investor/pesan` | ✅ Siap UI Chat | ⚠️ Hanya HTTP polling biasa, belum ada WebSocket/Pusher | **P1 (Tinggi)** |
 | **Penawaran Investasi (Deal Offer)** | `/dashboard/pesan` | ✅ Siap Attachment Card| ❌ Belum ada model data penawaran resmi & escrow tracking | **P2 (Lanjutan)** |
 | **Penugasan Konsultan oleh Admin** | `/admin/penugasan` | ✅ Siap Dropdown & Form | ❌ Aksi tombol hanya `setTimeout`, belum update foreign key | **P0 (Kritis)** |

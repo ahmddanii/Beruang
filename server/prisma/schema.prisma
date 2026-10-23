@@ -24,6 +24,7 @@ model User {
   investorProfile   InvestorProfile?
   accessRequests    AccessRequest[]
   notifications     Notification[]
+  watchlists        InvestorWatchlist[]
 }
 
 model ConsultantProfile {
@@ -78,6 +79,7 @@ model BusinessProfile {
   monthlyReports MonthlyReport[]
   documents      DataRoomDocument[]
   accessRequests AccessRequest[]
+  watchlists     InvestorWatchlist[]
 }
 
 model Assessment {
@@ -194,4 +196,15 @@ model Notification {
   link        String   @default("/dashboard/progres")
   actionLabel String?  @default("Lihat Kas")
   createdAt   DateTime @default(now())
+}
+
+model InvestorWatchlist {
+  id         String          @id @default(cuid())
+  userId     String
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime        @default(now())
+
+  @@unique([userId, businessId])
 }

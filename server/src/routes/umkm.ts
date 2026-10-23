@@ -1,6 +1,6 @@
 import { Router, Response } from "express";
 import { prisma } from "../index.js";
-import { requireAuth, AuthenticatedRequest } from "../middleware/auth.js";
+import { optionalAuth, requireAuth, AuthenticatedRequest } from "../middleware/auth.js";
 import { uploadAvatar } from "../middleware/upload.js";
 
 const router = Router();
@@ -29,7 +29,7 @@ async function resolveBusiness(req: AuthenticatedRequest) {
 /**
  * GET /api/umkm/profile
  */
-router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const biz = await resolveBusiness(req);
     if (!biz) {
@@ -42,7 +42,7 @@ router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
         id: biz.id,
         name: biz.name,
         brand: biz.brand,
-        ownerName: biz.user?.name || "Fikri Ramadhan",
+        ownerName: biz.ownerName || biz.user?.name || "Fikri Setiawan",
         ownerAvatarUrl: biz.user?.avatar || "",
         sector: biz.sector,
         city: biz.city,
@@ -55,10 +55,13 @@ router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
         description: biz.description,
         pitchSummary: biz.description,
         status: biz.status,
-        consultantName: "Maya Safitri, SE, M.Ak",
+        consultantName: "Dra. Maya Suryani, M.M.",
         nextMentoring: biz.nextMentoring,
         nib: biz.nib,
         npwp: biz.npwp,
+        bankName: biz.bankName,
+        bankAccountNumber: biz.bankAccountNumber,
+        bankAccountHolder: biz.bankAccountHolder,
       },
     });
   } catch (err: any) {
@@ -69,7 +72,7 @@ router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
 /**
  * PUT /api/umkm/profile
  */
-router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const biz = await resolveBusiness(req);
     if (!biz) {
@@ -117,15 +120,15 @@ router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
         ...(pitchSummary || pitch_summary ? { description: String(pitchSummary || pitch_summary).trim() } : {}),
         ...(sector ? { sector: String(sector).trim() } : {}),
         ...(city ? { city: String(city).trim(), location: `${String(city).trim()}, Indonesia` } : {}),
-        ...(fundingTarget || funding_target ? { fundingTarget: parseFloat(fundingTarget || funding_target) } : {}),
+        ...(fundingTarget != null ? { fundingTarget: parseFloat(fundingTarget) } : funding_target != null ? { fundingTarget: parseFloat(funding_target) } : {}),
         ...(equityOffered || equity_offered ? { equityOffered: String(equityOffered || equity_offered).trim() } : {}),
         ...(nib ? { nib: String(nib).trim() } : {}),
         ...(npwp ? { npwp: String(npwp).trim() } : {}),
         ...(bankName || bank_name ? { bankName: String(bankName || bank_name).trim() } : {}),
         ...(bankAccountNumber || bank_account_number ? { bankAccountNumber: String(bankAccountNumber || bank_account_number).trim() } : {}),
         ...(bankAccountHolder || bank_account_holder ? { bankAccountHolder: String(bankAccountHolder || bank_account_holder).trim() } : {}),
-        ...(outletsCount || outlets_count ? { outletsCount: Number(outletsCount || outlets_count) } : {}),
-        ...(employeesCount || employees_count ? { employeesCount: Number(employeesCount || employees_count) } : {}),
+        ...(outletsCount != null ? { outletsCount: Number(outletsCount) } : outlets_count != null ? { outletsCount: Number(outlets_count) } : {}),
+        ...(employeesCount != null ? { employeesCount: Number(employeesCount) } : employees_count != null ? { employeesCount: Number(employees_count) } : {}),
       },
     });
 

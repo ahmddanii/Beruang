@@ -263,6 +263,28 @@
               placeholder="Jelaskan keunggulan produk andalan, omzet rata-rata, segmen pelanggan setia, dan arah ekspansi bisnismu..."
             />
           </div>
+
+          <!-- Section 1 Save Action Button -->
+          <div class="flex items-center justify-between pt-3 border-t border-neutral-100 dark:border-neutral-800 flex-wrap gap-2">
+            <div class="flex items-center gap-1.5 text-xs text-neutral-500 font-poppins">
+              <span v-if="lastSavedInfo" class="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" />
+                {{ lastSavedInfo }}
+              </span>
+              <span v-else>
+                Tekan tombol simpan untuk langsung memperbarui data toko ke database.
+              </span>
+            </div>
+            <button
+              type="button"
+              :disabled="savingProfile"
+              class="btn-3d-blue px-5 py-2.5 text-xs sm:text-sm font-poppins font-bold shadow-xs cursor-pointer flex items-center gap-2 disabled:opacity-60"
+              @click="saveProfile"
+            >
+              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" :stroke-width="2.2" />
+              <span>{{ savingProfile ? 'Menyimpan...' : 'Simpan Informasi Usaha' }}</span>
+            </button>
+          </div>
         </div>
 
         <!-- SECTION 2: LEGALITAS & KEPATUHAN RESMI -->
@@ -1069,9 +1091,10 @@
           variant="blue"
           :huge-icon="CheckmarkCircle01Icon"
           :icon-size="15"
+          :disabled="savingProfile"
           @click="saveProfile"
         >
-          Simpan Perubahan
+          {{ savingProfile ? 'Menyimpan...' : 'Simpan Perubahan' }}
         </BActionButton>
       </div>
     </div>
@@ -1194,6 +1217,8 @@ const storeContacts = reactive({
 // Sector Custom Choice
 const selectedSectorChoice = ref('Kuliner & Minuman (F&B)')
 const customSectorInput = ref('')
+const savingProfile = ref(false)
+const lastSavedInfo = ref('')
 
 const establishedYearsAgo = computed(() => {
   const currentYear = 2026
@@ -1652,46 +1677,55 @@ async function saveProfile() {
     formProfile.sector = selectedSectorChoice.value
   }
 
-  await umkmStore.updateProfile({
-    name: formProfile.name.trim() || 'Kopi Senja Nusantara',
-    brand: formProfile.name.trim() || 'Kopi Senja Nusantara',
-    ownerName: formProfile.ownerName.trim() || 'Fikri Setiawan',
-    owner_name: formProfile.ownerName.trim() || 'Fikri Setiawan',
-    sector: formProfile.sector,
-    city: formProfile.city.trim(),
-    establishedYear: formProfile.establishedYear,
-    established_year: formProfile.establishedYear,
-    outletsCount: formProfile.outletsCount,
-    outlets_count: formProfile.outletsCount,
-    employeesCount: formProfile.employeesCount,
-    employees_count: formProfile.employeesCount,
-    fundingTarget: formProfile.fundingTarget,
-    funding_target: formProfile.fundingTarget,
-    description: formProfile.description.trim(),
-    pitchSummary: formProfile.description.trim(),
-    nib: formProfile.nib.trim(),
-    npwp: formProfile.npwp.trim()
-  })
+  savingProfile.value = true
+  try {
+    await umkmStore.updateProfile({
+      name: formProfile.name.trim() || 'Kopi Senja Nusantara',
+      brand: formProfile.name.trim() || 'Kopi Senja Nusantara',
+      ownerName: formProfile.ownerName.trim() || 'Fikri Setiawan',
+      owner_name: formProfile.ownerName.trim() || 'Fikri Setiawan',
+      sector: formProfile.sector,
+      city: formProfile.city.trim(),
+      establishedYear: formProfile.establishedYear,
+      established_year: formProfile.establishedYear,
+      outletsCount: formProfile.outletsCount,
+      outlets_count: formProfile.outletsCount,
+      employeesCount: formProfile.employeesCount,
+      employees_count: formProfile.employeesCount,
+      fundingTarget: formProfile.fundingTarget,
+      funding_target: formProfile.fundingTarget,
+      description: formProfile.description.trim(),
+      pitchSummary: formProfile.description.trim(),
+      nib: formProfile.nib.trim(),
+      npwp: formProfile.npwp.trim()
+    })
 
-  if (authStore.currentUser) {
-    authStore.currentUser.businessName = formProfile.name.trim()
-    authStore.currentUser.name = formProfile.ownerName.trim()
+    if (authStore.currentUser) {
+      authStore.currentUser.businessName = formProfile.name.trim()
+      authStore.currentUser.name = formProfile.ownerName.trim()
+    }
+
+    saveProductsToStorage()
+    saveContactsToStorage()
+    saveDocsToStorage()
+
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('umkm_profile_name', formProfile.name)
+      localStorage.setItem('umkm_profile_desc', formProfile.description)
+      localStorage.setItem('umkm_profile_sector', formProfile.sector)
+      localStorage.setItem('umkm_profile_city', formProfile.city)
+      localStorage.setItem('umkm_profile_nib', formProfile.nib)
+      localStorage.setItem('umkm_profile_npwp', formProfile.npwp)
+    }
+
+    const now = new Date()
+    lastSavedInfo.value = `Tersimpan pukul ${now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB`
+    triggerToast('✓ Informasi usaha berhasil diperbarui langsung di database!')
+  } catch (err: any) {
+    triggerToast('Gagal menyimpan profil: ' + (err?.message || 'Koneksi error'))
+  } finally {
+    savingProfile.value = false
   }
-
-  saveProductsToStorage()
-  saveContactsToStorage()
-  saveDocsToStorage()
-
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('umkm_profile_name', formProfile.name)
-    localStorage.setItem('umkm_profile_desc', formProfile.description)
-    localStorage.setItem('umkm_profile_sector', formProfile.sector)
-    localStorage.setItem('umkm_profile_city', formProfile.city)
-    localStorage.setItem('umkm_profile_nib', formProfile.nib)
-    localStorage.setItem('umkm_profile_npwp', formProfile.npwp)
-  }
-
-  triggerToast('Profil usaha berhasil disimpan & disinkronkan ke server!')
 }
 
 onMounted(async () => {

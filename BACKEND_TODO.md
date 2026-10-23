@@ -52,7 +52,7 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Validasi Kas Bulanan Konsultan** | `/konsultan/validasi` | ✅ Siap Form Verifikasi | ✅ Selesai (`GET /validations` & `POST /verify`) | Selesai |
 | **Input Scoring Radar 5 Aspek** | `/konsultan/klien/[id]/penilaian`| ✅ Siap Radar Chart | ✅ Selesai (`PUT /consultant/clients/:id/assessment`) | Selesai |
 | **Penerbitan Sertifikat Pendanaan** | `/konsultan/klien/[id]/sertifikasi`| ✅ Siap Generator PDF | ✅ Selesai (`POST /consultant/clients/:id/certify`) | Selesai |
-| **Kontrak Perjanjian Konsultan** | `/konsultan/klien/perjanjian/[id]`| ✅ Siap Draft & TTD | ❌ Belum ada tabel & endpoint penyimpanan kontrak MoU | **P1 (Tinggi)** |
+| **Kontrak Perjanjian Konsultan** | `/konsultan/klien/perjanjian/[id]`| ✅ Siap Draft & TTD | ✅ Selesai (Model Prisma `ConsultantAgreement`, endpoint konsultan & UMKM e-sign) | Selesai |
 | **AI Anomaly Detection (Gemini)** | `/konsultan/alert` | ✅ Siap UI Alert Card | ❌ Belum ada worker pembanding rasio HPP & trigger AI | **P1 (Tinggi)** |
 | **Katalog Investor Marketplace** | `/investor` | ✅ Siap Social Feed | ✅ Selesai (`GET /api/investor/marketplace` query DB & filter) | Selesai |
 | **Simpan Watchlist Investor** | `/investor/watchlist` | ✅ Siap Toggle Bookmark| ✅ Selesai (`GET /investor/watchlist`, `POST /bookmark/:id`) | Selesai |

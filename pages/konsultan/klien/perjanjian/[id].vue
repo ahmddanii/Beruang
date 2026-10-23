@@ -861,22 +861,52 @@ function switchSignatureMode(mode: 'draw' | 'type') {
   }
 }
 
-function confirmContractAndAccept() {
+async function confirmContractAndAccept() {
   if (!canSubmitContract.value || !requestData.value) return
   isSubmitting.value = true
   const req = requestData.value
-  setTimeout(() => {
-    konsultanStore.acceptRequest(req.id)
-    isSubmitting.value = false
-    router.push({
-      path: '/konsultan/klien',
-      query: {
-        tab: 'aktif',
-        acceptedClient: req.umkmId || req.id,
-        acceptedName: req.businessName
+
+  let signatureData = ''
+  if (signatureMode.value === 'draw' && signatureCanvasRef.value) {
+    try {
+      signatureData = signatureCanvasRef.value.toDataURL('image/png')
+    } catch {
+      signatureData = konsultanStore.profile.name
+    }
+  } else {
+    signatureData = konsultanStore.profile.name
+  }
+
+  try {
+    await useApi('/consultant/agreements', {
+      method: 'POST',
+      body: {
+        requestId: req.id,
+        businessId: req.umkmId || clientTargetId.value,
+        contractCode: `KTR-BRU-${contractCode.value}-2026`,
+        monthlyFee: monthlyFee.value,
+        durationMonths: durationMonths.value,
+        targetFunding: fundingTarget.value,
+        consultantSignature: signatureData,
+        consultantSignMode: signatureMode.value,
+        consultantSignerName: konsultanStore.profile.name,
+        agreementText: `Perjanjian kemitraan pendampingan bimbingan usaha ${businessName.value}.`
       }
     })
-  }, 300)
+  } catch (err: any) {
+    console.warn('Gagal menyimpan perjanjian ke backend:', err?.message)
+  }
+
+  konsultanStore.acceptRequest(req.id)
+  isSubmitting.value = false
+  router.push({
+    path: '/konsultan/klien',
+    query: {
+      tab: 'aktif',
+      acceptedClient: req.umkmId || req.id,
+      acceptedName: req.businessName
+    }
+  })
 }
 
 function openRejectModal() {

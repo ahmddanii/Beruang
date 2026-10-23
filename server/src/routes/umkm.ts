@@ -313,4 +313,136 @@ router.put("/investor-requests/:id/respond", requireAuth, async (req: Authentica
   }
 });
 
+/**
+ * GET /api/umkm/agreements & /api/umkm/agreement
+ * Melihat perjanjian kemitraan pendampingan aktif UMKM
+ */
+router.get("/agreements", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    if (!biz) {
+      return res.status(404).json({ success: false, message: "Profil usaha belum ditemukan." });
+    }
+
+    const agreements = await prisma.consultantAgreement.findMany({
+      where: { businessId: biz.id },
+      include: {
+        consultant: {
+          include: { user: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return res.json({
+      success: true,
+      data: agreements.map((a) => ({
+        id: a.id,
+        agreementCode: a.agreementCode,
+        requestId: a.requestId,
+        businessId: a.businessId,
+        consultantName: a.consultantSignerName || a.consultant?.user?.name || "Dra. Maya Suryani, M.M.",
+        consultantFirm: a.consultant?.firmName || "Maya Advisory Partner",
+        monthlyFee: a.monthlyFee,
+        durationMonths: a.durationMonths,
+        targetFunding: a.targetFunding,
+        status: a.status,
+        consultantSignedAt: a.consultantSignedAt,
+        consultantSignature: a.consultantSignature,
+        umkmSignedAt: a.umkmSignedAt,
+        umkmSignerName: a.umkmSignerName,
+        umkmSignature: a.umkmSignature,
+        createdAt: a.createdAt,
+      })),
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat perjanjian: " + err.message });
+  }
+});
+
+router.get("/agreement", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const biz = await resolveBusiness(req);
+    const agreement = await prisma.consultantAgreement.findFirst({
+      where: biz ? { businessId: biz.id } : {},
+      include: {
+        consultant: {
+          include: { user: true },
+        },
+        business: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (!agreement) {
+      return res.status(404).json({ success: false, message: "Belum ada perjanjian pendampingan aktif." });
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        id: agreement.id,
+        agreementCode: agreement.agreementCode,
+        requestId: agreement.requestId,
+        businessId: agreement.businessId,
+        businessName: agreement.business.brand || agreement.business.name,
+        consultantName: agreement.consultantSignerName || agreement.consultant?.user?.name || "Dra. Maya Suryani, M.M.",
+        consultantFirm: agreement.consultant?.firmName || "Maya Advisory Partner",
+        monthlyFee: agreement.monthlyFee,
+        durationMonths: agreement.durationMonths,
+        targetFunding: agreement.targetFunding,
+        status: agreement.status,
+        consultantSignedAt: agreement.consultantSignedAt,
+        consultantSignature: agreement.consultantSignature,
+        umkmSignedAt: agreement.umkmSignedAt,
+        umkmSignerName: agreement.umkmSignerName,
+        umkmSignature: agreement.umkmSignature,
+        createdAt: agreement.createdAt,
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat perjanjian: " + err.message });
+  }
+});
+
+/**
+ * POST /api/umkm/agreements/:id/sign
+ * UMKM menandatangani perjanjian kemitraan secara digital
+ */
+router.post("/agreements/:id/sign", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { umkmSignature, umkmSignMode, umkmSignerName } = req.body;
+
+    const agreement = await prisma.consultantAgreement.findFirst({
+      where: {
+        OR: [{ id }, { agreementCode: id }],
+      },
+    });
+
+    if (!agreement) {
+      return res.status(404).json({ success: false, message: "Perjanjian tidak ditemukan." });
+    }
+
+    const updated = await prisma.consultantAgreement.update({
+      where: { id: agreement.id },
+      data: {
+        status: "ACTIVE",
+        umkmSignedAt: new Date(),
+        umkmSignature: umkmSignature || agreement.umkmSignature,
+        umkmSignMode: umkmSignMode || "draw",
+        umkmSignerName: umkmSignerName || "Fikri Setiawan",
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: "Perjanjian kemitraan resmi disetujui dan ditandatangani oleh UMKM. Status pembinaan kini AKTIF.",
+      data: updated,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menandatangani perjanjian: " + err.message });
+  }
+});
+
 export default router;

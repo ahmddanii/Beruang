@@ -44,6 +44,7 @@ model ConsultantProfile {
 
   businesses  BusinessProfile[]
   assignments ConsultantAssignment[]
+  agreements  ConsultantAgreement[]
 }
 
 model InvestorProfile {
@@ -96,6 +97,7 @@ model BusinessProfile {
   watchlists     InvestorWatchlist[]
   assignments    ConsultantAssignment[]
   chatThreads    ChatThread[]
+  agreements     ConsultantAgreement[]
 }
 
 model ConsultantAssignment {
@@ -270,5 +272,30 @@ model ChatMessage {
   attachmentSubtitle String?
   attachmentValue    String?
   createdAt          DateTime    @default(now())
+}
+
+model ConsultantAgreement {
+  id                   String             @id @default(cuid())
+  agreementCode        String             @unique
+  consultantId         String?
+  consultant           ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
+  businessId           String
+  business             BusinessProfile    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  requestId            String?
+  monthlyFee           Float              @default(1500000)
+  durationMonths       Int                @default(3)
+  targetFunding        Float              @default(150000000)
+  status               String             @default("SIGNED_CONSULTANT") // DRAFT, SIGNED_CONSULTANT, ACTIVE, TERMINATED
+  consultantSignedAt   DateTime?          @default(now())
+  consultantSignerName String?            @default("Dra. Maya Suryani, M.M.")
+  consultantSignature  String?
+  consultantSignMode   String?            @default("draw")
+  umkmSignedAt         DateTime?
+  umkmSignerName       String?
+  umkmSignature        String?
+  umkmSignMode         String?
+  agreementText        String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
 }
 

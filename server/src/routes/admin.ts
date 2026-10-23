@@ -25,14 +25,23 @@ router.get("/stats", optionalAuth, async (_req: AuthenticatedRequest, res: Respo
       success: true,
       message: "Statistik telemetri admin ekosistem berhasil dimuat.",
       data: {
+        totalUmkm: 142 + dbUmkmCount - 7,
         total_umkm: 142 + dbUmkmCount - 7, // Scaling representasi skala nasional
+        activeConsultants: 28 + dbConsultantCount - 3,
         active_consultants: 28 + dbConsultantCount - 3,
+        readyForFunding: 38 + readyForFundingCount - 6,
         ready_for_funding: 38 + readyForFundingCount - 6,
+        totalCapitalDeployed: "Rp 4.2 M",
         total_capital_deployed: "Rp 4.2 M",
+        nplRatio: "0.0%",
         npl_ratio: "0.0%",
+        newUmkmThisMonth: 12,
         new_umkm_this_month: 12,
+        graduationRate: "26.7%",
         graduation_rate: "26.7%",
+        pendingAssignments: pendingAssignmentsCount,
         pending_assignments: pendingAssignmentsCount,
+        isAssigned: isAssigned,
         is_assigned: isAssigned,
       },
     });

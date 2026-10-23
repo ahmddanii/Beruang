@@ -146,7 +146,7 @@ router.get("/threads/:id/messages", optionalAuth, async (req: AuthenticatedReque
 router.post("/threads/:id/messages", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { text, attachment, attachment_type } = req.body;
+    const { text, attachment, attachment_type, attachmentType, attachmentTitle, attachmentSubtitle, attachmentValue } = req.body;
 
     if (!text || text.trim() === "") {
       return res.status(422).json({
@@ -175,7 +175,10 @@ router.post("/threads/:id/messages", optionalAuth, async (req: AuthenticatedRequ
     const senderName = req.user?.name || (senderRole === "INVESTOR" ? thread.investorName || "Hendro Wicaksono" : "Fikri Setiawan");
 
     const attachObj = attachment || {};
-    const attachType = attachment_type || attachObj.type || null;
+    const attachType = attachmentType || attachment_type || attachObj.type || null;
+    const attachTitle = attachmentTitle || attachObj.title || null;
+    const attachSubtitle = attachmentSubtitle || attachObj.subtitle || null;
+    const attachVal = attachmentValue || attachObj.value || null;
 
     // Simpan pesan baru
     const newMsg = await prisma.chatMessage.create({
@@ -186,9 +189,9 @@ router.post("/threads/:id/messages", optionalAuth, async (req: AuthenticatedRequ
         text: text.trim(),
         timestamp: timeStr,
         attachmentType: attachType,
-        attachmentTitle: attachObj.title || null,
-        attachmentSubtitle: attachObj.subtitle || null,
-        attachmentValue: attachObj.value || null,
+        attachmentTitle: attachTitle,
+        attachmentSubtitle: attachSubtitle,
+        attachmentValue: attachVal,
       },
     });
 

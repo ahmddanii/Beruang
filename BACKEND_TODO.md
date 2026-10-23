@@ -1,7 +1,8 @@
 # Laporan Audit Kesiapan Backend — Platform Beruang (Ber-Uang)
 > **Tanggal Audit:** 23 Oktober 2026  
 > **Status Frontend:** Siap & Terintegrasi Antarmuka (Nuxt 3 / Vue 3 / Pinia / Tailwind CSS)  
-> **Target Analisis:** Evaluasi menyeluruh endpoint, layanan, skema database, dan alur kerja backend yang **belum dapat digunakan atau harus dibuat ulang**.
+> **Target Analisis:** Evaluasi menyeluruh endpoint, layanan, skema database, dan alur kerja backend yang **belum dapat digunakan atau harus dibuat ulang**.  
+> **Laporan Audit Persistensi Terbaru:** Lihat [docs/BACKEND_PERSISTENCE_AUDIT.md](file:///e:/Kuliah/Project/beruang-frontend/docs/BACKEND_PERSISTENCE_AUDIT.md) untuk daftar lengkap fitur yang belum tersimpan langsung ke SQLite.
 
 ---
 

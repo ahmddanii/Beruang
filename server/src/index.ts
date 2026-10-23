@@ -13,6 +13,7 @@ import consultantRouter from "./routes/consultant.js";
 import investorRouter from "./routes/investor.js";
 import onboardingRouter, { handleUmkmOnboarding, handleConsultantOnboarding, handleInvestorOnboarding } from "./routes/onboarding.js";
 import adminRouter from "./routes/admin.js";
+import chatRouter from "./routes/chat.js";
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ app.use("/api/umkm", umkmRouter);
 app.use("/api/consultant", consultantRouter);
 app.use("/api/investor", investorRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/chat", chatRouter);
 
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

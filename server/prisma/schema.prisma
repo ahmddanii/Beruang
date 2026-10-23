@@ -95,6 +95,7 @@ model BusinessProfile {
   accessRequests AccessRequest[]
   watchlists     InvestorWatchlist[]
   assignments    ConsultantAssignment[]
+  chatThreads    ChatThread[]
 }
 
 model ConsultantAssignment {
@@ -234,3 +235,40 @@ model InvestorWatchlist {
 
   @@unique([userId, businessId])
 }
+
+model ChatThread {
+  id              String           @id @default(cuid())
+  businessId      String?
+  business        BusinessProfile? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  umkmId          String?
+  investorId      String?
+  investorName    String?          @default("Hendro Wicaksono")
+  investorLembaga String?          @default("Nusantara Impact Angel Syndicate")
+  investorAvatar  String?          @default("https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces")
+  dealStatus      String           @default("Tahap Penjajakan Awal")
+  ticketDiscussed Float            @default(150000000)
+  unreadInvestor  Int              @default(0)
+  unreadUmkm      Int              @default(0)
+  lastMessage     String           @default("")
+  lastMessageAt   String?          @default("Baru saja")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  messages        ChatMessage[]
+}
+
+model ChatMessage {
+  id                 String      @id @default(cuid())
+  threadId           String
+  thread             ChatThread  @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  senderRole         String      // "INVESTOR" | "UMKM"
+  senderName         String
+  text               String
+  timestamp          String
+  attachmentType     String?     // "METRIC" | "DOCUMENT" | "DEAL_OFFER"
+  attachmentTitle    String?
+  attachmentSubtitle String?
+  attachmentValue    String?
+  createdAt          DateTime    @default(now())
+}
+

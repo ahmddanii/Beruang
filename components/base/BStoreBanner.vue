@@ -1,6 +1,6 @@
 <template>
   <!-- Outer Wrapper (Allows Circular Profile Avatar to Overlap Bottom Edge) -->
-  <div class="relative w-full mb-16 sm:mb-20 md:mb-24 select-none">
+  <div class="relative w-full mb-16 sm:mb-20 md:mb-24">
     <!-- Hidden File Input for Banner Image Selection -->
     <input
       ref="fileInputRef"
@@ -32,7 +32,7 @@
       <img
         :src="currentBannerUrl"
         :alt="`Banner Toko ${storeName}`"
-        class="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover/banner:scale-105"
+        class="w-full h-full object-cover object-center"
         @error="handleImageError"
       />
 
@@ -186,7 +186,7 @@
           <img
             :src="currentOwnerAvatarUrl"
             :alt="`Foto Profil ${ownerName}`"
-            class="w-full h-full object-cover object-center transition-transform duration-300 group-hover/avatar:scale-105"
+            class="w-full h-full object-cover object-center"
             @error="handleAvatarError"
           />
 

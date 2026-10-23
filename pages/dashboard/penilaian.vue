@@ -1,397 +1,720 @@
 <template>
-  <div class="space-y-6 pb-20 font-sans text-neutral-900 dark:text-neutral-100 select-none">
-    <!-- 1. Top Action Controls -->
-    <div class="flex items-center justify-end gap-2.5 pb-2 shrink-0 flex-wrap">
-      <!-- Unduh Rapor PDF Button -->
-      <button
-        type="button"
-        class="btn-pill-gradient group"
-        title="Unduh Rapor Kesiapan Usaha (PDF)"
-        @click="handleExportReport"
-      >
-        <HugeiconsIcon :icon="Download01Icon" :size="15" :stroke-width="2" class="text-neutral-700 dark:text-neutral-200" />
-        <span>Unduh Rapor Kesiapan (PDF)</span>
-      </button>
-
-      <!-- Primary 3D Action: Lihat Sertifikat Validasi -->
-      <button
-        type="button"
-        class="btn-3d-green px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs cursor-pointer"
-        @click="isCertificateModalOpen = true"
-      >
-        <HugeiconsIcon :icon="Award01Icon" :size="17" :stroke-width="2.2" />
-        <span>Lihat Sertifikat Validasi</span>
-      </button>
-    </div>
-
-    <!-- 2. Editorial Header Banner (GoPay Tactile Card) -->
-    <div class="gsap-header-card rounded-3xl card-tactile-gopay p-6 sm:p-7 relative overflow-hidden border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#13161F]">
-      <!-- Background Ambient Glow -->
-      <div class="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-[#2091AA]/10 dark:bg-[#2091AA]/15 blur-3xl pointer-events-none" />
-      <div class="absolute right-36 -bottom-16 w-48 h-48 rounded-full bg-[#00AA13]/10 dark:bg-[#00AA13]/10 blur-3xl pointer-events-none" />
-
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div class="space-y-2 max-w-2xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6F4F7] dark:bg-[#2091AA]/20 text-[#2091AA] dark:text-[#50AABF] text-xs font-poppins font-semibold border border-[#2091AA]/20 dark:border-[#50AABF]/30">
-            <HugeiconsIcon :icon="AnalyticsUpIcon" :size="14" :stroke-width="2" />
-            <span>Diagnosis Objektif 5 Aspek Fundamental Toko</span>
-          </div>
-
-          <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
-            Cek Kesehatan Usaha & Kelayakan Kemitraan
-          </h1>
-
-          <p class="text-sm sm:text-[15px] text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-            Evaluasi berkala terhadap kekuatan finansial kas, efisiensi bahan jualan, kepatuhan legalitas, dan tata kelola tokomu bersama konsultan pendamping. Hasil validasi ini menjadi standar acuan resmi investor sebelum menyalurkan modal.
-          </p>
-        </div>
-
-        <!-- Right Quick Stat Pills -->
-        <div class="grid grid-cols-2 gap-3 shrink-0">
-          <div class="p-3.5 sm:p-4 rounded-2xl bg-neutral-50/80 dark:bg-[#18191E] border border-neutral-200/70 dark:border-neutral-800 flex flex-col justify-center min-w-[140px]">
-            <span class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Indeks Kesehatan</span>
-            <div class="flex items-baseline gap-1 mt-0.5">
-              <span class="font-poppins font-extrabold text-2xl text-[#00AA13] dark:text-emerald-400 tabular-nums">
-                {{ umkmStore.overallHealthScore }}
-              </span>
-              <span class="text-xs text-neutral-400">/ 100</span>
-            </div>
-            <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-              Grade A (Siap Kemitraan)
-            </span>
-          </div>
-
-          <div class="p-3.5 sm:p-4 rounded-2xl bg-neutral-50/80 dark:bg-[#18191E] border border-neutral-200/70 dark:border-neutral-800 flex flex-col justify-center min-w-[140px]">
-            <span class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Validasi Terakhir</span>
-            <span class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white mt-1">
-              {{ umkmStore.profile.certifiedAt }}
-            </span>
-            <span class="text-[11px] text-[#2091AA] dark:text-[#50AABF] font-medium mt-0.5 truncate max-w-[130px]">
-              {{ umkmStore.profile.consultantName }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Radar Chart & Overall Health Bento Section (GoPay Tactile Cards) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-      <!-- Left Column: Interactive Radar Chart Card (7 cols) -->
-      <div class="lg:col-span-7 card-tactile-gopay rounded-2xl p-6 sm:p-7 flex flex-col justify-between">
-        <div>
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800/80 mb-6">
-            <div>
-              <h2 class="font-poppins font-bold text-lg sm:text-xl text-neutral-900 dark:text-white">
-                Radar 5 Aspek Fundamental Toko
-              </h2>
-              <p class="text-xs font-poppins text-neutral-500 mt-0.5">
-                Pemetaan kekuatan bisnis tokomu dibandingkan target kelulusan akses modal investor.
-              </p>
-            </div>
-            <div class="flex items-center gap-4 text-xs font-poppins font-semibold shrink-0">
-              <span class="flex items-center gap-1.5 text-[#2091AA] dark:text-[#50AABF]">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#2091AA]" />
-                Capaian Toko
-              </span>
-              <span class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
-                <span class="w-2.5 h-2.5 rounded-full border border-amber-500 bg-amber-400/30" />
-                Target Kelulusan
-              </span>
-            </div>
-          </div>
-
-          <!-- Radar Canvas Component -->
-          <div class="flex items-center justify-center py-2">
-            <BRadarChart
-              :items="radarData"
-              :size="330"
-              show-target
-            />
-          </div>
-        </div>
-
-        <div class="mt-4 p-3.5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/40 w-full text-xs text-neutral-600 dark:text-neutral-300 text-center flex items-center justify-center gap-2 font-poppins">
-          <HugeiconsIcon :icon="HelpCircleIcon" :size="16" class="text-[#2091AA] dark:text-[#50AABF]" />
-          <span>Arahkan kursor pada sudut radar untuk melihat perbandingan skor terhadap target minimum kelulusan.</span>
-        </div>
+  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100 select-text">
+    <!-- ========================================================================= -->
+    <!-- 1. TOP HEADER: Clean Page Title & Chat Konsultan Action                     -->
+    <!-- ========================================================================= -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <HugeiconsIcon
+          :icon="AnalyticsUpIcon"
+          :size="26"
+          :stroke-width="2.2"
+          class="text-neutral-900 dark:text-white shrink-0"
+        />
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Cek Kesehatan
+        </h1>
       </div>
 
-      <!-- Right Column: Overall Health Score Card & Aspect Quick Meters (5 cols) -->
-      <div class="lg:col-span-5 space-y-4 flex flex-col justify-between">
-        <!-- Grade A Badge Card -->
-        <div class="p-5 sm:p-6 rounded-2xl card-tactile-gopay space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-poppins font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-              PREDIKAT KESEHATAN BISNIS
-            </span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-poppins font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" :stroke-width="2" />
-              <span>GRADE A TERVERIFIKASI</span>
-            </span>
-          </div>
-
-          <div class="flex items-center justify-between my-2">
-            <div>
-              <div class="flex items-baseline gap-2">
-                <span class="text-4xl sm:text-5xl font-poppins font-extrabold text-neutral-900 dark:text-white tabular-nums">
-                  {{ umkmStore.overallHealthScore }}
-                </span>
-                <span class="text-sm text-neutral-400 font-bold font-poppins">/ 100</span>
-              </div>
-              <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 mt-1 font-sans">
-                Kondisi usaha: <strong class="text-[#00AA13] dark:text-emerald-400">Sehat & Siap Kemitraan Modal</strong>.
-              </p>
-            </div>
-
-            <!-- Grade Visual Crest -->
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 text-neutral-950 flex flex-col items-center justify-center font-poppins font-extrabold shadow-sm border border-amber-300 shrink-0">
-              <span class="text-3xl leading-none">A</span>
-              <span class="text-[9px] font-semibold uppercase tracking-wider">LULUS</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pillar Mini Progress Bars List -->
-        <div class="space-y-2.5 flex-1 flex flex-col justify-start">
-          <div
-            v-for="aspect in umkmStore.assessmentAspects"
-            :key="aspect.id"
-            class="p-3.5 rounded-xl card-tactile-gopay flex items-center justify-between gap-3 border transition-colors hover:border-neutral-400 dark:hover:border-neutral-600"
-          >
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center justify-between mb-1">
-                <h4 class="font-poppins font-bold text-xs sm:text-sm text-neutral-900 dark:text-white truncate">
-                  {{ aspect.name }}
-                </h4>
-                <span class="text-xs font-poppins font-bold tabular-nums text-neutral-700 dark:text-neutral-300">
-                  {{ aspect.score }}%
-                </span>
-              </div>
-
-              <!-- Mini Progress Bar -->
-              <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
-                <div
-                  :class="[
-                    'h-full rounded-full transition-all duration-500',
-                    aspect.score >= aspect.targetScore
-                      ? 'bg-gradient-to-r from-[#2091AA] to-[#00AA13]'
-                      : 'bg-gradient-to-r from-amber-400 to-amber-500'
-                  ]"
-                  :style="{ width: `${aspect.score}%` }"
-                />
-              </div>
-
-              <div class="flex items-center justify-between text-[10px] text-neutral-400 font-poppins mt-1">
-                <span>Target: {{ aspect.targetScore }}%</span>
-                <span :class="aspect.score >= aspect.targetScore ? 'text-[#00AA13] font-semibold' : 'text-amber-600 font-semibold'">
-                  {{ aspect.score >= aspect.targetScore ? '✓ Terlampaui' : 'Perlu Penguatan' }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. Detailed 5-Pillar Cards: Evaluasi Objektif & Rekomendasi Konsultan -->
-    <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 space-y-5">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800/80">
-        <div>
-          <h2 class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-            Rincian Evaluasi 5 Pilar Bisnis
-          </h2>
-          <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-normal">
-            Catatan lapangan resmi dari konsultan pendamping tokomu serta langkah aksi rekomendasi perbaikan.
-          </p>
-        </div>
-
-        <NuxtLink
-          to="/dashboard/rencana-aksi"
-          class="btn-pill-action group shrink-0"
+      <div class="flex items-center gap-2.5 shrink-0">
+        <BActionButton
+          variant="green"
+          :huge-icon="Comment01Icon"
+          to="/dashboard/pesan"
+          custom-class="px-5 py-2.5 text-xs sm:text-sm font-semibold shadow-xs"
+          title="Buka pesan untuk konsultasi langsung dengan konsultan pendamping"
         >
-          <span>Kerjakan Rencana Aksi</span>
-          <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </NuxtLink>
+          Chat Konsultan
+        </BActionButton>
       </div>
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
-        <div
-          v-for="aspect in umkmStore.assessmentAspects"
-          :key="`card-${aspect.id}`"
-          class="p-5 rounded-2xl card-tactile-gopay border flex flex-col justify-between space-y-4 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors"
-        >
-          <div>
-            <!-- Header Pillar -->
-            <div class="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800/80 gap-2">
-              <span class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white truncate">
-                {{ aspect.name }}
-              </span>
-              <span
-                :class="[
-                  'text-xs font-poppins font-bold px-2.5 py-0.5 rounded-full border shrink-0 tabular-nums',
-                  aspect.score >= aspect.targetScore
-                    ? 'bg-emerald-50 text-[#00AA13] border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800'
-                    : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
-                ]"
-              >
-                {{ aspect.score }}/100
-              </span>
+    <!-- ========================================================================= -->
+    <!-- 2. BARIS 1: 4 KARTU STAT METRIK (Standar Beruang Design System)           -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-stretch w-full">
+      <!-- Card 1: Indeks Kesehatan Toko -->
+      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 flex flex-col justify-between transition-all duration-200">
+        <div>
+          <div class="flex items-center justify-between w-full">
+            <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center shrink-0">
+              <HugeiconsIcon :icon="AnalyticsUpIcon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
             </div>
+            <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+              +5 Poin
+            </span>
+          </div>
 
-            <!-- Consultant Quote -->
-            <p class="text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed italic my-3.5 font-sans bg-neutral-50/80 dark:bg-[#18191E] p-3.5 rounded-xl border border-neutral-200/60 dark:border-neutral-800">
-              "{{ aspect.notes }}"
+          <div class="mt-3.5 space-y-1">
+            <span class="text-xs sm:text-[13px] font-semibold text-neutral-600 dark:text-neutral-400 block font-poppins">
+              Indeks Kesehatan Toko
+            </span>
+            <div class="flex items-baseline gap-1.5 pt-0.5">
+              <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
+                79
+              </span>
+              <span class="text-sm font-semibold text-neutral-400 dark:text-neutral-500">/ 100</span>
+            </div>
+            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
+              Naik dari 74 poin evaluasi bulan lalu
             </p>
           </div>
+        </div>
+      </div>
 
-          <!-- Bottom Footer Link -->
-          <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-xs font-poppins">
-            <span class="text-neutral-500">
-              Target: <strong class="text-neutral-800 dark:text-neutral-200">{{ aspect.targetScore }}%</strong>
+      <!-- Card 2: Pilar Lulus Standar -->
+      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 flex flex-col justify-between transition-all duration-200">
+        <div>
+          <div class="flex items-center justify-between w-full">
+            <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center shrink-0">
+              <HugeiconsIcon :icon="Task01Icon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
+            </div>
+            <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shrink-0">
+              40% Lolos
             </span>
+          </div>
+
+          <div class="mt-3.5 space-y-1">
+            <span class="text-xs sm:text-[13px] font-semibold text-neutral-600 dark:text-neutral-400 block font-poppins">
+              Pilar Lulus Standar
+            </span>
+            <div class="flex items-baseline gap-1.5 pt-0.5">
+              <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
+                2 / 5
+              </span>
+              <span class="text-sm font-semibold text-neutral-400 dark:text-neutral-500">Pilar</span>
+            </div>
+            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
+              3 pilar butuh perbaikan terarah
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Estimasi Plafon Modal -->
+      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 flex flex-col justify-between transition-all duration-200">
+        <div>
+          <div class="flex items-center justify-between w-full">
+            <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center shrink-0">
+              <HugeiconsIcon :icon="Coins01Icon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
+            </div>
+            <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 shrink-0">
+              Bagi Hasil
+            </span>
+          </div>
+
+          <div class="mt-3.5 space-y-1">
+            <span class="text-xs sm:text-[13px] font-semibold text-neutral-600 dark:text-neutral-400 block font-poppins">
+              Estimasi Plafon Modal
+            </span>
+            <div class="flex items-baseline gap-1.5 pt-0.5">
+              <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
+                Rp 250 Jt
+              </span>
+            </div>
+            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
+              Rekomendasi nilai pendanaan bertahap
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Pergerakan Untung Bersih -->
+      <div class="card-tactile-gopay rounded-2xl p-5 sm:p-6 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 flex flex-col justify-between transition-all duration-200">
+        <div>
+          <div class="flex items-center justify-between w-full">
+            <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center shrink-0">
+              <HugeiconsIcon :icon="MoneyBag01Icon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
+            </div>
+            <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+              +12% MoM
+            </span>
+          </div>
+
+          <div class="mt-3.5 space-y-1">
+            <span class="text-xs sm:text-[13px] font-semibold text-neutral-600 dark:text-neutral-400 block font-poppins">
+              Pergerakan Untung Bersih
+            </span>
+            <div class="flex items-baseline gap-1.5 pt-0.5">
+              <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
+                Rp 32,6 Jt
+              </span>
+            </div>
+            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
+              Margin untung 32,6% terjaga stabil
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3. BARIS 2: EVALUASI KELAYAKAN 5 PILAR TOKO (Redesain Kebutuhan UMKM)     -->
+    <!-- Donut Chart & 5 Pilar Kesiapan Bisnis Tanpa Catatan/Langkah Perbaikan      -->
+    <!-- ========================================================================= -->
+    <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 flex flex-col justify-between font-poppins space-y-6 w-full">
+      <div>
+        <!-- Header Card -->
+        <div class="pb-4 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h2 class="font-poppins font-bold text-lg sm:text-xl text-neutral-900 dark:text-white">
+              Evaluasi Kelayakan 5 Pilar Toko
+            </h2>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+              Standar kesiapan tata kelola bisnis tokomu berbasis bobot kriteria pemodal terakreditasi
+            </p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700">
+            <span>Ambang Batas Lolos Pemodal: 80%</span>
+          </span>
+        </div>
+
+        <!-- Bagian Donut Chart Kelayakan 5 Pilar -->
+        <div class="pt-5 pb-5 border-b border-neutral-100 dark:border-neutral-800/80">
+          <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+            <!-- Donut Chart Canvas Container with Center Grade Indicator -->
+            <div class="relative w-36 h-36 sm:w-44 sm:h-44 shrink-0 flex items-center justify-center">
+              <canvas ref="donutCanvas" class="w-full h-full"></canvas>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
+                <span class="text-3xl font-bold font-poppins text-neutral-900 dark:text-white tabular-nums leading-none">
+                  79%
+                </span>
+                <span class="text-xs font-semibold text-[#00800e] dark:text-emerald-400 mt-1">
+                  Grade B+
+                </span>
+              </div>
+            </div>
+
+            <!-- Donut Chart Legend & Summary Kebutuhan UMKM -->
+            <div class="flex-1 space-y-3 text-center sm:text-left min-w-0">
+              <div class="space-y-1">
+                <div class="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                  <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+                    Status: Layak Bersyarat
+                  </h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+                    Dikit Lagi Lolos Penuh
+                  </span>
+                </div>
+                <p class="text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-2xl">
+                  Skor tokomu saat ini <strong>79%</strong> dengan 2 pilar telah memenuhi target pemodal. Selisih 3 pilar lainnya hanya berjarak 5%–11% dari ambang batas ideal pendanaan institusional (80%).
+                </p>
+              </div>
+
+              <!-- Status Legend Badges -->
+              <div class="flex items-center justify-center sm:justify-start gap-2.5 pt-1 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-[#00800e] dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+                  <span class="w-2 h-2 rounded-full bg-[#00800e]" />
+                  <span>2 Pilar Lolos Standar</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
+                  <span class="w-2 h-2 rounded-full bg-[#D97706]" />
+                  <span>3 Pilar Perlu Penguatan</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 Baris Pilar Kesiapan Bisnis (Lebar Penuh, Rapi, Bersih Tanpa Clutter Catatan/Langkah) -->
+        <div class="space-y-3 pt-4">
+          <div
+            v-for="pillar in fivePillars"
+            :key="pillar.id"
+            class="p-4 sm:p-5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 bg-white dark:bg-[#13161F] transition-all duration-200"
+          >
+            <!-- Baris Atas: Nama Pilar, Deskripsi Edukatif UMKM, Skor vs Target, & Status Badge -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div class="min-w-0 space-y-0.5">
+                <div class="flex items-center gap-2.5">
+                  <span
+                    class="w-2.5 h-2.5 rounded-full shrink-0"
+                    :style="{ backgroundColor: pillar.color }"
+                  />
+                  <h3 class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white truncate">
+                    {{ pillar.name }}
+                  </h3>
+                </div>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans pl-5 leading-normal">
+                  {{ pillar.description }}
+                </p>
+              </div>
+
+              <!-- Skor & Status Badge -->
+              <div class="flex items-center gap-3 shrink-0 text-xs pl-5 sm:pl-0">
+                <div class="text-neutral-600 dark:text-neutral-300 font-medium">
+                  Skor: <strong class="text-neutral-900 dark:text-white tabular-nums font-bold text-sm">{{ pillar.score }}%</strong>
+                  <span class="text-neutral-300 dark:text-neutral-700 mx-1.5">|</span>
+                  <span class="text-neutral-500 dark:text-neutral-400">Target Min: <span class="tabular-nums font-semibold">{{ pillar.targetScore }}%</span></span>
+                </div>
+
+                <span
+                  v-if="pillar.score >= pillar.targetScore"
+                  class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-[#00800e] border border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800"
+                >
+                  Lolos Standar
+                </span>
+                <span
+                  v-else
+                  class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800"
+                >
+                  Perlu Aksi
+                </span>
+              </div>
+            </div>
+
+            <!-- Baris Bawah: Horizontal Progress Bar dengan Penanda Target Pemodal -->
+            <div class="relative w-full h-2 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-visible mt-3">
+              <div
+                class="h-full rounded-full transition-all duration-300"
+                :style="{
+                  width: `${pillar.score}%`,
+                  backgroundColor: pillar.score >= pillar.targetScore ? '#00800e' : '#D97706'
+                }"
+              />
+
+              <!-- Threshold Marker: Garis Penanda Vertikal Gelap pada Titik Target -->
+              <div
+                class="absolute -top-1 w-0.5 h-4 bg-neutral-900 dark:bg-white z-10 rounded-full shadow-2xs pointer-events-none"
+                :style="{ left: `${pillar.targetScore}%` }"
+                :title="`Batas Target Minimum: ${pillar.targetScore}%`"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footnote Status -->
+      <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
+        <span>Garis vertikal menandai ambang batas kelayakan modal pemodal.</span>
+        <span class="font-semibold text-neutral-800 dark:text-neutral-200">2 dari 5 Lolos (40%)</span>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 4. BARIS 3: BENTO 2 KOLOM (Kesiapan Berkas Legalitas & Ringkasan Keuangan)   -->
+    <!-- Masing-masing domain memiliki kartu terpisah yang lega dan rapi          -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-stretch w-full">
+      <!-- Container 1 (6 Kolom): Kesiapan Berkas Legalitas Toko -->
+      <div class="lg:col-span-6 card-tactile-gopay rounded-2xl p-5 sm:p-7 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 font-poppins flex flex-col justify-between space-y-5">
+        <div>
+          <div class="pb-3 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h2 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
+                Kesiapan Berkas Legalitas Toko
+              </h2>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                Dokumen kepatuhan resmi yang wajib diverifikasi sebelum pendanaan
+              </p>
+            </div>
             <NuxtLink
-              to="/dashboard/rencana-aksi"
-              class="font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline inline-flex items-center gap-1 group/link"
+              to="/dashboard/profile"
+              class="text-xs font-semibold text-[#156374] dark:text-[#50AABF] hover:underline flex items-center gap-1 shrink-0"
             >
-              <span>Perkuat di Aksi</span>
-              <span class="transition-transform group-hover/link:translate-x-0.5">→</span>
+              <span>Buka Data Room</span>
+              <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" />
             </NuxtLink>
           </div>
+
+          <!-- 4 Kartu Berkas Legalitas -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+            <!-- NIB Usaha -->
+            <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] flex items-center justify-center shrink-0 mt-0.5">
+                  <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs sm:text-[13px] font-semibold text-neutral-900 dark:text-white truncate">
+                    NIB Usaha
+                  </h5>
+                  <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                    No. 1209.2831.0091 • OSS
+                  </p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+                Lengkap
+              </span>
+            </div>
+
+            <!-- NPWP Toko -->
+            <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] flex items-center justify-center shrink-0 mt-0.5">
+                  <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs sm:text-[13px] font-semibold text-neutral-900 dark:text-white truncate">
+                    NPWP Toko
+                  </h5>
+                  <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                    No. 82.910.455.2 • Taat
+                  </p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+                Lengkap
+              </span>
+            </div>
+
+            <!-- Rekening Khusus -->
+            <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] flex items-center justify-center shrink-0 mt-0.5">
+                  <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs sm:text-[13px] font-semibold text-neutral-900 dark:text-white truncate">
+                    Rekening Khusus
+                  </h5>
+                  <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                    Giro Mandiri 142-00-19283
+                  </p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+                Lengkap
+              </span>
+            </div>
+
+            <!-- Bukti Nota Transaksi -->
+            <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <HugeiconsIcon :icon="FileValidationIcon" :size="17" />
+                </div>
+                <div class="min-w-0">
+                  <h5 class="text-xs sm:text-[13px] font-semibold text-neutral-900 dark:text-white truncate">
+                    Bukti Nota Transaksi
+                  </h5>
+                  <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                    Arsip 30 Hari • 80% Terarsip
+                  </p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shrink-0">
+                Perlu Aksi
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
+          <span>3 dari 4 berkas tervalidasi sah.</span>
+          <span class="font-semibold text-[#00800e] dark:text-emerald-400">Tingkat Kepatuhan: 75%</span>
+        </div>
+      </div>
+
+      <!-- Container 2 (6 Kolom): Ringkasan Keuangan Toko (30 Hari) -->
+      <div class="lg:col-span-6 card-tactile-gopay rounded-2xl p-5 sm:p-7 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 font-poppins flex flex-col justify-between space-y-5">
+        <div>
+          <div class="pb-3 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h2 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
+                Ringkasan Keuangan (30 Hari)
+              </h2>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                Akumulasi pergerakan uang masuk dan modal jualan 30 hari terakhir
+              </p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-[#00800e] dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+              <span>Margin Untung: 32,6%</span>
+            </span>
+          </div>
+
+          <!-- Grid 3 Kartu Finansial Baku Beruang -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3">
+            <!-- Total Pendapatan -->
+            <div class="p-3.5 rounded-xl bg-white dark:bg-[#15161A] border border-neutral-200/90 dark:border-neutral-800 flex flex-col justify-between">
+              <span class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">Total Pendapatan</span>
+              <div class="font-bold text-base text-neutral-900 dark:text-white tabular-nums pt-1">
+                Rp 100 Jt
+              </div>
+              <span class="text-[10px] text-neutral-400 font-sans pt-0.5">Uang masuk kotor</span>
+            </div>
+
+            <!-- Modal Jualan -->
+            <div class="p-3.5 rounded-xl bg-white dark:bg-[#15161A] border border-neutral-200/90 dark:border-neutral-800 flex flex-col justify-between">
+              <span class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">Modal Jualan</span>
+              <div class="font-bold text-base text-neutral-800 dark:text-neutral-200 tabular-nums pt-1">
+                Rp 45,1 Jt
+              </div>
+              <span class="text-[10px] text-emerald-600 font-sans pt-0.5">Hemat (45,1%)</span>
+            </div>
+
+            <!-- Untung Bersih -->
+            <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800 flex flex-col justify-between">
+              <span class="text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">Untung Bersih</span>
+              <div class="font-bold text-base text-[#00800e] dark:text-emerald-400 tabular-nums pt-1">
+                Rp 32,6 Jt
+              </div>
+              <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-sans pt-0.5">Sisa kas bersih</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
+          <span>Rasio untung bersih toko melampaui rata-rata industri F&B (25%).</span>
+          <span class="font-semibold text-neutral-800 dark:text-neutral-200">Arus Kas: Sehat</span>
         </div>
       </div>
     </div>
 
-    <!-- 5. Modal Sertifikat Validasi Kesiapan Usaha -->
-    <BModal
-      v-model="isCertificateModalOpen"
-      title="Sertifikat Kesiapan Kemitraan Usaha"
-      subtitle="Dokumen verifikasi resmi kelayakan akses modal platform Beruang"
-      size="lg"
-    >
-      <div class="space-y-5 pt-1 font-poppins">
-        <!-- Certificate Card Styled like Official Diploma / Credential -->
-        <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#F3F8FC] to-white dark:from-[#13161F] dark:to-[#18191E] border-2 border-[#2091AA]/30 shadow-lg relative overflow-hidden">
-          <!-- Watermark / Seal Icon -->
-          <div class="absolute -right-8 -bottom-8 w-44 h-44 rounded-full bg-[#00AA13]/10 dark:bg-[#00AA13]/15 flex items-center justify-center pointer-events-none">
-            <HugeiconsIcon :icon="Award01Icon" :size="100" class="text-[#00AA13]/25" />
+    <!-- ========================================================================= -->
+    <!-- 5. BARIS 4: TREN UNTUNG BERSIH (Chart Container Tersendiri di Bawahnya)     -->
+    <!-- Menampilkan BShadcnLineChart Secara Lebar, Rapi, & Sarat Informasi        -->
+    <!-- ========================================================================= -->
+    <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 font-poppins space-y-6 w-full">
+      <div class="pb-3 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
+              Tren Untung Bersih (Jan - Jun)
+            </h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 tabular-nums">
+              +35% Semester 1
+            </span>
           </div>
-
-          <div class="relative z-10 space-y-5">
-            <!-- Header Certificate -->
-            <div class="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-4">
-              <div class="flex items-center gap-2">
-                <img src="/logo/logoSmall.svg" alt="Beruang" class="h-6 w-auto" />
-                <span class="font-poppins font-extrabold text-base">
-                  <span class="text-[#2091AA]">Ber</span><span class="text-[#00AA13]">uang</span>
-                </span>
-              </div>
-              <span class="text-xs font-mono font-bold text-neutral-400">
-                SERTIFIKAT ID: BERU/2026/VAL/0891
-              </span>
-            </div>
-
-            <!-- Body Certificate -->
-            <div class="text-center py-4 space-y-2">
-              <span class="text-xs font-poppins font-semibold uppercase tracking-widest text-[#2091AA] dark:text-[#50AABF]">
-                SERTIFIKAT KELAYAKAN INVESTASI UMKM
-              </span>
-              <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white">
-                {{ umkmStore.profile.name }}
-              </h2>
-              <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-sans max-w-lg mx-auto leading-relaxed">
-                NIB: {{ umkmStore.profile.nib }} • Sektor: {{ umkmStore.profile.sector }} • Lokasi: {{ umkmStore.profile.city }}
-              </p>
-            </div>
-
-            <!-- Statement -->
-            <p class="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-sans leading-relaxed text-center max-w-xl mx-auto">
-              Dinyatakan telah memenuhi standar kelayakan bisnis <strong>Grade A (Indeks 79/100)</strong> berdasarkan evaluasi 5 pilar fundamental (Finansial, Operasional, Pemasaran, Legalitas, dan Tata Kelola) dan siap dihubungkan dengan sindikasi investor terakreditasi.
-            </p>
-
-            <!-- Signatures Footer -->
-            <div class="pt-6 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-2 gap-4 text-xs">
-              <div class="text-left space-y-1">
-                <span class="text-neutral-400 block">Diterbitkan Pada</span>
-                <span class="font-bold text-neutral-900 dark:text-white block">{{ umkmStore.profile.certifiedAt }}</span>
-                <span class="text-[11px] text-emerald-600 font-semibold block">✓ Status Aktif & Terverifikasi</span>
-              </div>
-              <div class="text-right space-y-1">
-                <span class="text-neutral-400 block">Konsultan Pendamping Resmi</span>
-                <span class="font-bold text-neutral-900 dark:text-white block">{{ umkmStore.profile.consultantName }}</span>
-                <span class="text-[11px] text-neutral-500 block">Lisensi Keuangan #7281</span>
-              </div>
-            </div>
-          </div>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Grafik pemantauan akumulasi untung bersih toko dari bulan ke bulan sebagai indikator stabilitas finansial
+          </p>
         </div>
 
-        <div class="flex items-center justify-end gap-3 pt-2">
+        <!-- Switcher: Area & Garis vs Grafik Batang -->
+        <div class="flex items-center gap-1 p-0.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700 text-xs font-poppins">
           <button
             type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-poppins font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-            @click="isCertificateModalOpen = false"
+            :class="[
+              'px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer',
+              chartPreviewMode === 'area'
+                ? 'bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white shadow-2xs font-semibold'
+                : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
+            ]"
+            @click="chartPreviewMode = 'area'"
           >
-            Tutup
+            Area & Garis
           </button>
           <button
             type="button"
-            class="btn-3d-blue px-5 py-2.5 text-xs sm:text-sm font-poppins font-semibold cursor-pointer"
-            @click="handleExportReport"
+            :class="[
+              'px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer',
+              chartPreviewMode === 'bar'
+                ? 'bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white shadow-2xs font-semibold'
+                : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
+            ]"
+            @click="chartPreviewMode = 'bar'"
           >
-            Unduh Berkas Resmi (PDF)
+            Batang
           </button>
         </div>
       </div>
-    </BModal>
+
+      <!-- Strip 4 Kartu KPI Tren Finansial -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-1">
+        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
+          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Rata-Rata Bulanan</span>
+          <span class="text-sm sm:text-base font-bold text-neutral-900 dark:text-white tabular-nums">Rp 28.150.000</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
+          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Bulan Tertinggi</span>
+          <span class="text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">Juni (Rp 32,6 Jt)</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
+          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Pertumbuhan Semester</span>
+          <span class="text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">+35,2%</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
+          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Kestabilan Kas</span>
+          <span class="text-sm sm:text-base font-bold text-[#156374] dark:text-[#50AABF]">Sangat Baik</span>
+        </div>
+      </div>
+
+      <!-- BShadcnLineChart Component: 100% Konsisten dengan Halaman Catatan Kas, Lebar & Breathable -->
+      <div class="relative w-full h-72 sm:h-80 pt-2">
+        <BShadcnLineChart
+          :data="profitTrendRecords"
+          index="month"
+          :categories="profitChartCategories"
+          :config="profitChartConfig"
+          :mode="chartPreviewMode"
+          :show-area="chartPreviewMode === 'area'"
+          :show-grid-line="true"
+          :show-tooltip="true"
+          :show-x-axis="true"
+          :show-y-axis="true"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useUmkmStore } from '~/stores/umkm'
-import gsap from 'gsap'
-import BRadarChart from '~/components/base/BRadarChart.vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import Chart from 'chart.js/auto'
+import BActionButton from '~/components/base/BActionButton.vue'
+import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  Home03Icon,
   AnalyticsUpIcon,
-  Award01Icon,
-  Download01Icon,
-  CheckmarkCircle01Icon,
-  HelpCircleIcon
+  ArrowRight01Icon,
+  ArrowDown01Icon,
+  Comment01Icon,
+  Task01Icon,
+  Coins01Icon,
+  MoneyBag01Icon,
+  ShieldCheckIcon,
+  FileValidationIcon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
-const umkmStore = useUmkmStore()
+// 5 Aspek Fundamental Kesiapan Bisnis Toko (Disesuaikan untuk Kebutuhan UMKM)
+const fivePillars = [
+  {
+    id: 'fin',
+    name: 'Keuangan & Pergerakan Uang',
+    description: 'Pemisahan rekening pribadi dengan kas toko dan disiplin pencatatan transaksi',
+    score: 78,
+    targetScore: 85,
+    color: '#156374'
+  },
+  {
+    id: 'ops',
+    name: 'Operasional & Standar Kerja',
+    description: 'Kerapian stok bahan baku, resep standar penyajian, dan efisiensi sisa bahan',
+    score: 85,
+    targetScore: 80,
+    color: '#00800e'
+  },
+  {
+    id: 'mkt',
+    name: 'Pasar & Pemasaran',
+    description: 'Jumlah pelanggan setia, frekuensi pesanan berulang, dan penjualan langsung',
+    score: 64,
+    targetScore: 75,
+    color: '#2563EB'
+  },
+  {
+    id: 'leg',
+    name: 'Legalitas & Izin Usaha',
+    description: 'Kelengkapan dokumen resmi NIB OSS RBA, NPWP toko, dan sertifikat halal',
+    score: 92,
+    targetScore: 90,
+    color: '#6366F1'
+  },
+  {
+    id: 'gov',
+    name: 'Tim & Pembagian Tugas',
+    description: 'Kejelasan peran Store Leader, jadwal shift kerja, dan evaluasi hasil tim',
+    score: 75,
+    targetScore: 80,
+    color: '#D97706'
+  }
+]
 
-const radarData = computed(() => {
-  return umkmStore.assessmentAspects.map(a => ({
-    name: a.name.split(' ')[0],
-    score: a.score,
-    maxScore: a.maxScore,
-    targetScore: a.targetScore
-  }))
-})
+// Donut Chart Instance for 5 Pillars
+const donutCanvas = ref<HTMLCanvasElement | null>(null)
+let donutChartInstance: any = null
 
-// Certificate Modal State
-const isCertificateModalOpen = ref(false)
+function initDonutChart() {
+  if (!donutCanvas.value) return
+  if (donutChartInstance) {
+    donutChartInstance.destroy()
+    donutChartInstance = null
+  }
 
-function handleExportReport() {
-  alert('Menyiapkan dokumen Rapor Kesiapan Usaha (PDF) resmi Kopi Senja Nusantara untuk ekspor investor...')
+  donutChartInstance = new Chart(donutCanvas.value, {
+    type: 'doughnut',
+    data: {
+      labels: fivePillars.map(p => p.name),
+      datasets: [
+        {
+          data: fivePillars.map(p => p.score),
+          backgroundColor: fivePillars.map(p => p.color),
+          borderWidth: 0,
+          borderRadius: 5,
+          spacing: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '72%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          enabled: true,
+          callbacks: {
+            label: (context: any) => ` ${context.label}: ${context.raw}%`
+          }
+        }
+      }
+    }
+  })
 }
 
 onMounted(() => {
-  // GSAP Entrance
-  gsap.from('.gsap-header-card', {
-    opacity: 0,
-    y: -10,
-    duration: 0.5,
-    ease: 'power2.out'
-  })
+  if (import.meta.client) {
+    nextTick(() => {
+      initDonutChart()
+    })
+  }
 })
+
+onBeforeUnmount(() => {
+  if (donutChartInstance) {
+    donutChartInstance.destroy()
+    donutChartInstance = null
+  }
+})
+
+// Data Tren Untung Bersih untuk BShadcnLineChart (Konsisten dengan Catatan Kas)
+const chartPreviewMode = ref<'area' | 'bar'>('area')
+
+const profitTrendRecords = [
+  { month: 'Jan', profit: 24100000 },
+  { month: 'Feb', profit: 26400000 },
+  { month: 'Mar', profit: 28000000 },
+  { month: 'Apr', profit: 29800000 },
+  { month: 'Mei', profit: 30500000 },
+  { month: 'Jun', profit: 32600000 }
+]
+
+const profitChartCategories = ['profit']
+
+const profitChartConfig = {
+  profit: {
+    label: 'Untung Bersih',
+    color: '#00AA13'
+  }
+}
 </script>
+
+<style scoped>
+.card-tactile-gopay,
+:deep(.card-tactile-gopay) {
+  background-color: #FFFFFF !important;
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+  border-color: #E2E8F0 !important;
+}
+
+.dark .card-tactile-gopay,
+:deep(.dark .card-tactile-gopay),
+:deep(.dark) .card-tactile-gopay {
+  background-color: #13161F !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.card-tactile-gopay::before,
+:deep(.card-tactile-gopay::before) {
+  display: none !important;
+  box-shadow: none !important;
+}
+</style>

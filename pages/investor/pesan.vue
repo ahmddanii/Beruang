@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col font-poppins text-neutral-900 dark:text-neutral-100 select-none overflow-hidden">
+  <div class="h-full flex flex-col font-poppins text-neutral-900 dark:text-neutral-100 overflow-hidden">
     <!-- Chat Main Split View Container -->
     <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 rounded-2xl overflow-hidden pb-1">
 

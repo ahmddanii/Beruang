@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col min-h-0 font-poppins text-neutral-900 dark:text-neutral-100 select-none overflow-hidden">
+  <div class="h-full flex flex-col min-h-0 font-poppins text-neutral-900 dark:text-neutral-100 overflow-hidden">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"

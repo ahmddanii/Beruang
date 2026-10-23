@@ -1,21 +1,21 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
-    <!-- 1. Top Page Header: Title on Left, Action Buttons on Right (Sejajar - Matched with Catatan Kas & Beranda) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-      <!-- Title & Icon: Notifikasi Toko -->
+    <!-- 1. Top Page Header: Title on Left & Action Buttons on Right (1 Baris Sejajar - Matched with Catatan Kas & Beranda) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <!-- Title & Icon: Notifikasi -->
       <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon
           :icon="Notification01Icon"
-          :size="28"
+          :size="26"
           :stroke-width="2.2"
-          class="text-neutral-900 dark:text-white shrink-0 sm:w-8 sm:h-8"
+          class="text-neutral-900 dark:text-white shrink-0"
         />
-        <h1 class="text-3xl sm:text-[34px] lg:text-[38px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.15] truncate">
-          Notifikasi Toko
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Notifikasi
         </h1>
       </div>
 
-      <!-- 3 Action Buttons on the Right (Sejajar) -->
+      <!-- Action Buttons on the Right (Sejajar) -->
       <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
         <!-- Mark All as Read Button -->
         <BActionButton
@@ -28,197 +28,19 @@
           Tandai Semua Dibaca
         </BActionButton>
 
-        <!-- Refresh Button -->
-        <button
-          type="button"
-          class="btn-pill-action group shrink-0 cursor-pointer"
-          title="Segarkan data notifikasi"
-          @click="handleRefresh"
-        >
-          <HugeiconsIcon
-            :icon="RefreshIcon"
-            :size="16"
-            :stroke-width="2"
-            class="text-neutral-500 group-hover:text-neutral-800 dark:text-neutral-400 dark:group-hover:text-white mr-1.5"
-          />
-          <span>Segarkan</span>
-        </button>
-
         <!-- Settings Link -->
-        <NuxtLink
+        <BActionButton
+          variant="default"
+          icon="none"
           to="/dashboard/pengaturan"
-          class="btn-pill-action group shrink-0 cursor-pointer"
           title="Pengaturan Notifikasi"
         >
-          <svg class="w-4 h-4 text-neutral-500 group-hover:text-neutral-800 dark:text-neutral-400 dark:group-hover:text-white mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-          <span>Pengaturan</span>
-        </NuxtLink>
+          Pengaturan
+        </BActionButton>
       </div>
     </div>
 
-    <!-- 2. Metric Container: 4 Equal Width Financial Cards (Matched with Catatan Kas & Beranda) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch w-full">
-      <!-- Card 1: Total Pemberitahuan -->
-      <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
-          <div class="flex items-center justify-between w-full gap-1.5">
-            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <div class="stat-card-icon-box shrink-0">
-                <HugeiconsIcon
-                  :icon="Notification01Icon"
-                  :size="16"
-                  :stroke-width="2.0"
-                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
-                />
-              </div>
-              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
-                Total Pemberitahuan
-              </span>
-            </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>Semua</span>
-            </div>
-          </div>
-          <div class="my-auto py-2.5 sm:py-3.5">
-            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              {{ notificationStore.roleNotifications.length }} Pesan
-            </span>
-          </div>
-          <div class="stat-card-actions">
-            <BActionButton
-              variant="default"
-              icon="chevron"
-              @click="selectedFilter = 'ALL'"
-              custom-class="shrink-0"
-            >
-              Cek Semua
-            </BActionButton>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Belum Dibaca -->
-      <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
-          <div class="flex items-center justify-between w-full gap-1.5">
-            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <div class="stat-card-icon-box shrink-0">
-                <HugeiconsIcon
-                  :icon="CheckmarkCircle01Icon"
-                  :size="16"
-                  :stroke-width="2.0"
-                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
-                />
-              </div>
-              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
-                Belum Dibaca
-              </span>
-            </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>{{ notificationStore.unreadCount > 0 ? 'Perlu Cek' : 'Bersih' }}</span>
-            </div>
-          </div>
-          <div class="my-auto py-2.5 sm:py-3.5">
-            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-emerald-800 dark:text-emerald-400 tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              {{ notificationStore.unreadCount }} Baru
-            </span>
-          </div>
-          <div class="stat-card-actions">
-            <BActionButton
-              variant="green"
-              icon="check"
-              @click="selectedFilter = 'UNREAD'"
-              custom-class="shrink-0"
-            >
-              Lihat Yang Baru
-            </BActionButton>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: Prioritas Penting -->
-      <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
-          <div class="flex items-center justify-between w-full gap-1.5">
-            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <div class="stat-card-icon-box shrink-0">
-                <HugeiconsIcon
-                  :icon="Award01Icon"
-                  :size="16"
-                  :stroke-width="2.0"
-                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
-                />
-              </div>
-              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
-                Prioritas Penting
-              </span>
-            </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100/90 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 shrink-0">
-              <span>Mendesak</span>
-            </div>
-          </div>
-          <div class="my-auto py-2.5 sm:py-3.5">
-            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              {{ priorityCount }} Pesan
-            </span>
-          </div>
-          <div class="stat-card-actions">
-            <BActionButton
-              variant="default"
-              icon="chevron"
-              @click="selectedFilter = 'PRIORITY'"
-              custom-class="shrink-0"
-            >
-              Cek Prioritas
-            </BActionButton>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4: Validasi & Kas -->
-      <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
-          <div class="flex items-center justify-between w-full gap-1.5">
-            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
-              <div class="stat-card-icon-box shrink-0">
-                <HugeiconsIcon
-                  :icon="Coins01Icon"
-                  :size="16"
-                  :stroke-width="2.0"
-                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
-                />
-              </div>
-              <span class="text-xs sm:text-sm font-poppins font-semibold text-neutral-800 dark:text-neutral-100 whitespace-nowrap tracking-[-0.01em]">
-                Validasi & Kas
-              </span>
-            </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>Tervalidasi</span>
-            </div>
-          </div>
-          <div class="my-auto py-2.5 sm:py-3.5">
-            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              {{ validasiCount }} Laporan
-            </span>
-          </div>
-          <div class="stat-card-actions">
-            <BActionButton
-              variant="default"
-              icon="chevron"
-              @click="selectedFilter = 'VALIDASI'"
-              custom-class="shrink-0"
-            >
-              Cek Laporan
-            </BActionButton>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Macro Segmented Pill Switcher (Tab Navigasi Makro Full Rata Kiri Kanan - GoPay Green Edition) -->
+    <!-- 2. Macro Segmented Pill Switcher with Native Counts (Tab Navigasi Makro - GoPay Green Edition) -->
     <BPillTabs
       v-model="selectedFilter"
       :tabs="filterTabs"
@@ -690,7 +512,8 @@ useHead({
 })
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const notificationStore = useNotificationStore()
@@ -712,34 +535,25 @@ const validasiCount = computed(() => {
   ).length
 })
 
-// 4 Segmented Tabs matching Catatan Kas GoPay Green Macro Switcher
+// 4 Segmented Tabs with real-time reactive counts
 const filterTabs = computed<PillTabItem[]>(() => {
   return [
-    { id: 'ALL', label: 'Semua Notifikasi', icon: Notification01Icon },
-    { id: 'UNREAD', label: 'Belum Dibaca', icon: CheckmarkCircle01Icon },
-    { id: 'PRIORITY', label: 'Prioritas Utama', icon: Award01Icon },
-    { id: 'VALIDASI', label: 'Validasi & Kas', icon: Coins01Icon }
+    { id: 'ALL', label: 'Semua', icon: Notification01Icon, count: notificationStore.roleNotifications.length },
+    { id: 'UNREAD', label: 'Belum Dibaca', icon: CheckmarkCircle01Icon, count: notificationStore.unreadCount },
+    { id: 'PRIORITY', label: 'Prioritas', icon: Award01Icon, count: priorityCount.value },
+    { id: 'VALIDASI', label: 'Validasi & Kas', icon: Coins01Icon, count: validasiCount.value }
   ]
 })
 
 onMounted(() => {
   notificationStore.initNotifications()
 
-  // GSAP Entrance Animations matching Catatan Kas (progres.vue)
+  // GSAP Entrance Animations
   if (typeof window !== 'undefined') {
-    gsap.from('.gsap-stat-card', {
-      opacity: 0,
-      y: 12,
-      stagger: 0.06,
-      duration: 0.45,
-      ease: 'power2.out',
-      clearProps: 'all'
-    })
     gsap.from('.segmented-pill-container', {
       opacity: 0,
       y: 8,
       duration: 0.4,
-      delay: 0.15,
       ease: 'power2.out',
       clearProps: 'all'
     })

@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100 select-none">
+  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"

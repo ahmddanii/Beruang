@@ -1,44 +1,34 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
 
-    <!-- Editorial Greeting & Profile Header (Without bottom border divider) -->
-    <header class="gsap-header relative z-10">
-      <div class="space-y-1.5 w-full">
-        <!-- Top Row: Name + Verified Checkmark on Left, Edit Profil Button on Right -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex flex-col min-w-0 space-y-2 sm:space-y-2.5">
-            <!-- Ucapan Selamat sesuai Waktu (Pagi / Siang / Sore / Malam) tanpa nama dan emoji -->
-            <div class="flex items-center text-xs sm:text-[14px] font-poppins font-medium text-neutral-500 dark:text-neutral-400 select-none">
-              <span>{{ timeGreeting.text }}</span>
-            </div>
-
-            <!-- Nama UMKM + Verified Badge -->
-            <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap min-w-0">
-              <h1
-                class="text-3xl sm:text-[34px] lg:text-[38px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.15] truncate"
-              >
-                {{ umkmName }}
-              </h1>
-
-              <!-- Verified Badge Rosette Green Gradient (matching Catat Kas button) placed beside UMKM name -->
-              <BVerifiedBadge v-if="isVerified" />
-            </div>
-          </div>
-
-          <!-- Action Button: Edit Profil -->
-          <NuxtLink
-            to="/dashboard/profile"
-            class="btn-pill-action group shrink-0 self-start sm:self-auto focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
-            title="Edit Profil"
-          >
-            <span>Edit Profil</span>
-            <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </NuxtLink>
-        </div>
+    <!-- 1. Top Header: Title on Left & Action Controls (Edit Profil) on Right (1 Baris Sejajar ala Catatan Kas) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <HugeiconsIcon
+          :icon="Home03Icon"
+          :size="26"
+          :stroke-width="2.2"
+          class="text-neutral-900 dark:text-white shrink-0"
+        />
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Beranda
+        </h1>
       </div>
-    </header>
+
+      <!-- Action Controls: Edit Profil Button (Right-aligned, on the same row as Title) -->
+      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+        <NuxtLink
+          to="/dashboard/profile"
+          class="btn-pill-action group shrink-0 focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
+          title="Edit Profil Usaha"
+        >
+          <span>Edit Profil</span>
+          <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </NuxtLink>
+      </div>
+    </div>
 
     <!-- 1. Metric Container: 4 Equal Width Financial Cards (Apple Store Utility Card: rounded.lg 18px, spacing.lg 24px) -->
     <div
@@ -70,7 +60,7 @@
       <template v-else>
         <!-- Card 1: Untung Bersih -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -114,7 +104,7 @@
 
         <!-- Card 2: Modal Jualan -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -158,7 +148,7 @@
 
         <!-- Card 3: Uang Masuk -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -200,7 +190,7 @@
 
         <!-- Card 4: Uang Keluar -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -427,7 +417,7 @@
             </div>
 
             <!-- Informasi Total Kas di Bagian Bawah Kiri -->
-            <div class="pt-3 select-none w-full text-center sm:text-left">
+            <div class="pt-3 w-full text-center sm:text-left">
               <div class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
                 Rp {{ totalCalculatedOmzet.toLocaleString('id-ID') }}
               </div>
@@ -445,7 +435,7 @@
               role="button"
               tabindex="0"
               :aria-label="`${item.label}: Rp ${item.amount.toLocaleString('id-ID')} (${item.percent}%)`"
-              class="card-btn-hover p-3.5 sm:p-4 rounded-[12px] flex items-center justify-between gap-3.5 group cursor-pointer select-none"
+              class="card-btn-hover p-3.5 sm:p-4 rounded-[12px] flex items-center justify-between gap-3.5 group cursor-pointer"
               @mouseenter="activeHoveredItem = item; highlightDonutSegment(idx)"
               @mouseleave="activeHoveredItem = null; highlightDonutSegment(null)"
               @focus="activeHoveredItem = item; highlightDonutSegment(idx)"
@@ -874,7 +864,8 @@ import {
   Money03Icon,
   MoneyBag01Icon,
   Coins01Icon,
-  ArrowDownToLineIcon
+  ArrowDownToLineIcon,
+  Home03Icon
 } from '@hugeicons/core-free-icons'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore, type MonthlyRecord } from '~/stores/umkm'
@@ -891,7 +882,8 @@ import BActionButton from '~/components/base/BActionButton.vue'
 import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 function handleDownloadReport() {

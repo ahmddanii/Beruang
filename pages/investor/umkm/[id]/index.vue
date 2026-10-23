@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100 select-none">
+  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Top Breadcrumb & Action Bar -->
     <div class="flex items-center justify-between pb-2 border-b border-neutral-100 dark:border-neutral-800/80">
       <NuxtLink

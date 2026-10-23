@@ -171,7 +171,7 @@ const navItems = computed(() => {
       },
       {
         to: '/dashboard/rencana-aksi',
-        label: 'Rencana Aksi',
+        label: 'Progress Tugas',
         icon: Task01Icon,
         badge: `${umkmStore.tasksCompletedCount}/${umkmStore.tasks.length}`
       },

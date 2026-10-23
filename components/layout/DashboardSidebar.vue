@@ -10,11 +10,11 @@
       ]"
     >
       <div class="flex flex-col h-full overflow-hidden">
-        <!-- 1. Compact Mode: Expand Toggle Container (Solid container directly at top of collapsed sidebar with stroke below) -->
+        <!-- 1. Compact Header when Collapsed (Stroke below) -->
         <div
           ref="compactHeaderRef"
           :class="[
-            'sidebar-compact-toggle-container w-full shrink-0 flex items-center justify-center border-[#E2E8F0] dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.25,1,0.5,1)]',
+            'w-full shrink-0 flex items-center justify-center border-[#E2E8F0] dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none transition-all duration-300',
             isCollapsed
               ? 'max-h-[52px] h-[52px] opacity-100 pointer-events-auto border-b'
               : 'max-h-0 h-0 opacity-0 pointer-events-none border-b-0'
@@ -142,9 +142,9 @@
 
                   <!-- Label Container: Apple 14px typography with GSAP stagger animation -->
                   <div
-                    class="sidebar-label sidebar-anim-target overflow-hidden whitespace-nowrap flex items-center justify-between text-[14px] flex-1 min-w-0 pl-1 pr-3 pointer-events-none will-change-[transform,opacity]"
+                    class="sidebar-label sidebar-anim-target whitespace-nowrap flex items-center justify-between text-[14px] flex-1 min-w-0 pl-1 pr-3 h-full pointer-events-none will-change-[transform,opacity]"
                   >
-                    <span class="truncate leading-none">{{ item.label }}</span>
+                    <span class="whitespace-nowrap overflow-visible leading-normal py-0.5 select-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
                       class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-600 text-white tabular-nums leading-none shrink-0"
@@ -229,8 +229,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Mobile Nav Items (Segmented Modular Containers with bottom stroke only) -->
           <div class="flex-1 overflow-y-auto scrollbar-none">
             <nav aria-label="Menu Mobile">
               <div
@@ -266,7 +264,7 @@
                       :active="isActive(item.to)"
                       class="pointer-events-none"
                     />
-                    <span class="truncate flex-1 pointer-events-none">{{ item.label }}</span>
+                    <span class="whitespace-nowrap overflow-visible leading-normal py-0.5 flex-1 pointer-events-none select-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
                       class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0 pointer-events-none"
@@ -609,7 +607,7 @@ const navigationSections = computed<NavSection[]>(() => {
         title: 'Kelola Usaha',
         items: [
           { to: '/dashboard/profile', label: 'Profil Usaha', icon: UserCircleIcon },
-          { to: '/dashboard/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
+          { to: '/dashboard/rencana-aksi', label: 'Progress Tugas', icon: Task01Icon },
           { to: '/dashboard/penilaian', label: 'Cek Kesehatan', icon: AnalyticsUpIcon }
         ]
       },

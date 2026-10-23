@@ -1,5 +1,5 @@
 <template>
-  <div ref="dropdownRef" class="relative select-none font-poppins">
+  <div ref="dropdownRef" class="relative font-poppins">
     <!-- Trigger Button in Navbar: Avatar & Name Only (Dicoding Style) -->
     <button
       type="button"
@@ -14,6 +14,11 @@
       aria-label="Menu Akun Pengguna"
       @click="isOpen = !isOpen"
     >
+      <!-- User Name (Sebelah kiri dari profile image) -->
+      <span class="hidden sm:inline-block text-[13px] sm:text-[14px] font-semibold text-neutral-800 dark:text-neutral-200 truncate max-w-[130px] lg:max-w-[160px] tracking-tight">
+        {{ userName }}
+      </span>
+
       <!-- User Avatar -->
       <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 transition-transform duration-150 group-hover:scale-105">
         <img
@@ -23,11 +28,6 @@
           @error="(e: any) => { e.target.src = '/images/user-profile.png' }"
         />
       </div>
-
-      <!-- User Name -->
-      <span class="hidden sm:inline-block text-[13px] sm:text-[14px] font-semibold text-neutral-800 dark:text-neutral-200 truncate max-w-[130px] lg:max-w-[160px] tracking-tight">
-        {{ userName }}
-      </span>
 
       <!-- Subtle Chevron Indicator -->
       <svg

@@ -1,15 +1,15 @@
 <template>
-  <div class="space-y-5 sm:space-y-6 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Top Header: Title on Left & Action Controls (Month Filter + Unduh) on Right (Same Row) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none">
-      <div class="flex items-center gap-2 sm:gap-2.5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon
           :icon="Coins01Icon"
-          :size="20"
+          :size="26"
           :stroke-width="2.2"
           class="text-neutral-900 dark:text-white shrink-0"
         />
-        <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
           Catatan Kas
         </h1>
       </div>
@@ -96,7 +96,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch w-full">
       <!-- Card 1: Saldo Kas Toko -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -140,7 +140,7 @@
 
       <!-- Card 2: Modal Jualan (Diposisikan di sebelah kanan Saldo Kas Toko) -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -184,7 +184,7 @@
 
       <!-- Card 3: Uang Masuk -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -226,7 +226,7 @@
 
       <!-- Card 4: Biaya Operasional -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -761,7 +761,7 @@
             </div>
 
             <!-- Informasi Total Kas di Bagian Bawah Kiri -->
-            <div class="pt-3 select-none w-full text-center sm:text-left">
+            <div class="pt-3 w-full text-center sm:text-left">
               <div class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
                 Rp {{ calculatedPeriodOmzet.toLocaleString('id-ID') }}
               </div>
@@ -791,7 +791,7 @@
               role="button"
               tabindex="0"
               :aria-label="`${item.label}: Rp ${item.amount.toLocaleString('id-ID')} (${item.percent}%)`"
-              class="card-btn-hover p-4 rounded-[12px] flex flex-col gap-2.5 group cursor-pointer select-none transition-all"
+              class="card-btn-hover p-4 rounded-[12px] flex flex-col gap-2.5 group cursor-pointer transition-all"
               @mouseenter="activeHoveredItem = item; highlightDonutSegment(idx)"
               @mouseleave="activeHoveredItem = null; highlightDonutSegment(null)"
               @focus="activeHoveredItem = item; highlightDonutSegment(idx)"

@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen flex flex-col bg-white dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-poppins transition-colors overflow-hidden">
     <!-- Top Workspace Navbar (Full Width Across Top) -->
-    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between select-none shadow-none z-30">
+    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30">
       <!-- Left Side: Mobile Menu Button + Brand Logo & Name: Beruang -->
       <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
         <!-- Mobile Menu Toggle Button (Only on < lg) -->
@@ -38,13 +38,13 @@
         class="flex-1 max-w-sm sm:max-w-md lg:max-w-xl mx-2 sm:mx-6 min-w-0"
       />
 
-      <!-- Right Side: Notification & User Profile Account -->
+      <!-- Right Side: User Profile Account & Notification Bell (Bell di sebelah kanan profile) -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <!-- Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
-        <NotificationDropdown />
-
         <!-- User Account Profile Dropdown (Dicoding Style) -->
         <NavbarProfileDropdown />
+
+        <!-- Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
+        <NotificationDropdown />
       </div>
     </header>
 
@@ -60,14 +60,14 @@
           'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D]',
           isFixedLayout
             ? 'overflow-hidden flex flex-col h-full py-4 px-4 sm:px-8 lg:px-12 xl:px-16'
-            : 'overflow-y-auto overflow-x-hidden px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-16'
+            : 'overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable] px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-16'
         ]"
       >
         <div class="w-full max-w-7xl mx-auto flex flex-col flex-1">
           <!-- Page Header: Title + Icon at the very top of main container -->
           <div
             v-if="!route.meta.hideHeader"
-            class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8 select-none"
+            class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8"
           >
             <HugeiconsIcon
               :icon="currentPageInfo.icon"
@@ -195,9 +195,9 @@ const currentPageInfo = computed(() => {
   }
   if (p.startsWith('/dashboard/rencana-aksi')) {
     return {
-      title: 'Rencana Aksi',
+      title: 'Progress Tugas',
       icon: Task01Icon,
-      description: 'Langkah strategis terarah untuk meningkatkan skor kesiapan dan daya tarik tokomu bagi calon investor.'
+      description: 'Daftar tugas taktis dan pemantauan progres langkah perbaikan tokomu bersama konsultan pendamping.'
     }
   }
   if (p.startsWith('/dashboard/penilaian')) {

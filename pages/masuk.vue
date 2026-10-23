@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 font-sans flex flex-col justify-center items-center px-4 py-4 sm:px-6 select-none relative overflow-hidden">
+  <div class="h-screen h-dvh w-full bg-[#FAFAFA] dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 font-sans flex flex-col justify-center items-center px-4 py-4 sm:px-6 relative overflow-hidden">
     
     <!-- Subtle Ambient Background Glow (UMKM Dashboard Aesthetic) -->
     <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-primary-500/4 dark:bg-primary-500/8 rounded-full blur-3xl" />

@@ -38,7 +38,7 @@
     <!-- Notification Popover Card (Stable Fixed Dimensions matching Linear & GitHub standards) -->
     <div
       v-if="isOpen"
-      class="absolute top-full right-0 mt-2.5 w-[calc(100vw-24px)] sm:w-[410px] bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150 select-none"
+      class="absolute top-full right-0 mt-2.5 w-[calc(100vw-24px)] sm:w-[410px] bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
     >
       <!-- ========================================================================= -->
       <!-- 1. HEADER (Title, Unread Badge Pill, and 3-Dots Kebab Action Menu)         -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 pb-20 font-sans text-neutral-900 dark:text-neutral-100 select-none">
+  <div class="space-y-6 pb-20 font-sans text-neutral-900 dark:text-neutral-100">
     <!-- 1. Top Controls -->
     <div class="flex items-center justify-end gap-2.5 pb-2 shrink-0 flex-wrap">
       <NuxtLink
@@ -32,7 +32,7 @@
             <span>Katalog Publik Terakreditasi Beruang</span>
           </div>
 
-          <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
+          <h1 class="text-2xl sm:text-3xl font-heading font-semibold text-neutral-900 dark:text-white tracking-tight">
             Pratinjau Toko Publik di Hadapan Investor
           </h1>
 

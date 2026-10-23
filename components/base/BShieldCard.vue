@@ -2,7 +2,7 @@
   <component
     :is="to ? NuxtLink : 'div'"
     :to="to"
-    class="group relative rounded-2xl border border-neutral-200/90 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 bg-white dark:bg-[#15161A] p-4 sm:p-5 flex flex-col justify-between select-none h-full transition-all duration-150 ease-out"
+    class="group relative rounded-2xl border border-neutral-200/90 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 bg-white dark:bg-[#15161A] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-150 ease-out"
     style="-webkit-tap-highlight-color: transparent; outline: none;"
     :aria-label="`${label}: ${targetAmount}`"
   >

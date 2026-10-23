@@ -1,6 +1,33 @@
 <template>
-  <div class="h-full flex flex-col font-poppins text-neutral-900 dark:text-neutral-100 select-none overflow-hidden">
-    <!-- Chat Main Split View Container -->
+  <div class="h-full flex flex-col font-poppins text-neutral-900 dark:text-neutral-100 overflow-hidden">
+    <!-- 1. Top Header: Title on Left & Action Controls on Right (1 Baris Sejajar ala Catatan Kas) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 shrink-0">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <HugeiconsIcon
+          :icon="Message01Icon"
+          :size="26"
+          :stroke-width="2.2"
+          class="text-neutral-900 dark:text-white shrink-0"
+        />
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Pesan Diskusi
+        </h1>
+      </div>
+
+      <!-- Action Controls: Right-aligned on the same row as Title -->
+      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+        <BActionButton
+          variant="default"
+          icon="chevron"
+          to="/dashboard/pendanaan"
+          title="Buka Ruang Modal & Kemitraan"
+        >
+          Ruang Modal
+        </BActionButton>
+      </div>
+    </div>
+
+    <!-- 2. Chat Main Split View Container -->
     <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 rounded-2xl overflow-hidden pb-1">
 
       <!-- ========================================================================================= -->
@@ -8,7 +35,7 @@
       <!-- ========================================================================================= -->
       <aside
         :class="[
-          'lg:col-span-4 xl:col-span-4 flex flex-col h-full card-tactile-gopay rounded-2xl border overflow-hidden',
+          'lg:col-span-4 xl:col-span-4 flex flex-col h-full card-tactile-gopay rounded-[18px] border overflow-hidden',
           isMobileChatOpen ? 'hidden lg:flex' : 'flex'
         ]"
       >
@@ -16,12 +43,12 @@
         <div class="p-3.5 border-b border-neutral-200/80 dark:border-neutral-800 space-y-3 shrink-0 bg-white/50 dark:bg-[#13161F]/50 backdrop-blur-xs">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <HugeiconsIcon :icon="Message01Icon" :size="18" class="text-emerald-600 dark:text-emerald-400" />
-              <h2 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+              <HugeiconsIcon :icon="Message01Icon" :size="18" class="text-[#00800e] dark:text-emerald-400" />
+              <h2 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white">
                 Pesan Masuk Investor
               </h2>
             </div>
-            <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 tabular-nums">
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 tabular-nums">
               {{ chatStore.threads.length }} Investor
             </span>
           </div>
@@ -33,7 +60,7 @@
               v-model="chatStore.searchQuery"
               type="text"
               placeholder="Cari nama investor atau lembaga..."
-              class="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-neutral-100 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+              class="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-neutral-100 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#156374]/30"
             />
           </div>
         </div>
@@ -53,19 +80,19 @@
             @click="selectThread(thread.id)"
           >
             <!-- Investor Avatar -->
-            <div class="relative w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-[#2091AA] to-[#00AA13] shrink-0">
+            <div class="relative w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-[#156374] to-[#00800e] shrink-0">
               <img
                 :src="thread.investorAvatar || '/images/user-profile.png'"
                 alt="Foto Profil"
                 class="w-full h-full rounded-full object-cover bg-white dark:bg-[#18191E]"
               />
-              <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#13161F]" />
+              <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#00800e] ring-2 ring-white dark:ring-[#13161F]" />
             </div>
 
             <!-- Thread Details -->
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between gap-1">
-                <h3 class="font-poppins font-bold text-xs text-neutral-900 dark:text-white truncate">
+                <h3 class="font-poppins font-semibold text-xs text-neutral-900 dark:text-white truncate">
                   {{ thread.investorName }}
                 </h3>
                 <span class="text-[10px] text-neutral-400 shrink-0 tabular-nums">
@@ -83,7 +110,7 @@
                 </p>
                 <span
                   v-if="thread.unreadUmkm > 0"
-                  class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white tabular-nums shrink-0 leading-none"
+                  class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#00800e] text-white tabular-nums shrink-0 leading-none"
                 >
                   {{ thread.unreadUmkm }}
                 </span>
@@ -99,7 +126,7 @@
       <section
         v-if="activeThread"
         :class="[
-          'lg:col-span-8 xl:col-span-8 flex flex-col h-full card-tactile-gopay rounded-2xl border overflow-hidden bg-white/70 dark:bg-[#13161F]/70',
+          'lg:col-span-8 xl:col-span-8 flex flex-col h-full card-tactile-gopay rounded-[18px] border overflow-hidden bg-white/70 dark:bg-[#13161F]/70',
           !isMobileChatOpen ? 'hidden lg:flex' : 'flex'
         ]"
       >
@@ -117,7 +144,7 @@
             </button>
 
             <!-- Investor Profile Picture -->
-            <div class="w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-[#2091AA] to-[#00AA13] shrink-0">
+            <div class="w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-[#156374] to-[#00800e] shrink-0">
               <img
                 :src="activeThread.investorAvatar || '/images/user-profile.png'"
                 alt="Foto Profil"
@@ -127,7 +154,7 @@
 
             <div class="min-w-0">
               <div class="flex items-center gap-1.5">
-                <h3 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white truncate">
+                <h3 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white truncate">
                   {{ activeThread.investorName }}
                 </h3>
                 <span class="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
@@ -145,13 +172,13 @@
           <div class="flex items-center gap-2 shrink-0">
             <NuxtLink
               to="/dashboard/pendanaan"
-              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:border-neutral-400 transition-colors cursor-pointer"
+              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:border-neutral-400 transition-colors cursor-pointer"
             >
               <span>Ruang Modal</span>
             </NuxtLink>
             <NuxtLink
               to="/dashboard/progres"
-              class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer"
+              class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#00800e] hover:bg-[#006e0c] text-white shadow-xs cursor-pointer"
             >
               <span>Cek Kas Toko</span>
             </NuxtLink>
@@ -163,7 +190,7 @@
           <!-- Deal Status Banner -->
           <div class="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/60 flex items-center justify-between text-xs font-poppins">
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span class="w-2 h-2 rounded-full bg-[#00800e] animate-pulse" />
               <span class="text-neutral-600 dark:text-neutral-300">Status Penjajakan Mitra:</span>
               <strong class="text-emerald-800 dark:text-emerald-300 font-semibold">{{ activeThread.dealStatus }}</strong>
             </div>
@@ -178,44 +205,22 @@
             :key="msg.id"
             :class="[
               'flex flex-col max-w-[85%] sm:max-w-[75%]',
-              msg.senderRole === 'UMKM' ? 'ml-auto items-end' : 'mr-auto items-start'
+              msg.sender === 'UMKM' ? 'ml-auto items-end' : 'mr-auto items-start'
             ]"
           >
-            <!-- Sender Label -->
-            <span class="text-[10px] text-neutral-400 mb-1 px-1 font-medium">
-              {{ msg.senderRole === 'UMKM' ? 'Anda (Pelaku Usaha)' : activeThread.investorName }} • {{ msg.timestamp }}
-            </span>
-
-            <!-- Message Bubble -->
             <div
               :class="[
                 'p-3.5 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed shadow-2xs',
-                msg.senderRole === 'UMKM'
-                  ? 'bg-gradient-to-tr from-[#00800e] to-[#00AA13] text-white rounded-br-xs'
-                  : 'bg-white dark:bg-[#18191E] text-neutral-900 dark:text-neutral-100 border border-neutral-200/80 dark:border-neutral-800 rounded-bl-xs'
+                msg.sender === 'UMKM'
+                  ? 'bg-[#156374] text-white rounded-br-xs'
+                  : 'bg-white dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-bl-xs'
               ]"
             >
-              <p class="whitespace-pre-wrap">{{ msg.text }}</p>
-
-              <!-- Optional Card Attachment -->
-              <div
-                v-if="msg.attachment"
-                :class="[
-                  'mt-2.5 p-2.5 rounded-xl border flex items-center justify-between gap-3 text-xs',
-                  msg.senderRole === 'UMKM'
-                    ? 'bg-black/20 border-white/20 text-white'
-                    : 'bg-neutral-50 dark:bg-neutral-900/60 border-neutral-200 dark:border-neutral-700'
-                ]"
-              >
-                <div>
-                  <strong class="block font-semibold">{{ msg.attachment.title }}</strong>
-                  <span class="text-[11px] opacity-80 block">{{ msg.attachment.subtitle }}</span>
-                </div>
-                <strong v-if="msg.attachment.value" class="text-xs sm:text-sm font-bold tabular-nums shrink-0">
-                  {{ msg.attachment.value }}
-                </strong>
-              </div>
+              <p>{{ msg.text }}</p>
             </div>
+            <span class="text-[10px] text-neutral-400 mt-1 tabular-nums px-1">
+              {{ msg.timestamp }}
+            </span>
           </div>
         </div>
 
@@ -225,7 +230,7 @@
             v-for="chip in quickChips"
             :key="chip"
             type="button"
-            class="px-3 py-1 rounded-full text-xs font-medium bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:border-emerald-500 hover:text-emerald-600 transition-colors whitespace-nowrap cursor-pointer shrink-0"
+            class="px-3 py-1 rounded-full text-xs font-medium bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:border-[#156374] hover:text-[#156374] transition-colors whitespace-nowrap cursor-pointer shrink-0"
             @click="sendQuickMessage(chip)"
           >
             {{ chip }}
@@ -241,7 +246,7 @@
             v-model="inputMessage"
             type="text"
             placeholder="Balas pesan investor ini..."
-            class="flex-1 px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-neutral-100 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+            class="flex-1 px-4 py-2.5 rounded-xl text-xs sm:text-sm bg-neutral-100 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#156374]/40"
           />
 
           <button
@@ -262,6 +267,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useChatStore } from '~/stores/chat'
+import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Message01Icon,
@@ -272,7 +278,8 @@ import {
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const route = useRoute()
@@ -333,3 +340,26 @@ watch(
   }
 )
 </script>
+
+<style scoped>
+.card-tactile-gopay,
+:deep(.card-tactile-gopay) {
+  background-color: #FFFFFF !important;
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+  border-color: #E2E8F0 !important;
+}
+
+.dark .card-tactile-gopay,
+:deep(.dark .card-tactile-gopay),
+:deep(.dark) .card-tactile-gopay {
+  background-color: #13161F !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.card-tactile-gopay::before,
+:deep(.card-tactile-gopay::before) {
+  display: none !important;
+  box-shadow: none !important;
+}
+</style>

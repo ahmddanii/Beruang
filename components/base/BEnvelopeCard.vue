@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative flex flex-col justify-between cursor-pointer select-none h-full transition-all duration-150 ease-out"
+    class="group relative flex flex-col justify-between cursor-pointer h-full transition-all duration-150 ease-out"
     @click="$emit('click')"
   >
     <!-- STRUCTURAL FRAME: THE ENVELOPE (Unified white bg, 1px border, subtle drop-shadow) -->

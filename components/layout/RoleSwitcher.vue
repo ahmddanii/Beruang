@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-900 text-white text-xs px-4 py-2 border-b border-neutral-800 flex items-center justify-between flex-wrap gap-2 select-none z-50">
+  <div class="bg-neutral-900 text-white text-xs px-4 py-2 border-b border-neutral-800 flex items-center justify-between flex-wrap gap-2 z-50">
     <div class="flex items-center gap-2">
       <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary-500/20 text-primary-300 font-medium">
         <span class="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse" />

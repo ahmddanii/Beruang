@@ -97,7 +97,7 @@
       </g>
 
       <!-- Axis Labels -->
-      <g class="labels font-heading font-semibold text-xs sm:text-sm">
+      <g :class="['labels font-heading font-semibold', compact ? 'text-[10px]' : 'text-xs sm:text-sm']">
         <text
           v-for="(label, index) in labels"
           :key="index"
@@ -108,7 +108,7 @@
           class="fill-neutral-800 dark:fill-neutral-200 font-bold cursor-default"
         >
           {{ label.name }}
-          <tspan class="fill-[#2091AA] dark:fill-[#50AABF] font-extrabold ml-1">
+          <tspan v-if="!compact" class="fill-[#2091AA] dark:fill-[#50AABF] font-extrabold ml-1">
             ({{ items[index]?.score ?? 0 }}/{{ items[index]?.maxScore ?? 100 }})
           </tspan>
         </text>
@@ -143,17 +143,19 @@ const props = withDefaults(
     items: RadarAspect[]
     size?: number
     showTarget?: boolean
+    compact?: boolean
   }>(),
   {
     size: 320,
-    showTarget: false
+    showTarget: false,
+    compact: false
   }
 )
 
 const hoveredIndex = ref<number | null>(null)
 
 const center = computed(() => props.size / 2)
-const radius = computed(() => (props.size / 2) - 52) // margin for outer text labels
+const radius = computed(() => (props.size / 2) - (props.compact ? 32 : 52)) // margin for outer text labels
 const total = computed(() => props.items.length || 5)
 
 // Helper for angle calculation
@@ -212,7 +214,7 @@ const targetPoints = computed(() => {
 const labels = computed(() => {
   return props.items.map((item, i) => {
     const angle = (Math.PI * 2 / total.value) * i - Math.PI / 2
-    const labelDistance = radius.value + 28
+    const labelDistance = radius.value + (props.compact ? 16 : 28)
     const x = center.value + labelDistance * Math.cos(angle)
     const y = center.value + labelDistance * Math.sin(angle)
 

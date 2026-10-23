@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'flex items-start gap-3.5 p-3.5 rounded-xl border transition-all duration-150 select-none cursor-pointer',
+      'flex items-start gap-3.5 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer',
       modelValue
         ? 'bg-neutral-50/80 dark:bg-neutral-900/60 border-neutral-200/80 dark:border-neutral-800'
         : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:border-primary-300 dark:hover:border-primary-700 shadow-xs hover:shadow-card'

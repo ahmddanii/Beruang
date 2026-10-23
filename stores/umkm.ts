@@ -10,6 +10,12 @@ export interface AssessmentAspect {
   status: 'good' | 'warning' | 'needs_work'
 }
 
+export interface TaskStep {
+  id: string
+  title: string
+  completed: boolean
+}
+
 export interface ActionPlanTask {
   id: string
   title: string
@@ -19,6 +25,7 @@ export interface ActionPlanTask {
   dueDate: string
   milestoneId: string
   consultantNote?: string
+  steps?: TaskStep[]
 }
 
 export interface Milestone {
@@ -89,6 +96,8 @@ export const useUmkmStore = defineStore('umkm', {
       bannerUrl: '/images/default-store-banner.jpg',
       nib: '1209000123456',
       npwp: '81.423.891.4-429.000',
+      halalNumber: 'ID321100019283',
+      hkiNumber: 'IPT20250918290',
       fundingStatus: 'READY_FOR_FUNDING' as 'DRAFT' | 'IN_REVIEW' | 'READY_FOR_FUNDING',
       certifiedAt: '18 September 2026',
       consultantName: 'Dra. Maya Suryani, M.M.'
@@ -157,7 +166,12 @@ export const useUmkmStore = defineStore('umkm', {
         completed: true,
         dueDate: '10 Juli 2026',
         milestoneId: 'm1',
-        consultantNote: 'Terverifikasi per rekening koran Bank Mandiri.'
+        consultantNote: 'Terverifikasi per rekening koran Bank Mandiri.',
+        steps: [
+          { id: 's1-1', title: 'Buka rekening giro operasional khusus atas nama usaha di bank mitra', completed: true },
+          { id: 's1-2', title: 'Integrasikan pencatatan kas harian dan mutasi rekening toko', completed: true },
+          { id: 's1-3', title: 'Terapkan pemisahan kas fisik di laci kasir dari dompet pribadi', completed: true }
+        ]
       },
       {
         id: 't-2',
@@ -166,7 +180,12 @@ export const useUmkmStore = defineStore('umkm', {
         category: 'Legalitas',
         completed: true,
         dueDate: '25 Juli 2026',
-        milestoneId: 'm1'
+        milestoneId: 'm1',
+        steps: [
+          { id: 's2-1', title: 'Perbarui nomor KBLI 56303 (Kedai Minuman/Kopi) di sistem OSS RBA', completed: true },
+          { id: 's2-2', title: 'Unggah berkas permohonan sertifikasi halal BPJPH & audit bahan', completed: true },
+          { id: 's2-3', title: 'Cetak dan pasang sertifikat legalitas resmi di dinding gerai utama', completed: true }
+        ]
       },
       {
         id: 't-3',
@@ -176,7 +195,12 @@ export const useUmkmStore = defineStore('umkm', {
         completed: true,
         dueDate: '15 Agustus 2026',
         milestoneId: 'm2',
-        consultantNote: 'Selisih stok bahan baku kini di bawah batas wajar 2%.'
+        consultantNote: 'Selisih stok bahan baku kini di bawah batas wajar 2%.',
+        steps: [
+          { id: 's3-1', title: 'Buat formulir checklist opname stok harian/mingguan untuk barista', completed: true },
+          { id: 's3-2', title: 'Latih tim gerai cara menghitung sisa biji kopi, susu, dan sirup', completed: true },
+          { id: 's3-3', title: 'Evaluasi selisih stok bahan baku (waste) mingguan agar di bawah 2%', completed: true }
+        ]
       },
       {
         id: 't-4',
@@ -185,7 +209,12 @@ export const useUmkmStore = defineStore('umkm', {
         category: 'Finansial',
         completed: true,
         dueDate: '30 Agustus 2026',
-        milestoneId: 'm2'
+        milestoneId: 'm2',
+        steps: [
+          { id: 's4-1', title: 'Negosiasi harga pembelian kuantiti biji kopi arabika ke supplier', completed: true },
+          { id: 's4-2', title: 'Kunci kontrak pasokan kemasan ramah lingkungan untuk 6 bulan ke depan', completed: true },
+          { id: 's4-3', title: 'Tetapkan jadwal dan alur pembayaran tempo supplier (termin H+14)', completed: true }
+        ]
       },
       {
         id: 't-5',
@@ -194,7 +223,12 @@ export const useUmkmStore = defineStore('umkm', {
         category: 'Finansial',
         completed: true,
         dueDate: '05 Oktober 2026',
-        milestoneId: 'm3'
+        milestoneId: 'm3',
+        steps: [
+          { id: 's5-1', title: 'Rekapitulasi total mutasi uang masuk mesin POS kasir bulan September', completed: true },
+          { id: 's5-2', title: 'Unduh dan validasi mutasi rekening koran operasional bulan September', completed: true },
+          { id: 's5-3', title: 'Cocokkan saldo akhir kas toko dengan laporan keuangan di Beruang', completed: true }
+        ]
       },
       {
         id: 't-6',
@@ -204,7 +238,12 @@ export const useUmkmStore = defineStore('umkm', {
         completed: false,
         dueDate: '12 Oktober 2026',
         milestoneId: 'm3',
-        consultantNote: 'Fokus pada proyeksi payback period 18 bulan.'
+        consultantNote: 'Fokus pada proyeksi payback period 18 bulan.',
+        steps: [
+          { id: 's6-1', title: 'Susun dokumen ringkasan eksekutif (executive summary) 1 halaman', completed: true },
+          { id: 's6-2', title: 'Siapkan dokumen legalitas resmi & bukti arus kas dalam folder Data Room', completed: false },
+          { id: 's6-3', title: 'Simulasi presentasi proyeksi payback period 18 bulan bersama konsultan', completed: false }
+        ]
       }
     ] as ActionPlanTask[],
 
@@ -454,6 +493,21 @@ export const useUmkmStore = defineStore('umkm', {
       const task = this.tasks.find(t => t.id === taskId)
       if (task) {
         task.completed = !task.completed
+        if (task.steps && task.steps.length > 0) {
+          task.steps.forEach(s => s.completed = task.completed)
+        }
+      }
+    },
+
+    toggleTaskStep(taskId: string, stepId: string) {
+      const task = this.tasks.find(t => t.id === taskId)
+      if (task && task.steps) {
+        const step = task.steps.find(s => s.id === stepId)
+        if (step) {
+          step.completed = !step.completed
+          // Tugas pokok otomatis selesai jika semua anak tugas selesai
+          task.completed = task.steps.every(s => s.completed)
+        }
       }
     },
 

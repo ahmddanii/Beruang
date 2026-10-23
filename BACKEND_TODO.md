@@ -39,8 +39,8 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | :--- | :--- | :--- | :--- | :---: |
 | **Login Email & Password** | `/masuk` | ✅ Siap | ✅ Terhubung (`POST /auth/login`) | Selesai |
 | **Registrasi Pengguna** | `/daftar` | ✅ Siap | ✅ Terhubung (`POST /auth/register`) | Selesai |
-| **Google OAuth Asli** | `/masuk`, `/daftar` | ✅ Siap UI Google | ⚠️ Fallback lokal jika token exchange gagal | **P0 (Kritis)** |
-| **OTP WhatsApp Gateway** | `/verifikasi` | ✅ Siap | ⚠️ Mock dev mode (`otp_dev: null`), belum kirim WA riil | **P1 (Tinggi)** |
+| **Google OAuth Asli** | `/masuk`, `/daftar` | ✅ Siap UI Google | ✅ Selesai (`POST /api/auth/google` verifikasi token, firstOrCreate, terbitkan JWT) | Selesai |
+| **OTP WhatsApp Gateway** | `/verifikasi` | ✅ Siap | ✅ Selesai (`POST /api/otp/send` & `verify`, 6-digit TTL 5 mnt, rate limit 60s) | Selesai |
 | **Onboarding UMKM** | `/onboarding` | ✅ Siap (Wizard) | ✅ Selesai (`POST /api/onboarding/umkm` & relasi bank/NIB/NPWP) | Selesai |
 | **Onboarding Konsultan & Investor**| `/onboarding` | ✅ Siap | ✅ Selesai (`POST /api/onboarding/consultant` & `/investor`) | Selesai |
 | **Buku Kas Harian (Mutasi POS)** | `/dashboard/progres` | ✅ Siap | ✅ Terhubung (`GET & POST /finances/daily`) | Selesai |

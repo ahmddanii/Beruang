@@ -5,7 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { PrismaClient } from "@prisma/client";
 
-import authRouter from "./routes/auth.js";
+import authRouter, { handleOtpSend, handleOtpVerify } from "./routes/auth.js";
 import financesRouter from "./routes/finances.js";
 import vdrRouter from "./routes/vdr.js";
 import umkmRouter from "./routes/umkm.js";
@@ -49,6 +49,8 @@ app.use("/api/onboarding", onboardingRouter);
 app.post("/api/umkm/onboarding", handleUmkmOnboarding);
 app.post("/api/consultant/onboarding", handleConsultantOnboarding);
 app.post("/api/investor/onboarding", handleInvestorOnboarding);
+app.post("/api/otp/send", handleOtpSend);
+app.post("/api/otp/verify", handleOtpVerify);
 app.use("/api/finances", financesRouter);
 app.use("/api/umkm/monthly-reports", financesRouter);
 app.use("/api/vdr", vdrRouter);

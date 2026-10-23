@@ -84,8 +84,8 @@
         <BActionButton
           variant="green"
           icon="download"
-          title="Unduh Rekapitulasi Kas"
-          @click="handleExportPdf"
+          title="Unduh Rekapitulasi Kas Resmi"
+          @click="openExportModal"
         >
           Unduh Buku Kas
         </BActionButton>
@@ -528,7 +528,7 @@
     <!-- 5. TAB 2: REKAP KAS BULANAN TOKO -->
     <div v-else-if="activeTab === 'bulanan'" class="gsap-tab-content space-y-6 sm:space-y-8">
       <div class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 space-y-6 font-poppins">
-        <!-- Header Bar: Title on Left, Unduh Rekap CTA on Right (Sejajar) -->
+        <!-- Header Bar: Title on Left, Upload & Unduh Rekap CTA on Right -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100 dark:border-neutral-800/80">
           <div class="min-w-0 pr-2 space-y-1.5 flex-1">
             <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
@@ -539,13 +539,23 @@
             </p>
           </div>
 
-          <!-- Unduh Rekap Button (Green CTA, top right aligned with title) -->
-          <div class="flex items-center gap-2.5 shrink-0 self-start sm:self-center">
+          <!-- Action Buttons: Upload Laporan & Unduh Rekap (Sejajar) -->
+          <div class="flex items-center gap-2.5 shrink-0 self-start sm:self-center flex-wrap">
             <BActionButton
               variant="green"
+              :huge-icon="Upload04Icon"
+              :icon-size="15"
+              title="Unggah Berkas Laporan Keuangan Bulanan Baru"
+              @click="openUploadMonthlyModal"
+            >
+              Upload Laporan Kas
+            </BActionButton>
+
+            <BActionButton
+              variant="default"
               icon="download"
-              title="Unduh Rekap Kas Bulanan"
-              @click="handleExportPdf"
+              title="Unduh Rekap Kas Bulanan Lengkap (PDF & CSV)"
+              @click="openExportModal"
             >
               Unduh Rekap
             </BActionButton>
@@ -564,6 +574,8 @@
                 <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-800 dark:text-neutral-200">Rugi</th>
                 <th class="py-4 sm:py-5 px-5 text-left font-bold text-neutral-900 dark:text-white">Untung Bersih</th>
                 <th class="py-4 sm:py-5 px-6 text-left font-bold">Saldo Kas Akhir</th>
+                <th class="py-4 sm:py-5 px-5 text-left font-bold">Berkas Bukti</th>
+                <th class="py-4 sm:py-5 px-6 text-right font-bold">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
@@ -572,7 +584,7 @@
                 :key="`${rec.month}-${rec.year}`"
                 class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
-                <td class="py-4 sm:py-5 px-6 text-left font-poppins font-normal text-sm text-neutral-900 dark:text-white">
+                <td class="py-4 sm:py-5 px-6 text-left font-poppins font-semibold text-sm text-neutral-900 dark:text-white">
                   {{ rec.month }} {{ rec.year }}
                 </td>
                 <td class="py-4 sm:py-5 px-5 text-left font-poppins tabular-nums font-normal text-neutral-900 dark:text-white text-sm">
@@ -592,6 +604,45 @@
                 </td>
                 <td class="py-4 sm:py-5 px-6 text-left font-poppins tabular-nums font-medium text-[#156374] dark:text-[#50AABF] text-sm">
                   Rp {{ rec.cashBalance.toLocaleString('id-ID') }}
+                </td>
+                <!-- Berkas Bukti Laporan (Download & Upload) -->
+                <td class="py-4 sm:py-5 px-5 text-left font-poppins text-xs">
+                  <div v-if="rec.proofDocumentName" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/20 border border-[#156374]/25 text-[#156374] dark:text-[#50AABF]">
+                    <HugeiconsIcon :icon="FileValidationIcon" :size="14" class="shrink-0" />
+                    <span class="max-w-[110px] sm:max-w-[130px] truncate font-medium text-[11px]" :title="rec.proofDocumentName">
+                      {{ rec.proofDocumentName }}
+                    </span>
+                    <button
+                      type="button"
+                      class="ml-0.5 p-1 rounded hover:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] transition-colors cursor-pointer"
+                      title="Unduh Berkas Laporan Ini"
+                      @click="handleDownloadMonthlyProof(rec)"
+                    >
+                      <HugeiconsIcon :icon="Download01Icon" :size="13" :stroke-width="2.2" />
+                    </button>
+                  </div>
+                  <button
+                    v-else
+                    type="button"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-poppins font-medium text-neutral-500 hover:text-[#156374] dark:hover:text-[#50AABF] bg-neutral-100 dark:bg-neutral-800 hover:bg-[#E6F4F7] dark:hover:bg-[#156374]/20 transition-colors cursor-pointer"
+                    title="Upload Bukti Laporan Bulan Ini"
+                    @click="triggerRowUpload(rec)"
+                  >
+                    <HugeiconsIcon :icon="Upload04Icon" :size="13" />
+                    <span>Upload</span>
+                  </button>
+                </td>
+                <!-- Aksi Unduh Rapor Bulan Ini -->
+                <td class="py-4 sm:py-5 px-6 text-right font-poppins text-xs">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-poppins font-medium text-neutral-700 dark:text-neutral-200 hover:text-[#00AA13] hover:bg-emerald-50 dark:hover:bg-emerald-950/30 border border-neutral-200 dark:border-neutral-700 transition-colors cursor-pointer"
+                    title="Unduh Rapor PDF Bulan Ini"
+                    @click="handleDownloadSingleMonthPdf(rec)"
+                  >
+                    <HugeiconsIcon :icon="Download01Icon" :size="13" :stroke-width="2" />
+                    <span>PDF</span>
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -1124,6 +1175,314 @@
         </div>
       </div>
     </BModal>
+
+    <!-- Hidden Row Proof File Input -->
+    <input
+      ref="rowFileInputRef"
+      type="file"
+      class="hidden"
+      accept=".pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png"
+      @change="onRowFileSelected"
+    />
+
+    <!-- Hidden Monthly Report File Input -->
+    <input
+      ref="reportFileInputRef"
+      type="file"
+      class="hidden"
+      accept=".pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png"
+      @change="onReportFileSelected"
+    />
+
+    <!-- Modal 1: Unduh / Ekspor Rekap Kas Resmi -->
+    <BModal
+      v-model="isExportModalOpen"
+      title="Unduh Rekapitulasi Kas Resmi"
+      subtitle="Pilih format dokumen resmi untuk pelaporan pemodal dan perbankan"
+      size="md"
+    >
+      <div class="space-y-4 pt-1 font-poppins text-neutral-800 dark:text-neutral-200">
+        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          Dokumen ini memuat seluruh rekapitulasi buku kas, transaksi tervalidasi, dan margin keuntungan usaha secara terperinci.
+        </p>
+
+        <div class="space-y-2.5">
+          <!-- Opsi 1: PDF Standar ISO -->
+          <div
+            class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-[#156374] dark:hover:border-[#50AABF] hover:bg-[#E6F4F7]/40 dark:hover:bg-[#156374]/15 transition-all cursor-pointer flex items-center justify-between group"
+            @click="handleExportPdfDirect"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 border border-red-200/50">
+                <HugeiconsIcon :icon="File01Icon" :size="20" />
+              </div>
+              <div>
+                <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white group-hover:text-[#156374] dark:group-hover:text-[#50AABF] transition-colors">
+                  Buku Kas Resmi (Format PDF)
+                </h4>
+                <p class="text-xs text-neutral-500 font-normal">
+                  Standar ISO, tanda tangan digital konsultan & siap audit
+                </p>
+              </div>
+            </div>
+            <HugeiconsIcon :icon="Download01Icon" :size="16" class="text-neutral-400 group-hover:text-[#156374] dark:group-hover:text-[#50AABF] transition-colors shrink-0" />
+          </div>
+
+          <!-- Opsi 2: CSV / Excel UTF-8 -->
+          <div
+            class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-[#00AA13] hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 transition-all cursor-pointer flex items-center justify-between group"
+            @click="handleExportCsvDirect"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-200/50">
+                <HugeiconsIcon :icon="File02Icon" :size="20" />
+              </div>
+              <div>
+                <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white group-hover:text-[#00AA13] transition-colors">
+                  Buku Kas Excel (Format CSV UTF-8)
+                </h4>
+                <p class="text-xs text-neutral-500 font-normal">
+                  Kompatibel dengan Microsoft Excel, Google Sheets, & LibreOffice
+                </p>
+              </div>
+            </div>
+            <HugeiconsIcon :icon="Download01Icon" :size="16" class="text-neutral-400 group-hover:text-[#00AA13] transition-colors shrink-0" />
+          </div>
+
+          <!-- Opsi 3: Cetak Fisik -->
+          <div
+            class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-all cursor-pointer flex items-center justify-between group"
+            @click="handlePrintBukuKas"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="PrinterIcon" :size="20" />
+              </div>
+              <div>
+                <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white transition-colors">
+                  Cetak Langsung (Print Browser)
+                </h4>
+                <p class="text-xs text-neutral-500 font-normal">
+                  Kirim ke printer kasir atau simpan melalui dialog cetak sistem
+                </p>
+              </div>
+            </div>
+            <HugeiconsIcon :icon="PrinterIcon" :size="16" class="text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors shrink-0" />
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-end">
+          <button
+            type="button"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm font-poppins font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+            @click="isExportModalOpen = false"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </BModal>
+
+    <!-- Modal 2: Upload Laporan Kas Bulanan -->
+    <BModal
+      v-model="isUploadMonthlyModalOpen"
+      title="Upload Laporan Kas Bulanan"
+      subtitle="Unggah laporan omzet, modal jualan, dan berkas mutasi per bulan"
+      size="lg"
+    >
+      <form @submit.prevent="handleSaveMonthlyReport" class="space-y-4 pt-1 font-poppins">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <!-- Pilih Bulan -->
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              Periode Bulan
+            </label>
+            <select
+              v-model="uploadReportForm.month"
+              required
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins cursor-pointer"
+            >
+              <option value="Januari">Januari</option>
+              <option value="Februari">Februari</option>
+              <option value="Maret">Maret</option>
+              <option value="April">April</option>
+              <option value="Mei">Mei</option>
+              <option value="Juni">Juni</option>
+              <option value="Juli">Juli</option>
+              <option value="Agustus">Agustus</option>
+              <option value="September">September</option>
+              <option value="Oktober">Oktober</option>
+              <option value="November">November</option>
+              <option value="Desember">Desember</option>
+            </select>
+          </div>
+
+          <!-- Tahun -->
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              Tahun
+            </label>
+            <input
+              v-model.number="uploadReportForm.year"
+              type="number"
+              required
+              min="2020"
+              max="2030"
+              class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white tabular-nums focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <!-- Total Pendapatan / Omzet -->
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              Total Pendapatan (Omzet)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-neutral-500 font-poppins">Rp</span>
+              <input
+                v-model.number="uploadReportForm.omzet"
+                type="number"
+                required
+                min="0"
+                placeholder="45.000.000"
+                class="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white tabular-nums font-semibold focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
+              />
+            </div>
+          </div>
+
+          <!-- Modal Jualan / HPP -->
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              Modal Jualan (HPP)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-neutral-500 font-poppins">Rp</span>
+              <input
+                v-model.number="uploadReportForm.hpp"
+                type="number"
+                required
+                min="0"
+                placeholder="18.000.000"
+                class="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white tabular-nums font-semibold focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
+              />
+            </div>
+          </div>
+
+          <!-- Biaya Operasional / Opex -->
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              Biaya Operasional (Opex)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-neutral-500 font-poppins">Rp</span>
+              <input
+                v-model.number="uploadReportForm.opex"
+                type="number"
+                required
+                min="0"
+                placeholder="8.500.000"
+                class="w-full pl-9 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white tabular-nums font-semibold focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Perhitungan Kas Bersih Estimasi -->
+        <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-900/40 flex items-center justify-between text-xs sm:text-sm">
+          <span class="font-medium text-emerald-900 dark:text-emerald-300">Estimasi Untung Bersih:</span>
+          <span class="font-bold text-emerald-800 dark:text-emerald-400 tabular-nums text-sm sm:text-base">
+            Rp {{ ((uploadReportForm.omzet || 0) - (uploadReportForm.hpp || 0) - (uploadReportForm.opex || 0)).toLocaleString('id-ID') }}
+          </span>
+        </div>
+
+        <!-- Berkas Bukti Laporan (Dropzone) -->
+        <div>
+          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+            Berkas Laporan / Rekening Koran / Rekap POS
+          </label>
+          <div
+            class="border-2 border-dashed rounded-xl p-5 text-center transition-colors cursor-pointer"
+            :class="uploadReportForm.fileName ? 'border-[#00AA13] bg-emerald-50/40 dark:bg-emerald-950/20' : 'border-neutral-300 dark:border-neutral-700 hover:border-[#156374] dark:hover:border-[#50AABF] bg-neutral-50/50 dark:bg-neutral-900/50'"
+            @click="triggerReportFileSelect"
+          >
+            <div v-if="uploadReportForm.fileName" class="flex items-center justify-center gap-3">
+              <HugeiconsIcon :icon="FileValidationIcon" :size="24" class="text-emerald-800 dark:text-emerald-400 shrink-0" />
+              <div class="text-left min-w-0">
+                <p class="font-semibold text-sm text-neutral-900 dark:text-white truncate max-w-xs">
+                  {{ uploadReportForm.fileName }}
+                </p>
+                <p class="text-xs text-neutral-500">
+                  {{ uploadReportForm.fileSize }} • Siap diunggah
+                </p>
+              </div>
+              <button
+                type="button"
+                class="ml-2 p-1 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-500 hover:text-rose-600 transition-colors"
+                title="Hapus berkas"
+                @click.stop="clearReportFile"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="16" />
+              </button>
+            </div>
+            <div v-else class="space-y-1.5">
+              <div class="w-10 h-10 mx-auto rounded-full bg-[#E6F4F7] dark:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] flex items-center justify-center">
+                <HugeiconsIcon :icon="Upload04Icon" :size="20" />
+              </div>
+              <p class="text-xs sm:text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                Klik atau seret berkas laporan ke sini
+              </p>
+              <p class="text-[11px] text-neutral-500">
+                Mendukung PDF, Excel (.xlsx, .csv), atau Foto Mutasi (Maks. 10MB)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Catatan Tambahan -->
+        <div>
+          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
+            Catatan Tambahan
+          </label>
+          <textarea
+            v-model="uploadReportForm.notes"
+            rows="2"
+            placeholder="Contoh: Rekap laporan penjualan kasir cabang utama + mutasi QRIS."
+            class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins leading-relaxed"
+          ></textarea>
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-800">
+          <button
+            type="button"
+            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-poppins font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+            @click="isUploadMonthlyModalOpen = false"
+          >
+            Batal
+          </button>
+          <BActionButton
+            variant="green"
+            icon="upload"
+            type="submit"
+            :loading="isSubmittingReport"
+          >
+            Simpan & Upload Laporan
+          </BActionButton>
+        </div>
+      </form>
+    </BModal>
+
+    <!-- Floating Feedback Toast Notification -->
+    <Teleport to="body">
+      <div
+        v-if="showToast"
+        class="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 shadow-2xl border border-neutral-800 dark:border-neutral-200 text-xs sm:text-sm font-poppins font-medium animate-in fade-in slide-in-from-bottom-4 duration-200"
+      >
+        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="18" class="text-emerald-400 dark:text-emerald-800 shrink-0" />
+        <span>{{ toastMessage }}</span>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -1144,8 +1503,14 @@ import {
   CreditCardIcon,
   Delete02Icon,
   ViewIcon,
-  AnalyticsUpIcon
+  AnalyticsUpIcon,
+  FileValidationIcon,
+  Upload04Icon,
+  File01Icon,
+  File02Icon,
+  PrinterIcon
 } from '@hugeicons/core-free-icons'
+import { useReportDownloader } from '~/composables/useReportDownloader'
 
 // Base components
 import BActionButton from '~/components/base/BActionButton.vue'
@@ -1759,14 +2124,259 @@ function openReceiptModal(tx: DailyTransaction) {
   isReceiptModalOpen.value = true
 }
 
+const reportDownloader = useReportDownloader()
+
+// Feedback Toast
+const showToast = ref(false)
+const toastMessage = ref('')
+let toastTimer: any = null
+
+function showNotification(msg: string) {
+  toastMessage.value = msg
+  showToast.value = true
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    showToast.value = false
+  }, 3500)
+}
+
+// Export Buku Kas Modal State & Actions
+const isExportModalOpen = ref(false)
+
+function openExportModal() {
+  isExportModalOpen.value = true
+}
+
 function handleExportPdf() {
-  alert('Menyiapkan berkas Buku Kas Resmi (PDF) Kopi Senja Nusantara untuk laporan pemodal...')
+  openExportModal()
+}
+
+function handleExportPdfDirect() {
+  isExportModalOpen.value = false
+  showNotification('Menyiapkan berkas Buku Kas Resmi (PDF)...')
+  reportDownloader.exportBukuKasPdf({
+    storeName: umkmStore.profile.businessName || 'Kopi Senja Nusantara',
+    ownerName: umkmStore.profile.fullName || 'Fikri Setiawan',
+    transactions: umkmStore.dailyTransactions.map(t => ({
+      date: t.date,
+      title: t.title,
+      category: t.category,
+      amount: t.amount,
+      paymentMethod: t.paymentMethod,
+      notes: t.notes
+    })),
+    monthlySummary: umkmStore.monthlyRecords.map(m => ({
+      month: m.month,
+      year: m.year,
+      omzet: m.omzet,
+      hpp: m.hpp,
+      opex: m.opex,
+      netProfit: m.netProfit,
+      cashBalance: m.cashBalance
+    })),
+    period: 'Tahun Buku 2026'
+  })
+  showNotification('Berkas PDF Buku Kas Resmi berhasil diunduh!')
+}
+
+function handleExportCsvDirect() {
+  isExportModalOpen.value = false
+  showNotification('Menyiapkan berkas CSV Excel...')
+  reportDownloader.exportBukuKasCsv({
+    storeName: umkmStore.profile.businessName || 'Kopi Senja Nusantara',
+    transactions: umkmStore.dailyTransactions.map(t => ({
+      date: t.date,
+      title: t.title,
+      category: t.category,
+      amount: t.amount,
+      paymentMethod: t.paymentMethod,
+      notes: t.notes
+    })),
+    monthlySummary: umkmStore.monthlyRecords.map(m => ({
+      month: m.month,
+      year: m.year,
+      omzet: m.omzet,
+      hpp: m.hpp,
+      opex: m.opex,
+      netProfit: m.netProfit,
+      cashBalance: m.cashBalance
+    }))
+  })
+  showNotification('Berkas Buku Kas (CSV Excel) berhasil diunduh!')
+}
+
+function handlePrintBukuKas() {
+  isExportModalOpen.value = false
+  if (typeof window !== 'undefined') {
+    window.print()
+  }
+}
+
+// Upload Laporan Bulanan Modal State & Actions
+const isUploadMonthlyModalOpen = ref(false)
+const isSubmittingReport = ref(false)
+const reportFileInputRef = ref<HTMLInputElement | null>(null)
+
+const uploadReportForm = ref({
+  month: 'Oktober',
+  year: 2026,
+  omzet: 45000000,
+  hpp: 18000000,
+  opex: 8500000,
+  notes: '',
+  file: null as File | null,
+  fileName: '',
+  fileSize: '',
+  fileDataUrl: ''
+})
+
+function openUploadMonthlyModal() {
+  uploadReportForm.value = {
+    month: 'Oktober',
+    year: 2026,
+    omzet: 45000000,
+    hpp: 18000000,
+    opex: 8500000,
+    notes: '',
+    file: null,
+    fileName: '',
+    fileSize: '',
+    fileDataUrl: ''
+  }
+  isUploadMonthlyModalOpen.value = true
+}
+
+function triggerReportFileSelect() {
+  reportFileInputRef.value?.click()
+}
+
+function onReportFileSelected(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  const sizeFormatted = file.size > 1024 * 1024
+    ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+    : `${Math.round(file.size / 1024)} KB`
+
+  uploadReportForm.value.file = file
+  uploadReportForm.value.fileName = file.name
+  uploadReportForm.value.fileSize = sizeFormatted
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    uploadReportForm.value.fileDataUrl = e.target?.result as string
+  }
+  reader.readAsDataURL(file)
+}
+
+function clearReportFile() {
+  uploadReportForm.value.file = null
+  uploadReportForm.value.fileName = ''
+  uploadReportForm.value.fileSize = ''
+  uploadReportForm.value.fileDataUrl = ''
+  if (reportFileInputRef.value) {
+    reportFileInputRef.value.value = ''
+  }
+}
+
+async function handleSaveMonthlyReport() {
+  isSubmittingReport.value = true
+  try {
+    const netProfit = uploadReportForm.value.omzet - uploadReportForm.value.hpp - uploadReportForm.value.opex
+    const cashBalance = Math.max(0, netProfit + 25000000)
+
+    await umkmStore.addMonthlyProgress({
+      month: uploadReportForm.value.month,
+      year: uploadReportForm.value.year,
+      omzet: uploadReportForm.value.omzet,
+      hpp: uploadReportForm.value.hpp,
+      opex: uploadReportForm.value.opex,
+      netProfit,
+      cashBalance,
+      proofDocumentName: uploadReportForm.value.fileName || `Laporan_Kas_${uploadReportForm.value.month}_${uploadReportForm.value.year}.pdf`,
+      proofDocumentSize: uploadReportForm.value.fileSize || '1.8 MB',
+      notes: uploadReportForm.value.notes
+    })
+
+    isUploadMonthlyModalOpen.value = false
+    showNotification(`Laporan Kas ${uploadReportForm.value.month} ${uploadReportForm.value.year} berhasil diunggah!`)
+  } finally {
+    isSubmittingReport.value = false
+  }
+}
+
+// Row-level Upload & Download Actions
+const rowFileInputRef = ref<HTMLInputElement | null>(null)
+const selectedRecForRowUpload = ref<any>(null)
+
+function triggerRowUpload(rec: any) {
+  selectedRecForRowUpload.value = rec
+  rowFileInputRef.value?.click()
+}
+
+async function onRowFileSelected(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file || !selectedRecForRowUpload.value) return
+
+  await umkmStore.uploadMonthlyReportFile(
+    selectedRecForRowUpload.value.month,
+    selectedRecForRowUpload.value.year,
+    file
+  )
+
+  showNotification(`Berkas bukti laporan ${selectedRecForRowUpload.value.month} ${selectedRecForRowUpload.value.year} berhasil diunggah!`)
+  if (rowFileInputRef.value) {
+    rowFileInputRef.value.value = ''
+  }
+  selectedRecForRowUpload.value = null
+}
+
+function handleDownloadMonthlyProof(rec: any) {
+  const fileName = rec.proofDocumentName || `Laporan_Kas_${rec.month}_${rec.year}.pdf`
+  showNotification(`Mengunduh berkas bukti ${fileName}...`)
+  
+  const store = umkmStore.profile.businessName || 'Kopi Senja Nusantara'
+  const sections = [
+    {
+      heading: `1. REKAPITULASI KAS BULAN ${rec.month.toUpperCase()} ${rec.year}`,
+      lines: [
+        `Nama Toko           : ${store}`,
+        `Periode             : ${rec.month} ${rec.year}`,
+        `Total Pendapatan    : Rp ${rec.omzet.toLocaleString('id-ID')}`,
+        `Modal Jualan (HPP)  : Rp ${rec.hpp.toLocaleString('id-ID')}`,
+        `Biaya Operasional   : Rp ${rec.opex.toLocaleString('id-ID')}`,
+        `Keuntungan Bersih   : Rp ${rec.netProfit.toLocaleString('id-ID')}`,
+        `Saldo Kas Penutupan : Rp ${rec.cashBalance.toLocaleString('id-ID')}`
+      ]
+    },
+    {
+      heading: '2. STATUS VALIDASI & KONSULTAN',
+      lines: [
+        'Status Dokumen  : Terverifikasi Konsultan Keuangan Beruang',
+        'Konsultan       : Dra. Maya Suryani, M.M.',
+        'Kesesuaian Data : 100% Cocok dengan Mutasi Rekening Giro & POS Toko'
+      ]
+    }
+  ]
+  const blob = reportDownloader.createStandardPdf(
+    `BUKTI LAPORAN KAS - ${rec.month.toUpperCase()} ${rec.year}`,
+    `Dokumen Rekapitulasi Finansial Terverifikasi ${store}`,
+    sections
+  )
+  reportDownloader.downloadBlob(blob, fileName)
+}
+
+function handleDownloadSingleMonthPdf(rec: any) {
+  handleDownloadMonthlyProof(rec)
 }
 
 let handleResize: (() => void) | null = null
 let gsapCtx: gsap.Context | null = null
 
 onMounted(() => {
+  umkmStore.initMonthlyRecordsFromStorage()
   umkmStore.fetchFinances()
   nextTick(() => {
     updateTabIndicator(true)

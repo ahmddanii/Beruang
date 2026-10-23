@@ -40,6 +40,10 @@ export interface MonthlyRecord {
   netProfit: number
   cashBalance: number
   proofDocumentUrl?: string
+  proofDocumentName?: string
+  proofDocumentSize?: string
+  uploadedAt?: string
+  notes?: string
   status: 'VERIFIED' | 'PENDING' | 'REJECTED'
   hasAnomaly?: boolean
   anomalyNote?: string
@@ -343,6 +347,9 @@ export const useUmkmStore = defineStore('umkm', {
         opex: 17500000,
         netProfit: 28000000,
         cashBalance: 71000000,
+        proofDocumentName: 'Mutasi_Kasir_POS_Agustus_2026.pdf',
+        proofDocumentSize: '2.1 MB',
+        uploadedAt: '02 Sep 2026',
         status: 'VERIFIED'
       },
       {
@@ -353,6 +360,9 @@ export const useUmkmStore = defineStore('umkm', {
         opex: 19000000,
         netProfit: 31500000,
         cashBalance: 74000000,
+        proofDocumentName: 'Rekening_Koran_Mandiri_Sept2026.pdf',
+        proofDocumentSize: '2.4 MB',
+        uploadedAt: '03 Okt 2026',
         status: 'VERIFIED'
       },
       {
@@ -363,6 +373,9 @@ export const useUmkmStore = defineStore('umkm', {
         opex: 22300000,
         netProfit: 32600000,
         cashBalance: 75500000,
+        proofDocumentName: 'Rekap_POS_BukuKas_Okt2026.pdf',
+        proofDocumentSize: '3.1 MB',
+        uploadedAt: '18 Okt 2026',
         status: 'VERIFIED',
         hasAnomaly: false,
         anomalyNote: 'Proporsi modal bahan dan operasional harian berada dalam batas aman evaluasi sistem.'
@@ -846,21 +859,103 @@ export const useUmkmStore = defineStore('umkm', {
     },
 
     /**
-     * POST /api/umkm/monthly-reports
+     * POST /api/umkm/monthly-reports atau /finances/monthly
+     * Menyimpan dan memperbarui rekapitulasi laporan bulanan beserta file bukti
      */
-    async addMonthlyProgress(record: Omit<MonthlyRecord, 'status'>) {
-      this.monthlyRecords.push({
-        ...record,
-        status: 'PENDING'
-      })
+    async addMonthlyProgress(record: Partial<MonthlyRecord> & { month: string; year: number; omzet: number; hpp: number; opex: number }) {
+      const netProfit = record.netProfit !== undefined ? record.netProfit : (record.omzet - record.hpp - record.opex)
+      const cashBalance = record.cashBalance !== undefined ? record.cashBalance : (this.financeSummary.cashBalance + netProfit)
+
+      const newRec: MonthlyRecord = {
+        month: record.month,
+        year: record.year,
+        omzet: record.omzet,
+        hpp: record.hpp,
+        opex: record.opex,
+        loss: record.loss || 0,
+        netProfit,
+        cashBalance,
+        proofDocumentUrl: record.proofDocumentUrl || '',
+        proofDocumentName: record.proofDocumentName || `Laporan_Kas_${record.month}_${record.year}.pdf`,
+        proofDocumentSize: record.proofDocumentSize || '2.0 MB',
+        uploadedAt: record.uploadedAt || new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+        notes: record.notes || '',
+        status: record.status || 'PENDING'
+      }
+
+      const existingIndex = this.monthlyRecords.findIndex(r => r.month.toLowerCase() === record.month.toLowerCase() && r.year === record.year)
+      if (existingIndex >= 0) {
+        this.monthlyRecords[existingIndex] = { ...this.monthlyRecords[existingIndex], ...newRec }
+      } else {
+        this.monthlyRecords.push(newRec)
+      }
+
+      // Update summary cards
+      this.financeSummary.totalIncomeMonth = newRec.omzet
+      this.financeSummary.totalCogsMonth = newRec.hpp
+      this.financeSummary.totalOpexMonth = newRec.opex
+      this.financeSummary.netProfitMonth = newRec.netProfit
+      this.financeSummary.cashBalance = newRec.cashBalance
+      if (newRec.omzet > 0) {
+        this.financeSummary.marginPercentage = Number(((newRec.netProfit / newRec.omzet) * 100).toFixed(1))
+      }
+
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('umkm_monthly_records', JSON.stringify(this.monthlyRecords))
+        } catch (e) {
+          console.warn('Gagal menyimpan rekap bulanan ke localStorage', e)
+        }
+      }
 
       try {
-        await useApi('/umkm/monthly-reports', {
+        await useApi('/finances/monthly', {
           method: 'POST',
-          body: record
+          body: newRec
         })
       } catch (err: any) {
         console.warn('Gagal kirim laporan bulanan ke backend:', err?.message)
+      }
+
+      return newRec
+    },
+
+    /**
+     * Upload berkas bukti laporan untuk bulan yang sudah ada
+     */
+    async uploadMonthlyReportFile(month: string, year: number, file: { name: string; size: string; dataUrl?: string }) {
+      const target = this.monthlyRecords.find(r => r.month.toLowerCase() === month.toLowerCase() && r.year === year)
+      const nowStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+      if (target) {
+        target.proofDocumentName = file.name
+        target.proofDocumentSize = file.size
+        target.proofDocumentUrl = file.dataUrl || ''
+        target.uploadedAt = nowStr
+        target.status = 'PENDING'
+      }
+
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('umkm_monthly_records', JSON.stringify(this.monthlyRecords))
+        } catch (e) {
+          console.warn('Gagal simpan file laporan ke localStorage', e)
+        }
+      }
+    },
+
+    initMonthlyRecordsFromStorage() {
+      if (typeof window !== 'undefined') {
+        try {
+          const saved = localStorage.getItem('umkm_monthly_records')
+          if (saved) {
+            const parsed = JSON.parse(saved)
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              this.monthlyRecords = parsed
+            }
+          }
+        } catch (e) {
+          // ignore
+        }
       }
     },
 

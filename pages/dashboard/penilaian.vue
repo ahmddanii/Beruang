@@ -363,11 +363,14 @@ import {
   HelpCircleIcon
 } from '@hugeicons/core-free-icons'
 
+import { useReportDownloader } from '~/composables/useReportDownloader'
+
 definePageMeta({
   layout: 'dashboard'
 })
 
 const umkmStore = useUmkmStore()
+const reportDownloader = useReportDownloader()
 
 const radarData = computed(() => {
   return umkmStore.assessmentAspects.map(a => ({
@@ -382,7 +385,17 @@ const radarData = computed(() => {
 const isCertificateModalOpen = ref(false)
 
 function handleExportReport() {
-  alert('Menyiapkan dokumen Rapor Kesiapan Usaha (PDF) resmi Kopi Senja Nusantara untuk ekspor investor...')
+  reportDownloader.exportRaporKesiapanPdf({
+    storeName: umkmStore.profile.businessName || 'Kopi Senja Nusantara',
+    healthScore: umkmStore.healthScore,
+    aspects: umkmStore.assessmentAspects.map(a => ({
+      name: a.name,
+      score: a.score,
+      targetScore: a.targetScore,
+      notes: a.status
+    })),
+    consultantName: umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.'
+  })
 }
 
 onMounted(() => {

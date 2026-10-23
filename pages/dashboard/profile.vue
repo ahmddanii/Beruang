@@ -535,15 +535,27 @@
                   </div>
 
                   <!-- Actions for Uploaded File -->
-                  <div class="flex items-center justify-between gap-2 pt-1">
-                    <BActionButton
-                      variant="default"
-                      :huge-icon="EyeIcon"
-                      :icon-size="14"
-                      @click="openDocPreview(doc)"
-                    >
-                      Lihat Dokumen
-                    </BActionButton>
+                  <div class="flex items-center justify-between gap-2 pt-1 flex-wrap">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <BActionButton
+                        variant="default"
+                        :huge-icon="EyeIcon"
+                        :icon-size="14"
+                        @click="openDocPreview(doc)"
+                      >
+                        Lihat
+                      </BActionButton>
+
+                      <BActionButton
+                        variant="default"
+                        :huge-icon="Download01Icon"
+                        :icon-size="14"
+                        title="Unduh Berkas Ini"
+                        @click="handleDownloadLegalDoc(doc)"
+                      >
+                        Unduh
+                      </BActionButton>
+                    </div>
 
                     <div class="flex items-center gap-1">
                       <button
@@ -905,7 +917,15 @@
       </div>
 
       <template #footer>
-        <div class="flex items-center justify-end gap-2 w-full">
+        <div class="flex items-center justify-between gap-2 w-full">
+          <BActionButton
+            variant="green"
+            :huge-icon="Download01Icon"
+            :icon-size="14"
+            @click="handleDownloadLegalDoc(activePreviewDoc)"
+          >
+            Unduh Berkas Resmi (PDF)
+          </BActionButton>
           <BButton
             variant="secondary"
             size="sm"
@@ -1113,8 +1133,10 @@ import {
   UserGroupIcon,
   Certificate01Icon,
   Comment01Icon,
-  CheckmarkBadge01Icon
+  CheckmarkBadge01Icon,
+  Download01Icon
 } from '@hugeicons/core-free-icons'
+import { useReportDownloader } from '~/composables/useReportDownloader'
 
 definePageMeta({
   layout: 'dashboard'
@@ -1452,6 +1474,19 @@ function triggerDocUpload(docId: string) {
   }
 }
 
+const reportDownloader = useReportDownloader()
+
+function handleDownloadLegalDoc(doc: any) {
+  if (!doc) return
+  triggerToast(`Mengunduh berkas ${doc.title}...`)
+  reportDownloader.downloadLegalDoc({
+    title: doc.title,
+    subtitle: doc.subtitle,
+    file: doc.file,
+    storeName: form.value.businessName || 'Kopi Senja Nusantara'
+  })
+}
+
 function onDocFileSelected(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
@@ -1464,14 +1499,24 @@ function onDocFileSelected(event: Event) {
 
   const targetDoc = legalDocuments.value.find(d => d.id === currentUploadDocId.value)
   if (targetDoc) {
-    targetDoc.file = {
-      name: file.name,
-      size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-      uploadedAt: 'Hari ini',
-      isVerified: true
+    const sizeFormatted = file.size > 1024 * 1024
+      ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+      : `${Math.round(file.size / 1024)} KB`
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string
+      targetDoc.file = {
+        name: file.name,
+        size: sizeFormatted,
+        uploadedAt: 'Hari ini',
+        isVerified: true,
+        url: dataUrl
+      }
+      saveDocsToStorage()
+      triggerToast(`Berkas ${targetDoc.title} berhasil diunggah!`)
     }
-    saveDocsToStorage()
-    triggerToast(`Berkas ${targetDoc.title} berhasil diunggah!`)
+    reader.readAsDataURL(file)
   }
   currentUploadDocId.value = null
 }

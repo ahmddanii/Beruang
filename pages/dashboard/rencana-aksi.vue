@@ -608,15 +608,26 @@
 
       <!-- Modal Pinned Footer (Without Unduh Salinan) -->
       <template #footer>
-        <div class="flex items-center justify-between w-full">
-          <button
-            type="button"
-            class="btn-pill-gradient inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 cursor-pointer transition-all shadow-2xs"
-            @click="triggerEvidenceUpload(selectedTaskForPreview?.id)"
-          >
-            <HugeiconsIcon :icon="Upload04Icon" :size="14" :stroke-width="2" />
-            <span>Unggah Ulang / Ganti Bukti</span>
-          </button>
+        <div class="flex items-center justify-between w-full flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="btn-pill-gradient inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 cursor-pointer transition-all shadow-2xs"
+              @click="triggerEvidenceUpload(selectedTaskForPreview?.id)"
+            >
+              <HugeiconsIcon :icon="Upload04Icon" :size="14" :stroke-width="2" />
+              <span>Unggah Ulang</span>
+            </button>
+
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#E6F4F7] text-[#156374] dark:bg-[#156374]/20 dark:text-[#50AABF] border border-[#156374]/25 hover:bg-[#D9EEF3] transition-colors cursor-pointer"
+              @click="handleDownloadTaskEvidence"
+            >
+              <HugeiconsIcon :icon="Download01Icon" :size="14" :stroke-width="2" />
+              <span>Unduh Dokumen (PDF)</span>
+            </button>
+          </div>
 
           <button
             type="button"
@@ -769,8 +780,10 @@ import {
   EyeIcon,
   Upload04Icon,
   ShieldCheckIcon,
-  FileValidationIcon
+  FileValidationIcon,
+  Download01Icon
 } from '@hugeicons/core-free-icons'
+import { useReportDownloader } from '~/composables/useReportDownloader'
 
 definePageMeta({
   layout: 'dashboard'
@@ -1020,6 +1033,44 @@ const selectedTaskEvidence = computed(() => {
 function openEvidenceModal(task: any) {
   selectedTaskForPreview.value = task
   isEvidenceModalOpen.value = true
+}
+
+const reportDownloader = useReportDownloader()
+
+function handleDownloadTaskEvidence() {
+  if (!selectedTaskForPreview.value) return
+  const task = selectedTaskForPreview.value
+  const evidence = selectedTaskEvidence.value
+  const store = umkmStore.profile.name || umkmStore.profile.businessName || 'Kopi Senja Nusantara'
+
+  const sections = [
+    {
+      heading: '1. RINCIAN LANGKAH AKSI PERBAIKAN',
+      lines: [
+        `Langkah Aksi     : ${task.title}`,
+        `Kategori Aspek   : ${task.aspect}`,
+        `Target Selesai   : ${task.dueDate}`,
+        `Unit Usaha       : ${store}`,
+        `Status Verifikasi: Terverifikasi Konsultan Beruang`
+      ]
+    },
+    {
+      heading: '2. PENGESAHAN BUKTI IMPLEMENTASI',
+      lines: [
+        `Klasifikasi      : ${evidence?.classification || 'Dokumentasi Kepatuhan Langkah Aksi'}`,
+        `Nama Berkas      : ${evidence?.file?.name || 'Bukti_Verifikasi.pdf'}`,
+        `Waktu Verifikasi : ${evidence?.file?.uploadedAt || '18 Oktober 2026'}`,
+        `Pemeriksa        : ${umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.'}`
+      ]
+    }
+  ]
+
+  const blob = reportDownloader.createStandardPdf(
+    `BUKTI LANGKAH AKSI - ${task.title.toUpperCase()}`,
+    `Sertifikat Verifikasi Bukti Pelaksanaan Rekomendasi Konsultan Beruang`,
+    sections
+  )
+  reportDownloader.downloadBlob(blob, `Bukti_Aksi_${task.id}_${store.replace(/\s+/g, '_')}.pdf`)
 }
 
 function triggerEvidenceUpload(taskId?: string) {

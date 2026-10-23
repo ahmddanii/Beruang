@@ -635,6 +635,7 @@ import {
   CheckmarkCircle01Icon,
   Shield02Icon
 } from '@hugeicons/core-free-icons'
+import { useReportDownloader } from '~/composables/useReportDownloader'
 
 definePageMeta({
   layout: 'dashboard'
@@ -642,6 +643,7 @@ definePageMeta({
 
 const route = useRoute()
 const umkmStore = useUmkmStore()
+const reportDownloader = useReportDownloader()
 
 const activeTab = ref<'gate' | 'requests' | 'simulation' | 'preview'>('gate')
 const tabIndicatorRef = ref<HTMLElement | null>(null)
@@ -741,7 +743,13 @@ function triggerCelebration() {
 }
 
 function handleExportProposal() {
-  alert('Menyiapkan berkas Proposal Akses Modal Kemitraan (PDF) resmi Kopi Senja Nusantara...')
+  reportDownloader.exportProposalPdf({
+    storeName: umkmStore.profile.businessName || 'Kopi Senja Nusantara',
+    fundingTarget: simAmount.value || umkmStore.profile.fundingTarget || 250000000,
+    tenorMonths: simDurationYears.value * 12,
+    profitShare: simSharePercent.value,
+    description: umkmStore.profile.pitchSummary
+  })
 }
 
 let handleResize: (() => void) | null = null

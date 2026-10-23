@@ -12,6 +12,7 @@ import umkmRouter from "./routes/umkm.js";
 import consultantRouter from "./routes/consultant.js";
 import investorRouter from "./routes/investor.js";
 import onboardingRouter, { handleUmkmOnboarding, handleConsultantOnboarding, handleInvestorOnboarding } from "./routes/onboarding.js";
+import adminRouter from "./routes/admin.js";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use("/api/umkm/documents", vdrRouter);
 app.use("/api/umkm", umkmRouter);
 app.use("/api/consultant", consultantRouter);
 app.use("/api/investor", investorRouter);
+app.use("/api/admin", adminRouter);
 
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

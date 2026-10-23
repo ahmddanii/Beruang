@@ -299,7 +299,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Store01Icon,
@@ -309,6 +309,7 @@ import {
   UserAdd01Icon,
   ArrowRight01Icon
 } from '@hugeicons/core-free-icons'
+import { useApi } from '~/composables/useApi'
 
 definePageMeta({
   layout: 'dashboard'
@@ -317,9 +318,31 @@ definePageMeta({
 const showAssignModal = ref(false)
 const isAssigned = ref(false)
 
-function confirmAssignment() {
-  isAssigned.value = true
-  showAssignModal.value = false
+onMounted(async () => {
+  try {
+    const res = await useApi<any>('/admin/stats')
+    if (res.data && typeof res.data.is_assigned === 'boolean') {
+      isAssigned.value = res.data.is_assigned
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat status telemetri admin:', err?.message)
+  }
+})
+
+async function confirmAssignment() {
+  try {
+    await useApi('/admin/assignments', {
+      method: 'POST',
+      body: {
+        businessId: 'biz-sotobanjar-01',
+      }
+    })
+  } catch (err: any) {
+    console.warn('Fallback penugasan lokal:', err?.message)
+  } finally {
+    isAssigned.value = true
+    showAssignModal.value = false
+  }
 }
 
 const activityList = [

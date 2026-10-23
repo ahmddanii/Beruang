@@ -42,7 +42,8 @@ model ConsultantProfile {
   activeClientsCount Int      @default(0)
   createdAt          DateTime @default(now())
 
-  businesses BusinessProfile[]
+  businesses  BusinessProfile[]
+  assignments ConsultantAssignment[]
 }
 
 model InvestorProfile {
@@ -93,6 +94,18 @@ model BusinessProfile {
   documents      DataRoomDocument[]
   accessRequests AccessRequest[]
   watchlists     InvestorWatchlist[]
+  assignments    ConsultantAssignment[]
+}
+
+model ConsultantAssignment {
+  id           String            @id @default(cuid())
+  businessId   String
+  business     BusinessProfile   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  consultantId String
+  consultant   ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+  slaDays      Int               @default(7)
+  notes        String?
+  assignedAt   DateTime          @default(now())
 }
 
 model Assessment {

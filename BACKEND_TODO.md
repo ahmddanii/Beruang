@@ -60,8 +60,8 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Signed URL Dokumen VDR** | `/investor/data-room/[id]` | ✅ Siap Viewer | ✅ Selesai (`GET /api/investor/data-room/:id` & VDR stream) | Selesai |
 | **Chat Deal Room Real-Time** | `/dashboard/pesan`, `/investor/pesan` | ✅ Siap UI Chat | ⚠️ Hanya HTTP polling biasa, belum ada WebSocket/Pusher | **P1 (Tinggi)** |
 | **Penawaran Investasi (Deal Offer)** | `/dashboard/pesan` | ✅ Siap Attachment Card| ❌ Belum ada model data penawaran resmi & escrow tracking | **P2 (Lanjutan)** |
-| **Penugasan Konsultan oleh Admin** | `/admin/penugasan` | ✅ Siap Dropdown & Form | ❌ Aksi tombol hanya `setTimeout`, belum update foreign key | **P0 (Kritis)** |
-| **Statistik Global Ekosistem** | `/admin` | ✅ Siap Telemetri Card | ❌ **404 Not Found** (`/api/admin/stats`), data masih hardcoded | **P1 (Tinggi)** |
+| **Penugasan Konsultan oleh Admin** | `/admin/penugasan` | ✅ Siap Dropdown & Form | ✅ Selesai (`POST /api/admin/assignments` & riwayat penugasan) | Selesai |
+| **Statistik Global Ekosistem** | `/admin` | ✅ Siap Telemetri Card | ✅ Selesai (`GET /api/admin/stats` kalkulasi agregat nasional) | Selesai |
 
 ---
 

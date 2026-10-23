@@ -111,13 +111,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import BBadge from '~/components/base/BBadge.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   ArrowLeft02Icon,
   CheckmarkCircle02Icon
 } from '@hugeicons/core-free-icons'
+import { useApi } from '~/composables/useApi'
 
 definePageMeta({
   layout: 'dashboard'
@@ -134,17 +135,28 @@ const roleFilters = [
   { label: 'Administrator', value: 'ADMIN' }
 ]
 
-const users = [
+const users = ref([
   { name: 'Budi Setiawan', org: 'Kopi Senja Nusantara', email: 'budi@kopisenja.id', phone: '0812-3456-7890', role: 'UMKM' },
   { name: 'Dra. Maya Suryani, M.M.', org: 'Konsultan Senior BNSP (F&B)', email: 'maya@beruang.id', phone: '0811-9876-5432', role: 'KONSULTAN' },
   { name: 'Hendro Wicaksono', org: 'Nusantara Angel Syndicate', email: 'hendro@nusantara.id', phone: '0813-2233-4455', role: 'INVESTOR' },
   { name: 'Siti Rahmawati', org: 'Batik Lestari Malang', email: 'siti@batiklestari.id', phone: '0857-1122-3344', role: 'UMKM' },
   { name: 'Bambang Sudarsono, S.E.', org: 'Konsultan Rantai Pasok', email: 'bambang@beruang.id', phone: '0812-9988-7766', role: 'KONSULTAN' },
   { name: 'Super Admin Beruang', org: 'Operations & Compliance Lead', email: 'admin@beruang.id', phone: '0811-0000-1111', role: 'ADMIN' }
-]
+])
+
+onMounted(async () => {
+  try {
+    const res = await useApi<any>('/admin/users')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      users.value = res.data
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat pengguna ekosistem live:', err?.message)
+  }
+})
 
 const filteredUsers = computed(() => {
-  return users.filter(u => {
+  return users.value.filter(u => {
     const matchRole = selectedRole.value === 'ALL' || u.role === selectedRole.value
     const matchSearch = !searchQuery.value ||
       u.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||

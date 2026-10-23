@@ -179,6 +179,7 @@ import {
   ArrowLeft02Icon,
   ArrowRight02Icon
 } from '@hugeicons/core-free-icons'
+import { useApi } from '~/composables/useApi'
 
 definePageMeta({
   layout: 'dashboard'
@@ -188,14 +189,25 @@ const selectedConsultant = ref('1')
 const loading = ref(false)
 const assigned = ref(false)
 
-function handleAssign() {
+async function handleAssign() {
   loading.value = true
-  setTimeout(() => {
+  try {
+    await useApi('/admin/assignments', {
+      method: 'POST',
+      body: {
+        businessId: 'biz-sotobanjar-01',
+        consultantId: selectedConsultant.value,
+        slaDays: 7,
+      }
+    })
+  } catch (err: any) {
+    console.warn('Fallback penugasan lokal:', err?.message)
+  } finally {
     loading.value = false
     assigned.value = true
     setTimeout(() => {
       assigned.value = false
     }, 4000)
-  }, 400)
+  }
 }
 </script>

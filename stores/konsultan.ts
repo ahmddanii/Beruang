@@ -1041,10 +1041,48 @@ export const useKonsultanStore = defineStore('konsultan', {
     },
 
     // 6. Update Profil Konsultan
-    updateProfile(updatedData: Partial<ConsultantProfileData>) {
+    async updateProfile(updatedData: Partial<ConsultantProfileData>) {
       this.profile = {
         ...this.profile,
         ...updatedData
+      }
+
+      try {
+        const response = await useApi('/consultant/profile', {
+          method: 'PUT',
+          body: updatedData
+        })
+        return response
+      } catch (err: any) {
+        console.warn('Gagal sinkronisasi profil konsultan ke backend:', err?.message)
+        throw err
+      }
+    },
+
+    // 6b. Ambil Profil Konsultan dari Backend
+    async fetchProfile() {
+      try {
+        const res = await useApi('/consultant/profile')
+        if (res?.data) {
+          this.profile = {
+            ...this.profile,
+            ...res.data,
+            name: res.data.name || this.profile.name,
+            email: res.data.email || this.profile.email,
+            phone: res.data.phone || this.profile.phone,
+            title: res.data.title || this.profile.title,
+            firmName: res.data.firmName || res.data.institution || this.profile.firmName,
+            specialization: res.data.specialization || this.profile.specialization,
+            bnspLicense: res.data.bnspLicense || this.profile.bnspLicense,
+            city: res.data.city || this.profile.city,
+            experience: res.data.experience || this.profile.experience,
+            bio: res.data.bio || this.profile.bio,
+            maxClients: res.data.maxClients || this.profile.maxClients,
+          }
+        }
+        return res
+      } catch (err: any) {
+        console.warn('Gagal memuat profil konsultan dari backend:', err?.message)
       }
     },
 

@@ -1,6 +1,6 @@
 import { Router, Response } from "express";
 import { prisma } from "../index.js";
-import { requireAuth, AuthenticatedRequest } from "../middleware/auth.js";
+import { requireAuth, optionalAuth, AuthenticatedRequest } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -829,7 +829,7 @@ const consultantPreferencesStore = new Map<string, { acceptNewRequests: boolean;
 /**
  * GET /api/consultant/profile
  */
-router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
     const consultant = await prisma.consultantProfile.findFirst({
@@ -858,6 +858,8 @@ router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
         avatar: consultant.user.avatar,
         firmName: consultant.firmName,
         institution: consultant.firmName,
+        title: (consultant as any).title || "Konsultan Ahli Keuangan & Audit UMKM",
+        bio: (consultant as any).bio || "Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.",
         specialization: consultant.specialization,
         bnspLicense: consultant.bnspLicense,
         city: consultant.city,
@@ -876,7 +878,7 @@ router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
 /**
  * PUT /api/consultant/profile
  */
-router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
     const consultant = await prisma.consultantProfile.findFirst({
@@ -893,6 +895,8 @@ router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
       phone,
       firmName,
       institution,
+      title,
+      bio,
       specialization,
       bnspLicense,
       city,
@@ -907,6 +911,8 @@ router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
       where: { id: consultant.id },
       data: {
         ...(resolvedFirm ? { firmName: String(resolvedFirm).trim() } : {}),
+        ...(title ? { title: String(title).trim() } : {}),
+        ...(bio ? { bio: String(bio).trim() } : {}),
         ...(specialization ? { specialization: String(specialization).trim() } : {}),
         ...(bnspLicense ? { bnspLicense: String(bnspLicense).trim() } : {}),
         ...(city ? { city: String(city).trim() } : {}),

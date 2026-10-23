@@ -34,6 +34,8 @@ model ConsultantProfile {
   userId             String   @unique
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   firmName           String
+  title              String?  @default("Konsultan Ahli Keuangan & Audit UMKM")
+  bio                String?  @default("Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.")
   specialization     String?  @default("F&B & Ritel")
   bnspLicense        String?  @default("BNSP-KM-2026-9812")
   city               String?  @default("Bandung")

@@ -327,9 +327,11 @@
         <div class="pt-4 border-t border-neutral-200/80 dark:border-white/10 flex items-center justify-end">
           <button
             type="submit"
-            class="px-6 py-3 rounded-2xl bg-[#0081A0] hover:bg-[#006D87] text-white font-heading font-bold text-sm shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer"
+            :disabled="isSaving"
+            class="px-6 py-3 rounded-2xl bg-[#0081A0] hover:bg-[#006D87] text-white font-heading font-bold text-sm shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer disabled:opacity-60 flex items-center gap-2"
           >
-            Simpan Perubahan Profil
+            <span v-if="isSaving" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            <span>{{ isSaving ? 'Menyimpan...' : 'Simpan Perubahan Profil' }}</span>
           </button>
         </div>
       </form>
@@ -595,7 +597,7 @@ function setTab(tab: 'personal' | 'documents') {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (route.query.tab === 'dokumen' || route.query.tab === 'documents') {
     activeTab.value = 'documents'
   }
@@ -606,6 +608,26 @@ onMounted(() => {
     updateTabIndicatorPosition(true)
   }
   window.addEventListener('resize', handleResizeTabs)
+
+  try {
+    await konsultanStore.fetchProfile()
+    profileData.value = {
+      name: konsultanStore.profile.name,
+      title: konsultanStore.profile.title,
+      email: konsultanStore.profile.email,
+      phone: konsultanStore.profile.phone,
+      firmName: konsultanStore.profile.firmName,
+      specialization: konsultanStore.profile.specialization,
+      experience: konsultanStore.profile.experience,
+      bnspLicense: konsultanStore.profile.bnspLicense,
+      city: konsultanStore.profile.city,
+      bio: konsultanStore.profile.bio,
+      maxClients: konsultanStore.profile.maxClients,
+      avatar: konsultanStore.profile.avatar
+    }
+  } catch (err) {
+    // fallback gracefully to current store state
+  }
 })
 
 onBeforeUnmount(() => {
@@ -686,9 +708,18 @@ function previewDocument(doc: ConsultantDocument) {
   alert(`Membuka pratinjau berkas: ${doc.filename}\nStatus: ${doc.status === 'VERIFIED' ? 'Terverifikasi Resmi' : 'Sedang Ditinjau'}`)
 }
 
-function handleSaveProfile() {
-  konsultanStore.updateProfile(profileData.value)
-  showToast('Profil konsultan berhasil diperbarui!')
+const isSaving = ref(false)
+
+async function handleSaveProfile() {
+  isSaving.value = true
+  try {
+    await konsultanStore.updateProfile(profileData.value)
+    showToast('Profil konsultan berhasil diperbarui dan tersimpan!')
+  } catch (err: any) {
+    showToast('Profil diperbarui di sesi lokal.')
+  } finally {
+    isSaving.value = false
+  }
 }
 
 // Completeness Computation

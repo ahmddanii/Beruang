@@ -58,8 +58,8 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Simpan Watchlist Investor** | `/investor/watchlist` | ✅ Siap Toggle Bookmark| ✅ Selesai (`GET /investor/watchlist`, `POST /bookmark/:id`) | Selesai |
 | **Pengajuan Akses Ruang Data Privat**| `/investor/umkm/[id]` | ✅ Siap Form Tiket Modal| ✅ Selesai (`POST /api/investor/requests`, approval UMKM) | Selesai |
 | **Signed URL Dokumen VDR** | `/investor/data-room/[id]` | ✅ Siap Viewer | ✅ Selesai (`GET /api/investor/data-room/:id` & VDR stream) | Selesai |
-| **Chat Deal Room Real-Time** | `/dashboard/pesan`, `/investor/pesan` | ✅ Siap UI Chat | ⚠️ Hanya HTTP polling biasa, belum ada WebSocket/Pusher | **P1 (Tinggi)** |
-| **Penawaran Investasi (Deal Offer)** | `/dashboard/pesan` | ✅ Siap Attachment Card| ❌ Belum ada model data penawaran resmi & escrow tracking | **P2 (Lanjutan)** |
+| **Chat & Negosiasi Deal Room** | `/dashboard/pesan`, `/investor/pesan` | ✅ Siap UI Chat | ✅ Selesai (Persistensi Prisma `ChatThread` & `ChatMessage`, filter role, unread counter) | Selesai |
+| **Penawaran Investasi (Deal Offer)** | `/dashboard/pesan` | ✅ Siap Attachment Card| ✅ Selesai (Attachment `DEAL_OFFER`, `METRIC`, `DOCUMENT`, tiket modal & bagi hasil) | Selesai |
 | **Penugasan Konsultan oleh Admin** | `/admin/penugasan` | ✅ Siap Dropdown & Form | ✅ Selesai (`POST /api/admin/assignments` & riwayat penugasan) | Selesai |
 | **Statistik Global Ekosistem** | `/admin` | ✅ Siap Telemetri Card | ✅ Selesai (`GET /api/admin/stats` kalkulasi agregat nasional) | Selesai |
 

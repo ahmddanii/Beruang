@@ -44,14 +44,14 @@ Berdasarkan pengujian langsung terhadap 35+ rute endpoint pada backend live:
 | **Onboarding UMKM** | `/onboarding` | ✅ Siap (Wizard) | ✅ Selesai (`POST /api/onboarding/umkm` & relasi bank/NIB/NPWP) | Selesai |
 | **Onboarding Konsultan & Investor**| `/onboarding` | ✅ Siap | ✅ Selesai (`POST /api/onboarding/consultant` & `/investor`) | Selesai |
 | **Buku Kas Harian (Mutasi POS)** | `/dashboard/progres` | ✅ Siap | ✅ Terhubung (`GET & POST /finances/daily`) | Selesai |
-| **Kalkulasi Otomatis Saldo Kas** | `/dashboard/progres` | ✅ Siap | ⚠️ Saldo & margin belum dihitung ulang otomatis di DB | **P0 (Kritis)** |
-| **Upload Bukti Kas & Rekening Koran** | `/dashboard/progres` | ✅ Siap Modal & Form | ❌ Belum ada penyimpanan berkas fisik (S3/Supabase) | **P0 (Kritis)** |
-| **Virtual Data Room (VDR) Dokumen**| `/dashboard/profile` | ✅ Siap Dokumen List | ❌ **404 Not Found** (Saat ini pakai `localStorage`) | **P0 (Kritis)** |
-| **Bukti Langkah Aksi (Evidence)** | `/dashboard/rencana-aksi` | ✅ Siap Upload & View | ⚠️ Tersimpan di memori browser blob/base64 | **P1 (Tinggi)** |
-| **Permintaan Bimbingan Konsultan** | `/konsultan/request` | ✅ Siap UI Terima/Tolak | ❌ **404 Not Found** (Saat ini mutasi state Pinia saja) | **P0 (Kritis)** |
-| **Validasi Kas Bulanan Konsultan** | `/konsultan/validasi` | ✅ Siap Form Verifikasi | ⚠️ Backend return `[]`, aksi belum update status DB | **P0 (Kritis)** |
-| **Input Scoring Radar 5 Aspek** | `/konsultan/klien/[id]/penilaian`| ✅ Siap Radar Chart | ❌ Belum ada endpoint konsultan mengedit skor klien | **P0 (Kritis)** |
-| **Penerbitan Sertifikat Pendanaan** | `/konsultan/klien/[id]/sertifikasi`| ✅ Siap Generator PDF | ❌ Belum ada endpoint resmi penerbitan lisensi/sertifikat | **P1 (Tinggi)** |
+| **Kalkulasi Otomatis Saldo Kas** | `/dashboard/progres` | ✅ Siap | ✅ Selesai (`GET /finances/summary` agregator kas DB) | Selesai |
+| **Upload Bukti Kas & Rekening Koran** | `/dashboard/progres` | ✅ Siap Modal & Form | ✅ Selesai (Multer storage berkas fisik PDF/Excel) | Selesai |
+| **Virtual Data Room (VDR) Dokumen**| `/dashboard/profile` | ✅ Siap Dokumen List | ✅ Selesai (`GET, POST, DELETE /vdr/documents`) | Selesai |
+| **Bukti Langkah Aksi (Evidence)** | `/dashboard/rencana-aksi` | ✅ Siap Upload & View | ✅ Selesai (Tersimpan di Multer & URL DB) | Selesai |
+| **Permintaan Bimbingan Konsultan** | `/konsultan/request` | ✅ Siap UI Terima/Tolak | ✅ Selesai (`GET & POST /consultant/requests`) | Selesai |
+| **Validasi Kas Bulanan Konsultan** | `/konsultan/validasi` | ✅ Siap Form Verifikasi | ✅ Selesai (`GET /validations` & `POST /verify`) | Selesai |
+| **Input Scoring Radar 5 Aspek** | `/konsultan/klien/[id]/penilaian`| ✅ Siap Radar Chart | ✅ Selesai (`PUT /consultant/clients/:id/assessment`) | Selesai |
+| **Penerbitan Sertifikat Pendanaan** | `/konsultan/klien/[id]/sertifikasi`| ✅ Siap Generator PDF | ✅ Selesai (`POST /consultant/clients/:id/certify`) | Selesai |
 | **Kontrak Perjanjian Konsultan** | `/konsultan/klien/perjanjian/[id]`| ✅ Siap Draft & TTD | ❌ Belum ada tabel & endpoint penyimpanan kontrak MoU | **P1 (Tinggi)** |
 | **AI Anomaly Detection (Gemini)** | `/konsultan/alert` | ✅ Siap UI Alert Card | ❌ Belum ada worker pembanding rasio HPP & trigger AI | **P1 (Tinggi)** |
 | **Katalog Investor Marketplace** | `/investor` | ✅ Siap Social Feed | ✅ Selesai (`GET /api/investor/marketplace` query DB & filter) | Selesai |

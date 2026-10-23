@@ -2296,7 +2296,8 @@ async function handleSaveMonthlyReport() {
       cashBalance,
       proofDocumentName: uploadReportForm.value.fileName || `Laporan_Kas_${uploadReportForm.value.month}_${uploadReportForm.value.year}.pdf`,
       proofDocumentSize: uploadReportForm.value.fileSize || '1.8 MB',
-      notes: uploadReportForm.value.notes
+      notes: uploadReportForm.value.notes,
+      rawFile: uploadReportForm.value.file
     })
 
     isUploadMonthlyModalOpen.value = false
@@ -2323,7 +2324,11 @@ async function onRowFileSelected(event: Event) {
   await umkmStore.uploadMonthlyReportFile(
     selectedRecForRowUpload.value.month,
     selectedRecForRowUpload.value.year,
-    file
+    {
+      name: file.name,
+      size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+      rawFile: file
+    }
   )
 
   showNotification(`Berkas bukti laporan ${selectedRecForRowUpload.value.month} ${selectedRecForRowUpload.value.year} berhasil diunggah!`)
@@ -2336,7 +2341,19 @@ async function onRowFileSelected(event: Event) {
 function handleDownloadMonthlyProof(rec: any) {
   const fileName = rec.proofDocumentName || `Laporan_Kas_${rec.month}_${rec.year}.pdf`
   showNotification(`Mengunduh berkas bukti ${fileName}...`)
-  
+
+  // Jika memiliki backend ID atau proofDocumentUrl di server, unduh langsung
+  if (rec.id) {
+    const downloadUrl = `/api/proxy/finances/monthly/${rec.id}/download`
+    const link = document.createElement('a')
+    link.href = downloadUrl
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    return
+  }
+
   const store = umkmStore.profile.businessName || 'Kopi Senja Nusantara'
   const sections = [
     {

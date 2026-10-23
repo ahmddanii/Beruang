@@ -1479,21 +1479,32 @@ const reportDownloader = useReportDownloader()
 function handleDownloadLegalDoc(doc: any) {
   if (!doc) return
   triggerToast(`Mengunduh berkas ${doc.title}...`)
+
+  if (doc.file?.downloadUrl) {
+    const link = document.createElement('a')
+    link.href = doc.file.downloadUrl
+    link.download = doc.file.name || `${doc.title}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    return
+  }
+
   reportDownloader.downloadLegalDoc({
     title: doc.title,
     subtitle: doc.subtitle,
     file: doc.file,
-    storeName: form.value.businessName || 'Kopi Senja Nusantara'
+    storeName: formProfile.name || 'Kopi Senja Nusantara'
   })
 }
 
-function onDocFileSelected(event: Event) {
+async function onDocFileSelected(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file || !currentUploadDocId.value) return
 
-  if (file.size > 10 * 1024 * 1024) {
-    alert('Ukuran berkas melebihi batas 10 MB. Silakan kompresi berkas terlebih dahulu.')
+  if (file.size > 15 * 1024 * 1024) {
+    alert('Ukuran berkas melebihi batas 15 MB. Silakan kompresi berkas terlebih dahulu.')
     return
   }
 
@@ -1504,7 +1515,7 @@ function onDocFileSelected(event: Event) {
       : `${Math.round(file.size / 1024)} KB`
 
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       const dataUrl = e.target?.result as string
       targetDoc.file = {
         name: file.name,
@@ -1515,18 +1526,48 @@ function onDocFileSelected(event: Event) {
       }
       saveDocsToStorage()
       triggerToast(`Berkas ${targetDoc.title} berhasil diunggah!`)
+
+      // Kirim multipart/form-data ke backend VDR
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('name', targetDoc.title)
+        formData.append('category', targetDoc.categoryBadge || 'Legalitas')
+
+        const res = await useApi<any>('/vdr/documents', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (res.data?.id) {
+          (targetDoc.file as any).backendId = res.data.id
+          ;(targetDoc.file as any).downloadUrl = `/api/proxy/vdr/documents/${res.data.id}/download`
+          saveDocsToStorage()
+        }
+      } catch (uploadErr: any) {
+        console.warn('Gagal upload berkas ke endpoint VDR server:', uploadErr?.message)
+      }
     }
     reader.readAsDataURL(file)
   }
   currentUploadDocId.value = null
 }
 
-function removeDocument(docId: string) {
+async function removeDocument(docId: string) {
   const targetDoc = legalDocuments.value.find(d => d.id === docId)
   if (targetDoc) {
+    const backendId = (targetDoc.file as any)?.backendId
     targetDoc.file = null
     saveDocsToStorage()
     triggerToast(`Berkas ${targetDoc.title} berhasil dihapus.`)
+
+    if (backendId) {
+      try {
+        await useApi(`/vdr/documents/${backendId}`, { method: 'DELETE' })
+      } catch (e: any) {
+        console.warn('Gagal hapus berkas di backend VDR:', e?.message)
+      }
+    }
   }
 }
 
@@ -1540,7 +1581,7 @@ function saveDocsToStorage() {
   }
 }
 
-function initDocsFromStorage() {
+async function initDocsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
       const saved = localStorage.getItem('umkm_data_room_docs')
@@ -1553,6 +1594,31 @@ function initDocsFromStorage() {
     } catch (e) {
       // ignore
     }
+  }
+
+  // Sinkronkan dokumen dari live backend VDR
+  try {
+    const res = await useApi<any[]>('/vdr/documents')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      res.data.forEach((serverDoc) => {
+        const match = legalDocuments.value.find(
+          d => d.title.toLowerCase().includes(serverDoc.name.toLowerCase()) ||
+               serverDoc.name.toLowerCase().includes(d.title.toLowerCase())
+        )
+        if (match) {
+          match.file = {
+            name: serverDoc.name,
+            size: serverDoc.size || '1.5 MB',
+            uploadedAt: new Date(serverDoc.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+            isVerified: true,
+            backendId: serverDoc.id,
+            downloadUrl: `/api/proxy/vdr/documents/${serverDoc.id}/download`
+          } as any
+        }
+      })
+    }
+  } catch (err: any) {
+    console.warn('Gagal mengambil daftar dokumen VDR live:', err?.message)
   }
 }
 

@@ -2,3 +2,13 @@ node_modules/
 dist/
 .env
 *.log
+prisma/dev.db
+prisma/dev.db-journal
+uploads/vdr/*
+!uploads/vdr/.gitkeep
+uploads/reports/*
+!uploads/reports/.gitkeep
+uploads/receipts/*
+!uploads/receipts/.gitkeep
+uploads/avatars/*
+!uploads/avatars/.gitkeep

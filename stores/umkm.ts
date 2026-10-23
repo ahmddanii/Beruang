@@ -862,7 +862,16 @@ export const useUmkmStore = defineStore('umkm', {
      * POST /api/umkm/monthly-reports atau /finances/monthly
      * Menyimpan dan memperbarui rekapitulasi laporan bulanan beserta file bukti
      */
-    async addMonthlyProgress(record: Partial<MonthlyRecord> & { month: string; year: number; omzet: number; hpp: number; opex: number }) {
+    async addMonthlyProgress(
+      record: Partial<MonthlyRecord> & {
+        month: string
+        year: number
+        omzet: number
+        hpp: number
+        opex: number
+        rawFile?: File | null
+      }
+    ) {
       const netProfit = record.netProfit !== undefined ? record.netProfit : (record.omzet - record.hpp - record.opex)
       const cashBalance = record.cashBalance !== undefined ? record.cashBalance : (this.financeSummary.cashBalance + netProfit)
 
@@ -876,8 +885,8 @@ export const useUmkmStore = defineStore('umkm', {
         netProfit,
         cashBalance,
         proofDocumentUrl: record.proofDocumentUrl || '',
-        proofDocumentName: record.proofDocumentName || `Laporan_Kas_${record.month}_${record.year}.pdf`,
-        proofDocumentSize: record.proofDocumentSize || '2.0 MB',
+        proofDocumentName: record.proofDocumentName || (record.rawFile ? record.rawFile.name : `Laporan_Kas_${record.month}_${record.year}.pdf`),
+        proofDocumentSize: record.proofDocumentSize || (record.rawFile ? `${(record.rawFile.size / (1024 * 1024)).toFixed(1)} MB` : '2.0 MB'),
         uploadedAt: record.uploadedAt || new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
         notes: record.notes || '',
         status: record.status || 'PENDING'
@@ -909,10 +918,29 @@ export const useUmkmStore = defineStore('umkm', {
       }
 
       try {
-        await useApi('/finances/monthly', {
+        let bodyPayload: any = newRec
+        if (record.rawFile instanceof File) {
+          const formData = new FormData()
+          formData.append('file', record.rawFile)
+          formData.append('month', String(newRec.month))
+          formData.append('year', String(newRec.year))
+          formData.append('omzet', String(newRec.omzet))
+          formData.append('hpp', String(newRec.hpp))
+          formData.append('opex', String(newRec.opex))
+          formData.append('loss', String(newRec.loss || 0))
+          if (newRec.notes) formData.append('notes', newRec.notes)
+          bodyPayload = formData
+        }
+
+        const res = await useApi<any>('/finances/monthly', {
           method: 'POST',
-          body: newRec
+          body: bodyPayload
         })
+
+        if (res.data?.proofDocumentUrl) {
+          newRec.proofDocumentUrl = res.data.proofDocumentUrl
+          if (res.data.id) (newRec as any).id = res.data.id
+        }
       } catch (err: any) {
         console.warn('Gagal kirim laporan bulanan ke backend:', err?.message)
       }
@@ -923,7 +951,7 @@ export const useUmkmStore = defineStore('umkm', {
     /**
      * Upload berkas bukti laporan untuk bulan yang sudah ada
      */
-    async uploadMonthlyReportFile(month: string, year: number, file: { name: string; size: string; dataUrl?: string }) {
+    async uploadMonthlyReportFile(month: string, year: number, file: { name: string; size: string; dataUrl?: string; rawFile?: File }) {
       const target = this.monthlyRecords.find(r => r.month.toLowerCase() === month.toLowerCase() && r.year === year)
       const nowStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
       if (target) {
@@ -939,6 +967,28 @@ export const useUmkmStore = defineStore('umkm', {
           localStorage.setItem('umkm_monthly_records', JSON.stringify(this.monthlyRecords))
         } catch (e) {
           console.warn('Gagal simpan file laporan ke localStorage', e)
+        }
+      }
+
+      if (file.rawFile instanceof File && target) {
+        try {
+          const formData = new FormData()
+          formData.append('file', file.rawFile)
+          formData.append('month', String(target.month))
+          formData.append('year', String(target.year))
+          formData.append('omzet', String(target.omzet))
+          formData.append('hpp', String(target.hpp))
+          formData.append('opex', String(target.opex))
+
+          const res = await useApi<any>('/finances/monthly', {
+            method: 'POST',
+            body: formData
+          })
+          if (res.data?.proofDocumentUrl) {
+            target.proofDocumentUrl = res.data.proofDocumentUrl
+          }
+        } catch (e: any) {
+          console.warn('Gagal upload file bukti laporan ke backend:', e?.message)
         }
       }
     },

@@ -169,10 +169,15 @@ router.post("/assignments", optionalAuth, async (req: AuthenticatedRequest, res:
 
     // Cari profil konsultan
     let consultant = null;
-    if (consultantId) {
+    let targetConsultantId = consultantId;
+    if (consultantId === "1") targetConsultantId = "cons-prof-01";
+    else if (consultantId === "2") targetConsultantId = "cons-prof-02";
+    else if (consultantId === "3") targetConsultantId = "cons-prof-03";
+
+    if (targetConsultantId) {
       consultant = await prisma.consultantProfile.findFirst({
         where: {
-          OR: [{ id: consultantId }, { userId: consultantId }],
+          OR: [{ id: targetConsultantId }, { userId: targetConsultantId }],
         },
         include: { user: true },
       });
@@ -219,22 +224,31 @@ router.post("/assignments", optionalAuth, async (req: AuthenticatedRequest, res:
       },
     });
 
-    // Kirim notifikasi ke UMKM
+    // 1. Dispatch notifikasi terpadu ke UMKM
     if (biz.userId) {
       await prisma.notification.create({
         data: {
           userId: biz.userId,
           title: "Konsultan Pendamping Resmi Ditugaskan",
-          message: `Admin telah menugaskan ${consultant.user.name} sebagai konsultan pendamping tokomu. Jadwal pendampingan pertama segera dimulai.`,
+          message: `Admin telah menugaskan ${consultant.user.name} (${consultant.firmName}) sebagai konsultan pendamping tokomu. Target penyusunan action plan: ${Number(slaDays) || 7} hari kerja.`,
           category: "KONSULTAN",
           priority: "HIGH",
           link: "/dashboard/konsultan",
           actionLabel: "Lihat Profil Konsultan",
+          roleTarget: "UMKM",
+          senderName: "Administrator Ekosistem Beruang",
+          actionDetail: "menetapkan konsultan pendamping resmi",
+          quoteSnippet: `"Admin menetapkan SLA pendampingan awal selama ${Number(slaDays) || 7} hari kerja."`,
+          avatar: consultant.user.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=faces",
+          badgeCount: 1,
+          iconType: "verified",
+          sectionGroup: "today",
+          isRead: false,
         },
       });
     }
 
-    // Kirim notifikasi ke Konsultan
+    // 2. Dispatch notifikasi terpadu ke Konsultan
     await prisma.notification.create({
       data: {
         userId: consultant.userId,
@@ -244,6 +258,15 @@ router.post("/assignments", optionalAuth, async (req: AuthenticatedRequest, res:
         priority: "HIGH",
         link: "/konsultan/klien",
         actionLabel: "Buka Ruang Klien",
+        roleTarget: "CONSULTANT",
+        senderName: "Administrator Ekosistem Beruang",
+        actionDetail: `menugaskan UMKM binaan baru: ${biz.brand || biz.name}`,
+        quoteSnippet: `"${biz.sector} • ${biz.city || 'Indonesia'} • Catatan: ${notes || 'Fokus pada standardisasi pembukuan kas & audit HPP.'}"`,
+        avatar: "/images/default-store-banner.jpg",
+        badgeCount: 1,
+        iconType: "deal",
+        sectionGroup: "today",
+        isRead: false,
       },
     });
 

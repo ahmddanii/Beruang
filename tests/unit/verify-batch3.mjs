@@ -26,7 +26,7 @@ const pesanContent = fs.readFileSync('pages/dashboard/pesan.vue', 'utf8')
 // Check meta hideHeader
 assert.ok(pesanContent.includes("hideHeader: true"), 'pesan.vue should have hideHeader: true')
 // Check 1-row header
-assert.ok(pesanContent.includes("Pesan Diskusi"), 'pesan.vue should have Pesan Diskusi title')
+assert.ok(pesanContent.includes("Pesan"), 'pesan.vue should have Pesan title')
 assert.ok(pesanContent.includes("Ruang Modal"), 'pesan.vue should have Ruang Modal action button')
 // Check components and structure
 assert.ok(pesanContent.includes("Pesan Masuk Investor"), 'pesan.vue should have threads sidebar')

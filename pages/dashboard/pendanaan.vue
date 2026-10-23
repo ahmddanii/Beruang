@@ -214,7 +214,11 @@
       <div class="col-span-12 lg:col-span-4 space-y-5">
         <!-- 1. Advisor Card (Dra. Maya Suryani) -->
         <div class="card-tactile-gopay rounded-[20px] p-6 space-y-4 bg-white dark:bg-[#13161F]">
-          <div class="flex items-center gap-3.5 pb-3 border-b border-neutral-100 dark:border-neutral-800">
+          <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white">
+            Konsultan Pendampingmu
+          </h4>
+
+          <div class="flex items-center gap-3.5">
             <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 border-2 border-white dark:border-neutral-700 shadow-2xs shrink-0">
               <img
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
@@ -223,19 +227,13 @@
               />
             </div>
             <div>
-              <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Konsultan Pendampingmu</span>
-              <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white leading-tight mt-0.5">
+              <span class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white leading-tight block">
                 {{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}
-              </h4>
-              <p class="text-xs text-neutral-500 dark:text-neutral-400">
+              </span>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
                 Advisor Kurasi Finansial & Legalitas
               </p>
             </div>
-          </div>
-
-          <!-- Kurator Personal Message -->
-          <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-800/40 border border-neutral-200/60 dark:border-neutral-800 text-xs font-sans text-neutral-600 dark:text-neutral-300 leading-relaxed italic">
-            "Fikri, tokomu sudah memenuhi {{ completedTasksCount }} tugas utama dengan sangat baik. Ajukan peninjauan sekarang agar kita bisa jadwalkan sesi final dan menerbitkan sertifikasi Grade A untuk tokomu!"
           </div>
 
           <NuxtLink

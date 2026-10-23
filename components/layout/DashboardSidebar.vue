@@ -617,7 +617,7 @@ const navigationSections = computed<NavSection[]>(() => {
           { to: '/dashboard/pendanaan', label: 'Cari Modal', icon: Award01Icon },
           {
             to: '/dashboard/pesan',
-            label: 'Pesan Diskusi',
+            label: 'Pesan',
             icon: Message01Icon,
             badge: chatStore.unreadCountUmkm > 0 ? chatStore.unreadCountUmkm : undefined
           },

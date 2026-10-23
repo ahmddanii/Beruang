@@ -53,36 +53,65 @@
       <!-- Desktop & Mobile Drawer Sidebar (placed below navbar) -->
       <DashboardSidebar class="h-full shrink-0 relative z-20" />
 
-      <!-- Main Dashboard Workspace Content (Centered Dicoding Layout with generous breathing room) -->
+      <!-- Main Dashboard Workspace Content (Centered Dicoding Layout with generous breathing room & Sticky Footer) -->
       <main
         ref="mainContentRef"
         :class="[
-          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D]',
+          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D] flex flex-col',
           isFixedLayout
-            ? 'overflow-hidden flex flex-col h-full py-4 px-4 sm:px-8 lg:px-12 xl:px-16'
-            : 'overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable] px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-16'
+            ? 'overflow-hidden h-full'
+            : 'overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]'
         ]"
       >
-        <div class="w-full max-w-7xl mx-auto flex flex-col flex-1">
-          <!-- Page Header: Title + Icon at the very top of main container -->
+        <div
+          :class="[
+            'flex flex-col flex-1',
+            isFixedLayout ? 'h-full min-h-0' : 'min-h-full justify-between'
+          ]"
+        >
+          <!-- Content Container (max-w-7xl centered) -->
           <div
-            v-if="!route.meta.hideHeader"
-            class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8"
+            :class="[
+              'w-full max-w-7xl mx-auto flex flex-col flex-1',
+              isFixedLayout
+                ? 'min-h-0 px-4 sm:px-8 lg:px-12 xl:px-16 pt-4 pb-2'
+                : 'px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-10'
+            ]"
           >
-            <HugeiconsIcon
-              :icon="currentPageInfo.icon"
-              :size="20"
-              :stroke-width="2.2"
-              class="text-neutral-900 dark:text-white shrink-0"
-            />
-            <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-              {{ currentPageInfo.title }}
-            </h1>
+            <!-- Page Header: Title + Icon at the very top of main container -->
+            <div
+              v-if="!route.meta.hideHeader"
+              class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8"
+            >
+              <HugeiconsIcon
+                :icon="currentPageInfo.icon"
+                :size="20"
+                :stroke-width="2.2"
+                class="text-neutral-900 dark:text-white shrink-0"
+              />
+              <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+                {{ currentPageInfo.title }}
+              </h1>
+            </div>
+
+            <!-- Page Slot Content -->
+            <div :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : 'flex-1'">
+              <slot />
+            </div>
           </div>
 
-          <div :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : ''">
-            <slot />
-          </div>
+          <!-- Bottom Footer (Dicoding Style, Sticky at Bottom of Viewport when Content is Short) -->
+          <footer
+            class="w-full shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#0C121D] mt-auto transition-colors font-sans"
+          >
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span>© 2026 Beruang Indonesia</span>
+                <span class="text-neutral-300 dark:text-neutral-700">|</span>
+                <span>Beruang is a trademark of PT Beruang Finansial Indonesia.</span>
+              </div>
+            </div>
+          </footer>
         </div>
       </main>
 

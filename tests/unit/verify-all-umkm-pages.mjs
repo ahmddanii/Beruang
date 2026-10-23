@@ -3,7 +3,7 @@ import assert from 'node:assert'
 
 console.log('=================================================================')
 console.log('RUNNING COMPREHENSIVE AUDIT & VERIFICATION ACROSS ALL UMKM PAGES')
-console.log('Target: Profil Usaha, Rencana Aksi, Cek Kesehatan, Cari Modal, Pesan Diskusi, Notifikasi')
+console.log('Target: Profil Usaha, Rencana Aksi, Cek Kesehatan, Cari Modal, Pesan, Notifikasi')
 console.log('=================================================================\n')
 
 const pages = [
@@ -11,7 +11,7 @@ const pages = [
   { file: 'pages/dashboard/rencana-aksi.vue', name: 'Progress Tugas', title: 'Progress Tugas' },
   { file: 'pages/dashboard/penilaian.vue', name: 'Cek Kesehatan', title: 'Cek Kesehatan' },
   { file: 'pages/dashboard/pendanaan.vue', name: 'Cari Modal', title: 'Cari Modal' },
-  { file: 'pages/dashboard/pesan.vue', name: 'Pesan Diskusi', title: 'Pesan Diskusi' },
+  { file: 'pages/dashboard/pesan.vue', name: 'Pesan', title: 'Pesan' },
   { file: 'pages/dashboard/notifikasi.vue', name: 'Notifikasi', title: 'Notifikasi' }
 ]
 

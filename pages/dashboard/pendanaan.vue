@@ -33,7 +33,12 @@
             Cek Apakah Bisnismu<br class="hidden sm:inline" /> Sudah Layak untuk Funding
           </h2>
           <p class="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mt-2.5 sm:mt-3.5 font-sans leading-relaxed">
-            Tinjau kesehatan kas tokomu dan penuhi syarat kelayakan bersama konsultan kurator <strong>{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</strong> untuk membuka akses permodalan terverifikasi.
+            <template v-if="effectiveConsultantName">
+              Tinjau kesehatan kas tokomu dan penuhi syarat kelayakan bersama konsultan kurator <strong>{{ effectiveConsultantName }}</strong> untuk membuka akses permodalan terverifikasi.
+            </template>
+            <template v-else>
+              Tinjau kesehatan kas tokomu dan penuhi syarat kelayakan bersama kurator terakreditasi untuk membuka akses permodalan usaha terverifikasi.
+            </template>
           </p>
         </template>
 
@@ -43,7 +48,12 @@
             Selamat Bisnis Kamu<br class="hidden sm:inline" /> Sudah Siap untuk Funding!
           </h2>
           <p class="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mt-2.5 sm:mt-3.5 font-sans leading-relaxed">
-            Konsultan kurator <strong>{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</strong> telah mengesahkan seluruh kelayakan tata kelola dan arus kas tokomu dengan predikat <strong>Grade A</strong>.
+            <template v-if="effectiveConsultantName">
+              Konsultan kurator <strong>{{ effectiveConsultantName }}</strong> telah mengesahkan seluruh kelayakan tata kelola dan arus kas tokomu dengan predikat <strong>Grade A</strong>.
+            </template>
+            <template v-else>
+              Kurator independen telah mengesahkan seluruh kelayakan tata kelola dan arus kas tokomu dengan predikat <strong>Grade A</strong>.
+            </template>
           </p>
         </template>
       </div>
@@ -140,7 +150,7 @@
                 Tingkat Kesiapan Pengajuan: <strong class="text-neutral-900 dark:text-white">{{ readinessPercentage }}%</strong>
               </span>
               <span class="text-[11px] font-semibold text-[#00800e] dark:text-[#00C058]">
-                Dikit lagi lolos pendanaan! Yok bisa yok.
+                {{ readinessMotivationalCopy }}
               </span>
             </div>
             <!-- Tactile Progress Bar -->
@@ -153,8 +163,8 @@
           </div>
         </div>
 
-        <!-- 2. Reusable Task Category Cards (Disamakan dengan Progress Tugas ala Gambar 2) -->
-        <div class="space-y-6">
+        <!-- 2. Reusable Task Category Cards / Empty State -->
+        <div v-if="fundingTaskGroups.length > 0" class="space-y-6">
           <BTaskCategoryCard
             v-for="group in fundingTaskGroups"
             :key="group.category"
@@ -165,6 +175,34 @@
             :tasks="group.tasks"
             @action="openTaskEvidence"
           />
+        </div>
+        <div v-else class="card-tactile-gopay rounded-[20px] p-8 text-center space-y-4 bg-white dark:bg-[#13161F]">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-[#00800e] dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-200/60 dark:border-emerald-800/60">
+            <HugeiconsIcon :icon="Task01Icon" :size="28" />
+          </div>
+          <div class="space-y-1.5 max-w-md mx-auto">
+            <h4 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
+              Belum Ada Tugas Kesiapan Aktif
+            </h4>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed font-sans">
+              Tugas dan target perbaikan akan otomatis terbit setelah tokomu melakukan Cek Kesehatan Bisnis pertama atau berdiskusi dengan kurator pendamping.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <NuxtLink
+              to="/dashboard/penilaian"
+              class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#00800e] hover:bg-[#006e0c] text-white text-xs font-semibold shadow-2xs transition-all flex items-center justify-center gap-2"
+            >
+              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" />
+              <span>Mulai Cek Kesehatan Bisnis</span>
+            </NuxtLink>
+            <NuxtLink
+              to="/dashboard/konsultasi"
+              class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-semibold transition-all flex items-center justify-center gap-2"
+            >
+              <span>Lihat Kurator Pendamping</span>
+            </NuxtLink>
+          </div>
         </div>
 
         <!-- 3. Final Submission Action Box -->
@@ -177,52 +215,86 @@
               Kirim berkas tokomu untuk diverifikasi oleh konsultan kurator. Hasil kurasi dan sertifikat resmi akan diterbitkan dalam 1-2 hari kerja.
             </p>
           </div>
-          <div class="w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto shrink-0">
+          <div class="w-full sm:w-auto shrink-0 flex flex-col items-center sm:items-end">
             <BActionButton
               variant="green"
-              custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center shrink-0"
-              title="Kirim Berkas Pengajuan Kelayakan ke Konsultan Kurator"
-              @click="isSubmitModalOpen = true"
+              :disabled="!isEligibleForSubmission"
+              custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              :title="isEligibleForSubmission ? 'Kirim Berkas Pengajuan Kelayakan ke Konsultan Kurator' : 'Selesaikan minimal 75% tugas kesiapan untuk mengajukan peninjauan'"
+              @click="isEligibleForSubmission ? isSubmitModalOpen = true : null"
             >
               Ajukan Peninjauan Sekarang
             </BActionButton>
+            <span v-if="!isEligibleForSubmission" class="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1.5 text-center sm:text-right font-sans">
+              Minimal kesiapan 75% untuk mengajukan kurasi
+            </span>
           </div>
         </div>
       </div>
 
       <!-- RIGHT COLUMN (4 cols): Profil Kurator & Alur Proses -->
       <div class="col-span-12 lg:col-span-4 space-y-5">
-        <!-- 1. Advisor Card (Dra. Maya Suryani) -->
+        <!-- 1. Advisor Card -->
         <div class="card-tactile-gopay rounded-[20px] p-6 space-y-4 bg-white dark:bg-[#13161F]">
           <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white">
             Konsultan Pendampingmu
           </h4>
 
-          <div class="flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 border-2 border-white dark:border-neutral-700 shadow-2xs shrink-0">
-              <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
-                alt="Dra. Maya Suryani, M.M."
-                class="w-full h-full object-cover"
-              />
+          <template v-if="effectiveConsultantName">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 border-2 border-white dark:border-neutral-700 shadow-2xs shrink-0">
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
+                  :alt="effectiveConsultantName"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <span class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white leading-tight block">
+                  {{ effectiveConsultantName }}
+                </span>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  Advisor Kurasi Finansial & Legalitas
+                </p>
+              </div>
             </div>
-            <div>
-              <span class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white leading-tight block">
-                {{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}
-              </span>
-              <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                Advisor Kurasi Finansial & Legalitas
-              </p>
-            </div>
-          </div>
 
-          <NuxtLink
-            to="/dashboard/pesan"
-            class="w-full py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <HugeiconsIcon :icon="Comment01Icon" :size="14" />
-            <span>Diskusi via Pesan</span>
-          </NuxtLink>
+            <NuxtLink
+              to="/dashboard/pesan"
+              class="w-full py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <HugeiconsIcon :icon="Comment01Icon" :size="14" />
+              <span>Diskusi via Pesan</span>
+            </NuxtLink>
+          </template>
+
+          <template v-else>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center shrink-0">
+                  <HugeiconsIcon :icon="UserGroupIcon" :size="20" />
+                </div>
+                <div>
+                  <span class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white leading-tight block">
+                    Belum Memiliki Kurator
+                  </span>
+                  <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                    Tersedia konsultan BNSP
+                  </p>
+                </div>
+              </div>
+              <p class="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed font-sans">
+                Kurator independen akan mendampingi tokomu menata kesehatan kas, rasio HPP, dan kelengkapan data room investor.
+              </p>
+              <NuxtLink
+                to="/dashboard/konsultasi"
+                class="w-full py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-[#00800e] dark:text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border border-emerald-200/60 dark:border-emerald-800/60"
+              >
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" />
+                <span>Pilih Konsultan Pendamping</span>
+              </NuxtLink>
+            </div>
+          </template>
         </div>
 
         <!-- 2. Alur 3 Langkah Menuju Pendanaan -->
@@ -239,7 +311,14 @@
               </div>
               <div class="min-w-0">
                 <span class="font-semibold text-neutral-900 dark:text-white block">Penuhi Syarat & Tugas Kesiapan</span>
-                <span class="text-neutral-500 dark:text-neutral-400 text-[11px] block mt-0.5">Saat ini: {{ completedTasksCount }} dari {{ totalTasksCount }} tugas selesai ({{ readinessPercentage }}%)</span>
+                <span class="text-neutral-500 dark:text-neutral-400 text-[11px] block mt-0.5">
+                  <template v-if="totalTasksCount > 0">
+                    Saat ini: {{ completedTasksCount }} dari {{ totalTasksCount }} tugas selesai ({{ readinessPercentage }}%)
+                  </template>
+                  <template v-else>
+                    Saat ini: Belum ada tugas diselesaikan (0%)
+                  </template>
+                </span>
               </div>
             </div>
 
@@ -294,7 +373,7 @@
           <div class="w-24 h-20 sm:w-32 sm:h-24 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 shrink-0 shadow-2xs">
             <img
               :src="umkmStore.profile.bannerUrl || '/images/default-store-banner.jpg'"
-              :alt="umkmStore.profile.name || 'Kopi Senja Nusantara'"
+              :alt="effectiveBizName"
               class="w-full h-full object-cover"
               @error="(e: any) => { e.target.src = '/images/default-store-banner.jpg' }"
             />
@@ -302,13 +381,13 @@
 
           <div class="space-y-1 sm:space-y-1.5 min-w-0">
             <h3 class="font-poppins font-semibold text-xl sm:text-2xl text-neutral-900 dark:text-white tracking-tight leading-snug">
-              {{ umkmStore.profile.name || 'Kopi Senja Nusantara' }}
+              {{ effectiveBizName }}
             </h3>
             <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-              Pemilik bisnis: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.ownerName || 'Fikri Setiawan' }}</strong>
+              Pemilik bisnis: <strong class="text-neutral-700 dark:text-neutral-200">{{ effectiveOwnerName }}</strong>
             </p>
             <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-              Konsultan: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</strong>
+              Konsultan: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.consultantName || (isDemoUser ? 'Dra. Maya Suryani, M.M.' : 'Belum Ditugaskan') }}</strong>
             </p>
           </div>
         </div>
@@ -325,7 +404,7 @@
 
         <!-- 3. Official Narrative Paragraph -->
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans text-justify">
-          Sertifikasi kelayakan ini diterbitkan resmi oleh platform Beruang sebagai bukti bahwa <strong class="text-neutral-800 dark:text-neutral-100">{{ umkmStore.profile.name || 'Kopi Senja Nusantara' }}</strong> telah memenuhi seluruh kualifikasi fundamental tata kelola keuangan UMKM modern. Evaluasi menyeluruh mencakup kedisiplinan pencatatan kas riil, pemisahan rekening operasional, kepatuhan legalitas dasar, serta kepemilikan margin untung bersih yang sehat dan telah siap menerima penawaran permodalan bagi hasil.
+          Sertifikasi kelayakan ini diterbitkan resmi oleh platform Beruang sebagai bukti bahwa <strong class="text-neutral-800 dark:text-neutral-100">{{ effectiveBizName }}</strong> telah memenuhi seluruh kualifikasi fundamental tata kelola keuangan UMKM modern. Evaluasi menyeluruh mencakup kedisiplinan pencatatan kas riil, pemisahan rekening operasional, kepatuhan legalitas dasar, serta kepemilikan margin untung bersih yang sehat dan telah siap menerima penawaran permodalan bagi hasil.
         </p>
 
         <!-- 4. Detailed Verified Criteria Section -->
@@ -536,7 +615,7 @@
           </div>
           <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
             <span>Konsultan Pendamping:</span>
-            <span>{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</span>
+            <span>{{ effectiveConsultantName || 'Belum Ditugaskan' }}</span>
           </div>
           <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
             <span>Tugas Selesai:</span>
@@ -667,15 +746,38 @@ import {
   CourtLawIcon,
   Package01Icon,
   UserGroupIcon,
-  Comment01Icon
+  Comment01Icon,
+  Task01Icon
 } from '@hugeicons/core-free-icons'
+
+import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
   layout: 'dashboard',
   hideHeader: true
 })
 
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+const isDemoUser = computed(() => {
+  const email = authStore.currentUser?.email?.toLowerCase() || ''
+  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
+})
+
+const effectiveConsultantName = computed(() => {
+  if (umkmStore.profile.consultantName) return umkmStore.profile.consultantName
+  if (isDemoUser.value) return 'Dra. Maya Suryani, M.M.'
+  return null
+})
+
+const effectiveBizName = computed(() => {
+  return umkmStore.profile.name || authStore.currentUser?.businessName || (isDemoUser.value ? 'Kopi Senja Nusantara' : 'Usaha Saya')
+})
+
+const effectiveOwnerName = computed(() => {
+  return umkmStore.profile.ownerName || authStore.currentUser?.name || (isDemoUser.value ? 'Fikri Setiawan' : 'Pemilik Usaha')
+})
 
 // State: Tahap Pengajuan (ketika user mau mengajukan / meninjau kelayakan) vs Sudah Siap (Lolos Sertifikasi)
 // Default ke 'PENGAJUAN' sesuai alur user yang meninjau kelayakan usaha
@@ -713,8 +815,30 @@ const completedTasksCount = computed(() => {
 })
 
 const readinessPercentage = computed(() => {
-  if (totalTasksCount.value === 0) return 80
-  return Math.round((completedTasksCount.value / totalTasksCount.value) * 100)
+  if (totalTasksCount.value === 0) return 0
+  return Math.min(100, Math.max(0, Math.round((completedTasksCount.value / totalTasksCount.value) * 100)))
+})
+
+const readinessMotivationalCopy = computed(() => {
+  const pct = readinessPercentage.value
+  const total = totalTasksCount.value
+  if (total === 0 || pct === 0) {
+    return 'Mulai selesaikan tugas kesiapan untuk membuka akses modal usahamu.'
+  }
+  if (pct < 50) {
+    return 'Langkah awal yang baik! Selesaikan tugas prioritas tokomu.'
+  }
+  if (pct < 75) {
+    return 'Kian dekat! Lengkapi sisa syarat untuk kurasi kelayakan modal.'
+  }
+  if (pct < 100) {
+    return 'Dikit lagi lolos pendanaan! Yok bisa yok.'
+  }
+  return 'Lolos 100%! Seluruh kriteria kesiapan pendanaan telah terpenuhi.'
+})
+
+const isEligibleForSubmission = computed(() => {
+  return readinessPercentage.value >= 75 && totalTasksCount.value > 0
 })
 
 // Evidence Modal & Storage
@@ -847,7 +971,7 @@ function handleCopyLink() {
 }
 
 function handleWhatsApp() {
-  const text = `Lihat profil usaha ${umkmStore.profile.name || 'Kopi Senja Nusantara'} di platform Beruang:\n${effectiveShareUrl.value}`
+  const text = `Lihat profil usaha ${effectiveBizName.value} di platform Beruang:\n${effectiveShareUrl.value}`
   const targetUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`
   window.open(targetUrl, '_blank')
 }
@@ -869,8 +993,8 @@ function handleLinkedIn() {
 }
 
 function handleGmail() {
-  const subject = `Profil Usaha: ${umkmStore.profile.name || 'Kopi Senja Nusantara'} - Beruang`
-  const body = `Halo,\n\nSilakan cek profil usaha ${umkmStore.profile.name || 'Kopi Senja Nusantara'} di platform Beruang melalui tautan berikut:\n${effectiveShareUrl.value}`
+  const subject = `Profil Usaha: ${effectiveBizName.value} - Beruang`
+  const body = `Halo,\n\nSilakan cek profil usaha ${effectiveBizName.value} di platform Beruang melalui tautan berikut:\n${effectiveShareUrl.value}`
   const targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   window.open(targetUrl, '_blank')
 }
@@ -886,8 +1010,11 @@ let gsapCtx: gsap.Context | null = null
 
 onMounted(async () => {
   try {
-    await umkmStore.fetchFundingGate()
-    await umkmStore.fetchProfile()
+    await Promise.allSettled([
+      umkmStore.fetchTasks(),
+      umkmStore.fetchProfile(),
+      umkmStore.fetchFundingGate()
+    ])
     if (umkmStore.fundingGate?.isReadyForFunding || umkmStore.profile.fundingStatus === 'READY_FOR_FUNDING') {
       currentFundingStage.value = 'READY'
     }

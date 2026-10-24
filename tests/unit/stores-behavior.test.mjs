@@ -70,4 +70,19 @@ describe('Frontend Stores Architecture & Logic Verification', () => {
     assert.ok(content.includes('confirmDeleteBranch'), 'Must have confirmDeleteBranch handler')
     assert.ok(content.includes('outletsCount'), 'Must keep outletsCount synchronized with branch count')
   })
+
+  it('RBAC Policy: Only fikri@kopisenja.id and ADMIN accounts can switch role, ordinary users cannot', () => {
+    const authContent = fs.readFileSync('stores/auth.ts', 'utf8')
+    assert.ok(authContent.includes('canSwitchRole:'), 'stores/auth.ts must define canSwitchRole getter')
+    assert.ok(authContent.includes("email === 'fikri@kopisenja.id'"), 'fikri@kopisenja.id must be allowed')
+    assert.ok(authContent.includes("role === 'ADMIN'"), 'ADMIN role must be allowed')
+    assert.ok(authContent.includes('!this.canSwitchRole'), 'setRole action must guard unauthorized users')
+
+    const dropdownContent = fs.readFileSync('components/layout/NavbarProfileDropdown.vue', 'utf8')
+    assert.ok(dropdownContent.includes('v-if="authStore.canSwitchRole"'), 'NavbarProfileDropdown must hide RBAC switcher for ordinary accounts')
+    assert.ok(dropdownContent.includes('if (!authStore.canSwitchRole)'), 'handleSwitchRole must block switching if not permitted')
+
+    const middlewareContent = fs.readFileSync('middleware/auth.global.ts', 'utf8')
+    assert.ok(middlewareContent.includes('!authStore.canSwitchRole'), 'auth.global.ts middleware must enforce role separation for ordinary users')
+  })
 })

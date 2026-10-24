@@ -40,6 +40,34 @@
 
     <!-- 5. Category Task Containers (AWS AI Academy Reference Layout) -->
     <div id="milestones-container" class="space-y-6 min-h-[420px]">
+      <!-- Empty State if no tasks -->
+      <div
+        v-if="filteredCategoryGroups.length === 0"
+        class="card-tactile-gopay rounded-2xl p-8 sm:p-12 text-center flex flex-col items-center justify-center space-y-3 bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800"
+      >
+        <div class="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 flex items-center justify-center">
+          <HugeiconsIcon :icon="Task01Icon" :size="24" />
+        </div>
+        <div class="space-y-1 max-w-md">
+          <h3 class="text-base sm:text-lg font-bold font-poppins text-neutral-900 dark:text-white">
+            Belum Ada Tugas Rencana Aksi
+          </h3>
+          <p class="text-xs sm:text-sm font-sans text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            Konsultan pendamping tokomu akan merumuskan tugas perbaikan operasional dan finansial setelah evaluasi kesehatan tokomu dimulai.
+          </p>
+        </div>
+        <div class="pt-2">
+          <BActionButton
+            variant="green"
+            :huge-icon="Comment01Icon"
+            to="/dashboard/pesan"
+            custom-class="px-5 py-2.5 text-xs sm:text-sm font-semibold justify-center"
+          >
+            Chat Konsultan Sekarang
+          </BActionButton>
+        </div>
+      </div>
+
       <!-- Category Card Container via Reusable BTaskCategoryCard -->
       <BTaskCategoryCard
         v-for="group in filteredCategoryGroups"
@@ -236,15 +264,24 @@ import {
   CheckmarkBadge01Icon,
   Clock01Icon,
   FileValidationIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  Comment01Icon
 } from '@hugeicons/core-free-icons'
+import { useAuthStore } from '~/stores/auth'
+import { useUmkmStore } from '~/stores/umkm'
 
 definePageMeta({
   layout: 'dashboard',
   hideHeader: true
 })
 
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+const isDemoUser = computed(() => {
+  const email = authStore.currentUser?.email?.toLowerCase() || ''
+  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
+})
 
 // Task Counts
 const completedTasksCount = computed(() => {
@@ -338,7 +375,11 @@ const defaultTaskEvidence: Record<string, any> = {
   }
 }
 
-const taskEvidenceMap = ref<Record<string, any>>({ ...defaultTaskEvidence })
+const taskEvidenceMap = ref<Record<string, any>>(isDemoUser.value ? { ...defaultTaskEvidence } : {})
+
+onMounted(async () => {
+  await umkmStore.fetchTasks()
+})
 
 const selectedTaskEvidence = computed(() => {
   if (!selectedTaskForPreview.value) return null

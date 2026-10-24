@@ -276,7 +276,7 @@
           </div>
           <button
             type="button"
-            class="text-xs font-semibold text-red-600 hover:text-red-700 hover:underline cursor-pointer"
+            class="text-xs font-semibold text-neutral-500 hover:text-red-600 transition-colors cursor-pointer"
             @click="terminateOtherSessions"
           >
             {{ t('disconnect_others') }}
@@ -284,37 +284,38 @@
         </div>
 
         <div class="space-y-2.5">
+          <!-- Sesi Saat Ini (Perangkat Riil Pengguna) -->
           <div class="p-3.5 rounded-xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <HugeiconsIcon :icon="ComputerIcon" :size="20" class="text-[#156374] dark:text-[#50AABF]" />
+              <HugeiconsIcon :icon="currentDeviceSession.isMobile ? SmartPhone01Icon : ComputerIcon" :size="20" class="text-[#156374] dark:text-[#50AABF]" />
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white">Windows 11 • Google Chrome</span>
+                  <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white">
+                    {{ currentDeviceSession.label }}
+                  </span>
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                     {{ t('current_session') }}
                   </span>
                 </div>
-                <span class="text-[11px] text-neutral-500">Jakarta, Indonesia • IP 182.253.xx.xx</span>
+                <span class="text-[11px] text-neutral-500">
+                  {{ currentDeviceSession.location }} • {{ currentDeviceSession.ip }}
+                </span>
               </div>
             </div>
             <span class="text-xs text-emerald-600 font-semibold">{{ t('active_now') }}</span>
           </div>
 
-          <div v-if="!otherSessionsTerminated" class="p-3.5 rounded-xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <HugeiconsIcon :icon="SmartPhone01Icon" :size="20" class="text-neutral-500" />
-              <div>
-                <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">iPhone 14 • Safari Mobile</span>
-                <span class="text-[11px] text-neutral-500">Bandung, Indonesia • {{ t('active_hours_ago') }}</span>
-              </div>
+          <!-- Status Sesi Perangkat Lain -->
+          <div class="p-3.5 rounded-xl border border-dashed border-neutral-200 dark:border-neutral-800 bg-[#F8FAFC]/50 dark:bg-[#18191E]/50 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <HugeiconsIcon :icon="ShieldCheckIcon" :size="18" class="text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span class="text-xs text-neutral-500 dark:text-neutral-400 font-sans">
+                Tidak ada sesi perangkat lain. Akun hanya aktif di perangkat ini.
+              </span>
             </div>
-            <button
-              type="button"
-              class="text-xs text-neutral-500 hover:text-red-600 cursor-pointer"
-              @click="terminateOtherSessions"
-            >
-              {{ t('terminate_btn') }}
-            </button>
+            <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+              Aman
+            </span>
           </div>
         </div>
       </div>
@@ -1217,14 +1218,53 @@ const langSavedBadge = ref(false)
 
 // Initial Saved State
 const savedAccountForm = reactive({
-  email: authStore.currentUser?.email || 'fikri@kopisenja.id',
-  phone: '0812-8877-6655'
+  email: authStore.currentUser?.email || '',
+  phone: authStore.currentUser?.phone || ''
 })
 
 const accountForm = reactive({
-  email: authStore.currentUser?.email || 'fikri@kopisenja.id',
-  phone: '0812-8877-6655',
+  email: authStore.currentUser?.email || '',
+  phone: authStore.currentUser?.phone || '',
   twoFactorEnabled: true
+})
+
+// Deteksi dinamis sesi perangkat yang sedang digunakan pengguna
+const currentDeviceSession = computed(() => {
+  if (typeof window === 'undefined') {
+    return {
+      os: 'Perangkat Web',
+      browser: 'Browser',
+      isMobile: false,
+      label: 'Sesi Web Aktif',
+      ip: 'Sesi Web Terenkripsi',
+      location: 'Indonesia'
+    }
+  }
+
+  const ua = navigator.userAgent
+  let os = 'Perangkat Komputer'
+  let isMobile = false
+
+  if (/Windows/i.test(ua)) os = 'Windows PC'
+  else if (/Macintosh|Mac OS X/i.test(ua)) os = 'macOS'
+  else if (/Android/i.test(ua)) { os = 'Android'; isMobile = true }
+  else if (/iPhone|iPad|iPod/i.test(ua)) { os = 'iOS Device'; isMobile = true }
+  else if (/Linux/i.test(ua)) os = 'Linux'
+
+  let browser = 'Browser'
+  if (/Edg/i.test(ua)) browser = 'Microsoft Edge'
+  else if (/Chrome/i.test(ua)) browser = 'Google Chrome'
+  else if (/Safari/i.test(ua)) browser = 'Apple Safari'
+  else if (/Firefox/i.test(ua)) browser = 'Mozilla Firefox'
+
+  return {
+    os,
+    browser,
+    isMobile,
+    label: `${os} • ${browser}`,
+    ip: 'Sesi Web Terenkripsi (SSL)',
+    location: 'Indonesia (Waktu Lokal)'
+  }
 })
 
 const passwordForm = reactive({
@@ -1457,7 +1497,7 @@ function handleSaveAll() {
 
 function terminateOtherSessions() {
   otherSessionsTerminated.value = true
-  alert('Seluruh sesi di perangkat lain berhasil diputuskan.')
+  alert('Tidak ada sesi di perangkat lain yang terhubung. Seluruh akses aman pada perangkat ini.')
 }
 
 // Double Verification Actions

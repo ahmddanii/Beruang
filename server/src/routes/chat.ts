@@ -58,8 +58,8 @@ function formatThread(t: any) {
     umkmSector: biz?.sector || "F&B (Coffee & Drinks)",
     umkmCity: biz?.city || "Bandung",
     umkmAvatar: "/images/default-store-banner.jpg",
-    umkmHealthScore: biz?.assessment?.compositeScore || 79,
-    umkmMargin: 48.5,
+    umkmHealthScore: biz?.assessment?.compositeScore || (feId === "umkm-01" ? 79 : 0),
+    umkmMargin: feId === "umkm-01" ? 48.5 : 0,
     investorId: t.investorId || "usr-inv-01",
     investorName: t.investorName || "Hendro Wicaksono",
     investorLembaga: t.investorLembaga || "Nusantara Impact Angel Syndicate",
@@ -83,9 +83,35 @@ function formatThread(t: any) {
  * GET /api/chat/threads
  * Mengambil daftar percakapan aktif antar UMKM dan Investor
  */
-router.get("/threads", optionalAuth, async (_req: AuthenticatedRequest, res: Response) => {
+router.get("/threads", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.json({
+        success: true,
+        message: "Silakan masuk untuk melihat daftar percakapan.",
+        data: [],
+      });
+    }
+
+    let whereClause: any = {};
+    if (req.user.role === "UMKM") {
+      const isDemo = req.user.email?.toLowerCase() === "fikri@kopisenja.id" || req.user.id === "usr-demo-01";
+      if (!isDemo) {
+        const biz = await prisma.businessProfile.findFirst({ where: { userId: req.user.id } });
+        if (biz) {
+          whereClause = { businessId: biz.id };
+        } else {
+          return res.json({
+            success: true,
+            message: "Daftar percakapan berhasil dimuat.",
+            data: [],
+          });
+        }
+      }
+    }
+
     const threads = await prisma.chatThread.findMany({
+      where: whereClause,
       include: {
         business: {
           include: {

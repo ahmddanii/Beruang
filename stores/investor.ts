@@ -23,6 +23,8 @@ export interface MarketplaceUmkm {
   postAspectRatio?: '3:4' | '1:1'
   isPlatformPost?: boolean
   platformCategory?: string
+  authorUserId?: string
+  authorEmail?: string
   tags: string[]
   accessStatus: 'NONE' | 'PENDING' | 'APPROVED' | 'REJECTED'
   bookmarked: boolean
@@ -606,6 +608,8 @@ export const useInvestorStore = defineStore('investor', {
 
     createUmkmPost(payload: {
       umkmRefId?: string
+      authorUserId?: string
+      authorEmail?: string
       name: string
       city: string
       sector: string
@@ -615,6 +619,10 @@ export const useInvestorStore = defineStore('investor', {
       pitchSummary: string
       postImages: string[]
       tags?: string[]
+      marginPercentage?: number
+      growthYoY?: number
+      healthScore?: number
+      certifiedAt?: string
     }): MarketplaceUmkm {
       const cleanImages =
         payload.postImages && payload.postImages.length > 0
@@ -623,25 +631,27 @@ export const useInvestorStore = defineStore('investor', {
 
       const newPost: MarketplaceUmkm = {
         id: `umkm-post-${Date.now()}`,
-        umkmRefId: payload.umkmRefId || 'umkm-01',
+        umkmRefId: payload.umkmRefId || '',
+        authorUserId: payload.authorUserId,
+        authorEmail: payload.authorEmail,
         isCustomPost: true,
-        name: payload.name || 'Kopi Senja Nusantara',
-        code: 'BERU-2026-8841',
-        sector: payload.sector || 'Kuliner & Minuman (F&B)',
-        city: payload.city ? payload.city.split(',')[0]!.trim() : 'Bandung',
-        establishedYear: payload.establishedYear || 2021,
+        name: payload.name || 'Usaha Saya',
+        code: `BERU-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        sector: payload.sector || 'Sektor Usaha',
+        city: payload.city ? payload.city.split(',')[0]!.trim() : 'Kota',
+        establishedYear: payload.establishedYear || new Date().getFullYear(),
         postedAt: 'Baru saja',
-        fundingTarget: payload.fundingTarget || 250000000,
-        marginPercentage: 43,
-        growthYoY: 32,
-        healthScore: 88,
-        certifiedAt: '24 Okt 2026',
-        consultantName: payload.consultantName || 'Hendra Wijaya, CFA',
+        fundingTarget: payload.fundingTarget || 0,
+        marginPercentage: payload.marginPercentage ?? 0,
+        growthYoY: payload.growthYoY ?? 0,
+        healthScore: payload.healthScore ?? 0,
+        certifiedAt: payload.certifiedAt || 'Belum Terverifikasi',
+        consultantName: payload.consultantName || 'Konsultan Pendamping',
         pitchSummary: payload.pitchSummary.trim(),
         postImageUrl: cleanImages[0]!,
         postImages: cleanImages,
         postAspectRatio: '3:4',
-        tags: payload.tags || ['F&B', 'Ready for Funding', 'Verified'],
+        tags: payload.tags || ['UMKM Terdaftar'],
         accessStatus: 'APPROVED',
         bookmarked: false
       }

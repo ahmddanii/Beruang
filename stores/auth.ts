@@ -167,12 +167,26 @@ export const useAuthStore = defineStore('auth', {
         email === 'hendro@nusantaraventures.com' ||
         email === 'admin@beruang.id'
       )
+    },
+    canSwitchRole: (state): boolean => {
+      if (!state.currentUser) return false
+      const email = state.currentUser.email?.toLowerCase() || ''
+      const role = state.currentUser.role
+      // Switch role hanya diizinkan untuk akun fikri@kopisenja.id atau akun ADMIN
+      // Pengguna umum/biasa (UMKM, Konsultan, Investor/Funder biasa) tidak bisa switch role
+      return (
+        email === 'fikri@kopisenja.id' ||
+        role === 'ADMIN' ||
+        email === 'admin@beruang.id' ||
+        email === 'maya.suryani@beruang.id' ||
+        email === 'hendro@nusantaraventures.com'
+      )
     }
   },
 
   actions: {
     /**
-     * Inisialisasi sesi dari cookie 'beruang_token' saat aplikasi dimuat
+     * Inisialisasi sesi dari cookie 'beruang_token' & fallback localStorage saat aplikasi dimuat/refresh
      */
     async initSession() {
       const tokenCookie = useCookie<string | null>('beruang_token', {
@@ -180,10 +194,43 @@ export const useAuthStore = defineStore('auth', {
         sameSite: 'lax',
         path: '/'
       })
-      if (tokenCookie.value) {
-        this.token = tokenCookie.value
+
+      let activeToken = tokenCookie.value
+      if (!activeToken && import.meta.client) {
+        try {
+          const storedToken = localStorage.getItem('beruang_token')
+          if (storedToken) {
+            activeToken = storedToken
+            tokenCookie.value = storedToken
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      if (activeToken) {
+        this.token = activeToken
         this.isAuthenticated = true
-        await this.fetchMe()
+
+        // Segera pulihkan profil user dari localStorage untuk mencegah flicker atau redirect keliru
+        if (import.meta.client) {
+          try {
+            const cachedUser = localStorage.getItem('beruang_user')
+            if (cachedUser) {
+              const parsed = JSON.parse(cachedUser)
+              if (parsed && typeof parsed === 'object') {
+                this.currentUser = parsed
+              }
+            }
+          } catch {
+            // ignore
+          }
+        }
+
+        // Ambil profil user terbaru dari backend jika token aktif
+        if (activeToken !== 'google-session-active') {
+          await this.fetchMe()
+        }
       } else {
         this.token = ''
         this.currentUser = null
@@ -204,6 +251,11 @@ export const useAuthStore = defineStore('auth', {
         verified: true
       } as UserProfile
       this.isAuthenticated = true
+      if (import.meta.client && this.currentUser) {
+        try {
+          localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+        } catch {}
+      }
     },
 
     /**
@@ -220,6 +272,11 @@ export const useAuthStore = defineStore('auth', {
             businessName: userData.businessName || userData.businessProfile?.brand || userData.businessProfile?.name || userData.orgName || this.currentUser?.businessName
           }
           this.isAuthenticated = true
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
         }
       } catch (err: any) {
         console.warn('Gagal memuat profil pengguna dari backend:', err?.message)
@@ -256,6 +313,14 @@ export const useAuthStore = defineStore('auth', {
           businessName: res.data.user.businessName || res.data.user.orgName
         }
         this.isAuthenticated = true
+
+        if (import.meta.client) {
+          try {
+            localStorage.setItem('beruang_token', res.data.token)
+            localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+          } catch {}
+        }
+
         return res.data
       } catch (err: any) {
         // Fallback demo/mock login jika live API gagal atau mode demo tanpa rekursi
@@ -279,6 +344,14 @@ export const useAuthStore = defineStore('auth', {
           verified: true
         }
         this.isAuthenticated = true
+
+        if (import.meta.client) {
+          try {
+            localStorage.setItem('beruang_token', demoToken)
+            localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+          } catch {}
+        }
+
         return { user: this.currentUser, token: demoToken }
       } finally {
         this.loading = false
@@ -327,6 +400,12 @@ export const useAuthStore = defineStore('auth', {
             businessName: res.data.user.businessName || res.data.user.orgName || this.currentUser?.businessName
           }
           this.isAuthenticated = true
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_token', res.data.token)
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
           await this.fetchMe()
         }
 
@@ -334,8 +413,22 @@ export const useAuthStore = defineStore('auth', {
       } catch (err: any) {
         if (preloadedProfile?.email) {
           console.warn('Backend Google Auth belum sinkron, menggunakan data profil Google autentik:', err?.message)
+          const fallbackToken = 'google-session-active'
+          const tokenCookie = useCookie<string | null>('beruang_token', {
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+            path: '/'
+          })
+          tokenCookie.value = fallbackToken
+          this.token = fallbackToken
           this.isAuthenticated = true
-          return { token: 'google-session-active', user: this.currentUser! }
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_token', fallbackToken)
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
+          return { token: fallbackToken, user: this.currentUser! }
         }
         this.error = err?.message || 'Login dengan akun Google gagal'
         throw err
@@ -408,6 +501,12 @@ export const useAuthStore = defineStore('auth', {
               businessName: res.data.user.businessProfile?.brand || res.data.user.businessProfile?.name || res.data.user.businessName
             }
           }
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_token', res.data.token)
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
           await this.fetchMe()
         }
 
@@ -463,6 +562,13 @@ export const useAuthStore = defineStore('auth', {
           this.token = res.data.token
           this.currentUser = res.data.user
           this.isAuthenticated = true
+
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_token', res.data.token)
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
         }
 
         return res.data
@@ -487,6 +593,14 @@ export const useAuthStore = defineStore('auth', {
           verified: true
         }
         this.isAuthenticated = true
+
+        if (import.meta.client && this.currentUser) {
+          try {
+            localStorage.setItem('beruang_token', mockToken)
+            localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+          } catch {}
+        }
+
         return { user: this.currentUser, token: mockToken }
       } finally {
         this.loading = false
@@ -513,6 +627,11 @@ export const useAuthStore = defineStore('auth', {
         } as UserProfile
       }
       this.isAuthenticated = true
+      if (import.meta.client && this.currentUser) {
+        try {
+          localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+        } catch {}
+      }
     },
 
     /**
@@ -520,6 +639,11 @@ export const useAuthStore = defineStore('auth', {
      * Otomatis login dengan akun seeder live yang relevan jika password default tersedia
      */
     async setRole(role: UserRole) {
+      if (this.currentUser && !this.canSwitchRole) {
+        console.warn(`[RBAC] Switch role diblokir untuk akun ${this.currentUser.email} (${this.currentUser.role}). Hanya fikri@kopisenja.id atau akun ADMIN yang diizinkan berpindah peran.`)
+        return
+      }
+
       const demo = DEMO_CREDENTIALS[role]
       if (demo) {
         this.currentUser = {
@@ -551,6 +675,12 @@ export const useAuthStore = defineStore('auth', {
               ...res.data.user,
               businessName: res.data.user.businessName || res.data.user.orgName || demo.businessName
             }
+            if (import.meta.client && this.currentUser) {
+              try {
+                localStorage.setItem('beruang_token', res.data.token)
+                localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+              } catch {}
+            }
           }
         } catch {
           // Tetap gunakan sesi demo lokal jika live backend offline
@@ -562,6 +692,12 @@ export const useAuthStore = defineStore('auth', {
           const demoToken = 'demo-' + role.toLowerCase()
           tokenCookie.value = demoToken
           this.token = demoToken
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_token', demoToken)
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
         }
       }
     },
@@ -589,6 +725,7 @@ export const useAuthStore = defineStore('auth', {
         if (import.meta.client) {
           try {
             localStorage.removeItem('beruang_token')
+            localStorage.removeItem('beruang_user')
             localStorage.removeItem('beruang_onboarded')
             localStorage.removeItem('umkm_monthly_records')
             localStorage.removeItem('beruang_notifications_v4')

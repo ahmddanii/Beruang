@@ -93,7 +93,7 @@
       </div>
 
       <!-- Quick Actions: Profil & Pengaturan (Akses langsung ke Settings) -->
-      <div class="p-1.5 border-b border-[#E2E8F0] dark:border-neutral-800 space-y-0.5">
+      <div class="p-1.5 space-y-0.5">
         <NuxtLink
           :to="profilePath"
           class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
@@ -113,8 +113,8 @@
         </NuxtLink>
       </div>
 
-      <!-- RBAC Switcher Menu -->
-      <div class="p-2.5">
+      <!-- RBAC Switcher Menu (Hanya aktif untuk fikri@kopisenja.id atau Admin) -->
+      <div v-if="authStore.canSwitchRole" class="p-2.5 border-t border-[#E2E8F0] dark:border-neutral-800/80">
         <div class="px-2 py-1 flex items-center justify-between mb-1">
           <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
             {{ currentLang === 'en' ? 'Switch Role (RBAC Test)' : 'Pindah Peran (Uji RBAC)' }}
@@ -298,6 +298,10 @@ const rolesList: { id: UserRole; name: string; path: string }[] = [
 ]
 
 function handleSwitchRole(newRole: UserRole, targetPath: string) {
+  if (!authStore.canSwitchRole) {
+    console.warn('[RBAC] Switch role diblokir untuk akun biasa.')
+    return
+  }
   authStore.setRole(newRole)
   isOpen.value = false
   router.push(targetPath)

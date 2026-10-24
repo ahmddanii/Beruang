@@ -58,10 +58,10 @@ export async function requireAuth(
 
     next();
   } catch (err: any) {
-    // 2. Fallback untuk demo token jika sedang dalam development
-    if (token.startsWith("demo-") || token.includes("ZUPe7fbd554b")) {
-      const isInvestor = req.originalUrl?.includes("investor") || req.baseUrl?.includes("investor");
-      const isConsultant = req.originalUrl?.includes("consultant") || req.baseUrl?.includes("consultant");
+    // 2. Fallback HANYA untuk token demo eksplisit pada environment development
+    if (token === "demo-token" || token.startsWith("demo-token-")) {
+      const isInvestor = token.includes("investor") || req.originalUrl?.includes("investor") || req.baseUrl?.includes("investor");
+      const isConsultant = token.includes("consultant") || req.originalUrl?.includes("consultant") || req.baseUrl?.includes("consultant");
 
       const targetEmail = isInvestor
         ? "hendro@nusantaraventures.com"
@@ -142,8 +142,8 @@ export async function optionalAuth(
       };
     }
   } catch (err: any) {
-    if (token.startsWith("demo-") || token.includes("ZUPe7fbd554b")) {
-      const isInvestor = req.originalUrl?.includes("investor") || req.baseUrl?.includes("investor");
+    if (token === "demo-token" || token.startsWith("demo-token-")) {
+      const isInvestor = token.includes("investor") || req.originalUrl?.includes("investor") || req.baseUrl?.includes("investor");
       const targetEmail = isInvestor ? "hendro@nusantaraventures.com" : "fikri@kopisenja.id";
       const defaultUser = await prisma.user.findFirst({
         where: { email: targetEmail },

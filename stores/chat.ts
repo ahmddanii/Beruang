@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useApi } from '~/composables/useApi'
+import { useAuthStore } from './auth'
 
 export interface ChatAttachment {
   type: 'METRIC' | 'DOCUMENT' | 'DEAL_OFFER'
@@ -44,11 +45,7 @@ export interface ChatThread {
   online?: boolean
 }
 
-export const useChatStore = defineStore('chat', {
-  state: () => ({
-    activeThreadId: 'thread-01' as string | null,
-    searchQuery: '',
-    threads: [
+export const DEMO_CHAT_THREADS: ChatThread[] = [
       {
         id: 'thread-01',
         umkmId: 'umkm-01',
@@ -161,10 +158,17 @@ export const useChatStore = defineStore('chat', {
             senderRole: 'INVESTOR',
             senderName: 'Dra. Maya Suryani',
             text: 'Maya: Rapor keuangan bulan ini sudah selesai kami validasi.',
+            timestamp: 'Kemarin'
           }
         ]
       }
-    ] as ChatThread[]
+    ]
+
+export const useChatStore = defineStore('chat', {
+  state: () => ({
+    activeThreadId: null as string | null,
+    searchQuery: '',
+    threads: [] as ChatThread[]
   }),
 
   getters: {
@@ -192,6 +196,9 @@ export const useChatStore = defineStore('chat', {
 
   actions: {
     async fetchThreads() {
+      const authStore = useAuthStore()
+      const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+
       try {
         const res = await useApi<ChatThread[]>('/chat/threads')
         if (res.data && Array.isArray(res.data) && res.data.length > 0) {
@@ -199,15 +206,27 @@ export const useChatStore = defineStore('chat', {
             ...t,
             messages: t.messages || []
           }))
-          if (!this.activeThreadId && this.threads.length > 0) {
-            this.activeThreadId = this.threads[0].id
-          }
-          if (this.activeThreadId) {
-            await this.fetchMessages(this.activeThreadId)
-          }
+        } else if (isDemo) {
+          this.threads = [...DEMO_CHAT_THREADS]
+        } else {
+          this.threads = []
+        }
+
+        if (!this.activeThreadId && this.threads.length > 0) {
+          this.activeThreadId = this.threads[0].id
+        } else if (this.threads.length === 0) {
+          this.activeThreadId = null
+        }
+
+        if (this.activeThreadId) {
+          await this.fetchMessages(this.activeThreadId)
         }
       } catch (err: any) {
         console.warn('Gagal memuat daftar obrolan live:', err?.message)
+        if (isDemo && this.threads.length === 0) {
+          this.threads = [...DEMO_CHAT_THREADS]
+          this.activeThreadId = this.threads[0]?.id || null
+        }
       }
     },
 

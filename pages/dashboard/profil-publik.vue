@@ -46,13 +46,13 @@
           <div class="p-3.5 sm:p-4 rounded-2xl bg-neutral-50/80 dark:bg-[#18191E] border border-neutral-200/70 dark:border-neutral-800 flex flex-col justify-center min-w-[140px]">
             <span class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Status Publikasi</span>
             <div class="flex items-center gap-1.5 mt-1">
-              <span class="w-2 h-2 rounded-full bg-[#00AA13] animate-pulse" />
+              <span :class="['w-2 h-2 rounded-full', isPublished ? 'bg-[#00AA13] animate-pulse' : 'bg-neutral-400']" />
               <span class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white">
-                Aktif Tayang
+                {{ isPublished ? 'Aktif Tayang' : 'Draf Internal' }}
               </span>
             </div>
             <span class="text-[11px] text-neutral-400 mt-0.5">
-              Siap Pendanaan
+              {{ isPublished ? 'Siap Pendanaan' : 'Belum Dipublikasi' }}
             </span>
           </div>
 
@@ -99,40 +99,47 @@
               <img src="/logo.svg" alt="Logo Usaha" class="w-full h-full object-contain" />
             </div>
             <div>
-              <span class="text-[11px] font-mono font-bold text-neutral-400">ID TOKO: BERU-KOP-01</span>
+              <span class="text-[11px] font-mono font-bold text-neutral-400">ID TOKO: {{ businessIdDisplay }}</span>
               <h3 class="font-poppins font-bold text-xl sm:text-2xl text-neutral-900 dark:text-white leading-tight">
-                {{ umkmStore.profile.name }}
+                {{ umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya' }}
               </h3>
               <p class="text-xs sm:text-sm text-neutral-500 font-medium mt-0.5">
-                {{ umkmStore.profile.sector }} • {{ umkmStore.profile.city }}
+                {{ umkmStore.profile.sector || 'Sektor Usaha Belum Diatur' }} • {{ umkmStore.profile.city || 'Kota Belum Diatur' }}
               </p>
             </div>
           </div>
 
-          <span class="inline-flex items-center gap-1.5 text-xs font-poppins font-bold px-3 py-1 rounded-full bg-emerald-50 text-[#00AA13] border border-emerald-200 shrink-0">
+          <span
+            :class="[
+              'inline-flex items-center gap-1.5 text-xs font-poppins font-bold px-3 py-1 rounded-full shrink-0',
+              umkmStore.profile.nib || isDemo
+                ? 'bg-emerald-50 text-[#00AA13] border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
+                : 'bg-neutral-100 text-neutral-600 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700'
+            ]"
+          >
             <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" :stroke-width="2" />
-            <span>Terverifikasi OSS</span>
+            <span>{{ verifiedStatusText }}</span>
           </span>
         </div>
 
         <!-- Pitch Summary Bubble -->
         <div class="p-4 rounded-xl bg-neutral-50 dark:bg-[#18191E] border border-neutral-200/70 dark:border-neutral-800 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed italic font-sans">
-          "{{ umkmStore.profile.pitchSummary }}"
+          "{{ pitchText }}"
         </div>
 
         <!-- Key Financial Metrics Grid -->
         <div class="grid grid-cols-3 gap-3.5 text-center font-poppins">
           <div class="p-4 rounded-2xl bg-neutral-50/80 dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800">
             <span class="text-xs text-neutral-500 block font-medium">Margin Untung</span>
-            <span class="font-bold text-lg sm:text-xl text-[#00AA13] dark:text-emerald-400 tabular-nums mt-1 block">48.5%</span>
+            <span class="font-bold text-lg sm:text-xl text-[#00AA13] dark:text-emerald-400 tabular-nums mt-1 block">{{ marginDisplay }}</span>
           </div>
           <div class="p-4 rounded-2xl bg-neutral-50/80 dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800">
             <span class="text-xs text-neutral-500 block font-medium">Pertumbuhan</span>
-            <span class="font-bold text-lg sm:text-xl text-[#2091AA] dark:text-[#50AABF] tabular-nums mt-1 block">+34.2%</span>
+            <span class="font-bold text-lg sm:text-xl text-[#2091AA] dark:text-[#50AABF] tabular-nums mt-1 block">{{ growthDisplay }}</span>
           </div>
           <div class="p-4 rounded-2xl bg-neutral-50/80 dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800">
             <span class="text-xs text-neutral-500 block font-medium">Skor Bisnis</span>
-            <span class="font-bold text-lg sm:text-xl text-neutral-900 dark:text-white tabular-nums mt-1 block">79/100</span>
+            <span class="font-bold text-lg sm:text-xl text-neutral-900 dark:text-white tabular-nums mt-1 block">{{ scoreDisplay }}</span>
           </div>
         </div>
 
@@ -140,7 +147,7 @@
         <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-poppins">
           <div class="flex items-center gap-1.5 text-neutral-500">
             <span>Konsultan Pendamping:</span>
-            <strong class="text-neutral-900 dark:text-white font-semibold">{{ umkmStore.profile.consultantName }}</strong>
+            <strong class="text-neutral-900 dark:text-white font-semibold">{{ consultantText }}</strong>
           </div>
 
           <NuxtLink
@@ -157,8 +164,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useUmkmStore } from '~/stores/umkm'
+import { useAuthStore } from '~/stores/auth'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Home03Icon,
@@ -173,10 +181,58 @@ definePageMeta({
   layout: 'dashboard'
 })
 
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+const isDemo = computed(() => authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser)
+
+const businessIdDisplay = computed(() => {
+  if (isDemo.value) return 'BERU-KOP-01'
+  if (umkmStore.profile.id) return 'BERU-' + umkmStore.profile.id.substring(0, 8).toUpperCase()
+  return 'BERU-NEW'
+})
+
+const isPublished = computed(() => {
+  if (isDemo.value) return true
+  return umkmStore.hasAssessment && umkmStore.profile.fundingStatus === 'READY_FOR_FUNDING'
+})
+
+const marginDisplay = computed(() => {
+  if (isDemo.value) return '48.5%'
+  return umkmStore.financeSummary.marginPercentage > 0 ? `${umkmStore.financeSummary.marginPercentage}%` : '-'
+})
+
+const growthDisplay = computed(() => {
+  if (isDemo.value) return '+34.2%'
+  return umkmStore.monthlyRecords.length > 1 ? '+0%' : '-'
+})
+
+const scoreDisplay = computed(() => {
+  if (isDemo.value) return '79/100'
+  return umkmStore.overallHealthScore > 0 ? `${umkmStore.overallHealthScore}/100` : '0/100'
+})
+
+const verifiedStatusText = computed(() => {
+  if (isDemo.value) return 'Terverifikasi OSS'
+  return umkmStore.profile.nib ? 'NIB Terdaftar' : 'Belum Terverifikasi'
+})
+
+const pitchText = computed(() => {
+  if (umkmStore.profile.pitchSummary) return umkmStore.profile.pitchSummary
+  if (isDemo.value) return 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%.'
+  return 'Belum ada ringkasan usaha. Lengkapi profil tokomu di menu Profil Usaha.'
+})
+
+const consultantText = computed(() => {
+  if (umkmStore.profile.consultantName) return umkmStore.profile.consultantName
+  if (isDemo.value) return 'Dra. Maya Suryani, M.M.'
+  return 'Belum ditugaskan'
+})
 
 onMounted(() => {
   umkmStore.fetchProfile()
+  umkmStore.fetchFinances()
+  umkmStore.fetchAssessment()
 })
 
 function handleCopyLink() {

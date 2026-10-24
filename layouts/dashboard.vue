@@ -256,14 +256,16 @@ watch(
       }
     })
 
-    if (newPath.startsWith('/investor') && authStore.currentUser?.role !== 'INVESTOR') {
-      authStore.setRole('INVESTOR')
-    } else if (newPath.startsWith('/konsultan') && authStore.currentUser?.role !== 'CONSULTANT') {
-      authStore.setRole('CONSULTANT')
-    } else if (newPath.startsWith('/admin') && authStore.currentUser?.role !== 'ADMIN') {
-      authStore.setRole('ADMIN')
-    } else if (newPath.startsWith('/dashboard') && authStore.currentUser?.role !== 'UMKM') {
-      authStore.setRole('UMKM')
+    if (authStore.canSwitchRole) {
+      if (newPath.startsWith('/investor') && authStore.currentUser?.role !== 'INVESTOR') {
+        authStore.setRole('INVESTOR')
+      } else if (newPath.startsWith('/konsultan') && authStore.currentUser?.role !== 'CONSULTANT') {
+        authStore.setRole('CONSULTANT')
+      } else if (newPath.startsWith('/admin') && authStore.currentUser?.role !== 'ADMIN') {
+        authStore.setRole('ADMIN')
+      } else if (newPath.startsWith('/dashboard') && authStore.currentUser?.role !== 'UMKM') {
+        authStore.setRole('UMKM')
+      }
     }
   },
   { immediate: true }

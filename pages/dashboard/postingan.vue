@@ -60,7 +60,35 @@
         </span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+      <!-- Empty State jika belum ada postingan -->
+      <div
+        v-if="myUmkmPosts.length === 0"
+        class="card-tactile-gopay w-full rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] p-8 sm:p-12 text-center flex flex-col items-center justify-center space-y-4 !shadow-none"
+      >
+        <div class="w-16 h-16 rounded-2xl bg-[#F0FDF4] dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#00AA13] dark:text-emerald-400 shadow-none">
+          <HugeiconsIcon :icon="Image01Icon" :size="32" :stroke-width="1.8" />
+        </div>
+        <div class="max-w-md space-y-1.5">
+          <h3 class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white">
+            Belum Ada Postingan
+          </h3>
+          <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            Akun Anda belum memiliki postingan cerita usaha. Terbitkan postingan pertamamu agar profil usahamu dapat ditemukan dan dilihat oleh jejaring investor terverifikasi.
+          </p>
+        </div>
+        <div class="pt-2">
+          <BActionButton
+            variant="green"
+            icon="plus"
+            :icon-size="16"
+            @click="openCreatePostModal"
+          >
+            Buat Postingan Pertama
+          </BActionButton>
+        </div>
+      </div>
+
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         <article
           v-for="post in myUmkmPosts"
           :key="post.id"
@@ -108,7 +136,6 @@
                 </button>
 
                 <button
-                  v-if="myUmkmPosts.length > 1"
                   type="button"
                   aria-label="Hapus Postingan"
                   class="w-9 h-9 rounded-xl bg-white dark:bg-[#18191E] text-neutral-500 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-400 border border-[#CBD5E1] dark:border-neutral-700 hover:border-red-300 dark:hover:border-red-800 transition-colors flex items-center justify-center cursor-pointer shadow-none"
@@ -698,8 +725,19 @@ const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const investorStore = useInvestorStore()
 
-const umkmName = computed(() => umkmStore.profile.name || 'Kopi Senja Nusantara')
-const umkmCity = computed(() => (umkmStore.profile.city || 'Bandung').split(',')[0]!.trim())
+const isDemoUser = computed(() => {
+  const email = authStore.currentUser?.email?.toLowerCase() || ''
+  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
+})
+
+const umkmName = computed(() => {
+  return umkmStore.profile.name || authStore.currentUser?.businessName || (isDemoUser.value ? 'Kopi Senja Nusantara' : 'Usaha Saya')
+})
+
+const umkmCity = computed(() => {
+  const c = umkmStore.profile.city || (isDemoUser.value ? 'Bandung' : '')
+  return c ? c.split(',')[0]!.trim() : 'Kota'
+})
 
 // Toast Feedback
 const toastMessage = ref('')
@@ -817,14 +855,19 @@ function prevDraftSlide() {
 function handleCreateUmkmPost() {
   if (!newPostForm.pitchSummary.trim() || newPostForm.postImages.length === 0) return
 
+  const currentUserId = authStore.currentUser?.id
+  const currentEmail = authStore.currentUser?.email
+
   investorStore.createUmkmPost({
-    umkmRefId: 'umkm-01',
+    umkmRefId: currentUserId || (isDemoUser.value ? 'umkm-01' : 'umkm-user'),
+    authorUserId: currentUserId,
+    authorEmail: currentEmail,
     name: umkmName.value,
     city: umkmCity.value,
-    sector: umkmStore.profile.sector || 'Kuliner & Minuman (F&B)',
-    establishedYear: umkmStore.profile.establishedYear || 2021,
-    fundingTarget: umkmStore.profile.fundingTarget || 250000000,
-    consultantName: 'Dra. Maya Suryani, M.M.',
+    sector: umkmStore.profile.sector || (isDemoUser.value ? 'Kuliner & Minuman (F&B)' : 'Sektor Usaha'),
+    establishedYear: umkmStore.profile.establishedYear || new Date().getFullYear(),
+    fundingTarget: umkmStore.profile.fundingTarget || 0,
+    consultantName: umkmStore.profile.consultantName || (isDemoUser.value ? 'Dra. Maya Suryani, M.M.' : 'Belum Ditugaskan'),
     pitchSummary: newPostForm.pitchSummary.trim(),
     postImages: [...newPostForm.postImages]
   })
@@ -844,14 +887,42 @@ function handleDeletePost(postId: string) {
 }
 
 const myUmkmPosts = computed<MarketplaceUmkm[]>(() => {
-  const currentName = umkmName.value.toLowerCase().trim()
+  const currentUserId = authStore.currentUser?.id
+  const currentEmail = authStore.currentUser?.email?.toLowerCase()
+  const currentBizName = (umkmStore.profile.name || authStore.currentUser?.businessName || '').toLowerCase().trim()
+
   return investorStore.marketplaceList
-    .filter(
-      m =>
-        m.id === 'umkm-01' ||
-        m.umkmRefId === 'umkm-01' ||
-        m.name.toLowerCase().trim() === currentName
-    )
+    .filter(m => {
+      // 1. Akun demo Fikri Setiawan (Kopi Senja)
+      if (currentEmail === 'fikri@kopisenja.id') {
+        return (
+          m.id === 'umkm-01' ||
+          m.umkmRefId === 'umkm-01' ||
+          (currentBizName && m.name.toLowerCase().trim() === currentBizName)
+        )
+      }
+
+      // 2. Akun non-demo (pengguna baru/riil):
+      // JANGAN PERNAH menyertakan postingan demo bawaan Kopi Senja (umkm-01)
+      if (m.id === 'umkm-01' || (m.umkmRefId === 'umkm-01' && !m.authorUserId)) {
+        return false
+      }
+
+      // Tampilkan jika dibuat oleh pengguna ini (cocokkan userId / email)
+      if (m.authorUserId && currentUserId && m.authorUserId === currentUserId) {
+        return true
+      }
+      if (m.authorEmail && currentEmail && m.authorEmail === currentEmail) {
+        return true
+      }
+
+      // Postingan custom yang baru dibuat untuk usaha ini
+      if (m.isCustomPost && currentBizName && m.name.toLowerCase().trim() === currentBizName) {
+        return true
+      }
+
+      return false
+    })
     .slice()
     .reverse()
 })

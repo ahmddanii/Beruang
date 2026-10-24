@@ -40,8 +40,17 @@
             <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center shrink-0">
               <HugeiconsIcon :icon="AnalyticsUpIcon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
             </div>
-            <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              +5 Poin
+            <span
+              v-if="hasAssessment"
+              class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0"
+            >
+              {{ isDemoUser ? '+5 Poin' : 'Terverifikasi' }}
+            </span>
+            <span
+              v-else
+              class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700 shrink-0"
+            >
+              Belum Dievaluasi
             </span>
           </div>
 
@@ -51,12 +60,12 @@
             </span>
             <div class="flex items-baseline gap-1.5 pt-0.5">
               <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
-                79
+                {{ overallHealthScore }}
               </span>
               <span class="text-sm font-semibold text-neutral-400 dark:text-neutral-500">/ 100</span>
             </div>
             <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
-              Naik dari 74 poin evaluasi bulan lalu
+              {{ hasAssessment ? (isDemoUser ? 'Naik dari 74 poin evaluasi bulan lalu' : 'Skor indeks kesehatan tokomu') : 'Menunggu evaluasi konsultan pendamping' }}
             </p>
           </div>
         </div>
@@ -69,8 +78,17 @@
             <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/30 flex items-center justify-center shrink-0">
               <HugeiconsIcon :icon="Task01Icon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
             </div>
-            <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shrink-0">
-              40% Lolos
+            <span
+              v-if="hasAssessment"
+              class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shrink-0"
+            >
+              {{ passedPillarsPct }}% Lolos
+            </span>
+            <span
+              v-else
+              class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700 shrink-0"
+            >
+              0% Lolos
             </span>
           </div>
 
@@ -80,12 +98,12 @@
             </span>
             <div class="flex items-baseline gap-1.5 pt-0.5">
               <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
-                2 / 5
+                {{ passedPillarsCount }} / 5
               </span>
               <span class="text-sm font-semibold text-neutral-400 dark:text-neutral-500">Pilar</span>
             </div>
             <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
-              3 pilar butuh perbaikan terarah
+              {{ hasAssessment ? `${5 - passedPillarsCount} pilar butuh perbaikan terarah` : '5 pilar menunggu evaluasi konsultan' }}
             </p>
           </div>
         </div>
@@ -109,11 +127,11 @@
             </span>
             <div class="flex items-baseline gap-1.5 pt-0.5">
               <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
-                Rp 250 Jt
+                {{ estimatedFundingPlafon }}
               </span>
             </div>
             <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
-              Rekomendasi nilai pendanaan bertahap
+              {{ hasAssessment ? 'Rekomendasi nilai pendanaan bertahap' : 'Dihitung setelah verifikasi laporan kas' }}
             </p>
           </div>
         </div>
@@ -127,7 +145,7 @@
               <HugeiconsIcon :icon="MoneyBag01Icon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
             </div>
             <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              +12% MoM
+              {{ isDemoUser ? '+12% MoM' : (Number(currentMarginPercentage) > 0 ? `${currentMarginPercentage}% Margin` : 'Bulan Ini') }}
             </span>
           </div>
 
@@ -137,11 +155,11 @@
             </span>
             <div class="flex items-baseline gap-1.5 pt-0.5">
               <span class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight leading-none">
-                Rp 32,6 Jt
+                {{ currentNetProfitDisplay }}
               </span>
             </div>
             <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
-              Margin untung 32,6% terjaga stabil
+              {{ Number(currentMarginPercentage) > 0 ? `Margin untung ${currentMarginPercentage}% terjaga` : 'Catat kas harian untuk menghitung margin' }}
             </p>
           </div>
         </div>
@@ -149,8 +167,7 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 3. BARIS 2: EVALUASI KELAYAKAN 5 PILAR TOKO (Redesain Kebutuhan UMKM)     -->
-    <!-- Donut Chart & 5 Pilar Kesiapan Bisnis Tanpa Catatan/Langkah Perbaikan      -->
+    <!-- 3. BARIS 2: EVALUASI KELAYAKAN 5 PILAR TOKO                               -->
     <!-- ========================================================================= -->
     <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 flex flex-col justify-between font-poppins space-y-6 w-full">
       <div>
@@ -169,6 +186,36 @@
           </span>
         </div>
 
+        <!-- Banner Panduan untuk Akun Baru yang Belum Memiliki Penilaian Resmi -->
+        <div
+          v-if="!hasAssessment"
+          class="mt-5 p-4 rounded-xl bg-[#F3F8FC] dark:bg-[#156374]/15 border border-[#156374]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5"
+        >
+          <div class="flex items-start gap-3 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-[#156374] text-white flex items-center justify-center shrink-0 mt-0.5">
+              <HugeiconsIcon :icon="Alert01Icon" :size="18" />
+            </div>
+            <div class="space-y-0.5 min-w-0">
+              <h4 class="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">
+                Toko Belum Memiliki Evaluasi Kesehatan Resmi
+              </h4>
+              <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
+                Skor 5 pilar akan dinilai dan divalidasi langsung oleh konsultan pendamping tokomu setelah pembukuan kas tercatat rutin.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+            <BActionButton
+              variant="green"
+              :huge-icon="Comment01Icon"
+              to="/dashboard/pesan"
+              custom-class="w-full sm:w-auto px-4 py-2 text-xs font-semibold justify-center"
+            >
+              Mulai Konsultasi
+            </BActionButton>
+          </div>
+        </div>
+
         <!-- Bagian Donut Chart Kelayakan 5 Pilar -->
         <div class="pt-5 pb-5 border-b border-neutral-100 dark:border-neutral-800/80">
           <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
@@ -177,27 +224,40 @@
               <canvas ref="donutCanvas" class="w-full h-full"></canvas>
               <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
                 <span class="text-3xl font-bold font-poppins text-neutral-900 dark:text-white tabular-nums leading-none">
-                  79%
+                  {{ overallHealthScore }}%
                 </span>
                 <span class="text-xs font-semibold text-[#00800e] dark:text-emerald-400 mt-1">
-                  Grade B+
+                  {{ overallGrade }}
                 </span>
               </div>
             </div>
 
-            <!-- Donut Chart Legend & Summary Kebutuhan UMKM -->
+            <!-- Donut Chart Legend & Summary -->
             <div class="flex-1 space-y-3 text-center sm:text-left min-w-0">
-              <div class="space-y-1">
+              <div v-if="hasAssessment" class="space-y-1">
                 <div class="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
                   <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
-                    Status: Layak Bersyarat
+                    {{ overallHealthScore >= 80 ? 'Status: Layak Pemodal' : 'Status: Layak Bersyarat' }}
                   </h3>
                   <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
-                    Dikit Lagi Lolos Penuh
+                    {{ overallHealthScore >= 80 ? 'Lolos Penuh' : 'Dikit Lagi Lolos Penuh' }}
                   </span>
                 </div>
                 <p class="text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-2xl">
-                  Skor tokomu saat ini <strong>79%</strong> dengan 2 pilar telah memenuhi target pemodal. Selisih 3 pilar lainnya hanya berjarak 5%–11% dari ambang batas ideal pendanaan institusional (80%).
+                  Skor tokomu saat ini <strong>{{ overallHealthScore }}%</strong> dengan {{ passedPillarsCount }} pilar telah memenuhi target pemodal.
+                </p>
+              </div>
+              <div v-else class="space-y-1">
+                <div class="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                  <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+                    Status: Belum Dievaluasi
+                  </h3>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
+                    Perlu Konsultasi
+                  </span>
+                </div>
+                <p class="text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-2xl">
+                  Toko Anda belum memiliki evaluasi resmi dari konsultan pendamping. Catat kas tokomu secara rutin dan diskusikan bersama konsultan untuk mengaktifkan penilaian kelayakan modal.
                 </p>
               </div>
 
@@ -205,18 +265,18 @@
               <div class="flex items-center justify-center sm:justify-start gap-2.5 pt-1 flex-wrap">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-[#00800e] dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
                   <span class="w-2 h-2 rounded-full bg-[#00800e]" />
-                  <span>2 Pilar Lolos Standar</span>
+                  <span>{{ passedPillarsCount }} Pilar Lolos Standar</span>
                 </span>
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
                   <span class="w-2 h-2 rounded-full bg-[#D97706]" />
-                  <span>3 Pilar Perlu Penguatan</span>
+                  <span>{{ 5 - passedPillarsCount }} Pilar Perlu Penguatan</span>
                 </span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 5 Baris Pilar Kesiapan Bisnis (Lebar Penuh, Rapi, Bersih Tanpa Clutter Catatan/Langkah) -->
+        <!-- 5 Baris Pilar Kesiapan Bisnis -->
         <div class="space-y-3 pt-4">
           <div
             v-for="pillar in fivePillars"
@@ -249,16 +309,22 @@
                 </div>
 
                 <span
-                  v-if="pillar.score >= pillar.targetScore"
+                  v-if="pillar.score >= pillar.targetScore && pillar.score > 0"
                   class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-[#00800e] border border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800"
                 >
                   Lolos Standar
                 </span>
                 <span
-                  v-else
+                  v-else-if="pillar.score > 0"
                   class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800"
                 >
                   Perlu Aksi
+                </span>
+                <span
+                  v-else
+                  class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-neutral-100 text-neutral-600 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700"
+                >
+                  Belum Dinilai
                 </span>
               </div>
             </div>
@@ -269,7 +335,7 @@
                 class="gsap-pillar-bar h-full rounded-full transition-all duration-300"
                 :style="{
                   width: `${pillar.score}%`,
-                  backgroundColor: pillar.score >= pillar.targetScore ? '#00800e' : '#D97706'
+                  backgroundColor: pillar.score >= pillar.targetScore && pillar.score > 0 ? '#00800e' : (pillar.score > 0 ? '#D97706' : '#94A3B8')
                 }"
               />
 
@@ -287,13 +353,12 @@
       <!-- Footnote Status -->
       <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
         <span>Garis vertikal menandai ambang batas kelayakan modal pemodal.</span>
-        <span class="font-semibold text-neutral-800 dark:text-neutral-200">2 dari 5 Lolos (40%)</span>
+        <span class="font-semibold text-neutral-800 dark:text-neutral-200">{{ passedPillarsCount }} dari 5 Lolos ({{ passedPillarsPct }}%)</span>
       </div>
     </div>
 
     <!-- ========================================================================= -->
     <!-- 4. BARIS 3: BENTO 2 KOLOM (Kesiapan Berkas Legalitas & Ringkasan Keuangan)   -->
-    <!-- Masing-masing domain memiliki kartu terpisah yang lega dan rapi          -->
     <!-- ========================================================================= -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-stretch w-full">
       <!-- Container 1 (6 Kolom): Kesiapan Berkas Legalitas Toko -->
@@ -312,7 +377,7 @@
               to="/dashboard/profile"
               class="text-xs font-semibold text-[#156374] dark:text-[#50AABF] hover:underline flex items-center gap-1 shrink-0"
             >
-              <span>Buka Data Room</span>
+              <span>Buka Profil Usaha</span>
               <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" />
             </NuxtLink>
           </div>
@@ -322,7 +387,7 @@
             <!-- NIB Usaha -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.profile.nib || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -330,19 +395,19 @@
                     NIB Usaha
                   </h5>
                   <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-                    No. 1209.2831.0091 • OSS
+                    {{ legalNibDisplay }}
                   </p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-                Lengkap
+              <span :class="[umkmStore.profile.nib || isDemoUser ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ umkmStore.profile.nib || isDemoUser ? 'Lengkap' : 'Belum Ada' }}
               </span>
             </div>
 
             <!-- NPWP Toko -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.profile.npwp || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -350,19 +415,19 @@
                     NPWP Toko
                   </h5>
                   <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-                    No. 82.910.455.2 • Taat
+                    {{ legalNpwpDisplay }}
                   </p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-                Lengkap
+              <span :class="[umkmStore.profile.npwp || isDemoUser ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ umkmStore.profile.npwp || isDemoUser ? 'Lengkap' : 'Belum Ada' }}
               </span>
             </div>
 
             <!-- Rekening Khusus -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.profile.bankAccountNumber || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -370,19 +435,19 @@
                     Rekening Khusus
                   </h5>
                   <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-                    Giro Mandiri 142-00-19283
+                    {{ legalBankAccountDisplay }}
                   </p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-                Lengkap
+              <span :class="[umkmStore.profile.bankAccountNumber || isDemoUser ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ umkmStore.profile.bankAccountNumber || isDemoUser ? 'Lengkap' : 'Belum Ada' }}
               </span>
             </div>
 
             <!-- Bukti Nota Transaksi -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.dailyTransactions.length > 0 || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="FileValidationIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -390,20 +455,20 @@
                     Bukti Nota Transaksi
                   </h5>
                   <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-                    Arsip 30 Hari • 80% Terarsip
+                    {{ legalReceiptDisplay }}
                   </p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shrink-0">
-                Perlu Aksi
+              <span :class="[(umkmStore.dailyTransactions.length >= 10) || isDemoUser ? 'bg-emerald-50 text-[#00800e] border-emerald-200/80' : 'bg-amber-50 text-amber-700 border-amber-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ (umkmStore.dailyTransactions.length >= 10) || isDemoUser ? 'Lengkap' : (umkmStore.dailyTransactions.length > 0 ? 'Perlu Aksi' : 'Belum Ada') }}
               </span>
             </div>
           </div>
         </div>
 
         <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
-          <span>3 dari 4 berkas tervalidasi sah.</span>
-          <span class="font-semibold text-[#00800e] dark:text-emerald-400">Tingkat Kepatuhan: 75%</span>
+          <span>{{ validLegalCount }} dari 4 berkas tervalidasi sah.</span>
+          <span class="font-semibold text-[#00800e] dark:text-emerald-400">Tingkat Kepatuhan: {{ validLegalPct }}%</span>
         </div>
       </div>
 
@@ -420,7 +485,7 @@
               </p>
             </div>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-[#00800e] dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
-              <span>Margin Untung: 32,6%</span>
+              <span>Margin Untung: {{ currentMarginPercentage }}%</span>
             </span>
           </div>
 
@@ -430,7 +495,7 @@
             <div class="p-3.5 rounded-xl bg-white dark:bg-[#15161A] border border-neutral-200/90 dark:border-neutral-800 flex flex-col justify-between">
               <span class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">Total Pendapatan</span>
               <div class="font-bold text-base text-neutral-900 dark:text-white tabular-nums pt-1">
-                Rp 100 Jt
+                {{ displayTotalIncome }}
               </div>
               <span class="text-[10px] text-neutral-400 font-sans pt-0.5">Uang masuk kotor</span>
             </div>
@@ -439,16 +504,16 @@
             <div class="p-3.5 rounded-xl bg-white dark:bg-[#15161A] border border-neutral-200/90 dark:border-neutral-800 flex flex-col justify-between">
               <span class="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">Modal Jualan</span>
               <div class="font-bold text-base text-neutral-800 dark:text-neutral-200 tabular-nums pt-1">
-                Rp 45,1 Jt
+                {{ displayTotalCogs }}
               </div>
-              <span class="text-[10px] text-emerald-600 font-sans pt-0.5">Hemat (45,1%)</span>
+              <span class="text-[10px] text-emerald-600 font-sans pt-0.5">Biaya produksi</span>
             </div>
 
             <!-- Untung Bersih -->
             <div class="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800 flex flex-col justify-between">
               <span class="text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">Untung Bersih</span>
               <div class="font-bold text-base text-[#00800e] dark:text-emerald-400 tabular-nums pt-1">
-                Rp 32,6 Jt
+                {{ displayNetProfit }}
               </div>
               <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-sans pt-0.5">Sisa kas bersih</span>
             </div>
@@ -456,17 +521,17 @@
         </div>
 
         <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
-          <span>Rasio untung bersih toko melampaui rata-rata industri F&B (25%).</span>
-          <span class="font-semibold text-neutral-800 dark:text-neutral-200">Arus Kas: Sehat</span>
+          <span>{{ hasAssessment ? (isDemoUser ? 'Laporan kas terverifikasi oleh Konsultan Pendamping Dra. Maya Suryani, M.M.' : 'Laporan kas dievaluasi berkala oleh konsultan tokomu.') : 'Mulai catat kas harianmu agar dapat divalidasi oleh konsultan pendamping.' }}</span>
+          <span class="font-semibold text-neutral-800 dark:text-neutral-200">Arus Kas: {{ hasAssessment ? 'Sehat' : 'Awal' }}</span>
         </div>
       </div>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 5. BARIS 4: TREN UNTUNG BERSIH (Seragam dengan Pergerakan Uang Toko)        -->
+    <!-- 5. BARIS 4: TREN UNTUNG BERSIH                                            -->
     <!-- ========================================================================= -->
     <div class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 font-poppins space-y-9 sm:space-y-11 w-full">
-      <!-- Header: Title, Subtitle, and Right Actions (Dropdown Chart Type, Dropdown Period, Button Lihat Detail) -->
+      <!-- Header: Title, Subtitle, and Right Actions -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 sm:pb-3">
         <!-- Left: Title & Subtitle -->
         <div class="min-w-0 max-w-xl">
@@ -480,7 +545,7 @@
 
         <!-- Right: Actions Control (Dropdown Jenis Grafik + Dropdown Periode + Button Lihat Detail) -->
         <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap lg:flex-nowrap shrink-0">
-          <!-- 1. Dropdown Jenis Grafik (Bergaya btn-pill-action seperti Pergerakan Uang Toko) -->
+          <!-- 1. Dropdown Jenis Grafik -->
           <div ref="chartTypeDropdownRef" class="relative">
             <button
               type="button"
@@ -525,7 +590,7 @@
             </div>
           </div>
 
-          <!-- 2. Dropdown Filter Periode / Rentang Waktu (Bergaya btn-pill-action seperti Pergerakan Uang Toko) -->
+          <!-- 2. Dropdown Filter Periode -->
           <div ref="periodDropdownRef" class="relative">
             <button
               type="button"
@@ -594,7 +659,7 @@
       </div>
 
       <!-- BShadcnLineChart Component: Seragam dengan Pergerakan Uang Toko di Beranda -->
-      <div class="relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
+      <div v-if="filteredProfitTrendRecords.length > 0" class="relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
         <BShadcnLineChart
           :data="filteredProfitTrendRecords"
           index="month"
@@ -609,12 +674,17 @@
           :show-y-axis="true"
         />
       </div>
+      <div v-else class="py-12 text-center flex flex-col items-center justify-center space-y-2">
+        <HugeiconsIcon :icon="AnalyticsUpIcon" :size="32" class="text-neutral-400 dark:text-neutral-500" />
+        <p class="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Belum Ada Riwayat Finansial</p>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm">Grafik tren untung bersih akan terbentuk otomatis setelah kamu mencatat transaksi kas harian.</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import Chart from 'chart.js/auto'
 import BActionButton from '~/components/base/BActionButton.vue'
@@ -630,21 +700,52 @@ import {
   Coins01Icon,
   MoneyBag01Icon,
   ShieldCheckIcon,
-  FileValidationIcon
+  FileValidationIcon,
+  Alert01Icon
 } from '@hugeicons/core-free-icons'
+import { useAuthStore } from '~/stores/auth'
+import { useUmkmStore } from '~/stores/umkm'
 
 definePageMeta({
   layout: 'dashboard',
   hideHeader: true
 })
 
-// 5 Aspek Fundamental Kesiapan Bisnis Toko (Disesuaikan untuk Kebutuhan UMKM)
-const fivePillars = [
+const authStore = useAuthStore()
+const umkmStore = useUmkmStore()
+
+const isDemoUser = computed(() => {
+  const email = authStore.currentUser?.email?.toLowerCase() || ''
+  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
+})
+
+const hasAssessment = computed(() => {
+  if (isDemoUser.value) return true
+  return umkmStore.hasAssessment || (umkmStore.overallHealthScore > 0)
+})
+
+// Metric 1: Indeks Kesehatan Toko
+const overallHealthScore = computed(() => {
+  if (isDemoUser.value) return 79
+  return umkmStore.overallHealthScore || 0
+})
+
+const overallGrade = computed(() => {
+  const s = overallHealthScore.value
+  if (s === 0) return 'Grade -'
+  if (s >= 85) return 'Grade A'
+  if (s >= 75) return 'Grade B+'
+  if (s >= 65) return 'Grade B'
+  if (s >= 50) return 'Grade C'
+  return 'Grade D'
+})
+
+// 5 Aspek Fundamental Kesiapan Bisnis Toko
+const basePillars = [
   {
     id: 'fin',
     name: 'Keuangan & Pergerakan Uang',
     description: 'Pemisahan rekening pribadi dengan kas toko dan disiplin pencatatan transaksi',
-    score: 78,
     targetScore: 85,
     color: '#156374'
   },
@@ -652,7 +753,6 @@ const fivePillars = [
     id: 'ops',
     name: 'Operasional & Standar Kerja',
     description: 'Kerapian stok bahan baku, resep standar penyajian, dan efisiensi sisa bahan',
-    score: 85,
     targetScore: 80,
     color: '#00800e'
   },
@@ -660,7 +760,6 @@ const fivePillars = [
     id: 'mkt',
     name: 'Pasar & Pemasaran',
     description: 'Jumlah pelanggan setia, frekuensi pesanan berulang, dan penjualan langsung',
-    score: 64,
     targetScore: 75,
     color: '#2563EB'
   },
@@ -668,7 +767,6 @@ const fivePillars = [
     id: 'leg',
     name: 'Legalitas & Izin Usaha',
     description: 'Kelengkapan dokumen resmi NIB OSS RBA, NPWP toko, dan sertifikat halal',
-    score: 92,
     targetScore: 90,
     color: '#6366F1'
   },
@@ -676,11 +774,131 @@ const fivePillars = [
     id: 'gov',
     name: 'Tim & Pembagian Tugas',
     description: 'Kejelasan peran Store Leader, jadwal shift kerja, dan evaluasi hasil tim',
-    score: 75,
     targetScore: 80,
     color: '#D97706'
   }
 ]
+
+const demoScores: Record<string, number> = {
+  fin: 78,
+  ops: 85,
+  mkt: 64,
+  leg: 92,
+  gov: 75
+}
+
+const fivePillars = computed(() => {
+  return basePillars.map(p => {
+    let score = 0
+    if (isDemoUser.value) {
+      score = demoScores[p.id] || 0
+    } else {
+      const match = umkmStore.assessmentAspects.find(a => a.id === p.id)
+      score = match ? match.score : 0
+    }
+    return {
+      ...p,
+      score
+    }
+  })
+})
+
+const passedPillarsCount = computed(() => {
+  return fivePillars.value.filter(p => p.score >= p.targetScore && p.score > 0).length
+})
+
+const passedPillarsPct = computed(() => {
+  return Math.round((passedPillarsCount.value / 5) * 100)
+})
+
+// Metric 3: Estimasi Plafon Modal
+const estimatedFundingPlafon = computed(() => {
+  if (isDemoUser.value) return 'Rp 250 Jt'
+  if (umkmStore.profile.fundingTarget && umkmStore.profile.fundingTarget > 0) {
+    const val = umkmStore.profile.fundingTarget
+    if (val >= 1000000000) return `Rp ${(val / 1000000000).toFixed(1).replace('.0', '')} M`
+    if (val >= 1000000) return `Rp ${(val / 1000000).toFixed(0)} Jt`
+    return `Rp ${val.toLocaleString('id-ID')}`
+  }
+  return 'Belum Ditentukan'
+})
+
+// Metric 4: Pergerakan Untung Bersih & Margin
+const currentNetProfitDisplay = computed(() => {
+  if (isDemoUser.value && umkmStore.financeSummary.netProfitMonth === 0) return 'Rp 32,6 Jt'
+  const val = umkmStore.financeSummary.netProfitMonth || 0
+  if (val === 0) return 'Rp 0'
+  if (Math.abs(val) >= 1000000000) return `Rp ${(val / 1000000000).toFixed(1).replace('.0', '')} M`
+  if (Math.abs(val) >= 1000000) return `Rp ${(val / 1000000).toFixed(1).replace('.', ',')} Jt`
+  return `Rp ${val.toLocaleString('id-ID')}`
+})
+
+const currentMarginPercentage = computed(() => {
+  if (isDemoUser.value && umkmStore.financeSummary.marginPercentage === 0) return '32.6'
+  return umkmStore.financeSummary.marginPercentage ? umkmStore.financeSummary.marginPercentage.toFixed(1) : '0.0'
+})
+
+// Bento 1: Legalitas Items
+const legalNibDisplay = computed(() => {
+  if (isDemoUser.value) return 'No. 1209.2831.0091 • OSS'
+  return umkmStore.profile.nib ? `No. ${umkmStore.profile.nib} • OSS` : 'Belum Ditambahkan'
+})
+
+const legalNpwpDisplay = computed(() => {
+  if (isDemoUser.value) return 'No. 82.910.455.2 • Taat'
+  return umkmStore.profile.npwp ? `No. ${umkmStore.profile.npwp} • Taat` : 'Belum Ditambahkan'
+})
+
+const legalBankAccountDisplay = computed(() => {
+  if (isDemoUser.value) return 'Giro Mandiri 142-00-19283'
+  if (umkmStore.profile.bankAccountNumber) {
+    return `${umkmStore.profile.bankName || 'Rekening'} ${umkmStore.profile.bankAccountNumber}`
+  }
+  return 'Belum Terhubung'
+})
+
+const legalReceiptDisplay = computed(() => {
+  if (isDemoUser.value) return 'Arsip 30 Hari • 80% Terarsip'
+  const count = umkmStore.dailyTransactions.length
+  return count > 0 ? `${count} Transaksi Tercatat` : 'Belum Ada Transaksi'
+})
+
+const validLegalCount = computed(() => {
+  if (isDemoUser.value) return 3
+  let count = 0
+  if (umkmStore.profile.nib) count++
+  if (umkmStore.profile.npwp) count++
+  if (umkmStore.profile.bankAccountNumber) count++
+  if (umkmStore.dailyTransactions.length >= 5) count++
+  return count
+})
+
+const validLegalPct = computed(() => {
+  return Math.round((validLegalCount.value / 4) * 100)
+})
+
+// Bento 2: Financial 30 Days Summary
+function formatShortIdr(amount: number): string {
+  if (!amount || amount === 0) return 'Rp 0'
+  if (Math.abs(amount) >= 1000000000) return `Rp ${(amount / 1000000000).toFixed(1).replace('.0', '')} M`
+  if (Math.abs(amount) >= 1000000) return `Rp ${(amount / 1000000).toFixed(1).replace('.', ',')} Jt`
+  return `Rp ${amount.toLocaleString('id-ID')}`
+}
+
+const displayTotalIncome = computed(() => {
+  if (isDemoUser.value && umkmStore.financeSummary.totalIncomeMonth === 0) return 'Rp 100 Jt'
+  return formatShortIdr(umkmStore.financeSummary.totalIncomeMonth)
+})
+
+const displayTotalCogs = computed(() => {
+  if (isDemoUser.value && umkmStore.financeSummary.totalCogsMonth === 0) return 'Rp 45,1 Jt'
+  return formatShortIdr(umkmStore.financeSummary.totalCogsMonth)
+})
+
+const displayNetProfit = computed(() => {
+  if (isDemoUser.value && umkmStore.financeSummary.netProfitMonth === 0) return 'Rp 32,6 Jt'
+  return formatShortIdr(umkmStore.financeSummary.netProfitMonth)
+})
 
 // Donut Chart Instance for 5 Pillars
 const pageRootRef = ref<HTMLElement | null>(null)
@@ -695,17 +913,22 @@ function initDonutChart() {
     donutChartInstance = null
   }
 
+  const scores = fivePillars.value.map(p => p.score)
+  const isZero = scores.every(s => s === 0)
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const neutralColor = isDark ? '#262626' : '#E2E8F0'
+
   donutChartInstance = new Chart(donutCanvas.value, {
     type: 'doughnut',
     data: {
-      labels: fivePillars.map(p => p.name),
+      labels: isZero ? ['Belum Dinilai'] : fivePillars.value.map(p => p.name),
       datasets: [
         {
-          data: fivePillars.map(p => p.score),
-          backgroundColor: fivePillars.map(p => p.color),
+          data: isZero ? [1] : scores,
+          backgroundColor: isZero ? [neutralColor] : fivePillars.value.map(p => p.color),
           borderWidth: 0,
-          borderRadius: 5,
-          spacing: 3
+          borderRadius: isZero ? 0 : 5,
+          spacing: isZero ? 0 : 3
         }
       ]
     },
@@ -721,7 +944,7 @@ function initDonutChart() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          enabled: true,
+          enabled: !isZero,
           callbacks: {
             label: (context: any) => ` ${context.label}: ${context.raw}%`
           }
@@ -731,7 +954,14 @@ function initDonutChart() {
   })
 }
 
-onMounted(() => {
+watch(fivePillars, () => {
+  nextTick(() => {
+    initDonutChart()
+  })
+}, { deep: true })
+
+onMounted(async () => {
+  await umkmStore.fetchDashboardData()
   if (import.meta.client) {
     nextTick(() => {
       initDonutChart()
@@ -777,7 +1007,7 @@ onBeforeUnmount(() => {
   }
 })
 
-// Data & Kontrol Pill Dropdowns Tren Untung Bersih (Seragam dengan Pergerakan Uang Toko di Beranda)
+// Data & Kontrol Pill Dropdowns Tren Untung Bersih
 const chartTypeDropdownRef = ref<HTMLElement | null>(null)
 const periodDropdownRef = ref<HTMLElement | null>(null)
 const chartPreviewMode = ref<'area' | 'bar' | 'cashflow'>('area')
@@ -846,28 +1076,39 @@ function handleEscapeChartDropdowns(event: KeyboardEvent) {
   }
 }
 
-const profitTrendRecords = [
-  { month: 'Nov', profit: 19200000, omzet: 68000000, outflow: 48800000 },
-  { month: 'Des', profit: 21500000, omzet: 74000000, outflow: 52500000 },
-  { month: 'Jan', profit: 22400000, omzet: 76500000, outflow: 54100000 },
-  { month: 'Feb', profit: 23800000, omzet: 79000000, outflow: 55200000 },
-  { month: 'Mar', profit: 24100000, omzet: 81000000, outflow: 56900000 },
-  { month: 'Apr', profit: 25600000, omzet: 83500000, outflow: 57900000 },
-  { month: 'Mei', profit: 26400000, omzet: 85000000, outflow: 58600000 },
-  { month: 'Jun', profit: 27900000, omzet: 88000000, outflow: 60100000 },
-  { month: 'Jul', profit: 29100000, omzet: 90500000, outflow: 61400000 },
-  { month: 'Agu', profit: 28000000, omzet: 82000000, outflow: 54000000 },
-  { month: 'Sep', profit: 31500000, omzet: 91000000, outflow: 59500000 },
-  { month: 'Okt', profit: 32600000, omzet: 100000000, outflow: 67400000 }
-]
+const profitTrendRecords = computed(() => {
+  if (isDemoUser.value) {
+    return [
+      { month: 'Nov', profit: 19200000, omzet: 68000000, outflow: 48800000 },
+      { month: 'Des', profit: 21500000, omzet: 74000000, outflow: 52500000 },
+      { month: 'Jan', profit: 22400000, omzet: 76500000, outflow: 54100000 },
+      { month: 'Feb', profit: 23800000, omzet: 79000000, outflow: 55200000 },
+      { month: 'Mar', profit: 24100000, omzet: 81000000, outflow: 56900000 },
+      { month: 'Apr', profit: 25600000, omzet: 83500000, outflow: 57900000 },
+      { month: 'Mei', profit: 26400000, omzet: 85000000, outflow: 58600000 },
+      { month: 'Jun', profit: 27900000, omzet: 88000000, outflow: 60100000 },
+      { month: 'Jul', profit: 29100000, omzet: 90500000, outflow: 61400000 },
+      { month: 'Agu', profit: 28000000, omzet: 82000000, outflow: 54000000 },
+      { month: 'Sep', profit: 31500000, omzet: 91000000, outflow: 59500000 },
+      { month: 'Okt', profit: 32600000, omzet: 100000000, outflow: 67400000 }
+    ]
+  }
+  return (umkmStore.monthlyRecords || []).map(r => ({
+    month: r.month.slice(0, 3),
+    profit: r.netProfit || 0,
+    omzet: r.omzet || 0,
+    outflow: (r.hpp || 0) + (r.opex || 0)
+  }))
+})
 
 const filteredProfitTrendRecords = computed(() => {
+  const records = profitTrendRecords.value
   if (selectedPeriodFilter.value === '3m') {
-    return profitTrendRecords.slice(-3)
+    return records.slice(-3)
   } else if (selectedPeriodFilter.value === '6m') {
-    return profitTrendRecords.slice(-6)
+    return records.slice(-6)
   }
-  return profitTrendRecords
+  return records
 })
 
 const currentProfitChartCategories = computed(() => {

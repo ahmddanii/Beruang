@@ -14,10 +14,24 @@ async function resolveBusiness(req: AuthenticatedRequest) {
     if (b) return b;
   }
   if (req.user?.id) {
-    const b = await prisma.businessProfile.findUnique({
+    let b = await prisma.businessProfile.findUnique({
       where: { userId: req.user.id },
       include: { user: true, assessment: true, tasks: true, consultant: { include: { user: true } } },
     });
+    if (!b && (req.user.role === "UMKM" || !req.user.role)) {
+      b = await prisma.businessProfile.create({
+        data: {
+          userId: req.user.id,
+          brand: req.user.name ? `Usaha ${req.user.name}` : "Usaha Saya",
+          name: req.user.name ? `Usaha ${req.user.name}` : "Usaha Saya",
+          status: "DRAFT",
+          outletsCount: 1,
+          employeesCount: 1,
+          fundingTarget: 0,
+        },
+        include: { user: true, assessment: true, tasks: true, consultant: { include: { user: true } } },
+      });
+    }
     if (b) return b;
   }
   // Fallback demo HANYA untuk Fikri demo akun
@@ -318,25 +332,36 @@ router.get("/assessment", optionalAuth, async (req: AuthenticatedRequest, res: R
       })
       : null;
 
-    const data = assessment || {
-      financial: 50,
-      operationsHpp: 50,
-      marketing: 50,
-      hrTeam: 50,
-      legal: 50,
-      compositeScore: 50,
-    };
+    if (!assessment) {
+      return res.json({
+        success: true,
+        data: {
+          hasAssessment: false,
+          compositeScore: 0,
+          isVerified: false,
+          aspects: [
+            { id: "fin", name: "Keuangan & Pergerakan Uang", score: 0, maxScore: 100, targetScore: 85, description: "Pemisahan rekening pribadi dengan kas toko dan disiplin pencatatan transaksi" },
+            { id: "ops", name: "Operasional & Standar Kerja", score: 0, maxScore: 100, targetScore: 80, description: "Kerapian stok bahan baku, resep standar penyajian, dan efisiensi sisa bahan" },
+            { id: "mkt", name: "Pasar & Pemasaran", score: 0, maxScore: 100, targetScore: 75, description: "Jumlah pelanggan setia, frekuensi pesanan berulang, dan penjualan langsung" },
+            { id: "leg", name: "Legalitas & Izin Usaha", score: 0, maxScore: 100, targetScore: 90, description: "Kelengkapan dokumen resmi NIB OSS RBA, NPWP toko, dan sertifikat halal" },
+            { id: "gov", name: "Tim & Pembagian Tugas", score: 0, maxScore: 100, targetScore: 80, description: "Kejelasan peran tim, jadwal shift kerja, dan evaluasi hasil tim" },
+          ],
+        },
+      });
+    }
 
     return res.json({
       success: true,
       data: {
-        compositeScore: data.compositeScore,
+        hasAssessment: true,
+        compositeScore: assessment.compositeScore,
+        isVerified: assessment.isVerified,
         aspects: [
-          { id: "fin", name: "Kesehatan Finansial & Kas", score: data.financial, maxScore: 100, targetScore: 85 },
-          { id: "ops", name: "Operasional & Kontrol HPP", score: data.operationsHpp, maxScore: 100, targetScore: 80 },
-          { id: "mkt", name: "Pemasaran & Penjualan", score: data.marketing, maxScore: 100, targetScore: 75 },
-          { id: "hr", name: "Tim & Tata Kelola", score: data.hrTeam, maxScore: 100, targetScore: 80 },
-          { id: "leg", name: "Legalitas & Kepatuhan", score: data.legal, maxScore: 100, targetScore: 90 },
+          { id: "fin", name: "Keuangan & Pergerakan Uang", score: assessment.financial, maxScore: 100, targetScore: 85, description: "Pemisahan rekening pribadi dengan kas toko dan disiplin pencatatan transaksi" },
+          { id: "ops", name: "Operasional & Standar Kerja", score: assessment.operationsHpp, maxScore: 100, targetScore: 80, description: "Kerapian stok bahan baku, resep standar penyajian, dan efisiensi sisa bahan" },
+          { id: "mkt", name: "Pasar & Pemasaran", score: assessment.marketing, maxScore: 100, targetScore: 75, description: "Jumlah pelanggan setia, frekuensi pesanan berulang, dan penjualan langsung" },
+          { id: "leg", name: "Legalitas & Izin Usaha", score: assessment.legal, maxScore: 100, targetScore: 90, description: "Kelengkapan dokumen resmi NIB OSS RBA, NPWP toko, dan sertifikat halal" },
+          { id: "gov", name: "Tim & Pembagian Tugas", score: assessment.hrTeam, maxScore: 100, targetScore: 80, description: "Kejelasan peran tim, jadwal shift kerja, dan evaluasi hasil tim" },
         ],
       },
     });

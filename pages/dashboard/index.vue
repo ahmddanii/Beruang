@@ -1069,6 +1069,12 @@
         </div>
       </div>
     </Teleport>
+
+    <!-- Slide-Over Drawer: Catat Kas Toko Baru -->
+    <BCashEntryDrawer
+      v-model="isTransactionDrawerOpen"
+      @saved="handleTransactionSaved"
+    />
   </div>
 </template>
 
@@ -1290,7 +1296,8 @@ const editError = ref('')
 const showToastSuccess = ref(false)
 
 function openQuickEditModal() {
-  editStoreName.value = umkmStore.profile.name || 'Kopi Senja Nusantara'
+  const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+  editStoreName.value = umkmStore.profile.name || authStore.currentUser?.businessName || (isDemo ? 'Kopi Senja Nusantara' : 'Usaha Saya')
   editDescription.value = umkmStore.profile.description || umkmStore.profile.pitchSummary || ''
   editError.value = ''
   isQuickEditModalOpen.value = true
@@ -1328,23 +1335,65 @@ interface SparkPoint {
   value: string
 }
 
-const netProfitPoints: SparkPoint[] = [
-  { x: 20, y: 50, date: 'Agustus', value: 'Rp 28.000.000' },
-  { x: 140, y: 28, date: 'September', value: 'Rp 31.500.000' },
-  { x: 260, y: 12, date: 'Oktober', value: 'Rp 32.600.000' }
-]
+const netProfitPoints = computed<SparkPoint[]>(() => {
+  const records = latestMonthlyRecords.value.slice(0, 3).reverse()
+  if (records.length >= 2) {
+    return records.map((r, i) => ({
+      x: 20 + i * 120,
+      y: 50 - i * 18,
+      date: r.month,
+      value: 'Rp ' + (r.netProfit || 0).toLocaleString('id-ID')
+    }))
+  }
+  if (isDemo.value) {
+    return [
+      { x: 20, y: 50, date: 'Agustus', value: 'Rp 28.000.000' },
+      { x: 140, y: 28, date: 'September', value: 'Rp 31.500.000' },
+      { x: 260, y: 12, date: 'Oktober', value: 'Rp 32.600.000' }
+    ]
+  }
+  return []
+})
 
-const cashInflowPoints: SparkPoint[] = [
-  { x: 20, y: 50, date: 'Agustus', value: 'Rp 82.000.000' },
-  { x: 140, y: 30, date: 'September', value: 'Rp 91.000.000' },
-  { x: 260, y: 10, date: 'Oktober', value: 'Rp 100.000.000' }
-]
+const cashInflowPoints = computed<SparkPoint[]>(() => {
+  const records = latestMonthlyRecords.value.slice(0, 3).reverse()
+  if (records.length >= 2) {
+    return records.map((r, i) => ({
+      x: 20 + i * 120,
+      y: 50 - i * 20,
+      date: r.month,
+      value: 'Rp ' + (r.omzet || 0).toLocaleString('id-ID')
+    }))
+  }
+  if (isDemo.value) {
+    return [
+      { x: 20, y: 50, date: 'Agustus', value: 'Rp 82.000.000' },
+      { x: 140, y: 30, date: 'September', value: 'Rp 91.000.000' },
+      { x: 260, y: 10, date: 'Oktober', value: 'Rp 100.000.000' }
+    ]
+  }
+  return []
+})
 
-const cashOutflowPoints: SparkPoint[] = [
-  { x: 20, y: 46, date: 'Agustus', value: 'Rp 54.000.000' },
-  { x: 140, y: 32, date: 'September', value: 'Rp 59.500.000' },
-  { x: 260, y: 14, date: 'Oktober', value: 'Rp 67.400.000' }
-]
+const cashOutflowPoints = computed<SparkPoint[]>(() => {
+  const records = latestMonthlyRecords.value.slice(0, 3).reverse()
+  if (records.length >= 2) {
+    return records.map((r, i) => ({
+      x: 20 + i * 120,
+      y: 46 - i * 16,
+      date: r.month,
+      value: 'Rp ' + ((r.hpp || 0) + (r.opex || 0)).toLocaleString('id-ID')
+    }))
+  }
+  if (isDemo.value) {
+    return [
+      { x: 20, y: 46, date: 'Agustus', value: 'Rp 54.000.000' },
+      { x: 140, y: 32, date: 'September', value: 'Rp 59.500.000' },
+      { x: 260, y: 14, date: 'Oktober', value: 'Rp 67.400.000' }
+    ]
+  }
+  return []
+})
 
 const hoveredProfitPoint = ref<SparkPoint | null>(null)
 const hoveredInflowPoint = ref<SparkPoint | null>(null)
@@ -1356,7 +1405,8 @@ function handleSparklineHover(e: MouseEvent, type: 'profit' | 'inflow' | 'outflo
   if (!rect.width) return
   const relX = Math.max(0, Math.min(280, ((e.clientX - rect.left) / rect.width) * 280))
 
-  const points = type === 'profit' ? netProfitPoints : type === 'inflow' ? cashInflowPoints : cashOutflowPoints
+  const points = type === 'profit' ? netProfitPoints.value : type === 'inflow' ? cashInflowPoints.value : cashOutflowPoints.value
+  if (!points || points.length === 0) return
   let nearest = points[0]
   let minDist = Math.abs(points[0].x - relX)
   for (let i = 1; i < points.length; i++) {
@@ -1813,7 +1863,9 @@ onMounted(() => {
 
   // Trigger HPP Progress bar ease-out animation
   setTimeout(() => {
-    hppBarWidth.value = 45.1
+    hppBarWidth.value = totalCalculatedOmzet.value > 0
+      ? Number(((calculatedHppAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1))
+      : (isDemo.value ? 45.1 : 0)
   }, 200)
 
   // Initialize Branches & Charts
@@ -1839,6 +1891,10 @@ onBeforeUnmount(() => {
 
 // Slide-Over Drawers State
 const isTransactionDrawerOpen = ref(false)
+
+async function handleTransactionSaved() {
+  await umkmStore.fetchFinances()
+}
 
 function openInvestorDrawer() {
   navigateTo('/dashboard/pendanaan')

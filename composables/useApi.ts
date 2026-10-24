@@ -77,11 +77,18 @@ export const useApi = async <T = any>(
 
     // Hanya bersihkan token dan redirect ke login jika sesi auth utama (/auth/me) yang 401
     if (status === 401 && normalizedEndpoint === '/auth/me') {
-      token.value = null
-      if (import.meta.client) {
-        const currentPath = window.location.pathname
-        if (!currentPath.startsWith('/masuk') && !currentPath.startsWith('/daftar')) {
-          navigateTo('/masuk')
+      const isDevToken = token.value?.startsWith('demo-') || token.value?.startsWith('google-session') || token.value?.startsWith('beruang-reg')
+      if (!isDevToken) {
+        token.value = null
+        if (import.meta.client) {
+          try {
+            localStorage.removeItem('beruang_token')
+            localStorage.removeItem('beruang_user')
+          } catch {}
+          const currentPath = window.location.pathname
+          if (!currentPath.startsWith('/masuk') && !currentPath.startsWith('/daftar')) {
+            navigateTo('/masuk')
+          }
         }
       }
     }

@@ -217,9 +217,16 @@
           </button>
 
           <!-- Empty State -->
-          <div v-if="filteredThreads.length === 0" class="py-12 px-4 text-center text-xs sm:text-sm text-neutral-400 font-sans space-y-1.5">
-            <p class="font-semibold text-neutral-700 dark:text-neutral-300">Tidak ada percakapan</p>
-            <p>Ubah kata kunci pencarian atau ganti filter kategori.</p>
+          <div v-if="filteredThreads.length === 0" class="py-16 px-4 text-center font-poppins space-y-3">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-neutral-100 dark:bg-neutral-800/80 flex items-center justify-center text-neutral-400">
+              <HugeiconsIcon :icon="Message01Icon" :size="22" />
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-neutral-800 dark:text-neutral-200">Belum Ada Kontak Diskusi</p>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-xs mx-auto leading-relaxed">
+                Ruang obrolan dengan konsultan pendamping atau investor akan otomatis aktif saat Anda mengajukan bimbingan atau menerima penawaran akses modal.
+              </p>
+            </div>
           </div>
         </div>
       </aside>
@@ -338,7 +345,7 @@
             <div class="space-y-1.5 min-w-0" :class="msg.senderRole === 'UMKM' ? 'items-end text-right' : 'items-start'">
               <div class="flex items-center gap-2 text-xs" :class="msg.senderRole === 'UMKM' ? 'justify-end' : ''">
                 <span class="font-semibold text-neutral-900 dark:text-white font-poppins">
-                  {{ msg.senderRole === 'UMKM' ? 'Anda (Kopi Senja)' : activeThread.investorName }}
+                  {{ msg.senderRole === 'UMKM' ? mySenderLabel : activeThread.investorName }}
                 </span>
                 <span class="text-neutral-400 dark:text-neutral-500 tabular-nums font-sans">{{ msg.timestamp }}</span>
               </div>
@@ -489,6 +496,23 @@
         </div>
       </section>
 
+      <!-- Empty State ketika belum ada thread dipilih -->
+      <section
+        v-else
+        class="hidden lg:flex lg:flex-1 lg:min-w-0 flex-col items-center justify-center p-8 text-center bg-[#F8FAFC] dark:bg-[#0B0F19]"
+      >
+        <div class="max-w-sm space-y-3">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-neutral-100 dark:bg-neutral-800/60 flex items-center justify-center text-neutral-400">
+            <HugeiconsIcon :icon="Message01Icon" :size="28" />
+          </div>
+          <h3 class="font-poppins font-semibold text-base text-neutral-800 dark:text-neutral-200">
+            Belum Ada Percakapan Terpilih
+          </h3>
+          <p class="font-poppins text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            Mulai berdiskusi dengan investor atau konsultan pendamping melalui katalog usaha atau ajukan pendampingan.
+          </p>
+        </div>
+      </section>
     </div>
 
     <!-- ========================================================================= -->
@@ -705,12 +729,28 @@ import {
   File01Icon
 } from '@hugeicons/core-free-icons'
 
+import { useAuthStore } from '~/stores/auth'
+import { useUmkmStore } from '~/stores/umkm'
+
 definePageMeta({
   layout: 'dashboard',
   hideHeader: true
 })
 
+const authStore = useAuthStore()
+const umkmStore = useUmkmStore()
 const chatStore = useChatStore()
+
+const isDemoUser = computed(() => {
+  const email = authStore.currentUser?.email?.toLowerCase() || ''
+  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
+})
+
+const mySenderLabel = computed(() => {
+  const name = umkmStore.profile.name || authStore.currentUser?.businessName
+  if (name) return `Anda (${name})`
+  return isDemoUser.value ? 'Anda (Kopi Senja)' : 'Anda'
+})
 
 const inputMessage = ref('')
 const messagesContainer = ref<HTMLElement | null>(null)
@@ -733,12 +773,14 @@ const quickPhrases = [
 ]
 
 // Official Documents List
-const officialDocuments = ref([
-  { name: 'NIB OSS RBA - Legalitas Usaha.pdf', size: '1.8 MB', status: 'Dokumen Sah' },
-  { name: 'Laporan Rekonsiliasi Kas 30 Hari.pdf', size: '3.2 MB', status: 'Tervalidasi' },
-  { name: 'NPWP Toko & Rekening Koran.pdf', size: '980 KB', status: 'Terverifikasi' },
-  { name: 'Proposal Kemitraan Bagi Hasil.pdf', size: '2.4 MB', status: 'Siap Akses' }
-])
+const officialDocuments = ref<Array<{ name: string; size: string; status: string }>>(
+  isDemoUser.value ? [
+    { name: 'NIB OSS RBA - Legalitas Usaha.pdf', size: '1.8 MB', status: 'Dokumen Sah' },
+    { name: 'Laporan Rekonsiliasi Kas 30 Hari.pdf', size: '3.2 MB', status: 'Tervalidasi' },
+    { name: 'NPWP Toko & Rekening Koran.pdf', size: '980 KB', status: 'Terverifikasi' },
+    { name: 'Proposal Kemitraan Bagi Hasil.pdf', size: '2.4 MB', status: 'Siap Akses' }
+  ] : []
+)
 
 // Filter tabs with dynamic counts for BPillTabs (size="md")
 const totalThreadsCount = computed(() => chatStore.threads.length)

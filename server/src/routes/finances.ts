@@ -20,11 +20,31 @@ async function resolveBusinessId(req: AuthenticatedRequest): Promise<string | nu
     return req.user.businessId;
   }
   if (req.user?.id) {
-    const biz = await prisma.businessProfile.findUnique({
+    let biz = await prisma.businessProfile.findUnique({
       where: { userId: req.user.id },
       select: { id: true },
     });
     if (biz) return biz.id;
+
+    // Jika user terdaftar tetapi businessProfile belum terinisialisasi, buat profil default
+    try {
+      const newBiz = await prisma.businessProfile.create({
+        data: {
+          userId: req.user.id,
+          brand: `${req.user.name || "Usaha"} Store`,
+          name: `${req.user.name || "Usaha"} Store`,
+          ownerName: req.user.name || "Pemilik Usaha",
+          sector: "Perdagangan Umum",
+          location: "Indonesia",
+          city: "Jakarta",
+          status: "PROFILE_INCOMPLETE",
+        },
+        select: { id: true },
+      });
+      return newBiz.id;
+    } catch {
+      // ignore
+    }
   }
   // Fallback demo HANYA untuk Fikri demo akun
   if (req.user?.email === "fikri@kopisenja.id") {

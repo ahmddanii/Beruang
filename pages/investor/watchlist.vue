@@ -20,23 +20,16 @@
 
     <!-- 1. Top Header: Title on Left & Action Control on Right -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
-      <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center text-amber-500 shrink-0 border border-amber-200 dark:border-amber-800">
-          <HugeiconsIcon
-            :icon="StarIcon"
-            :size="24"
-            :stroke-width="2.2"
-            class="fill-amber-400"
-          />
-        </div>
-        <div>
-          <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-            Portofolio Pantau
-          </h1>
-          <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-            Daftar UMKM terakreditasi yang Anda simpan untuk uji tuntas dan permohonan akses data room
-          </p>
-        </div>
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <HugeiconsIcon
+          :icon="Bookmark02Icon"
+          :size="26"
+          :stroke-width="2.2"
+          class="text-neutral-900 dark:text-white shrink-0"
+        />
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Simpan
+        </h1>
       </div>
 
       <div class="flex items-center gap-2.5 shrink-0">
@@ -45,7 +38,7 @@
           variant="default"
           :huge-icon="ArrowLeft01Icon"
         >
-          Kembali ke Katalog
+          Kembali ke Jaringan
         </BActionButton>
       </div>
     </div>
@@ -218,6 +211,7 @@ import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   StarIcon,
+  Bookmark02Icon,
   FileUnlockedIcon,
   CheckmarkCircle01Icon,
   Location01Icon,

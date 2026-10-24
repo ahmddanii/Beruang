@@ -1,6 +1,6 @@
 <template>
   <div ref="investasiPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
-    <!-- 1. Page Title: Identical to UMKM Pages -->
+    <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon :icon="Coins01Icon" :size="26" :stroke-width="2.2" class="text-neutral-900 dark:text-white shrink-0" />
@@ -10,6 +10,13 @@
       </div>
 
       <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
+        <NuxtLink
+          to="/admin/investor"
+          class="btn-pill-action justify-center"
+        >
+          <HugeiconsIcon :icon="UserMultiple02Icon" :size="16" :stroke-width="2" />
+          <span>Direktori Investor</span>
+        </NuxtLink>
         <button
           type="button"
           class="btn-pill-action justify-center"
@@ -44,8 +51,9 @@
       </div>
     </Transition>
 
-    <!-- 2. 3 Summary Cards (Identical .stat-card-clean Typography & Geometry to UMKM Pages) -->
+    <!-- 2. 3 Summary Cards (Simplified, Clear, No Minat Pendanaan Nominal) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 items-stretch w-full">
+      <!-- Card 1: Total Alur Penjajakan -->
       <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
         <div class="stat-card-clean transition-all duration-200">
           <div class="flex items-center justify-between w-full gap-2">
@@ -54,21 +62,22 @@
                 <HugeiconsIcon :icon="Coins01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
               </div>
               <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
-                Minat Pendanaan
+                Total Penjajakan
               </span>
             </div>
             <div class="stat-card-badge badge-green">
-              <span>{{ dealItems.length }} Tiket</span>
+              <span>Terpantau</span>
             </div>
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              Rp 1.020.000.000
+              {{ dealItems.length }} Alur
             </span>
           </div>
         </div>
       </div>
 
+      <!-- Card 2: Ruang Data Terbuka -->
       <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
         <div class="stat-card-clean transition-all duration-200">
           <div class="flex items-center justify-between w-full gap-2">
@@ -86,12 +95,13 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              {{ activeDataRoomCount }} Akses
+              {{ activeDataRoomCount }} Akses Aktif
             </span>
           </div>
         </div>
       </div>
 
+      <!-- Card 3: Institusi Investor -->
       <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
         <div class="stat-card-clean transition-all duration-200">
           <div class="flex items-center justify-between w-full gap-2">
@@ -100,7 +110,7 @@
                 <HugeiconsIcon :icon="Shield01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
               </div>
               <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
-                Institusi Investor
+                Investor Terhubung
               </span>
             </div>
             <div class="stat-card-badge badge-green">
@@ -109,26 +119,28 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              4 Pemodal
+              {{ uniqueInvestorsCount }} Institusi
             </span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 3. Deal Flow & Data Room Table -->
+    <!-- 3. Clean Deal Flow & Data Room Table (Simple, Elegant, No Overflow) -->
     <section class="gsap-admin-section card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
-      <div class="p-5 sm:p-8 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
-        <div class="space-y-1.5">
-          <h2 class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-            Daftar Interaksi Pemodal & Akses Ruang Data
-          </h2>
-          <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
-            Pantau pembukaan dokumen keuangan privat antara investor dan UMKM binaan.
-          </p>
+      <div class="p-5 sm:p-7 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-1">
+            <h2 class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+              Pengawasan Akses Ruang Data
+            </h2>
+            <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
+              Kelola izin pembukaan dokumen keuangan privat antara investor dan UMKM binaan.
+            </p>
+          </div>
         </div>
 
-        <!-- Joined Search & Filter Control Bar (Identik dengan Catatan Kas — Daftar Mutasi Transaksi Kas Harian) -->
+        <!-- Joined Search & Filter Control Bar (Identik dengan Catatan Kas & Standard Admin) -->
         <div class="relative w-full rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-neutral-50/70 dark:bg-[#1A1A1A] focus-within:border-[#00800e] dark:focus-within:border-[#00C058] focus-within:ring-2 focus-within:ring-[#00800e]/20 transition-all flex items-center min-h-[46px]">
           <!-- Left: Search Icon + Input -->
           <div class="relative flex-1 flex items-center min-w-0">
@@ -160,7 +172,7 @@
           <!-- Divider Line -->
           <div class="h-6 w-px bg-neutral-300 dark:bg-neutral-700 shrink-0" aria-hidden="true" />
 
-          <!-- Right: Filter Button Trigger (Joined seamlessly) -->
+          <!-- Right: Filter Button Trigger -->
           <div class="relative shrink-0">
             <button
               type="button"
@@ -207,39 +219,59 @@
         </div>
       </div>
 
+      <!-- Clean Responsive Table (Zero horizontal overflow on standard desktop) -->
       <div class="overflow-x-auto w-full">
         <table class="w-full text-left text-sm font-poppins">
           <thead>
-            <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
-              <th class="py-4 sm:py-5 px-6 text-left font-bold">Investor Pemodal</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Target UMKM & Konsultan</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Minat Pendanaan</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Tahap & Ruang Data</th>
-              <th class="py-4 sm:py-5 px-6 text-right font-bold">Tindakan</th>
+            <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs font-bold uppercase tracking-wider">
+              <th class="py-3.5 px-4 sm:px-5 text-left font-bold">Investor</th>
+              <th class="py-3.5 px-3 sm:px-4 text-left font-bold">UMKM Binaan</th>
+              <th class="py-3.5 px-3 sm:px-4 text-left font-bold">Ruang Data</th>
+              <th class="py-3.5 px-3 sm:px-4 text-left font-bold">Update</th>
+              <th class="py-3.5 px-4 sm:px-5 text-right font-bold">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
             <tr
-              v-for="deal in filteredDeals"
+              v-for="deal in paginatedDeals"
               :key="deal.id"
-              class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
+              class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer"
+              @click="openDetailModal(deal)"
             >
-              <td class="py-4 sm:py-5 px-6 text-left">
-                <p class="text-sm font-semibold text-neutral-900 dark:text-white">{{ deal.investorName }}</p>
-                <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">{{ deal.investorType }}</p>
+              <!-- Investor -->
+              <td class="py-3.5 px-4 sm:px-5 text-left">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-full bg-[#E6F4F7] dark:bg-[#156374]/25 border border-[#156374]/20 flex items-center justify-center text-xs font-semibold text-[#156374] dark:text-[#50AABF] shrink-0">
+                    {{ deal.investorName.slice(0, 2).toUpperCase() }}
+                  </div>
+                  <div class="min-w-0 max-w-[180px] sm:max-w-[210px]">
+                    <p class="text-sm font-semibold text-neutral-900 dark:text-white truncate" :title="deal.investorName">
+                      {{ deal.investorName }}
+                    </p>
+                    <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                      {{ deal.investorType }}
+                    </p>
+                  </div>
+                </div>
               </td>
-              <td class="py-4 sm:py-5 px-5 text-left">
-                <p class="text-sm font-semibold text-neutral-900 dark:text-white">{{ deal.umkmName }}</p>
-                <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Konsultan: {{ deal.consultantName }}</p>
+
+              <!-- Target UMKM -->
+              <td class="py-3.5 px-3 sm:px-4 text-left">
+                <div class="min-w-0 max-w-[170px] sm:max-w-[200px]">
+                  <p class="text-sm font-semibold text-neutral-900 dark:text-white truncate" :title="deal.umkmName">
+                    {{ deal.umkmName }}
+                  </p>
+                  <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                    Konsultan: {{ deal.consultantName }}
+                  </p>
+                </div>
               </td>
-              <td class="py-4 sm:py-5 px-5 text-left whitespace-nowrap">
-                <span class="text-sm font-semibold text-neutral-900 dark:text-white tabular-nums block">{{ deal.ticketSize }}</span>
-                <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Update {{ deal.updatedAt }}</p>
-              </td>
-              <td class="py-4 sm:py-5 px-5 text-left whitespace-nowrap">
+
+              <!-- Status Ruang Data -->
+              <td class="py-3.5 px-3 sm:px-4 text-left whitespace-nowrap">
                 <span
                   :class="[
-                    'inline-flex items-center px-2.5 py-1 rounded-[8px] text-xs font-semibold border font-poppins',
+                    'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[8px] text-xs font-semibold border font-poppins',
                     deal.stage === 'Ruang Data Terbuka'
                       ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
                       : deal.stage === 'Penjajakan Awal'
@@ -247,15 +279,32 @@
                         : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700'
                   ]"
                 >
-                  {{ deal.stage }}
+                  <span
+                    class="w-1.5 h-1.5 rounded-full shrink-0"
+                    :class="[
+                      deal.stage === 'Ruang Data Terbuka'
+                        ? 'bg-emerald-600 dark:bg-emerald-400'
+                        : deal.stage === 'Penjajakan Awal'
+                          ? 'bg-cyan-600 dark:bg-cyan-400'
+                          : 'bg-neutral-400'
+                    ]"
+                  />
+                  <span>{{ deal.stage }}</span>
                 </span>
               </td>
-              <td class="py-4 sm:py-5 px-6 text-right whitespace-nowrap">
-                <div class="inline-flex items-center gap-2.5">
+
+              <!-- Pembaruan Terakhir -->
+              <td class="py-3.5 px-3 sm:px-4 text-left whitespace-nowrap text-xs text-neutral-600 dark:text-neutral-400 tabular-nums">
+                {{ deal.updatedAt }}
+              </td>
+
+              <!-- Tindakan / Aksi -->
+              <td class="py-3.5 px-4 sm:px-5 text-right whitespace-nowrap" @click.stop>
+                <div class="inline-flex items-center gap-2">
                   <button
-                    v-if="deal.stage === 'Penjajakan Awal'"
+                    v-if="deal.stage === 'Penjajakan Awal' || deal.stage === 'Akses Dicabut'"
                     type="button"
-                    class="btn-pill-action-green"
+                    class="btn-pill-action-green text-xs !min-h-[32px] !py-1 !px-2.5"
                     @click="grantDataRoom(deal)"
                   >
                     <span>Buka Akses</span>
@@ -263,18 +312,168 @@
                   <button
                     v-if="deal.stage === 'Ruang Data Terbuka'"
                     type="button"
-                    class="btn-pill-action-red-outline"
+                    class="btn-pill-action-red-outline text-xs !min-h-[32px] !py-1 !px-2.5"
                     @click="revokeDataRoom(deal)"
                   >
                     <span>Cabut Izin</span>
                   </button>
+
+                  <button
+                    type="button"
+                    class="btn-pill-action text-xs !min-h-[32px] !py-1 !px-2.5"
+                    @click="openDetailModal(deal)"
+                  >
+                    <span>Detail</span>
+                  </button>
                 </div>
+              </td>
+            </tr>
+
+            <!-- Empty State -->
+            <tr v-if="filteredDeals.length === 0">
+              <td colspan="5" class="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                Tidak ada data alur investasi yang sesuai dengan pencarian atau filter.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Component -->
+      <BPagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredDeals.length"
+        :pageSize="pageSize"
+        itemLabel="alur investasi"
+      />
     </section>
+
+    <!-- 4. Interactive Detail Modal (Prevents UI clutter on main table) -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="selectedDeal"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs font-poppins"
+          @click.self="selectedDeal = null"
+        >
+          <div class="w-full max-w-lg rounded-[18px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 p-6 sm:p-7 shadow-none space-y-5 animate-in fade-in zoom-in-95 duration-150">
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between gap-3 border-b border-neutral-100 dark:border-neutral-800 pb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-full bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center text-base font-bold shrink-0">
+                  {{ selectedDeal.investorName.slice(0, 2).toUpperCase() }}
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white leading-tight">
+                    {{ selectedDeal.investorName }}
+                  </h3>
+                  <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+                    Menjajaki: <strong class="text-neutral-800 dark:text-neutral-200">{{ selectedDeal.umkmName }}</strong>
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="w-9 h-9 rounded-full bg-white dark:bg-neutral-800 border border-[#CBD5E1] dark:border-neutral-700 flex items-center justify-center text-neutral-500 hover:text-neutral-900 dark:hover:text-white cursor-pointer shadow-none"
+                @click="selectedDeal = null"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="16" :stroke-width="2.2" />
+              </button>
+            </div>
+
+            <!-- Modal Info List -->
+            <div class="p-4 sm:p-5 rounded-[14px] bg-neutral-50/70 dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-800 space-y-3 text-xs sm:text-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-neutral-500 dark:text-neutral-400">Status Akses Ruang Data:</span>
+                <span
+                  :class="[
+                    'inline-flex items-center px-2.5 py-0.5 rounded-[8px] text-xs font-semibold border',
+                    selectedDeal.stage === 'Ruang Data Terbuka'
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
+                      : selectedDeal.stage === 'Penjajakan Awal'
+                        ? 'bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+                        : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700'
+                  ]"
+                >
+                  {{ selectedDeal.stage }}
+                </span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-neutral-500 dark:text-neutral-400">Konsultan Pendamping:</span>
+                <span class="font-semibold text-neutral-900 dark:text-white">{{ selectedDeal.consultantName }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-neutral-500 dark:text-neutral-400">Tipe Lembaga Investor:</span>
+                <span class="font-medium text-neutral-900 dark:text-white">{{ selectedDeal.investorType }}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-neutral-500 dark:text-neutral-400">Pembaruan Terakhir:</span>
+                <span class="font-medium text-neutral-900 dark:text-white">{{ selectedDeal.updatedAt }}</span>
+              </div>
+              <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 space-y-1.5">
+                <span class="text-neutral-500 dark:text-neutral-400 block text-xs font-semibold uppercase tracking-wider">
+                  Pengamanan Berkas &amp; Dokumen:
+                </span>
+                <div class="flex flex-wrap gap-2 text-xs">
+                  <span class="px-2 py-1 rounded-[6px] bg-white dark:bg-neutral-800 border border-[#CBD5E1] dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
+                    Watermark ID Aktif
+                  </span>
+                  <span class="px-2 py-1 rounded-[6px] bg-white dark:bg-neutral-800 border border-[#CBD5E1] dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
+                    Laporan Arus Kas
+                  </span>
+                  <span class="px-2 py-1 rounded-[6px] bg-white dark:bg-neutral-800 border border-[#CBD5E1] dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
+                    Buku Besar Usaha
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="flex items-center justify-between gap-2.5 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+              <NuxtLink
+                to="/admin/investor"
+                class="btn-pill-action text-xs"
+              >
+                <span>Lihat Profil Investor →</span>
+              </NuxtLink>
+
+              <div class="flex items-center gap-2">
+                <button
+                  v-if="selectedDeal.stage === 'Penjajakan Awal' || selectedDeal.stage === 'Akses Dicabut'"
+                  type="button"
+                  class="btn-pill-action-green"
+                  @click="grantDataRoom(selectedDeal)"
+                >
+                  <span>Buka Akses</span>
+                </button>
+                <button
+                  v-if="selectedDeal.stage === 'Ruang Data Terbuka'"
+                  type="button"
+                  class="btn-pill-action-red-outline"
+                  @click="revokeDataRoom(selectedDeal)"
+                >
+                  <span>Cabut Izin</span>
+                </button>
+                <button
+                  type="button"
+                  class="btn-pill-action"
+                  @click="selectedDeal = null"
+                >
+                  <span>Tutup</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -291,7 +490,8 @@ import {
   Search01Icon,
   FilterHorizontalIcon,
   ArrowDown01Icon,
-  Cancel01Icon
+  Cancel01Icon,
+  UserMultiple02Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -309,7 +509,6 @@ interface DealFlowItem {
   investorType: string
   umkmName: string
   consultantName: string
-  ticketSize: string
   stage: 'Ruang Data Terbuka' | 'Penjajakan Awal' | 'Akses Dicabut'
   updatedAt: string
 }
@@ -318,14 +517,20 @@ const investasiPageRef = ref<HTMLElement | null>(null)
 let gsapCtx: gsap.Context | null = null
 
 const toastMessage = ref('')
-const selectedStage = ref<'ALL' | 'Ruang Data Terbuka' | 'Penjajakan Awal'>('ALL')
+const selectedStage = ref<'ALL' | 'Ruang Data Terbuka' | 'Penjajakan Awal' | 'Akses Dicabut'>('ALL')
 const isFilterDropdownOpen = ref(false)
 const searchQuery = ref('')
+const selectedDeal = ref<DealFlowItem | null>(null)
+
+// Pagination states
+const currentPage = ref(1)
+const pageSize = ref(10)
 
 const stageTabs = [
   { id: 'ALL' as const, label: 'Semua Alur', shortLabel: 'Semua' },
   { id: 'Ruang Data Terbuka' as const, label: 'Ruang Data Terbuka', shortLabel: 'Ruang Data' },
-  { id: 'Penjajakan Awal' as const, label: 'Penjajakan Awal', shortLabel: 'Penjajakan' }
+  { id: 'Penjajakan Awal' as const, label: 'Penjajakan Awal', shortLabel: 'Penjajakan' },
+  { id: 'Akses Dicabut' as const, label: 'Akses Dicabut', shortLabel: 'Dicabut' }
 ]
 
 const activeStageLabel = computed(() => {
@@ -339,6 +544,7 @@ const activeStageShortLabel = computed(() => {
 function selectStageFilter(id: typeof selectedStage.value) {
   selectedStage.value = id
   isFilterDropdownOpen.value = false
+  currentPage.value = 1
 }
 
 const dealItems = ref<DealFlowItem[]>([
@@ -348,7 +554,6 @@ const dealItems = ref<DealFlowItem[]>([
     investorType: 'Venture Capital • Jakarta',
     umkmName: 'Kopi Kenangan Senja',
     consultantName: 'Rendra Pratama, S.E., Ak.',
-    ticketSize: 'Rp 250.000.000',
     stage: 'Ruang Data Terbuka',
     updatedAt: '2 jam lalu'
   },
@@ -358,7 +563,6 @@ const dealItems = ref<DealFlowItem[]>([
     investorType: 'Venture Capital • Jakarta',
     umkmName: 'Batik Sekar Jagad',
     consultantName: 'Nadia Kusuma, MBA, CFP',
-    ticketSize: 'Rp 320.000.000',
     stage: 'Ruang Data Terbuka',
     updatedAt: '4 jam lalu'
   },
@@ -368,7 +572,6 @@ const dealItems = ref<DealFlowItem[]>([
     investorType: 'Dana Syariah • Bandung',
     umkmName: 'Kopi Kenangan Senja',
     consultantName: 'Rendra Pratama, S.E., Ak.',
-    ticketSize: 'Rp 150.000.000',
     stage: 'Penjajakan Awal',
     updatedAt: '1 hari lalu'
   },
@@ -378,7 +581,6 @@ const dealItems = ref<DealFlowItem[]>([
     investorType: 'Impact Fund • Bali',
     umkmName: 'Tenun Ikat Nusantara',
     consultantName: 'Dr. Hendra Wijaya, M.M.',
-    ticketSize: 'Rp 180.000.000',
     stage: 'Penjajakan Awal',
     updatedAt: '5 jam lalu'
   },
@@ -388,13 +590,67 @@ const dealItems = ref<DealFlowItem[]>([
     investorType: 'Angel Syndicate • Bogor',
     umkmName: 'Sayur Hidroponik Segar',
     consultantName: 'Rendra Pratama, S.E., Ak.',
-    ticketSize: 'Rp 120.000.000',
     stage: 'Ruang Data Terbuka',
     updatedAt: '3 hari lalu'
+  },
+  {
+    id: 'deal-6',
+    investorName: 'Surabaya Angel Network',
+    investorType: 'Angel Investor • Surabaya',
+    umkmName: 'Sambal Bu Rudy Binaan',
+    consultantName: 'Siti Rahmawati, S.E., M.Ak.',
+    stage: 'Penjajakan Awal',
+    updatedAt: '6 jam lalu'
+  },
+  {
+    id: 'deal-7',
+    investorName: 'Mandiri Mitra Usaha',
+    investorType: 'Dana Ventura • Jakarta',
+    umkmName: 'Keripik Tempe Barokah',
+    consultantName: 'Rendra Pratama, S.E., Ak.',
+    stage: 'Ruang Data Terbuka',
+    updatedAt: '1 hari lalu'
+  },
+  {
+    id: 'deal-8',
+    investorName: 'Artha Ventura Syariah',
+    investorType: 'Dana Syariah • Bandung',
+    umkmName: 'Tenun Ikat Nusantara',
+    consultantName: 'Dr. Hendra Wijaya, M.M.',
+    stage: 'Akses Dicabut',
+    updatedAt: '4 hari lalu'
+  },
+  {
+    id: 'deal-9',
+    investorName: 'Timur Berkarya Fund',
+    investorType: 'Impact Fund • Bali',
+    umkmName: 'Kopi Kenangan Senja',
+    consultantName: 'Rendra Pratama, S.E., Ak.',
+    stage: 'Penjajakan Awal',
+    updatedAt: '12 jam lalu'
+  },
+  {
+    id: 'deal-10',
+    investorName: 'Nusantara Impact Capital',
+    investorType: 'Venture Capital • Jakarta',
+    umkmName: 'Sayur Hidroponik Segar',
+    consultantName: 'Rendra Pratama, S.E., Ak.',
+    stage: 'Ruang Data Terbuka',
+    updatedAt: '5 hari lalu'
+  },
+  {
+    id: 'deal-11',
+    investorName: 'Koperasi Pemodal Lokal',
+    investorType: 'Angel Syndicate • Bogor',
+    umkmName: 'Batik Sekar Jagad',
+    consultantName: 'Nadia Kusuma, MBA, CFP',
+    stage: 'Penjajakan Awal',
+    updatedAt: '2 hari lalu'
   }
 ])
 
 const activeDataRoomCount = computed(() => dealItems.value.filter(d => d.stage === 'Ruang Data Terbuka').length)
+const uniqueInvestorsCount = computed(() => new Set(dealItems.value.map(d => d.investorName)).size)
 
 const filteredDeals = computed(() => {
   return dealItems.value.filter((d) => {
@@ -405,23 +661,35 @@ const filteredDeals = computed(() => {
       matchStage &&
       (d.investorName.toLowerCase().includes(q) ||
         d.umkmName.toLowerCase().includes(q) ||
-        d.consultantName.toLowerCase().includes(q))
+        d.consultantName.toLowerCase().includes(q) ||
+        d.investorType.toLowerCase().includes(q))
     )
   })
 })
 
+const paginatedDeals = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return filteredDeals.value.slice(start, start + pageSize.value)
+})
+
+function openDetailModal(deal: DealFlowItem) {
+  selectedDeal.value = deal
+}
+
 function grantDataRoom(deal: DealFlowItem) {
   deal.stage = 'Ruang Data Terbuka'
-  toastMessage.value = `Akses Ruang Data ${deal.umkmName} dibuka untuk ${deal.investorName}.`
+  deal.updatedAt = 'Baru saja'
+  toastMessage.value = `Izin Ruang Data ${deal.umkmName} berhasil dibuka untuk ${deal.investorName}.`
 }
 
 function revokeDataRoom(deal: DealFlowItem) {
   deal.stage = 'Akses Dicabut'
+  deal.updatedAt = 'Baru saja'
   toastMessage.value = `Akses Ruang Data ${deal.umkmName} untuk ${deal.investorName} telah dicabut.`
 }
 
 function handleExportCsv() {
-  toastMessage.value = `Data alur investasi (${filteredDeals.value.length} transaksi) berhasil diunduh.`
+  toastMessage.value = `Data alur investasi (${filteredDeals.value.length} catatan) berhasil diekspor.`
 }
 
 onMounted(() => {

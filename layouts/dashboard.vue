@@ -119,8 +119,8 @@
         </div>
       </main>
 
-      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page & Hidden on Mobile to Avoid Collision) -->
-      <LinkedInChatDock v-if="!isMessagesPage" class="hidden lg:block" />
+      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page, Hidden on Admin, & Hidden on Mobile to Avoid Collision) -->
+      <LinkedInChatDock v-if="!isMessagesPage && !isAdminRole" class="hidden lg:block" />
 
       <!-- Mobile Floating Pill Tab Bar & Quick Access FAB for UMKM (Images 1 & 2) -->
       <MobilePillTabBar v-if="isUmkmRole" />
@@ -202,6 +202,9 @@ const isMessagesPage = computed(() => {
 })
 
 const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const isAdminRole = computed(() => {
+  return currentRole.value === 'ADMIN' || route.path.startsWith('/admin')
+})
 const isInvestorRole = computed(() => {
   return currentRole.value === 'INVESTOR' || route.path.startsWith('/investor')
 })
@@ -314,7 +317,7 @@ const currentPageInfo = computed(() => {
 
   // Investor pages
   if (p === '/investor' || p === '/investor/') {
-    return { title: 'Katalog Usaha', icon: Store01Icon }
+    return { title: 'Jaringan', icon: Store01Icon }
   }
   if (p.startsWith('/investor/pesan')) {
     return {
@@ -331,10 +334,13 @@ const currentPageInfo = computed(() => {
     }
   }
   if (p.startsWith('/investor/watchlist')) {
-    return { title: 'Disimpan', icon: StarIcon }
+    return { title: 'Simpan', icon: StarIcon }
   }
   if (p.startsWith('/investor/umkm/')) {
     return { title: 'Detail Prospek UMKM', icon: Store01Icon }
+  }
+  if (p.startsWith('/investor/profile')) {
+    return { title: 'Profil Investor', icon: UserCircleIcon }
   }
   if (p.startsWith('/investor/pengaturan')) {
     return { title: 'Pengaturan Investor', icon: Settings01Icon }
@@ -347,8 +353,14 @@ const currentPageInfo = computed(() => {
   if (p.startsWith('/admin/umkm')) {
     return { title: 'Kemitraan UMKM', icon: Store01Icon }
   }
+  if (p.startsWith('/admin/daftar-umkm')) {
+    return { title: 'Data UMKM', icon: Store01Icon }
+  }
   if (p.startsWith('/admin/penugasan')) {
-    return { title: 'Penugasan Konsultan', icon: UserAdd01Icon }
+    return { title: 'Konsultan', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/admin/investor')) {
+    return { title: 'Data Investor', icon: Coins01Icon }
   }
   if (p.startsWith('/admin/sertifikasi')) {
     return { title: 'Sertifikasi Usaha', icon: Award01Icon }

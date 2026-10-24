@@ -181,58 +181,7 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 5. CONTAINER 3: STATUS INTEGRASI LAYANAN API                               -->
-    <!-- ========================================================================= -->
-    <div class="gsap-setting-card card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none space-y-6">
-      <div class="flex items-center gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800">
-        <div class="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-          <HugeiconsIcon :icon="SparklesIcon" :size="20" :stroke-width="2" />
-        </div>
-        <div>
-          <h2 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
-            Konektivitas Layanan & API Pihak Ketiga
-          </h2>
-          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-            Monitoring kesehatan endpoint pengiriman pesan transaksional dan engine asisten cerdas.
-          </p>
-        </div>
-      </div>
-
-      <div class="space-y-3">
-        <div class="p-4 rounded-xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <HugeiconsIcon :icon="SparklesIcon" :size="20" class="text-indigo-500" />
-            <div>
-              <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
-                AI Copilot Engine (Claude 3.7 Sonnet)
-              </span>
-              <span class="text-[11px] text-neutral-500">Deteksi anomali biaya dan drafting rekomendasi bimbingan</span>
-            </div>
-          </div>
-          <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-            Terhubung & Aktif
-          </span>
-        </div>
-
-        <div class="p-4 rounded-xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <HugeiconsIcon :icon="SmartPhone01Icon" :size="20" class="text-[#00800e]" />
-            <div>
-              <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
-                WhatsApp Business Gateway (Fonnte API)
-              </span>
-              <span class="text-[11px] text-neutral-500">Notifikasi pengingat tanggal 25 dan alert izin data room</span>
-            </div>
-          </div>
-          <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-            Terhubung (Kuota: 12.450 Pesan)
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- 6. BOTTOM ACTION BAR                                                      -->
+    <!-- 5. BOTTOM ACTION BAR                                                      -->
     <!-- ========================================================================= -->
     <div class="gsap-settings-footer flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
       <p class="text-xs text-neutral-500 dark:text-neutral-400">
@@ -262,12 +211,8 @@ import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Settings01Icon,
   CheckmarkCircle01Icon,
-  InformationCircleIcon,
   Award01Icon,
   Calendar03Icon,
-  SparklesIcon,
-  SmartPhone01Icon,
-  ArrowRight01Icon,
   Tick02Icon
 } from '@hugeicons/core-free-icons'
 

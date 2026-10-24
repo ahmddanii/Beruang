@@ -1,6 +1,6 @@
 <template>
   <div ref="sertifikasiPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
-    <!-- 1. Page Title: Identical to UMKM Pages -->
+    <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon :icon="Award01Icon" :size="26" :stroke-width="2.2" class="text-neutral-900 dark:text-white shrink-0" />
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <!-- Toast Feedback -->
+    <!-- Toast Notification -->
     <Transition
       enter-active-class="transition duration-200 ease-out"
       enter-from-class="transform -translate-y-2 opacity-0"
@@ -43,8 +43,9 @@
       </div>
     </Transition>
 
-    <!-- 2. 3 Summary Cards (Identical .stat-card-clean Typography & Geometry to UMKM Pages) -->
+    <!-- 2. 3 Summary Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 items-stretch w-full">
+      <!-- Card 1: Antrean Sertifikasi -->
       <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
         <div class="stat-card-clean transition-all duration-200">
           <div class="flex items-center justify-between w-full gap-2">
@@ -68,6 +69,7 @@
         </div>
       </div>
 
+      <!-- Card 2: Lulus Sertifikasi -->
       <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
         <div class="stat-card-clean transition-all duration-200">
           <div class="flex items-center justify-between w-full gap-2">
@@ -76,7 +78,7 @@
                 <HugeiconsIcon :icon="Award01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
               </div>
               <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
-                Lulus Grade A
+                Lulus Sertifikasi
               </span>
             </div>
             <div class="stat-card-badge badge-green">
@@ -91,6 +93,7 @@
         </div>
       </div>
 
+      <!-- Card 3: Ambang Skor Lulus -->
       <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
         <div class="stat-card-clean transition-all duration-200">
           <div class="flex items-center justify-between w-full gap-2">
@@ -99,7 +102,7 @@
                 <HugeiconsIcon :icon="Shield01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
               </div>
               <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
-                Ambang Skor Lulus
+                Ambang Kelulusan
               </span>
             </div>
             <div class="stat-card-badge badge-green">
@@ -115,7 +118,7 @@
       </div>
     </div>
 
-    <!-- 3. Certification Queue Container -->
+    <!-- 3. Certification Table Container -->
     <section class="gsap-admin-section card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
       <div class="p-5 sm:p-8 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
         <div class="space-y-1.5">
@@ -123,11 +126,11 @@
             Daftar Pengajuan Sertifikasi Kesiapan Pendanaan
           </h2>
           <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
-            Tinjau pengesahan usaha binaan berdasarkan penilaian 5 pilar dan kelengkapan mutasi rekening.
+            Pantau sertifikasi kesiapan pendanaan UMKM yang ditinjau konsultan dan kelengkapan mutasi rekening.
           </p>
         </div>
 
-        <!-- Joined Search & Filter Control Bar (Identik dengan Catatan Kas — Daftar Mutasi Transaksi Kas Harian) -->
+        <!-- Joined Search & Filter Control Bar -->
         <div class="relative w-full rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-neutral-50/70 dark:bg-[#1A1A1A] focus-within:border-[#00800e] dark:focus-within:border-[#00C058] focus-within:ring-2 focus-within:ring-[#00800e]/20 transition-all flex items-center min-h-[46px]">
           <!-- Left: Search Icon + Input -->
           <div class="relative flex-1 flex items-center min-w-0">
@@ -140,8 +143,8 @@
             <input
               v-model="searchQuery"
               type="text"
-              aria-label="Cari UMKM atau konsultan pengusul"
-              placeholder="Cari UMKM, pemilik, konsultan pengusul..."
+              aria-label="Cari UMKM atau konsultan peninjau"
+              placeholder="Cari UMKM, pemilik, konsultan peninjau..."
               class="w-full pl-2.5 pr-2 py-2.5 bg-transparent border-0 text-xs sm:text-sm text-[#18181b] dark:text-[#FDFDFD] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-0 font-poppins min-w-0"
             />
             <button
@@ -159,7 +162,7 @@
           <!-- Divider Line -->
           <div class="h-6 w-px bg-neutral-300 dark:bg-neutral-700 shrink-0" aria-hidden="true" />
 
-          <!-- Right: Filter Button Trigger (Joined seamlessly) -->
+          <!-- Right: Filter Button Trigger -->
           <div class="relative shrink-0">
             <button
               type="button"
@@ -206,21 +209,21 @@
         </div>
       </div>
 
+      <!-- Table: Simple, Clean, No Scores / No Grades -->
       <div class="overflow-x-auto w-full">
         <table class="w-full text-left text-sm font-poppins">
           <thead>
             <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
-              <th class="py-4 sm:py-5 px-6 text-left font-bold">Usaha & Pemilik</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Konsultan Pengusul</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Skor 5 Pilar</th>
+              <th class="py-4 sm:py-5 px-6 text-left font-bold">Usaha &amp; Pemilik</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">Konsultan Peninjau</th>
               <th class="py-4 sm:py-5 px-5 text-left font-bold">Bukti Mutasi</th>
               <th class="py-4 sm:py-5 px-5 text-left font-bold">Status</th>
-              <th class="py-4 sm:py-5 px-6 text-right font-bold">Tindakan</th>
+              <th class="py-4 sm:py-5 px-6 text-right font-bold">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
             <tr
-              v-for="item in filteredSubmissions"
+              v-for="item in paginatedSubmissions"
               :key="item.id"
               class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
             >
@@ -230,14 +233,9 @@
               </td>
               <td class="py-4 sm:py-5 px-5 text-left">
                 <p class="text-sm font-medium text-neutral-900 dark:text-white">{{ item.consultantName }}</p>
-                <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Diajukan {{ item.submittedAt }}</p>
+                <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">Ditinjau {{ item.submittedAt }}</p>
               </td>
               <td class="py-4 sm:py-5 px-5 text-left whitespace-nowrap">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-[8px] text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800 tabular-nums">
-                  {{ item.score }}/100
-                </span>
-              </td>
-              <td class="py-4 sm:py-5 px-5 text-left">
                 <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ item.bankMutation }}</span>
               </td>
               <td class="py-4 sm:py-5 px-5 text-left whitespace-nowrap">
@@ -255,31 +253,36 @@
                 </span>
               </td>
               <td class="py-4 sm:py-5 px-6 text-right whitespace-nowrap">
-                <div class="inline-flex items-center gap-2.5">
-                  <button
-                    type="button"
-                    class="btn-pill-action"
-                    @click="selectedSubmission = item"
-                  >
-                    <span>Tinjau</span>
-                  </button>
-                  <button
-                    v-if="item.status === 'Menunggu'"
-                    type="button"
-                    class="btn-pill-action-green"
-                    @click="approveCertification(item)"
-                  >
-                    <span>Sahkan</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  class="btn-pill-action"
+                  @click="selectedSubmission = item"
+                >
+                  <span>Detail</span>
+                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2" />
+                </button>
+              </td>
+            </tr>
+
+            <tr v-if="filteredSubmissions.length === 0">
+              <td colspan="5" class="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                Tidak ditemukan pengajuan sertifikasi yang sesuai dengan pencarian.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination -->
+      <BPagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredSubmissions.length"
+        :pageSize="pageSize"
+        itemLabel="pengajuan"
+      />
     </section>
 
-    <!-- Modal Tinjau Sertifikasi -->
+    <!-- Modal Detail Sertifikasi -->
     <Teleport to="body">
       <Transition
         enter-active-class="transition duration-200 ease-out"
@@ -299,7 +302,7 @@
               <div>
                 <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">{{ selectedSubmission.umkmName }}</h3>
                 <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-                  Diusulkan oleh {{ selectedSubmission.consultantName }}
+                  Ditinjau oleh {{ selectedSubmission.consultantName }}
                 </p>
               </div>
               <button
@@ -313,36 +316,20 @@
 
             <div class="p-4 sm:p-5 rounded-[14px] bg-neutral-50/70 dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-800 space-y-3 text-sm">
               <div class="flex items-center justify-between">
-                <span class="text-neutral-500 dark:text-neutral-400">Skor Kesehatan Total</span>
-                <span class="font-bold text-[#00800e] dark:text-[#4ADE80] tabular-nums">{{ selectedSubmission.score }}/100</span>
+                <span class="text-neutral-500 dark:text-neutral-400">Status Peninjauan Konsultan</span>
+                <span class="font-semibold text-neutral-900 dark:text-white">{{ selectedSubmission.status }}</span>
               </div>
               <div class="flex items-center justify-between">
                 <span class="text-neutral-500 dark:text-neutral-400">Verifikasi Mutasi Rekening</span>
                 <span class="font-semibold text-neutral-900 dark:text-white">{{ selectedSubmission.bankMutation }}</span>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <span class="text-neutral-500 dark:text-neutral-400 shrink-0">Catatan Konsultan</span>
+                <span class="text-neutral-500 dark:text-neutral-400 shrink-0">Catatan Peninjauan</span>
                 <span class="font-medium text-neutral-800 dark:text-neutral-200 text-right">{{ selectedSubmission.notes }}</span>
               </div>
             </div>
 
             <div class="flex items-center justify-end gap-2.5 pt-1">
-              <button
-                v-if="selectedSubmission.status === 'Menunggu'"
-                type="button"
-                class="btn-pill-action-red-outline"
-                @click="requestRevision(selectedSubmission)"
-              >
-                <span>Revisi</span>
-              </button>
-              <button
-                v-if="selectedSubmission.status === 'Menunggu'"
-                type="button"
-                class="btn-pill-action-green"
-                @click="approveCertification(selectedSubmission)"
-              >
-                <span>Sahkan</span>
-              </button>
               <button
                 type="button"
                 class="btn-pill-action"
@@ -359,9 +346,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { HugeiconsIcon } from '@hugeicons/vue'
+import BPagination from '~/components/base/BPagination.vue'
 import {
   Award01Icon,
   Store01Icon,
@@ -371,6 +359,7 @@ import {
   Search01Icon,
   FilterHorizontalIcon,
   ArrowDown01Icon,
+  ArrowRight01Icon,
   Cancel01Icon
 } from '@hugeicons/core-free-icons'
 
@@ -390,7 +379,6 @@ interface CertificationItem {
   sector: string
   consultantName: string
   submittedAt: string
-  score: number
   bankMutation: string
   status: 'Menunggu' | 'Disahkan' | 'Revisi'
   notes: string
@@ -405,9 +393,17 @@ const isFilterDropdownOpen = ref(false)
 const searchQuery = ref('')
 const selectedSubmission = ref<CertificationItem | null>(null)
 
+// Pagination state
+const currentPage = ref(1)
+const pageSize = ref(10)
+
+watch([searchQuery, activeFilter], () => {
+  currentPage.value = 1
+})
+
 const filterTabs = [
   { id: 'ALL' as const, label: 'Semua Status', shortLabel: 'Semua' },
-  { id: 'Menunggu' as const, label: 'Menunggu Pengesahan', shortLabel: 'Menunggu' },
+  { id: 'Menunggu' as const, label: 'Menunggu Verifikasi', shortLabel: 'Menunggu' },
   { id: 'Disahkan' as const, label: 'Telah Disahkan', shortLabel: 'Disahkan' }
 ]
 
@@ -432,7 +428,6 @@ const submissions = ref<CertificationItem[]>([
     sector: 'Agribisnis',
     consultantName: 'Rendra Pratama, S.E., Ak.',
     submittedAt: '2 jam lalu',
-    score: 79,
     bankMutation: '3 Bulan Terverifikasi',
     status: 'Menunggu',
     notes: 'Arus kas positif konsisten dan stok panen stabil.'
@@ -444,7 +439,6 @@ const submissions = ref<CertificationItem[]>([
     sector: 'Kriya & Tekstil',
     consultantName: 'Dr. Hendra Wijaya, M.M.',
     submittedAt: '5 jam lalu',
-    score: 76,
     bankMutation: '3 Bulan Terverifikasi',
     status: 'Menunggu',
     notes: 'Kontrak pembeli ritel Bali telah berjalan rutin.'
@@ -456,7 +450,6 @@ const submissions = ref<CertificationItem[]>([
     sector: 'Kuliner & F&B',
     consultantName: 'Rendra Pratama, S.E., Ak.',
     submittedAt: '2 hari lalu',
-    score: 84,
     bankMutation: '6 Bulan Terverifikasi',
     status: 'Disahkan',
     notes: 'Telah memenuhi seluruh 5 pilar kesiapan modal.'
@@ -468,10 +461,20 @@ const submissions = ref<CertificationItem[]>([
     sector: 'Kriya & Tekstil',
     consultantName: 'Nadia Kusuma, MBA, CFP',
     submittedAt: '4 hari lalu',
-    score: 88,
     bankMutation: '6 Bulan Terverifikasi',
     status: 'Disahkan',
     notes: 'Dokumen NIB dan laporan ekspor lengkap.'
+  },
+  {
+    id: 'cert-5',
+    umkmName: 'Sambal Bu Rudy Jaya',
+    owner: 'Rudi Hartono',
+    sector: 'Kuliner & F&B',
+    consultantName: 'Nadia Kusuma, MBA, CFP',
+    submittedAt: '1 minggu lalu',
+    bankMutation: '6 Bulan Terverifikasi',
+    status: 'Disahkan',
+    notes: 'Sertifikasi PIRT dan sertifikat halal aktif.'
   }
 ])
 
@@ -492,17 +495,10 @@ const filteredSubmissions = computed(() => {
   })
 })
 
-function approveCertification(item: CertificationItem) {
-  item.status = 'Disahkan'
-  selectedSubmission.value = null
-  toastMessage.value = `Sertifikasi Grade A untuk ${item.umkmName} telah disahkan.`
-}
-
-function requestRevision(item: CertificationItem) {
-  item.status = 'Revisi'
-  selectedSubmission.value = null
-  toastMessage.value = `Permintaan revisi dikirimkan ke konsultan ${item.consultantName}.`
-}
+const paginatedSubmissions = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return filteredSubmissions.value.slice(start, start + pageSize.value)
+})
 
 onMounted(() => {
   if (!sertifikasiPageRef.value) return

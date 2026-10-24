@@ -568,6 +568,154 @@
             </div>
           </div>
         </div>
+
+        <!-- SECTION 4: POSTINGAN & AKTIVITAS USAHA (Terhubung ke Halaman Postingan Usaha /dashboard/postingan) -->
+        <div class="card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-100 dark:border-neutral-800 pb-4">
+            <div>
+              <h3 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white">
+                Postingan & Aktivitas Usaha
+              </h3>
+              <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 mt-1">
+                Kelola dan buat postingan usaha (Single Post maupun Carousel Multi-Slide) di halaman khusus Postingan Usaha.
+              </p>
+            </div>
+
+            <div class="w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto shrink-0">
+              <BActionButton
+                to="/dashboard/postingan"
+                variant="green"
+                icon="plus"
+                :icon-size="15"
+                custom-class="w-full sm:w-auto justify-center text-center"
+              >
+                Buat Postingan
+              </BActionButton>
+            </div>
+          </div>
+
+          <!-- Daftar Postingan UMKM -->
+          <div v-if="myUmkmPosts.length > 0" class="space-y-5">
+            <article
+              v-for="post in myUmkmPosts"
+              :key="post.id"
+              class="rounded-2xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC]/60 dark:bg-neutral-900/40 p-4 sm:p-5 space-y-4"
+            >
+              <!-- Post Header (Proporsional w-12 h-12 sm:w-13 sm:h-13 & gap-0.5 sm:gap-1) -->
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                  <div class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2.5 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden">
+                    <img
+                      :src="umkmStore.profile.ownerAvatarUrl || authStore.currentUser?.avatar || '/logo.svg'"
+                      :alt="post.name"
+                      class="w-full h-full object-contain rounded-full"
+                    />
+                  </div>
+                  <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
+                    <div class="inline-flex items-center gap-1 text-xs font-poppins font-medium text-neutral-500 dark:text-neutral-400 leading-tight">
+                      <HugeiconsIcon :icon="Location01Icon" :size="13" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+                      <span>{{ post.city }}</span>
+                    </div>
+                    <h4 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white truncate leading-tight">
+                      {{ post.name }}
+                    </h4>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-poppins text-neutral-500 dark:text-neutral-400 leading-tight">
+                      <HugeiconsIcon :icon="Time02Icon" :size="13" class="text-neutral-400 dark:text-neutral-500 shrink-0" />
+                      <span>{{ post.postedAt || 'Baru saja' }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                  <BBadge variant="emerald" size="sm" pill>
+                    {{ getUmkmPostImages(post).length > 1 ? `Carousel (${getUmkmPostImages(post).length} Slide)` : 'Single Post' }}
+                  </BBadge>
+                  <button
+                    v-if="post.isCustomPost"
+                    type="button"
+                    class="w-8 h-8 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-400 hover:text-red-600 dark:hover:text-red-400 flex items-center justify-center transition-colors cursor-pointer"
+                    title="Hapus Postingan"
+                    @click="handleDeleteUmkmPost(post.id)"
+                  >
+                    <HugeiconsIcon :icon="Delete02Icon" :size="15" />
+                  </button>
+                </div>
+              </div>
+
+              <!-- Caption -->
+              <p class="text-sm font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                "{{ post.pitchSummary }}"
+              </p>
+
+              <!-- Media Carousel Preview (Single Post / Multi-Post) -->
+              <div class="relative w-full max-w-[460px] h-[420px] rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none">
+                <div
+                  class="flex w-full h-full transition-transform duration-300 ease-out"
+                  :style="{ transform: `translateX(-${getUmkmSlideIndex(post.id) * 100}%)` }"
+                >
+                  <div
+                    v-for="(imgUrl, sIdx) in getUmkmPostImages(post)"
+                    :key="`${post.id}-slide-${sIdx}`"
+                    class="w-full h-full shrink-0 relative overflow-hidden bg-neutral-900"
+                  >
+                    <img
+                      :src="imgUrl"
+                      :alt="`${post.name} - Slide ${sIdx + 1}`"
+                      class="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                </div>
+
+                <!-- Slide Counter Pill -->
+                <div
+                  v-if="getUmkmPostImages(post).length > 1"
+                  class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-neutral-950/75 text-white text-xs font-poppins font-semibold tabular-nums border border-white/15 backdrop-blur-xs pointer-events-none"
+                >
+                  {{ getUmkmSlideIndex(post.id) + 1 }} / {{ getUmkmPostImages(post).length }}
+                </div>
+
+                <!-- Before Button (Tanpa efek turun saat ditekan) -->
+                <button
+                  v-if="getUmkmPostImages(post).length > 1 && getUmkmSlideIndex(post.id) > 0"
+                  type="button"
+                  aria-label="Slide Sebelumnya"
+                  class="absolute left-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer"
+                  @click.stop="prevUmkmSlide(post)"
+                >
+                  <HugeiconsIcon :icon="ArrowLeft01Icon" :size="18" :stroke-width="2.4" />
+                </button>
+
+                <!-- Next Button (Tanpa efek turun saat ditekan) -->
+                <button
+                  v-if="getUmkmPostImages(post).length > 1 && getUmkmSlideIndex(post.id) < getUmkmPostImages(post).length - 1"
+                  type="button"
+                  aria-label="Slide Berikutnya"
+                  class="absolute right-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer"
+                  @click.stop="nextUmkmSlide(post)"
+                >
+                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="18" :stroke-width="2.4" />
+                </button>
+
+                <!-- Bottom Dots -->
+                <div
+                  v-if="getUmkmPostImages(post).length > 1"
+                  class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1.5 rounded-full bg-neutral-950/65 backdrop-blur-xs border border-white/15 flex items-center gap-1.5"
+                >
+                  <button
+                    v-for="(_, dIdx) in getUmkmPostImages(post)"
+                    :key="`${post.id}-dot-${dIdx}`"
+                    type="button"
+                    :class="[
+                      'h-1.5 rounded-full transition-all duration-200 cursor-pointer',
+                      getUmkmSlideIndex(post.id) === dIdx ? 'w-4 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
+                    ]"
+                    @click.stop="setUmkmSlideIndex(post.id, dIdx)"
+                  />
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
       </div>
 
       <!-- ========================================================================= -->
@@ -1000,9 +1148,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
+import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
 import BStoreBanner from '~/components/base/BStoreBanner.vue'
 import BBadge from '~/components/base/BBadge.vue'
 import BProgressBar from '~/components/base/BProgressBar.vue'
@@ -1034,6 +1183,9 @@ import {
   Comment01Icon,
   CheckmarkBadge01Icon,
   ArrowDown01Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  Cancel01Icon,
   CourtLawIcon,
   HalalIcon,
   Package01Icon,
@@ -1050,6 +1202,7 @@ definePageMeta({
 
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+const investorStore = useInvestorStore()
 
 // Share Profile Modal State
 const isShareModalOpen = ref(false)
@@ -1297,6 +1450,144 @@ function handleAddProduct() {
   isAddProductModalOpen.value = false
   saveProductsToStorage()
   triggerToast('Produk unggulan baru berhasil ditambahkan!')
+}
+
+// =========================================================================
+// UMKM POST CREATION & CAROUSEL MANAGEMENT (TERHUBUNG KE JARINGAN INVESTOR)
+// =========================================================================
+const isCreatePostModalOpen = ref(false)
+const postImageFileInputRef = ref<HTMLInputElement | null>(null)
+const newPostImageUrlInput = ref('')
+const umkmActiveSlides = ref<Record<string, number>>({})
+
+const presetPostGallery = [
+  'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=900&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=900&auto=format&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&auto=format&fit=crop&q=80'
+]
+
+const newPostForm = reactive({
+  pitchSummary: '',
+  postImages: [
+    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&auto=format&fit=crop&q=80'
+  ] as string[]
+})
+
+const myUmkmPosts = computed<MarketplaceUmkm[]>(() => {
+  const currentName = (formProfile.name || 'Kopi Senja Nusantara').toLowerCase().trim()
+  return investorStore.marketplaceList.filter(
+    m =>
+      m.id === 'umkm-01' ||
+      m.umkmRefId === 'umkm-01' ||
+      m.name.toLowerCase().trim() === currentName
+  )
+})
+
+function getUmkmPostImages(post: MarketplaceUmkm): string[] {
+  if (post.postImages && post.postImages.length > 0) {
+    return post.postImages
+  }
+  return [post.postImageUrl || presetPostGallery[0]!]
+}
+
+function getUmkmSlideIndex(postId: string): number {
+  return umkmActiveSlides.value[postId] ?? 0
+}
+
+function setUmkmSlideIndex(postId: string, index: number) {
+  umkmActiveSlides.value[postId] = index
+}
+
+function nextUmkmSlide(post: MarketplaceUmkm) {
+  const imgs = getUmkmPostImages(post)
+  const cur = getUmkmSlideIndex(post.id)
+  if (cur < imgs.length - 1) {
+    umkmActiveSlides.value[post.id] = cur + 1
+  }
+}
+
+function prevUmkmSlide(post: MarketplaceUmkm) {
+  const cur = getUmkmSlideIndex(post.id)
+  if (cur > 0) {
+    umkmActiveSlides.value[post.id] = cur - 1
+  }
+}
+
+function openCreatePostModal() {
+  newPostForm.pitchSummary = ''
+  newPostForm.postImages = [
+    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&auto=format&fit=crop&q=80'
+  ]
+  newPostImageUrlInput.value = ''
+  isCreatePostModalOpen.value = true
+}
+
+function triggerPostImageUpload() {
+  if (postImageFileInputRef.value) {
+    postImageFileInputRef.value.value = ''
+    postImageFileInputRef.value.click()
+  }
+}
+
+function onPostImageFilesSelected(event: Event) {
+  const target = event.target as HTMLInputElement
+  const files = target.files
+  if (!files || files.length === 0) return
+
+  Array.from(files).forEach(file => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        newPostForm.postImages.push(reader.result)
+      }
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+function addPostImageUrl() {
+  const url = newPostImageUrlInput.value.trim()
+  if (!url) return
+  newPostForm.postImages.push(url)
+  newPostImageUrlInput.value = ''
+}
+
+function addPresetPostImage(url: string) {
+  newPostForm.postImages.push(url)
+}
+
+function removeDraftPostImage(idx: number) {
+  if (newPostForm.postImages.length > 1) {
+    newPostForm.postImages.splice(idx, 1)
+  }
+}
+
+function handleCreateUmkmPost() {
+  if (!newPostForm.pitchSummary.trim()) return
+
+  investorStore.createUmkmPost({
+    umkmRefId: 'umkm-01',
+    name: formProfile.name || 'Kopi Senja Nusantara',
+    city: formProfile.city || 'Bandung',
+    sector: formProfile.sector || 'Kuliner & Minuman (F&B)',
+    establishedYear: formProfile.establishedYear || 2021,
+    fundingTarget: formProfile.fundingTarget || 250000000,
+    consultantName: 'Dra. Maya Suryani, M.M.',
+    pitchSummary: newPostForm.pitchSummary.trim(),
+    postImages: [...newPostForm.postImages]
+  })
+
+  isCreatePostModalOpen.value = false
+  triggerToast('Postingan usaha berhasil diterbitkan ke halaman Jaringan Investor!')
+}
+
+function handleDeleteUmkmPost(postId: string) {
+  investorStore.deleteUmkmPost(postId)
+  triggerToast('Postingan berhasil dihapus.')
 }
 
 function saveProductsToStorage() {
@@ -1639,6 +1930,7 @@ onMounted(() => {
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
   umkmStore.initQuickProfileFromStorage()
+  investorStore.initPostsFromStorage()
 
   initProductsFromStorage()
   initContactsFromStorage()

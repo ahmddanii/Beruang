@@ -12,7 +12,7 @@
       <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
         <button
           type="button"
-          class="btn-pill-action justify-center"
+          class="btn-pill-action-green justify-center"
           @click="handleExportCsv"
         >
           <HugeiconsIcon :icon="Download01Icon" :size="16" :stroke-width="2" />
@@ -20,10 +20,10 @@
         </button>
         <NuxtLink
           to="/admin/penugasan"
-          class="btn-pill-action-green justify-center"
+          class="btn-pill-action justify-center"
         >
-          <HugeiconsIcon :icon="UserAdd01Icon" :size="16" :stroke-width="2.2" />
-          <span>Tugaskan</span>
+          <HugeiconsIcon :icon="UserGroupIcon" :size="16" :stroke-width="2" />
+          <span>Konsultan</span>
         </NuxtLink>
       </div>
     </div>
@@ -220,16 +220,16 @@
         <table class="w-full text-left text-sm font-poppins">
           <thead>
             <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
-              <th class="py-4 sm:py-5 px-6 text-left font-bold">Profil UMKM</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Status Kesiapan</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Konsultan Pendamping</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Relasi Investor</th>
-              <th class="py-4 sm:py-5 px-6 text-right font-bold">Tindakan</th>
+              <th class="py-4 sm:py-5 px-6 text-left font-bold">PROFIL</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">STATUS</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">KONSULTAN</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">INVESTOR</th>
+              <th class="py-4 sm:py-5 px-6 text-right font-bold">AKSI</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
             <tr
-              v-for="umkm in filteredUmkm"
+              v-for="umkm in paginatedUmkm"
               :key="umkm.id"
               class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
             >
@@ -258,7 +258,7 @@
                       : 'bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
                   ]"
                 >
-                  {{ umkm.readinessStatus }} ({{ umkm.score }}/100)
+                  {{ umkm.readinessStatus }}
                 </span>
               </td>
 
@@ -266,7 +266,6 @@
               <td class="py-4 sm:py-5 px-5 text-left">
                 <div v-if="umkm.consultant">
                   <p class="text-sm font-medium text-neutral-900 dark:text-white">{{ umkm.consultant.name }}</p>
-                  <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">{{ umkm.consultant.specialty }}</p>
                 </div>
                 <div v-else>
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[8px] text-xs font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
@@ -276,16 +275,17 @@
                 </div>
               </td>
 
-              <!-- Relasi Investor -->
+              <!-- Relasi Investor (Satu Row dengan Truncate Ellipsis) -->
               <td class="py-4 sm:py-5 px-5 text-left">
-                <div v-if="umkm.investors.length > 0" class="flex flex-wrap items-center gap-2">
+                <div v-if="umkm.investors.length > 0" class="flex flex-nowrap items-center gap-1.5 max-w-[240px]">
                   <div
                     v-for="inv in umkm.investors"
                     :key="inv.name"
-                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[8px] bg-white dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-700 text-xs sm:text-sm"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[8px] bg-white dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-700 text-xs sm:text-sm min-w-0 max-w-full"
+                    :title="inv.name"
                   >
                     <HugeiconsIcon :icon="Coins01Icon" :size="14" :stroke-width="2" class="text-[#00800e] dark:text-[#4ADE80] shrink-0" />
-                    <span class="font-medium text-neutral-900 dark:text-white">{{ inv.name }}</span>
+                    <span class="font-medium text-neutral-900 dark:text-white truncate whitespace-nowrap">{{ inv.name }}</span>
                   </div>
                 </div>
                 <span v-else class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
@@ -314,6 +314,14 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Table -->
+      <BPagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredUmkm.length"
+        :pageSize="pageSize"
+        itemLabel="mitra"
+      />
     </section>
 
     <!-- Modal Detail Kemitraan (UMKM + Konsultan + Investor) -->
@@ -358,12 +366,6 @@
             <div class="p-4 sm:p-5 rounded-[14px] bg-neutral-50/70 dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-800 space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Konsultan Pendamping</span>
-                <span
-                  v-if="selectedUmkm.consultant"
-                  class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E8F8EE] dark:bg-[#00800e]/20 text-[#00800e] dark:text-[#4ADE80]"
-                >
-                  Aktif Mendampingi
-                </span>
               </div>
 
               <div v-if="selectedUmkm.consultant" class="flex items-center justify-between gap-3 pt-1">
@@ -388,10 +390,10 @@
                 <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">Belum memiliki konsultan pendamping aktif.</p>
                 <NuxtLink
                   to="/admin/penugasan"
-                  class="btn-pill-action-green"
+                  class="btn-pill-action"
                   @click="selectedUmkm = null"
                 >
-                  <span>Tugaskan</span>
+                  <span>Lihat Konsultan</span>
                 </NuxtLink>
               </div>
             </div>
@@ -414,12 +416,9 @@
                   <div>
                     <div class="flex items-center gap-2">
                       <p class="text-sm font-semibold text-neutral-900 dark:text-white">{{ inv.name }}</p>
-                      <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#E8F8EE] dark:bg-[#00800e]/20 text-[#00800e] dark:text-[#4ADE80]">
-                        {{ inv.stage }}
-                      </span>
                     </div>
                     <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                      Minat Pendanaan: <strong class="text-neutral-800 dark:text-neutral-200 tabular-nums">{{ inv.ticketSize }}</strong> • Update {{ inv.updatedAt }}
+                      Pembaruan: {{ inv.updatedAt }}
                     </p>
                   </div>
                   <button
@@ -454,13 +453,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { HugeiconsIcon } from '@hugeicons/vue'
+import BPagination from '~/components/base/BPagination.vue'
 import {
   Store01Icon,
   Download01Icon,
-  UserAdd01Icon,
+  UserGroupIcon,
   UserCheck01Icon,
   CheckmarkCircle01Icon,
   Search01Icon,
@@ -639,12 +639,149 @@ const umkmPartnerships = ref<UmkmPartnershipItem[]>([
         updatedAt: '5 jam lalu'
       }
     ]
+  },
+  {
+    id: 'umkm-6',
+    name: 'Sambal Bu Rudy Jaya',
+    owner: 'Rudi Hartono',
+    sector: 'Kuliner & F&B',
+    city: 'Surabaya',
+    score: 82,
+    readinessStatus: 'Siap Didanai',
+    consultant: {
+      name: 'Nadia Kusuma, MBA, CFP',
+      specialty: 'Kesiapan Ekspor',
+      since: '15 Jan 2026'
+    },
+    investors: [
+      {
+        name: 'Nusantara Impact Capital',
+        stage: 'Ruang Data Terbuka',
+        ticketSize: 'Rp 350.000.000',
+        updatedAt: '1 hari lalu'
+      }
+    ]
+  },
+  {
+    id: 'umkm-7',
+    name: 'Madu Hutan Sumbawa',
+    owner: 'Fahri Hamzah',
+    sector: 'Agribisnis',
+    city: 'Sumbawa',
+    score: 75,
+    readinessStatus: 'Siap Didanai',
+    consultant: {
+      name: 'Rendra Pratama, S.E., Ak.',
+      specialty: 'Arus Kas & Pajak',
+      since: '20 Jan 2026'
+    },
+    investors: []
+  },
+  {
+    id: 'umkm-8',
+    name: 'Keramik Dinoyo Art',
+    owner: 'Anugrah Saputra',
+    sector: 'Kriya & Tekstil',
+    city: 'Malang',
+    score: 68,
+    readinessStatus: 'Pendampingan',
+    consultant: {
+      name: 'Dr. Hendra Wijaya, M.M.',
+      specialty: 'Restrukturisasi Kas',
+      since: '10 Feb 2026'
+    },
+    investors: []
+  },
+  {
+    id: 'umkm-9',
+    name: 'Sepatu Kulit Mandiri',
+    owner: 'Taufik Hidayat',
+    sector: 'Kriya & Tekstil',
+    city: 'Garut',
+    score: 79,
+    readinessStatus: 'Siap Didanai',
+    consultant: {
+      name: 'Nadia Kusuma, MBA, CFP',
+      specialty: 'Kesiapan Ekspor',
+      since: '18 Feb 2026'
+    },
+    investors: [
+      {
+        name: 'Koperasi Pemodal Lokal',
+        stage: 'Ruang Data Terbuka',
+        ticketSize: 'Rp 150.000.000',
+        updatedAt: '4 hari lalu'
+      }
+    ]
+  },
+  {
+    id: 'umkm-10',
+    name: 'Kripik Tempe Barokah',
+    owner: 'Siti Aminah',
+    sector: 'Kuliner & F&B',
+    city: 'Ngawi',
+    score: 65,
+    readinessStatus: 'Perlu Validasi',
+    consultant: null,
+    investors: []
+  },
+  {
+    id: 'umkm-11',
+    name: 'Cokelat Ransiki Papua',
+    owner: 'Yohanes Rumkabu',
+    sector: 'Agribisnis',
+    city: 'Manokwari',
+    score: 86,
+    readinessStatus: 'Siap Didanai',
+    consultant: {
+      name: 'Rendra Pratama, S.E., Ak.',
+      specialty: 'Arus Kas & Pajak',
+      since: '01 Jan 2026'
+    },
+    investors: [
+      {
+        name: 'Nusantara Impact Capital',
+        stage: 'Ruang Data Terbuka',
+        ticketSize: 'Rp 500.000.000',
+        updatedAt: '2 hari lalu'
+      }
+    ]
+  },
+  {
+    id: 'umkm-12',
+    name: 'Lumbung Beras Organik',
+    owner: 'Surono',
+    sector: 'Agribisnis',
+    city: 'Klaten',
+    score: 83,
+    readinessStatus: 'Siap Didanai',
+    consultant: {
+      name: 'Dr. Hendra Wijaya, M.M.',
+      specialty: 'Restrukturisasi Kas',
+      since: '12 Jan 2026'
+    },
+    investors: [
+      {
+        name: 'AgriInvest Ventura',
+        stage: 'Penjajakan Awal',
+        ticketSize: 'Rp 400.000.000',
+        updatedAt: '1 minggu lalu'
+      }
+    ]
   }
 ])
 
 const assignedCount = computed(() => umkmPartnerships.value.filter(u => u.consultant !== null).length)
 const investorConnectedCount = computed(() => umkmPartnerships.value.filter(u => u.investors.length > 0).length)
 const totalActiveInvestors = computed(() => umkmPartnerships.value.reduce((acc, u) => acc + u.investors.length, 0))
+
+// Pagination States
+const currentPage = ref(1)
+const pageSize = ref(10)
+
+watch([searchQuery, selectedSector], () => {
+  currentPage.value = 1
+})
 
 const filteredUmkm = computed(() => {
   return umkmPartnerships.value.filter((item) => {
@@ -663,6 +800,11 @@ const filteredUmkm = computed(() => {
 
     return matchSector && matchSearch
   })
+})
+
+const paginatedUmkm = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return filteredUmkm.value.slice(start, start + pageSize.value)
 })
 
 function getInitials(name: string): string {

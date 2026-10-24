@@ -246,7 +246,7 @@
         </div>
       </div>
 
-      <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-4">
         <div class="space-y-0.5">
           <span class="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white block">
             Auto-Draft Rekomendasi Evaluasi Konsultan
@@ -255,10 +255,26 @@
             Hasilkan draf awal rekomendasi perbaikan saat entri kas bulanan selesai diunggah klien.
           </p>
         </div>
-        <label class="relative inline-flex items-center cursor-pointer shrink-0">
-          <input v-model="aiForm.autoDraftRecommendations" type="checkbox" class="sr-only peer" />
-          <div class="w-11 h-6 bg-neutral-200 peer-focus:outline-none rounded-full peer dark:bg-neutral-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-600 peer-checked:bg-[#00800e]" />
-        </label>
+        <button
+          type="button"
+          role="switch"
+          :aria-checked="aiForm.autoDraftRecommendations"
+          aria-label="Auto-Draft Rekomendasi Evaluasi Konsultan"
+          :class="[
+            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-none',
+            aiForm.autoDraftRecommendations
+              ? 'bg-[#00800e] dark:bg-[#00C058]'
+              : 'bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+          ]"
+          @click="aiForm.autoDraftRecommendations = !aiForm.autoDraftRecommendations"
+        >
+          <span
+            :class="[
+              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white transition duration-200 ease-in-out shadow-none',
+              aiForm.autoDraftRecommendations ? 'translate-x-5' : 'translate-x-0'
+            ]"
+          />
+        </button>
       </div>
     </div>
 

@@ -1,11 +1,11 @@
 <template>
   <div ref="penugasanPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
-    <!-- 1. Page Title: Identical to UMKM Pages -->
+    <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
-        <HugeiconsIcon :icon="UserAdd01Icon" :size="26" :stroke-width="2.2" class="text-neutral-900 dark:text-white shrink-0" />
+        <HugeiconsIcon :icon="UserGroupIcon" :size="26" :stroke-width="2.2" class="text-neutral-900 dark:text-white shrink-0" />
         <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-          Penugasan Konsultan
+          Konsultan
         </h1>
       </div>
 
@@ -15,143 +15,104 @@
           class="btn-pill-action justify-center"
         >
           <HugeiconsIcon :icon="Store01Icon" :size="16" :stroke-width="2" />
-          <span>Kemitraan</span>
+          <span>Kemitraan UMKM</span>
         </NuxtLink>
       </div>
     </div>
 
-    <!-- Toast Success Notification -->
-    <Transition
-      enter-active-class="transition duration-200 ease-out"
-      enter-from-class="transform -translate-y-2 opacity-0"
-      enter-to-class="transform translate-y-0 opacity-100"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="transform translate-y-0 opacity-100"
-      leave-to-class="transform -translate-y-2 opacity-0"
-    >
-      <div
-        v-if="assigned"
-        class="flex items-center justify-between gap-3 px-4 py-3.5 rounded-[14px] bg-[#E8F8EE] dark:bg-[#00800e]/20 border border-[#86EFAC] dark:border-[#00C058]/30 text-[#00800e] dark:text-[#4ADE80] shadow-none"
-      >
-        <div class="flex items-center gap-2.5 text-sm font-semibold">
-          <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="18" :stroke-width="2.2" class="shrink-0" />
-          <span>Konsultan berhasil ditugaskan dan tautan koordinasi telah dikirim.</span>
-        </div>
-        <button
-          type="button"
-          class="text-xs sm:text-sm font-bold hover:underline cursor-pointer"
-          @click="assigned = false"
-        >
-          Tutup
-        </button>
-      </div>
-    </Transition>
-
-    <!-- 2. Active Queue Assignment Container -->
-    <section class="gsap-admin-section card-tactile-gopay rounded-[18px] p-6 sm:p-8 space-y-6 font-poppins">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800/80">
-        <div class="space-y-1.5">
-          <h2 class="text-lg sm:text-[21px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-            Antrean Penugasan (1 Usaha)
-          </h2>
-          <p class="text-xs sm:text-[14px] font-poppins text-neutral-500 dark:text-neutral-400 leading-normal">
-            Pasangkan usaha binaan yang baru selesai penilaian awal dengan konsultan pendamping sesuai sektornya.
-          </p>
-        </div>
-        <span class="text-xs sm:text-sm font-medium text-neutral-500 dark:text-neutral-400 shrink-0">
-          Penilaian Selesai 8 Jam Lalu
-        </span>
-      </div>
-
-      <!-- Target UMKM Summary Box -->
-      <div class="p-5 rounded-[14px] bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="space-y-1">
-          <span class="text-xs font-bold text-[#156374] dark:text-[#50AABF] uppercase tracking-wider">
-            ID: BERU-STB-09
-          </span>
-          <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
-            Roastery Puncak Klasik
-          </h3>
-          <span class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 block">
-            Sektor: Kuliner & F&B • Bogor • Pemasukan ~Rp 38.000.000 / bln • 1 Outlet
-          </span>
-        </div>
-        <span class="px-3 py-1 rounded-[8px] text-xs font-semibold bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50 self-start sm:self-auto shrink-0">
-          Menunggu Konsultan
-        </span>
-      </div>
-
-      <!-- Assignment Form -->
-      <form class="space-y-5" @submit.prevent="handleAssign">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label class="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              Konsultan Pendamping Sesuai Sektor
-            </label>
-            <select
-              v-model="selectedConsultant"
-              class="w-full h-[44px] px-3.5 rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-neutral-900 text-sm font-medium text-neutral-900 dark:text-white focus:outline-none focus:border-[#00800e] transition-colors shadow-none"
-            >
-              <option value="1">Rendra Pratama, S.E., Ak. (Arus Kas & F&B • 2/5 Klien)</option>
-              <option value="2">Nadia Kusuma, MBA, CFP (Kriya & Ekspor • 1/5 Klien)</option>
-              <option value="3">Dr. Hendra Wijaya, M.M. (Restrukturisasi Kas • 1/5 Klien)</option>
-            </select>
+    <!-- 2. 3 Summary Cards (Identical .stat-card-clean Typography & Geometry to UMKM & Other Admin Pages) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 items-stretch w-full">
+      <!-- Card 1: Total Konsultan -->
+      <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean transition-all duration-200">
+          <div class="flex items-center justify-between w-full gap-2">
+            <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <div class="stat-card-icon-box">
+                <HugeiconsIcon :icon="Briefcase01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+              </div>
+              <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                Total Konsultan
+              </span>
+            </div>
+            <div class="stat-card-badge badge-green">
+              <span>BNSP</span>
+            </div>
           </div>
-
-          <div>
-            <label class="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              Target Penyusunan Rencana Aksi Awal
-            </label>
-            <input
-              type="text"
-              disabled
-              value="7 Hari Kerja"
-              class="w-full h-[44px] px-3.5 rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-sm font-medium text-neutral-500 cursor-not-allowed shadow-none"
-            />
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              3 Profesional
+            </span>
           </div>
         </div>
+      </div>
 
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-            Catatan Pendampingan (Opsional)
-          </label>
-          <textarea
-            v-model="notes"
-            rows="2"
-            placeholder="Fokuskan pendampingan pada pencatatan biaya bahan baku harian..."
-            class="w-full p-3.5 rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-neutral-900 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#00800e] transition-colors shadow-none"
-          />
+      <!-- Card 2: UMKM Didampingi -->
+      <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean transition-all duration-200">
+          <div class="flex items-center justify-between w-full gap-2">
+            <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <div class="stat-card-icon-box">
+                <HugeiconsIcon :icon="UserCheck01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+              </div>
+              <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                UMKM Didampingi
+              </span>
+            </div>
+            <div class="stat-card-badge badge-green">
+              <span>80% Aktif</span>
+            </div>
+          </div>
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              4 / 5 Usaha
+            </span>
+          </div>
         </div>
+      </div>
 
-        <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex justify-end">
-          <button
-            type="submit"
-            :disabled="loading"
-            class="btn-pill-action-green"
-          >
-            <HugeiconsIcon :icon="UserAdd01Icon" :size="16" :stroke-width="2.2" />
-            <span>{{ loading ? 'Memproses...' : 'Tugaskan' }}</span>
-          </button>
+      <!-- Card 3: Meninjau Konsultan -->
+      <div class="gsap-admin-card gsap-stat-card flex-1 w-full">
+        <div class="stat-card-clean transition-all duration-200">
+          <div class="flex items-center justify-between w-full gap-2">
+            <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <div class="stat-card-icon-box">
+                <HugeiconsIcon :icon="Store01Icon" :size="17" :stroke-width="2.0" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+              </div>
+              <span class="text-[13px] xl:text-[14px] font-poppins font-semibold text-neutral-800 dark:text-neutral-100 capitalize truncate tracking-[-0.01em]">
+                Meninjau Konsultan
+              </span>
+            </div>
+            <div class="stat-card-badge badge-neutral">
+              <span>Mandiri</span>
+            </div>
+          </div>
+          <div class="my-auto py-2.5 sm:py-3.5">
+            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+              1 Usaha
+            </span>
+          </div>
         </div>
-      </form>
-    </section>
+      </div>
+    </div>
 
-    <!-- 3. Recent Assignments History Table -->
+    <!-- 3. Main Directory Container: Table of Consultant & UMKM Mentorship -->
     <section class="gsap-admin-section card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
       <div class="p-5 sm:p-8 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div class="space-y-1.5">
             <h2 class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              Riwayat Penugasan
+              Daftar Konsultan & Pendampingan UMKM
             </h2>
             <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
-              Daftar penugasan konsultan pendamping yang telah berjalan pada UMKM binaan.
+              Pantau seluruh usaha binaan beserta konsultan pendamping yang dipilih secara mandiri.
             </p>
           </div>
-          <span class="text-xs sm:text-sm font-medium text-neutral-500 tabular-nums shrink-0">{{ filteredHistory.length }} Penugasan Aktif</span>
+          <span class="text-xs sm:text-sm font-medium text-neutral-500 tabular-nums shrink-0">
+            {{ filteredHistory.length }} Relasi Terpantau
+          </span>
         </div>
 
-        <!-- Joined Search & Filter Control Bar (Identik dengan Catatan Kas — Daftar Mutasi Transaksi Kas Harian) -->
+        <!-- Joined Search & Filter Control Bar (Identik dengan Catatan Kas & Kemitraan UMKM) -->
         <div class="relative w-full rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-neutral-50/70 dark:bg-[#1A1A1A] focus-within:border-[#00800e] dark:focus-within:border-[#00C058] focus-within:ring-2 focus-within:ring-[#00800e]/20 transition-all flex items-center min-h-[46px]">
           <!-- Left: Search Icon + Input -->
           <div class="relative flex-1 flex items-center min-w-0">
@@ -230,14 +191,16 @@
         </div>
       </div>
 
+      <!-- Table View -->
       <div class="overflow-x-auto w-full">
         <table class="w-full text-left text-sm font-poppins">
           <thead>
             <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
-              <th class="py-4 sm:py-5 px-6 text-left font-bold">Nama UMKM</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Konsultan Pendamping</th>
-              <th class="py-4 sm:py-5 px-5 text-left font-bold">Tanggal</th>
-              <th class="py-4 sm:py-5 px-6 text-right font-bold">Status</th>
+              <th class="py-4 sm:py-5 px-6 text-left font-bold">PROFIL UMKM</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">KONSULTAN PILIHAN</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">TANGGAL PEMILIHAN</th>
+              <th class="py-4 sm:py-5 px-5 text-left font-bold">STATUS PENDAMPINGAN</th>
+              <th class="py-4 sm:py-5 px-6 text-right font-bold">AKSI</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200 font-poppins">
@@ -246,32 +209,192 @@
               :key="item.id"
               class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
             >
-              <td class="py-4 sm:py-5 px-6 font-semibold text-sm text-neutral-900 dark:text-white">
-                {{ item.umkmName }}
+              <!-- UMKM -->
+              <td class="py-4 sm:py-5 px-6 text-left">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-10 h-10 rounded-full bg-[#E6F4F7] dark:bg-[#156374]/25 border border-[#156374]/20 flex items-center justify-center text-sm font-semibold text-[#156374] dark:text-[#50AABF] shrink-0">
+                    {{ getInitials(item.umkmName) }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-semibold text-sm text-neutral-900 dark:text-white truncate">
+                      {{ item.umkmName }}
+                    </p>
+                    <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 truncate mt-0.5">
+                      {{ item.owner }} • {{ item.sector }} ({{ item.city }})
+                    </p>
+                  </div>
+                </div>
               </td>
-              <td class="py-4 sm:py-5 px-5 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                {{ item.consultantName }}
+
+              <!-- Konsultan Pilihan UMKM -->
+              <td class="py-4 sm:py-5 px-5 text-left">
+                <div v-if="item.consultantName">
+                  <p class="text-sm font-medium text-neutral-900 dark:text-white">
+                    {{ item.consultantName }}
+                  </p>
+                  <p class="text-xs font-medium text-neutral-600 dark:text-neutral-400 mt-0.5">
+                    {{ item.consultantSpecialty }}
+                  </p>
+                </div>
+                <div v-else>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[8px] text-xs font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
+                    <HugeiconsIcon :icon="Alert01Icon" :size="14" :stroke-width="2.2" />
+                    Belum Memilih Konsultan
+                  </span>
+                </div>
               </td>
+
+              <!-- Tanggal Pemilihan Mandiri -->
               <td class="py-4 sm:py-5 px-5 text-sm text-neutral-600 dark:text-neutral-400 tabular-nums">
-                {{ item.assignedDate }}
+                {{ item.assignedDate || '—' }}
               </td>
-              <td class="py-4 sm:py-5 px-6 text-right">
+
+              <!-- Status Pendampingan -->
+              <td class="py-4 sm:py-5 px-5 text-left whitespace-nowrap">
                 <span
                   :class="[
                     'inline-flex items-center px-2.5 py-1 rounded-[8px] text-xs font-semibold border font-poppins',
                     item.status === 'Siap Didanai'
                       ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
-                      : 'bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+                      : item.status === 'Sedang Didampingi'
+                      ? 'bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+                      : 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800'
                   ]"
                 >
                   {{ item.status }}
                 </span>
+              </td>
+
+              <!-- Aksi: Detail Button -->
+              <td class="py-4 sm:py-5 px-6 text-right whitespace-nowrap">
+                <button
+                  type="button"
+                  class="btn-pill-action"
+                  @click="openDetailModal(item)"
+                >
+                  <span>Detail</span>
+                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2" />
+                </button>
+              </td>
+            </tr>
+
+            <tr v-if="filteredHistory.length === 0">
+              <td colspan="5" class="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                Tidak ditemukan relasi pendampingan yang sesuai dengan pencarian.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
+
+    <!-- Modal Detail Relasi Pendampingan -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="selectedRelation"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs font-poppins"
+          @click.self="selectedRelation = null"
+        >
+          <div class="w-full max-w-xl rounded-[18px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 p-6 sm:p-7 shadow-none space-y-5">
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between gap-3 border-b border-neutral-100 dark:border-neutral-800 pb-4">
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-[12px] bg-[#E6F4F7] dark:bg-[#156374]/25 border border-[#156374]/20 flex items-center justify-center text-[#156374] dark:text-[#50AABF] shrink-0">
+                  <HugeiconsIcon :icon="UserGroupIcon" :size="22" :stroke-width="2.2" />
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+                    Pemantauan Relasi Bimbingan
+                  </h3>
+                  <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
+                    {{ selectedRelation.umkmName }} • {{ selectedRelation.sector }}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="w-9 h-9 rounded-full bg-white dark:bg-neutral-800 border border-[#CBD5E1] dark:border-neutral-700 flex items-center justify-center text-neutral-500 hover:text-neutral-900 dark:hover:text-white cursor-pointer shadow-none"
+                @click="selectedRelation = null"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="16" :stroke-width="2.2" />
+              </button>
+            </div>
+
+            <!-- Detail Info 1: Profil UMKM -->
+            <div class="p-4 rounded-[12px] bg-neutral-50/70 dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-800 space-y-1.5">
+              <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider block">
+                Usaha Binaan
+              </span>
+              <p class="text-sm font-bold text-neutral-900 dark:text-white">
+                {{ selectedRelation.umkmName }} (Pemilik: {{ selectedRelation.owner }})
+              </p>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                Lokasi: {{ selectedRelation.city }} • Pemasukan Rata-rata: ~{{ selectedRelation.monthlyRevenue }}
+              </p>
+            </div>
+
+            <!-- Detail Info 2: Konsultan Pilihan -->
+            <div class="p-4 rounded-[12px] bg-neutral-50/70 dark:bg-neutral-900 border border-[#CBD5E1] dark:border-neutral-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                  Konsultan Pilihan UMKM
+                </span>
+                <span
+                  v-if="selectedRelation.consultantName"
+                  class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E8F8EE] dark:bg-[#00800e]/20 text-[#00800e] dark:text-[#4ADE80]"
+                >
+                  Dipilih Mandiri oleh UMKM
+                </span>
+                <span
+                  v-else
+                  class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
+                >
+                  Menunggu Pilihan UMKM
+                </span>
+              </div>
+              <div v-if="selectedRelation.consultantName">
+                <p class="text-sm font-bold text-neutral-900 dark:text-white">
+                  {{ selectedRelation.consultantName }}
+                </p>
+                <p class="text-xs text-[#156374] dark:text-[#50AABF] font-medium mt-0.5">
+                  Spesialisasi: {{ selectedRelation.consultantSpecialty }}
+                </p>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                  Fokus Bimbingan: {{ selectedRelation.focusArea || 'Pencatatan kas berkala dan pemisahan akun operasional usaha.' }}
+                </p>
+              </div>
+              <p v-else class="text-xs text-neutral-500 dark:text-neutral-400">
+                Pelaku UMKM sedang mengevaluasi daftar konsultan terkurasi pada aplikasi mereka.
+              </p>
+            </div>
+
+            <!-- Detail Info 3: Catatan Pemantauan -->
+            <div class="p-4 rounded-[12px] border border-dashed border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-[#13161F] text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              💡 <strong>Catatan Admin:</strong> Hubungan pendampingan ini dibentuk atas persetujuan kedua belah pihak. Admin berperan sebagai fasilitator integritas data dan pemantau kepatuhan tata kelola kas UMKM.
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex justify-end pt-2">
+              <button
+                type="button"
+                class="btn-pill-action"
+                @click="selectedRelation = null"
+              >
+                <span>Tutup</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -280,13 +403,16 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  UserAdd01Icon,
+  UserGroupIcon,
   Store01Icon,
-  CheckmarkCircle01Icon,
+  Briefcase01Icon,
   Search01Icon,
   FilterHorizontalIcon,
   ArrowDown01Icon,
-  Cancel01Icon
+  ArrowRight01Icon,
+  Cancel01Icon,
+  UserCheck01Icon,
+  Alert01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -295,25 +421,22 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Penugasan Konsultan — Admin Beruang'
+  title: 'Konsultan — Admin Beruang'
 })
 
 const penugasanPageRef = ref<HTMLElement | null>(null)
 let gsapCtx: gsap.Context | null = null
 
-const selectedConsultant = ref('1')
-const notes = ref('')
-const loading = ref(false)
-const assigned = ref(false)
-
 const searchQuery = ref('')
-const selectedStatusFilter = ref<'ALL' | 'Siap Didanai' | 'Pendampingan'>('ALL')
+const selectedStatusFilter = ref<'ALL' | 'Siap Didanai' | 'Sedang Didampingi' | 'Meninjau Konsultan'>('ALL')
 const isFilterDropdownOpen = ref(false)
+const selectedRelation = ref<any | null>(null)
 
 const statusFilterOptions = [
   { id: 'ALL' as const, label: 'Semua Status', shortLabel: 'Semua' },
   { id: 'Siap Didanai' as const, label: 'Siap Didanai', shortLabel: 'Siap' },
-  { id: 'Pendampingan' as const, label: 'Pendampingan', shortLabel: 'Pendampingan' }
+  { id: 'Sedang Didampingi' as const, label: 'Sedang Didampingi', shortLabel: 'Didampingi' },
+  { id: 'Meninjau Konsultan' as const, label: 'Meninjau Konsultan', shortLabel: 'Meninjau' }
 ]
 
 const activeStatusLabel = computed(() => {
@@ -329,27 +452,72 @@ function selectStatusFilter(id: typeof selectedStatusFilter.value) {
   isFilterDropdownOpen.value = false
 }
 
+// Data pemantauan pendampingan aktif
 const assignmentHistory = ref([
   {
-    id: 'hist-1',
+    id: 'rel-1',
     umkmName: 'Kopi Kenangan Senja',
+    owner: 'Budi Santoso',
+    sector: 'Kuliner & F&B',
+    city: 'Bandung',
+    monthlyRevenue: 'Rp 65.000.000',
     consultantName: 'Rendra Pratama, S.E., Ak.',
+    consultantSpecialty: 'Arus Kas & Pajak',
     assignedDate: '12 Jan 2026',
-    status: 'Siap Didanai' as const
+    status: 'Siap Didanai' as const,
+    focusArea: 'Penyusunan laporan arus kas bulanan terverifikasi dan pembukuan bahan baku.'
   },
   {
-    id: 'hist-2',
+    id: 'rel-2',
     umkmName: 'Batik Sekar Jagad',
+    owner: 'Siti Lestari',
+    sector: 'Kriya & Tekstil',
+    city: 'Yogyakarta',
+    monthlyRevenue: 'Rp 82.000.000',
     consultantName: 'Nadia Kusuma, MBA, CFP',
+    consultantSpecialty: 'Kesiapan Ekspor',
     assignedDate: '04 Feb 2026',
-    status: 'Siap Didanai' as const
+    status: 'Siap Didanai' as const,
+    focusArea: 'Tata kelola persediaan kain malam dan kesiapan dokumen sertifikasi usaha.'
   },
   {
-    id: 'hist-3',
+    id: 'rel-3',
     umkmName: 'Sayur Hidroponik Segar',
+    owner: 'Hendra Wijaya',
+    sector: 'Agribisnis',
+    city: 'Bogor',
+    monthlyRevenue: 'Rp 45.000.000',
     consultantName: 'Rendra Pratama, S.E., Ak.',
+    consultantSpecialty: 'Rantai Pasok Agribisnis',
     assignedDate: '19 Feb 2026',
-    status: 'Pendampingan' as const
+    status: 'Sedang Didampingi' as const,
+    focusArea: 'Pencatatan kas siklus panen dan efisiensi biaya logistik distribusi sayur.'
+  },
+  {
+    id: 'rel-4',
+    umkmName: 'Tenun Ikat Nusantara',
+    owner: 'Maria Fransiska',
+    sector: 'Kriya & Tekstil',
+    city: 'Kupang',
+    monthlyRevenue: 'Rp 52.000.000',
+    consultantName: 'Dr. Hendra Wijaya, M.M.',
+    consultantSpecialty: 'Restrukturisasi Kas',
+    assignedDate: '28 Feb 2026',
+    status: 'Sedang Didampingi' as const,
+    focusArea: 'Pemisahan kas keluarga dari modal kerja perajin tenun rumahan.'
+  },
+  {
+    id: 'rel-5',
+    umkmName: 'Roastery Puncak Klasik',
+    owner: 'Dimas Anggara',
+    sector: 'Kuliner & F&B',
+    city: 'Bogor',
+    monthlyRevenue: 'Rp 38.000.000',
+    consultantName: '',
+    consultantSpecialty: '',
+    assignedDate: '',
+    status: 'Meninjau Konsultan' as const,
+    focusArea: 'Pelaku UMKM sedang meninjau profil 3 konsultan spesialis F&B.'
   }
 ])
 
@@ -360,26 +528,36 @@ const filteredHistory = computed(() => {
     if (!q) return matchStatus
     return (
       matchStatus &&
-      (item.umkmName.toLowerCase().includes(q) || item.consultantName.toLowerCase().includes(q))
+      (item.umkmName.toLowerCase().includes(q) ||
+        item.owner.toLowerCase().includes(q) ||
+        item.consultantName.toLowerCase().includes(q))
     )
   })
 })
 
-function handleAssign() {
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-    assigned.value = true
-  }, 300)
+function getInitials(name: string): string {
+  if (!name) return 'U'
+  const parts = name.trim().split(/\s+/)
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[1][0]).toUpperCase()
+}
+
+function openDetailModal(item: any) {
+  selectedRelation.value = item
 }
 
 onMounted(() => {
   if (!penugasanPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(
+      '.gsap-admin-card',
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: 0.45, stagger: 0.06, ease: 'power2.out', clearProps: 'transform' }
+    )
+    gsap.fromTo(
       '.gsap-admin-section',
       { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power2.out', clearProps: 'transform' }
+      { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power2.out', delay: 0.1, clearProps: 'transform' }
     )
   }, penugasanPageRef.value)
 })

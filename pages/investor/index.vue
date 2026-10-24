@@ -11,7 +11,7 @@
     >
       <div
         v-if="toastMessage"
-        class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-full bg-neutral-900/90 dark:bg-neutral-800/90 text-white border border-neutral-700/60 backdrop-blur-md text-xs font-poppins font-semibold shadow-xl flex items-center gap-2 pointer-events-none"
+        class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-full bg-neutral-900/95 dark:bg-neutral-800/95 text-white border border-neutral-700/60 backdrop-blur-md text-xs font-poppins font-semibold shadow-none flex items-center gap-2 pointer-events-none"
       >
         <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-emerald-400 shrink-0" />
         <span>{{ toastMessage }}</span>
@@ -19,8 +19,7 @@
     </Transition>
 
     <!-- ========================================================================================= -->
-    <!-- 1. TOP HEADER: Page Title & Watchlist Action Button (100% Identical to UMKM Standard)       -->
-    <!-- No artificial gradient box around icon, raw HugeiconsIcon 26px with font-semibold 2xl/3xl  -->
+    <!-- 1. TOP HEADER: Page Title "Jaringan" on Left & Wilayah Controls on Right (Sejajar)         -->
     <!-- ========================================================================================= -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
@@ -31,315 +30,282 @@
           class="text-neutral-900 dark:text-white shrink-0"
         />
         <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-          Katalog
+          Jaringan
         </h1>
       </div>
 
-      <!-- Action Button to Watchlist / Saved Opportunities (UMKM Header Standard) -->
-      <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
-        <BActionButton
-          to="/investor/watchlist"
-          variant="default"
-          icon="chevron"
-          custom-class="w-full sm:w-auto justify-center text-center"
-          title="Portofolio Pantau"
+      <!-- Action Controls on Right: Reset Semua (Hijau) & Pilih Lokasi (Sejajar dengan Title Jaringan) -->
+      <div class="flex items-center gap-2.5 self-start sm:self-auto shrink-0">
+        <button
+          type="button"
+          class="btn-pill-action btn-pill-action-green cursor-pointer shadow-none"
+          title="Reset Semua Filter Wilayah & Pencarian"
+          @click="resetAllFilters"
         >
-          Portofolio Pantau ({{ investorStore.watchlist.length }})
-        </BActionButton>
+          <span>Reset Semua</span>
+        </button>
+
+        <button
+          type="button"
+          :class="[
+            'btn-pill-action group cursor-pointer shadow-none',
+            isLocationModalOpen || investorStore.selectedCities.length > 0
+              ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! dark:bg-[#156374]/25! dark:text-[#50AABF]! dark:border-[#50AABF]/35!'
+              : ''
+          ]"
+          aria-haspopup="dialog"
+          :aria-expanded="isLocationModalOpen"
+          title="Pilih Wilayah UMKM di Seluruh Indonesia"
+          @click="isLocationModalOpen = true"
+        >
+          <HugeiconsIcon
+            :icon="Location01Icon"
+            :size="15"
+            :stroke-width="2"
+            class="text-[#156374] dark:text-[#50AABF] shrink-0"
+          />
+          <span>{{ activeCityLabel }}</span>
+          <HugeiconsIcon
+            :icon="ArrowDown01Icon"
+            :size="15"
+            :stroke-width="2.2"
+            :class="[
+              'text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0',
+              isLocationModalOpen ? 'rotate-180' : ''
+            ]"
+          />
+        </button>
       </div>
     </div>
 
     <!-- ========================================================================================= -->
-    <!-- 2. DIRECTORY FEED LAYOUT (2 Columns: Feed on Left, Investor Profile on Right)             -->
+    <!-- 2. DIRECTORY FEED LAYOUT (2 Columns: Feed on Left sized to 550px Media, Profile on Right)  -->
     <!-- ========================================================================================= -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start font-poppins">
+    <div class="flex flex-col lg:flex-row items-start gap-6 lg:gap-7 font-poppins">
 
       <!-- ======================================================================================= -->
-      <!-- KOLOM KIRI (8-9 Cols Desktop): Feed Peluang Usaha UMKM                                    -->
+      <!-- KOLOM TENGAH / KIRI: Feed Postingan UMKM & Tips Platform (Disesuaikan dengan 550x578)    -->
       <!-- ======================================================================================= -->
-      <main class="lg:col-span-8 xl:col-span-9 space-y-5">
+      <main class="w-full max-w-[600px] lg:w-[600px] shrink-0 space-y-6 mx-auto lg:mx-0">
 
-        <!-- A. FEED TELEMETRY TOOLBAR (No duplicate search bar; search is handled in centered navbar) -->
-        <div class="card-tactile-gopay rounded-2xl p-4 border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-2 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-            <HugeiconsIcon :icon="Store01Icon" :size="16" class="text-[#00800e] dark:text-[#00C058] shrink-0" />
-            <span>Menampilkan <strong class="font-semibold text-neutral-900 dark:text-white tabular-nums">{{ filteredFeed.length }}</strong> Usaha Terverifikasi</span>
-          </div>
-
-          <!-- Secondary Filter Controls: City & Sort -->
-          <div class="flex items-center gap-3 text-xs flex-wrap self-end sm:self-auto">
-            <!-- City Selector -->
-            <div class="flex items-center gap-1.5 text-neutral-500 dark:text-neutral-400">
-              <HugeiconsIcon :icon="Location01Icon" :size="13" class="shrink-0" />
-              <select
-                v-model="investorStore.selectedCity"
-                class="bg-transparent font-medium text-neutral-800 dark:text-neutral-200 focus:outline-none cursor-pointer text-xs"
-              >
-                <option value="ALL">Semua Wilayah</option>
-                <option value="Bandung">Bandung</option>
-                <option value="Surabaya">Surabaya</option>
-                <option value="Malang">Malang</option>
-                <option value="Solo">Solo</option>
-                <option value="Padang">Padang</option>
-                <option value="Yogyakarta">Yogyakarta</option>
-              </select>
-            </div>
-
-            <!-- Sort Selector -->
-            <div class="flex items-center gap-1.5 text-neutral-500 dark:text-neutral-400">
-              <span class="text-[11px]">Urutkan:</span>
-              <select
-                v-model="selectedSortBy"
-                class="bg-transparent font-semibold text-neutral-900 dark:text-white focus:outline-none cursor-pointer text-xs"
-              >
-                <option value="HEALTH_SCORE">Skor Tertinggi</option>
-                <option value="MARGIN">Untung Tertinggi</option>
-                <option value="TARGET_ASC">Tiket Terendah</option>
-                <option value="GROWTH">Pertumbuhan Tertinggi</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Active Filter Chips (if any filter is applied) -->
-        <div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap text-xs px-1">
-          <span class="text-neutral-500 dark:text-neutral-400 font-medium">Filter Aktif:</span>
-          <span
-            v-if="investorStore.selectedSector !== 'ALL'"
-            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#E6F4F7] text-[#0f5464] dark:bg-[#183640] dark:text-[#78c7d8] font-semibold text-[11px]"
-          >
-            Sektor: {{ activeSectorLabel }}
-            <button type="button" class="ml-1 cursor-pointer hover:text-red-500" @click="investorStore.selectedSector = 'ALL'">✕</button>
-          </span>
-          <span
-            v-if="investorStore.selectedCity !== 'ALL'"
-            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#E6F4F7] text-[#0f5464] dark:bg-[#183640] dark:text-[#78c7d8] font-semibold text-[11px]"
-          >
-            Wilayah: {{ investorStore.selectedCity }}
-            <button type="button" class="ml-1 cursor-pointer hover:text-red-500" @click="investorStore.selectedCity = 'ALL'">✕</button>
-          </span>
-          <span
-            v-if="investorStore.searchQuery"
-            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-200 dark:bg-neutral-800 font-semibold text-[11px]"
-          >
-            "{{ investorStore.searchQuery }}"
-            <button type="button" class="ml-1 cursor-pointer hover:text-red-500" @click="investorStore.searchQuery = ''">✕</button>
-          </span>
-          <button
-            type="button"
-            class="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline cursor-pointer ml-1"
-            @click="resetAllFilters"
-          >
-            Reset Semua
-          </button>
-        </div>
-
-        <!-- B. POST FEED (UMKM Opportunity Cards) -->
-        <div v-if="filteredFeed.length > 0" class="space-y-5">
+        <!-- POST FEED (Card Container disesuaikan dengan ukuran Media Container 550 x 578) -->
+        <div v-if="filteredFeed.length > 0" class="space-y-6 sm:space-y-7">
           <article
             v-for="item in filteredFeed"
             :key="item.id"
             :id="'umkm-card-' + item.id"
-            class="card-tactile-gopay rounded-2xl border font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden shadow-2xs"
+            class="card-tactile-gopay w-full max-w-[600px] mx-auto rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden !shadow-none"
           >
-            <!-- Card Body Content -->
-            <div class="p-4 sm:p-5 space-y-3.5">
+            <!-- Card Body Content (Inner Width 550px + 24px Left/Right Padding = 598px + 2px Border = 600px) -->
+            <div class="p-5 sm:p-6 space-y-5">
 
-              <!-- 1. Post Author Header: Logo + Name + Verified Badge + Subtitle -->
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-3 min-w-0">
-                  <!-- Logo Gerai UMKM -->
-                  <div class="w-11 h-11 rounded-xl bg-amber-400/90 dark:bg-amber-500/90 p-1.5 shrink-0 flex items-center justify-center shadow-2xs border border-amber-300/60">
-                    <img src="/logo.svg" alt="Logo Usaha" class="w-full h-full object-contain" />
+              <!-- 1. Post Author Header: Circular Profile Image + Name + Metadata + Upload Timestamp + Save & Share -->
+              <div class="flex items-start justify-between gap-4">
+                <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                  <!-- Profile Image (Lingkaran proporsional, disesuaikan dengan tinggi 3 baris informasi rapat di kanannya): Beruang Official vs UMKM -->
+                  <div
+                    v-if="item.isPlatformPost"
+                    class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#E6F4F7] dark:bg-[#156374]/25 p-2.5 shrink-0 flex items-center justify-center border border-[#156374]/30 dark:border-[#50AABF]/35 overflow-hidden shadow-none"
+                  >
+                    <img src="/logo/logoSmall.svg" alt="Beruang Official" class="w-full h-full object-contain rounded-full" />
+                  </div>
+                  <div
+                    v-else
+                    class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2.5 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden shadow-none"
+                  >
+                    <img src="/logo.svg" alt="Foto Profil Usaha" class="w-full h-full object-contain rounded-full" />
                   </div>
 
-                  <div class="min-w-0">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                      <h3 class="font-poppins font-semibold text-base sm:text-lg text-neutral-900 dark:text-white truncate">
-                        {{ item.name }}
-                      </h3>
-                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="11" :stroke-width="2.2" />
-                        <span>Siap Pendanaan</span>
-                      </span>
+                  <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
+                    <!-- Di Bagian Atas dari Nama UMKM: Lokasi (contoh: Bandung) atau Kategori Platform -->
+                    <div
+                      v-if="!item.isPlatformPost"
+                      class="inline-flex items-center gap-1 text-xs font-poppins font-medium text-neutral-500 dark:text-neutral-400 leading-tight"
+                    >
+                      <HugeiconsIcon :icon="Location01Icon" :size="13" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+                      <span>{{ item.city }}</span>
+                    </div>
+                    <div
+                      v-else
+                      class="inline-flex items-center gap-1 text-xs font-poppins font-semibold text-[#156374] dark:text-[#50AABF] leading-tight"
+                    >
+                      <HugeiconsIcon :icon="SparklesIcon" :size="13" :stroke-width="2.2" class="shrink-0" />
+                      <span>{{ item.platformCategory || 'Tips & Trick' }}</span>
                     </div>
 
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 truncate mt-0.5 font-normal">
-                      <span>{{ item.city }}</span>
-                      <span>•</span>
-                      <span>{{ item.sector }}</span>
-                      <span>•</span>
-                      <span>Est. {{ item.establishedYear }}</span>
-                    </p>
+                    <!-- Nama UMKM / Author -->
+                    <h3 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white truncate leading-tight">
+                      {{ item.name }}
+                    </h3>
+
+                    <!-- Di Bagian Bawah dari Nama UMKM: Kapan Postingan Diupload -->
+                    <div class="inline-flex items-center gap-1.5 text-xs font-poppins text-neutral-500 dark:text-neutral-400 leading-tight">
+                      <HugeiconsIcon :icon="Time02Icon" :size="13" class="text-neutral-400 dark:text-neutral-500 shrink-0" />
+                      <span>{{ item.postedAt || fallbackPostedAtById[item.id] || 'Baru saja' }}</span>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Right Corner: Skor Kesehatan & Bookmark -->
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <span class="px-2.5 py-0.5 rounded-lg bg-[#E6F4F7] text-[#0f5464] dark:bg-[#183640] dark:text-[#78c7d8] border border-[#2091AA]/25 text-xs font-semibold tabular-nums">
-                    Skor {{ item.healthScore }}
-                  </span>
-
-                  <!-- Bookmark Star Button -->
+                <!-- Right Corner: Save (Bookmark) & Share Buttons -->
+                <div class="flex items-center gap-2 shrink-0">
+                  <!-- Save / Bookmark Button (Untuk UMKM) -->
                   <button
+                    v-if="!item.isPlatformPost"
                     type="button"
-                    :aria-label="item.bookmarked ? 'Hapus UMKM dari daftar pantau' : 'Simpan UMKM ke daftar pantau'"
+                    :aria-label="item.bookmarked ? 'Hapus UMKM dari daftar simpan' : 'Simpan UMKM ke daftar simpan'"
                     :class="[
-                      'w-8 h-8 rounded-lg transition-all cursor-pointer flex items-center justify-center border',
+                      'w-9 h-9 rounded-xl transition-colors cursor-pointer flex items-center justify-center border shadow-none',
                       item.bookmarked
-                        ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-500 border-amber-200 dark:border-amber-800'
-                        : 'bg-neutral-100/70 dark:bg-neutral-800/70 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 border-transparent hover:border-neutral-200 dark:hover:border-neutral-700'
+                        ? 'bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] border-[#156374]/35 dark:border-[#50AABF]/40'
+                        : 'bg-white dark:bg-[#18191E] text-neutral-600 dark:text-neutral-300 border-[#CBD5E1] dark:border-neutral-700 hover:bg-[#F8FAFC] dark:hover:bg-[#262626] hover:text-neutral-900 dark:hover:text-white'
                     ]"
-                    :title="item.bookmarked ? 'Hapus dari Simpanan' : 'Simpan ke Portofolio Pantau'"
+                    :title="item.bookmarked ? 'Hapus dari Simpanan' : 'Simpan ke Daftar Simpan'"
                     @click="toggleBookmarkWithFeedback(item)"
                   >
                     <HugeiconsIcon
-                      :icon="StarIcon"
-                      :size="16"
+                      :icon="Bookmark02Icon"
+                      :size="17"
                       :stroke-width="2"
-                      :class="item.bookmarked ? 'fill-amber-400 text-amber-500' : ''"
+                      :class="item.bookmarked ? 'fill-current' : ''"
                     />
                   </button>
 
-                  <!-- Share Link Button -->
+                  <!-- Share Button (Improved Icon: Share08Icon) -->
                   <button
                     type="button"
-                    class="w-8 h-8 rounded-lg bg-neutral-100/70 dark:bg-neutral-800/70 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 border border-transparent hover:border-neutral-200 dark:hover:border-neutral-700 transition-colors flex items-center justify-center cursor-pointer"
-                    title="Bagikan Tautan Profil"
+                    aria-label="Bagikan Tautan Postingan"
+                    class="w-9 h-9 rounded-xl bg-white dark:bg-[#18191E] text-neutral-600 dark:text-neutral-300 border border-[#CBD5E1] dark:border-neutral-700 hover:bg-[#F8FAFC] dark:hover:bg-[#262626] hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center justify-center cursor-pointer shadow-none"
+                    title="Bagikan Tautan Postingan"
                     @click="copyShareLink(item)"
                   >
-                    <HugeiconsIcon :icon="Share01Icon" :size="15" />
+                    <HugeiconsIcon :icon="Share08Icon" :size="17" :stroke-width="2" />
                   </button>
                 </div>
               </div>
 
-              <!-- 2. Post Text (Founder Pitch & Thesis) -->
-              <p class="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+              <!-- 2. Post Text (Font size matched to Sidebar 14px/15px font-poppins) -->
+              <p class="text-[14px] sm:text-[15px] font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed">
                 "{{ item.pitchSummary }}"
               </p>
 
-              <!-- 3. Store Documentation Image -->
-              <div class="relative rounded-xl overflow-hidden border border-neutral-200/80 dark:border-neutral-800/80 bg-neutral-100 dark:bg-neutral-900">
-                <img
-                  :src="getStoreBannerImage(item.id)"
-                  :alt="`Dokumentasi Gerai ${item.name}`"
-                  class="w-full h-48 sm:h-56 object-cover"
-                />
-                <div class="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-medium">
-                  <HugeiconsIcon :icon="Store01Icon" :size="12" class="text-emerald-400 shrink-0" />
-                  <span>Gerai Fisik Aktif • {{ item.city }}</span>
+              <!-- =================================================================================== -->
+              <!-- 3. POST MEDIA CONTAINER (Ukuran 550 x 578, Single Post & Multi-Post LinkedIn Carousel) -->
+              <!-- =================================================================================== -->
+              <div
+                class="relative w-full max-w-[550px] h-[578px] aspect-[550/578] mx-auto rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none group/carousel shadow-none"
+              >
+                <!-- Horizontal Carousel Track -->
+                <div
+                  class="flex w-full h-full transition-transform duration-300 ease-out"
+                  :style="{ transform: `translateX(-${getSlideIndex(item.id) * 100}%)` }"
+                >
+                  <div
+                    v-for="(imgUrl, sIdx) in getPostImages(item)"
+                    :key="`${item.id}-slide-${sIdx}`"
+                    class="w-full h-full shrink-0 relative overflow-hidden bg-neutral-900"
+                  >
+                    <img
+                      :src="imgUrl"
+                      :alt="`${item.name} - Slide ${sIdx + 1}`"
+                      loading="lazy"
+                      class="w-full h-full object-cover object-center cursor-pointer"
+                      @click="openFullscreenPreview(item, getSlideIndex(item.id))"
+                    />
+                  </div>
+                </div>
+
+                <!-- Top-Left Multi-Post Slide Counter Pill (LinkedIn Style) -->
+                <div
+                  v-if="getPostImages(item).length > 1"
+                  class="absolute top-3.5 left-3.5 z-20 px-2.5 py-1 rounded-full bg-neutral-950/75 text-white text-xs font-poppins font-semibold tabular-nums border border-white/15 backdrop-blur-xs pointer-events-none"
+                >
+                  {{ getSlideIndex(item.id) + 1 }} / {{ getPostImages(item).length }}
+                </div>
+
+                <!-- Top-Right Full Screen Preview Icon Button -->
+                <button
+                  type="button"
+                  aria-label="Pratinjau Layar Penuh"
+                  title="Pratinjau Layar Penuh"
+                  class="absolute top-3.5 right-3.5 z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/20 backdrop-blur-xs flex items-center justify-center transition-all duration-200 cursor-pointer shadow-none"
+                  @click.stop="openFullscreenPreview(item, getSlideIndex(item.id))"
+                >
+                  <HugeiconsIcon :icon="FullScreenIcon" :size="17" :stroke-width="2.2" />
+                </button>
+
+                <!-- LinkedIn Carousel BEFORE (Previous) Button inside Carousel Container (Muncul ketika Next sudah ditekan / slide > 0, tanpa efek turun saat ditekan) -->
+                <button
+                  v-if="getPostImages(item).length > 1 && getSlideIndex(item.id) > 0"
+                  type="button"
+                  aria-label="Slide Sebelumnya (Before)"
+                  title="Slide Sebelumnya"
+                  class="carousel-before-btn absolute left-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
+                  @click.stop="prevSlide(item)"
+                >
+                  <HugeiconsIcon :icon="ArrowLeft01Icon" :size="18" :stroke-width="2.4" />
+                </button>
+
+                <!-- LinkedIn Carousel NEXT Button inside Carousel Container (Tanpa efek turun saat ditekan) -->
+                <button
+                  v-if="getPostImages(item).length > 1 && getSlideIndex(item.id) < getPostImages(item).length - 1"
+                  type="button"
+                  aria-label="Slide Berikutnya (Next)"
+                  title="Slide Berikutnya"
+                  class="carousel-next-btn absolute right-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
+                  @click.stop="nextSlide(item)"
+                >
+                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="18" :stroke-width="2.4" />
+                </button>
+
+                <!-- Bottom Dot Indicators for Multi-Post Carousel -->
+                <div
+                  v-if="getPostImages(item).length > 1"
+                  class="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1.5 rounded-full bg-neutral-950/65 backdrop-blur-xs border border-white/15 flex items-center gap-1.5"
+                >
+                  <button
+                    v-for="(_, dIdx) in getPostImages(item)"
+                    :key="`${item.id}-dot-${dIdx}`"
+                    type="button"
+                    :aria-label="`Pilih Slide ${dIdx + 1}`"
+                    :class="[
+                      'h-1.5 rounded-full transition-all duration-200 cursor-pointer',
+                      getSlideIndex(item.id) === dIdx
+                        ? 'w-4 bg-white'
+                        : 'w-1.5 bg-white/50 hover:bg-white/80'
+                    ]"
+                    @click.stop="setSlideIndex(item.id, dIdx)"
+                  />
                 </div>
               </div>
-
-              <!-- 4. Consultant Endorsement Strip -->
-              <div class="p-2.5 rounded-xl bg-[#F6F8FA] dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between flex-wrap gap-2 text-xs">
-                <div class="flex items-center gap-1.5 min-w-0">
-                  <HugeiconsIcon :icon="Award01Icon" :size="15" class="text-amber-500 shrink-0" />
-                  <span class="text-neutral-600 dark:text-neutral-400 text-xs">
-                    Didampingi oleh: <strong class="text-neutral-900 dark:text-white font-semibold">{{ item.consultantName }}</strong>
-                  </span>
-                </div>
-                <div class="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" />
-                  <span>Validasi Kas Selesai ({{ item.certifiedAt }})</span>
-                </div>
-              </div>
-
-              <!-- 5. 4 Telemetry Metrics Bento -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-poppins text-center">
-                <div class="p-2.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60">
-                  <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Target Modal</span>
-                  <strong class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white tabular-nums block mt-0.5">
-                    Rp {{ (item.fundingTarget / 1000000).toLocaleString('id-ID') }} Jt
-                  </strong>
-                </div>
-
-                <div class="p-2.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60">
-                  <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Untung Bersih</span>
-                  <strong class="text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums block mt-0.5">
-                    {{ item.marginPercentage }}%
-                  </strong>
-                </div>
-
-                <div class="p-2.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60">
-                  <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Pertumbuhan</span>
-                  <strong class="text-xs sm:text-sm font-semibold text-[#2091AA] dark:text-[#50AABF] tabular-nums block mt-0.5">
-                    +{{ item.growthYoY }}%
-                  </strong>
-                </div>
-
-                <div class="p-2.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60">
-                  <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Status Kas</span>
-                  <strong class="text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums block mt-0.5">
-                    100% Bersih
-                  </strong>
-                </div>
-              </div>
-
             </div>
 
-            <!-- 6. Post Action Row (Pesan, Simulasi ROI, Profil, Data Room) -->
-            <div class="px-4 sm:px-5 py-2.5 bg-neutral-50/80 dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-2 flex-wrap">
-              <!-- Left Group: Chat & ROI Calculator -->
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <button
-                  type="button"
-                  class="h-8 px-2.5 sm:px-3 rounded-lg text-xs font-semibold bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#183640] dark:hover:bg-[#204754] text-[#0f5464] dark:text-[#78c7d8] transition-colors flex items-center gap-1.5 cursor-pointer border border-[#2091AA]/20 shrink-0"
-                  title="Kirim pesan langsung ke pemilik usaha"
-                  @click="goToChatWithUmkm(item)"
-                >
-                  <HugeiconsIcon :icon="Message01Icon" :size="14" class="text-[#00800e] dark:text-[#00C058]" />
-                  <span>Kirim Pesan</span>
-                </button>
-
-                <button
-                  type="button"
-                  class="h-8 px-2.5 sm:px-3 rounded-lg text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-colors flex items-center gap-1.5 cursor-pointer border border-neutral-200 dark:border-neutral-700 shrink-0"
-                  title="Simulasi bagi hasil investasi"
-                  @click="openRoiModal(item)"
-                >
-                  <HugeiconsIcon :icon="Coins01Icon" :size="14" class="text-[#156374] dark:text-[#50AABF]" />
-                  <span>Simulasi ROI</span>
-                </button>
+            <!-- 4. Post Footer Row: Informasi Konsultan Pendamping di Kiri & Button "Lihat Profil" di Kanan (1 Row) -->
+            <div
+              class="px-5 sm:px-6 py-4 bg-[#F8FAFC] dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            >
+              <div class="flex items-center gap-2 text-xs sm:text-[13px] min-w-0">
+                <HugeiconsIcon
+                  :icon="item.isPlatformPost ? SparklesIcon : Award01Icon"
+                  :size="16"
+                  class="text-[#156374] dark:text-[#50AABF] shrink-0"
+                />
+                <span v-if="item.isPlatformPost" class="text-neutral-600 dark:text-neutral-400">
+                  Disusun oleh: <strong class="text-neutral-900 dark:text-white font-semibold">{{ item.consultantName }}</strong>
+                </span>
+                <span v-else class="text-neutral-600 dark:text-neutral-400 truncate">
+                  Didampingi oleh: <strong class="text-neutral-900 dark:text-white font-semibold">{{ item.consultantName }}</strong>
+                </span>
               </div>
 
-              <!-- Right Group: Tinjau Profil & Data Room -->
-              <div class="flex items-center gap-1.5 flex-wrap justify-end">
-                <NuxtLink
-                  :to="`/investor/umkm/${item.id}`"
-                  class="h-8 px-2.5 sm:px-3 rounded-lg text-xs font-semibold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-colors inline-flex items-center gap-1 cursor-pointer border border-neutral-200 dark:border-neutral-700 shrink-0"
-                >
-                  <span>Profil</span>
-                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" />
-                </NuxtLink>
-
-                <!-- Data Room Action Button -->
-                <NuxtLink
-                  v-if="item.accessStatus === 'APPROVED'"
-                  :to="`/investor/data-room/${item.id}`"
-                  class="inline-flex items-center gap-1.5 px-3 sm:px-3.5 h-8 rounded-lg text-xs font-semibold font-poppins bg-[#00800e] hover:bg-[#00700c] text-white shadow-xs transition-all cursor-pointer shrink-0"
-                >
-                  <HugeiconsIcon :icon="FileUnlockedIcon" :size="14" :stroke-width="2" />
-                  <span>Data Room</span>
-                </NuxtLink>
-
-                <div
-                  v-else-if="item.accessStatus === 'PENDING'"
-                  class="inline-flex items-center gap-1 px-2.5 sm:px-3 h-8 rounded-lg text-xs font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 shrink-0"
-                >
-                  <HugeiconsIcon :icon="Clock01Icon" :size="13" class="text-amber-600 animate-spin" />
-                  <span>Menunggu</span>
-                </div>
-
-                <NuxtLink
-                  v-else
-                  :to="`/investor/umkm/${item.id}/ajukan-akses`"
-                  class="btn-pill-action group cursor-pointer inline-flex items-center gap-1 h-8 px-2.5 sm:px-3 text-xs font-semibold shrink-0"
-                >
-                  <span>Data Room</span>
-                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" class="group-hover:translate-x-0.5 transition-transform" />
-                </NuxtLink>
-              </div>
+              <BActionButton
+                v-if="!item.isPlatformPost"
+                :to="`/investor/umkm/${item.umkmRefId || item.id}`"
+                variant="default"
+                icon="chevron"
+                custom-class="w-full sm:w-auto justify-center text-center shrink-0"
+              >
+                Lihat Profil
+              </BActionButton>
             </div>
           </article>
         </div>
@@ -347,7 +313,7 @@
         <!-- Empty State Filter Feed -->
         <div
           v-else
-          class="card-tactile-gopay rounded-2xl p-10 sm:p-14 border text-center space-y-4 max-w-lg mx-auto"
+          class="card-tactile-gopay rounded-2xl p-10 sm:p-12 border text-center space-y-4 w-full max-w-[600px] mx-auto !shadow-none"
         >
           <div class="w-14 h-14 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center mx-auto">
             <HugeiconsIcon :icon="Search01Icon" :size="24" />
@@ -356,220 +322,417 @@
             <h3 class="font-poppins font-semibold text-base text-neutral-900 dark:text-white">
               Tidak Ada UMKM yang Sesuai
             </h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-sm mx-auto font-sans">
-              Cobalah memilih opsi sektor lain atau mencari nama kota lainnya.
+            <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1 max-w-sm mx-auto font-poppins">
+              Cobalah memilih wilayah lain atau mengatur ulang pencarian Anda.
             </p>
           </div>
           <button
             type="button"
-            class="px-4 py-2 rounded-xl text-xs font-semibold bg-[#00800e] text-white hover:bg-[#00700c] transition-colors cursor-pointer"
+            class="btn-pill-action btn-pill-action-green mx-auto cursor-pointer shadow-none"
             @click="resetAllFilters"
           >
-            Reset Semua Filter
+            <span>Reset Semua Filter</span>
           </button>
         </div>
       </main>
 
       <!-- ======================================================================================= -->
-      <!-- KOLOM KANAN (3-4 Cols Desktop): Profile Card & Standar Akreditasi (Dipindahkan ke Kanan)  -->
+      <!-- KOLOM KANAN: Section "Profil" + Section "Pesan" (3 Chat History Terbaru)                -->
       <!-- ======================================================================================= -->
-      <aside class="lg:col-span-4 xl:col-span-3 space-y-4 lg:sticky lg:top-6">
+      <aside class="w-full lg:flex-1 min-w-0 lg:sticky lg:top-6 space-y-6">
+        <!-- 1. Section Profil Investor (Title "Profil" di Luar Atas Container) -->
+        <div class="space-y-2.5">
+          <h2 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white px-0.5">
+            Profil
+          </h2>
 
-        <!-- A. PROFILE CARD (Cover Banner + Centered Protruding Avatar) -->
-        <div class="card-tactile-gopay rounded-2xl border overflow-hidden shadow-2xs">
-          <!-- Banner Cover Atas -->
-          <div class="h-20 bg-gradient-to-r from-[#2091AA]/25 via-[#00AA13]/20 to-[#2091AA]/15 border-b border-neutral-100 dark:border-neutral-800 relative">
-            <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xs text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-              Terakreditasi
-            </span>
-          </div>
-
-          <!-- Centered Avatar & Profile Info -->
-          <div class="flex flex-col items-center text-center -mt-10 px-4 pb-4">
-            <div class="relative w-20 h-20 rounded-full p-1 bg-white dark:bg-[#13161F] shadow-md border-2 border-white dark:border-[#13161F] shrink-0">
+          <NuxtLink
+            to="/investor/profile"
+            class="card-tactile-gopay rounded-2xl p-4 sm:p-5 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none flex items-center gap-3.5 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors cursor-pointer group"
+            title="Kelola Profil Investor"
+          >
+            <!-- Profile Image on Left -->
+            <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-full overflow-hidden border border-slate-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 shrink-0">
               <img
-                :src="authStore.currentUser?.avatar || '/images/user-profile.png'"
-                alt="Foto Profil Investor"
-                class="w-full h-full rounded-full object-cover bg-neutral-100 dark:bg-neutral-800"
+                :src="investorStore.profile.avatarUrl || authStore.currentUser?.avatar || '/images/user-profile.png'"
+                :alt="investorStore.profile.name || 'Foto Profil Investor'"
+                class="w-full h-full object-cover"
               />
-              <span class="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#13161F]" />
             </div>
 
-            <div class="mt-2.5">
-              <h2 class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white flex items-center justify-center gap-1.5">
-                <span>{{ authStore.currentUser?.name || 'Fikri Setiawan' }}</span>
-                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="15" class="text-emerald-500 shrink-0" />
-              </h2>
-              <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 mt-0.5">
-                Angel Investor
-              </p>
-              <p class="text-[11px] text-neutral-400 dark:text-neutral-500">
-                Nusantara Angel Syndicate
+            <!-- Investor Name on Right & Company / PT Name Below -->
+            <div class="min-w-0 flex-1">
+              <h3 class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white truncate group-hover:text-[#156374] dark:group-hover:text-[#50AABF] transition-colors">
+                {{ investorStore.profile.name || authStore.currentUser?.name || 'Fikri Setiawan' }}
+              </h3>
+              <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                {{ investorStore.profile.companyName || 'PT Nusantara Kapital Investama' }}
               </p>
             </div>
+          </NuxtLink>
+        </div>
 
-            <!-- Metric Rows -->
-            <div class="w-full mt-3.5 pt-3 border-t border-neutral-100 dark:border-neutral-800/80 space-y-2 text-xs text-left">
-              <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-                <span class="text-xs">Bisnis Dipantau</span>
-                <strong class="font-semibold text-[#00800e] dark:text-[#00C058] tabular-nums">
-                  {{ investorStore.watchlist.length }}
-                </strong>
-              </div>
-              <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-                <span class="text-xs">Diskusi Terjalin</span>
-                <strong class="font-semibold text-neutral-900 dark:text-white tabular-nums">
-                  {{ chatStore.threads.length }}
-                </strong>
-              </div>
-              <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-                <span class="text-xs">Akses Data Room</span>
-                <strong class="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                  {{ approvedDataRoomsCount }}
-                </strong>
-              </div>
-            </div>
+        <!-- 2. Section Pesan (Title "Pesan" di Luar Atas Container 3 Chat History Terbaru) -->
+        <div class="space-y-2.5">
+          <h2 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white px-0.5">
+            Pesan
+          </h2>
 
-            <!-- Attached Navigation Links -->
-            <div class="w-full mt-3.5 pt-3 border-t border-neutral-100 dark:border-neutral-800/80 space-y-1 text-left">
+          <div
+            class="card-tactile-gopay rounded-2xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none overflow-hidden font-poppins"
+          >
+            <div class="divide-y divide-[#E2E8F0] dark:divide-neutral-800">
               <NuxtLink
-                to="/investor/watchlist"
-                class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              >
-                <HugeiconsIcon :icon="StarIcon" :size="14" class="text-amber-500 fill-amber-400 shrink-0" />
-                <span class="truncate">Portofolio Pantau</span>
-              </NuxtLink>
-
-              <NuxtLink
+                v-for="chat in recentUmkmChats"
+                :key="chat.id"
                 to="/investor/pesan"
-                class="flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                class="px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3.5 hover:bg-[#F8FAFC] dark:hover:bg-[#18191E] transition-colors cursor-pointer group"
               >
-                <div class="flex items-center gap-2 min-w-0">
-                  <HugeiconsIcon :icon="Message01Icon" :size="14" class="text-[#00800e] dark:text-[#00C058] shrink-0" />
-                  <span class="truncate">Pesan</span>
-                </div>
-                <span
-                  v-if="chatStore.unreadCountInvestor > 0"
-                  class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-600 text-white tabular-nums"
-                >
-                  {{ chatStore.unreadCountInvestor }}
-                </span>
-              </NuxtLink>
+                <!-- Kiri: Profile Image UMKM + Nama UMKM & Chat Terakhir -->
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                  <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden shadow-none">
+                    <img
+                      :src="chat.avatarUrl || '/logo.svg'"
+                      :alt="chat.umkmName"
+                      class="w-full h-full object-contain rounded-full"
+                    />
+                  </div>
 
-              <NuxtLink
-                to="/investor/pengaturan"
-                class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              >
-                <HugeiconsIcon :icon="Settings01Icon" :size="14" class="text-neutral-400 shrink-0" />
-                <span class="truncate">Pengaturan Mandat</span>
+                  <div class="min-w-0 flex-1 space-y-1">
+                    <h3 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white truncate group-hover:text-[#156374] dark:group-hover:text-[#50AABF] transition-colors leading-snug">
+                      {{ chat.umkmName }}
+                    </h3>
+                    <p class="text-xs font-poppins text-neutral-500 dark:text-neutral-400 truncate leading-snug">
+                      {{ chat.lastMessage }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Kanan: Status Online (jika online) atau Jam Terakhir Komunikasi -->
+                <div class="shrink-0 text-right">
+                  <span
+                    v-if="chat.online"
+                    class="inline-flex items-center gap-1.5 text-xs font-poppins font-semibold text-[#00800e] dark:text-[#00C058]"
+                  >
+                    <span class="w-2 h-2 rounded-full bg-[#00800e] dark:bg-[#00C058] shrink-0" />
+                    <span>Online</span>
+                  </span>
+                  <span
+                    v-else
+                    class="text-xs font-poppins font-medium text-neutral-400 dark:text-neutral-500 tabular-nums"
+                  >
+                    {{ chat.lastTime }}
+                  </span>
+                </div>
               </NuxtLink>
             </div>
           </div>
         </div>
-
-        <!-- B. TRUST ASSURANCE CARD -->
-        <div class="card-tactile-gopay rounded-2xl p-4 border space-y-2.5">
-          <div class="flex items-center gap-2 text-xs font-semibold text-neutral-900 dark:text-white">
-            <HugeiconsIcon :icon="ShieldCheckIcon" :size="16" class="text-emerald-500 shrink-0" />
-            <span>Standar Akreditasi Beruang</span>
-          </div>
-          <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed font-sans">
-            Seluruh data pergerakan kas toko dan mutasi giro bank telah diverifikasi berkala oleh konsultan pendamping berlisensi.
-          </p>
-        </div>
-
       </aside>
-
     </div>
 
     <!-- ========================================================================================= -->
-    <!-- QUICK ROI CALCULATOR MODAL (Simulasi Bagi Hasil Usaha)                                     -->
+    <!-- 3. FULL SCREEN PREVIEW MODAL (Selayar Penuh dengan Minimize Button Animasi Berputar & Next/Before) -->
     <!-- ========================================================================================= -->
     <Teleport to="body">
       <div
-        v-if="selectedRoiModal"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
-        @click.self="selectedRoiModal = null"
+        v-if="fullscreenPost"
+        class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 font-poppins select-none"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Pratinjau Gambar Layar Penuh"
+        @click.self="closeFullscreenPreview"
       >
-        <div class="card-tactile-gopay rounded-3xl p-6 border max-w-md w-full space-y-5 bg-white dark:bg-[#13161F] shadow-2xl font-poppins">
-          <div class="flex items-start justify-between">
-            <div>
-              <span class="text-[10px] font-semibold text-[#00800e] dark:text-[#00C058] uppercase tracking-wider block">
-                Simulasi Bagi Hasil Usaha
-              </span>
-              <h3 class="font-poppins font-semibold text-base text-neutral-900 dark:text-white mt-0.5">
-                {{ selectedRoiModal.name }}
+        <!-- Top Bar inside Fullscreen Preview: Post Info -->
+        <div class="w-full max-w-4xl flex items-center justify-between gap-4 mb-3.5 z-30">
+          <div class="flex items-center gap-3 min-w-0 text-white">
+            <div class="w-9 h-9 rounded-full bg-neutral-900 border border-white/20 p-1.5 flex items-center justify-center shrink-0 overflow-hidden">
+              <img
+                :src="fullscreenPost.isPlatformPost ? '/logo/logoSmall.svg' : '/logo.svg'"
+                :alt="fullscreenPost.name"
+                class="w-full h-full object-contain rounded-full"
+              />
+            </div>
+            <div class="min-w-0">
+              <h3 class="text-sm sm:text-base font-poppins font-semibold text-white truncate leading-tight">
+                {{ fullscreenPost.name }}
               </h3>
+              <p class="text-xs text-neutral-300 truncate">
+                {{ fullscreenPost.postedAt }}
+                <template v-if="getPostImages(fullscreenPost).length > 1">
+                  • Slide {{ fullscreenSlideIndex + 1 }} dari {{ getPostImages(fullscreenPost).length }}
+                </template>
+              </p>
             </div>
+          </div>
+        </div>
+
+        <!-- Main Fullscreen Carousel Stage -->
+        <div
+          class="relative w-full max-w-4xl flex-1 max-h-[82vh] flex items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-neutral-950"
+        >
+          <img
+            :src="getPostImages(fullscreenPost)[fullscreenSlideIndex]"
+            :alt="`${fullscreenPost.name} - Pratinjau Penuh ${fullscreenSlideIndex + 1}`"
+            class="max-w-full max-h-[80vh] w-auto h-auto object-contain select-none transition-all duration-300"
+          />
+
+          <!-- Top-Left Slide Counter Pill inside Fullscreen Container -->
+          <div
+            v-if="getPostImages(fullscreenPost).length > 1"
+            class="absolute top-4 left-4 z-30 px-3 py-1 rounded-full bg-neutral-900/90 text-white text-xs font-poppins font-semibold tabular-nums border border-white/25 backdrop-blur-xs pointer-events-none"
+          >
+            {{ fullscreenSlideIndex + 1 }} / {{ getPostImages(fullscreenPost).length }}
+          </div>
+
+          <!-- Single Exit Button (Silang / Cancel01Icon) dengan Animasi Berputar -->
+          <button
+            type="button"
+            aria-label="Tutup Pratinjau Layar Penuh"
+            title="Tutup Pratinjau Layar Penuh"
+            class="group absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-white border border-white/30 backdrop-blur-xs flex items-center justify-center transition-all duration-200 cursor-pointer shadow-none"
+            @click.stop="closeFullscreenPreview"
+          >
+            <HugeiconsIcon
+              :icon="Cancel01Icon"
+              :size="20"
+              :stroke-width="2.4"
+              class="transition-transform duration-300 ease-out group-hover:rotate-90 group-active:rotate-180 animate-in spin-in-90"
+            />
+          </button>
+
+          <!-- Fullscreen BEFORE (Previous) Button -->
+          <button
+            v-if="getPostImages(fullscreenPost).length > 1 && fullscreenSlideIndex > 0"
+            type="button"
+            aria-label="Slide Sebelumnya di Layar Penuh"
+            title="Slide Sebelumnya (Before)"
+            class="absolute left-4 inset-y-0 my-auto z-30 w-11 h-11 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-white border border-white/30 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
+            @click.stop="prevFullscreenSlide"
+          >
+            <HugeiconsIcon :icon="ArrowLeft01Icon" :size="20" :stroke-width="2.4" />
+          </button>
+
+          <!-- Fullscreen NEXT Button -->
+          <button
+            v-if="getPostImages(fullscreenPost).length > 1 && fullscreenSlideIndex < getPostImages(fullscreenPost).length - 1"
+            type="button"
+            aria-label="Slide Berikutnya di Layar Penuh"
+            title="Slide Berikutnya (Next)"
+            class="absolute right-4 inset-y-0 my-auto z-30 w-11 h-11 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-white border border-white/30 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
+            @click.stop="nextFullscreenSlide"
+          >
+            <HugeiconsIcon :icon="ArrowRight01Icon" :size="20" :stroke-width="2.4" />
+          </button>
+
+          <!-- Fullscreen Bottom Dot Indicators -->
+          <div
+            v-if="getPostImages(fullscreenPost).length > 1"
+            class="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 px-3 py-1.5 rounded-full bg-neutral-900/90 border border-white/20 flex items-center gap-2"
+          >
             <button
+              v-for="(_, fIdx) in getPostImages(fullscreenPost)"
+              :key="`fs-dot-${fIdx}`"
               type="button"
-              aria-label="Tutup jendela simulasi bagi hasil"
-              class="p-1 rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-white cursor-pointer"
-              @click="selectedRoiModal = null"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div class="p-3.5 rounded-2xl bg-neutral-100 dark:bg-neutral-800 space-y-2 text-xs">
-            <div class="flex justify-between">
-              <span class="text-neutral-500">Target Pendanaan:</span>
-              <strong class="tabular-nums text-neutral-900 dark:text-white font-semibold">Rp {{ selectedRoiModal.fundingTarget.toLocaleString('id-ID') }}</strong>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-neutral-500">Rasio Untung Riil:</span>
-              <strong class="tabular-nums text-emerald-600 font-semibold">{{ selectedRoiModal.marginPercentage }}%</strong>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-neutral-500">Skema Standar:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200">Bagi Hasil Usaha</span>
-            </div>
-          </div>
-
-          <div class="space-y-1.5">
-            <div class="flex justify-between text-xs font-medium">
-              <span class="text-neutral-600 dark:text-neutral-400">Komitmen Tiket Anda:</span>
-              <strong class="font-semibold text-[#00800e] dark:text-[#00C058] tabular-nums">
-                Rp {{ modalTicketInput.toLocaleString('id-ID') }}
-              </strong>
-            </div>
-            <input
-              v-model.number="modalTicketInput"
-              type="range"
-              min="25000000"
-              :max="selectedRoiModal.fundingTarget"
-              step="5000000"
-              class="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-[#00800e]"
+              :aria-label="`Pilih Slide Layar Penuh ${fIdx + 1}`"
+              :class="[
+                'h-2 rounded-full transition-all duration-200 cursor-pointer',
+                fullscreenSlideIndex === fIdx
+                  ? 'w-5 bg-white'
+                  : 'w-2 bg-white/45 hover:bg-white/80'
+              ]"
+              @click.stop="setFullscreenSlide(fIdx)"
             />
           </div>
+        </div>
+      </div>
+    </Teleport>
 
-          <div class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-2 text-xs">
-            <div class="flex justify-between items-center">
-              <span class="text-neutral-600 dark:text-neutral-400">Estimasi Bagi Hasil Bulanan:</span>
-              <strong class="text-base font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                Rp {{ Math.round((modalTicketInput * 0.14) / 12).toLocaleString('id-ID') }}
-              </strong>
+    <!-- ========================================================================================= -->
+    <!-- 4. MODAL FILTER WILAYAH SELURUH INDONESIA (DENGAN KONSEP CHECKLIST)                        -->
+    <!-- ========================================================================================= -->
+    <Teleport to="body">
+      <div
+        v-if="isLocationModalOpen"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150 font-poppins"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-wilayah-title"
+        @click.self="isLocationModalOpen = false"
+      >
+        <div class="w-full max-w-2xl rounded-[22px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 shadow-none overflow-hidden flex flex-col max-h-[86vh]">
+          <!-- Modal Header -->
+          <div class="px-6 py-4 sm:py-5 border-b border-neutral-100 dark:border-neutral-800 flex items-start justify-between gap-4 shrink-0">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Location01Icon" :size="20" :stroke-width="2" />
+              </div>
+              <div>
+                <h2 id="modal-wilayah-title" class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-tight">
+                  Pilih Wilayah Indonesia
+                </h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  Centang satu atau beberapa kota di seluruh Indonesia untuk menyaring peluang UMKM.
+                </p>
+              </div>
             </div>
-            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 leading-normal">
-              Berdasarkan performa historis kas toko yang telah tervalidasi oleh konsultan pendamping.
-            </p>
-          </div>
 
-          <div class="flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
-              class="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
-              @click="selectedRoiModal = null"
+              class="w-8 h-8 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              aria-label="Tutup Modal Wilayah"
+              @click="isLocationModalOpen = false"
             >
-              Tutup
+              <HugeiconsIcon :icon="Cancel01Icon" :size="18" :stroke-width="2.2" />
             </button>
-            <NuxtLink
-              :to="`/investor/umkm/${selectedRoiModal.id}/ajukan-akses`"
-              class="px-4 py-2 rounded-xl text-xs font-semibold bg-[#00800e] text-white shadow-xs cursor-pointer hover:bg-[#00700c] transition-colors"
-              @click="selectedRoiModal = null"
+          </div>
+
+          <!-- Search & "Semua Wilayah" Master Checklist Row -->
+          <div class="px-6 pt-4 pb-3 border-b border-neutral-100 dark:border-neutral-800 space-y-3 shrink-0 bg-[#F8FAFC]/60 dark:bg-[#18191E]/50">
+            <!-- Search Input inside Modal -->
+            <div class="relative">
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none flex items-center">
+                <HugeiconsIcon :icon="Search01Icon" :size="16" :stroke-width="2" />
+              </span>
+              <input
+                v-model="locationSearchQuery"
+                type="text"
+                placeholder="Cari kota atau wilayah di seluruh Indonesia (misal: Surabaya, Medan, Makassar)..."
+                class="input-tactile-gopay has-prefix-icon !h-10 text-xs sm:text-sm bg-white dark:bg-[#13161F]"
+              />
+              <button
+                v-if="locationSearchQuery"
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer"
+                @click="locationSearchQuery = ''"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="14" />
+              </button>
+            </div>
+
+            <!-- Master Option: Semua Wilayah (Seluruh Indonesia) -->
+            <div
+              class="p-3 sm:p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 cursor-pointer select-none shadow-none"
+              :class="[
+                investorStore.selectedCities.length === 0
+                  ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+                  : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+              ]"
+              @click="investorStore.clearCitySelection()"
             >
-              Lanjut Ajukan Tiket Ini →
-            </NuxtLink>
+              <div class="min-w-0 pr-2">
+                <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
+                  Semua Wilayah (Seluruh Indonesia)
+                </span>
+                <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block">
+                  Tampilkan seluruh peluang usaha UMKM dari Sabang sampai Merauke tanpa batasan kota
+                </span>
+              </div>
+              <div
+                :class="[
+                  'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+                  investorStore.selectedCities.length === 0
+                    ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                    : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+                ]"
+              >
+                <HugeiconsIcon v-if="investorStore.selectedCities.length === 0" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Scrollable Checklist Body: Grouped by Islands / Regions Across Indonesia -->
+          <div class="px-6 py-4 overflow-y-auto space-y-5 flex-1">
+            <template v-if="filteredIndonesiaRegions.length > 0">
+              <div
+                v-for="region in filteredIndonesiaRegions"
+                :key="region.island"
+                class="space-y-2.5"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-poppins font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    {{ region.island }}
+                  </span>
+                  <button
+                    type="button"
+                    class="text-[11px] font-semibold text-[#156374] dark:text-[#50AABF] hover:underline cursor-pointer"
+                    @click="toggleEntireRegion(region.cities)"
+                  >
+                    {{ isRegionFullySelected(region.cities) ? 'Batal Pilih Pulau Ini' : 'Pilih Semua di Pulau Ini' }}
+                  </button>
+                </div>
+
+                <!-- Checklist Grid for Cities in Region -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                  <div
+                    v-for="city in region.cities"
+                    :key="city"
+                    class="p-3 rounded-xl border transition-all flex items-center justify-between gap-2.5 cursor-pointer select-none shadow-none"
+                    :class="[
+                      isCityChecked(city)
+                        ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+                        : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+                    ]"
+                    @click="investorStore.toggleCitySelection(city)"
+                  >
+                    <span class="text-xs sm:text-[13px] font-semibold text-neutral-800 dark:text-neutral-200 truncate">
+                      {{ city }}
+                    </span>
+                    <div
+                      :class="[
+                        'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+                        isCityChecked(city)
+                          ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                          : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+                      ]"
+                    >
+                      <HugeiconsIcon v-if="isCityChecked(city)" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Empty Search Result inside Modal -->
+            <div v-else class="py-8 text-center space-y-2">
+              <p class="text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                Kota "{{ locationSearchQuery }}" tidak ditemukan
+              </p>
+              <p class="text-xs text-neutral-500">
+                Coba gunakan nama kota atau pulau lain di Indonesia.
+              </p>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="px-6 py-4 border-t border-neutral-100 dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+            <div class="flex items-center gap-3 text-xs">
+              <span class="font-medium text-neutral-600 dark:text-neutral-400">
+                Status:
+                <strong class="text-neutral-900 dark:text-white font-semibold">
+                  {{ investorStore.selectedCities.length === 0 ? 'Semua Wilayah Indonesia' : `${investorStore.selectedCities.length} Kota Dipilih` }}
+                </strong>
+              </span>
+              <button
+                v-if="investorStore.selectedCities.length > 0"
+                type="button"
+                class="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline cursor-pointer"
+                @click="investorStore.clearCitySelection()"
+              >
+                Reset Pilihan
+              </button>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5">
+              <BActionButton
+                variant="green"
+                :huge-icon="CheckmarkCircle01Icon"
+                custom-class="w-full sm:w-auto justify-center"
+                @click="isLocationModalOpen = false"
+              >
+                Terapkan Wilayah
+              </BActionButton>
+            </div>
           </div>
         </div>
       </div>
@@ -578,28 +741,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
+import { ref, computed, onMounted } from 'vue'
+import { useInvestorStore, build150MarketplaceUmkms, type MarketplaceUmkm } from '~/stores/investor'
 import { useAuthStore } from '~/stores/auth'
-import { useChatStore } from '~/stores/chat'
 import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Search01Icon,
   CheckmarkCircle01Icon,
-  StarIcon,
+  Bookmark02Icon,
   Store01Icon,
   Location01Icon,
+  Building03Icon,
   Award01Icon,
-  ArrowRight01Icon,
   Coins01Icon,
-  Share01Icon,
-  FileUnlockedIcon,
-  Clock01Icon,
-  Message01Icon,
-  ShieldCheckIcon,
-  Settings01Icon
+  MoneyBag01Icon,
+  AnalyticsUpIcon,
+  Share08Icon,
+  ArrowDown01Icon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  Cancel01Icon,
+  Tick02Icon,
+  Time02Icon,
+  FullScreenIcon,
+  SparklesIcon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -607,10 +773,316 @@ definePageMeta({
   hideHeader: true
 })
 
-const router = useRouter()
 const investorStore = useInvestorStore()
 const authStore = useAuthStore()
-const chatStore = useChatStore()
+
+onMounted(() => {
+  investorStore.initPostsFromStorage()
+})
+
+// 3 Chat History Terbaru di bawah Profil Investor
+interface RecentUmkmChat {
+  id: string
+  umkmName: string
+  avatarUrl: string
+  lastMessage: string
+  lastTime: string
+  online: boolean
+}
+
+const recentUmkmChats = ref<RecentUmkmChat[]>([
+  {
+    id: 'chat-umkm-01',
+    umkmName: 'Kopi Senja Nusantara',
+    avatarUrl: '/logo.svg',
+    lastMessage: 'Kami siap menjadwalkan sesi bedah ruang data minggu ini.',
+    lastTime: '17:05',
+    online: true
+  },
+  {
+    id: 'chat-umkm-03',
+    umkmName: 'Sambal Bu Rudy Asli',
+    avatarUrl: '/logo.svg',
+    lastMessage: 'Laporan mutasi kas kuartal terbaru sudah kami unggah.',
+    lastTime: '15:40',
+    online: false
+  },
+  {
+    id: 'chat-umkm-05',
+    umkmName: 'Keripik Tempe Marem',
+    avatarUrl: '/logo.svg',
+    lastMessage: 'Terima kasih atas ketertarikan Bapak pada ekspansi produksi kami.',
+    lastTime: '11:20',
+    online: true
+  }
+])
+
+// Carousel Slide State per Post ID + HMR-Safe Fallback Multi-Image Dummy Slides
+const activeSlides = ref<Record<string, number>>({})
+
+const fallbackPostImagesById: Record<string, string[]> = {
+  'umkm-01': [
+    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&auto=format&fit=crop&q=80'
+  ],
+  'umkm-03': [
+    'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=900&auto=format&fit=crop&q=80'
+  ],
+  'umkm-05': [
+    'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1621996346565-e3d5d6281298?w=900&auto=format&fit=crop&q=80'
+  ],
+  'umkm-07': [
+    'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&auto=format&fit=crop&q=80'
+  ],
+  'umkm-09': [
+    'https://images.unsplash.com/photo-1544025162-d76694265947?w=900&auto=format&fit=crop&q=80'
+  ],
+  'umkm-12': [
+    'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=900&auto=format&fit=crop&q=80'
+  ],
+  'platform-tips-01': [
+    'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80'
+  ],
+  'platform-tips-02': [
+    'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=900&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80'
+  ]
+}
+
+const fallbackPostedAtById: Record<string, string> = {
+  'umkm-01': '2 jam yang lalu',
+  'umkm-03': '5 jam yang lalu',
+  'umkm-05': 'Kemarin • 16:40 WIB',
+  'umkm-07': '2 hari yang lalu',
+  'umkm-09': '3 hari yang lalu',
+  'umkm-12': '4 hari yang lalu',
+  'platform-tips-01': '3 jam yang lalu',
+  'platform-tips-02': '1 hari yang lalu'
+}
+
+function getPostImages(item: MarketplaceUmkm): string[] {
+  if (item.postImages && item.postImages.length > 1) {
+    return item.postImages
+  }
+  if (fallbackPostImagesById[item.id] && fallbackPostImagesById[item.id]!.length > 0) {
+    return fallbackPostImagesById[item.id]!
+  }
+  if (item.postImages && item.postImages.length > 0) {
+    return item.postImages
+  }
+  return [item.postImageUrl || '/images/default-store-banner.jpg']
+}
+
+function getSlideIndex(postId: string): number {
+  return activeSlides.value[postId] ?? 0
+}
+
+function setSlideIndex(postId: string, index: number) {
+  activeSlides.value[postId] = index
+}
+
+function nextSlide(item: MarketplaceUmkm) {
+  const images = getPostImages(item)
+  const current = getSlideIndex(item.id)
+  if (current < images.length - 1) {
+    activeSlides.value[item.id] = current + 1
+  }
+}
+
+function prevSlide(item: MarketplaceUmkm) {
+  const current = getSlideIndex(item.id)
+  if (current > 0) {
+    activeSlides.value[item.id] = current - 1
+  }
+}
+
+// Fullscreen Preview State
+const fullscreenPost = ref<MarketplaceUmkm | null>(null)
+const fullscreenSlideIndex = ref(0)
+
+function openFullscreenPreview(item: MarketplaceUmkm, slideIndex = 0) {
+  fullscreenPost.value = item
+  fullscreenSlideIndex.value = slideIndex
+}
+
+function closeFullscreenPreview() {
+  fullscreenPost.value = null
+}
+
+function nextFullscreenSlide() {
+  if (!fullscreenPost.value) return
+  const images = getPostImages(fullscreenPost.value)
+  if (fullscreenSlideIndex.value < images.length - 1) {
+    fullscreenSlideIndex.value += 1
+    activeSlides.value[fullscreenPost.value.id] = fullscreenSlideIndex.value
+  }
+}
+
+function prevFullscreenSlide() {
+  if (!fullscreenPost.value) return
+  if (fullscreenSlideIndex.value > 0) {
+    fullscreenSlideIndex.value -= 1
+    activeSlides.value[fullscreenPost.value.id] = fullscreenSlideIndex.value
+  }
+}
+
+function setFullscreenSlide(index: number) {
+  if (!fullscreenPost.value) return
+  fullscreenSlideIndex.value = index
+  activeSlides.value[fullscreenPost.value.id] = index
+}
+
+// Modal Pilih Wilayah (Seluruh Indonesia Checklist)
+const isLocationModalOpen = ref(false)
+const locationSearchQuery = ref('')
+
+interface IndonesiaRegionGroup {
+  island: string
+  cities: string[]
+}
+
+const indonesiaRegions: IndonesiaRegionGroup[] = [
+  {
+    island: 'Pulau Jawa',
+    cities: [
+      'Jakarta',
+      'Bandung',
+      'Surabaya',
+      'Malang',
+      'Solo',
+      'Yogyakarta',
+      'Semarang',
+      'Bogor',
+      'Tangerang',
+      'Bekasi',
+      'Depok',
+      'Cirebon'
+    ]
+  },
+  {
+    island: 'Pulau Sumatera',
+    cities: [
+      'Medan',
+      'Padang',
+      'Palembang',
+      'Pekanbaru',
+      'Bandar Lampung',
+      'Banda Aceh',
+      'Batam',
+      'Jambi',
+      'Bengkulu',
+      'Pangkalpinang'
+    ]
+  },
+  {
+    island: 'Bali & Nusa Tenggara',
+    cities: [
+      'Denpasar',
+      'Badung',
+      'Gianyar',
+      'Mataram',
+      'Labuan Bajo',
+      'Kupang'
+    ]
+  },
+  {
+    island: 'Pulau Kalimantan',
+    cities: [
+      'Balikpapan',
+      'Samarinda',
+      'Banjarmasin',
+      'Pontianak',
+      'Palangkaraya',
+      'Tarakan'
+    ]
+  },
+  {
+    island: 'Pulau Sulawesi',
+    cities: [
+      'Makassar',
+      'Manado',
+      'Kendari',
+      'Palu',
+      'Gorontalo',
+      'Parepare'
+    ]
+  },
+  {
+    island: 'Maluku & Papua',
+    cities: [
+      'Ambon',
+      'Ternate',
+      'Jayapura',
+      'Sorong',
+      'Manokwari',
+      'Merauke'
+    ]
+  }
+]
+
+const filteredIndonesiaRegions = computed<IndonesiaRegionGroup[]>(() => {
+  const q = locationSearchQuery.value.toLowerCase().trim()
+  if (!q) return indonesiaRegions
+
+  return indonesiaRegions
+    .map(region => {
+      const islandMatch = region.island.toLowerCase().includes(q)
+      const matchedCities = islandMatch
+        ? region.cities
+        : region.cities.filter(city => city.toLowerCase().includes(q))
+      return {
+        island: region.island,
+        cities: matchedCities
+      }
+    })
+    .filter(region => region.cities.length > 0)
+})
+
+function isCityChecked(city: string): boolean {
+  return investorStore.selectedCities.includes(city)
+}
+
+function isRegionFullySelected(cities: string[]): boolean {
+  return cities.length > 0 && cities.every(c => investorStore.selectedCities.includes(c))
+}
+
+function toggleEntireRegion(cities: string[]) {
+  if (isRegionFullySelected(cities)) {
+    for (const c of cities) {
+      if (investorStore.selectedCities.includes(c)) {
+        investorStore.toggleCitySelection(c)
+      }
+    }
+  } else {
+    for (const c of cities) {
+      if (!investorStore.selectedCities.includes(c)) {
+        investorStore.toggleCitySelection(c)
+      }
+    }
+  }
+}
+
+const activeCityLabel = computed(() => {
+  const count = investorStore.selectedCities.length
+  if (count === 0) return 'Semua Wilayah'
+  if (count === 1) return investorStore.selectedCities[0]
+  return 'Kostum'
+})
 
 // Toast State
 const toastMessage = ref('')
@@ -624,45 +1096,75 @@ function triggerToast(msg: string) {
   }, 2500)
 }
 
-// Approved Data Rooms Count
-const approvedDataRoomsCount = computed(() => {
-  return investorStore.marketplaceList.filter(item => item.accessStatus === 'APPROVED').length
-})
-
-const activeSectorLabel = computed(() => {
-  const map: Record<string, string> = {
-    'ALL': 'Semua Sektor',
-    'F&B': 'Kuliner & F&B',
-    'FMCG': 'Oleh-oleh FMCG',
-    'Agroindustri': 'Agroindustri',
-    'Fashion': 'Fashion & Kriya'
-  }
-  return map[investorStore.selectedSector] || investorStore.selectedSector
-})
-
-// Sort By Selection
-const selectedSortBy = ref<'HEALTH_SCORE' | 'MARGIN' | 'TARGET_ASC' | 'GROWTH'>('HEALTH_SCORE')
-
-// Active Filters Detection
-const hasActiveFilters = computed(() => {
-  return (
-    investorStore.searchQuery !== '' ||
-    investorStore.selectedSector !== 'ALL' ||
-    investorStore.selectedCity !== 'ALL'
-  )
-})
-
 function resetAllFilters() {
   investorStore.searchQuery = ''
   investorStore.selectedSector = 'ALL'
-  investorStore.selectedCity = 'ALL'
+  investorStore.clearCitySelection()
   investorStore.minMargin = 0
 }
 
-// Feed Filtering & Sorting
-const filteredFeed = computed(() => {
-  const list = investorStore.marketplaceList.filter(item => {
-    const q = investorStore.searchQuery.toLowerCase().trim()
+// Fallback Platform Posts (HMR-Safe jika store sudah ter-mount sebelumnya)
+const fallbackPlatformPosts: MarketplaceUmkm[] = [
+  {
+    id: 'platform-tips-01',
+    name: 'Beruang Official',
+    code: 'BERU-TIPS-01',
+    sector: 'Tips & Trick Investasi UMKM',
+    city: 'Edukasi Platform',
+    establishedYear: 2026,
+    postedAt: '3 jam yang lalu',
+    fundingTarget: 0,
+    marginPercentage: 0,
+    growthYoY: 0,
+    healthScore: 100,
+    certifiedAt: '',
+    consultantName: 'Tim Riset & Kepatuhan Beruang',
+    pitchSummary: 'Tips & Trick Membaca Kualitas Kas UMKM: Sebelum menyalurkan modal, perhatikan 3 indikator utama pada Ruang Data — rasio untung bersih yang stabil di atas 35%, disiplin pemisahan rekening operasional toko dari rekening pribadi, serta konsistensi pencatatan mutasi kas harian.',
+    postImageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&auto=format&fit=crop&q=80',
+    postImages: fallbackPostImagesById['platform-tips-01']!,
+    isPlatformPost: true,
+    platformCategory: 'Tips & Trick',
+    tags: ['Tips & Trick', 'Edukasi Investor'],
+    accessStatus: 'NONE',
+    bookmarked: false
+  },
+  {
+    id: 'platform-tips-02',
+    name: 'Beruang Official',
+    code: 'BERU-TIPS-02',
+    sector: 'Tips & Trick Strategi Portofolio',
+    city: 'Edukasi Platform',
+    establishedYear: 2026,
+    postedAt: '1 hari yang lalu',
+    fundingTarget: 0,
+    marginPercentage: 0,
+    growthYoY: 0,
+    healthScore: 100,
+    certifiedAt: '',
+    consultantName: 'Tim Riset & Kepatuhan Beruang',
+    pitchSummary: 'Tips & Trick Diversifikasi Sektor UMKM: Mengombinasikan pendanaan pada sektor F&B perputaran kas harian dengan sektor kriya berorientasi ekspor membantu menjaga stabilitas imbal bagi hasil bulanan terhadap siklus musiman.',
+    postImageUrl: 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=900&auto=format&fit=crop&q=80',
+    postImages: fallbackPostImagesById['platform-tips-02']!,
+    isPlatformPost: true,
+    platformCategory: 'Tips & Trick',
+    tags: ['Tips & Trick', 'Strategi Portofolio'],
+    accessStatus: 'NONE',
+    bookmarked: false
+  }
+]
+
+// Feed Filtering + Interleaving Platform "Tips & Trick" Posts (dengan sumber 150 data UMKM)
+const fallback150Umkms = build150MarketplaceUmkms()
+
+const filteredFeed = computed<MarketplaceUmkm[]>(() => {
+  const q = investorStore.searchQuery.toLowerCase().trim()
+
+  const sourceList =
+    investorStore.marketplaceList && investorStore.marketplaceList.length >= 150
+      ? investorStore.marketplaceList
+      : fallback150Umkms
+
+  const umkmFiltered = sourceList.filter(item => {
     const matchSearch =
       q === '' ||
       item.name.toLowerCase().includes(q) ||
@@ -675,62 +1177,65 @@ const filteredFeed = computed(() => {
       item.sector.toLowerCase().includes(investorStore.selectedSector.toLowerCase())
 
     const matchCity =
-      investorStore.selectedCity === 'ALL' ||
-      item.city.toLowerCase() === investorStore.selectedCity.toLowerCase()
+      investorStore.selectedCities.length === 0 ||
+      investorStore.selectedCities.some(c => c.toLowerCase() === item.city.toLowerCase())
 
     return matchSearch && matchSector && matchCity
   })
 
-  // Sort
-  if (selectedSortBy.value === 'MARGIN') {
-    return [...list].sort((a, b) => b.marginPercentage - a.marginPercentage)
+  const platformSource =
+    investorStore.platformPosts && investorStore.platformPosts.length > 0
+      ? investorStore.platformPosts
+      : fallbackPlatformPosts
+
+  const platformFiltered = platformSource.filter(post => {
+    if (!q) return true
+    return (
+      post.name.toLowerCase().includes(q) ||
+      post.sector.toLowerCase().includes(q) ||
+      post.pitchSummary.toLowerCase().includes(q) ||
+      (post.platformCategory || '').toLowerCase().includes(q)
+    )
+  })
+
+  if (umkmFiltered.length === 0) {
+    return []
   }
-  if (selectedSortBy.value === 'TARGET_ASC') {
-    return [...list].sort((a, b) => a.fundingTarget - b.fundingTarget)
-  }
-  if (selectedSortBy.value === 'GROWTH') {
-    return [...list].sort((a, b) => b.growthYoY - a.growthYoY)
-  }
-  return [...list].sort((a, b) => b.healthScore - a.healthScore)
+
+  // Sisipkan postingan Tips & Trick dari platform di sela-sela postingan UMKM
+  const combined: MarketplaceUmkm[] = []
+  let platformIdx = 0
+
+  umkmFiltered.forEach((umkmItem, idx) => {
+    combined.push(umkmItem)
+    // Tempatkan postingan platform setelah item ke-1 dan ke-3
+    if ((idx === 0 || idx === 2) && platformIdx < platformFiltered.length) {
+      combined.push(platformFiltered[platformIdx]!)
+      platformIdx += 1
+    }
+  })
+
+  return combined
 })
 
-// Store Banner Map
-function getStoreBannerImage(id: string): string {
-  if (id === 'umkm-01') return '/images/default-store-banner.jpg'
-  return '/images/default-store-banner.jpg'
-}
-
-// Bookmark Action with Instant Feedback
+// Save / Bookmark Action with Instant Feedback
 function toggleBookmarkWithFeedback(item: MarketplaceUmkm) {
   investorStore.toggleBookmark(item.id)
   if (item.bookmarked) {
-    triggerToast(`${item.name} disimpan ke Portofolio Pantau!`)
+    triggerToast(`${item.name} disimpan ke daftar Simpan!`)
   } else {
-    triggerToast(`${item.name} dihapus dari Portofolio Pantau.`)
+    triggerToast(`${item.name} dihapus dari daftar Simpan.`)
   }
 }
 
 // Share Link Action
 function copyShareLink(item: MarketplaceUmkm) {
   if (import.meta.client) {
-    const url = `${window.location.origin}/investor/umkm/${item.id}`
+    const url = item.isPlatformPost
+      ? `${window.location.origin}/investor#${item.id}`
+      : `${window.location.origin}/investor/umkm/${item.id}`
     navigator.clipboard.writeText(url)
-    triggerToast(`Tautan profil ${item.name} berhasil disalin!`)
+    triggerToast(`Tautan postingan ${item.name} berhasil disalin!`)
   }
-}
-
-// Navigate to Chat with Specific UMKM
-function goToChatWithUmkm(item: MarketplaceUmkm) {
-  const threadId = chatStore.startOrGetThread(item.id, item.name)
-  router.push(`/investor/pesan?umkmId=${item.id}&threadId=${threadId}`)
-}
-
-// ROI Modal State
-const selectedRoiModal = ref<MarketplaceUmkm | null>(null)
-const modalTicketInput = ref(100000000)
-
-function openRoiModal(item: MarketplaceUmkm) {
-  selectedRoiModal.value = item
-  modalTicketInput.value = Math.min(100000000, item.fundingTarget)
 }
 </script>

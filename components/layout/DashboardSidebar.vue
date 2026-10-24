@@ -304,6 +304,7 @@ import {
   CheckmarkCircle01Icon,
   Alert01Icon,
   StarIcon,
+  Bookmark02Icon,
   UserAdd01Icon,
   Cancel01Icon,
   RubiksCubeIcon,
@@ -313,7 +314,8 @@ import {
   ArrowRight01Icon,
   Notification01Icon,
   Message01Icon,
-  Settings01Icon
+  Settings01Icon,
+  Image01Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -613,6 +615,7 @@ const navigationSections = computed<NavSection[]>(() => {
         title: 'Kelola Usaha',
         items: [
           { to: '/dashboard/profile', label: 'Profil Usaha', icon: UserCircleIcon },
+          { to: '/dashboard/postingan', label: 'Postingan Usaha', icon: Image01Icon },
           { to: '/dashboard/rencana-aksi', label: 'Progress Tugas', icon: Task01Icon },
           { to: '/dashboard/penilaian', label: 'Cek Kesehatan', icon: AnalyticsUpIcon }
         ]
@@ -667,13 +670,14 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/investor', label: 'Katalog', icon: Store01Icon },
-          { to: '/investor/watchlist', label: 'Portofolio Pantau', icon: StarIcon }
+          { to: '/investor', label: 'Jaringan', icon: Store01Icon },
+          { to: '/investor/watchlist', label: 'Simpan', icon: Bookmark02Icon }
         ]
       },
       {
-        title: 'Komunikasi',
+        title: 'Kelola Mandat',
         items: [
+          { to: '/investor/profile', label: 'Profil Investor', icon: UserCircleIcon },
           {
             to: '/investor/pesan',
             label: 'Pesan',
@@ -701,7 +705,9 @@ const navigationSections = computed<NavSection[]>(() => {
         title: 'Pemberdayaan',
         items: [
           { to: '/admin/umkm', label: 'Kemitraan UMKM', icon: Store01Icon },
-          { to: '/admin/penugasan', label: 'Penugasan Konsultan', icon: UserAdd01Icon },
+          { to: '/admin/daftar-umkm', label: 'Data UMKM', icon: Store01Icon },
+          { to: '/admin/penugasan', label: 'Konsultan', icon: UserGroupIcon },
+          { to: '/admin/investor', label: 'Investor', icon: Coins01Icon },
           { to: '/admin/sertifikasi', label: 'Sertifikasi Usaha', icon: Award01Icon }
         ]
       },

@@ -128,4 +128,13 @@ describe('Settings Pages & Design System Contracts', () => {
     assert.ok(content.includes('startOtpCountdown'), 'Pengaturan must run OTP resend countdown timer')
     assert.ok(content.includes('modal_email_otp_title'), 'Modal must use localized modal_email_otp_title')
   })
+
+  it('2FA WhatsApp OTP and Auto Watermark use sliding Toggle Switch (role="switch") design', () => {
+    const content = fs.readFileSync('pages/dashboard/pengaturan.vue', 'utf8')
+    const switchMatches = content.match(/role="switch"/g) || []
+    assert.ok(switchMatches.length >= 2, 'pages/dashboard/pengaturan.vue must contain at least 2 sliding toggle switches (2FA & Auto Watermark)')
+    assert.ok(content.includes(':aria-checked="accountForm.twoFactorEnabled"'), '2FA must bind aria-checked to accountForm.twoFactorEnabled')
+    assert.ok(content.includes(':aria-checked="privacyForm.autoWatermark"'), 'Watermark must bind aria-checked to privacyForm.autoWatermark')
+    assert.ok(content.includes('translate-x-5'), 'Toggle switch thumb must slide via translate-x-5')
+  })
 })

@@ -151,6 +151,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
+import { useInvestorStore } from '~/stores/investor'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { UserCircleIcon, Settings01Icon, Logout01Icon } from '@hugeicons/core-free-icons'
 
@@ -158,6 +159,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+const investorStore = useInvestorStore()
 
 const dropdownRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
@@ -202,6 +204,13 @@ const userAvatarUrl = computed(() => {
       '/images/user-profile.png'
     )
   }
+  if (authStore.currentUser?.role === 'INVESTOR') {
+    return (
+      investorStore.profile.avatarUrl ||
+      authStore.currentUser?.avatar ||
+      '/images/user-profile.png'
+    )
+  }
   return authStore.currentUser?.avatar || '/images/user-profile.png'
 })
 
@@ -226,7 +235,7 @@ const settingsPath = computed(() => {
 const profilePath = computed(() => {
   switch (authStore.currentUser?.role) {
     case 'CONSULTANT': return '/konsultan'
-    case 'INVESTOR': return '/investor'
+    case 'INVESTOR': return '/investor/profile'
     case 'ADMIN': return '/admin'
     default: return '/dashboard/profile'
   }

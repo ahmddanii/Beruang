@@ -70,8 +70,8 @@
         </div>
       </Transition>
 
-      <!-- 2. Top-Right Action: Dedicated Action Button & Dropdown Menu -->
-      <div class="absolute top-3 sm:top-4 right-3 sm:right-5 z-20 pointer-events-auto">
+      <!-- 2. Top-Right Action: Dedicated Action Button & Dropdown Menu (Hanya tampil jika bukan readonly) -->
+      <div v-if="!readonly" class="absolute top-3 sm:top-4 right-3 sm:right-5 z-20 pointer-events-auto">
         <div ref="menuRef" class="relative">
           <!-- Dedicated Action Trigger Button with Camera Icon & Label -->
           <button
@@ -87,18 +87,13 @@
               :stroke-width="2"
             />
             <span class="font-poppins font-semibold">Ubah Sampul</span>
-            <svg
-              class="w-3.5 h-3.5 text-white/80 transition-transform duration-200 shrink-0"
+            <HugeiconsIcon
+              :icon="ArrowDown01Icon"
+              :size="14"
+              :stroke-width="2.2"
+              class="text-white/80 transition-transform duration-200 shrink-0"
               :class="{ 'rotate-180': isMenuOpen }"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
+            />
           </button>
 
           <!-- Dropdown Menu for Banner -->
@@ -175,13 +170,13 @@
         <div
           class="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-full border-4 sm:border-[5px] border-white dark:border-[#0F1014] bg-neutral-100 dark:bg-[#18191E] overflow-hidden flex items-center justify-center cursor-pointer select-none transition-all duration-200"
           :class="[
-            isAvatarDragging ? 'ring-4 ring-primary-500 ring-offset-2' : ''
+            !readonly && isAvatarDragging ? 'ring-4 ring-primary-500 ring-offset-2' : ''
           ]"
-          title="Klik untuk opsi foto profil"
-          @dragover.prevent="onAvatarDragOver"
-          @dragleave.prevent="onAvatarDragLeave"
-          @drop.prevent="onAvatarDrop"
-          @click="toggleAvatarMenu"
+          :title="readonly ? 'Klik untuk melihat foto profil penuh' : 'Klik untuk opsi foto profil'"
+          @dragover.prevent="!readonly && onAvatarDragOver($event)"
+          @dragleave.prevent="!readonly && onAvatarDragLeave($event)"
+          @drop.prevent="!readonly && onAvatarDrop($event)"
+          @click="readonly ? onSelectViewFullAvatar() : toggleAvatarMenu()"
         >
           <img
             :src="currentOwnerAvatarUrl"
@@ -190,15 +185,18 @@
             @error="handleAvatarError"
           />
 
-          <!-- Hover Overlay with Camera Icon -->
-          <div class="absolute inset-0 bg-black/45 backdrop-blur-[1px] opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1 pointer-events-none">
+          <!-- Hover Overlay with Camera Icon (Hanya jika bukan readonly) -->
+          <div
+            v-if="!readonly"
+            class="absolute inset-0 bg-black/45 backdrop-blur-[1px] opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1 pointer-events-none"
+          >
             <HugeiconsIcon :icon="Camera01Icon" :size="24" :stroke-width="2" />
             <span class="text-[10px] sm:text-xs font-heading font-medium tracking-wide">Ubah Foto</span>
           </div>
 
           <!-- Drag & Drop Active Overlay on Avatar -->
           <div
-            v-if="isAvatarDragging"
+            v-if="!readonly && isAvatarDragging"
             class="absolute inset-0 bg-primary-950/85 backdrop-blur-xs flex flex-col items-center justify-center text-white pointer-events-none text-center p-2"
           >
             <HugeiconsIcon :icon="Camera01Icon" :size="24" class="text-white mb-1" />
@@ -206,8 +204,9 @@
           </div>
         </div>
 
-        <!-- Floating Circular Camera Badge Button (bottom-right of avatar) -->
+        <!-- Floating Circular Camera Badge Button (bottom-right of avatar, hanya jika bukan readonly) -->
         <button
+          v-if="!readonly"
           type="button"
           class="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white dark:bg-[#1E2026] text-neutral-700 dark:text-neutral-200 shadow-md hover:shadow-lg border border-neutral-200/90 dark:border-neutral-700 flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 transition-all cursor-pointer z-10"
           aria-label="Opsi Foto Profil"
@@ -516,6 +515,7 @@ import {
   ZoomInIcon,
   ZoomOutIcon,
   ArrowReloadHorizontalIcon,
+  ArrowDown01Icon,
   CheckmarkBadge01Icon,
   Cancel01Icon
 } from '@hugeicons/core-free-icons'
@@ -528,6 +528,7 @@ const props = withDefaults(
     defaultOwnerAvatarUrl?: string
     bannerUrl?: string
     defaultBannerUrl?: string
+    readonly?: boolean
   }>(),
   {
     storeName: 'Kopi Senja Nusantara',
@@ -535,7 +536,8 @@ const props = withDefaults(
     ownerAvatarUrl: '/images/user-profile.png',
     defaultOwnerAvatarUrl: '/images/user-profile.png',
     bannerUrl: '/images/default-store-banner.jpg',
-    defaultBannerUrl: '/images/default-store-banner.jpg'
+    defaultBannerUrl: '/images/default-store-banner.jpg',
+    readonly: false
   }
 )
 

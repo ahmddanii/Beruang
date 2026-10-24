@@ -229,8 +229,8 @@
         </div>
       </div>
 
-      <!-- 2FA WhatsApp (Custom Tactile Pill Toggle Button) -->
-      <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <!-- 2FA WhatsApp (Toggle Switch) -->
+      <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between gap-4">
         <div class="space-y-0.5">
           <span class="text-sm font-bold text-neutral-900 dark:text-white block">
             {{ t('two_factor_title') }}
@@ -240,31 +240,26 @@
           </p>
         </div>
 
-        <!-- Custom Tactile White Pill Toggle -->
+        <!-- Sliding Toggle Switch -->
         <button
           type="button"
+          role="switch"
+          :aria-checked="accountForm.twoFactorEnabled"
+          :aria-label="t('two_factor_title')"
           :class="[
-            'inline-flex items-center gap-2 h-9 px-3.5 rounded-full border transition-colors cursor-pointer select-none shadow-none',
+            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-none',
             accountForm.twoFactorEnabled
-              ? 'bg-[#E6F4F7] dark:bg-[#156374]/30 border-[#156374]/40 text-[#156374] dark:text-[#50AABF]'
-              : 'bg-white dark:bg-[#18191E] border-[#CBD5E1] dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+              ? 'bg-[#00800e] dark:bg-[#00C058]'
+              : 'bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600'
           ]"
           @click="accountForm.twoFactorEnabled = !accountForm.twoFactorEnabled; showToastFeedback(t('field_saved'))"
         >
           <span
             :class="[
-              'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all',
-              accountForm.twoFactorEnabled
-                ? 'bg-[#00800e] text-white'
-                : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600'
+              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white transition duration-200 ease-in-out shadow-none',
+              accountForm.twoFactorEnabled ? 'translate-x-5' : 'translate-x-0'
             ]"
-          >
-            <HugeiconsIcon v-if="accountForm.twoFactorEnabled" :icon="CheckmarkCircle01Icon" :size="12" />
-            <HugeiconsIcon v-else :icon="Cancel01Icon" :size="10" :stroke-width="2.5" />
-          </span>
-          <span class="text-xs font-bold">
-            {{ accountForm.twoFactorEnabled ? '2FA Aktif' : '2FA Nonaktif' }}
-          </span>
+          />
         </button>
       </div>
 
@@ -576,7 +571,7 @@
 
       <!-- Watermark & Masa Berlaku -->
       <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center justify-between gap-4">
           <div class="space-y-0.5">
             <span class="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white block">
               {{ t('watermark_title') }}
@@ -586,31 +581,26 @@
             </p>
           </div>
 
-          <!-- Tactile Pill Toggle -->
+          <!-- Sliding Toggle Switch -->
           <button
             type="button"
+            role="switch"
+            :aria-checked="privacyForm.autoWatermark"
+            :aria-label="t('watermark_title')"
             :class="[
-              'inline-flex items-center gap-2 h-9 px-3.5 rounded-full border transition-colors cursor-pointer select-none shadow-none shrink-0',
+              'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-none',
               privacyForm.autoWatermark
-                ? 'bg-[#E6F4F7] dark:bg-[#156374]/30 border-[#156374]/40 text-[#156374] dark:text-[#50AABF]'
-                : 'bg-white dark:bg-[#18191E] border-[#CBD5E1] dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+                ? 'bg-[#00800e] dark:bg-[#00C058]'
+                : 'bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600'
             ]"
             @click="privacyForm.autoWatermark = !privacyForm.autoWatermark; showToastFeedback(t('field_saved'))"
           >
             <span
               :class="[
-                'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all',
-                privacyForm.autoWatermark
-                  ? 'bg-[#00800e] text-white'
-                  : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600'
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white transition duration-200 ease-in-out shadow-none',
+                privacyForm.autoWatermark ? 'translate-x-5' : 'translate-x-0'
               ]"
-            >
-              <HugeiconsIcon v-if="privacyForm.autoWatermark" :icon="CheckmarkCircle01Icon" :size="12" />
-              <HugeiconsIcon v-else :icon="Cancel01Icon" :size="10" :stroke-width="2.5" />
-            </span>
-            <span class="text-xs font-bold">
-              {{ privacyForm.autoWatermark ? 'Watermark Aktif' : 'Nonaktif' }}
-            </span>
+            />
           </button>
         </div>
 

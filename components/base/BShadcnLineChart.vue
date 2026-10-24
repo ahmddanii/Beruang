@@ -98,7 +98,7 @@
               rx="6"
               :fill="`url(#shadcn-bar-grad-${categories[0]})`"
               :fill-opacity="activeIndex === pIdx ? 1 : 0.85"
-              class="transition-all duration-150 cursor-pointer pointer-events-auto"
+              class="chart-bar-rect transition-opacity duration-150 cursor-pointer pointer-events-auto"
               @mouseenter="activeIndex = pIdx"
             />
           </g>
@@ -116,7 +116,7 @@
                 rx="5"
                 :fill="`url(#shadcn-bar-grad-${cat})`"
                 :fill-opacity="activeIndex === pIdx ? 1 : 0.85"
-                class="transition-all duration-150 cursor-pointer pointer-events-auto"
+                class="chart-bar-rect transition-opacity duration-150 cursor-pointer pointer-events-auto"
                 @mouseenter="activeIndex = pIdx"
               />
             </g>
@@ -266,7 +266,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { gsap } from 'gsap'
 
 export interface ChartConfigItem {
@@ -664,6 +664,28 @@ function animateChart(isFilterChange = false) {
       )
     })
 
+    // 1c. Bar & Cashflow mode vertical grow animation (GPU-accelerated scaleY)
+    const barRects = svgRef.value.querySelectorAll<SVGRectElement>('.chart-bar-rect')
+    if (barRects.length > 0) {
+      gsap.killTweensOf(barRects)
+      gsap.fromTo(
+        barRects,
+        {
+          scaleY: 0,
+          opacity: 0.4,
+          transformOrigin: 'center bottom'
+        },
+        {
+          scaleY: 1,
+          opacity: 1,
+          duration: isFilterChange ? 0.52 : 0.65,
+          stagger: 0.03,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity'
+        }
+      )
+    }
+
     // 2. Vertex dots animation (if showDots enabled)
     const dots = chartWrapperRef.value ? chartWrapperRef.value.querySelectorAll('.chart-vertex-dot') : []
     if (dots.length > 0) {
@@ -707,8 +729,17 @@ onMounted(() => {
   animateChart(false)
 })
 
+onBeforeUnmount(() => {
+  if (svgRef.value) {
+    gsap.killTweensOf(svgRef.value.querySelectorAll('*'))
+  }
+  if (chartWrapperRef.value) {
+    gsap.killTweensOf(chartWrapperRef.value.querySelectorAll('*'))
+  }
+})
+
 watch(
-  () => props.data,
+  () => [props.data, props.mode, props.categories],
   () => {
     animateChart(true)
   },

@@ -15,8 +15,41 @@
         </h1>
       </div>
 
-      <!-- Action Controls: Edit Profil Button (Stacked full-width on mobile, right-aligned on desktop) -->
+      <!-- Action Controls: Filter Lihat Cabang & Edit Profil Button (Stacked full-width on mobile, right-aligned on desktop) -->
       <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
+        <!-- Filter Lihat Cabang Button -->
+        <button
+          type="button"
+          :class="[
+            'btn-pill-action group justify-center cursor-pointer shadow-none',
+            isBranchModalOpen || umkmStore.selectedBranchIds.length > 0
+              ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! dark:bg-[#156374]/25! dark:text-[#50AABF]! dark:border-[#50AABF]/35!'
+              : ''
+          ]"
+          aria-haspopup="dialog"
+          :aria-expanded="isBranchModalOpen"
+          title="Pilih Cabang Usaha untuk Memfilter Pergerakan Uang Toko"
+          @click="isBranchModalOpen = true"
+        >
+          <HugeiconsIcon
+            :icon="Store01Icon"
+            :size="15"
+            :stroke-width="2"
+            class="text-[#156374] dark:text-[#50AABF] shrink-0"
+          />
+          <span>{{ activeBranchButtonLabel }}</span>
+          <HugeiconsIcon
+            :icon="ArrowDown01Icon"
+            :size="15"
+            :stroke-width="2.2"
+            :class="[
+              'text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0',
+              isBranchModalOpen ? 'rotate-180' : ''
+            ]"
+          />
+        </button>
+
+        <!-- Edit Profil Button -->
         <NuxtLink
           to="/dashboard/profile"
           class="btn-pill-action group justify-center focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
@@ -87,7 +120,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 32.600.000
+                {{ currentNetProfitDisplay }}
               </span>
             </div>
 
@@ -131,7 +164,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 45.100.000
+                {{ currentHppDisplay }}
               </span>
             </div>
 
@@ -173,7 +206,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 100.000.000
+                {{ currentInflowDisplay }}
               </span>
             </div>
 
@@ -215,7 +248,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                Rp 67.400.000
+                {{ currentOutflowDisplay }}
               </span>
             </div>
 
@@ -906,6 +939,175 @@
         </div>
       </transition>
     </Teleport>
+    <!-- Modal Filter Cabang Toko (Sesuai Konsep Modal Wilayah Jaringan Investor) -->
+    <Teleport to="body">
+      <div
+        v-if="isBranchModalOpen"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150 font-poppins"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-cabang-title"
+        @click.self="isBranchModalOpen = false"
+      >
+        <div class="w-full max-w-2xl rounded-[22px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 shadow-none overflow-hidden flex flex-col max-h-[86vh]">
+          <!-- Modal Header -->
+          <div class="px-6 py-4 sm:py-5 border-b border-neutral-100 dark:border-neutral-800 flex items-start justify-between gap-4 shrink-0">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="2" />
+              </div>
+              <div>
+                <h2 id="modal-cabang-title" class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-tight">
+                  Pilih Cabang Usaha
+                </h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  Centang satu atau beberapa gerai cabang untuk menyaring pergerakan uang toko dan 4 kartu finansial utama.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="w-8 h-8 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              aria-label="Tutup Modal Cabang"
+              @click="isBranchModalOpen = false"
+            >
+              <HugeiconsIcon :icon="Cancel01Icon" :size="18" :stroke-width="2.2" />
+            </button>
+          </div>
+
+          <!-- Search & "Semua Cabang" Master Checklist Row -->
+          <div class="px-6 pt-4 pb-3 border-b border-neutral-100 dark:border-neutral-800 space-y-3 shrink-0 bg-[#F8FAFC]/60 dark:bg-[#18191E]/50">
+            <!-- Search Input inside Modal (Full-width rata kanan-kiri) -->
+            <div class="relative w-full">
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none flex items-center">
+                <HugeiconsIcon :icon="Search01Icon" :size="16" :stroke-width="2" />
+              </span>
+              <input
+                v-model="branchSearchQuery"
+                type="text"
+                placeholder="Cari nama atau lokasi cabang usaha (misal: Riau, Dago, Sudirman)..."
+                class="w-full h-10 pl-10 pr-9 rounded-xl border border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-[#13161F] text-xs sm:text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#156374] dark:focus:border-[#50AABF] focus:ring-2 focus:ring-[#156374]/20 transition-all font-poppins"
+              />
+              <button
+                v-if="branchSearchQuery"
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer"
+                @click="branchSearchQuery = ''"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="14" />
+              </button>
+            </div>
+
+            <!-- Master Option: Semua Cabang -->
+            <div
+              class="p-3 sm:p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 cursor-pointer select-none shadow-none"
+              :class="[
+                umkmStore.selectedBranchIds.length === 0
+                  ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+                  : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+              ]"
+              @click="umkmStore.clearBranchSelection()"
+            >
+              <div class="min-w-0 pr-2">
+                <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
+                  Semua Cabang
+                </span>
+              </div>
+              <div
+                :class="[
+                  'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+                  umkmStore.selectedBranchIds.length === 0
+                    ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                    : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+                ]"
+              >
+                <HugeiconsIcon v-if="umkmStore.selectedBranchIds.length === 0" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Scrollable Checklist Body: Max 3 Columns -->
+          <div class="px-6 py-4 overflow-y-auto space-y-3 flex-1">
+            <template v-if="filteredBranchList.length > 0">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                <div
+                  v-for="branch in filteredBranchList"
+                  :key="branch.id"
+                  class="p-3 rounded-xl border transition-all flex items-center justify-between gap-2.5 cursor-pointer select-none shadow-none"
+                  :class="[
+                    isBranchChecked(branch.id)
+                      ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+                      : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+                  ]"
+                  @click="umkmStore.toggleBranchSelection(branch.id)"
+                >
+                  <div class="min-w-0 pr-1 space-y-0.5">
+                    <span class="text-xs sm:text-[13px] font-semibold text-neutral-800 dark:text-neutral-200 truncate block">
+                      {{ branch.name }}
+                    </span>
+                    <span class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate block">
+                      {{ branch.location }}
+                    </span>
+                  </div>
+                  <div
+                    :class="[
+                      'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+                      isBranchChecked(branch.id)
+                        ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                        : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+                    ]"
+                  >
+                    <HugeiconsIcon v-if="isBranchChecked(branch.id)" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Empty Search Result inside Modal -->
+            <div v-else class="py-8 text-center space-y-2">
+              <p class="text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                Cabang "{{ branchSearchQuery }}" tidak ditemukan
+              </p>
+              <p class="text-xs text-neutral-500">
+                Tambahkan cabang baru melalui menu Profil Usaha.
+              </p>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="px-6 py-4 border-t border-neutral-100 dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+            <div class="flex items-center gap-3 text-xs">
+              <span class="font-medium text-neutral-600 dark:text-neutral-400">
+                Status:
+                <strong class="text-neutral-900 dark:text-white font-semibold">
+                  {{ umkmStore.selectedBranchIds.length === 0 ? 'Semua Cabang' : `${umkmStore.selectedBranchIds.length} Cabang Dipilih` }}
+                </strong>
+              </span>
+              <button
+                v-if="umkmStore.selectedBranchIds.length > 0"
+                type="button"
+                class="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline cursor-pointer"
+                @click="umkmStore.clearBranchSelection()"
+              >
+                Reset Pilihan
+              </button>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5">
+              <BActionButton
+                variant="green"
+                :huge-icon="CheckmarkCircle01Icon"
+                custom-class="w-full sm:w-auto justify-center"
+                @click="isBranchModalOpen = false"
+              >
+                Terapkan Cabang
+              </BActionButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -924,7 +1126,12 @@ import {
   MoneyBag01Icon,
   Coins01Icon,
   ArrowDownToLineIcon,
-  Home03Icon
+  Home03Icon,
+  Store01Icon,
+  ArrowDown01Icon,
+  Tick02Icon,
+  Cancel01Icon,
+  Search01Icon
 } from '@hugeicons/core-free-icons'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore, type MonthlyRecord } from '~/stores/umkm'
@@ -953,6 +1160,50 @@ function handleDownloadReport() {
 
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+// Modal Filter Cabang Toko & Logika Per-Cabang
+const isBranchModalOpen = ref(false)
+const branchSearchQuery = ref('')
+
+const filteredBranchList = computed(() => {
+  const q = branchSearchQuery.value.toLowerCase().trim()
+  const list = umkmStore.branches || []
+  if (!q) return list
+  return list.filter(b =>
+    b.name.toLowerCase().includes(q) ||
+    b.location.toLowerCase().includes(q) ||
+    (b.address && b.address.toLowerCase().includes(q))
+  )
+})
+
+const activeBranchButtonLabel = computed(() => {
+  return umkmStore.activeBranchLabel || 'Semua'
+})
+
+function isBranchChecked(branchId: string): boolean {
+  return umkmStore.selectedBranchIds.includes(branchId)
+}
+
+// Active Branch Filter Ratio (scales the 4 financial cards and Pergerakan Uang Toko)
+const activeBranchRatio = computed(() => {
+  return umkmStore.activeBranchRatio || 1
+})
+
+const currentNetProfitDisplay = computed(() => {
+  return 'Rp ' + Math.round(32600000 * activeBranchRatio.value).toLocaleString('id-ID')
+})
+
+const currentHppDisplay = computed(() => {
+  return 'Rp ' + Math.round(45100000 * activeBranchRatio.value).toLocaleString('id-ID')
+})
+
+const currentInflowDisplay = computed(() => {
+  return 'Rp ' + Math.round(100000000 * activeBranchRatio.value).toLocaleString('id-ID')
+})
+
+const currentOutflowDisplay = computed(() => {
+  return 'Rp ' + Math.round(67400000 * activeBranchRatio.value).toLocaleString('id-ID')
+})
 
 // Period selection
 const selectedPeriod = ref('month')
@@ -1170,10 +1421,10 @@ const calculatedHppPercent = computed(() => 45.1)
 const calculatedOpexPercent = computed(() => 22.3)
 const calculatedProfitPercent = computed(() => 32.6)
 
-const calculatedHppAmount = computed(() => 45100000)
-const calculatedOpexAmount = computed(() => 22300000)
-const calculatedProfitAmount = computed(() => 32600000)
-const totalCalculatedOmzet = computed(() => 100000000)
+const calculatedHppAmount = computed(() => Math.round(45100000 * activeBranchRatio.value))
+const calculatedOpexAmount = computed(() => Math.round(22300000 * activeBranchRatio.value))
+const calculatedProfitAmount = computed(() => Math.round(32600000 * activeBranchRatio.value))
+const totalCalculatedOmzet = computed(() => Math.round(100000000 * activeBranchRatio.value))
 
 function formatDisplayedAmount(val: number) {
   return 'Rp ' + val.toLocaleString('id-ID')
@@ -1315,6 +1566,12 @@ watch(donutCanvas, (newEl) => {
   }
 })
 
+watch(activeBranchRatio, () => {
+  nextTick(() => {
+    updateDonutChart()
+  })
+})
+
 // Hero Shadcn UI Chart Config, Preview Switcher & Period Logic
 const chartTypeDropdownRef = ref<HTMLElement | null>(null)
 const periodDropdownRef = ref<HTMLElement | null>(null)
@@ -1422,9 +1679,15 @@ function selectPeriodFilter(filter: '3m' | '6m' | '1y') {
 }
 
 const heroFilteredRecords = computed(() => {
+  const ratio = activeBranchRatio.value
   const records = (umkmStore.monthlyRecords || []).map(r => ({
     ...r,
-    outflow: (r.hpp || 0) + (r.opex || 0)
+    omzet: Math.round((r.omzet || 0) * ratio),
+    hpp: Math.round((r.hpp || 0) * ratio),
+    opex: Math.round((r.opex || 0) * ratio),
+    outflow: Math.round(((r.hpp || 0) + (r.opex || 0)) * ratio),
+    netProfit: Math.round((r.netProfit || 0) * ratio),
+    cashBalance: Math.round((r.cashBalance || 0) * ratio)
   }))
   if (heroPeriodFilter.value === '3m') {
     return records.slice(-3)
@@ -1527,7 +1790,8 @@ onMounted(() => {
     hppBarWidth.value = 45.1
   }, 200)
 
-  // Initialize Charts
+  // Initialize Branches & Charts
+  umkmStore.initBranchesFromStorage()
   initDonutChart()
 
   if (import.meta.client) {

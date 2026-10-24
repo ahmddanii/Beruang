@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -48,9 +48,9 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 2. DAFTAR POSTINGAN YANG SUDAH DIBUAT (Centered Clean Feed)               -->
+    <!-- 2. DAFTAR POSTINGAN YANG SUDAH DIBUAT (Horizontal Flow, Max 3 Columns)    -->
     <!-- ========================================================================= -->
-    <main class="w-full max-w-[600px] mx-auto space-y-3">
+    <main class="w-full space-y-4">
       <div class="flex items-center justify-between px-0.5">
         <h2 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white">
           Daftar Postingan yang Sudah Dibuat
@@ -60,13 +60,13 @@
         </span>
       </div>
 
-      <div class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         <article
           v-for="post in myUmkmPosts"
           :key="post.id"
-          class="card-tactile-gopay w-full max-w-[600px] rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden !shadow-none"
+          class="card-tactile-gopay lazy-render-card w-full rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden flex flex-col justify-between !shadow-none"
         >
-          <div class="p-5 sm:p-6 space-y-5">
+          <div class="p-5 sm:p-6 space-y-4 flex-1 flex flex-col">
             <!-- 1. Post Author Header -->
             <div class="flex items-start justify-between gap-4">
               <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
@@ -121,13 +121,13 @@
             </div>
 
             <!-- 2. Post Text -->
-            <p class="text-[14px] sm:text-[15px] font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p class="text-[14px] sm:text-[15px] font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed line-clamp-3">
               "{{ post.pitchSummary }}"
             </p>
 
-            <!-- 3. POST MEDIA CONTAINER (Ukuran 550 x 578, Single Post & Multi-Post LinkedIn Carousel) -->
+            <!-- 3. POST MEDIA CONTAINER (Proporsional 550:578 di dalam Grid 3 Kolom) -->
             <div
-              class="relative w-full max-w-[550px] h-[578px] aspect-[550/578] mx-auto rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none shadow-none"
+              class="relative w-full aspect-[550/578] mx-auto rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none shadow-none mt-auto"
             >
               <div
                 class="flex w-full h-full transition-transform duration-300 ease-out"
@@ -215,7 +215,7 @@
 
           <!-- 4. Post Footer Row -->
           <div
-            class="px-5 sm:px-6 py-4 bg-[#F8FAFC] dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            class="px-5 sm:px-6 py-4 bg-[#F8FAFC] dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center gap-3"
           >
             <div class="flex items-center gap-2 text-xs sm:text-[13px] min-w-0">
               <HugeiconsIcon
@@ -227,11 +227,6 @@
                 Didampingi oleh: <strong class="text-neutral-900 dark:text-white font-semibold">{{ post.consultantName }}</strong>
               </span>
             </div>
-
-            <span class="inline-flex items-center gap-1.5 text-xs font-poppins font-semibold text-[#00800e] dark:text-[#00C058] shrink-0">
-              <span class="w-2 h-2 rounded-full bg-[#00800e] dark:bg-[#00C058]" />
-              <span>Tayang di Jaringan</span>
-            </span>
           </div>
         </article>
       </div>
@@ -671,7 +666,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { gsap } from 'gsap'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
@@ -849,12 +845,15 @@ function handleDeletePost(postId: string) {
 
 const myUmkmPosts = computed<MarketplaceUmkm[]>(() => {
   const currentName = umkmName.value.toLowerCase().trim()
-  return investorStore.marketplaceList.filter(
-    m =>
-      m.id === 'umkm-01' ||
-      m.umkmRefId === 'umkm-01' ||
-      m.name.toLowerCase().trim() === currentName
-  )
+  return investorStore.marketplaceList
+    .filter(
+      m =>
+        m.id === 'umkm-01' ||
+        m.umkmRefId === 'umkm-01' ||
+        m.name.toLowerCase().trim() === currentName
+    )
+    .slice()
+    .reverse()
 })
 
 // Carousel Navigation per Post
@@ -928,11 +927,36 @@ function copyPostShareLink(post: MarketplaceUmkm) {
   }
 }
 
+const pageRootRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
+
 onMounted(() => {
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
   umkmStore.initQuickProfileFromStorage()
   investorStore.initPostsFromStorage()
+
+  if (import.meta.client && pageRootRef.value && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    nextTick(() => {
+      gsapCtx = gsap.context(() => {
+        gsap.from('.card-tactile-gopay', {
+          opacity: 0,
+          y: 14,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.out',
+          clearProps: 'all'
+        })
+      }, pageRootRef.value!)
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
 })
 </script>
 

@@ -35,6 +35,17 @@ export interface Milestone {
   order: number
 }
 
+export interface UmkmBranch {
+  id: string
+  name: string
+  location: string
+  address: string
+  city: string
+  isPrimary?: boolean
+  shareRatio?: number
+  establishedYear?: number
+}
+
 export interface MonthlyRecord {
   month: string
   year: number
@@ -102,6 +113,41 @@ export const useUmkmStore = defineStore('umkm', {
       certifiedAt: '18 September 2026',
       consultantName: 'Dra. Maya Suryani, M.M.'
     },
+
+    branches: [
+      {
+        id: 'branch-1',
+        name: 'Cabang Utama Riau',
+        location: 'Bandung',
+        address: 'Jl. R.E. Martadinata No. 45, Citarum, Bandung',
+        city: 'Bandung',
+        isPrimary: true,
+        shareRatio: 0.45,
+        establishedYear: 2021
+      },
+      {
+        id: 'branch-2',
+        name: 'Cabang Dago Heritage',
+        location: 'Bandung',
+        address: 'Jl. Ir. H. Juanda No. 102, Dago, Bandung',
+        city: 'Bandung',
+        isPrimary: false,
+        shareRatio: 0.35,
+        establishedYear: 2023
+      },
+      {
+        id: 'branch-3',
+        name: 'Cabang Sudirman Walk',
+        location: 'Jakarta Selatan',
+        address: 'Jl. Jend. Sudirman Kav. 52, SCBD, Jakarta Selatan',
+        city: 'Jakarta Selatan',
+        isPrimary: false,
+        shareRatio: 0.20,
+        establishedYear: 2024
+      }
+    ] as UmkmBranch[],
+
+    selectedBranchIds: [] as string[],
 
     assessmentAspects: [
       {
@@ -485,6 +531,28 @@ export const useUmkmStore = defineStore('umkm', {
     },
     latestMonthlyRecord: (state) => {
       return state.monthlyRecords[state.monthlyRecords.length - 1]
+    },
+    activeBranchRatio: (state): number => {
+      if (!state.selectedBranchIds || state.selectedBranchIds.length === 0) {
+        return 1
+      }
+      if (!state.branches || state.branches.length === 0) {
+        return 1
+      }
+      const totalRatio = state.branches.reduce((acc, b) => acc + (b.shareRatio || (1 / state.branches.length)), 0) || 1
+      const selectedRatio = state.branches
+        .filter(b => state.selectedBranchIds.includes(b.id))
+        .reduce((acc, b) => acc + (b.shareRatio || (1 / state.branches.length)), 0)
+      return selectedRatio / totalRatio
+    },
+    activeBranchLabel: (state): string => {
+      const count = state.selectedBranchIds.length
+      if (count === 0) return 'Semua'
+      if (count === 1) {
+        const found = state.branches.find(b => b.id === state.selectedBranchIds[0])
+        return found ? found.name : 'Cabang Terpilih'
+      }
+      return 'Kostum'
     }
   },
 
@@ -644,6 +712,82 @@ export const useUmkmStore = defineStore('umkm', {
           if (savedDesc) {
             this.profile.pitchSummary = savedDesc
             this.profile.description = savedDesc
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    },
+
+    addBranch(branch: Omit<UmkmBranch, 'id'>) {
+      const newId = `branch-${Date.now()}`
+      const newBranch: UmkmBranch = {
+        ...branch,
+        id: newId,
+        shareRatio: branch.shareRatio || 0.20
+      }
+      this.branches.push(newBranch)
+      this.profile.outletsCount = this.branches.length
+      this.saveBranchesToStorage()
+      return newBranch
+    },
+
+    deleteBranch(branchId: string) {
+      this.branches = this.branches.filter(b => b.id !== branchId)
+      this.selectedBranchIds = this.selectedBranchIds.filter(id => id !== branchId)
+      this.profile.outletsCount = Math.max(1, this.branches.length)
+      this.saveBranchesToStorage()
+    },
+
+    toggleBranchSelection(branchId: string) {
+      const idx = this.selectedBranchIds.indexOf(branchId)
+      if (idx > -1) {
+        this.selectedBranchIds.splice(idx, 1)
+      } else {
+        this.selectedBranchIds.push(branchId)
+      }
+      this.saveBranchesToStorage()
+    },
+
+    clearBranchSelection() {
+      this.selectedBranchIds = []
+      this.saveBranchesToStorage()
+    },
+
+    saveBranchesToStorage() {
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('umkm_branches_list', JSON.stringify(this.branches))
+          localStorage.setItem('umkm_selected_branch_ids', JSON.stringify(this.selectedBranchIds))
+          localStorage.setItem('umkm_outlets_count', String(this.profile.outletsCount))
+        } catch (e) {
+          console.warn('Gagal menyimpan branches ke storage', e)
+        }
+      }
+    },
+
+    initBranchesFromStorage() {
+      if (typeof window !== 'undefined') {
+        try {
+          const savedBranches = localStorage.getItem('umkm_branches_list')
+          const savedSelected = localStorage.getItem('umkm_selected_branch_ids')
+          const savedOutlets = localStorage.getItem('umkm_outlets_count')
+          if (savedBranches) {
+            const parsed = JSON.parse(savedBranches)
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              this.branches = parsed
+            }
+          }
+          if (savedSelected) {
+            const parsed = JSON.parse(savedSelected)
+            if (Array.isArray(parsed)) {
+              this.selectedBranchIds = parsed
+            }
+          }
+          if (savedOutlets) {
+            this.profile.outletsCount = Number(savedOutlets) || this.branches.length
+          } else {
+            this.profile.outletsCount = this.branches.length
           }
         } catch (e) {
           // ignore

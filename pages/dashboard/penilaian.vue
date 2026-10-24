@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100 select-text">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100 select-text">
     <!-- ========================================================================= -->
     <!-- 1. TOP HEADER: Clean Page Title & Chat Konsultan Action                     -->
     <!-- ========================================================================= -->
@@ -266,7 +266,7 @@
             <!-- Baris Bawah: Horizontal Progress Bar dengan Penanda Target Pemodal -->
             <div class="relative w-full h-2 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-visible mt-3">
               <div
-                class="h-full rounded-full transition-all duration-300"
+                class="gsap-pillar-bar h-full rounded-full transition-all duration-300"
                 :style="{
                   width: `${pillar.score}%`,
                   backgroundColor: pillar.score >= pillar.targetScore ? '#00800e' : '#D97706'
@@ -615,6 +615,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { gsap } from 'gsap'
 import Chart from 'chart.js/auto'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
@@ -682,8 +683,10 @@ const fivePillars = [
 ]
 
 // Donut Chart Instance for 5 Pillars
+const pageRootRef = ref<HTMLElement | null>(null)
 const donutCanvas = ref<HTMLCanvasElement | null>(null)
 let donutChartInstance: any = null
+let gsapCtx: gsap.Context | null = null
 
 function initDonutChart() {
   if (!donutCanvas.value) return
@@ -710,6 +713,11 @@ function initDonutChart() {
       responsive: true,
       maintainAspectRatio: false,
       cutout: '72%',
+      animation: {
+        animateRotate: true,
+        animateScale: true,
+        duration: 600
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -727,6 +735,27 @@ onMounted(() => {
   if (import.meta.client) {
     nextTick(() => {
       initDonutChart()
+      if (pageRootRef.value && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsapCtx = gsap.context(() => {
+          gsap.from('.card-tactile-gopay', {
+            opacity: 0,
+            y: 14,
+            duration: 0.42,
+            stagger: 0.05,
+            ease: 'power2.out',
+            clearProps: 'all'
+          })
+          gsap.from('.gsap-pillar-bar', {
+            scaleX: 0,
+            transformOrigin: 'left center',
+            duration: 0.65,
+            stagger: 0.06,
+            ease: 'power3.out',
+            delay: 0.12,
+            clearProps: 'transform'
+          })
+        }, pageRootRef.value)
+      }
     })
     document.addEventListener('click', handleClickOutsideChartDropdowns)
     document.addEventListener('keydown', handleEscapeChartDropdowns)
@@ -734,6 +763,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
   if (donutChartInstance) {
     donutChartInstance.destroy()
     donutChartInstance = null

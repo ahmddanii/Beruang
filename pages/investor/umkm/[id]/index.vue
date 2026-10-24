@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -499,6 +499,8 @@
                 <img
                   :src="prod.imageUrl || '/images/default-store-banner.jpg'"
                   :alt="prod.name"
+                  loading="lazy"
+                  decoding="async"
                   class="w-full h-full object-cover object-center transition-transform duration-300"
                 />
                 <div v-if="prod.categoryBadge" class="absolute top-2.5 left-2.5">
@@ -569,6 +571,8 @@
                     <img
                       :src="profileData.avatarUrl"
                       :alt="post.name"
+                      loading="lazy"
+                      decoding="async"
                       class="w-full h-full object-contain rounded-full"
                     />
                   </div>
@@ -616,6 +620,8 @@
                     <img
                       :src="imgUrl"
                       :alt="`${post.name} - Slide ${sIdx + 1}`"
+                      loading="lazy"
+                      decoding="async"
                       class="w-full h-full object-cover object-center cursor-pointer"
                       @click="openFullscreenPreview(post, getSlideIndex(post.id))"
                     />
@@ -705,6 +711,8 @@
             <img
               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80"
               :alt="item.consultantName"
+              loading="lazy"
+              decoding="async"
               class="w-12 h-12 rounded-xl object-cover shrink-0"
             />
             <div class="min-w-0">
@@ -1004,7 +1012,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
 import { useRoute } from 'vue-router'
 import { useInvestorStore, build150MarketplaceUmkms, type MarketplaceUmkm } from '~/stores/investor'
 import { useUmkmStore } from '~/stores/umkm'
@@ -1051,6 +1060,8 @@ definePageMeta({
 const route = useRoute()
 const investorStore = useInvestorStore()
 const umkmStore = useUmkmStore()
+const pageRootRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
 
 const umkmId = computed(() => (route.params.id as string) || 'umkm-01')
 
@@ -1420,6 +1431,36 @@ onMounted(() => {
     } catch {
       // ignore
     }
+
+    if (pageRootRef.value) {
+      const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+      if (!prefersReducedMotion) {
+        gsapCtx = gsap.context(() => {
+          const cards = pageRootRef.value?.querySelectorAll('.card-tactile-gopay')
+          if (cards && cards.length > 0) {
+            gsap.fromTo(
+              cards,
+              { opacity: 0, y: 14 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.45,
+                stagger: 0.05,
+                ease: 'power2.out',
+                clearProps: 'all'
+              }
+            )
+          }
+        }, pageRootRef.value)
+      }
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
   }
 })
 </script>

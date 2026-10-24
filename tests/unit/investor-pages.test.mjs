@@ -85,6 +85,7 @@ describe('Investor Role Jaringan & Profil Investor Contracts', () => {
     assert.ok(umkmPostPage.includes('<span>Lanjutkan</span>'), 'Discard confirmation modal must have Lanjutkan button')
     assert.ok(umkmPostPage.includes('Keluar'), 'Discard confirmation modal must have Keluar button')
     assert.ok(umkmPostPage.includes('Daftar Postingan yang Sudah Dibuat'), 'pages/dashboard/postingan.vue must display Daftar Postingan yang Sudah Dibuat')
+    assert.ok(umkmPostPage.includes('lg:grid-cols-3'), 'pages/dashboard/postingan.vue must lay out posts horizontally up to maximum 3 columns')
     assert.ok(umkmPostPage.includes('handleCreateUmkmPost'), 'pages/dashboard/postingan.vue must allow publishing single or multi-slide posts')
     assert.ok(umkmProfile.includes('to="/dashboard/postingan"'), 'UMKM profile page must link Buat Postingan button to /dashboard/postingan')
 

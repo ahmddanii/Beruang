@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -75,7 +75,7 @@
       <div
         v-for="item in investorStore.watchlist"
         :key="item.id"
-        class="card-tactile-gopay rounded-2xl p-5 sm:p-6 border flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all font-poppins space-y-4.5 group"
+        class="gsap-watchlist-card lazy-render-card card-tactile-gopay rounded-2xl p-5 sm:p-6 border flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all font-poppins space-y-4.5 group"
       >
         <div class="space-y-4">
           <!-- Top Row: Code Pill, Badge & Star Toggle -->
@@ -203,7 +203,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
 import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
 import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -224,6 +225,41 @@ definePageMeta({
 })
 
 const investorStore = useInvestorStore()
+
+const pageRootRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
+
+onMounted(() => {
+  if (typeof window !== 'undefined' && pageRootRef.value) {
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    if (!prefersReducedMotion) {
+      gsapCtx = gsap.context(() => {
+        const cards = pageRootRef.value?.querySelectorAll('.gsap-watchlist-card, .card-tactile-gopay')
+        if (cards && cards.length > 0) {
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 14 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.42,
+              stagger: 0.05,
+              ease: 'power2.out',
+              clearProps: 'all'
+            }
+          )
+        }
+      }, pageRootRef.value)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
+})
 
 // Toast State
 const toastMessage = ref('')

@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-8 pb-10 max-w-2xl mx-auto">
+  <div ref="pageRootRef" class="space-y-8 pb-10 max-w-2xl mx-auto">
     <!-- Breadcrumb & Header -->
     <div>
       <div class="flex items-center gap-2 text-xs text-neutral-500 mb-3">
@@ -128,7 +128,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
 import { useRoute, useRouter } from 'vue-router'
 import { useInvestorStore } from '~/stores/investor'
 import BCard from '~/components/base/BCard.vue'
@@ -152,6 +153,37 @@ const router = useRouter()
 const umkmId = computed(() => route.params.id as string || 'umkm-01')
 
 const investorStore = useInvestorStore()
+const pageRootRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
+
+onMounted(() => {
+  if (typeof window !== 'undefined' && pageRootRef.value) {
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    if (!prefersReducedMotion) {
+      gsapCtx = gsap.context(() => {
+        gsap.fromTo(
+          pageRootRef.value!.children,
+          { opacity: 0, y: 14 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.42,
+            stagger: 0.06,
+            ease: 'power2.out',
+            clearProps: 'all'
+          }
+        )
+      }, pageRootRef.value)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
+})
 
 const item = computed(() => {
   return investorStore.marketplaceList.find(m => m.id === umkmId.value) || investorStore.marketplaceList[0]

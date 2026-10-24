@@ -134,7 +134,7 @@
                     <span
                       v-if="item.badge"
                       :class="[
-                        'absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#13161F] transition-all duration-200 pointer-events-none',
+                        'absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#00AA13] dark:bg-[#22C55E] ring-2 ring-white dark:ring-[#13161F] transition-all duration-200 pointer-events-none',
                         isCollapsed ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
                       ]"
                     />
@@ -147,7 +147,7 @@
                     <span class="whitespace-nowrap overflow-visible leading-normal py-0.5 select-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-600 text-white tabular-nums leading-none shrink-0"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-[#00AA13] dark:bg-[#22C55E] text-white tabular-nums leading-none shrink-0"
                     >
                       {{ item.badge }}
                     </span>
@@ -339,7 +339,7 @@
                     <span class="whitespace-nowrap overflow-visible leading-normal py-0.5 flex-1 pointer-events-none select-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0 pointer-events-none"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-[#00AA13] dark:bg-[#22C55E] text-white tabular-nums leading-none shrink-0 pointer-events-none"
                     >
                       {{ item.badge }}
                     </span>

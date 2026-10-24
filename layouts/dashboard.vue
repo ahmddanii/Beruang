@@ -60,7 +60,7 @@
       <main
         ref="mainContentRef"
         :class="[
-          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D] flex flex-col',
+          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D] flex flex-col scroll-smooth',
           isFixedLayout
             ? 'overflow-hidden h-full'
             : 'overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]'
@@ -97,10 +97,23 @@
               </h1>
             </div>
 
-            <!-- Page Slot Content -->
-            <div :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : 'flex-1'">
-              <slot />
-            </div>
+            <!-- Route Transition Skeleton Screen UI (Zero-Overhead GPU Shimmer) -->
+            <Transition name="skeleton-fade" mode="out-in">
+              <BSkeletonScreen
+                v-if="isRouteLoading"
+                key="skeleton-screen"
+                :variant="currentSkeletonVariant"
+                :show-header="true"
+              />
+              <div
+                v-else
+                key="workspace-content"
+                ref="slotWrapperRef"
+                :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : 'flex-1'"
+              >
+                <slot />
+              </div>
+            </Transition>
           </div>
 
           <!-- Bottom Footer (Dicoding Style, Sticky at Bottom of Viewport when Content is Short) -->
@@ -129,8 +142,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { gsap } from 'gsap'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import DashboardSidebar from '~/components/layout/DashboardSidebar.vue'
@@ -139,6 +153,7 @@ import NavbarProfileDropdown from '~/components/layout/NavbarProfileDropdown.vue
 import LinkedInChatDock from '~/components/layout/LinkedInChatDock.vue'
 import AdvancedNavbarSearch from '~/components/search/AdvancedNavbarSearch.vue'
 import MobilePillTabBar from '~/components/layout/MobilePillTabBar.vue'
+import BSkeletonScreen from '~/components/base/BSkeletonScreen.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Menu01Icon,
@@ -166,15 +181,79 @@ const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const { toggleMobile } = useSidebar()
 const mainContentRef = ref<HTMLElement | null>(null)
+const slotWrapperRef = ref<HTMLElement | null>(null)
+const isRouteLoading = ref(true)
+let routeSkeletonTimer: any = null
+let layoutGsapCtx: gsap.Context | null = null
+
+const currentSkeletonVariant = computed<'dashboard' | 'feed' | 'profile' | 'table'>(() => {
+  const p = route.path
+  if (p === '/investor' || p.startsWith('/dashboard/postingan')) return 'feed'
+  if (p.includes('/profile') || p.includes('/umkm/')) return 'profile'
+  if (
+    p.startsWith('/dashboard/progres') ||
+    p.startsWith('/admin/umkm') ||
+    p.startsWith('/admin/mitra') ||
+    p.startsWith('/admin/audit') ||
+    p.startsWith('/admin/laporan')
+  ) {
+    return 'table'
+  }
+  return 'dashboard'
+})
+
+function runWorkspaceEntranceAnimations() {
+  if (!import.meta.client || !slotWrapperRef.value) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
+
+  layoutGsapCtx = gsap.context(() => {
+    const cards = Array.from(
+      slotWrapperRef.value!.querySelectorAll('.card-tactile-gopay, .stat-card-clean')
+    ).slice(0, 12)
+    if (cards.length > 0) {
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 12 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.38,
+          stagger: 0.035,
+          ease: 'power2.out',
+          overwrite: 'auto',
+          clearProps: 'transform,opacity'
+        }
+      )
+    }
+  }, slotWrapperRef.value)
+}
 
 watch(
   () => route.path,
-  (newPath) => {
+  (newPath, oldPath) => {
+    if (import.meta.client && oldPath && newPath !== oldPath) {
+      isRouteLoading.value = true
+      if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+      routeSkeletonTimer = setTimeout(() => {
+        isRouteLoading.value = false
+        nextTick(() => {
+          runWorkspaceEntranceAnimations()
+        })
+      }, 420)
+    }
+
     nextTick(() => {
       if (mainContentRef.value) {
-        mainContentRef.value.scrollTop = 0
+        mainContentRef.value.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
       }
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      }
     })
 
     if (newPath.startsWith('/investor') && authStore.currentUser?.role !== 'INVESTOR') {
@@ -189,6 +268,36 @@ watch(
   },
   { immediate: true }
 )
+
+onMounted(() => {
+  if (import.meta.client) {
+    if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+    routeSkeletonTimer = setTimeout(() => {
+      isRouteLoading.value = false
+      nextTick(() => {
+        runWorkspaceEntranceAnimations()
+      })
+    }, 450)
+  } else {
+    isRouteLoading.value = false
+  }
+})
+
+onBeforeUnmount(() => {
+  if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
+})
+
+onBeforeUnmount(() => {
+  if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
+})
 const isFixedLayout = computed(() => {
   const p = route.path
   return (

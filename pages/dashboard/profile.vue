@@ -397,6 +397,80 @@
           </div>
         </div>
 
+        <!-- SECTION 1B: DAFTAR GERAI & CABANG USAHA -->
+        <div class="card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-100 dark:border-neutral-800 pb-4">
+            <div>
+              <h3 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white">
+                Daftar Gerai & Cabang Usaha
+              </h3>
+              <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 mt-1">
+                Kelola gerai cabang aktif yang menjadi unit operasional dan pendorong omzet usaha Anda (Total {{ umkmStore.branches.length }} Gerai).
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="btn-pill-action btn-pill-action-green cursor-pointer shrink-0 self-start sm:self-auto shadow-none"
+              title="Tambah Cabang Usaha Baru"
+              @click="openAddBranchModal"
+            >
+              <HugeiconsIcon :icon="PlusSignIcon" :size="15" :stroke-width="2.2" />
+              <span>Tambah Cabang</span>
+            </button>
+          </div>
+
+          <!-- Grid Daftar Cabang (Maksimal 3 Kolom) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+            <div
+              v-for="(branch, bIdx) in umkmStore.branches"
+              :key="branch.id"
+              class="p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-[#F8FAFC]/70 dark:bg-[#18191E]/60 flex flex-col justify-between space-y-3 transition-colors hover:border-neutral-300 dark:hover:border-neutral-700"
+            >
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+                    <HugeiconsIcon :icon="Store01Icon" :size="16" :stroke-width="2" />
+                  </div>
+                  <div class="min-w-0">
+                    <span v-if="branch.isPrimary" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                      Gerai Utama
+                    </span>
+                    <span v-else class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
+                      Cabang #{{ bIdx + 1 }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Delete Action (kecuali cabang utama) -->
+                <button
+                  v-if="!branch.isPrimary && umkmStore.branches.length > 1"
+                  type="button"
+                  class="p-1 rounded-lg text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
+                  title="Hapus Cabang Ini"
+                  @click="confirmDeleteBranch(branch)"
+                >
+                  <HugeiconsIcon :icon="Delete02Icon" :size="15" />
+                </button>
+              </div>
+
+              <div class="space-y-1">
+                <h4 class="font-poppins font-semibold text-sm text-neutral-900 dark:text-white truncate">
+                  {{ branch.name }}
+                </h4>
+                <p class="text-xs font-poppins text-neutral-500 dark:text-neutral-400 line-clamp-2">
+                  {{ branch.address || branch.location }}
+                </p>
+              </div>
+
+              <div class="pt-2 border-t border-neutral-200/60 dark:border-neutral-800 text-[11px] text-neutral-500 flex items-center justify-between">
+                <span>{{ branch.city }}</span>
+                <span class="font-mono tabular-nums text-neutral-400">Est. {{ branch.establishedYear || 2026 }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- SECTION 2: LEGALITAS & KEPATUHAN RESMI -->
         <div class="card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] space-y-6">
           <div class="border-b border-neutral-100 dark:border-neutral-800 pb-4">
@@ -1022,11 +1096,112 @@
         </div>
       </Transition>
     </Teleport>
+    <!-- Modal Tambah Cabang Usaha Baru -->
+    <Teleport to="body">
+      <div
+        v-if="isAddBranchModalOpen"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150 font-poppins"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-add-branch-title"
+        @click.self="isAddBranchModalOpen = false"
+      >
+        <div class="w-full max-w-lg rounded-[22px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 shadow-none overflow-hidden flex flex-col">
+          <!-- Modal Header -->
+          <div class="px-6 py-4 sm:py-5 border-b border-neutral-100 dark:border-neutral-800 flex items-start justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="2" />
+              </div>
+              <div>
+                <h2 id="modal-add-branch-title" class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-tight">
+                  Tambah Cabang Usaha Baru
+                </h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  Daftarkan unit gerai baru Anda ke ekosistem toko Beruang.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="w-8 h-8 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors cursor-pointer"
+              aria-label="Tutup Modal Tambah Cabang"
+              @click="isAddBranchModalOpen = false"
+            >
+              <HugeiconsIcon :icon="Cancel01Icon" :size="18" :stroke-width="2.2" />
+            </button>
+          </div>
+
+          <!-- Modal Body Form -->
+          <div class="px-6 py-5 space-y-4">
+            <div>
+              <label class="block text-xs font-poppins font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+                Nama Cabang Usaha <span class="text-red-500">*</span>
+              </label>
+              <input
+                v-model="newBranchForm.name"
+                type="text"
+                class="input-tactile-gopay"
+                placeholder="Contoh: Cabang Buah Batu"
+                autofocus
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-poppins font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+                Kota Domisili Cabang <span class="text-red-500">*</span>
+              </label>
+              <input
+                v-model="newBranchForm.city"
+                type="text"
+                class="input-tactile-gopay"
+                placeholder="Contoh: Bandung"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-poppins font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+                Alamat Lengkap Cabang <span class="text-red-500">*</span>
+              </label>
+              <input
+                v-model="newBranchForm.address"
+                type="text"
+                class="input-tactile-gopay"
+                placeholder="Contoh: Jl. Buah Batu No. 182, Turangga, Bandung"
+              />
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="px-6 py-4 border-t border-neutral-100 dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex items-center justify-end gap-2.5">
+            <button
+              type="button"
+              class="btn-pill-action cursor-pointer shadow-none"
+              @click="isAddBranchModalOpen = false"
+            >
+              <span>Batal</span>
+            </button>
+
+            <button
+              type="button"
+              class="btn-pill-action btn-pill-action-green cursor-pointer shadow-none"
+              :disabled="!newBranchForm.name.trim() || !newBranchForm.city.trim() || !newBranchForm.address.trim()"
+              @click="submitNewBranch"
+            >
+              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="15" :stroke-width="2.0" />
+              <span>Simpan Cabang</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { gsap } from 'gsap'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
@@ -1070,7 +1245,8 @@ import {
   CopyrightIcon,
   MedicineBottle01Icon,
   Coins01Icon,
-  PencilEdit02Icon
+  PencilEdit02Icon,
+  PlusSignIcon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -1129,7 +1305,7 @@ const formProfile = reactive({
   sector: umkmStore.profile.sector || 'Kuliner & Minuman (F&B)',
   city: umkmStore.profile.city || 'Bandung, Jawa Barat',
   establishedYear: umkmStore.profile.establishedYear || 2021,
-  outletsCount: umkmStore.profile.outletsCount || 3,
+  outletsCount: umkmStore.branches.length || umkmStore.profile.outletsCount || 3,
   employeesCount: umkmStore.profile.employeesCount || 14,
   fundingTarget: umkmStore.profile.fundingTarget || 250000000,
   plannedFundUse: 'Ekspansi 2 gerai cloud kitchen di area Bandung Timur dan pengadaan mesin roastery kapasitas 5kg terpusat.',
@@ -1139,6 +1315,52 @@ const formProfile = reactive({
   halalNumber: umkmStore.profile.halalNumber || 'ID321100019283',
   hkiNumber: umkmStore.profile.hkiNumber || 'IPT20250918290'
 })
+
+// Branch Management Logic (Daftar Gerai & Cabang Usaha)
+const isAddBranchModalOpen = ref(false)
+const newBranchForm = reactive({
+  name: '',
+  city: '',
+  address: ''
+})
+
+function openAddBranchModal() {
+  newBranchForm.name = ''
+  newBranchForm.city = formProfile.city || 'Bandung'
+  newBranchForm.address = ''
+  isAddBranchModalOpen.value = true
+}
+
+function submitNewBranch() {
+  if (!newBranchForm.name.trim() || !newBranchForm.city.trim() || !newBranchForm.address.trim()) return
+  const created = umkmStore.addBranch({
+    name: newBranchForm.name.trim(),
+    city: newBranchForm.city.trim(),
+    location: newBranchForm.city.trim(),
+    address: newBranchForm.address.trim(),
+    establishedYear: new Date().getFullYear(),
+    shareRatio: 0.15
+  })
+  formProfile.outletsCount = umkmStore.branches.length
+  isAddBranchModalOpen.value = false
+  triggerToast(`Cabang ${created.name} berhasil ditambahkan!`)
+}
+
+function confirmDeleteBranch(branch: any) {
+  if (confirm(`Apakah Anda yakin ingin menghapus ${branch.name}?`)) {
+    umkmStore.deleteBranch(branch.id)
+    formProfile.outletsCount = umkmStore.branches.length
+    triggerToast(`Cabang ${branch.name} berhasil dihapus.`)
+  }
+}
+
+watch(
+  () => umkmStore.branches.length,
+  (newCount) => {
+    formProfile.outletsCount = newCount
+  },
+  { immediate: true }
+)
 
 // Expandable narrative preview in "Tentang Bisnis Saya"
 const isDescriptionExpanded = ref(false)
@@ -1804,7 +2026,10 @@ function saveProfile() {
   triggerToast('Profil usaha berhasil disimpan & disinkronkan!')
 }
 
+let gsapCtx: gsap.Context | null = null
+
 onMounted(() => {
+  umkmStore.initBranchesFromStorage()
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
   umkmStore.initQuickProfileFromStorage()
@@ -1842,7 +2067,26 @@ onMounted(() => {
 
   nextTick(() => {
     initialSnapshot.value = getFormSnapshot()
+    if (import.meta.client && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsapCtx = gsap.context(() => {
+        gsap.from('.card-tactile-gopay', {
+          opacity: 0,
+          y: 14,
+          duration: 0.42,
+          stagger: 0.05,
+          ease: 'power2.out',
+          clearProps: 'all'
+        })
+      })
+    }
   })
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
 })
 </script>
 

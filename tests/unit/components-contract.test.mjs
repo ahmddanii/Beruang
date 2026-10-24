@@ -38,4 +38,44 @@ describe('Frontend UI Components & Design System Contracts', () => {
     assert.ok(content.includes("selectTheme('dark'"), 'Quick theme switcher must support Dark theme')
     assert.ok(content.includes('ComputerIcon') && content.includes('Sun03Icon') && content.includes('Moon02Icon'), 'Quick theme switcher must use Hugeicons')
   })
+
+  it('BSkeletonScreen (components/base/BSkeletonScreen.vue) provides zero-overhead GPU shimmer skeleton screens', () => {
+    assert.ok(fs.existsSync('components/base/BSkeletonScreen.vue'), 'BSkeletonScreen component must exist')
+    const content = fs.readFileSync('components/base/BSkeletonScreen.vue', 'utf8')
+    assert.ok(content.includes('skeleton-shimmer'), 'BSkeletonScreen must use skeleton-shimmer class')
+    assert.ok(content.includes('dashboard') && content.includes('feed') && content.includes('profile') && content.includes('table'), 'BSkeletonScreen must support all core variants')
+  })
+
+  it('enforces universal smooth scrolling and GPU shimmer in main.css', () => {
+    const cssContent = fs.readFileSync('assets/css/main.css', 'utf8')
+    assert.ok(cssContent.includes('scroll-behavior: smooth'), 'main.css must configure scroll-behavior: smooth')
+    assert.ok(cssContent.includes('skeleton-shimmer'), 'main.css must configure skeleton-shimmer keyframes')
+    assert.ok(cssContent.includes('lazy-render-card'), 'main.css must configure lazy-render-card content-visibility')
+  })
+
+  it('enforces GSAP entrance animations across UMKM and Investor pages', () => {
+    for (const page of [
+      'pages/dashboard/index.vue',
+      'pages/dashboard/penilaian.vue',
+      'pages/dashboard/postingan.vue',
+      'pages/dashboard/profile.vue',
+      'pages/dashboard/pendanaan.vue',
+      'pages/investor/index.vue',
+      'pages/investor/profile.vue',
+      'pages/investor/watchlist.vue',
+      'pages/investor/umkm/[id]/index.vue',
+      'pages/investor/data-room/[id].vue'
+    ]) {
+      const content = fs.readFileSync(page, 'utf8')
+      assert.ok(content.includes('gsap'), `${page} must import and use gsap`)
+      assert.ok(content.includes('onMounted') && content.includes('onBeforeUnmount'), `${page} must have onMounted and onBeforeUnmount for GSAP lifecycle cleanup`)
+    }
+  })
+
+  it('pages/investor/data-room/[id].vue adopts BPillTabs adhering to the segmented pill design scheme', () => {
+    const content = fs.readFileSync('pages/investor/data-room/[id].vue', 'utf8')
+    assert.ok(content.includes('BPillTabs'), 'Data room page must use BPillTabs')
+    assert.ok(content.includes('dataRoomTabs'), 'Data room page must pass dataRoomTabs to BPillTabs')
+    assert.ok(content.includes('shortLabel'), 'dataRoomTabs must provide shortLabel for mobile responsiveness')
+  })
 })

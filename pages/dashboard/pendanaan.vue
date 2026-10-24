@@ -669,7 +669,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { gsap } from 'gsap'
 import { useUmkmStore } from '~/stores/umkm'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BModal from '~/components/base/BModal.vue'
@@ -902,6 +903,32 @@ function handleDownloadCertificate() {
     window.print()
   }
 }
+
+let gsapCtx: gsap.Context | null = null
+
+onMounted(() => {
+  if (import.meta.client && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    nextTick(() => {
+      gsapCtx = gsap.context(() => {
+        gsap.from('.card-tactile-gopay', {
+          opacity: 0,
+          y: 14,
+          duration: 0.42,
+          stagger: 0.05,
+          ease: 'power2.out',
+          clearProps: 'all'
+        })
+      })
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
+})
 </script>
 
 <style scoped>

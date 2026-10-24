@@ -1605,5 +1605,86 @@ summary:active,
   stroke: #FFFFFF !important;
 }
 
+/* ==========================================================================
+   SMOOTH SCROLL, GPU SKELETON SHIMMER & CONTENT-VISIBILITY LAZY RENDERING
+   ========================================================================== */
+
+html,
+body,
+main,
+.scroll-smooth {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  main,
+  .scroll-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* GPU-accelerated Skeleton Shimmer (Zero main-thread paint cost) */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #E2E8F0;
+}
+
+.dark .skeleton-shimmer {
+  background-color: #1E2533;
+}
+
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translate3d(-100%, 0, 0);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: beruang-skeleton-wave 1.35s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform;
+}
+
+.dark .skeleton-shimmer::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+}
+
+@keyframes beruang-skeleton-wave {
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+/* Native CSS Lazy Rendering for offscreen cards & rows */
+.lazy-render-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* Smooth Crossfade for Skeleton Screen transitions */
+.skeleton-fade-enter-active,
+.skeleton-fade-leave-active {
+  transition: opacity 0.22s ease-out;
+}
+
+.skeleton-fade-enter-from,
+.skeleton-fade-leave-to {
+  opacity: 0;
+}
+
+
+
 
 

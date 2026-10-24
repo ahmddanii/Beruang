@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -88,13 +88,13 @@
       <!-- ======================================================================================= -->
       <main class="w-full max-w-[600px] lg:w-[600px] shrink-0 space-y-6 mx-auto lg:mx-0">
 
-        <!-- POST FEED (Card Container disesuaikan dengan ukuran Media Container 550 x 578) -->
+        <!-- POST FEED (Card Container disesuaikan dengan ukuran Media Container 550 x 578 + Lazy Rendering) -->
         <div v-if="filteredFeed.length > 0" class="space-y-6 sm:space-y-7">
           <article
-            v-for="item in filteredFeed"
+            v-for="item in visibleFeedItems"
             :key="item.id"
             :id="'umkm-card-' + item.id"
-            class="card-tactile-gopay w-full max-w-[600px] mx-auto rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden !shadow-none"
+            class="gsap-feed-card lazy-render-card card-tactile-gopay w-full max-w-[600px] mx-auto rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden !shadow-none"
           >
             <!-- Card Body Content (Inner Width 550px + 24px Left/Right Padding = 598px + 2px Border = 600px) -->
             <div class="p-5 sm:p-6 space-y-5">
@@ -107,13 +107,13 @@
                     v-if="item.isPlatformPost"
                     class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#E6F4F7] dark:bg-[#156374]/25 p-2.5 shrink-0 flex items-center justify-center border border-[#156374]/30 dark:border-[#50AABF]/35 overflow-hidden shadow-none"
                   >
-                    <img src="/logo/logoSmall.svg" alt="Beruang Official" class="w-full h-full object-contain rounded-full" />
+                    <img src="/logo/logoSmall.svg" alt="Beruang Official" loading="lazy" decoding="async" class="w-full h-full object-contain rounded-full" />
                   </div>
                   <div
                     v-else
                     class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2.5 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden shadow-none"
                   >
-                    <img src="/logo.svg" alt="Foto Profil Usaha" class="w-full h-full object-contain rounded-full" />
+                    <img src="/logo.svg" alt="Foto Profil Usaha" loading="lazy" decoding="async" class="w-full h-full object-contain rounded-full" />
                   </div>
 
                   <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
@@ -208,6 +208,7 @@
                       :src="imgUrl"
                       :alt="`${item.name} - Slide ${sIdx + 1}`"
                       loading="lazy"
+                      decoding="async"
                       class="w-full h-full object-cover object-center cursor-pointer"
                       @click="openFullscreenPreview(item, getSlideIndex(item.id))"
                     />
@@ -308,6 +309,21 @@
               </BActionButton>
             </div>
           </article>
+
+          <!-- Lazy Load Sentinel & Load More Fallback for 150+ Feed Items -->
+          <div
+            v-if="visibleFeedLimit < filteredFeed.length"
+            ref="feedSentinelRef"
+            class="py-4 flex flex-col items-center justify-center gap-3"
+          >
+            <button
+              type="button"
+              class="btn-pill-action cursor-pointer shadow-none"
+              @click="loadMoreFeedItems"
+            >
+              <span>Muat Lebih Banyak ({{ filteredFeed.length - visibleFeedLimit }} tersisa)</span>
+            </button>
+          </div>
         </div>
 
         <!-- Empty State Filter Feed -->
@@ -356,6 +372,8 @@
               <img
                 :src="investorStore.profile.avatarUrl || authStore.currentUser?.avatar || '/images/user-profile.png'"
                 :alt="investorStore.profile.name || 'Foto Profil Investor'"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -394,6 +412,8 @@
                     <img
                       :src="chat.avatarUrl || '/logo.svg'"
                       :alt="chat.umkmName"
+                      loading="lazy"
+                      decoding="async"
                       class="w-full h-full object-contain rounded-full"
                     />
                   </div>
@@ -741,7 +761,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
 import { useInvestorStore, build150MarketplaceUmkms, type MarketplaceUmkm } from '~/stores/investor'
 import { useAuthStore } from '~/stores/auth'
 import BActionButton from '~/components/base/BActionButton.vue'
@@ -776,8 +797,86 @@ definePageMeta({
 const investorStore = useInvestorStore()
 const authStore = useAuthStore()
 
+const pageRootRef = ref<HTMLElement | null>(null)
+const feedSentinelRef = ref<HTMLElement | null>(null)
+const visibleFeedLimit = ref(10)
+let gsapCtx: gsap.Context | null = null
+let feedObserver: IntersectionObserver | null = null
+
+function loadMoreFeedItems() {
+  if (visibleFeedLimit.value < filteredFeed.value.length) {
+    visibleFeedLimit.value = Math.min(filteredFeed.value.length, visibleFeedLimit.value + 8)
+  }
+}
+
+function setupFeedLazyObserver() {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return
+  if (feedObserver) {
+    feedObserver.disconnect()
+  }
+  feedObserver = new IntersectionObserver(
+    entries => {
+      if (entries.some(e => e.isIntersecting)) {
+        loadMoreFeedItems()
+      }
+    },
+    { rootMargin: '320px 0px' }
+  )
+  if (feedSentinelRef.value) {
+    feedObserver.observe(feedSentinelRef.value)
+  }
+}
+
+watch(feedSentinelRef, el => {
+  if (el && feedObserver) {
+    feedObserver.observe(el)
+  }
+})
+
+watch(
+  () => [investorStore.searchQuery, investorStore.selectedSector, investorStore.selectedCities.length],
+  () => {
+    visibleFeedLimit.value = 10
+  }
+)
+
 onMounted(() => {
   investorStore.initPostsFromStorage()
+  setupFeedLazyObserver()
+
+  if (typeof window !== 'undefined' && pageRootRef.value) {
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    if (!prefersReducedMotion) {
+      gsapCtx = gsap.context(() => {
+        const cards = pageRootRef.value?.querySelectorAll('.gsap-feed-card, aside .card-tactile-gopay')
+        if (cards && cards.length > 0) {
+          gsap.fromTo(
+            Array.from(cards).slice(0, 8),
+            { opacity: 0, y: 16 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              stagger: 0.055,
+              ease: 'power2.out',
+              clearProps: 'all'
+            }
+          )
+        }
+      }, pageRootRef.value)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (feedObserver) {
+    feedObserver.disconnect()
+    feedObserver = null
+  }
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
 })
 
 // 3 Chat History Terbaru di bawah Profil Investor
@@ -1216,6 +1315,10 @@ const filteredFeed = computed<MarketplaceUmkm[]>(() => {
   })
 
   return combined
+})
+
+const visibleFeedItems = computed<MarketplaceUmkm[]>(() => {
+  return filteredFeed.value.slice(0, visibleFeedLimit.value)
 })
 
 // Save / Bookmark Action with Instant Feedback

@@ -449,10 +449,10 @@
 
             <!-- Row 2: Title & Receipt number -->
             <div>
-              <p class="text-sm font-semibold text-neutral-900 dark:text-white leading-snug">
+              <p class="text-sm font-poppins font-semibold text-neutral-900 dark:text-white leading-snug">
                 {{ tx.title }}
               </p>
-              <span class="text-xs font-mono text-neutral-400 block mt-0.5">
+              <span class="text-xs font-poppins text-neutral-400 block mt-0.5">
                 {{ tx.receiptNumber || 'NOTA/KASIR/AUTO' }}
               </span>
             </div>
@@ -560,7 +560,7 @@
                   <p class="text-sm font-medium font-poppins text-neutral-900 dark:text-white truncate max-w-sm" :title="tx.title">
                     {{ tx.title }}
                   </p>
-                  <span class="text-xs font-mono font-medium text-neutral-600 dark:text-neutral-400 block truncate mt-0.5">
+                  <span class="text-xs font-poppins font-medium text-neutral-600 dark:text-neutral-400 block truncate mt-0.5">
                     {{ tx.receiptNumber || 'NOTA/KASIR/AUTO' }}
                   </span>
                 </td>

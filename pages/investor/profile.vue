@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Top Page Header: Title on Left -->
     <div class="flex items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
@@ -586,7 +586,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
 import { useAuthStore } from '~/stores/auth'
 import { useInvestorStore } from '~/stores/investor'
 import BStoreBanner from '~/components/base/BStoreBanner.vue'
@@ -710,6 +711,8 @@ const investorDocs = [
 
 const initialSnapshot = ref('')
 const isSaving = ref(false)
+const pageRootRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
 
 function getFormSnapshot(): string {
   return JSON.stringify(formProfile)
@@ -722,6 +725,36 @@ const hasUnsavedChanges = computed(() => {
 
 onMounted(() => {
   initialSnapshot.value = getFormSnapshot()
+
+  if (typeof window !== 'undefined' && pageRootRef.value) {
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    if (!prefersReducedMotion) {
+      gsapCtx = gsap.context(() => {
+        const blocks = pageRootRef.value?.querySelectorAll('.card-tactile-gopay')
+        if (blocks && blocks.length > 0) {
+          gsap.fromTo(
+            blocks,
+            { opacity: 0, y: 14 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              stagger: 0.05,
+              ease: 'power2.out',
+              clearProps: 'all'
+            }
+          )
+        }
+      }, pageRootRef.value)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
 })
 
 function onBannerUpdated(newUrl: string) {

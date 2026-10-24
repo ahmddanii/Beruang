@@ -188,28 +188,36 @@ function toggleTaskCollapse(taskId: string | number) {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
-  border-radius: 9999px;
+  border-radius: 8px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  border: 1.5px solid #E2E8F0;
+  border: 1px solid #CBD5E1;
   background-color: #FFFFFF;
-  color: #1E293B;
+  color: #171717;
+  box-shadow: 0 1.5px 0px 0 rgba(0, 0, 0, 0.06);
   transition: all 0.15s ease-in-out;
 }
 
 .dark .btn-pill-action {
-  border-color: rgba(255, 255, 255, 0.15);
-  background-color: #1E2330;
-  color: #F8FAFC;
+  border-color: rgba(253, 253, 253, 0.16);
+  background-color: #1A1A1A;
+  color: #FDFDFD;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3);
 }
 
 .btn-pill-action:hover {
-  background-color: #F1F5F9;
+  background-color: #F8FAFC;
   border-color: #CBD5E1;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.10);
 }
 
 .dark .btn-pill-action:hover {
-  background-color: #282F40;
-  border-color: rgba(255, 255, 255, 0.25);
+  background-color: #262626;
+  border-color: rgba(253, 253, 253, 0.28);
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-pill-action:active {
+  box-shadow: 0 1px 0px 0 rgba(0, 0, 0, 0.08);
 }
 </style>

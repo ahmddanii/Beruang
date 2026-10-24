@@ -25,7 +25,7 @@
         class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline transition-colors"
       >
         <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2.2" />
-        <span>Kembali ke Venture Social Feed</span>
+        <span>Kembali ke Katalog Peluang Usaha</span>
       </NuxtLink>
 
       <div class="flex items-center gap-2">
@@ -590,7 +590,8 @@ import {
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const route = useRoute()

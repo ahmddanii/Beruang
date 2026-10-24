@@ -5,7 +5,15 @@
     :type="to ? undefined : type"
     :disabled="disabled"
     :class="[
-      variant === 'green' ? 'btn-pill-action-green' : variant === 'blue' ? 'btn-pill-action-blue' : 'btn-pill-action',
+      variant === 'green'
+        ? 'btn-pill-action-green'
+        : variant === 'blue'
+        ? 'btn-pill-action-blue'
+        : variant === 'red'
+        ? 'btn-pill-action-red'
+        : variant === 'red-outline'
+        ? 'btn-pill-action-red-outline'
+        : 'btn-pill-action',
       'group',
       disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
       customClass
@@ -81,7 +89,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 withDefaults(
   defineProps<{
-    variant?: 'default' | 'green' | 'blue'
+    variant?: 'default' | 'green' | 'blue' | 'red' | 'red-outline'
     icon?: 'chevron' | 'download' | 'plus' | 'check' | 'none'
     hugeIcon?: any
     iconSize?: number

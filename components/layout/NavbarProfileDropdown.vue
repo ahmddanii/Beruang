@@ -46,10 +46,10 @@
       </svg>
     </button>
 
-    <!-- Dicoding-Style Floating Popover Dropdown -->
+    <!-- Dicoding-Style Floating Popover Dropdown (NO DROP SHADOW) -->
     <div
       v-if="isOpen"
-      class="absolute right-0 top-full mt-2 w-72 bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 rounded-[8px] shadow-xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
+      class="absolute right-0 top-full mt-2 w-72 bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 rounded-[8px] shadow-none z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
     >
       <!-- User Identity Header -->
       <div class="p-3.5 border-b border-[#E2E8F0] dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30">
@@ -78,15 +78,24 @@
         </div>
       </div>
 
-      <!-- Quick Action: Profil Usaha -->
-      <div class="p-2 border-b border-[#E2E8F0] dark:border-neutral-800">
+      <!-- Quick Actions: Profil & Pengaturan (Akses langsung ke Settings) -->
+      <div class="p-1.5 border-b border-[#E2E8F0] dark:border-neutral-800 space-y-0.5">
         <NuxtLink
-          to="/dashboard/profile"
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          :to="profilePath"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
           @click="isOpen = false"
         >
           <HugeiconsIcon :icon="UserCircleIcon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
-          <span>Lihat Profil Usaha</span>
+          <span>{{ authStore.currentUser?.role === 'UMKM' ? 'Lihat Profil Usaha' : 'Profil Saya' }}</span>
+        </NuxtLink>
+
+        <NuxtLink
+          :to="settingsPath"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          @click="isOpen = false"
+        >
+          <HugeiconsIcon :icon="Settings01Icon" :size="17" :stroke-width="1.9" class="text-neutral-500 dark:text-neutral-400" />
+          <span>Pengaturan Akun</span>
         </NuxtLink>
       </div>
 
@@ -108,7 +117,7 @@
             :class="[
               'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 cursor-pointer text-left',
               authStore.currentUser?.role === role.id
-                ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-none'
                 : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
             ]"
             @click="handleSwitchRole(role.id, role.path)"
@@ -143,7 +152,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { HugeiconsIcon } from '@hugeicons/vue'
-import { UserCircleIcon, Logout01Icon } from '@hugeicons/core-free-icons'
+import { UserCircleIcon, Settings01Icon, Logout01Icon } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
 const router = useRouter()
@@ -202,6 +211,24 @@ const currentRoleLabel = computed(() => {
     case 'INVESTOR': return 'Investor / Funder'
     case 'ADMIN': return 'Admin Platform'
     default: return 'Pelaku Usaha (UMKM)'
+  }
+})
+
+const settingsPath = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return '/konsultan/pengaturan'
+    case 'INVESTOR': return '/investor/pengaturan'
+    case 'ADMIN': return '/admin/pengaturan'
+    default: return '/dashboard/pengaturan'
+  }
+})
+
+const profilePath = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return '/konsultan'
+    case 'INVESTOR': return '/investor'
+    case 'ADMIN': return '/admin'
+    default: return '/dashboard/profile'
   }
 })
 

@@ -213,7 +213,7 @@ const navItems = computed(() => {
     return [
       {
         to: '/investor',
-        label: 'Katalog Usaha',
+        label: 'Katalog',
         icon: Store01Icon
       },
       {

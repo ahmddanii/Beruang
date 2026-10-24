@@ -18,26 +18,35 @@
       </div>
     </Transition>
 
-    <!-- Top Sub-Header & Breadcrumb Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-neutral-100 dark:border-neutral-800/80">
-      <div class="space-y-1">
-        <NuxtLink
-          to="/investor"
-          class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline transition-colors"
-        >
-          <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2.2" />
-          <span>Kembali ke Venture Social Feed</span>
-        </NuxtLink>
-        <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans">
-          Daftar pantau UMKM terakreditasi yang Anda tandai untuk due diligence & permohonan akses data room privat.
-        </p>
+    <!-- 1. Top Header: Title on Left & Action Control on Right -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center text-amber-500 shrink-0 border border-amber-200 dark:border-amber-800">
+          <HugeiconsIcon
+            :icon="StarIcon"
+            :size="24"
+            :stroke-width="2.2"
+            class="fill-amber-400"
+          />
+        </div>
+        <div>
+          <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+            Portofolio Pantau
+          </h1>
+          <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Daftar UMKM terakreditasi yang Anda simpan untuk uji tuntas dan permohonan akses data room
+          </p>
+        </div>
       </div>
 
       <div class="flex items-center gap-2.5 shrink-0">
-        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-xs font-semibold">
-          <HugeiconsIcon :icon="StarIcon" :size="14" class="fill-amber-400 text-amber-500" />
-          <span class="tabular-nums">{{ investorStore.watchlist.length }} Usaha Tersimpan</span>
-        </span>
+        <BActionButton
+          to="/investor"
+          variant="default"
+          :huge-icon="ArrowLeft01Icon"
+        >
+          Kembali ke Katalog
+        </BActionButton>
       </div>
     </div>
 
@@ -203,6 +212,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
+import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   ArrowLeft01Icon,
@@ -215,7 +225,8 @@ import {
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const investorStore = useInvestorStore()

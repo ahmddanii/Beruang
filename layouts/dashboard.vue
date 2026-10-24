@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen flex flex-col bg-white dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-poppins transition-colors overflow-hidden">
     <!-- Top Workspace Navbar (Full Width Across Top) -->
-    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30">
+    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30 relative">
       <!-- Left Side: Mobile Menu Button + Brand Logo & Name: Beruang -->
       <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
         <!-- Mobile Menu Toggle Button (Only on < lg, hidden for UMKM where bottom pill tab bar is primary) -->
@@ -33,11 +33,13 @@
         </NuxtLink>
       </div>
 
-      <!-- Center: Advanced Search Bar in Top Navbar with Embedded Sector Filter (Khusus Role Investor) -->
-      <AdvancedNavbarSearch
+      <!-- Center: Advanced Search Bar in Top Navbar (Centered Horizontally) -->
+      <div
         v-if="isInvestorRole"
-        class="flex-1 max-w-sm sm:max-w-md lg:max-w-xl mx-2 sm:mx-6 min-w-0"
-      />
+        class="hidden sm:flex absolute left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md lg:max-w-lg items-center justify-center pointer-events-none z-10 px-4"
+      >
+        <AdvancedNavbarSearch class="w-full pointer-events-auto" />
+      </div>
 
       <!-- Right Side: User Profile Account & Notification Bell (Bell di sebelah kanan profile) -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -75,7 +77,7 @@
             :class="[
               'w-full max-w-7xl mx-auto flex flex-col flex-1',
               isFixedLayout
-                ? 'min-h-0 px-4 sm:px-8 lg:px-12 xl:px-16 pt-4 pb-2'
+                ? 'min-h-0 px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-6 sm:pb-8'
                 : 'px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-28 sm:pb-32 lg:pb-10'
             ]"
           >
@@ -165,19 +167,31 @@ const umkmStore = useUmkmStore()
 const { toggleMobile } = useSidebar()
 const mainContentRef = ref<HTMLElement | null>(null)
 
-watch(() => route.path, () => {
-  nextTick(() => {
-    if (mainContentRef.value) {
-      mainContentRef.value.scrollTop = 0
+watch(
+  () => route.path,
+  (newPath) => {
+    nextTick(() => {
+      if (mainContentRef.value) {
+        mainContentRef.value.scrollTop = 0
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    })
+
+    if (newPath.startsWith('/investor') && authStore.currentUser?.role !== 'INVESTOR') {
+      authStore.setRole('INVESTOR')
+    } else if (newPath.startsWith('/konsultan') && authStore.currentUser?.role !== 'CONSULTANT') {
+      authStore.setRole('CONSULTANT')
+    } else if (newPath.startsWith('/admin') && authStore.currentUser?.role !== 'ADMIN') {
+      authStore.setRole('ADMIN')
+    } else if (newPath.startsWith('/dashboard') && authStore.currentUser?.role !== 'UMKM') {
+      authStore.setRole('UMKM')
     }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-  })
-})
+  },
+  { immediate: true }
+)
 const isFixedLayout = computed(() => {
   const p = route.path
   return (
-    p === '/investor' ||
-    p === '/investor/' ||
     p.startsWith('/investor/pesan') ||
     p.startsWith('/dashboard/pesan')
   )
@@ -328,13 +342,25 @@ const currentPageInfo = computed(() => {
 
   // Admin pages
   if (p === '/admin' || p === '/admin/') {
-    return { title: 'Ringkasan', icon: Home03Icon }
+    return { title: 'Beranda', icon: Home03Icon }
+  }
+  if (p.startsWith('/admin/umkm')) {
+    return { title: 'Kemitraan UMKM', icon: Store01Icon }
   }
   if (p.startsWith('/admin/penugasan')) {
     return { title: 'Penugasan Konsultan', icon: UserAdd01Icon }
   }
+  if (p.startsWith('/admin/sertifikasi')) {
+    return { title: 'Sertifikasi Usaha', icon: Award01Icon }
+  }
+  if (p.startsWith('/admin/investasi')) {
+    return { title: 'Alur Investasi', icon: Coins01Icon }
+  }
   if (p.startsWith('/admin/pengguna')) {
     return { title: 'Kelola Pengguna', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/admin/pengaturan')) {
+    return { title: 'Pengaturan', icon: Settings01Icon }
   }
 
   return { title: 'Beranda', icon: Home03Icon }

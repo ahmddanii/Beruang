@@ -40,7 +40,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/dashboard/progres',
-    actionLabel: 'Lihat Kas',
+    actionLabel: 'Lihat',
     roleTarget: 'UMKM',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=faces',
     badgeCount: 2,
@@ -60,7 +60,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/dashboard/permintaan-investor',
-    actionLabel: 'Tinjau Modal',
+    actionLabel: 'Tinjau',
     roleTarget: 'UMKM',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=faces',
     iconType: 'deal',
@@ -79,7 +79,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/dashboard/progres',
-    actionLabel: 'Lihat Kas',
+    actionLabel: 'Lihat',
     roleTarget: 'UMKM',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&crop=faces',
     iconType: 'verified',
@@ -98,7 +98,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
     isRead: true,
     link: '/dashboard/pengaturan',
-    actionLabel: 'Keamanan',
+    actionLabel: 'Cek',
     roleTarget: 'UMKM',
     iconType: 'shield',
     sectionGroup: 'today'
@@ -116,7 +116,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
     isRead: true,
     link: '/dashboard/progres',
-    actionLabel: 'Lihat Pesanan',
+    actionLabel: 'Lihat',
     roleTarget: 'UMKM',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces',
     badgeCount: 4,
@@ -136,7 +136,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
     isRead: true,
     link: '/dashboard/penilaian',
-    actionLabel: 'Cek Kesiapan',
+    actionLabel: 'Cek',
     roleTarget: 'UMKM',
     iconType: 'growth',
     sectionGroup: 'yesterday'
@@ -154,7 +154,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
     isRead: true,
     link: '/dashboard/progres',
-    actionLabel: 'Lihat Kas',
+    actionLabel: 'Lihat',
     roleTarget: 'UMKM',
     iconType: 'wallet',
     sectionGroup: 'yesterday'
@@ -173,7 +173,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/konsultan/validasi',
-    actionLabel: 'Validasi Sekarang',
+    actionLabel: 'Tinjau',
     roleTarget: 'CONSULTANT',
     iconType: 'verified',
     sectionGroup: 'today'
@@ -192,7 +192,7 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
     date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     isRead: false,
     link: '/investor',
-    actionLabel: 'Tinjau Profil Toko',
+    actionLabel: 'Tinjau',
     roleTarget: 'INVESTOR',
     iconType: 'deal',
     sectionGroup: 'today'
@@ -231,7 +231,7 @@ export const useNotificationStore = defineStore('notification', {
 
       if (import.meta.client && !forceReset) {
         try {
-          const saved = localStorage.getItem('beruang_notifications_v4')
+          const saved = localStorage.getItem('beruang_notifications_v5')
           if (saved) {
             const parsed = JSON.parse(saved)
             if (Array.isArray(parsed) && parsed.length > 0) {
@@ -252,7 +252,7 @@ export const useNotificationStore = defineStore('notification', {
     saveToStorage() {
       if (import.meta.client) {
         try {
-          localStorage.setItem('beruang_notifications_v4', JSON.stringify(this.notifications))
+          localStorage.setItem('beruang_notifications_v5', JSON.stringify(this.notifications))
         } catch (e) {
           console.warn('Gagal menyimpan notifikasi ke localStorage', e)
         }

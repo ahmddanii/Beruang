@@ -6,7 +6,7 @@
       :class="[
         'hidden lg:flex flex-col shrink-0 h-full z-40 select-none border-r transition-[width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-[width]',
         isCollapsed ? 'w-[72px]' : 'w-64',
-        'bg-[#FFFFFF] dark:bg-[#13161F] border-[#E2E8F0] dark:border-neutral-800/80 shadow-[1px_0_10px_rgba(0,0,0,0.02)]'
+        'bg-[#FFFFFF] dark:bg-[#13161F] border-[#E2E8F0] dark:border-neutral-800/80 shadow-none'
       ]"
     >
       <div class="flex flex-col h-full overflow-hidden">
@@ -22,7 +22,7 @@
         >
           <button
             type="button"
-            class="sidebar-toggle-btn w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-neutral-800 hover:bg-[#156374] text-[#156374] hover:text-white dark:text-neutral-300 dark:hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer border border-[#E2E8F0] dark:border-neutral-700 shadow-2xs group"
+            class="sidebar-toggle-btn w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-neutral-800 hover:bg-[#156374] text-[#156374] hover:text-white dark:text-neutral-300 dark:hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer border border-[#E2E8F0] dark:border-neutral-700 shadow-none group"
             title="Perluas Sidebar (Ctrl+B)"
             aria-label="Perluas Sidebar"
             @click="handleToggleCollapse"
@@ -68,7 +68,7 @@
           <button
             type="button"
             :class="[
-              'sidebar-toggle-btn absolute top-3 right-3 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white/90 hover:bg-[#156374] text-[#156374] hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md border border-white/60 backdrop-blur-md z-10 group',
+              'sidebar-toggle-btn absolute top-3 right-3 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white/90 hover:bg-[#156374] text-[#156374] hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-none border border-white/60 backdrop-blur-md z-10 group',
               isCollapsed ? 'opacity-0 scale-75 pointer-events-none' : 'opacity-100 scale-100'
             ]"
             title="Ciutkan Sidebar (Ctrl+B)"
@@ -118,7 +118,7 @@
                       ? 'w-11 justify-start px-0'
                       : 'w-full px-0 justify-start',
                     isActive(item.to)
-                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-none'
                       : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
                   ]"
                   @click="handleNavigate(item.to)"
@@ -174,8 +174,8 @@
           @click="$emit('closeMobile')"
         />
 
-        <!-- Slide-out Drawer Panel in Tactile Background -->
-        <div class="relative w-80 max-w-[88vw] bg-[#FFFFFF] dark:bg-[#13161F] h-full flex flex-col shadow-2xl z-10 pb-6 overflow-hidden border-r border-slate-200/80 dark:border-neutral-800">
+        <!-- Slide-out Drawer Panel in Tactile Background (NO DROP SHADOW) -->
+        <div class="relative w-80 max-w-[88vw] bg-[#FFFFFF] dark:bg-[#13161F] h-full flex flex-col shadow-none z-10 pb-6 overflow-hidden border-r border-slate-200/80 dark:border-neutral-800">
           <!-- Mobile Drawer Branding Header (Placed ABOVE Lottie animation banner) -->
           <div class="w-full h-14 shrink-0 px-4 flex items-center justify-between border-b border-slate-200/80 dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none">
             <NuxtLink
@@ -253,7 +253,7 @@
                     :class="[
                       'flex items-center gap-3.5 px-3.5 py-2.5 rounded-[10px] font-poppins text-[15px] transition-all duration-150 group border cursor-pointer',
                       isActive(item.to)
-                        ? 'bg-[#E6F4F7] dark:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] font-semibold border-[#156374]/20 shadow-2xs'
+                        ? 'bg-[#E6F4F7] dark:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] font-semibold border-[#156374]/20 shadow-none'
                         : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 border-transparent'
                     ]"
                     @click="handleNavigate(item.to)"
@@ -312,7 +312,8 @@ import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   Notification01Icon,
-  Message01Icon
+  Message01Icon,
+  Settings01Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -556,7 +557,12 @@ watch(
   }
 )
 
-const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const currentRole = computed(() => {
+  if (route.path.startsWith('/investor')) return 'INVESTOR'
+  if (route.path.startsWith('/konsultan')) return 'CONSULTANT'
+  if (route.path.startsWith('/admin')) return 'ADMIN'
+  return authStore.currentUser?.role || 'UMKM'
+})
 
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'
@@ -628,6 +634,12 @@ const navigationSections = computed<NavSection[]>(() => {
             badge: notificationStore.unreadCount > 0 ? notificationStore.unreadCount : undefined
           }
         ]
+      },
+      {
+        title: 'Preferensi',
+        items: [
+          { to: '/dashboard/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
+        ]
       }
     ]
   } else if (currentRole.value === 'CONSULTANT') {
@@ -643,14 +655,37 @@ const navigationSections = computed<NavSection[]>(() => {
         items: [
           { to: '/konsultan/alert', label: 'Peringatan', icon: Alert01Icon }
         ]
+      },
+      {
+        title: 'Preferensi',
+        items: [
+          { to: '/konsultan/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
+        ]
       }
     ]
   } else if (currentRole.value === 'INVESTOR') {
     return [
       {
         items: [
-          { to: '/investor', label: 'Katalog Usaha', icon: Store01Icon },
-          { to: '/investor/watchlist', label: 'Disimpan', icon: StarIcon }
+          { to: '/investor', label: 'Katalog', icon: Store01Icon },
+          { to: '/investor/watchlist', label: 'Portofolio Pantau', icon: StarIcon }
+        ]
+      },
+      {
+        title: 'Komunikasi',
+        items: [
+          {
+            to: '/investor/pesan',
+            label: 'Pesan',
+            icon: Message01Icon,
+            badge: chatStore.unreadCountInvestor > 0 ? chatStore.unreadCountInvestor : undefined
+          }
+        ]
+      },
+      {
+        title: 'Preferensi',
+        items: [
+          { to: '/investor/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
         ]
       }
     ]
@@ -659,9 +694,28 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/admin', label: 'Ringkasan', icon: Home03Icon },
+          { to: '/admin', label: 'Beranda', icon: Home03Icon }
+        ]
+      },
+      {
+        title: 'Pemberdayaan',
+        items: [
+          { to: '/admin/umkm', label: 'Kemitraan UMKM', icon: Store01Icon },
           { to: '/admin/penugasan', label: 'Penugasan Konsultan', icon: UserAdd01Icon },
+          { to: '/admin/sertifikasi', label: 'Sertifikasi Usaha', icon: Award01Icon }
+        ]
+      },
+      {
+        title: 'Monitoring',
+        items: [
+          { to: '/admin/investasi', label: 'Alur Investasi', icon: Coins01Icon },
           { to: '/admin/pengguna', label: 'Kelola Pengguna', icon: UserGroupIcon }
+        ]
+      },
+      {
+        title: 'Sistem',
+        items: [
+          { to: '/admin/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
         ]
       }
     ]

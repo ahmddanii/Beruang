@@ -143,7 +143,8 @@ import {
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const route = useRoute()

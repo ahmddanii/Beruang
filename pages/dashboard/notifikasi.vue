@@ -78,8 +78,8 @@
                 Total Pemberitahuan
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>Semua</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', notificationStore.roleNotifications.length > 0 ? 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ notificationStore.roleNotifications.length > 0 ? 'Semua' : 'Bersih' }}</span>
             </div>
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
@@ -117,12 +117,12 @@
                 Belum Dibaca
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', notificationStore.unreadCount > 0 ? 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
               <span>{{ notificationStore.unreadCount > 0 ? 'Perlu Cek' : 'Bersih' }}</span>
             </div>
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
-            <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-emerald-800 dark:text-emerald-400 tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
+            <span :class="['text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight', notificationStore.unreadCount > 0 ? 'text-emerald-800 dark:text-emerald-400' : 'text-neutral-900 dark:text-white']">
               {{ notificationStore.unreadCount }} Baru
             </span>
           </div>
@@ -156,8 +156,8 @@
                 Prioritas Penting
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100/90 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 shrink-0">
-              <span>Mendesak</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', priorityCount > 0 ? 'bg-rose-100/90 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ priorityCount > 0 ? 'Mendesak' : 'Normal' }}</span>
             </div>
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
@@ -195,8 +195,8 @@
                 Validasi & Kas
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>Tervalidasi</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', validasiCount > 0 ? 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ validasiCount > 0 ? 'Tervalidasi' : '0 Laporan' }}</span>
             </div>
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
@@ -298,14 +298,14 @@
         </div>
         <div class="space-y-1 max-w-sm">
           <h3 class="font-bold text-base text-neutral-900 dark:text-white">
-            Tidak ada notifikasi ditemukan
+            Belum ada notifikasi baru
           </h3>
           <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
             <span v-if="searchQuery">
               Tidak ditemukan pesan yang cocok dengan "{{ searchQuery }}". Coba gunakan kata kunci lain.
             </span>
             <span v-else>
-              Semua laporan kas dan permodalan tokomu sudah terupdate rapi. Lanjutkan aktivitas bisnis tokomu hari ini!
+              Aktivitas transaksi, catatan kas toko, serta pembaruan verifikasi konsultan pendamping tokomu akan tampil otomatis di sini.
             </span>
           </p>
         </div>

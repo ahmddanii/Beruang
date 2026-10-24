@@ -200,6 +200,19 @@ const DEFAULT_NOTIFICATIONS: AppNotification[] = [
   }
 ]
 
+function getNotificationStorageKey(): string {
+  if (typeof window === 'undefined') return 'beruang_notifications_guest'
+  try {
+    const authStore = useAuthStore()
+    if (authStore.currentUser?.id) {
+      return `beruang_notifications_${authStore.currentUser.id}`
+    }
+  } catch {
+    // ignore
+  }
+  return 'beruang_notifications_guest'
+}
+
 export const useNotificationStore = defineStore('notification', {
   state: () => ({
     notifications: [] as AppNotification[],
@@ -230,15 +243,22 @@ export const useNotificationStore = defineStore('notification', {
       if (this.isInitialized && !forceReset) return
       this.isInitialized = true
 
+      const authStore = useAuthStore()
+      const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
+
       if (import.meta.client && !forceReset) {
         try {
-          const saved = localStorage.getItem('beruang_notifications_v4')
+          const storageKey = getNotificationStorageKey()
+          const saved = localStorage.getItem(storageKey)
           if (saved) {
             const parsed = JSON.parse(saved)
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              this.notifications = parsed
-              this.fetchNotifications()
-              return
+            if (Array.isArray(parsed)) {
+              const hasDummy = parsed.some(n => String(n.id).startsWith('notif-umkm-') || String(n.id).startsWith('notif-inv-') || String(n.id).startsWith('notif-kon-'))
+              if (isDemo || (!hasDummy && parsed.length > 0)) {
+                this.notifications = parsed
+                this.fetchNotifications()
+                return
+              }
             }
           }
         } catch (e) {
@@ -246,8 +266,12 @@ export const useNotificationStore = defineStore('notification', {
         }
       }
 
-      // Default mock if none stored or forced reset
-      this.notifications = [...DEFAULT_NOTIFICATIONS]
+      // Default mock HANYA untuk demo Kopi Senja Fikri
+      if (isDemo) {
+        this.notifications = [...DEFAULT_NOTIFICATIONS]
+      } else {
+        this.notifications = []
+      }
       this.saveToStorage()
       this.fetchNotifications()
     },
@@ -255,7 +279,8 @@ export const useNotificationStore = defineStore('notification', {
     saveToStorage() {
       if (import.meta.client) {
         try {
-          localStorage.setItem('beruang_notifications_v4', JSON.stringify(this.notifications))
+          const storageKey = getNotificationStorageKey()
+          localStorage.setItem(storageKey, JSON.stringify(this.notifications))
         } catch (e) {
           console.warn('Gagal menyimpan notifikasi ke localStorage', e)
         }
@@ -267,11 +292,17 @@ export const useNotificationStore = defineStore('notification', {
      */
     async fetchNotifications() {
       try {
+        const authStore = useAuthStore()
+        const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
         const res = await useApi<any>('/notifications')
-        if (res.data) {
+        if (res?.data !== undefined) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data || (res.data as any).notifications
-          if (Array.isArray(list) && list.length > 0) {
-            this.notifications = list
+          if (Array.isArray(list)) {
+            if (isDemo) {
+              this.notifications = list.length > 0 ? list : [...DEFAULT_NOTIFICATIONS]
+            } else {
+              this.notifications = list
+            }
             this.saveToStorage()
           }
         }
@@ -331,8 +362,15 @@ export const useNotificationStore = defineStore('notification', {
     },
 
     resetToDefault() {
-      this.notifications = [...DEFAULT_NOTIFICATIONS]
+      const authStore = useAuthStore()
+      const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
+      if (isDemo) {
+        this.notifications = [...DEFAULT_NOTIFICATIONS]
+      } else {
+        this.notifications = []
+      }
       this.saveToStorage()
+      this.fetchNotifications()
     }
   }
 })

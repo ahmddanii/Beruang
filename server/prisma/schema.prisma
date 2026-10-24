@@ -70,7 +70,7 @@ model BusinessProfile {
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   brand             String
   name              String
-  ownerName         String?  @default("Fikri Setiawan")
+  ownerName         String?
   sector            String
   location          String
   city              String?  @default("Bandung")
@@ -80,16 +80,16 @@ model BusinessProfile {
   status            String   @default("ACTION_PLAN_ACTIVE") // PROFILE_INCOMPLETE, PROFILE_COMPLETE, CONSULTANT_ASSIGNED, ACTION_PLAN_ACTIVE, READY_FOR_FUNDING
   consultantId      String?
   consultant        ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
-  nextMentoring     String   @default("Kamis, 14:00 WIB")
-  nib               String?  @default("1209000123456")
-  npwp              String?  @default("81.423.891.4-429.000")
-  bankName          String?  @default("Bank Mandiri")
-  bankAccountNumber String?  @default("1300098765432")
-  bankAccountHolder String?  @default("Kopi Senja Nusantara")
-  whatsapp          String?  @default("+62 812-3456-7890")
-  instagram         String?  @default("kopisenja.nusantara")
+  nextMentoring     String?
+  nib               String?
+  npwp              String?
+  bankName          String?
+  bankAccountNumber String?
+  bankAccountHolder String?
+  whatsapp          String?
+  instagram         String?
   outletsCount      Int      @default(1)
-  employeesCount    Int      @default(10)
+  employeesCount    Int      @default(5)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 

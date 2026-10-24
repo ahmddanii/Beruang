@@ -86,8 +86,17 @@
                   Untung Bersih
                 </span>
               </div>
-              <div class="stat-card-badge badge-green">
-                <span>+12%</span>
+              <div
+                v-if="totalCalculatedOmzet > 0"
+                class="stat-card-badge badge-green"
+              >
+                <span>+{{ calculatedProfitPercent }}%</span>
+              </div>
+              <div
+                v-else
+                class="stat-card-badge badge-neutral"
+              >
+                <span>Baru</span>
               </div>
             </div>
 
@@ -234,7 +243,7 @@
                 @click="isTransactionDrawerOpen = true"
                 custom-class="shrink-0"
               >
-                Catat Kas
+                {{ totalCalculatedOmzet > 0 || calculatedOutflowAmount > 0 ? 'Catat Kas' : 'Catat Kas Pertama' }}
               </BActionButton>
             </div>
           </div>
@@ -378,16 +387,40 @@
       </div>
 
       <!-- Shadcn UI Line Chart - Linear / Bar / Area / Cashflow: Pergerakan Uang Toko -->
-      <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
-        <BShadcnLineChart
-          :data="heroFilteredRecords"
-          index="month"
-          :categories="currentHeroChartCategories"
-          :config="currentHeroChartConfig"
-          curve-type="linear"
-          :show-area="chartPreviewMode === 'area'"
-          :mode="chartPreviewMode"
-        />
+      <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-4 sm:pt-6">
+        <template v-if="heroFilteredRecords.length > 0">
+          <BShadcnLineChart
+            :data="heroFilteredRecords"
+            index="month"
+            :categories="currentHeroChartCategories"
+            :config="currentHeroChartConfig"
+            curve-type="linear"
+            :show-area="chartPreviewMode === 'area'"
+            :mode="chartPreviewMode"
+          />
+        </template>
+        <template v-else>
+          <div class="w-full h-full flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-neutral-50/60 dark:bg-neutral-900/40 border border-dashed border-neutral-200 dark:border-neutral-800">
+            <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 shadow-2xs">
+              <HugeiconsIcon :icon="Coins01Icon" :size="22" :stroke-width="1.8" />
+            </div>
+            <h3 class="text-sm sm:text-base font-poppins font-bold text-neutral-800 dark:text-neutral-200">
+              Belum Ada Catatan Transaksi Kas
+            </h3>
+            <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 max-w-md mt-1 leading-relaxed">
+              Mulai catat transaksi uang masuk atau keluar tokomu untuk melihat grafik pergerakan saldo kas riil secara otomatis.
+            </p>
+            <div class="mt-4">
+              <BActionButton
+                variant="green"
+                icon="plus"
+                @click="isTransactionDrawerOpen = true"
+              >
+                Catat Kas Pertama
+              </BActionButton>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -421,9 +454,12 @@
         <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 items-center pb-1">
           <!-- Bagian 1 (Kiri): Donut Chart & Informasi Total Kas di Bawah Kiri -->
           <div class="sm:col-span-5 flex flex-col justify-between items-center sm:items-start h-full min-h-[230px]">
-            <!-- Donut Chart Ring (Tanpa tulisan di tengah) -->
+            <!-- Donut Chart Ring -->
             <div class="relative w-40 h-40 sm:w-44 sm:h-44 my-auto mx-auto flex items-center justify-center">
               <canvas ref="donutCanvas" class="w-full h-full"></canvas>
+              <div v-if="!hasBreakdownData" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span class="text-xs font-poppins font-semibold text-neutral-400 dark:text-neutral-500">Rp 0</span>
+              </div>
             </div>
 
             <!-- Informasi Total Kas di Bagian Bawah Kiri -->
@@ -975,12 +1011,14 @@ const timeGreeting = computed(() => {
 })
 
 const ownerFirstName = computed(() => {
-  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
+  const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || (isDemo ? 'Fikri' : 'Pemilik Usaha')
   return name.split(' ')[0]
 })
 
 const umkmName = computed(() => {
-  return umkmStore.profile.name || authStore.currentUser?.businessName || 'Kopi Senja Nusantara'
+  const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+  return umkmStore.profile.name || authStore.currentUser?.businessName || (isDemo ? 'Kopi Senja Nusantara' : 'Toko Saya')
 })
 
 const umkmDescription = computed(() => {
@@ -1199,21 +1237,22 @@ async function handleSaveQuickTransaction() {
 
 // Total Riil Aliran Kas Bulan Ini dari umkmStore.financeSummary
 const financeSummary = computed(() => umkmStore.financeSummary)
+const isDemo = computed(() => authStore.currentUser?.email === 'fikri@kopisenja.id')
 
 const totalCalculatedOmzet = computed(() => {
-  return financeSummary.value?.totalIncomeMonth || 100000000
+  return Number(financeSummary.value?.totalIncomeMonth ?? (isDemo.value ? 100000000 : 0))
 })
 
 const calculatedHppAmount = computed(() => {
-  return financeSummary.value?.totalCogsMonth || 45100000
+  return Number(financeSummary.value?.totalCogsMonth ?? (isDemo.value ? 45100000 : 0))
 })
 
 const calculatedOpexAmount = computed(() => {
-  return financeSummary.value?.totalOpexMonth || 22300000
+  return Number(financeSummary.value?.totalOpexMonth ?? (isDemo.value ? 22300000 : 0))
 })
 
 const calculatedProfitAmount = computed(() => {
-  return financeSummary.value?.netProfitMonth || 32600000
+  return Number(financeSummary.value?.netProfitMonth ?? (isDemo.value ? 32600000 : 0))
 })
 
 const calculatedOutflowAmount = computed(() => {
@@ -1233,6 +1272,10 @@ const calculatedOpexPercent = computed(() => {
 const calculatedProfitPercent = computed(() => {
   if (!totalCalculatedOmzet.value) return '0.0'
   return ((calculatedProfitAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
+})
+
+const hasBreakdownData = computed(() => {
+  return calculatedHppAmount.value > 0 || calculatedOpexAmount.value > 0 || calculatedProfitAmount.value > 0
 })
 
 function formatDisplayedAmount(val: number | { value: number }) {
@@ -1270,7 +1313,7 @@ const breakdownItems = computed(() => [
 ])
 
 function highlightDonutSegment(index: number | null) {
-  if (!donutChartInstance) return
+  if (!donutChartInstance || !hasBreakdownData.value) return
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
   const mutedGrey = isDark ? '#334155' : '#CBD5E1'
   const defaultColors = ['#156374', '#50AABF', '#00AA13']
@@ -1294,22 +1337,28 @@ function initDonutChart() {
     donutChartInstance = null
   }
 
+  const hasData = hasBreakdownData.value
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const neutralColor = isDark ? '#262626' : '#E2E8F0'
+
   donutChartInstance = new Chart(donutCanvas.value, {
     type: 'doughnut',
     data: {
-      labels: ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'],
+      labels: hasData ? ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'] : ['Belum Ada Aliran Kas'],
       datasets: [
         {
-          data: [
-            calculatedHppAmount.value,
-            calculatedOpexAmount.value,
-            calculatedProfitAmount.value
-          ],
-          backgroundColor: ['#156374', '#50AABF', '#00AA13'],
+          data: hasData
+            ? [
+                calculatedHppAmount.value,
+                calculatedOpexAmount.value,
+                calculatedProfitAmount.value
+              ]
+            : [1],
+          backgroundColor: hasData ? ['#156374', '#50AABF', '#00AA13'] : [neutralColor],
           borderWidth: 0,
           hoverOffset: 0,
-          borderRadius: 6,
-          spacing: 4
+          borderRadius: hasData ? 6 : 0,
+          spacing: hasData ? 4 : 0
         }
       ]
     },
@@ -1328,6 +1377,7 @@ function initDonutChart() {
       circumference: 360,
       cutout: '68%',
       onHover: (_event: any, elements: any[]) => {
+        if (!hasBreakdownData.value) return
         if (elements && elements.length > 0) {
           const index = elements[0].index
           activeHoveredItem.value = breakdownItems.value[index] || null
@@ -1339,7 +1389,7 @@ function initDonutChart() {
       },
       plugins: {
         legend: { display: false },
-        tooltip: { enabled: false }
+        tooltip: { enabled: hasData }
       },
       animation: {
         animateRotate: true,
@@ -1352,17 +1402,23 @@ function initDonutChart() {
 
 function updateDonutChart() {
   if (!donutChartInstance) return
-  donutChartInstance.data.labels = ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
-  donutChartInstance.data.datasets[0].data = [
-    calculatedHppAmount.value,
-    calculatedOpexAmount.value,
-    calculatedProfitAmount.value
-  ]
-  donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
+  const hasData = hasBreakdownData.value
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const neutralColor = isDark ? '#262626' : '#E2E8F0'
+
+  donutChartInstance.data.labels = hasData ? ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'] : ['Belum Ada Aliran Kas']
+  donutChartInstance.data.datasets[0].data = hasData
+    ? [
+        calculatedHppAmount.value,
+        calculatedOpexAmount.value,
+        calculatedProfitAmount.value
+      ]
+    : [1]
+  donutChartInstance.data.datasets[0].backgroundColor = hasData ? ['#156374', '#50AABF', '#00AA13'] : [neutralColor]
   donutChartInstance.data.datasets[0].borderWidth = 0
   donutChartInstance.data.datasets[0].hoverOffset = 0
-  donutChartInstance.data.datasets[0].borderRadius = 6
-  donutChartInstance.data.datasets[0].spacing = 4
+  donutChartInstance.data.datasets[0].borderRadius = hasData ? 6 : 0
+  donutChartInstance.data.datasets[0].spacing = hasData ? 4 : 0
   donutChartInstance.options.circumference = 360
   donutChartInstance.options.cutout = '68%'
   donutChartInstance.update()

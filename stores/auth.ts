@@ -139,14 +139,34 @@ export const useAuthStore = defineStore('auth', {
     userAvatar: (state): string => state.currentUser?.avatar || '',
     isOnboarded: (state): boolean => {
       if (!state.isAuthenticated || !state.currentUser) return false
+      // Akun demo bawaan selalu dianggap sudah onboarded
+      const email = state.currentUser.email?.toLowerCase() || ''
+      if (
+        email === 'fikri@kopisenja.id' ||
+        email === 'maya.suryani@beruang.id' ||
+        email === 'hendro@nusantaraventures.com' ||
+        email === 'admin@beruang.id'
+      ) {
+        return true
+      }
       if (state.currentUser.onboardingCompleted) return true
-      const onboardedCookie = useCookie<string | null>('beruang_onboarded', { path: '/' })
-      if (onboardedCookie.value === 'true') return true
-      const u = state.currentUser
-      if (u.role === 'UMKM' && Boolean(u.businessProfile?.brand || (u.businessName && !u.businessName.toLowerCase().includes('kopi senja')))) return true
-      if (u.role === 'CONSULTANT' && Boolean(u.consultantProfile?.firm_name || (u.institution && !u.institution.toLowerCase().includes('suryani')))) return true
-      if (u.role === 'INVESTOR' && Boolean(u.investorProfile?.entity_name || (u.entityName && !u.entityName.toLowerCase().includes('nusantara')))) return true
+      // Auto-check jika user sudah memiliki profil usaha/kelembagaan aktif
+      const biz = state.currentUser.businessProfile
+      if (biz && (biz.brand || biz.name) && biz.status !== 'PROFILE_INCOMPLETE') return true
+      const cons = state.currentUser.consultantProfile
+      if (cons && (cons.firm_name || cons.firmName)) return true
+      const inv = state.currentUser.investorProfile
+      if (inv && (inv.firm_name || inv.firmName)) return true
       return false
+    },
+    isDemoUser: (state): boolean => {
+      const email = state.currentUser?.email?.toLowerCase() || ''
+      return (
+        email === 'fikri@kopisenja.id' ||
+        email === 'maya.suryani@beruang.id' ||
+        email === 'hendro@nusantaraventures.com' ||
+        email === 'admin@beruang.id'
+      )
     }
   },
 
@@ -570,6 +590,11 @@ export const useAuthStore = defineStore('auth', {
           try {
             localStorage.removeItem('beruang_token')
             localStorage.removeItem('beruang_onboarded')
+            localStorage.removeItem('umkm_monthly_records')
+            localStorage.removeItem('beruang_notifications_v4')
+            if (this.currentUser?.id) {
+              localStorage.removeItem(`beruang_notifications_${this.currentUser.id}`)
+            }
             sessionStorage.clear()
           } catch {
             // ignore

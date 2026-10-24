@@ -504,12 +504,22 @@ async function handleGoogleLogin() {
     loadingMessage.value = '✓ Menghubungkan akun Google...'
     try {
       await authStore.loginWithGoogle(credential)
+      await authStore.fetchMe()
       const role = authStore.currentUser?.role || authStore.role || 'UMKM'
-      const targetRoute = role === 'INVESTOR' ? '/investor' : role === 'CONSULTANT' ? '/konsultan' : '/dashboard'
-      loadingMessage.value = `✓ Berhasil masuk! Mengalihkan ke ${role}...`
-      setTimeout(() => {
-        router.push(targetRoute)
-      }, 300)
+      const isOnboarded = authStore.isOnboarded
+
+      if (!isOnboarded) {
+        loadingMessage.value = '✓ Akun Google terhubung! Mengalihkan ke pendaftaran usaha...'
+        setTimeout(() => {
+          router.push(`/onboarding?role=${role}`)
+        }, 300)
+      } else {
+        const targetRoute = role === 'INVESTOR' ? '/investor' : role === 'CONSULTANT' ? '/konsultan' : '/dashboard'
+        loadingMessage.value = `✓ Berhasil masuk! Mengalihkan ke ${role}...`
+        setTimeout(() => {
+          router.push(targetRoute)
+        }, 300)
+      }
     } catch (err: any) {
       errorMessage.value = err?.data?.message || err?.message || 'Login dengan Google gagal'
     } finally {

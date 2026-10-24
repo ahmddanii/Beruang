@@ -9,21 +9,25 @@ async function resolveBusiness(req: AuthenticatedRequest) {
   if (req.user?.businessId) {
     const b = await prisma.businessProfile.findUnique({
       where: { id: req.user.businessId },
-      include: { user: true, assessment: true, tasks: true },
+      include: { user: true, assessment: true, tasks: true, consultant: { include: { user: true } } },
     });
     if (b) return b;
   }
   if (req.user?.id) {
     const b = await prisma.businessProfile.findUnique({
       where: { userId: req.user.id },
-      include: { user: true, assessment: true, tasks: true },
+      include: { user: true, assessment: true, tasks: true, consultant: { include: { user: true } } },
     });
     if (b) return b;
   }
-  // Fallback demo
-  return prisma.businessProfile.findFirst({
-    include: { user: true, assessment: true, tasks: true },
-  });
+  // Fallback demo HANYA untuk Fikri demo akun
+  if (req.user?.email === "fikri@kopisenja.id") {
+    return prisma.businessProfile.findFirst({
+      where: { brand: "Kopi Senja Nusantara" },
+      include: { user: true, assessment: true, tasks: true, consultant: { include: { user: true } } },
+    });
+  }
+  return null;
 }
 
 /**
@@ -33,8 +37,15 @@ router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
   try {
     const biz = await resolveBusiness(req);
     if (!biz) {
-      return res.status(404).json({ success: false, message: "Profil usaha belum ditemukan." });
+      return res.status(200).json({
+        success: false,
+        needsOnboarding: true,
+        message: "Profil usaha belum dibuat. Silakan selesaikan onboarding terlebih dahulu.",
+        data: null,
+      });
     }
+
+    const consultantName = biz.consultant?.user?.name || biz.consultant?.firmName || (biz.consultantId ? "Konsultan Pendamping" : "Belum Ditugaskan");
 
     return res.json({
       success: true,
@@ -42,28 +53,29 @@ router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
         id: biz.id,
         name: biz.name,
         brand: biz.brand,
-        ownerName: biz.ownerName || biz.user?.name || "Fikri Setiawan",
+        ownerName: biz.ownerName || biz.user?.name || "Pemilik Usaha",
         ownerAvatarUrl: biz.user?.avatar || "",
-        sector: biz.sector,
-        city: biz.city,
-        location: biz.location,
-        establishedYear: 2021,
-        outletsCount: biz.outletsCount,
-        employeesCount: biz.employeesCount,
-        fundingTarget: biz.fundingTarget,
-        equityOffered: biz.equityOffered,
-        description: biz.description,
-        pitchSummary: biz.description,
+        sector: biz.sector || "",
+        city: biz.city || "",
+        location: biz.location || "",
+        establishedYear: (biz as any).establishedYear ?? (biz as any).established_year ?? null,
+        outletsCount: biz.outletsCount ?? 1,
+        employeesCount: biz.employeesCount ?? 1,
+        fundingTarget: biz.fundingTarget ?? 0,
+        equityOffered: biz.equityOffered || "",
+        description: biz.description || "",
+        pitchSummary: biz.description || "",
         status: biz.status,
-        consultantName: "Dra. Maya Suryani, M.M.",
-        nextMentoring: biz.nextMentoring,
-        nib: biz.nib,
-        npwp: biz.npwp,
-        bankName: biz.bankName,
-        bankAccountNumber: biz.bankAccountNumber,
-        bankAccountHolder: biz.bankAccountHolder,
-        whatsapp: (biz as any).whatsapp || biz.user?.phone || "+62 812-3456-7890",
-        instagram: (biz as any).instagram || "kopisenja.nusantara",
+        consultantId: biz.consultantId,
+        consultantName,
+        nextMentoring: biz.nextMentoring || "",
+        nib: biz.nib || "",
+        npwp: biz.npwp || "",
+        bankName: biz.bankName || "",
+        bankAccountNumber: biz.bankAccountNumber || "",
+        bankAccountHolder: biz.bankAccountHolder || "",
+        whatsapp: (biz as any).whatsapp || biz.user?.phone || "",
+        instagram: (biz as any).instagram || "",
       },
     });
   } catch (err: any) {
@@ -189,25 +201,24 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
     const resolvedLocation = address
       ? `${String(address).trim()}, ${city || biz.city || 'Indonesia'}`
       : city
-      ? `${String(city).trim()}, Indonesia`
-      : undefined;
+        ? `${String(city).trim()}, Indonesia`
+        : undefined;
 
     const updated = await prisma.businessProfile.update({
       where: { id: biz.id },
       data: {
         ...(resolvedBrand ? { brand: String(resolvedBrand).trim(), name: String(resolvedBrand).trim() } : {}),
         ...(resolvedOwner ? { ownerName: String(resolvedOwner).trim() } : {}),
-        ...(description ? { description: String(description).trim() } : {}),
-        ...(pitchSummary || pitch_summary ? { description: String(pitchSummary || pitch_summary).trim() } : {}),
+        ...(description !== undefined ? { description: String(description).trim() } : pitchSummary || pitch_summary ? { description: String(pitchSummary || pitch_summary).trim() } : {}),
         ...(sector ? { sector: String(sector).trim() } : {}),
         ...(city ? { city: String(city).trim() } : {}),
         ...(resolvedLocation ? { location: resolvedLocation } : {}),
-        ...(whatsapp ? { whatsapp: String(whatsapp).trim() } : {}),
-        ...(instagram ? { instagram: String(instagram).trim() } : {}),
+        ...(whatsapp !== undefined ? { whatsapp: String(whatsapp).trim() } : {}),
+        ...(instagram !== undefined ? { instagram: String(instagram).trim() } : {}),
         ...(fundingTarget != null ? { fundingTarget: parseFloat(fundingTarget) } : funding_target != null ? { fundingTarget: parseFloat(funding_target) } : {}),
         ...(equityOffered || equity_offered ? { equityOffered: String(equityOffered || equity_offered).trim() } : {}),
-        ...(nib ? { nib: String(nib).trim() } : {}),
-        ...(npwp ? { npwp: String(npwp).trim() } : {}),
+        ...(nib !== undefined ? { nib: String(nib).trim() } : {}),
+        ...(npwp !== undefined ? { npwp: String(npwp).trim() } : {}),
         ...(bankName || bank_name ? { bankName: String(bankName || bank_name).trim() } : {}),
         ...(bankAccountNumber || bank_account_number ? { bankAccountNumber: String(bankAccountNumber || bank_account_number).trim() } : {}),
         ...(bankAccountHolder || bank_account_holder ? { bankAccountHolder: String(bankAccountHolder || bank_account_holder).trim() } : {}),
@@ -298,24 +309,22 @@ router.post(
 /**
  * GET /api/umkm/assessment
  */
-router.get("/assessment", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/assessment", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const biz = await resolveBusiness(req);
-    if (!biz) {
-      return res.status(404).json({ success: false, message: "Profil belum ditemukan." });
-    }
-
-    const assessment = await prisma.assessment.findUnique({
-      where: { businessId: biz.id },
-    });
+    const assessment = biz
+      ? await prisma.assessment.findUnique({
+        where: { businessId: biz.id },
+      })
+      : null;
 
     const data = assessment || {
-      financial: 78,
-      operationsHpp: 85,
-      marketing: 64,
-      hrTeam: 75,
-      legal: 92,
-      compositeScore: 79,
+      financial: 50,
+      operationsHpp: 50,
+      marketing: 50,
+      hrTeam: 50,
+      legal: 50,
+      compositeScore: 50,
     };
 
     return res.json({
@@ -343,7 +352,7 @@ router.get("/tasks", optionalAuth, async (req: AuthenticatedRequest, res: Respon
   try {
     const biz = await resolveBusiness(req);
     if (!biz) {
-      return res.status(404).json({ success: false, message: "Profil belum ditemukan." });
+      return res.json({ success: true, data: [] });
     }
 
     const tasks = await prisma.actionPlanTask.findMany({
@@ -555,13 +564,243 @@ router.delete("/tasks/:id", optionalAuth, async (req: AuthenticatedRequest, res:
 });
 
 /**
+ * GET /api/umkm/funding-gate
+ * Mengambil status verifikasi 4 syarat gerbang kesiapan modal (Funding Gate) secara riil
+ */
+router.get("/funding-gate", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const isDemo = req.user?.email === "fikri@kopisenja.id";
+    const biz = await resolveBusiness(req);
+
+    // 1. Jika belum ada profil bisnis atau guest yang bukan demo
+    if (!biz && !isDemo) {
+      return res.json({
+        success: true,
+        data: {
+          passedCount: 0,
+          totalCount: 4,
+          isReadyForFunding: false,
+          status: "IN_PROGRESS",
+          certifiedAt: null,
+          consultantName: "Belum Ditugaskan",
+          fundingTarget: 0,
+          pendingRequestsCount: 0,
+          criteria: [
+            {
+              id: "fundamental_score",
+              title: "Skor Fundamental ≥ 75 Poin",
+              description: "Skor agregat 5 aspek (Finansial, Operasional, Pasar, Legalitas, dan Tata Kelola) telah mencapai ambang batas kelulusan minimal 75.",
+              passed: false,
+              currentValue: 0,
+              targetValue: 75,
+              statusLabel: "Capaian: 0/100 (Belum Melakukan Asesmen)",
+            },
+            {
+              id: "cash_consistency",
+              title: "Konsistensi Pelaporan Kas ≥ 3 Bulan",
+              description: "Telah mencatat dan memverifikasi laporan pergerakan uang toko secara rutin minimal 3 bulan tanpa anomali kritis.",
+              passed: false,
+              currentValue: 0,
+              targetValue: 3,
+              statusLabel: "0 Bulan Tervalidasi (Minimal 3 Bulan)",
+            },
+            {
+              id: "legal_compliance",
+              title: "Kelengkapan Legalitas Dasar",
+              description: "Nomor Induk Berusaha (NIB) berbasis risiko terdaftar dan sertifikat perizinan aktif.",
+              passed: false,
+              currentValue: "-",
+              targetValue: "NIB Aktif",
+              statusLabel: "NIB Belum Diisi / Belum Terbit",
+            },
+            {
+              id: "consultant_recommendation",
+              title: "Rekomendasi Konsultan Pendamping",
+              description: "Persetujuan resmi dari konsultan bahwa tokomu siap dihubungkan dengan sindikasi modal investor.",
+              passed: false,
+              currentValue: "Belum Ada",
+              targetValue: "Disetujui Konsultan",
+              statusLabel: "Belum Memiliki Konsultan Pendamping",
+            },
+          ],
+        },
+      });
+    }
+
+    // 2. Jika akun demo Kopi Senja Fikri Setiawan
+    if (isDemo || biz?.brand === "Kopi Senja Nusantara") {
+      return res.json({
+        success: true,
+        data: {
+          passedCount: 4,
+          totalCount: 4,
+          isReadyForFunding: true,
+          status: "READY_FOR_FUNDING",
+          certifiedAt: "18 September 2026",
+          consultantName: "Dra. Maya Suryani, M.M.",
+          fundingTarget: 250000000,
+          pendingRequestsCount: 2,
+          criteria: [
+            {
+              id: "fundamental_score",
+              title: "Skor Fundamental ≥ 75 Poin",
+              description: "Skor agregat 5 aspek (Finansial, Operasional, Pasar, Legalitas, dan Tata Kelola) telah mencapai ambang batas kelulusan minimal 75.",
+              passed: true,
+              currentValue: 82,
+              targetValue: 75,
+              statusLabel: "Capaian: 82/100 (Lolos)",
+            },
+            {
+              id: "cash_consistency",
+              title: "Konsistensi Pelaporan Kas ≥ 3 Bulan",
+              description: "Telah mencatat dan memverifikasi laporan pergerakan uang toko secara rutin minimal 3 bulan tanpa anomali kritis.",
+              passed: true,
+              currentValue: 5,
+              targetValue: 3,
+              statusLabel: "5 Bulan Berturut Tervalidasi (Lolos)",
+            },
+            {
+              id: "legal_compliance",
+              title: "Kelengkapan Legalitas Dasar",
+              description: "Nomor Induk Berusaha (NIB) berbasis risiko terdaftar dan sertifikat perizinan aktif.",
+              passed: true,
+              currentValue: "1209000123456",
+              targetValue: "NIB Aktif",
+              statusLabel: "NIB & Sertifikat Halal Terbit (Lolos)",
+            },
+            {
+              id: "consultant_recommendation",
+              title: "Rekomendasi Konsultan Pendamping",
+              description: "Persetujuan resmi dari konsultan bahwa tokomu siap dihubungkan dengan sindikasi modal investor.",
+              passed: true,
+              currentValue: "Dra. Maya Suryani, M.M.",
+              targetValue: "Disetujui Konsultan",
+              statusLabel: "Disetujui oleh Dra. Maya Suryani (Lolos)",
+            },
+          ],
+        },
+      });
+    }
+
+    // 3. Evaluasi Riil dari Database untuk UMKM Pengguna Baru / Riil
+    const businessId = biz!.id;
+
+    // Kriteria 1: Skor Fundamental ≥ 75
+    const assessment = await prisma.assessment.findUnique({
+      where: { businessId },
+    });
+    const compositeScore = assessment?.compositeScore ?? 0;
+    const isScoreVerified = Boolean(assessment?.isVerified);
+    const isScorePassed = compositeScore >= 75 && isScoreVerified;
+
+    // Kriteria 2: Konsistensi Pelaporan Kas ≥ 3 Bulan (status: VERIFIED)
+    const verifiedMonthsCount = await prisma.monthlyReport.count({
+      where: {
+        businessId,
+        status: { in: ["VERIFIED", "verified"] },
+      },
+    });
+    const isCashPassed = verifiedMonthsCount >= 3;
+
+    // Kriteria 3: Kelengkapan Legalitas Dasar (NIB minimal 8 digit)
+    const nibValue = biz!.nib?.trim() || "";
+    const isLegalPassed = nibValue.length >= 8;
+
+    // Kriteria 4: Rekomendasi Konsultan Pendamping (punya konsultan & status READY_FOR_FUNDING)
+    const consultantName = biz!.consultant?.user?.name || biz!.consultant?.firmName || "Konsultan Pendamping";
+    const hasConsultant = Boolean(biz!.consultantId);
+    const isReadyStatus = (biz as any).fundingStatus === "READY_FOR_FUNDING" || biz!.status === "READY_FOR_FUNDING";
+    const isConsultantPassed = hasConsultant && isReadyStatus;
+
+    // Permintaan Investor Menunggu
+    const pendingRequestsCount = await prisma.accessRequest.count({
+      where: {
+        businessId,
+        status: "PENDING",
+      },
+    });
+
+    const criteria = [
+      {
+        id: "fundamental_score",
+        title: "Skor Fundamental ≥ 75 Poin",
+        description: "Skor agregat 5 aspek (Finansial, Operasional, Pasar, Legalitas, dan Tata Kelola) telah mencapai ambang batas kelulusan minimal 75.",
+        passed: isScorePassed,
+        currentValue: compositeScore,
+        targetValue: 75,
+        statusLabel: isScorePassed
+          ? `Capaian: ${compositeScore}/100 (Lolos)`
+          : compositeScore > 0
+          ? `Capaian: ${compositeScore}/100 (${!isScoreVerified ? "Menunggu Audit Konsultan" : "Belum Memenuhi"})`
+          : "Capaian: 0/100 (Belum Melakukan Asesmen)",
+      },
+      {
+        id: "cash_consistency",
+        title: "Konsistensi Pelaporan Kas ≥ 3 Bulan",
+        description: "Telah mencatat dan memverifikasi laporan pergerakan uang toko secara rutin minimal 3 bulan tanpa anomali kritis.",
+        passed: isCashPassed,
+        currentValue: verifiedMonthsCount,
+        targetValue: 3,
+        statusLabel: isCashPassed
+          ? `${verifiedMonthsCount} Bulan Tervalidasi (Lolos)`
+          : `${verifiedMonthsCount} Bulan Tervalidasi (Minimal 3 Bulan)`,
+      },
+      {
+        id: "legal_compliance",
+        title: "Kelengkapan Legalitas Dasar",
+        description: "Nomor Induk Berusaha (NIB) berbasis risiko terdaftar dan sertifikat perizinan aktif.",
+        passed: isLegalPassed,
+        currentValue: nibValue || "-",
+        targetValue: "NIB Aktif",
+        statusLabel: isLegalPassed
+          ? `NIB Terdaftar (${nibValue}) (Lolos)`
+          : "NIB Belum Diisi / Belum Lengkap",
+      },
+      {
+        id: "consultant_recommendation",
+        title: "Rekomendasi Konsultan Pendamping",
+        description: "Persetujuan resmi dari konsultan bahwa tokomu siap dihubungkan dengan sindikasi modal investor.",
+        passed: isConsultantPassed,
+        currentValue: hasConsultant ? consultantName : "Belum Ada",
+        targetValue: "Disetujui Konsultan",
+        statusLabel: isConsultantPassed
+          ? `Disetujui oleh ${consultantName} (Lolos)`
+          : hasConsultant
+          ? "Menunggu Validasi Konsultan Pendamping"
+          : "Belum Memiliki Konsultan Pendamping",
+      },
+    ];
+
+    const passedCount = criteria.filter((c) => c.passed).length;
+    const isReadyForFunding = passedCount === 4;
+
+    return res.json({
+      success: true,
+      data: {
+        passedCount,
+        totalCount: 4,
+        isReadyForFunding,
+        status: isReadyForFunding ? "READY_FOR_FUNDING" : "IN_PROGRESS",
+        certifiedAt: isReadyForFunding ? biz!.updatedAt.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : null,
+        consultantName: hasConsultant ? consultantName : "Belum Ditugaskan",
+        fundingTarget: biz!.fundingTarget || 0,
+        pendingRequestsCount,
+        criteria,
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal mengevaluasi funding gate: " + err.message });
+  }
+});
+
+/**
  * GET /api/umkm/investor-requests
  */
-router.get("/investor-requests", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/investor-requests", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const biz = await resolveBusiness(req);
     if (!biz) {
-      return res.status(404).json({ success: false, message: "Profil belum ditemukan." });
+      return res.json({ success: true, data: [] });
     }
 
     const requests = await prisma.accessRequest.findMany({

@@ -112,8 +112,8 @@
                 Saldo Kas Toko
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>Sehat</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', displayedCashBalance > 0 ? 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ displayedCashBalance > 0 ? 'Sehat' : 'Baru' }}</span>
             </div>
           </div>
 
@@ -132,7 +132,7 @@
               @click="isCashDrawerOpen = true"
               custom-class="shrink-0"
             >
-              Catat Kas
+              {{ displayedCashBalance > 0 || displayedIncome > 0 ? 'Catat Kas' : 'Catat Kas Pertama' }}
             </BActionButton>
           </div>
         </div>
@@ -156,15 +156,15 @@
                 Modal Jualan
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>Hemat</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', displayedHpp > 0 ? 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ displayedHpp > 0 ? 'Hemat' : '0.0%' }}</span>
             </div>
           </div>
 
           <!-- 2. Middle Value Row: font-semibold matching Beranda -->
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              - Rp {{ displayedHpp.toLocaleString('id-ID') }}
+              {{ displayedHpp > 0 ? '- ' : '' }}Rp {{ displayedHpp.toLocaleString('id-ID') }}
             </span>
           </div>
 
@@ -198,15 +198,15 @@
                 Uang Masuk
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              <span>+9.8%</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', displayedIncome > 0 ? 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ displayedIncome > 0 ? '+9.8%' : 'Penjualan' }}</span>
             </div>
           </div>
 
           <!-- 2. Middle Value Row: font-semibold matching Beranda -->
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              + Rp {{ displayedIncome.toLocaleString('id-ID') }}
+              {{ displayedIncome > 0 ? '+ ' : '' }}Rp {{ displayedIncome.toLocaleString('id-ID') }}
             </span>
           </div>
 
@@ -240,15 +240,15 @@
                 Biaya Operasional
               </span>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100/90 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 shrink-0">
-              <span>Terkontrol</span>
+            <div :class="['inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold shrink-0', displayedOpex > 0 ? 'bg-rose-100/90 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700']">
+              <span>{{ displayedOpex > 0 ? 'Terkontrol' : 'Beban' }}</span>
             </div>
           </div>
 
           <!-- 2. Middle Value Row: font-semibold matching Beranda -->
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              - Rp {{ displayedOpex.toLocaleString('id-ID') }}
+              {{ displayedOpex > 0 ? '- ' : '' }}Rp {{ displayedOpex.toLocaleString('id-ID') }}
             </span>
           </div>
 
@@ -645,6 +645,22 @@
                   </button>
                 </td>
               </tr>
+
+              <!-- Empty State Rekap Kas Bulanan -->
+              <tr v-if="umkmStore.monthlyRecords.length === 0">
+                <td colspan="9" class="py-12 text-center text-neutral-500 dark:text-neutral-400">
+                  <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="32" class="mx-auto mb-2 text-neutral-300 dark:text-neutral-600" />
+                  <p class="font-poppins font-normal text-xs sm:text-sm">Belum ada rekap kas bulanan yang diunggah.</p>
+                  <button
+                    type="button"
+                    class="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#00AA13] hover:underline cursor-pointer"
+                    @click="openUploadMonthlyModal"
+                  >
+                    <HugeiconsIcon :icon="Upload04Icon" :size="14" />
+                    <span>Upload Laporan Kas Pertama</span>
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -775,8 +791,14 @@
         </div>
 
         <!-- Shadcn UI Line Chart - Linear / Bar / Area / Cashflow: Pergerakan Uang Toko -->
-        <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
+        <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-6 sm:pt-8 flex items-center justify-center">
+          <div v-if="heroFilteredRecords.length === 0" class="flex flex-col items-center justify-center text-center p-6 text-neutral-500 dark:text-neutral-400">
+            <HugeiconsIcon :icon="AnalyticsUpIcon" :size="32" class="mb-2 text-neutral-300 dark:text-neutral-600" />
+            <p class="font-poppins font-normal text-xs sm:text-sm">Belum ada data pergerakan kas toko untuk ditampilkan.</p>
+            <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">Data grafik akan terbentuk otomatis setelah kamu mencatat mutasi kas atau mengunggah laporan kas bulanan.</p>
+          </div>
           <BShadcnLineChart
+            v-else
             :data="heroFilteredRecords"
             index="month"
             :categories="currentHeroChartCategories"
@@ -1518,12 +1540,16 @@ import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
 
+import { useAuthStore } from '~/stores/auth'
+
 definePageMeta({
   layout: 'dashboard',
   hideHeader: true
 })
 
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+const isDemo = computed(() => authStore.currentUser?.email === 'fikri@kopisenja.id')
 
 // State Tab Switcher
 const activeTab = ref<'mutasi' | 'bulanan' | 'tren'>('mutasi')
@@ -1579,15 +1605,30 @@ function setActiveTab(tab: 'mutasi' | 'bulanan' | 'tren') {
 // Latest Monthly Record (Bulan Aktif / Rekonsiliasi Terakhir)
 const latestMonthRecord = computed(() => {
   const records = umkmStore.monthlyRecords || []
-  return records[records.length - 1] || {
-    month: 'Oktober',
-    year: 2026,
-    omzet: 100000000,
-    hpp: 45100000,
-    opex: 22300000,
-    netProfit: 32600000,
-    cashBalance: 75500000,
-    status: 'VERIFIED'
+  if (records.length > 0) {
+    return records[records.length - 1]
+  }
+  if (isDemo.value) {
+    return {
+      month: 'Oktober',
+      year: 2026,
+      omzet: 100000000,
+      hpp: 45100000,
+      opex: 22300000,
+      netProfit: 32600000,
+      cashBalance: 75500000,
+      status: 'VERIFIED'
+    }
+  }
+  return {
+    month: 'Bulan Ini',
+    year: new Date().getFullYear(),
+    omzet: 0,
+    hpp: 0,
+    opex: 0,
+    netProfit: 0,
+    cashBalance: 0,
+    status: 'BELUM_ADA_DATA'
   }
 })
 
@@ -1618,7 +1659,7 @@ const monthDropdownRef = ref<HTMLElement | null>(null)
 const monthOptions = computed(() => {
   const records = umkmStore.monthlyRecords || []
   if (!records.length) {
-    return [{ id: 'current', label: 'Sekarang', isCurrent: true, month: 'Oktober', year: 2026 }]
+    return [{ id: 'current', label: 'Sekarang', isCurrent: true, month: 'Bulan Ini', year: new Date().getFullYear() }]
   }
 
   // Reverse chronological list: Oktober 2026 (Sekarang), September 2026, ...
@@ -1655,31 +1696,46 @@ const selectedMonthRecord = computed(() => {
 })
 
 const displayedCashBalance = computed(() => {
-  if (selectedMonthId.value === 'current' && umkmStore.financeSummary?.cashBalance) {
-    return umkmStore.financeSummary.cashBalance
+  if (selectedMonthId.value === 'current') {
+    if (umkmStore.financeSummary && typeof umkmStore.financeSummary.cashBalance === 'number') {
+      return umkmStore.financeSummary.cashBalance
+    }
+    return isDemo.value ? 75500000 : 0
   }
-  return selectedMonthRecord.value.cashBalance || 75500000
+  return selectedMonthRecord.value?.cashBalance ?? (isDemo.value ? 75500000 : 0)
 })
 
 const displayedIncome = computed(() => {
   if (selectedMonthId.value === 'current') {
-    return totalIncome.value > 0 ? totalIncome.value : (umkmStore.financeSummary?.totalIncomeMonth || selectedMonthRecord.value.omzet || 0)
+    if (totalIncome.value > 0) return totalIncome.value
+    if (umkmStore.financeSummary && typeof umkmStore.financeSummary.totalIncomeMonth === 'number') {
+      return umkmStore.financeSummary.totalIncomeMonth
+    }
+    return selectedMonthRecord.value?.omzet || 0
   }
-  return selectedMonthRecord.value.omzet || 0
+  return selectedMonthRecord.value?.omzet || 0
 })
 
 const displayedHpp = computed(() => {
   if (selectedMonthId.value === 'current') {
-    return totalHppExpense.value > 0 ? totalHppExpense.value : (umkmStore.financeSummary?.totalCogsMonth || selectedMonthRecord.value.hpp || 0)
+    if (totalHppExpense.value > 0) return totalHppExpense.value
+    if (umkmStore.financeSummary && typeof umkmStore.financeSummary.totalCogsMonth === 'number') {
+      return umkmStore.financeSummary.totalCogsMonth
+    }
+    return selectedMonthRecord.value?.hpp || 0
   }
-  return selectedMonthRecord.value.hpp || 0
+  return selectedMonthRecord.value?.hpp || 0
 })
 
 const displayedOpex = computed(() => {
   if (selectedMonthId.value === 'current') {
-    return totalOpexExpense.value > 0 ? totalOpexExpense.value : (umkmStore.financeSummary?.totalOpexMonth || selectedMonthRecord.value.opex || 0)
+    if (totalOpexExpense.value > 0) return totalOpexExpense.value
+    if (umkmStore.financeSummary && typeof umkmStore.financeSummary.totalOpexMonth === 'number') {
+      return umkmStore.financeSummary.totalOpexMonth
+    }
+    return selectedMonthRecord.value?.opex || 0
   }
-  return selectedMonthRecord.value.opex || 0
+  return selectedMonthRecord.value?.opex || 0
 })
 
 // Trend Chart Filter & Type State (Matched 100% with Beranda)
@@ -1881,22 +1937,31 @@ function initDonutChart() {
     donutChartInstance = null
   }
 
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const isEmpty = calculatedPeriodHpp.value === 0 && calculatedPeriodOpex.value === 0 && calculatedPeriodProfit.value === 0
+
+  const chartData = isEmpty
+    ? [1]
+    : [calculatedPeriodHpp.value, calculatedPeriodOpex.value, calculatedPeriodProfit.value]
+  const bgColors = isEmpty
+    ? [isDark ? '#334155' : '#E2E8F0']
+    : ['#156374', '#50AABF', '#00AA13']
+  const labels = isEmpty
+    ? ['Belum Ada Aliran Kas']
+    : ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
+
   donutChartInstance = new Chart(donutCanvas.value, {
     type: 'doughnut',
     data: {
-      labels: ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'],
+      labels,
       datasets: [
         {
-          data: [
-            calculatedPeriodHpp.value,
-            calculatedPeriodOpex.value,
-            calculatedPeriodProfit.value
-          ],
-          backgroundColor: ['#156374', '#50AABF', '#00AA13'],
+          data: chartData,
+          backgroundColor: bgColors,
           borderWidth: 0,
           hoverOffset: 0,
-          borderRadius: 6,
-          spacing: 4
+          borderRadius: isEmpty ? 0 : 6,
+          spacing: isEmpty ? 0 : 4
         }
       ]
     },
@@ -1915,6 +1980,7 @@ function initDonutChart() {
       circumference: 360,
       cutout: '64%',
       onHover: (_event: any, elements: any[]) => {
+        if (isEmpty) return
         if (elements && elements.length > 0) {
           const index = elements[0].index
           activeHoveredItem.value = progresBreakdownItems.value[index] || null
@@ -1926,7 +1992,7 @@ function initDonutChart() {
       },
       plugins: {
         legend: { display: false },
-        tooltip: { enabled: false }
+        tooltip: { enabled: !isEmpty }
       },
       animation: {
         animateRotate: true,
@@ -1939,17 +2005,30 @@ function initDonutChart() {
 
 function updateDonutChart() {
   if (!donutChartInstance) return
-  donutChartInstance.data.labels = ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
-  donutChartInstance.data.datasets[0].data = [
-    calculatedPeriodHpp.value,
-    calculatedPeriodOpex.value,
-    calculatedPeriodProfit.value
-  ]
-  donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const isEmpty = calculatedPeriodHpp.value === 0 && calculatedPeriodOpex.value === 0 && calculatedPeriodProfit.value === 0
+
+  if (isEmpty) {
+    donutChartInstance.data.labels = ['Belum Ada Aliran Kas']
+    donutChartInstance.data.datasets[0].data = [1]
+    donutChartInstance.data.datasets[0].backgroundColor = [isDark ? '#334155' : '#E2E8F0']
+    donutChartInstance.data.datasets[0].borderRadius = 0
+    donutChartInstance.data.datasets[0].spacing = 0
+    donutChartInstance.options.plugins.tooltip.enabled = false
+  } else {
+    donutChartInstance.data.labels = ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
+    donutChartInstance.data.datasets[0].data = [
+      calculatedPeriodHpp.value,
+      calculatedPeriodOpex.value,
+      calculatedPeriodProfit.value
+    ]
+    donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
+    donutChartInstance.data.datasets[0].borderRadius = 8
+    donutChartInstance.data.datasets[0].spacing = 4
+    donutChartInstance.options.plugins.tooltip.enabled = true
+  }
   donutChartInstance.data.datasets[0].borderWidth = 0
   donutChartInstance.data.datasets[0].hoverOffset = 0
-  donutChartInstance.data.datasets[0].borderRadius = 8
-  donutChartInstance.data.datasets[0].spacing = 4
   donutChartInstance.options.circumference = 360
   donutChartInstance.options.cutout = '64%'
   donutChartInstance.update()
@@ -2154,9 +2233,11 @@ function handleExportPdf() {
 function handleExportPdfDirect() {
   isExportModalOpen.value = false
   showNotification('Menyiapkan berkas Buku Kas Resmi (PDF)...')
+  const storeName = umkmStore.profile.name || umkmStore.profile.brand || authStore.currentUser?.businessName || (isDemo.value ? 'Kopi Senja Nusantara' : 'Usaha Toko')
+  const ownerName = umkmStore.profile.ownerName || authStore.currentUser?.name || (isDemo.value ? 'Fikri Setiawan' : 'Pemilik Usaha')
   reportDownloader.exportBukuKasPdf({
-    storeName: umkmStore.profile.businessName || 'Kopi Senja Nusantara',
-    ownerName: umkmStore.profile.fullName || 'Fikri Setiawan',
+    storeName,
+    ownerName,
     transactions: umkmStore.dailyTransactions.map(t => ({
       date: t.date,
       title: t.title,
@@ -2182,8 +2263,9 @@ function handleExportPdfDirect() {
 function handleExportCsvDirect() {
   isExportModalOpen.value = false
   showNotification('Menyiapkan berkas CSV Excel...')
+  const storeName = umkmStore.profile.name || umkmStore.profile.brand || authStore.currentUser?.businessName || (isDemo.value ? 'Kopi Senja Nusantara' : 'Usaha Toko')
   reportDownloader.exportBukuKasCsv({
-    storeName: umkmStore.profile.businessName || 'Kopi Senja Nusantara',
+    storeName,
     transactions: umkmStore.dailyTransactions.map(t => ({
       date: t.date,
       title: t.title,
@@ -2354,7 +2436,7 @@ function handleDownloadMonthlyProof(rec: any) {
     return
   }
 
-  const store = umkmStore.profile.businessName || 'Kopi Senja Nusantara'
+  const store = umkmStore.profile.name || umkmStore.profile.brand || authStore.currentUser?.businessName || (isDemo.value ? 'Kopi Senja Nusantara' : 'Usaha Toko')
   const sections = [
     {
       heading: `1. REKAPITULASI KAS BULAN ${rec.month.toUpperCase()} ${rec.year}`,

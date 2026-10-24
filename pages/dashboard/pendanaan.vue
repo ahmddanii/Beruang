@@ -13,8 +13,9 @@
         <span>Unduh Proposal (PDF)</span>
       </button>
 
-      <!-- Primary 3D Action: Rayakan Kelulusan -->
+      <!-- Primary 3D Action: Rayakan Kelulusan jika 4/4, atau Panduan Kesiapan jika belum lolos -->
       <button
+        v-if="fundingGate.isReadyForFunding"
         type="button"
         class="btn-3d-green px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-poppins font-semibold shadow-xs cursor-pointer"
         @click="triggerCelebration"
@@ -22,6 +23,14 @@
         <HugeiconsIcon :icon="Award01Icon" :size="17" :stroke-width="2.2" />
         <span>Rayakan Kelulusan</span>
       </button>
+      <NuxtLink
+        v-else
+        to="/dashboard/rencana-aksi"
+        class="btn-pill-action group cursor-pointer inline-flex items-center gap-1.5 font-poppins font-semibold"
+      >
+        <HugeiconsIcon :icon="Award01Icon" :size="16" :stroke-width="2" />
+        <span>Perkuat Kesiapan ({{ fundingGate.passedCount }}/{{ fundingGate.totalCount }})</span>
+      </NuxtLink>
     </div>
 
     <!-- 2. Editorial Header Banner (GoPay Tactile Card) -->
@@ -32,9 +41,9 @@
 
       <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="space-y-2 max-w-2xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00AA13]/10 dark:bg-[#00AA13]/20 text-[#00AA13] dark:text-emerald-400 text-xs font-poppins font-semibold border border-[#00AA13]/20 dark:border-emerald-500/30">
-            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" :stroke-width="2" />
-            <span>Status Kemitraan: Lolos 4/4 Syarat Gate</span>
+          <div :class="['inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-poppins font-semibold border', fundingGate.isReadyForFunding ? 'bg-[#00AA13]/10 dark:bg-[#00AA13]/20 text-[#00AA13] dark:text-emerald-400 border-[#00AA13]/20 dark:border-emerald-500/30' : 'bg-amber-100/90 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60']">
+            <HugeiconsIcon :icon="fundingGate.isReadyForFunding ? CheckmarkCircle01Icon : Award01Icon" :size="14" :stroke-width="2" />
+            <span>Status Kemitraan: {{ fundingGate.isReadyForFunding ? 'Lolos 4/4 Syarat Gate' : `${fundingGate.passedCount}/${fundingGate.totalCount} Syarat Terpenuhi` }}</span>
           </div>
 
           <h1 class="text-2xl sm:text-3xl font-heading font-bold text-neutral-900 dark:text-white tracking-tight">
@@ -52,11 +61,11 @@
             <span class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Target Akses Modal</span>
             <div class="flex items-baseline gap-1 mt-0.5">
               <span class="font-poppins font-extrabold text-xl sm:text-2xl text-[#2091AA] dark:text-[#50AABF] tabular-nums">
-                Rp 250 Jt
+                {{ formatTargetModal(fundingGate.fundingTarget || umkmStore.profile.fundingTarget) }}
               </span>
             </div>
             <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
-              Ekspansi 2 Cabang
+              {{ fundingGate.isReadyForFunding ? 'Ekspansi 2 Cabang' : 'Rencana Kemitraan' }}
             </span>
           </div>
 
@@ -94,8 +103,8 @@
       >
         <HugeiconsIcon :icon="Award01Icon" :size="16" class="mr-1.5" />
         <span>Status Kesiapan (Funding Gate)</span>
-        <span class="ml-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold tabular-nums bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-          4/4 Lolos
+        <span :class="['ml-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold tabular-nums', fundingGate.isReadyForFunding ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300']">
+          {{ fundingGate.passedCount }}/{{ fundingGate.totalCount }} {{ fundingGate.isReadyForFunding ? 'Lolos' : 'Terpenuhi' }}
         </span>
       </button>
 
@@ -148,33 +157,38 @@
       <div class="card-tactile-gopay rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-neutral-200/80 dark:border-neutral-800">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           <div class="max-w-xl space-y-3">
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] dark:text-emerald-400 text-xs sm:text-sm font-poppins font-semibold border border-emerald-200 dark:border-emerald-800">
+            <div :class="['inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs sm:text-sm font-poppins font-semibold border', fundingGate.isReadyForFunding ? 'bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800']">
               <HugeiconsIcon :icon="Award01Icon" :size="15" :stroke-width="2" />
-              <span>Sertifikasi Kesiapan Resmi Beruang</span>
+              <span>{{ fundingGate.isReadyForFunding ? 'Sertifikasi Kesiapan Resmi Beruang' : 'Tahap Penataan & Evaluasi Kesiapan Modal' }}</span>
             </div>
 
             <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              Selamat! Tokomu Resmi "Ready for Funding".
+              {{ fundingGate.isReadyForFunding ? 'Selamat! Tokomu Resmi "Ready for Funding".' : `Tokomu Sedang Membangun Rekam Jejak (${fundingGate.passedCount}/${fundingGate.totalCount} Syarat Terpenuhi)` }}
             </h2>
 
             <p class="text-sm sm:text-base text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
-              Konsultan pendamping <strong>{{ umkmStore.profile.consultantName }}</strong> telah mengesahkan seluruh syarat tata kelola dan kesehatan kas tokomu. Profil terkurasi usahamu kini dapat ditemukan oleh sindikasi investor di katalog marketplace.
+              <template v-if="fundingGate.isReadyForFunding">
+                Konsultan pendamping <strong>{{ fundingGate.consultantName }}</strong> telah mengesahkan seluruh syarat tata kelola dan kesehatan kas tokomu. Profil terkurasi usahamu kini dapat ditemukan oleh sindikasi investor di katalog marketplace.
+              </template>
+              <template v-else>
+                Untuk memperoleh sertifikasi resmi "Ready for Funding" dan membuka akses pendanaan dari sindikasi investor terakreditasi, penuhi 4 syarat gerbang di bawah ini bersama konsultan pendamping tokomu.
+              </template>
             </p>
 
             <div class="pt-2 flex flex-wrap items-center gap-4 text-xs sm:text-sm font-medium font-poppins">
-              <span class="text-neutral-500">Tanggal Sertifikasi:</span>
-              <span class="text-neutral-900 dark:text-white font-bold">{{ umkmStore.profile.certifiedAt }}</span>
+              <span class="text-neutral-500">{{ fundingGate.isReadyForFunding ? 'Tanggal Sertifikasi:' : 'Status Pendampingan:' }}</span>
+              <span class="text-neutral-900 dark:text-white font-bold">{{ fundingGate.isReadyForFunding ? fundingGate.certifiedAt : fundingGate.consultantName }}</span>
               <span class="text-neutral-300 dark:text-neutral-700">•</span>
               <span class="text-neutral-500">Target Modal:</span>
               <span class="text-[#2091AA] dark:text-[#50AABF] font-bold tabular-nums">
-                Rp {{ umkmStore.profile.fundingTarget.toLocaleString('id-ID') }}
+                {{ formatTargetModal(fundingGate.fundingTarget || umkmStore.profile.fundingTarget) }}
               </span>
             </div>
           </div>
 
-          <!-- Celebration Mascot SiBeru -->
+          <!-- Celebration or Cheering Mascot SiBeru -->
           <div class="shrink-0">
-            <SiBeru state="celebrate" size="lg" />
+            <SiBeru :state="fundingGate.isReadyForFunding ? 'celebrate' : 'happy'" size="lg" />
           </div>
         </div>
       </div>
@@ -190,20 +204,32 @@
               Seluruh syarat wajib berstatus hijau agar sertifikat kesiapan tidak mengalami penangguhan.
             </p>
           </div>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-poppins font-bold bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 shrink-0">
-            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="14" :stroke-width="2" />
-            <span>4 dari 4 Terpenuhi</span>
+          <span :class="['inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-poppins font-bold border shrink-0', fundingGate.isReadyForFunding ? 'bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' : 'bg-neutral-100 text-neutral-700 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700']">
+            <HugeiconsIcon :icon="fundingGate.isReadyForFunding ? CheckmarkCircle01Icon : Award01Icon" :size="14" :stroke-width="2" />
+            <span>{{ fundingGate.passedCount }} dari {{ fundingGate.totalCount }} Terpenuhi</span>
           </span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div
-            v-for="req in criteria"
-            :key="req.title"
-            class="p-4 sm:p-5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20 flex items-start gap-3.5"
+            v-for="req in fundingGate.criteria"
+            :key="req.id || req.title"
+            :class="[
+              'p-4 sm:p-5 rounded-xl border flex items-start gap-3.5 transition-all',
+              req.passed
+                ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20'
+                : 'border-neutral-200 dark:border-neutral-800/80 bg-neutral-50/50 dark:bg-[#18191E]'
+            ]"
           >
-            <div class="w-8 h-8 rounded-lg bg-[#00AA13] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="18" :stroke-width="2.2" />
+            <div
+              :class="[
+                'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-2xs',
+                req.passed
+                  ? 'bg-[#00AA13] text-white'
+                  : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300'
+              ]"
+            >
+              <HugeiconsIcon :icon="req.passed ? CheckmarkCircle01Icon : Award01Icon" :size="18" :stroke-width="2.2" />
             </div>
             <div class="space-y-1">
               <h4 class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white">
@@ -212,7 +238,14 @@
               <p class="text-xs sm:text-[13px] text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
                 {{ req.description }}
               </p>
-              <span class="inline-block mt-2 text-xs font-poppins font-bold text-[#00AA13] dark:text-emerald-300 bg-white dark:bg-neutral-800 px-2.5 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-700">
+              <span
+                :class="[
+                  'inline-block mt-2 text-xs font-poppins font-bold px-2.5 py-0.5 rounded-md border',
+                  req.passed
+                    ? 'text-[#00AA13] dark:text-emerald-300 bg-white dark:bg-neutral-800 border-emerald-200 dark:border-emerald-700'
+                    : 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/50'
+                ]"
+              >
                 {{ req.statusLabel }}
               </span>
             </div>
@@ -285,8 +318,23 @@
         </div>
       </div>
 
+      <!-- Empty State if no requests -->
+      <div v-if="umkmStore.investorRequests.length === 0" class="card-tactile-gopay rounded-2xl p-8 sm:p-12 text-center space-y-4">
+        <div class="w-14 h-14 rounded-2xl bg-[#E6F4F7] text-[#2091AA] dark:bg-[#2091AA]/20 dark:text-[#50AABF] flex items-center justify-center mx-auto shadow-2xs">
+          <HugeiconsIcon :icon="UserGroupIcon" :size="28" :stroke-width="2.2" />
+        </div>
+        <div class="max-w-md mx-auto space-y-1">
+          <h3 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
+            Belum Ada Permintaan Akses Investor
+          </h3>
+          <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-sans leading-relaxed">
+            Permintaan akses data room privat dari sindikasi investor akan muncul di sini setelah tokomu memenuhi 4 syarat gerbang pendanaan (Funding Gate).
+          </p>
+        </div>
+      </div>
+
       <!-- Requests Cards List -->
-      <div class="space-y-4">
+      <div v-else class="space-y-4">
         <div
           v-for="req in umkmStore.investorRequests"
           :key="req.id"
@@ -686,35 +734,79 @@ const pendingRequestsCount = computed(() => {
   return umkmStore.investorRequests.filter(r => r.status === 'PENDING').length
 })
 
-const criteria = [
-  {
-    title: 'Skor Fundamental ≥ 75 Poin',
-    description: 'Skor agregat 5 aspek (Finansial, Operasional, Pasar, Legalitas, dan Tata Kelola) telah mencapai ambang batas kelulusan.',
-    statusLabel: `Capaian: ${umkmStore.overallHealthScore}/100 (Lolos)`
-  },
-  {
-    title: 'Konsistensi Pelaporan Kas ≥ 3 Bulan',
-    description: 'Telah mencatat dan memverifikasi laporan pergerakan uang toko secara rutin tanpa anomali kritis.',
-    statusLabel: '5 Bulan Berturut Tervalidasi (Lolos)'
-  },
-  {
-    title: 'Kelengkapan Legalitas Dasar',
-    description: 'Nomor Induk Berusaha (NIB) berbasis risiko terdaftar dan sertifikat izin edar aktif.',
-    statusLabel: 'NIB & Sertifikat Halal Terbit (Lolos)'
-  },
-  {
-    title: 'Rekomendasi Konsultan Pendamping',
-    description: 'Persetujuan resmi dari konsultan bahwa tokomu telah siap dihubungkan dengan sindikasi modal investor.',
-    statusLabel: 'Disetujui oleh Dra. Maya Suryani (Lolos)'
+const defaultGateData: FundingGateData = {
+  passedCount: 0,
+  totalCount: 4,
+  isReadyForFunding: false,
+  status: 'IN_PROGRESS',
+  certifiedAt: null,
+  consultantName: 'Belum Ditugaskan',
+  fundingTarget: 0,
+  pendingRequestsCount: 0,
+  criteria: [
+    {
+      id: 'fundamental_score',
+      title: 'Skor Fundamental ≥ 75 Poin',
+      description: 'Skor agregat 5 aspek (Finansial, Operasional, Pasar, Legalitas, dan Tata Kelola) telah mencapai ambang batas kelulusan.',
+      passed: false,
+      currentValue: 0,
+      targetValue: 75,
+      statusLabel: 'Capaian: 0/100 (Belum Memenuhi)'
+    },
+    {
+      id: 'cash_consistency',
+      title: 'Konsistensi Pelaporan Kas ≥ 3 Bulan',
+      description: 'Telah mencatat dan memverifikasi laporan pergerakan uang toko secara rutin tanpa anomali kritis.',
+      passed: false,
+      currentValue: 0,
+      targetValue: 3,
+      statusLabel: '0 Bulan Tervalidasi (Minimal 3 Bulan)'
+    },
+    {
+      id: 'legal_compliance',
+      title: 'Kelengkapan Legalitas Dasar',
+      description: 'Nomor Induk Berusaha (NIB) berbasis risiko terdaftar dan sertifikat izin edar aktif.',
+      passed: false,
+      currentValue: '-',
+      targetValue: 'NIB Aktif',
+      statusLabel: 'NIB Belum Diisi / Belum Terbit'
+    },
+    {
+      id: 'consultant_recommendation',
+      title: 'Rekomendasi Konsultan Pendamping',
+      description: 'Persetujuan resmi dari konsultan bahwa tokomu telah siap dihubungkan dengan sindikasi modal investor.',
+      passed: false,
+      currentValue: 'Belum Ada',
+      targetValue: 'Disetujui Konsultan',
+      statusLabel: 'Belum Memiliki Konsultan Pendamping'
+    }
+  ]
+}
+
+const fundingGate = computed<FundingGateData>(() => {
+  return umkmStore.fundingGate || defaultGateData
+})
+
+function formatTargetModal(amount: number | null | undefined): string {
+  if (!amount || amount <= 0) return 'Rp 0'
+  if (amount >= 1000000000) {
+    return `Rp ${(amount / 1000000000).toLocaleString('id-ID', { maximumFractionDigits: 1 })} M`
   }
-]
+  if (amount >= 1000000) {
+    return `Rp ${(amount / 1000000).toLocaleString('id-ID')} Jt`
+  }
+  return `Rp ${amount.toLocaleString('id-ID')}`
+}
 
 // Simulation Calculator State
 const simAmount = ref(250000000)
 const simSharePercent = ref(15)
 const simDurationYears = ref(2)
+const manualProfit = ref(25000000)
 
-const currentMonthlyProfit = 32600000
+const currentMonthlyProfit = computed(() => {
+  return umkmStore.financeSummary.netProfitMonth || manualProfit.value
+})
 
 const estimatedMonthlyShare = computed(() => {
   return Math.round(currentMonthlyProfit * (simSharePercent.value / 100))
@@ -755,10 +847,12 @@ function handleExportProposal() {
 let handleResize: (() => void) | null = null
 
 onMounted(() => {
-  // Fetch live investor requests and fundamental scores
+  // Fetch live funding gate status, investor requests, and fundamental scores
+  umkmStore.fetchFundingGate()
   umkmStore.fetchInvestorRequests()
   umkmStore.fetchAssessment()
   umkmStore.fetchProfile()
+  umkmStore.fetchFinances()
 
   if (route.query.tab === 'requests') {
     activeTab.value = 'requests'

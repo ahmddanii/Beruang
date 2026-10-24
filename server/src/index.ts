@@ -16,6 +16,7 @@ import adminRouter from "./routes/admin.js";
 import chatRouter from "./routes/chat.js";
 import notificationsRouter from "./routes/notifications.js";
 import userRouter from "./routes/user.js";
+import { optionalAuth, requireAuth } from "./middleware/auth.js";
 dotenv.config({ override: true });
 
 // Ensure DATABASE_URL is set to local sqlite if not file:
@@ -50,9 +51,9 @@ app.get("/api/health", (_req: Request, res: Response) => {
 // Mounted Routes
 app.use("/api/auth", authRouter);
 app.use("/api/onboarding", onboardingRouter);
-app.post("/api/umkm/onboarding", handleUmkmOnboarding);
-app.post("/api/consultant/onboarding", handleConsultantOnboarding);
-app.post("/api/investor/onboarding", handleInvestorOnboarding);
+app.post("/api/umkm/onboarding", requireAuth, handleUmkmOnboarding);
+app.post("/api/consultant/onboarding", requireAuth, handleConsultantOnboarding);
+app.post("/api/investor/onboarding", requireAuth, handleInvestorOnboarding);
 app.post("/api/otp/send", handleOtpSend);
 app.post("/api/otp/verify", handleOtpVerify);
 app.use("/api/finances", financesRouter);

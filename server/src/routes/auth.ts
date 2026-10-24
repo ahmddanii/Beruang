@@ -20,6 +20,24 @@ function generateToken(user: { id: string; email: string; role: string }): strin
   );
 }
 
+function computeIsOnboarded(user: any): boolean {
+  if (user.onboardingCompleted) return true;
+  if (user.role === "UMKM") {
+    return Boolean(
+      user.businessProfile &&
+      user.businessProfile.status !== "PROFILE_INCOMPLETE" &&
+      user.businessProfile.brand
+    );
+  }
+  if (user.role === "CONSULTANT") {
+    return Boolean(user.consultantProfile && user.consultantProfile.firmName);
+  }
+  if (user.role === "INVESTOR") {
+    return Boolean(user.investorProfile && user.investorProfile.firmName);
+  }
+  return false;
+}
+
 /**
  * POST /api/auth/login
  */
@@ -66,6 +84,14 @@ router.post("/login", async (req: Request, res: Response) => {
       });
     }
 
+    if (computeIsOnboarded(user) && !user.onboardingCompleted) {
+      prisma.user.update({
+        where: { id: user.id },
+        data: { onboardingCompleted: true },
+      }).catch(() => {});
+      user.onboardingCompleted = true;
+    }
+
     const token = generateToken(user);
 
     return res.json({
@@ -81,6 +107,7 @@ router.post("/login", async (req: Request, res: Response) => {
           role: user.role,
           avatar: user.avatar,
           phone: user.phone,
+          onboardingCompleted: user.onboardingCompleted,
           businessProfile: user.businessProfile,
           consultantProfile: user.consultantProfile,
           investorProfile: user.investorProfile,
@@ -145,24 +172,27 @@ router.post("/register", async (req: Request, res: Response) => {
           userId: newUser.id,
           name: bName,
           brand: bName,
-          sector: "Kuliner & F&B",
-          location: "Bandung, Jawa Barat",
-          city: "Bandung",
-          fundingTarget: 250000000,
+          ownerName: newUser.name,
+          bankAccountHolder: bName,
+          sector: "",
+          location: "",
+          city: "",
+          fundingTarget: 0,
           status: "PROFILE_INCOMPLETE",
         },
       });
 
-      // Assessment awal
+      // Assessment awal baseline UMKM baru (belum diverifikasi konsultan)
       await prisma.assessment.create({
         data: {
           businessId: bizProfile.id,
-          financial: 75,
-          operationsHpp: 80,
-          marketing: 65,
-          hrTeam: 70,
-          legal: 85,
-          compositeScore: 75,
+          financial: 55,
+          operationsHpp: 50,
+          marketing: 45,
+          hrTeam: 50,
+          legal: 60,
+          compositeScore: 52,
+          isVerified: false,
         },
       });
     }
@@ -217,6 +247,14 @@ router.get("/me", requireAuth, async (req: AuthenticatedRequest, res: Response) 
       });
     }
 
+    if (computeIsOnboarded(user) && !user.onboardingCompleted) {
+      prisma.user.update({
+        where: { id: user.id },
+        data: { onboardingCompleted: true },
+      }).catch(() => {});
+      user.onboardingCompleted = true;
+    }
+
     return res.json({
       success: true,
       data: {
@@ -227,6 +265,7 @@ router.get("/me", requireAuth, async (req: AuthenticatedRequest, res: Response) 
           role: user.role,
           avatar: user.avatar,
           phone: user.phone,
+          onboardingCompleted: user.onboardingCompleted,
           businessProfile: user.businessProfile,
           consultantProfile: user.consultantProfile,
           investorProfile: user.investorProfile,
@@ -373,67 +412,22 @@ router.post("/google", async (req: Request, res: Response) => {
         },
       });
 
-      // Inisialisasi profil sesuai role
-      if (resolvedRole === "UMKM") {
-        const defaultBiz = await prisma.businessProfile.create({
-          data: {
-            userId: user.id,
-            name: `${name} Store`,
-            brand: `${name} Store`,
-            sector: "Kuliner & F&B",
-            location: "Bandung, Jawa Barat",
-            city: "Bandung",
-            fundingTarget: 250000000,
-            status: "PROFILE_INCOMPLETE",
-          },
-        });
-        await prisma.assessment.create({
-          data: {
-            businessId: defaultBiz.id,
-            financial: 75,
-            operationsHpp: 80,
-            marketing: 65,
-            hrTeam: 70,
-            legal: 85,
-            compositeScore: 75,
-          },
-        });
-        user = (await prisma.user.findUnique({
-          where: { id: user.id },
-          include: { businessProfile: true, consultantProfile: true, investorProfile: true },
-        })) as any;
-      } else if (resolvedRole === "CONSULTANT") {
-        await prisma.consultantProfile.create({
-          data: {
-            userId: user.id,
-            firmName: `${name} Advisory Partner`,
-            specialization: "Keuangan & Audit Biaya",
-            isCertified: true,
-          },
-        });
-        user = (await prisma.user.findUnique({
-          where: { id: user.id },
-          include: { businessProfile: true, consultantProfile: true, investorProfile: true },
-        })) as any;
-      } else if (resolvedRole === "INVESTOR") {
-        await prisma.investorProfile.create({
-          data: {
-            userId: user.id,
-            firmName: `${name} Investment Syndicate`,
-            commitmentCapital: "Rp 500 Juta",
-          },
-        });
-        user = (await prisma.user.findUnique({
-          where: { id: user.id },
-          include: { businessProfile: true, consultantProfile: true, investorProfile: true },
-        })) as any;
-      }
+      // Biarkan profil kosong agar pengguna baru menyelesaikan tahap onboarding secara terpandu
+      // (Memasukkan nama usaha sendiri & memilih konsultan pendamping)
     } else if (avatar && !user.avatar) {
       user = await prisma.user.update({
         where: { id: user.id },
         data: { avatar },
         include: { businessProfile: true, consultantProfile: true, investorProfile: true },
       });
+    }
+
+    if (computeIsOnboarded(user) && !user.onboardingCompleted) {
+      prisma.user.update({
+        where: { id: user.id },
+        data: { onboardingCompleted: true },
+      }).catch(() => {});
+      user.onboardingCompleted = true;
     }
 
     const jwtToken = generateToken(user);
@@ -616,22 +610,23 @@ export async function handleOtpVerify(req: Request, res: Response) {
             userId: user.id,
             name: `${user.name} Store`,
             brand: `${user.name} Store`,
-            sector: "Kuliner & F&B",
-            location: "Bandung, Jawa Barat",
-            city: "Bandung",
-            fundingTarget: 250000000,
+            sector: "",
+            location: "",
+            city: "",
+            fundingTarget: 0,
             status: "PROFILE_INCOMPLETE",
           },
         });
         await prisma.assessment.create({
           data: {
             businessId: defaultBiz.id,
-            financial: 75,
-            operationsHpp: 80,
-            marketing: 65,
-            hrTeam: 70,
-            legal: 85,
-            compositeScore: 75,
+            financial: 55,
+            operationsHpp: 50,
+            marketing: 45,
+            hrTeam: 50,
+            legal: 60,
+            compositeScore: 52,
+            isVerified: false,
           },
         });
         user = (await prisma.user.findUnique({

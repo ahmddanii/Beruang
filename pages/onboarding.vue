@@ -380,17 +380,91 @@
             </div>
           </div>
 
-          <!-- Step 4: Ringkasan & Konfirmasi -->
+          <!-- Step 4: Pilih Konsultan Pendamping -->
+          <div v-else-if="currentStep === 4" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Award01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  4. Pilih Konsultan Pendamping
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Pilih konsultan bisnis bersertifikasi resmi BNSP yang akan mengaudit & memandu usahamu hingga siap didanai investor.
+                </p>
+              </div>
+            </div>
+
+            <!-- List Konsultan Cards -->
+            <div class="space-y-3 text-left">
+              <div
+                v-for="c in consultantList"
+                :key="c.id"
+                :class="[
+                  'p-4 rounded-2xl border transition-all duration-150 cursor-pointer relative',
+                  formUmkm.consultantId === c.id
+                    ? 'border-[#0081A0] bg-[#0081A0]/5 dark:bg-[#0081A0]/10 shadow-sm ring-1 ring-[#0081A0]'
+                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600'
+                ]"
+                @click="selectConsultant(c)"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-[#0081A0]/10 text-[#0081A0] font-bold text-sm flex items-center justify-center shrink-0 border border-[#0081A0]/20">
+                      {{ c.name.charAt(0) }}
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <h4 class="font-bold text-sm text-neutral-900 dark:text-white">
+                          {{ c.name }}
+                        </h4>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold border border-emerald-200 dark:border-emerald-800">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          BNSP Terakreditasi
+                        </span>
+                      </div>
+                      <p class="text-xs text-neutral-600 dark:text-neutral-300 font-medium mt-0.5">
+                        {{ c.firmName }} • {{ c.city }}
+                      </p>
+                      <p class="text-[11px] text-[#0081A0] dark:text-[#2091AA] font-semibold mt-1">
+                        Spesialisasi: {{ c.specialization }} (Pengalaman {{ c.experience }})
+                      </p>
+                      <p class="text-[11px] text-neutral-500 mt-1 line-clamp-2">
+                        "{{ c.bio }}"
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Radio Circle Indicator -->
+                  <div class="shrink-0 mt-1">
+                    <div
+                      :class="[
+                        'w-5 h-5 rounded-full border flex items-center justify-center transition-all',
+                        formUmkm.consultantId === c.id
+                          ? 'border-[#0081A0] bg-[#0081A0] text-white'
+                          : 'border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800'
+                      ]"
+                    >
+                      <span v-if="formUmkm.consultantId === c.id" class="w-2 h-2 rounded-full bg-white"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5: Ringkasan & Konfirmasi -->
           <div v-else class="space-y-4">
             <div class="text-center mb-3">
               <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
               </div>
               <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
-                Profil Anda Sudah Siap!
+                Profil Usaha Anda Siap Dibuat!
               </h3>
               <p class="text-xs text-neutral-500 max-w-sm mx-auto">
-                Periksa kembali ringkasan usahamu sebelum masuk ke beranda toko.
+                Periksa kembali ringkasan usahamu dan konsultan pendamping sebelum masuk ke beranda tokomu.
               </p>
             </div>
 
@@ -411,10 +485,16 @@
                 <span class="text-neutral-500">Penjualan / Bulan:</span>
                 <span class="font-semibold tabular-nums">Rp {{ (formUmkm.monthlyRevenue || 0).toLocaleString('id-ID') }}</span>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
                 <span class="text-neutral-500">Kebutuhan Modal:</span>
                 <span class="font-bold text-primary-600 tabular-nums">
                   Rp {{ (formUmkm.targetFunding || 0).toLocaleString('id-ID') }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-500">Konsultan Pembimbing:</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">
+                  {{ formUmkm.consultantName || 'Dra. Maya Suryani, M.M.' }}
                 </span>
               </div>
             </div>
@@ -943,6 +1023,7 @@ const stepsUmkm = [
   { title: 'Data Usaha' },
   { title: 'Lokasi Usaha' },
   { title: 'Keuangan' },
+  { title: 'Pilih Konsultan' },
   { title: 'Selesai' }
 ]
 
@@ -1002,6 +1083,93 @@ export interface UmkmFormData {
   targetFunding: number | null
   equityOffered: string
   description: string
+  consultantId: string
+  consultantName: string
+}
+
+export interface ConsultantOption {
+  id: string
+  name: string
+  title: string
+  firmName: string
+  specialization: string
+  bnspLicense: string
+  city: string
+  experience: string
+  avatar: string
+  activeClientsCount: number
+  maxClients: number
+  isCertified: boolean
+  bio: string
+}
+
+const consultantList = ref<ConsultantOption[]>([
+  {
+    id: 'cons-prof-01',
+    name: 'Dra. Maya Suryani, M.M.',
+    title: 'Konsultan Ahli Keuangan & Audit UMKM',
+    firmName: 'Suryani Consulting & Advisory',
+    specialization: 'F&B, Keuangan & Standardisasi Operasional',
+    bnspLicense: 'BNSP-KM-2026-9812',
+    city: 'Bandung',
+    experience: '8 Tahun',
+    avatar: '',
+    activeClientsCount: 8,
+    maxClients: 10,
+    isCertified: true,
+    bio: 'Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.'
+  },
+  {
+    id: 'cons-prof-02',
+    name: 'Bambang Sudarsono, S.E.',
+    title: 'Konsultan Rantai Pasok & Agroindustri',
+    firmName: 'Sudarsono Supply Chain Advisory',
+    specialization: 'Agro & Rantai Pasok',
+    bnspLicense: 'BNSP-KM-2026-7731',
+    city: 'Surabaya',
+    experience: '10 Tahun',
+    avatar: '',
+    activeClientsCount: 6,
+    maxClients: 10,
+    isCertified: true,
+    bio: 'Ahli restrukturisasi vendor dan sistem pergudangan untuk produsen dan ritel modern binaan daerah.'
+  },
+  {
+    id: 'cons-prof-03',
+    name: 'Dr. Hendra Gunawan',
+    title: 'Konsultan Pajak & Kepatuhan Legalitas',
+    firmName: 'Gunawan Tax & Legal Partners',
+    specialization: 'Kepatuhan Pajak & Hukum',
+    bnspLicense: 'BNSP-KM-2026-4412',
+    city: 'Jakarta',
+    experience: '12 Tahun',
+    avatar: '',
+    activeClientsCount: 5,
+    maxClients: 10,
+    isCertified: true,
+    bio: 'Spesialis perizinan NIB, BPOM, Sertifikasi Halal, dan optimalisasi pajak badan usaha UMKM siap investasi.'
+  }
+])
+
+const loadingConsultants = ref(false)
+
+async function fetchConsultants() {
+  loadingConsultants.value = true
+  try {
+    const res = await useApi<ConsultantOption[]>('/consultant/list')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      consultantList.value = res.data
+    }
+  } catch (err) {
+    console.warn('Menggunakan daftar konsultan default:', err)
+  } finally {
+    loadingConsultants.value = false
+  }
+}
+
+function selectConsultant(c: ConsultantOption) {
+  formUmkm.value.consultantId = c.id
+  formUmkm.value.consultantName = c.name
 }
 
 const umkmSectors = [
@@ -1048,7 +1216,9 @@ const formUmkm = ref<UmkmFormData>({
   hppPercentage: 40,
   targetFunding: null,
   equityOffered: '10% Bagi Hasil',
-  description: ''
+  description: '',
+  consultantId: 'cons-prof-01',
+  consultantName: 'Dra. Maya Suryani, M.M.'
 })
 
 const displayMonthlyRevenue = ref(
@@ -1211,6 +1381,9 @@ const isCurrentStepValid = computed(() => {
         formUmkm.value.equityOffered?.trim()
       )
     }
+    if (currentStep.value === 4) {
+      return Boolean(formUmkm.value.consultantId)
+    }
     return true
   } else if (activeRole.value === 'CONSULTANT') {
     if (currentStep.value === 1) {
@@ -1289,6 +1462,7 @@ function syncAuthToForms() {
 
 onMounted(() => {
   syncAuthToForms()
+  fetchConsultants()
 })
 
 // Pastikan sinkron bila data user terhidrasi secara asinkron dari Google OAuth / Cookie
@@ -1321,9 +1495,10 @@ async function finishOnboarding() {
         ? new Date(formUmkm.value.startDate).getFullYear()
         : (formUmkm.value.year || 2021)
 
+      let savedBizId = authStore.currentUser?.businessId
       // Kirim ke backend live API jika endpoint tersedia
       try {
-        await useApi('/umkm/onboarding', {
+        const res = await useApi<any>('/umkm/onboarding', {
           method: 'POST',
           body: {
             brand: formUmkm.value.name,
@@ -1337,9 +1512,15 @@ async function finishOnboarding() {
             equity_offered: formUmkm.value.equityOffered || '10% Bagi Hasil',
             description: formUmkm.value.description || 'UMKM terkurasi Beruang',
             nib: formUmkm.value.nib,
-            npwp: formUmkm.value.npwp
+            npwp: formUmkm.value.npwp,
+            consultant_id: formUmkm.value.consultantId,
+            consultant_name: formUmkm.value.consultantName
           }
         })
+        if (res?.data?.id) {
+          savedBizId = res.data.id
+        }
+        await authStore.fetchMe()
       } catch (err: any) {
         console.warn('Gagal simpan onboarding ke live API, tetap lanjut ke dashboard:', err?.message)
       }
@@ -1363,6 +1544,8 @@ async function finishOnboarding() {
       umkmStore.profile.npwp = formUmkm.value.npwp
       umkmStore.profile.equity_offered = formUmkm.value.equityOffered
       umkmStore.profile.description = formUmkm.value.description
+      umkmStore.profile.consultantId = formUmkm.value.consultantId
+      umkmStore.profile.consultantName = formUmkm.value.consultantName
       umkmStore.profile.fundingStatus = 'READY_FOR_FUNDING'
 
       // Simpan ke authStore
@@ -1381,9 +1564,12 @@ async function finishOnboarding() {
         npwp: formUmkm.value.npwp,
         equityOffered: formUmkm.value.equityOffered,
         description: formUmkm.value.description,
+        consultantId: formUmkm.value.consultantId,
+        consultantName: formUmkm.value.consultantName,
         onboardingCompleted: true,
+        businessId: savedBizId,
         businessProfile: {
-          id: `bp-${authStore.currentUser?.id || 1}`,
+          id: savedBizId || `bp-${authStore.currentUser?.id || 1}`,
           user_id: Number(authStore.currentUser?.id || 1),
           brand: formUmkm.value.name,
           owner_name: formUmkm.value.owner,

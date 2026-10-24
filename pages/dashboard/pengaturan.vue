@@ -404,19 +404,21 @@ async function fetchProfileData() {
       const u = res.data
       const bp = u.businessProfile || {}
 
-      form.value.brand = bp.brand || bp.name || umkmStore.profile.name || 'Kopi Senja Nusantara'
-      form.value.ownerName = bp.ownerName || u.name || 'Fikri Setiawan'
-      form.value.sector = bp.sector || umkmStore.profile.sector || 'F&B (Coffee & Drinks)'
-      form.value.city = bp.city || umkmStore.profile.city || 'Bandung'
-      form.value.outletsCount = bp.outletsCount || 3
-      form.value.employeesCount = bp.employeesCount || 10
+      const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+
+      form.value.brand = bp.brand || bp.name || umkmStore.profile.name || (isDemo ? 'Kopi Senja Nusantara' : '')
+      form.value.ownerName = bp.ownerName || u.name || (isDemo ? 'Fikri Setiawan' : '')
+      form.value.sector = bp.sector || umkmStore.profile.sector || (isDemo ? 'F&B (Coffee & Drinks)' : 'F&B (Kuliner)')
+      form.value.city = bp.city || umkmStore.profile.city || (isDemo ? 'Bandung' : '')
+      form.value.outletsCount = bp.outletsCount || 1
+      form.value.employeesCount = bp.employeesCount || 1
       form.value.pitchSummary = bp.description || umkmStore.profile.pitchSummary || ''
-      form.value.phone = u.phone || '0812-9876-5432'
-      form.value.bankName = bp.bankName || 'Bank Central Asia'
-      form.value.bankAccountNumber = bp.bankAccountNumber || '8001234567'
+      form.value.phone = u.phone || (isDemo ? '0812-9876-5432' : '')
+      form.value.bankName = bp.bankName || (isDemo ? 'Bank Central Asia' : '')
+      form.value.bankAccountNumber = bp.bankAccountNumber || (isDemo ? '8001234567' : '')
       form.value.bankAccountHolder = bp.bankAccountHolder || form.value.ownerName
-      form.value.nib = bp.nib || '1209000123456'
-      form.value.npwp = bp.npwp || '81.423.891.4-429.000'
+      form.value.nib = bp.nib || (isDemo ? '1209000123456' : '')
+      form.value.npwp = bp.npwp || (isDemo ? '81.423.891.4-429.000' : '')
 
       if (u.preferences) {
         preferences.value.notifyMonthlyReport = u.preferences.notifyMonthlyReport ?? true
@@ -425,10 +427,11 @@ async function fetchProfileData() {
     }
   } catch (err: any) {
     console.warn('Gagal memuat profil live, memuat fallback lokal:', err?.message)
-    form.value.brand = umkmStore.profile.name || 'Kopi Senja Nusantara'
-    form.value.ownerName = umkmStore.profile.ownerName || 'Fikri Setiawan'
-    form.value.sector = umkmStore.profile.sector || 'F&B (Coffee & Drinks)'
-    form.value.city = umkmStore.profile.city || 'Bandung'
+    const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+    form.value.brand = umkmStore.profile.name || (isDemo ? 'Kopi Senja Nusantara' : '')
+    form.value.ownerName = umkmStore.profile.ownerName || (isDemo ? 'Fikri Setiawan' : '')
+    form.value.sector = umkmStore.profile.sector || (isDemo ? 'F&B (Coffee & Drinks)' : 'F&B (Kuliner)')
+    form.value.city = umkmStore.profile.city || (isDemo ? 'Bandung' : '')
     form.value.pitchSummary = umkmStore.profile.pitchSummary || ''
   }
 }

@@ -26,11 +26,15 @@ async function resolveBusinessId(req: AuthenticatedRequest): Promise<string | nu
     });
     if (biz) return biz.id;
   }
-  // Fallback demo untuk Fikri Kopi Senja
-  const defaultBiz = await prisma.businessProfile.findFirst({
-    select: { id: true },
-  });
-  return defaultBiz?.id || null;
+  // Fallback demo HANYA untuk Fikri demo akun
+  if (req.user?.email === "fikri@kopisenja.id") {
+    const defaultBiz = await prisma.businessProfile.findFirst({
+      where: { brand: "Kopi Senja Nusantara" },
+      select: { id: true },
+    });
+    return defaultBiz?.id || null;
+  }
+  return null;
 }
 
 /**
@@ -41,9 +45,17 @@ router.get("/summary", optionalAuth, async (req: AuthenticatedRequest, res: Resp
   try {
     const businessId = await resolveBusinessId(req);
     if (!businessId) {
-      return res.status(404).json({
-        success: false,
-        message: "Profil bisnis tidak ditemukan.",
+      return res.json({
+        success: true,
+        data: {
+          cashBalance: 0,
+          totalIncomeMonth: 0,
+          totalCogsMonth: 0,
+          totalOpexMonth: 0,
+          netProfitMonth: 0,
+          marginPercentage: 0,
+          marginStatus: "BELUM_ADA_DATA",
+        },
       });
     }
 
@@ -70,21 +82,24 @@ router.get("/summary", optionalAuth, async (req: AuthenticatedRequest, res: Resp
       else if (cat === "OPERASIONAL" || cat === "OPEX") totalOpex += tx.amount;
     });
 
-    const baseOmzet = latestMonthly?.omzet ?? 52400000;
-    const baseHpp = latestMonthly?.hpp ?? 28820000;
-    const baseOpex = latestMonthly?.opex ?? 9150000;
-    const baseCash = latestMonthly?.cashBalance ?? 48500000;
+    const isKopiSenja = businessId === "biz-kopisenja-01";
+    const baseOmzet = latestMonthly?.omzet ?? (isKopiSenja ? 52400000 : 0);
+    const baseHpp = latestMonthly?.hpp ?? (isKopiSenja ? 28820000 : 0);
+    const baseOpex = latestMonthly?.opex ?? (isKopiSenja ? 9150000 : 0);
+    const baseCash = latestMonthly?.cashBalance ?? (isKopiSenja ? 48500000 : 0);
 
     const omzet = baseOmzet + totalIncome;
     const hpp = baseHpp + totalCogs;
     const opex = baseOpex + totalOpex;
     const netProfit = omzet - hpp - opex;
     const cashBalance = baseCash + (totalIncome - totalCogs - totalOpex);
-    const marginPercentage = omzet > 0 ? Number(((netProfit / omzet) * 100).toFixed(1)) : 27.5;
+    const marginPercentage = omzet > 0 ? Number(((netProfit / omzet) * 100).toFixed(1)) : 0;
 
-    let marginStatus: "Sehat" | "Waspada" | "Kritis" = "Sehat";
-    if (marginPercentage < 15) marginStatus = "Kritis";
-    else if (marginPercentage < 25) marginStatus = "Waspada";
+    let marginStatus: "Sehat" | "Waspada" | "Kritis" | "Belum Ada Data" = omzet > 0 ? "Sehat" : "Belum Ada Data";
+    if (omzet > 0) {
+      if (marginPercentage < 15) marginStatus = "Kritis";
+      else if (marginPercentage < 25) marginStatus = "Waspada";
+    }
 
     return res.json({
       success: true,
@@ -116,9 +131,10 @@ router.get("/daily", optionalAuth, async (req: AuthenticatedRequest, res: Respon
   try {
     const businessId = await resolveBusinessId(req);
     if (!businessId) {
-      return res.status(404).json({
-        success: false,
-        message: "Profil bisnis tidak ditemukan.",
+      return res.json({
+        success: true,
+        message: "Belum ada transaksi kas.",
+        data: [],
       });
     }
 
@@ -308,9 +324,10 @@ router.get("/monthly", optionalAuth, async (req: AuthenticatedRequest, res: Resp
   try {
     const businessId = await resolveBusinessId(req);
     if (!businessId) {
-      return res.status(404).json({
-        success: false,
-        message: "Profil bisnis tidak ditemukan.",
+      return res.json({
+        success: true,
+        message: "Belum ada laporan kas bulanan.",
+        data: [],
       });
     }
 
@@ -385,7 +402,8 @@ router.post(
         where: { businessId },
         orderBy: [{ year: "desc" }, { submittedAt: "desc" }],
       });
-      const previousBalance = lastReport?.cashBalance ?? 40000000;
+      const isKopiSenja = businessId === "biz-kopisenja-01";
+      const previousBalance = lastReport?.cashBalance ?? (isKopiSenja ? 40000000 : 0);
       const cashBalance = previousBalance + netProfit;
 
       let docName = proofDocumentName || (req.file ? req.file.originalname : `Laporan_${month}_${numYear}.pdf`);

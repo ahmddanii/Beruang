@@ -24,6 +24,56 @@ async function resolveConsultantId(req: AuthenticatedRequest): Promise<string | 
 }
 
 /**
+ * GET /api/consultant/list
+ * Daftar seluruh konsultan terverifikasi untuk dipilih UMKM saat onboarding
+ */
+router.get("/list", optionalAuth, async (_req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultants = await prisma.consultantProfile.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatar: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    const formatted = consultants.map((c) => ({
+      id: c.id,
+      userId: c.userId,
+      name: c.user?.name || c.firmName,
+      title: c.title || "Konsultan Ahli Keuangan & Audit UMKM",
+      firmName: c.firmName,
+      specialization: c.specialization || "F&B, Keuangan & Standardisasi Operasional",
+      bnspLicense: c.bnspLicense || "BNSP-KM-2026-9812",
+      city: c.city || "Bandung",
+      experience: c.experience || "8 Tahun",
+      avatar: c.user?.avatar || "",
+      activeClientsCount: c.activeClientsCount,
+      maxClients: c.maxClients,
+      isCertified: c.isCertified,
+      bio: c.bio || "Konsultan pendamping bisnis bersertifikasi resmi BNSP.",
+    }));
+
+    return res.json({
+      success: true,
+      message: "Daftar konsultan berhasil diambil.",
+      data: formatted,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Gagal mengambil daftar konsultan: " + err.message,
+    });
+  }
+});
+
+/**
  * GET /api/consultant/stats & /api/consultant/dashboard
  * Ringkasan statistik dashboard konsultan
  */

@@ -108,6 +108,7 @@ router.get("/me", optionalAuth, async (req: AuthenticatedRequest, res: Response)
       role: user.role,
       avatar: user.avatar,
       verified: user.verified,
+      onboardingCompleted: user.onboardingCompleted,
       businessProfile: user.businessProfile,
       consultantProfile: user.consultantProfile,
       investorProfile: user.investorProfile,

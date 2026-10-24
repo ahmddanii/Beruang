@@ -50,24 +50,38 @@ function formatNotification(n: any) {
 
 /**
  * GET /api/notifications
- * Mengambil daftar notifikasi terpadu untuk peran pengguna yang aktif
+ * Mengambil daftar notifikasi terpadu untuk pengguna yang aktif
  */
 router.get("/", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userRole = req.user?.role || "UMKM";
     const userId = req.user?.id;
+    const isDemo = req.user?.email === "fikri@kopisenja.id";
 
-    // Filter berdasarkan roleTarget atau penerima khusus userId
-    const notifications = await prisma.notification.findMany({
-      where: {
-        OR: [
-          { roleTarget: userRole },
-          { roleTarget: "ALL" },
-          ...(userId ? [{ userId }] : []),
-        ],
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    let notifications: any[] = [];
+    if (userId) {
+      if (isDemo) {
+        // Akun demo Fikri Setiawan (Kopi Senja Nusantara)
+        notifications = await prisma.notification.findMany({
+          where: {
+            OR: [
+              { userId },
+              { roleTarget: userRole }
+            ]
+          },
+          orderBy: { createdAt: "desc" },
+        });
+      } else {
+        // Akun pengguna riil: HANYA notifikasi miliknya sendiri secara ketat
+        notifications = await prisma.notification.findMany({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+        });
+      }
+    } else {
+      // Guest atau belum login: KOSONGKAN notifikasi (tidak membocorkan data dummy)
+      notifications = [];
+    }
 
     return res.json({
       success: true,
@@ -116,15 +130,23 @@ router.patch("/:id/read", optionalAuth, async (req: AuthenticatedRequest, res: R
  */
 router.patch("/mark-all-read", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
     const userRole = req.user?.role || "UMKM";
 
-    await prisma.notification.updateMany({
-      where: {
-        OR: [{ roleTarget: userRole }, { roleTarget: "ALL" }],
-        isRead: false,
-      },
-      data: { isRead: true },
-    });
+    if (userId) {
+      await prisma.notification.updateMany({
+        where: { userId, isRead: false },
+        data: { isRead: true },
+      });
+    } else {
+      await prisma.notification.updateMany({
+        where: {
+          OR: [{ roleTarget: userRole }, { roleTarget: "ALL" }],
+          isRead: false,
+        },
+        data: { isRead: true },
+      });
+    }
 
     return res.json({
       success: true,

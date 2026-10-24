@@ -5,23 +5,11 @@ import { optionalAuth, requireAuth, AuthenticatedRequest } from "../middleware/a
 const router = Router();
 
 /**
- * Helper untuk mendapatkan ID user berdasarkan role atau token
+ * Helper untuk mendapatkan ID user terotentikasi
  */
-async function resolveUserByRole(req: AuthenticatedRequest, role: "UMKM" | "CONSULTANT" | "INVESTOR"): Promise<string> {
+async function resolveUserByRole(req: AuthenticatedRequest): Promise<string> {
   if (req.user?.id) return req.user.id;
-
-  const emailMap = {
-    UMKM: "fikri@kopisenja.id",
-    CONSULTANT: "maya.suryani@beruang.id",
-    INVESTOR: "hendro@nusantaraventures.com",
-  };
-
-  const defaultUser = await prisma.user.findFirst({
-    where: { email: emailMap[role] },
-    select: { id: true },
-  });
-
-  return defaultUser?.id || (role === "UMKM" ? "usr-umkm-01" : role === "CONSULTANT" ? "usr-cons-01" : "usr-inv-01");
+  throw new Error("UNAUTHORIZED");
 }
 
 /**
@@ -30,24 +18,33 @@ async function resolveUserByRole(req: AuthenticatedRequest, role: "UMKM" | "CONS
  */
 async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
   try {
-    const userId = await resolveUserByRole(req, "UMKM");
+    if (!req.user?.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Sesi otentikasi tidak ditemukan atau telah kedaluwarsa. Silakan masuk kembali.",
+      });
+    }
+
+    const userId = req.user.id;
     const b = req.body;
 
     const brand = b.brand || b.name || "Usaha Baru";
-    const ownerName = b.owner_name || b.owner || b.name || "Pemilik Usaha";
+    const ownerName = b.owner_name || b.owner || b.name || req.user.name || "Pemilik Usaha";
     const sector = b.sector || "F&B (Kuliner)";
     const city = b.city || "Bandung";
-    const establishedYear = Number(b.established_year || b.year) || 2021;
+    const establishedYear = Number(b.established_year || b.year) || new Date().getFullYear();
     const outletsCount = Number(b.outlets_count || b.outlets) || 1;
-    const employeesCount = Number(b.employees_count || b.employees) || 5;
-    const fundingTarget = Number(b.funding_target || b.fundingTarget) || 250000000;
-    const equityOffered = b.equity_offered || b.equityOffered || "12% Bagi Hasil";
-    const description = b.description || "UMKM terkurasi dengan komitmen tata kelola kas tervalidasi.";
-    const nib = b.nib || "1209000123456";
-    const npwp = b.npwp || "81.423.891.4-429.000";
-    const bankName = b.bank_name || b.bankName || "Bank Mandiri";
-    const bankAccountNumber = b.bank_account_number || b.bankAccountNumber || "1300098765432";
+    const employeesCount = Number(b.employees_count || b.employees) || 1;
+    const fundingTarget = Number(b.funding_target || b.fundingTarget) || 0;
+    const equityOffered = b.equity_offered || b.equityOffered || "";
+    const description = b.description ? String(b.description).trim() : "";
+    const nib = b.nib ? String(b.nib).trim() : null;
+    const npwp = b.npwp ? String(b.npwp).trim() : null;
+    const bankName = b.bank_name || b.bankName || null;
+    const bankAccountNumber = b.bank_account_number || b.bankAccountNumber || null;
     const bankAccountHolder = b.bank_account_holder || b.bankAccountHolder || brand;
+
+    const consultantId = b.consultant_id || b.consultantId || null;
 
     // 1. Update user
     await prisma.user.update({
@@ -79,7 +76,8 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
         bankAccountHolder,
         outletsCount,
         employeesCount,
-        status: "ACTION_PLAN_ACTIVE",
+        consultantId: consultantId || undefined,
+        status: consultantId ? "CONSULTANT_ASSIGNED" : "ACTION_PLAN_ACTIVE",
       },
       create: {
         userId,
@@ -99,11 +97,35 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
         bankAccountHolder,
         outletsCount,
         employeesCount,
-        status: "ACTION_PLAN_ACTIVE",
+        consultantId: consultantId || undefined,
+        status: consultantId ? "CONSULTANT_ASSIGNED" : "ACTION_PLAN_ACTIVE",
       },
     });
 
-    // 3. Pastikan assessment radar awal terpasang
+    // 3. Jika konsultan dipilih, buat relasi assignment dan increment klien aktif
+    if (consultantId) {
+      const existingAssignment = await prisma.consultantAssignment.findFirst({
+        where: { businessId: profile.id, consultantId },
+      });
+
+      if (!existingAssignment) {
+        await prisma.consultantAssignment.create({
+          data: {
+            consultantId,
+            businessId: profile.id,
+            slaDays: 7,
+            notes: `Pendampingan bisnis dimulai resmi pasca-onboarding oleh ${ownerName}.`,
+          },
+        });
+
+        await prisma.consultantProfile.update({
+          where: { id: consultantId },
+          data: { activeClientsCount: { increment: 1 } },
+        }).catch(() => {});
+      }
+    }
+
+    // 4. Pastikan assessment radar awal terpasang
     const existingAssessment = await prisma.assessment.findUnique({
       where: { businessId: profile.id },
     });
@@ -112,15 +134,54 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
       await prisma.assessment.create({
         data: {
           businessId: profile.id,
-          financial: 78,
-          operationsHpp: 82,
-          marketing: 68,
-          hrTeam: 74,
-          legal: 88,
-          compositeScore: 78,
+          financial: 55,
+          operationsHpp: 50,
+          marketing: 45,
+          hrTeam: 50,
+          legal: 60,
+          compositeScore: 52,
           isVerified: false,
-          consultantNotes: "Onboarding awal tuntas, siap pendampingan kurasi.",
+          consultantNotes: "Asesmen baseline awal tokomu. Jadwalkan audit 5 aspek bersama konsultan pembimbing untuk memperkuat kesiapan modal usahamu.",
         },
+      });
+    }
+
+    // 5. Buat 3 langkah rencana aksi (Action Plan) awal untuk UMKM baru
+    const tasksCount = await prisma.actionPlanTask.count({
+      where: { businessId: profile.id },
+    });
+
+    if (tasksCount === 0) {
+      await prisma.actionPlanTask.createMany({
+        data: [
+          {
+            businessId: profile.id,
+            title: "Lengkapi Profil Usaha & Unggah Foto Toko",
+            category: "Tata Kelola",
+            dueDate: "3 Hari ke Depan",
+            status: "TODO",
+            completed: false,
+            consultantFeedback: "Profil usaha yang lengkap memperkuat kepercayaan investor.",
+          },
+          {
+            businessId: profile.id,
+            title: "Catat Pemasukan & Pengeluaran Kas Pertama",
+            category: "Finansial",
+            dueDate: "Minggu Ini",
+            status: "TODO",
+            completed: false,
+            consultantFeedback: "Mulai biasakan mencatat seluruh uang masuk dan modal bahan harian.",
+          },
+          {
+            businessId: profile.id,
+            title: "Jadwalkan Sesi Perdana Bersama Konsultan Pendamping",
+            category: "Pendampingan",
+            dueDate: "1 Minggu ke Depan",
+            status: "TODO",
+            completed: false,
+            consultantFeedback: "Konsultasikan target efisiensi HPP dan standarisasi kesiapan tokomu.",
+          },
+        ],
       });
     }
 
@@ -138,7 +199,7 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
   }
 }
 
-router.post("/umkm", optionalAuth, handleUmkmOnboarding);
+router.post("/umkm", requireAuth, handleUmkmOnboarding);
 
 /**
  * POST /api/onboarding/consultant
@@ -146,10 +207,17 @@ router.post("/umkm", optionalAuth, handleUmkmOnboarding);
  */
 async function handleConsultantOnboarding(req: AuthenticatedRequest, res: Response) {
   try {
-    const userId = await resolveUserByRole(req, "CONSULTANT");
+    if (!req.user?.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Sesi otentikasi tidak ditemukan atau telah kedaluwarsa. Silakan masuk kembali.",
+      });
+    }
+
+    const userId = req.user.id;
     const b = req.body;
 
-    const name = b.name || "Dra. Maya Suryani, M.M.";
+    const name = b.name || req.user.name || "Dra. Maya Suryani, M.M.";
     const firmName = b.institution || b.firmName || b.businessName || "Suryani Consulting & Advisory";
     const bnspLicense = b.bnspLicense || b.bnsp_license || "BNSP-KM-2026-9812";
     const specialization = b.specialization || "F&B, Keuangan & Standardisasi Operasional";
@@ -206,7 +274,7 @@ async function handleConsultantOnboarding(req: AuthenticatedRequest, res: Respon
   }
 }
 
-router.post("/consultant", optionalAuth, handleConsultantOnboarding);
+router.post("/consultant", requireAuth, handleConsultantOnboarding);
 
 /**
  * POST /api/onboarding/investor
@@ -214,10 +282,17 @@ router.post("/consultant", optionalAuth, handleConsultantOnboarding);
  */
 async function handleInvestorOnboarding(req: AuthenticatedRequest, res: Response) {
   try {
-    const userId = await resolveUserByRole(req, "INVESTOR");
+    if (!req.user?.id) {
+      return res.status(401).json({
+        success: false,
+        message: "Sesi otentikasi tidak ditemukan atau telah kedaluwarsa. Silakan masuk kembali.",
+      });
+    }
+
+    const userId = req.user.id;
     const b = req.body;
 
-    const name = b.name || "Hendro Wicaksono";
+    const name = b.name || req.user.name || "Hendro Wicaksono";
     const firmName = b.entityName || b.firmName || b.businessName || "Nusantara Impact Angel Syndicate";
     const commitmentCapital = b.ticketRange || b.commitmentCapital || "Rp 1.5 Miliar";
     const investorType = b.investorType || "Angel Syndicate";
@@ -273,15 +348,15 @@ async function handleInvestorOnboarding(req: AuthenticatedRequest, res: Response
   }
 }
 
-router.post("/investor", optionalAuth, handleInvestorOnboarding);
+router.post("/investor", requireAuth, handleInvestorOnboarding);
 
 /**
  * GET /api/onboarding/status
  * Cek status onboarding user saat ini
  */
-router.get("/status", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/status", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.user?.id || (await resolveUserByRole(req, "UMKM"));
+    const userId = req.user!.id;
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {

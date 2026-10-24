@@ -54,7 +54,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
           <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-              {{ formProfile.name || 'Kopi Senja Nusantara' }}
+              {{ formProfile.name || 'Nama Usaha Belum Diisi' }}
             </h2>
             <BVerifiedBadge />
           </div>
@@ -74,7 +74,7 @@
 
         <!-- Headline / Tagline Bio -->
         <p class="text-sm sm:text-base font-poppins text-neutral-600 dark:text-neutral-300 leading-relaxed max-w-4xl">
-          {{ formProfile.description || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.' }}
+          {{ formProfile.description || 'Belum ada deskripsi usaha. Lengkapi formulir di bawah untuk menambahkan proposisi nilai tokomu.' }}
         </p>
 
         <!-- Metadata Pills using Reusable BBadge -->
@@ -305,8 +305,8 @@
                 <span class="text-xs font-poppins font-semibold text-neutral-800 dark:text-neutral-200">
                   Nomor Induk Berusaha (NIB OSS RBA)
                 </span>
-                <BBadge variant="success" size="sm" pill dot>
-                  Terdaftar OSS
+                <BBadge :variant="formProfile.nib ? 'success' : 'neutral'" size="sm" pill :dot="Boolean(formProfile.nib)">
+                  {{ formProfile.nib ? 'Terdaftar OSS' : 'Belum Terdata' }}
                 </BBadge>
               </div>
               <input
@@ -326,8 +326,8 @@
                 <span class="text-xs font-poppins font-semibold text-neutral-800 dark:text-neutral-200">
                   Nomor Pokok Wajib Pajak (NPWP Usaha)
                 </span>
-                <BBadge variant="success" size="sm" pill dot>
-                  Valid Pajak
+                <BBadge :variant="formProfile.npwp ? 'success' : 'neutral'" size="sm" pill :dot="Boolean(formProfile.npwp)">
+                  {{ formProfile.npwp ? 'Valid Pajak' : 'Belum Terdata' }}
                 </BBadge>
               </div>
               <input
@@ -347,12 +347,18 @@
                 <span class="text-xs font-poppins font-semibold text-neutral-800 dark:text-neutral-200">
                   Sertifikasi Halal (BPJPH / MUI)
                 </span>
-                <BBadge variant="success" size="sm" pill>
-                  ID321100019283
+                <BBadge :variant="formProfile.halal ? 'success' : 'neutral'" size="sm" pill>
+                  {{ formProfile.halal ? 'Tersertifikasi' : 'Belum Terdata' }}
                 </BBadge>
               </div>
-              <p class="text-xs font-poppins text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                Wajib bagi seluruh gerai F&B di Indonesia. Memastikan seluruh bahan baku kopi, gula aren, dan susu tersertifikasi halal resmi.
+              <input
+                v-model="formProfile.halal"
+                type="text"
+                class="input-tactile-gopay tabular-nums"
+                placeholder="Nomor Sertifikat Halal BPJPH (Opsional)"
+              />
+              <p class="text-[11px] font-poppins text-neutral-400">
+                Penting bagi sektor kuliner & F&B untuk menjamin kepatuhan bahan baku bagi konsumen.
               </p>
             </div>
 
@@ -362,12 +368,18 @@
                 <span class="text-xs font-poppins font-semibold text-neutral-800 dark:text-neutral-200">
                   Sertifikat Hak Merek (DJKI)
                 </span>
-                <BBadge variant="primary" size="sm" pill>
-                  IPT20250918290
+                <BBadge :variant="formProfile.haki ? 'primary' : 'neutral'" size="sm" pill>
+                  {{ formProfile.haki ? 'Terdaftar' : 'Belum Terdata' }}
                 </BBadge>
               </div>
-              <p class="text-xs font-poppins text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                Melindungi merek dagang "Kopi Senja" di Kelas 30 & 43 agar nilai valuasi brand aman saat menerima investasi sindikasi.
+              <input
+                v-model="formProfile.haki"
+                type="text"
+                class="input-tactile-gopay tabular-nums"
+                placeholder="Nomor Pendaftaran Merek DJKI (Opsional)"
+              />
+              <p class="text-[11px] font-poppins text-neutral-400">
+                Melindungi merek dagang dan logo usaha agar valuasi brand terlindungi saat menerima pendanaan.
               </p>
             </div>
           </div>
@@ -395,12 +407,34 @@
             </BActionButton>
           </div>
 
-          <!-- Product Cards Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Product Cards Grid / Empty State -->
+          <div v-if="featuredProducts.length === 0" class="py-10 px-4 text-center rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-900/30 space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-[#0081A0]/10 text-[#0081A0] flex items-center justify-center mx-auto">
+              <HugeiconsIcon :icon="Store01Icon" :size="24" :stroke-width="1.75" />
+            </div>
+            <div class="max-w-md mx-auto space-y-1">
+              <h4 class="text-sm font-poppins font-bold text-neutral-800 dark:text-neutral-200">
+                Belum Ada Produk Unggulan
+              </h4>
+              <p class="text-xs text-neutral-500 font-poppins">
+                Tambahkan lini produk andalan atau menu terlaris tokomu untuk menarik perhatian calon investor.
+              </p>
+            </div>
+            <button
+              type="button"
+              class="btn-3d-blue px-4 py-2 text-xs font-poppins font-bold shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+              @click="openAddProductModal"
+            >
+              <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="15" :stroke-width="2.2" />
+              <span>Tambah Produk Pertama</span>
+            </button>
+          </div>
+
+          <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div
               v-for="prod in featuredProducts"
               :key="prod.id"
-              class="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/40 dark:bg-neutral-900/40 overflow-hidden flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200"
+              class="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/40 dark:bg-neutral-900/40 overflow-hidden flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 relative group"
             >
               <!-- Product Image -->
               <div class="relative h-32 w-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
@@ -414,6 +448,14 @@
                     {{ prod.categoryBadge }}
                   </BBadge>
                 </div>
+                <button
+                  type="button"
+                  class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-sm text-neutral-400 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer shadow-xs opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  title="Hapus Produk"
+                  @click.stop="removeProduct(prod.id)"
+                >
+                  <HugeiconsIcon :icon="Delete02Icon" :size="13" />
+                </button>
               </div>
 
               <!-- Product Details -->
@@ -1188,30 +1230,38 @@ function formatNumber(val: number): string {
 
 // Owner First Name
 const ownerFirstName = computed(() => {
-  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
+  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || (isDemo.value ? 'Fikri' : 'Pengguna')
   return name.split(' ')[0]
 })
 
-// Profile Form State
+// Profile Form State: Data Kopi Senja HANYA berlaku untuk akun demo Fikri
+const isDemo = computed(() => {
+  return authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
+})
+
 const formProfile = reactive({
-  name: umkmStore.profile.name || 'Kopi Senja Nusantara',
-  ownerName: umkmStore.profile.ownerName || 'Fikri Setiawan',
-  sector: umkmStore.profile.sector || 'Kuliner & Minuman (F&B)',
-  city: umkmStore.profile.city || 'Bandung, Jawa Barat',
-  establishedYear: umkmStore.profile.establishedYear || 2021,
-  outletsCount: umkmStore.profile.outletsCount || 3,
-  employeesCount: umkmStore.profile.employeesCount || 14,
-  fundingTarget: umkmStore.profile.fundingTarget || 250000000,
-  description: umkmStore.profile.description || umkmStore.profile.pitchSummary || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
-  nib: umkmStore.profile.nib || '1209000123456',
-  npwp: umkmStore.profile.npwp || '81.423.891.4-429.000'
+  name: umkmStore.profile.name || authStore.currentUser?.businessName || (isDemo.value ? 'Kopi Senja Nusantara' : ''),
+  ownerName: umkmStore.profile.ownerName || authStore.currentUser?.name || (isDemo.value ? 'Fikri Setiawan' : ''),
+  sector: umkmStore.profile.sector || (isDemo.value ? 'Kuliner & Minuman (F&B)' : 'F&B (Kuliner)'),
+  city: umkmStore.profile.city || (isDemo.value ? 'Bandung, Jawa Barat' : ''),
+  establishedYear: umkmStore.profile.establishedYear || (isDemo.value ? 2021 : new Date().getFullYear()),
+  outletsCount: umkmStore.profile.outletsCount || 1,
+  employeesCount: umkmStore.profile.employeesCount || 1,
+  fundingTarget: umkmStore.profile.fundingTarget || 0,
+  description: (isDemo.value && !umkmStore.profile.description)
+    ? 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.'
+    : (umkmStore.profile.description || ''),
+  nib: (isDemo.value && !umkmStore.profile.nib) ? '1209000123456' : (umkmStore.profile.nib || ''),
+  npwp: (isDemo.value && !umkmStore.profile.npwp) ? '81.423.891.4-429.000' : (umkmStore.profile.npwp || ''),
+  halal: (isDemo.value && !(umkmStore.profile as any)?.halal) ? 'ID321100019283' : ((umkmStore.profile as any)?.halal || ''),
+  haki: (isDemo.value && !(umkmStore.profile as any)?.haki) ? 'IPT20250918290' : ((umkmStore.profile as any)?.haki || '')
 })
 
 // Store Contacts State
 const storeContacts = reactive({
-  whatsapp: '+62 812-3456-7890',
-  instagram: 'kopisenja.nusantara',
-  address: 'Jl. LLRE Martadinata (Riau) No. 45, Bandung'
+  whatsapp: (umkmStore.profile as any)?.whatsapp || authStore.currentUser?.phone || (isDemo.value ? '+62 812-3456-7890' : ''),
+  instagram: (umkmStore.profile as any)?.instagram || (isDemo.value ? 'kopisenja.nusantara' : ''),
+  address: (umkmStore.profile as any)?.address || umkmStore.profile.city || (isDemo.value ? 'Jl. LLRE Martadinata (Riau) No. 45, Bandung' : '')
 })
 
 // Sector Custom Choice
@@ -1264,7 +1314,7 @@ export interface FeaturedProduct {
   imageUrl?: string
 }
 
-const featuredProducts = ref<FeaturedProduct[]>([
+const DEMO_PRODUCTS: FeaturedProduct[] = [
   {
     id: 'prod-1',
     name: 'Kopi Susu Senja Aren 1L',
@@ -1295,7 +1345,9 @@ const featuredProducts = ref<FeaturedProduct[]>([
     description: 'Ekstrak seduh dingin 18 jam dengan sirup vanila organik & susu krim segar.',
     imageUrl: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=350&auto=format&fit=crop&q=80'
   }
-])
+]
+
+const featuredProducts = ref<FeaturedProduct[]>([])
 
 const isAddProductModalOpen = ref(false)
 const newProductForm = reactive({
@@ -1366,7 +1418,8 @@ async function removeProduct(id: string) {
 function saveProductsToStorage() {
   if (typeof window !== 'undefined') {
     try {
-      localStorage.setItem('umkm_featured_products', JSON.stringify(featuredProducts.value))
+      const storageKey = `umkm_featured_products_${authStore.currentUser?.id || 'guest'}`
+      localStorage.setItem(storageKey, JSON.stringify(featuredProducts.value))
     } catch (e) {
       // ignore
     }
@@ -1374,13 +1427,37 @@ function saveProductsToStorage() {
 }
 
 async function initProductsFromStorage() {
+  const isDemoUser = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
+  const storageKey = `umkm_featured_products_${authStore.currentUser?.id || 'guest'}`
+
+  // Jika bukan akun demo, bersihkan key produk warisan/legacy demo
+  if (!isDemoUser && typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('umkm_featured_products')
+      localStorage.removeItem('umkm_featured_products_guest')
+      const legacySaved = localStorage.getItem(storageKey)
+      if (legacySaved && (legacySaved.includes('Kopi Susu Senja') || legacySaved.includes('prod-1') || legacySaved.includes('Signature Espresso'))) {
+        localStorage.removeItem(storageKey)
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
   if (typeof window !== 'undefined') {
     try {
-      const saved = localStorage.getItem('umkm_featured_products')
+      const saved = localStorage.getItem(storageKey)
       if (saved) {
         const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          featuredProducts.value = parsed
+        if (Array.isArray(parsed)) {
+          // Validasi agar akun non-demo tidak memuat produk kopi senja
+          if (!isDemoUser && parsed.some((p: any) => p.name?.toLowerCase().includes('kopi susu senja') || p.id === 'prod-1')) {
+            featuredProducts.value = []
+            localStorage.removeItem(storageKey)
+          } else {
+            featuredProducts.value = parsed
+            return
+          }
         }
       }
     } catch (e) {
@@ -1390,19 +1467,33 @@ async function initProductsFromStorage() {
 
   try {
     const res = await useApi<any[]>('/umkm/products')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-      featuredProducts.value = res.data
-      saveProductsToStorage()
+    if (res.data && Array.isArray(res.data)) {
+      if (res.data.length > 0) {
+        featuredProducts.value = res.data
+        saveProductsToStorage()
+        return
+      } else if (!isDemoUser) {
+        featuredProducts.value = []
+        saveProductsToStorage()
+        return
+      }
     }
   } catch (err: any) {
     console.warn('Gagal memuat produk dari database backend:', err?.message)
+  }
+
+  if (isDemoUser) {
+    featuredProducts.value = [...DEMO_PRODUCTS]
+  } else {
+    featuredProducts.value = []
   }
 }
 
 function saveContactsToStorage() {
   if (typeof window !== 'undefined') {
     try {
-      localStorage.setItem('umkm_contacts', JSON.stringify(storeContacts))
+      const storageKey = `umkm_contacts_${authStore.currentUser?.id || 'guest'}`
+      localStorage.setItem(storageKey, JSON.stringify(storeContacts))
     } catch (e) {
       // ignore
     }
@@ -1412,17 +1503,22 @@ function saveContactsToStorage() {
 function initContactsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const saved = localStorage.getItem('umkm_contacts')
+      const isDemoUser = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
+      const storageKey = `umkm_contacts_${authStore.currentUser?.id || 'guest'}`
+      const saved = localStorage.getItem(storageKey)
       if (saved) {
         const parsed = JSON.parse(saved)
         Object.assign(storeContacts, parsed)
+      } else if (!isDemoUser) {
+        storeContacts.whatsapp = (umkmStore.profile as any)?.whatsapp || authStore.currentUser?.phone || ''
+        storeContacts.instagram = (umkmStore.profile as any)?.instagram || ''
+        storeContacts.address = (umkmStore.profile as any)?.address || umkmStore.profile.city || ''
       }
     } catch (e) {
       // ignore
     }
   }
 }
-
 // Legal Documents (Data Room)
 export interface LegalDocItem {
   id: string
@@ -1438,19 +1534,47 @@ export interface LegalDocItem {
   } | null
 }
 
-const legalDocuments = ref<LegalDocItem[]>([
+const DEMO_DOC_FILES: Record<string, { name: string; size: string; uploadedAt: string; isVerified: boolean }> = {
+  sku: {
+    name: 'SKU_Kopi_Senja_Nusantara_2026.pdf',
+    size: '1.4 MB',
+    uploadedAt: '12 Oktober 2026',
+    isVerified: true
+  },
+  akta: {
+    name: 'Akta_Notaris_PT_Senja_Berkah_Abadi.pdf',
+    size: '3.2 MB',
+    uploadedAt: '15 September 2026',
+    isVerified: true
+  },
+  kemenkumham: {
+    name: 'SK_Kemenkumham_AHU_0029182_2024.pdf',
+    size: '1.1 MB',
+    uploadedAt: '18 September 2026',
+    isVerified: true
+  },
+  halal: {
+    name: 'Sertifikat_Halal_BPJPH_ID321100019283.pdf',
+    size: '2.5 MB',
+    uploadedAt: '20 Agustus 2026',
+    isVerified: true
+  },
+  haki: {
+    name: 'HAKI_DJKI_Merek_KopiSenja_IPT2025.pdf',
+    size: '1.8 MB',
+    uploadedAt: '05 Juli 2026',
+    isVerified: true
+  }
+}
+
+const LEGAL_DOC_TEMPLATES: LegalDocItem[] = [
   {
     id: 'sku',
     title: 'Surat Keterangan Usaha (SKU)',
     subtitle: 'Surat Keterangan Usaha resmi dari kelurahan/kecamatan setempat yang menerangkan kepemilikan unit usaha aktif.',
     categoryBadge: 'Wajib UMKM',
     requirementNote: 'Syarat dasar kelayakan operasional usaha',
-    file: {
-      name: 'SKU_Kopi_Senja_Nusantara_2026.pdf',
-      size: '1.4 MB',
-      uploadedAt: '12 Oktober 2026',
-      isVerified: true
-    }
+    file: null
   },
   {
     id: 'akta',
@@ -1458,12 +1582,7 @@ const legalDocuments = ref<LegalDocItem[]>([
     subtitle: 'Dokumen autentik pendirian badan usaha (PT Perorangan, PT, CV, atau Firma) yang disahkan oleh Notaris.',
     categoryBadge: 'Badan Usaha / PT / CV',
     requirementNote: 'Bukti legalitas pendirian entitas bisnis resmi',
-    file: {
-      name: 'Akta_Notaris_PT_Senja_Berkah_Abadi.pdf',
-      size: '3.2 MB',
-      uploadedAt: '15 September 2026',
-      isVerified: true
-    }
+    file: null
   },
   {
     id: 'kemenkumham',
@@ -1471,12 +1590,7 @@ const legalDocuments = ref<LegalDocItem[]>([
     subtitle: 'Surat Keputusan Pengesahan Badan Hukum resmi dari Kementerian Hukum dan HAM Republik Indonesia.',
     categoryBadge: 'Pengesahan Hukum',
     requirementNote: 'Terdaftar resmi di database Administrasi Hukum Umum (AHU)',
-    file: {
-      name: 'SK_Kemenkumham_AHU_0029182_2024.pdf',
-      size: '1.1 MB',
-      uploadedAt: '18 September 2026',
-      isVerified: true
-    }
+    file: null
   },
   {
     id: 'halal',
@@ -1484,12 +1598,7 @@ const legalDocuments = ref<LegalDocItem[]>([
     subtitle: 'Sertifikasi jaminan produk halal resmi dari BPJPH Kementerian Agama (diperlukan jika produk makanan atau minuman/FnB).',
     categoryBadge: 'Khusus FnB / Kuliner',
     requirementNote: 'Wajib kepatuhan sektor FnB konsumen muslim',
-    file: {
-      name: 'Sertifikat_Halal_BPJPH_ID321100019283.pdf',
-      size: '2.5 MB',
-      uploadedAt: '20 Agustus 2026',
-      isVerified: true
-    }
+    file: null
   },
   {
     id: 'pirt',
@@ -1505,12 +1614,7 @@ const legalDocuments = ref<LegalDocItem[]>([
     subtitle: 'Surat pendaftaran merek dagang atau logo usaha melalui DJKI (Direktorat Jenderal Kekayaan Intelektual) untuk melindungi identitas brand.',
     categoryBadge: 'Perlindungan Brand',
     requirementNote: 'Mencegah plagiarisme dan mengunci valuasi brand',
-    file: {
-      name: 'HAKI_DJKI_Merek_KopiSenja_IPT2025.pdf',
-      size: '1.8 MB',
-      uploadedAt: '05 Juli 2026',
-      isVerified: true
-    }
+    file: null
   },
   {
     id: 'bpom',
@@ -1520,7 +1624,14 @@ const legalDocuments = ref<LegalDocItem[]>([
     requirementNote: 'Standar regulasi peredaran skala manufaktur/pabrikasi',
     file: null
   }
-])
+]
+
+const legalDocuments = ref<LegalDocItem[]>(
+  LEGAL_DOC_TEMPLATES.map(t => ({
+    ...t,
+    file: isDemo.value && DEMO_DOC_FILES[t.id] ? { ...DEMO_DOC_FILES[t.id] } : null
+  }))
+)
 
 const uploadedDocsCount = computed(() => {
   return legalDocuments.value.filter(doc => doc.file !== null).length
@@ -1638,7 +1749,8 @@ async function removeDocument(docId: string) {
 function saveDocsToStorage() {
   if (typeof window !== 'undefined') {
     try {
-      localStorage.setItem('umkm_data_room_docs', JSON.stringify(legalDocuments.value))
+      const storageKey = `umkm_data_room_docs_${authStore.currentUser?.id || 'guest'}`
+      localStorage.setItem(storageKey, JSON.stringify(legalDocuments.value))
     } catch (e) {
       // ignore
     }
@@ -1646,13 +1758,52 @@ function saveDocsToStorage() {
 }
 
 async function initDocsFromStorage() {
+  const isDemoUser = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
+  const storageKey = `umkm_data_room_docs_${authStore.currentUser?.id || 'guest'}`
+
+  // Jika bukan akun demo, bersihkan dokumen demo Kopi Senja dari localStorage
+  if (!isDemoUser && typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('umkm_data_room_docs')
+      localStorage.removeItem('umkm_data_room_docs_guest')
+      const legacySaved = localStorage.getItem(storageKey)
+      if (legacySaved && (legacySaved.includes('Kopi_Senja') || legacySaved.includes('Senja_Berkah_Abadi') || legacySaved.includes('AHU_0029182'))) {
+        localStorage.removeItem(storageKey)
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  // Inisialisasi awal
+  legalDocuments.value = LEGAL_DOC_TEMPLATES.map(t => ({
+    ...t,
+    file: isDemoUser && DEMO_DOC_FILES[t.id] ? { ...DEMO_DOC_FILES[t.id] } : null
+  }))
+
   if (typeof window !== 'undefined') {
     try {
-      const saved = localStorage.getItem('umkm_data_room_docs')
+      const saved = localStorage.getItem(storageKey)
       if (saved) {
         const parsed = JSON.parse(saved)
         if (Array.isArray(parsed) && parsed.length > 0) {
-          legalDocuments.value = parsed
+          parsed.forEach((storedDoc: any) => {
+            const match = legalDocuments.value.find(d => d.id === storedDoc.id)
+            if (match && storedDoc.file) {
+              // Jika user bukan akun demo Fikri, tolak berkas demo bawaan Kopi Senja
+              if (!isDemoUser && (
+                storedDoc.file.name?.includes('Kopi_Senja') ||
+                storedDoc.file.name?.includes('Senja_Berkah') ||
+                storedDoc.file.name?.includes('AHU_0029182') ||
+                storedDoc.file.name?.includes('ID321100019283') ||
+                storedDoc.file.name?.includes('IPT2025')
+              )) {
+                match.file = null
+                return
+              }
+              match.file = storedDoc.file
+            }
+          })
         }
       }
     } catch (e) {
@@ -1718,11 +1869,12 @@ async function saveProfile() {
 
   savingProfile.value = true
   try {
+    const isDemoUser = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
     await umkmStore.updateProfile({
-      name: formProfile.name.trim() || 'Kopi Senja Nusantara',
-      brand: formProfile.name.trim() || 'Kopi Senja Nusantara',
-      ownerName: formProfile.ownerName.trim() || 'Fikri Setiawan',
-      owner_name: formProfile.ownerName.trim() || 'Fikri Setiawan',
+      name: formProfile.name.trim() || (isDemoUser ? 'Kopi Senja Nusantara' : ''),
+      brand: formProfile.name.trim() || (isDemoUser ? 'Kopi Senja Nusantara' : ''),
+      ownerName: formProfile.ownerName.trim() || (isDemoUser ? 'Fikri Setiawan' : (authStore.currentUser?.name || '')),
+      owner_name: formProfile.ownerName.trim() || (isDemoUser ? 'Fikri Setiawan' : (authStore.currentUser?.name || '')),
       sector: formProfile.sector,
       city: formProfile.city.trim(),
       establishedYear: formProfile.establishedYear,
@@ -1737,6 +1889,8 @@ async function saveProfile() {
       pitchSummary: formProfile.description.trim(),
       nib: formProfile.nib.trim(),
       npwp: formProfile.npwp.trim(),
+      halal: formProfile.halal?.trim() || '',
+      haki: formProfile.haki?.trim() || '',
       whatsapp: storeContacts.whatsapp.trim(),
       instagram: storeContacts.instagram.trim(),
       address: storeContacts.address.trim(),
@@ -1753,12 +1907,13 @@ async function saveProfile() {
     saveDocsToStorage()
 
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('umkm_profile_name', formProfile.name)
-      localStorage.setItem('umkm_profile_desc', formProfile.description)
-      localStorage.setItem('umkm_profile_sector', formProfile.sector)
-      localStorage.setItem('umkm_profile_city', formProfile.city)
-      localStorage.setItem('umkm_profile_nib', formProfile.nib)
-      localStorage.setItem('umkm_profile_npwp', formProfile.npwp)
+      const keySuffix = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
+      localStorage.setItem(`umkm_profile_name${keySuffix}`, formProfile.name)
+      localStorage.setItem(`umkm_profile_desc${keySuffix}`, formProfile.description)
+      localStorage.setItem(`umkm_profile_sector${keySuffix}`, formProfile.sector)
+      localStorage.setItem(`umkm_profile_city${keySuffix}`, formProfile.city)
+      localStorage.setItem(`umkm_profile_nib${keySuffix}`, formProfile.nib)
+      localStorage.setItem(`umkm_profile_npwp${keySuffix}`, formProfile.npwp)
     }
 
     const now = new Date()
@@ -1772,25 +1927,58 @@ async function saveProfile() {
 }
 
 onMounted(async () => {
+  const isDemoUser = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
+
+  // Jika bukan akun demo Fikri, bersihkan key localStorage legacy yang bocor
+  if (!isDemoUser && typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('umkm_featured_products')
+      localStorage.removeItem('umkm_featured_products_guest')
+      localStorage.removeItem('umkm_data_room_docs')
+      localStorage.removeItem('umkm_data_room_docs_guest')
+      localStorage.removeItem('umkm_profile_desc')
+      localStorage.removeItem('umkm_profile_name')
+      localStorage.removeItem('umkm_contacts')
+      localStorage.removeItem('umkm_contacts_guest')
+
+      const keySuffix = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
+      const localDesc = localStorage.getItem(`umkm_profile_desc${keySuffix}`)
+      if (localDesc && localDesc.includes('Spesialis kopi arabika')) {
+        localStorage.removeItem(`umkm_profile_desc${keySuffix}`)
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
   await umkmStore.fetchProfile()
 
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
   umkmStore.initQuickProfileFromStorage()
 
-  initProductsFromStorage()
+  await initProductsFromStorage()
   initContactsFromStorage()
-  initDocsFromStorage()
+  await initDocsFromStorage()
 
   if (umkmStore.profile.name || umkmStore.profile.brand) {
     formProfile.name = umkmStore.profile.name || umkmStore.profile.brand
   }
-  if (umkmStore.profile.ownerName || umkmStore.profile.owner_name) {
+  if (!isDemoUser && (umkmStore.profile.ownerName === 'Fikri Setiawan' || umkmStore.profile.owner_name === 'Fikri Setiawan')) {
+    formProfile.ownerName = authStore.currentUser?.name || ''
+  } else if (umkmStore.profile.ownerName || umkmStore.profile.owner_name) {
     formProfile.ownerName = umkmStore.profile.ownerName || umkmStore.profile.owner_name
   }
-  if (umkmStore.profile.description || umkmStore.profile.pitchSummary) {
-    formProfile.description = umkmStore.profile.description || umkmStore.profile.pitchSummary
+
+  // Jika bukan akun demo tapi profil memiliki teks Kopi Senja bawaan, bersihkan
+  if (!isDemoUser && (umkmStore.profile.description?.includes('Spesialis kopi arabika') || (umkmStore.profile.pitchSummary?.includes('Spesialis kopi arabika')))) {
+    formProfile.description = ''
+    umkmStore.profile.description = ''
+    umkmStore.profile.pitchSummary = ''
+  } else if (umkmStore.profile.description !== undefined) {
+    formProfile.description = umkmStore.profile.description || ''
   }
+
   if (umkmStore.profile.sector) {
     formProfile.sector = umkmStore.profile.sector
     selectedSectorChoice.value = umkmStore.profile.sector
@@ -1808,10 +1996,44 @@ onMounted(async () => {
   if (umkmStore.profile.fundingTarget || umkmStore.profile.funding_target) {
     formProfile.fundingTarget = umkmStore.profile.fundingTarget || umkmStore.profile.funding_target
   }
-  if (umkmStore.profile.nib) formProfile.nib = umkmStore.profile.nib
-  if (umkmStore.profile.npwp) formProfile.npwp = umkmStore.profile.npwp
-  if ((umkmStore.profile as any).whatsapp) storeContacts.whatsapp = (umkmStore.profile as any).whatsapp
-  if ((umkmStore.profile as any).instagram) storeContacts.instagram = (umkmStore.profile as any).instagram
+
+  // Sanitasi NIB & NPWP demo jika ada pada akun baru
+  if (!isDemoUser && umkmStore.profile.nib === '1209000123456') {
+    formProfile.nib = ''
+  } else if (umkmStore.profile.nib !== undefined) {
+    formProfile.nib = umkmStore.profile.nib || ''
+  }
+
+  if (!isDemoUser && umkmStore.profile.npwp === '81.423.891.4-429.000') {
+    formProfile.npwp = ''
+  } else if (umkmStore.profile.npwp !== undefined) {
+    formProfile.npwp = umkmStore.profile.npwp || ''
+  }
+
+  if (!isDemoUser && (umkmStore.profile as any).halal === 'ID321100019283') {
+    formProfile.halal = ''
+  } else if ((umkmStore.profile as any).halal !== undefined) {
+    formProfile.halal = (umkmStore.profile as any).halal || ''
+  }
+
+  if (!isDemoUser && (umkmStore.profile as any).haki === 'IPT20250918290') {
+    formProfile.haki = ''
+  } else if ((umkmStore.profile as any).haki !== undefined) {
+    formProfile.haki = (umkmStore.profile as any).haki || ''
+  }
+
+  if (!isDemoUser && (umkmStore.profile as any).whatsapp === '+62 812-3456-7890') {
+    storeContacts.whatsapp = authStore.currentUser?.phone || ''
+  } else if ((umkmStore.profile as any).whatsapp) {
+    storeContacts.whatsapp = (umkmStore.profile as any).whatsapp
+  }
+
+  if (!isDemoUser && (umkmStore.profile as any).instagram === 'kopisenja.nusantara') {
+    storeContacts.instagram = ''
+  } else if ((umkmStore.profile as any).instagram) {
+    storeContacts.instagram = (umkmStore.profile as any).instagram
+  }
+
   if (umkmStore.profile.location && umkmStore.profile.location.includes(',')) {
     storeContacts.address = umkmStore.profile.location.split(',')[0].trim()
   }

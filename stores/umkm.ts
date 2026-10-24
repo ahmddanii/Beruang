@@ -76,6 +76,28 @@ export interface InvestorRequest {
   reviewedAt?: string
 }
 
+export interface FundingGateCriterion {
+  id: string
+  title: string
+  description: string
+  passed: boolean
+  currentValue: any
+  targetValue: any
+  statusLabel: string
+}
+
+export interface FundingGateData {
+  passedCount: number
+  totalCount: number
+  isReadyForFunding: boolean
+  status: string
+  certifiedAt: string | null
+  consultantName: string
+  fundingTarget: number
+  pendingRequestsCount: number
+  criteria: FundingGateCriterion[]
+}
+
 export interface UmkmBusinessProfile {
   id: string
   name: string
@@ -118,41 +140,310 @@ export interface FinanceSummary {
   marginStatus: 'SEHAT' | 'WASPADA' | 'KRITIS' | string
 }
 
+export const DEMO_UMKM_PROFILE: UmkmBusinessProfile = {
+  id: 'umkm-01',
+  name: 'Kopi Senja Nusantara',
+  brand: 'Kopi Senja Nusantara',
+  ownerName: 'Fikri Setiawan',
+  owner_name: 'Fikri Setiawan',
+  ownerAvatarUrl: '',
+  sector: 'Kuliner & Minuman (F&B)',
+  city: 'Bandung, Jawa Barat',
+  establishedYear: 2021,
+  outletsCount: 3,
+  employeesCount: 14,
+  fundingTarget: 250000000,
+  pitchSummary: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
+  description: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
+  logoUrl: '/logo.svg',
+  bannerUrl: '',
+  nib: '1209000123456',
+  npwp: '81.423.891.4-429.000',
+  fundingStatus: 'READY_FOR_FUNDING',
+  certifiedAt: '18 September 2026',
+  consultantName: 'Dra. Maya Suryani, M.M.'
+}
+
+export const CLEAN_UMKM_PROFILE: UmkmBusinessProfile = {
+  id: '',
+  name: '',
+  brand: '',
+  ownerName: '',
+  owner_name: '',
+  ownerAvatarUrl: '',
+  sector: '',
+  city: '',
+  establishedYear: null,
+  outletsCount: 1,
+  employeesCount: 1,
+  fundingTarget: 0,
+  pitchSummary: '',
+  description: '',
+  logoUrl: '/logo.svg',
+  bannerUrl: '',
+  nib: '',
+  npwp: '',
+  fundingStatus: 'DRAFT',
+  certifiedAt: '',
+  consultantName: ''
+}
+
+export const DEMO_FINANCE_SUMMARY: FinanceSummary = {
+  cashBalance: 75500000,
+  totalIncomeMonth: 100000000,
+  totalCogsMonth: 45100000,
+  totalOpexMonth: 22300000,
+  netProfitMonth: 32600000,
+  marginPercentage: 32.6,
+  marginStatus: 'SEHAT'
+}
+
+export const CLEAN_FINANCE_SUMMARY: FinanceSummary = {
+  cashBalance: 0,
+  totalIncomeMonth: 0,
+  totalCogsMonth: 0,
+  totalOpexMonth: 0,
+  netProfitMonth: 0,
+  marginPercentage: 0,
+  marginStatus: 'BELUM_ADA_DATA'
+}
+
+export const DEMO_MONTHLY_RECORDS: MonthlyRecord[] = [
+  {
+    month: 'Januari',
+    year: 2026,
+    omzet: 42000000,
+    hpp: 19000000,
+    opex: 11000000,
+    netProfit: 12000000,
+    cashBalance: 28000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Februari',
+    year: 2026,
+    omzet: 45000000,
+    hpp: 20500000,
+    opex: 11500000,
+    netProfit: 13000000,
+    cashBalance: 33000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Maret',
+    year: 2026,
+    omzet: 49000000,
+    hpp: 22000000,
+    opex: 12000000,
+    netProfit: 15000000,
+    cashBalance: 39000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'April',
+    year: 2026,
+    omzet: 53000000,
+    hpp: 24000000,
+    opex: 12500000,
+    netProfit: 16500000,
+    cashBalance: 45000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Mei',
+    year: 2026,
+    omzet: 58000000,
+    hpp: 26000000,
+    opex: 13500000,
+    netProfit: 18500000,
+    cashBalance: 52000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Juni',
+    year: 2026,
+    omzet: 64000000,
+    hpp: 28500000,
+    opex: 14500000,
+    netProfit: 21000000,
+    cashBalance: 59000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Juli',
+    year: 2026,
+    omzet: 72000000,
+    hpp: 32000000,
+    opex: 16000000,
+    netProfit: 24000000,
+    cashBalance: 66000000,
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Agustus',
+    year: 2026,
+    omzet: 82000000,
+    hpp: 36500000,
+    opex: 17500000,
+    netProfit: 28000000,
+    cashBalance: 71000000,
+    proofDocumentName: 'Mutasi_Kasir_POS_Agustus_2026.pdf',
+    proofDocumentSize: '2.1 MB',
+    uploadedAt: '02 Sep 2026',
+    status: 'VERIFIED'
+  },
+  {
+    month: 'September',
+    year: 2026,
+    omzet: 91000000,
+    hpp: 40500000,
+    opex: 19000000,
+    netProfit: 31500000,
+    cashBalance: 74000000,
+    proofDocumentName: 'Rekening_Koran_Mandiri_Sept2026.pdf',
+    proofDocumentSize: '2.4 MB',
+    uploadedAt: '03 Okt 2026',
+    status: 'VERIFIED'
+  },
+  {
+    month: 'Oktober',
+    year: 2026,
+    omzet: 100000000,
+    hpp: 45100000,
+    opex: 22300000,
+    netProfit: 32600000,
+    cashBalance: 75500000,
+    proofDocumentName: 'Rekap_POS_BukuKas_Okt2026.pdf',
+    proofDocumentSize: '3.1 MB',
+    uploadedAt: '18 Okt 2026',
+    status: 'VERIFIED',
+    hasAnomaly: false,
+    anomalyNote: 'Proporsi modal bahan dan operasional harian berada dalam batas aman evaluasi sistem.'
+  }
+]
+
+export const DEMO_INVESTOR_REQUESTS: InvestorRequest[] = [
+  {
+    id: 'req-01',
+    investorId: 'inv-101',
+    investorName: 'Hendro Wicaksono',
+    firmName: 'Nusantara Angel Syndicate',
+    avatar: '',
+    requestedAt: '22 September 2026',
+    status: 'APPROVED',
+    proposedTicket: 150000000,
+    introMessage: 'Halo Mas Fikri, kami melihat pertumbuhan gerai Kopi Senja sangat konsisten di Bandung. Kami berminat mendanai ekspansi 2 cloud kitchen baru dengan skema bagi hasil/equity.',
+    reviewedAt: '23 September 2026'
+  },
+  {
+    id: 'req-02',
+    investorId: 'inv-102',
+    investorName: 'Pratama Kusuma',
+    firmName: 'Jawa Maju Ventures',
+    avatar: '',
+    requestedAt: '25 September 2026',
+    status: 'PENDING',
+    proposedTicket: 100000000,
+    introMessage: 'Tertarik dengan model roastery efisien dan margin sehat. Ingin meninjau rekening koran dan proyeksi cashflow.'
+  }
+]
+
+export const DEMO_DAILY_TRANSACTIONS: DailyTransaction[] = [
+  {
+    id: 'tx-01',
+    date: '15 Oktober 2026',
+    title: 'Penjualan Kopi Susu Aren POS Kasir',
+    category: 'PEMASUKAN',
+    amount: 3850000,
+    paymentMethod: 'QRIS',
+    status: 'VERIFIED',
+    receiptNumber: 'INV/20261015/POS/089',
+    notes: 'Rekap harian kasir 3 gerai aktif'
+  },
+  {
+    id: 'tx-02',
+    date: '14 Oktober 2026',
+    title: 'Biji Kopi Arabika Malabar 25kg (Bahan Baku)',
+    category: 'MODAL_JUALAN',
+    amount: 3250000,
+    paymentMethod: 'TRANSFER',
+    status: 'VERIFIED',
+    receiptNumber: 'PO/20261014/MALABAR/012',
+    notes: 'Restock mingguan roastery supplier Malabar'
+  },
+  {
+    id: 'tx-03',
+    date: '13 Oktober 2026',
+    title: 'Susu Fresh Milk Pasteurisasi 60 Liter',
+    category: 'MODAL_JUALAN',
+    amount: 1140000,
+    paymentMethod: 'TRANSFER',
+    status: 'VERIFIED',
+    receiptNumber: 'INV/20261013/MILK/45',
+    notes: 'Pasokan harian susu murni peternak Lembang'
+  },
+  {
+    id: 'tx-04',
+    date: '12 Oktober 2026',
+    title: 'Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago',
+    category: 'OPERASIONAL',
+    amount: 2450000,
+    paymentMethod: 'TRANSFER',
+    status: 'VERIFIED',
+    receiptNumber: 'PLN/20261012/DAGO/981',
+    notes: 'Beban operasional rutin bulanan'
+  },
+  {
+    id: 'tx-05',
+    date: '11 Oktober 2026',
+    title: 'Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2',
+    category: 'PEMASUKAN',
+    amount: 5200000,
+    paymentMethod: 'QRIS',
+    status: 'VERIFIED',
+    receiptNumber: 'INV/20261011/POS/102',
+    notes: 'Lonjakan pesanan promo akhir pekan'
+  },
+  {
+    id: 'tx-06',
+    date: '10 Oktober 2026',
+    title: 'Pengadaan Cup Biodegradable & Paper Straw',
+    category: 'MODAL_JUALAN',
+    amount: 880000,
+    paymentMethod: 'TUNAI',
+    status: 'VERIFIED',
+    receiptNumber: 'NOTA/20261010/CUP/21',
+    notes: 'Kemasan takeaway 1.000 pcs'
+  },
+  {
+    id: 'tx-07',
+    date: '09 Oktober 2026',
+    title: 'Maintenance Rutin Mesin Espresso Simonelli',
+    category: 'OPERASIONAL',
+    amount: 750000,
+    paymentMethod: 'TUNAI',
+    status: 'VERIFIED',
+    receiptNumber: 'SRV/20261009/TECH/07',
+    notes: 'Descaling dan pergantian gasket seal'
+  },
+  {
+    id: 'tx-08',
+    date: '08 Oktober 2026',
+    title: 'Penjualan Hari Kerja (Senin - Rabu)',
+    category: 'PEMASUKAN',
+    amount: 4120000,
+    paymentMethod: 'QRIS',
+    status: 'VERIFIED',
+    receiptNumber: 'INV/20261008/POS/067',
+    notes: 'Kasir online terhubung mPOS'
+  }
+]
+
 export const useUmkmStore = defineStore('umkm', {
   state: () => ({
-    financeSummary: {
-      cashBalance: 75500000,
-      totalIncomeMonth: 100000000,
-      totalCogsMonth: 45100000,
-      totalOpexMonth: 22300000,
-      netProfitMonth: 32600000,
-      marginPercentage: 32.6,
-      marginStatus: 'SEHAT'
-    } as FinanceSummary,
+    financeSummary: { ...CLEAN_FINANCE_SUMMARY } as FinanceSummary,
 
-    profile: {
-      id: 'umkm-01',
-      name: 'Kopi Senja Nusantara',
-      brand: 'Kopi Senja Nusantara',
-      ownerName: 'Fikri Setiawan',
-      owner_name: 'Fikri Setiawan',
-      ownerAvatarUrl: '',
-      sector: 'Kuliner & Minuman (F&B)',
-      city: 'Bandung, Jawa Barat',
-      establishedYear: 2021,
-      outletsCount: 3,
-      employeesCount: 14,
-      fundingTarget: 250000000,
-      pitchSummary: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
-      description: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
-      logoUrl: '/logo.svg',
-      bannerUrl: '',
-      nib: '1209000123456',
-      npwp: '81.423.891.4-429.000',
-      fundingStatus: 'READY_FOR_FUNDING' as 'DRAFT' | 'IN_REVIEW' | 'READY_FOR_FUNDING',
-      certifiedAt: '18 September 2026',
-      consultantName: 'Dra. Maya Suryani, M.M.'
-    } as UmkmBusinessProfile,
+    profile: { ...CLEAN_UMKM_PROFILE } as UmkmBusinessProfile,
 
     assessmentAspects: [
       {
@@ -268,236 +559,10 @@ export const useUmkmStore = defineStore('umkm', {
       }
     ] as ActionPlanTask[],
 
-    monthlyRecords: [
-      {
-        month: 'Januari',
-        year: 2026,
-        omzet: 42000000,
-        hpp: 19000000,
-        opex: 11000000,
-        netProfit: 12000000,
-        cashBalance: 28000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Februari',
-        year: 2026,
-        omzet: 45000000,
-        hpp: 20500000,
-        opex: 11500000,
-        netProfit: 13000000,
-        cashBalance: 33000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Maret',
-        year: 2026,
-        omzet: 49000000,
-        hpp: 22000000,
-        opex: 12000000,
-        netProfit: 15000000,
-        cashBalance: 39000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'April',
-        year: 2026,
-        omzet: 53000000,
-        hpp: 24000000,
-        opex: 12500000,
-        netProfit: 16500000,
-        cashBalance: 45000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Mei',
-        year: 2026,
-        omzet: 58000000,
-        hpp: 26000000,
-        opex: 13500000,
-        netProfit: 18500000,
-        cashBalance: 52000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Juni',
-        year: 2026,
-        omzet: 64000000,
-        hpp: 28500000,
-        opex: 14500000,
-        netProfit: 21000000,
-        cashBalance: 59000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Juli',
-        year: 2026,
-        omzet: 72000000,
-        hpp: 32000000,
-        opex: 16000000,
-        netProfit: 24000000,
-        cashBalance: 66000000,
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Agustus',
-        year: 2026,
-        omzet: 82000000,
-        hpp: 36500000,
-        opex: 17500000,
-        netProfit: 28000000,
-        cashBalance: 71000000,
-        proofDocumentName: 'Mutasi_Kasir_POS_Agustus_2026.pdf',
-        proofDocumentSize: '2.1 MB',
-        uploadedAt: '02 Sep 2026',
-        status: 'VERIFIED'
-      },
-      {
-        month: 'September',
-        year: 2026,
-        omzet: 91000000,
-        hpp: 40500000,
-        opex: 19000000,
-        netProfit: 31500000,
-        cashBalance: 74000000,
-        proofDocumentName: 'Rekening_Koran_Mandiri_Sept2026.pdf',
-        proofDocumentSize: '2.4 MB',
-        uploadedAt: '03 Okt 2026',
-        status: 'VERIFIED'
-      },
-      {
-        month: 'Oktober',
-        year: 2026,
-        omzet: 100000000,
-        hpp: 45100000,
-        opex: 22300000,
-        netProfit: 32600000,
-        cashBalance: 75500000,
-        proofDocumentName: 'Rekap_POS_BukuKas_Okt2026.pdf',
-        proofDocumentSize: '3.1 MB',
-        uploadedAt: '18 Okt 2026',
-        status: 'VERIFIED',
-        hasAnomaly: false,
-        anomalyNote: 'Proporsi modal bahan dan operasional harian berada dalam batas aman evaluasi sistem.'
-      }
-    ] as MonthlyRecord[],
-
-    investorRequests: [
-      {
-        id: 'req-01',
-        investorId: 'inv-101',
-        investorName: 'Hendro Wicaksono',
-        firmName: 'Nusantara Angel Syndicate',
-        avatar: '',
-        requestedAt: '22 September 2026',
-        status: 'APPROVED',
-        proposedTicket: 150000000,
-        introMessage: 'Halo Mas Budi, kami melihat pertumbuhan gerai Kopi Senja sangat konsisten di Bandung. Kami berminat mendanai ekspansi 2 cloud kitchen baru dengan skema bagi hasil/equity.',
-        reviewedAt: '23 September 2026'
-      },
-      {
-        id: 'req-02',
-        investorId: 'inv-102',
-        investorName: 'Pratama Kusuma',
-        firmName: 'Jawa Maju Ventures',
-        avatar: '',
-        requestedAt: '25 September 2026',
-        status: 'PENDING',
-        proposedTicket: 100000000,
-        introMessage: 'Tertarik dengan model roastery efisien dan margin sehat. Ingin meninjau rekening koran dan proyeksi cashflow.'
-      }
-    ] as InvestorRequest[],
-
-    dailyTransactions: [
-      {
-        id: 'tx-01',
-        date: '15 Oktober 2026',
-        title: 'Penjualan Kopi Susu Aren POS Kasir',
-        category: 'PEMASUKAN',
-        amount: 3850000,
-        paymentMethod: 'QRIS',
-        status: 'VERIFIED',
-        receiptNumber: 'INV/20261015/POS/089',
-        notes: 'Rekap harian kasir 3 gerai aktif'
-      },
-      {
-        id: 'tx-02',
-        date: '14 Oktober 2026',
-        title: 'Biji Kopi Arabika Malabar 25kg (Bahan Baku)',
-        category: 'MODAL_JUALAN',
-        amount: 3250000,
-        paymentMethod: 'TRANSFER',
-        status: 'VERIFIED',
-        receiptNumber: 'PO/20261014/MALABAR/012',
-        notes: 'Restock mingguan roastery supplier Malabar'
-      },
-      {
-        id: 'tx-03',
-        date: '13 Oktober 2026',
-        title: 'Susu Fresh Milk Pasteurisasi 60 Liter',
-        category: 'MODAL_JUALAN',
-        amount: 1140000,
-        paymentMethod: 'TRANSFER',
-        status: 'VERIFIED',
-        receiptNumber: 'INV/20261013/MILK/45',
-        notes: 'Pasokan harian susu murni peternak Lembang'
-      },
-      {
-        id: 'tx-04',
-        date: '12 Oktober 2026',
-        title: 'Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago',
-        category: 'OPERASIONAL',
-        amount: 2450000,
-        paymentMethod: 'TRANSFER',
-        status: 'VERIFIED',
-        receiptNumber: 'PLN/20261012/DAGO/981',
-        notes: 'Beban operasional rutin bulanan'
-      },
-      {
-        id: 'tx-05',
-        date: '11 Oktober 2026',
-        title: 'Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2',
-        category: 'PEMASUKAN',
-        amount: 5200000,
-        paymentMethod: 'QRIS',
-        status: 'VERIFIED',
-        receiptNumber: 'INV/20261011/POS/102',
-        notes: 'Lonjakan pesanan promo akhir pekan'
-      },
-      {
-        id: 'tx-06',
-        date: '10 Oktober 2026',
-        title: 'Pengadaan Cup Biodegradable & Paper Straw',
-        category: 'MODAL_JUALAN',
-        amount: 880000,
-        paymentMethod: 'TUNAI',
-        status: 'VERIFIED',
-        receiptNumber: 'NOTA/20261010/CUP/21',
-        notes: 'Kemasan takeaway 1.000 pcs'
-      },
-      {
-        id: 'tx-07',
-        date: '09 Oktober 2026',
-        title: 'Maintenance Rutin Mesin Espresso Simonelli',
-        category: 'OPERASIONAL',
-        amount: 750000,
-        paymentMethod: 'TUNAI',
-        status: 'VERIFIED',
-        receiptNumber: 'SRV/20261009/TECH/07',
-        notes: 'Descaling dan pergantian gasket seal'
-      },
-      {
-        id: 'tx-08',
-        date: '08 Oktober 2026',
-        title: 'Penjualan Hari Kerja (Senin - Rabu)',
-        category: 'PEMASUKAN',
-        amount: 4120000,
-        paymentMethod: 'QRIS',
-        status: 'VERIFIED',
-        receiptNumber: 'INV/20261008/POS/067',
-        notes: 'Kasir online terhubung mPOS'
-      }
-    ] as DailyTransaction[]
+    monthlyRecords: [] as MonthlyRecord[],
+    investorRequests: [] as InvestorRequest[],
+    dailyTransactions: [] as DailyTransaction[],
+    fundingGate: null as FundingGateData | null
   }),
 
   getters: {
@@ -543,24 +608,26 @@ export const useUmkmStore = defineStore('umkm', {
           this.profile = {
             ...this.profile,
             ...d,
-            name: d.name || d.brand || this.profile.name,
-            brand: d.brand || d.name || this.profile.brand,
-            ownerName: d.ownerName || d.owner_name || this.profile.ownerName,
-            owner_name: d.owner_name || d.ownerName || this.profile.owner_name,
-            sector: d.sector || this.profile.sector,
-            city: d.city || this.profile.city,
-            establishedYear: d.establishedYear || d.established_year || this.profile.establishedYear,
-            established_year: d.established_year || d.establishedYear || this.profile.established_year,
-            outletsCount: d.outletsCount || d.outlets_count || this.profile.outletsCount,
-            outlets_count: d.outlets_count || d.outletsCount || this.profile.outlets_count,
-            employeesCount: d.employeesCount || d.employees_count || this.profile.employeesCount,
-            employees_count: d.employees_count || d.employeesCount || this.profile.employees_count,
-            fundingTarget: d.fundingTarget || d.funding_target || this.profile.fundingTarget,
-            funding_target: d.funding_target || d.fundingTarget || this.profile.funding_target,
-            description: d.description || d.pitchSummary || d.pitch_summary || this.profile.description,
-            pitchSummary: d.pitchSummary || d.description || d.pitch_summary || this.profile.pitchSummary,
-            nib: d.nib || this.profile.nib,
-            npwp: d.npwp || this.profile.npwp
+            name: d.name || d.brand || this.profile.name || '',
+            brand: d.brand || d.name || this.profile.brand || '',
+            ownerName: d.ownerName || d.owner_name || this.profile.ownerName || '',
+            owner_name: d.owner_name || d.ownerName || this.profile.owner_name || '',
+            sector: d.sector || this.profile.sector || '',
+            city: d.city || this.profile.city || '',
+            establishedYear: d.establishedYear ?? d.established_year ?? this.profile.establishedYear,
+            established_year: d.established_year ?? d.establishedYear ?? this.profile.established_year,
+            outletsCount: d.outletsCount ?? d.outlets_count ?? this.profile.outletsCount ?? 1,
+            outlets_count: d.outlets_count ?? d.outletsCount ?? this.profile.outlets_count ?? 1,
+            employeesCount: d.employeesCount ?? d.employees_count ?? this.profile.employeesCount ?? 1,
+            employees_count: d.employees_count ?? d.employeesCount ?? this.profile.employees_count ?? 1,
+            fundingTarget: d.fundingTarget ?? d.funding_target ?? this.profile.fundingTarget ?? 0,
+            funding_target: d.funding_target ?? d.fundingTarget ?? this.profile.funding_target ?? 0,
+            description: d.description || '',
+            pitchSummary: d.description || d.pitchSummary || '',
+            nib: d.nib || '',
+            npwp: d.npwp || '',
+            consultantId: d.consultantId || this.profile.consultantId || '',
+            consultantName: d.consultant?.user?.name || d.consultantName || this.profile.consultantName || ''
           }
         }
       } catch (err: any) {
@@ -732,6 +799,9 @@ export const useUmkmStore = defineStore('umkm', {
      * GET /api/finances/summary, /api/finances/daily, /api/finances/monthly
      */
     async fetchFinances() {
+      const authStore = useAuthStore()
+      const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
+
       try {
         const [dailyRes, monthlyRes, monthlyAltRes, summaryRes] = await Promise.allSettled([
           useApi<any>('/finances/daily'),
@@ -743,21 +813,25 @@ export const useUmkmStore = defineStore('umkm', {
         if (summaryRes.status === 'fulfilled' && summaryRes.value?.data) {
           const s = summaryRes.value.data
           this.financeSummary = {
-            cashBalance: Number(s.cashBalance ?? s.cash_balance ?? this.financeSummary.cashBalance),
-            totalIncomeMonth: Number(s.totalIncomeMonth ?? s.total_income_month ?? this.financeSummary.totalIncomeMonth),
-            totalCogsMonth: Number(s.totalCogsMonth ?? s.total_cogs_month ?? this.financeSummary.totalCogsMonth),
-            totalOpexMonth: Number(s.totalOpexMonth ?? s.total_opex_month ?? this.financeSummary.totalOpexMonth),
-            netProfitMonth: Number(s.netProfitMonth ?? s.net_profit_month ?? this.financeSummary.netProfitMonth),
-            marginPercentage: Number(s.marginPercentage ?? s.margin_percentage ?? this.financeSummary.marginPercentage),
-            marginStatus: s.marginStatus ?? s.margin_status ?? this.financeSummary.marginStatus
+            cashBalance: Number(s.cashBalance ?? s.cash_balance ?? 0),
+            totalIncomeMonth: Number(s.totalIncomeMonth ?? s.total_income_month ?? 0),
+            totalCogsMonth: Number(s.totalCogsMonth ?? s.total_cogs_month ?? 0),
+            totalOpexMonth: Number(s.totalOpexMonth ?? s.total_opex_month ?? 0),
+            netProfitMonth: Number(s.netProfitMonth ?? s.net_profit_month ?? 0),
+            marginPercentage: Number(s.marginPercentage ?? s.margin_percentage ?? 0),
+            marginStatus: s.marginStatus ?? s.margin_status ?? 'BELUM_ADA_DATA'
           }
+        } else if (isDemo && this.financeSummary.totalIncomeMonth === 0) {
+          this.financeSummary = { ...DEMO_FINANCE_SUMMARY }
         }
 
         if (dailyRes.status === 'fulfilled' && dailyRes.value?.data) {
           const list = Array.isArray(dailyRes.value.data) ? dailyRes.value.data : (dailyRes.value.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             this.dailyTransactions = list
           }
+        } else if (isDemo && this.dailyTransactions.length === 0) {
+          this.dailyTransactions = [...DEMO_DAILY_TRANSACTIONS]
         }
 
         const validMonthly = (monthlyRes.status === 'fulfilled' && monthlyRes.value?.data)
@@ -768,9 +842,11 @@ export const useUmkmStore = defineStore('umkm', {
 
         if (validMonthly) {
           const mList = Array.isArray(validMonthly) ? validMonthly : (validMonthly as any).data
-          if (Array.isArray(mList) && mList.length > 0) {
+          if (Array.isArray(mList)) {
             this.monthlyRecords = mList
           }
+        } else if (isDemo && this.monthlyRecords.length === 0) {
+          this.monthlyRecords = [...DEMO_MONTHLY_RECORDS]
         }
       } catch (err: any) {
         console.warn('Gagal memuat data keuangan live:', err?.message)
@@ -996,11 +1072,16 @@ export const useUmkmStore = defineStore('umkm', {
     initMonthlyRecordsFromStorage() {
       if (typeof window !== 'undefined') {
         try {
-          const saved = localStorage.getItem('umkm_monthly_records')
+          const authStore = useAuthStore()
+          const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
+          const storageKey = authStore.currentUser?.id ? `umkm_monthly_records_${authStore.currentUser.id}` : 'umkm_monthly_records'
+          const saved = localStorage.getItem(storageKey)
           if (saved) {
             const parsed = JSON.parse(saved)
             if (Array.isArray(parsed) && parsed.length > 0) {
-              this.monthlyRecords = parsed
+              if (isDemo || parsed[0]?.omzet !== 42000000) {
+                this.monthlyRecords = parsed
+              }
             }
           }
         } catch (e) {
@@ -1010,14 +1091,32 @@ export const useUmkmStore = defineStore('umkm', {
     },
 
     /**
+     * GET /api/umkm/funding-gate
+     * Memuat evaluasi 4 syarat gerbang pendanaan dari backend secara riil
+     */
+    async fetchFundingGate() {
+      try {
+        const res = await useApi<any>('/umkm/funding-gate')
+        if (res?.data) {
+          const d = res.data.data || res.data
+          this.fundingGate = d
+          return d
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat status funding gate:', err?.message)
+      }
+      return null
+    },
+
+    /**
      * GET /api/umkm/investor-requests
      */
     async fetchInvestorRequests() {
       try {
         const res = await useApi<any>('/umkm/investor-requests')
-        if (res.data) {
+        if (res?.data !== undefined) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             this.investorRequests = list
           }
         }
@@ -1166,12 +1265,20 @@ export const useUmkmStore = defineStore('umkm', {
     initQuickProfileFromStorage() {
       if (typeof window !== 'undefined') {
         try {
-          const savedName = localStorage.getItem('umkm_profile_name')
-          const savedDesc = localStorage.getItem('umkm_profile_desc')
+          const auth = useAuthStore()
+          const isDemo = auth.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
+          const keySuffix = auth.currentUser?.id ? `_${auth.currentUser.id}` : ''
+          const savedName = localStorage.getItem(`umkm_profile_name${keySuffix}`)
+          const savedDesc = localStorage.getItem(`umkm_profile_desc${keySuffix}`)
           if (savedName) this.profile.name = savedName
           if (savedDesc) {
-            this.profile.pitchSummary = savedDesc
-            this.profile.description = savedDesc
+            if (!isDemo && savedDesc.includes('Spesialis kopi arabika')) {
+              localStorage.removeItem(`umkm_profile_desc${keySuffix}`)
+              localStorage.removeItem('umkm_profile_desc')
+            } else {
+              this.profile.pitchSummary = savedDesc
+              this.profile.description = savedDesc
+            }
           }
         } catch (e) {
           // ignore

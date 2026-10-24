@@ -16,11 +16,11 @@
         </h1>
       </div>
 
-      <!-- Stage Switcher: Tahap Pengajuan vs Sudah Siap (Lolos) -->
-      <div class="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs font-poppins shrink-0 self-start sm:self-auto">
+      <!-- Stage Switcher: Tahap Pengajuan vs Sudah Siap (Lolos) - Full Width Segmented Control on Mobile -->
+      <div class="w-full sm:w-auto grid grid-cols-2 sm:flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs font-poppins shrink-0">
         <button
           type="button"
-          class="px-3 py-1.5 rounded-lg font-medium transition-all duration-150 cursor-pointer"
+          class="w-full sm:w-auto px-3 py-2 sm:py-1.5 rounded-lg font-medium transition-all duration-150 cursor-pointer text-center"
           :class="currentFundingStage === 'PENGAJUAN' ? 'bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white shadow-2xs font-semibold' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'"
           @click="currentFundingStage = 'PENGAJUAN'"
         >
@@ -28,7 +28,7 @@
         </button>
         <button
           type="button"
-          class="px-3 py-1.5 rounded-lg font-medium transition-all duration-150 cursor-pointer"
+          class="w-full sm:w-auto px-3 py-2 sm:py-1.5 rounded-lg font-medium transition-all duration-150 cursor-pointer text-center"
           :class="currentFundingStage === 'READY' ? 'bg-white dark:bg-[#13161F] text-[#00800e] dark:text-[#00C058] shadow-2xs font-semibold' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'"
           @click="currentFundingStage = 'READY'"
         >
@@ -44,41 +44,41 @@
     <!-- ========================================================================= -->
     <div class="space-y-4 sm:space-y-5">
       <!-- Container Hero Taktil -->
-      <div class="card-tactile-gopay rounded-[22px] sm:rounded-[26px] p-8 sm:p-12 md:p-16 text-center flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] dark:from-[#13161F] dark:to-[#0F121A]">
+      <div class="card-tactile-gopay rounded-[22px] sm:rounded-[26px] p-6 sm:p-12 md:p-16 text-center flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] dark:from-[#13161F] dark:to-[#0F121A]">
         <!-- Subtle Certificate Watermark Graphic in Background -->
         <div class="absolute -right-8 -bottom-8 w-64 h-64 rounded-full bg-emerald-500/5 dark:bg-emerald-400/5 blur-2xl pointer-events-none" />
         <div class="absolute -left-8 -top-8 w-64 h-64 rounded-full bg-[#156374]/5 dark:bg-[#50AABF]/5 blur-2xl pointer-events-none" />
 
         <!-- A. Mode: Tahap Pengajuan -->
         <template v-if="currentFundingStage === 'PENGAJUAN'">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight max-w-2xl mx-auto">
+          <h2 class="text-xl sm:text-3xl md:text-4xl lg:text-[40px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight max-w-2xl mx-auto">
             Cek Apakah Bisnismu<br class="hidden sm:inline" /> Sudah Layak untuk Funding
           </h2>
-          <p class="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mt-3.5 font-sans leading-relaxed">
+          <p class="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mt-2.5 sm:mt-3.5 font-sans leading-relaxed">
             Tinjau kesehatan kas tokomu dan penuhi syarat kelayakan bersama konsultan kurator <strong>{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</strong> untuk membuka akses permodalan terverifikasi.
           </p>
         </template>
 
         <!-- B. Mode: Sudah Siap (Lolos) -->
         <template v-else>
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight max-w-2xl mx-auto">
+          <h2 class="text-xl sm:text-3xl md:text-4xl lg:text-[40px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight max-w-2xl mx-auto">
             Selamat Bisnis Kamu<br class="hidden sm:inline" /> Sudah Siap untuk Funding!
           </h2>
-          <p class="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mt-3.5 font-sans leading-relaxed">
+          <p class="text-xs sm:text-sm md:text-base text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mt-2.5 sm:mt-3.5 font-sans leading-relaxed">
             Konsultan kurator <strong>{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</strong> telah mengesahkan seluruh kelayakan tata kelola dan arus kas tokomu dengan predikat <strong>Grade A</strong>.
           </p>
         </template>
       </div>
 
-      <!-- Centered Action Buttons under Hero Banner -->
-      <div class="flex items-center justify-center gap-3 sm:gap-4 pt-1 sm:pt-2 flex-wrap">
+      <!-- Action Buttons under Hero Banner: Stacked Atas-Bawah & Full Width on Mobile, Side-by-side on Desktop -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-4 pt-1 sm:pt-2 w-full max-w-sm sm:max-w-none mx-auto [&>*]:w-full sm:[&>*]:w-auto">
         <!-- A. Buttons for Tahap Pengajuan -->
         <template v-if="currentFundingStage === 'PENGAJUAN'">
           <!-- Button Hijau: Tinjau Bisnis Kamu -->
           <BActionButton
             variant="green"
             to="/dashboard/penilaian"
-            custom-class="px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs"
+            custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center"
             title="Buka Halaman Cek Kesehatan Bisnis untuk Meninjau Skor Kelayakan"
           >
             Tinjau Bisnis Kamu
@@ -89,7 +89,7 @@
             variant="default"
             icon="chevron"
             to="/dashboard/rencana-aksi"
-            custom-class="px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs"
+            custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center"
             title="Buka Halaman Progress Tugas untuk Menyelesaikan Rencana Aksi"
           >
             Cek Tugas Kamu
@@ -102,7 +102,7 @@
           <BActionButton
             variant="green"
             icon="download"
-            custom-class="px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs"
+            custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center"
             title="Unduh Salinan Sertifikat Kelayakan Investasi Resmi (PDF)"
             @click="handleDownloadCertificate"
           >
@@ -114,7 +114,7 @@
             variant="default"
             icon="chevron"
             to="/dashboard/profile"
-            custom-class="px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs"
+            custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center"
             title="Buka Halaman Pengaturan & Pratinjau Profil Usaha"
           >
             Siapkan Profil
@@ -190,7 +190,7 @@
         </div>
 
         <!-- 3. Final Submission Action Box -->
-        <div class="card-tactile-gopay rounded-[20px] p-6 sm:p-7 bg-gradient-to-r from-emerald-500/5 via-[#156374]/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="card-tactile-gopay rounded-[20px] p-6 sm:p-7 bg-gradient-to-r from-emerald-500/5 via-[#156374]/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div class="space-y-1">
             <h4 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
               Siap Mengajukan Peninjauan Kelayakan?
@@ -199,14 +199,16 @@
               Kirim berkas tokomu untuk diverifikasi oleh konsultan kurator. Hasil kurasi dan sertifikat resmi akan diterbitkan dalam 1-2 hari kerja.
             </p>
           </div>
-          <BActionButton
-            variant="green"
-            custom-class="px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs shrink-0"
-            title="Kirim Berkas Pengajuan Kelayakan ke Konsultan Kurator"
-            @click="isSubmitModalOpen = true"
-          >
-            Ajukan Peninjauan Sekarang
-          </BActionButton>
+          <div class="w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto shrink-0">
+            <BActionButton
+              variant="green"
+              custom-class="w-full sm:w-auto px-6 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center text-center shrink-0"
+              title="Kirim Berkas Pengajuan Kelayakan ke Konsultan Kurator"
+              @click="isSubmitModalOpen = true"
+            >
+              Ajukan Peninjauan Sekarang
+            </BActionButton>
+          </div>
         </div>
       </div>
 

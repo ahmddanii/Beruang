@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
-    <!-- 1. Top Header: Title on Left -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+    <!-- 1. Top Header: Title on Left & Action Control on Right -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon
           :icon="Task01Icon"
@@ -12,6 +12,19 @@
         <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
           Progress Tugas
         </h1>
+      </div>
+
+      <!-- Action Button: Cek Kesehatan (Stacked full-width atas-bawah on mobile, right-aligned on desktop) -->
+      <div class="w-full sm:w-auto">
+        <BActionButton
+          to="/dashboard/penilaian"
+          variant="default"
+          icon="chevron"
+          title="Buka Evaluasi Kesiapan & Cek Kesehatan Toko"
+          custom-class="w-full sm:w-auto justify-center"
+        >
+          Cek Kesehatan
+        </BActionButton>
       </div>
     </div>
 
@@ -43,14 +56,14 @@
         <template #action="{ task }">
           <button
             type="button"
-            class="btn-pill-action text-xs shrink-0 cursor-pointer"
+            class="btn-pill-action text-xs shrink-0 cursor-pointer w-full sm:w-auto justify-center"
             title="Lihat atau Unggah Bukti Dokumen Pelaksanaan Tugas"
             @click.stop="openEvidenceModal(task)"
           >
             <HugeiconsIcon
               :icon="FileValidationIcon"
               :size="14"
-              class="text-neutral-500 dark:text-neutral-400 mr-1.5"
+              class="text-neutral-500 dark:text-neutral-400 mr-1.5 shrink-0"
             />
             <span>{{ taskEvidenceMap[task.id] ? 'Lihat Berkas' : 'Unggah Bukti' }}</span>
           </button>
@@ -246,8 +259,8 @@ const remainingTasksCount = computed(() => {
 const statusFilter = ref<'PENDING' | 'COMPLETED'>('PENDING')
 
 const statusTabItems = computed<PillTabItem[]>(() => [
-  { id: 'PENDING', label: 'Tugas yang dikerjakan', count: remainingTasksCount.value },
-  { id: 'COMPLETED', label: 'Tugas yang diselesaikan', count: completedTasksCount.value }
+  { id: 'PENDING', label: 'Tugas yang dikerjakan', shortLabel: 'Dikerjakan', count: remainingTasksCount.value },
+  { id: 'COMPLETED', label: 'Tugas yang diselesaikan', shortLabel: 'Selesai', count: completedTasksCount.value }
 ])
 
 // Collapsed state per parent task (default expanded)

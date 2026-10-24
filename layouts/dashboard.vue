@@ -4,8 +4,9 @@
     <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30">
       <!-- Left Side: Mobile Menu Button + Brand Logo & Name: Beruang -->
       <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-        <!-- Mobile Menu Toggle Button (Only on < lg) -->
+        <!-- Mobile Menu Toggle Button (Only on < lg, hidden for UMKM where bottom pill tab bar is primary) -->
         <button
+          v-if="!isUmkmRole"
           type="button"
           class="lg:hidden w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] flex items-center justify-center text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors shrink-0 cursor-pointer"
           aria-label="Buka Menu Navigasi"
@@ -75,7 +76,7 @@
               'w-full max-w-7xl mx-auto flex flex-col flex-1',
               isFixedLayout
                 ? 'min-h-0 px-4 sm:px-8 lg:px-12 xl:px-16 pt-4 pb-2'
-                : 'px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-10'
+                : 'px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-28 sm:pb-32 lg:pb-10'
             ]"
           >
             <!-- Page Header: Title + Icon at the very top of main container -->
@@ -103,6 +104,7 @@
           <!-- Bottom Footer (Dicoding Style, Sticky at Bottom of Viewport when Content is Short) -->
           <footer
             class="w-full shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#0C121D] mt-auto transition-colors font-sans"
+            :class="isUmkmRole ? 'pb-26 sm:pb-4' : 'pb-4'"
           >
             <div class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
               <div class="flex items-center gap-2 flex-wrap">
@@ -115,14 +117,17 @@
         </div>
       </main>
 
-      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page) -->
-      <LinkedInChatDock v-if="!isMessagesPage" />
+      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page & Hidden on Mobile to Avoid Collision) -->
+      <LinkedInChatDock v-if="!isMessagesPage" class="hidden lg:block" />
+
+      <!-- Mobile Floating Pill Tab Bar & Quick Access FAB for UMKM (Images 1 & 2) -->
+      <MobilePillTabBar v-if="isUmkmRole" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
@@ -131,6 +136,7 @@ import NotificationDropdown from '~/components/layout/NotificationDropdown.vue'
 import NavbarProfileDropdown from '~/components/layout/NavbarProfileDropdown.vue'
 import LinkedInChatDock from '~/components/layout/LinkedInChatDock.vue'
 import AdvancedNavbarSearch from '~/components/search/AdvancedNavbarSearch.vue'
+import MobilePillTabBar from '~/components/layout/MobilePillTabBar.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Menu01Icon,
@@ -184,6 +190,9 @@ const isMessagesPage = computed(() => {
 const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
 const isInvestorRole = computed(() => {
   return currentRole.value === 'INVESTOR' || route.path.startsWith('/investor')
+})
+const isUmkmRole = computed(() => {
+  return currentRole.value === 'UMKM' && !route.path.startsWith('/investor') && !route.path.startsWith('/konsultan') && !route.path.startsWith('/admin')
 })
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'

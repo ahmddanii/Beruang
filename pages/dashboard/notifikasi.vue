@@ -15,13 +15,14 @@
         </h1>
       </div>
 
-      <!-- Action Buttons on the Right (Sejajar) -->
-      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+      <!-- Action Buttons on the Right (Stacked full-width on mobile, side-by-side on desktop) -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
         <!-- Mark All as Read Button -->
         <BActionButton
           v-if="notificationStore.unreadCount > 0"
           variant="green"
           icon="check"
+          custom-class="w-full sm:w-auto justify-center text-center"
           title="Tandai semua notifikasi sudah dibaca"
           @click="notificationStore.markAllAsRead"
         >
@@ -33,6 +34,7 @@
           variant="default"
           icon="none"
           to="/dashboard/pengaturan"
+          custom-class="w-full sm:w-auto justify-center text-center"
           title="Pengaturan Notifikasi"
         >
           Pengaturan
@@ -40,12 +42,14 @@
       </div>
     </div>
 
-    <!-- 2. Macro Segmented Pill Switcher with Native Counts (Tab Navigasi Makro - GoPay Green Edition) -->
-    <BPillTabs
-      v-model="selectedFilter"
-      :tabs="filterTabs"
-      size="md"
-    />
+    <!-- 2. Macro Segmented Pill Switcher with Native Counts (Desktop View: hidden on < sm where joined control bar handles it) -->
+    <div class="hidden sm:block">
+      <BPillTabs
+        v-model="selectedFilter"
+        :tabs="filterTabs"
+        size="md"
+      />
+    </div>
 
     <!-- 4. Interactive Notifications Container (Matched with Catatan Kas & Beranda Card Concept) -->
     <div id="notifications-table-container" class="card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
@@ -70,31 +74,91 @@
           </div>
         </div>
 
-        <!-- Search Input: Melebar rata kiri kanan di bawah teks, rounded-[8px] sesuai konsep design sistem -->
-        <div class="w-full pt-3 sm:pt-4">
-          <div class="relative w-full">
+        <!-- Joined Search & Filter Control Bar (Disatukan / Gabung menjadi satu kontrol ringkas & presisi) -->
+        <div class="relative w-full rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-neutral-50/70 dark:bg-[#1A1A1A] focus-within:border-[#00800e] dark:focus-within:border-[#00C058] focus-within:ring-2 focus-within:ring-[#00800e]/20 transition-all flex items-center min-h-[46px] mt-3 sm:mt-4">
+          <!-- Left: Search Icon + Input -->
+          <div class="relative flex-1 flex items-center min-w-0">
             <HugeiconsIcon
               :icon="Search01Icon"
               :size="16"
               :stroke-width="1.8"
-              class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 pointer-events-none"
+              class="ml-3.5 text-neutral-400 dark:text-neutral-500 shrink-0 pointer-events-none"
             />
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Cari kata kunci notifikasi, nama pengirim, ID pesanan, atau catatan..."
-              class="w-full pl-10 pr-10 py-2.5 rounded-[8px] border border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-[#18191E] text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#156374]/30 dark:focus:ring-[#50AABF]/30 transition-all font-poppins"
+              aria-label="Cari notifikasi, aktivitas, atau pengirim"
+              placeholder="Cari notifikasi, nama pengirim, atau catatan..."
+              class="w-full pl-2.5 pr-2 py-2.5 bg-transparent border-0 text-xs sm:text-sm text-[#18181b] dark:text-[#FDFDFD] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-0 font-poppins min-w-0"
             />
             <button
               v-if="searchQuery"
               type="button"
               aria-label="Hapus pencarian"
-              class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer"
+              class="p-1.5 mr-1 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer shrink-0"
               title="Hapus pencarian"
               @click="searchQuery = ''"
             >
-              <HugeiconsIcon :icon="Cancel01Icon" :size="16" :stroke-width="2" />
+              <HugeiconsIcon :icon="Cancel01Icon" :size="15" :stroke-width="2" />
             </button>
+          </div>
+
+          <!-- Divider Line -->
+          <div class="h-6 w-px bg-neutral-300 dark:bg-neutral-700 shrink-0" aria-hidden="true" />
+
+          <!-- Right: Filter Dropdown Trigger (Joined seamlessly) -->
+          <div ref="filterDropdownRef" class="relative shrink-0">
+            <button
+              type="button"
+              class="h-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-poppins font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200/50 dark:hover:bg-neutral-800 transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap min-h-[46px]"
+              :aria-expanded="isFilterDropdownOpen"
+              title="Filter Kategori Notifikasi"
+              @click="isFilterDropdownOpen = !isFilterDropdownOpen"
+            >
+              <HugeiconsIcon :icon="FilterHorizontalIcon" :size="14" :stroke-width="2" class="text-neutral-500 dark:text-neutral-400 shrink-0" />
+              <span class="truncate">{{ activeFilterLabel }}</span>
+              <svg
+                class="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 shrink-0"
+                :class="{ 'rotate-180': isFilterDropdownOpen }"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.0"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu Popover -->
+            <div
+              v-if="isFilterDropdownOpen"
+              class="absolute right-0 top-full mt-1.5 w-52 sm:w-56 rounded-[10px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
+            >
+              <div class="space-y-0.5">
+                <button
+                  v-for="opt in filterTabs"
+                  :key="opt.id"
+                  type="button"
+                  :class="[
+                    'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-xs sm:text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                    selectedFilter === opt.id
+                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                      : 'text-[#475569] dark:text-neutral-300 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                  ]"
+                  @click="selectedFilter = opt.id as any; isFilterDropdownOpen = false"
+                >
+                  <span>{{ opt.label }}</span>
+                  <span
+                    v-if="opt.count !== undefined"
+                    class="text-[11px] px-2 py-0.5 rounded-full bg-neutral-200/70 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 tabular-nums font-semibold"
+                  >
+                    {{ opt.count }}
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -286,10 +350,36 @@
                   <p class="text-xs sm:text-[13px] text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
                     {{ item.quoteSnippet || item.message }}
                   </p>
+
+                  <!-- Mobile Action Buttons (Visible on mobile < sm, stacked underneath) -->
+                  <div class="sm:hidden flex items-center gap-2 pt-2.5 mt-2 border-t border-neutral-100 dark:border-neutral-800/60 w-full [&>*]:flex-1">
+                    <button
+                      type="button"
+                      class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-neutral-700 hover:bg-slate-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors cursor-pointer text-center justify-center"
+                      :title="item.isRead ? 'Tandai belum dibaca' : 'Tandai sudah dibaca'"
+                      @click="toggleReadState(item)"
+                    >
+                      {{ item.isRead ? 'Belum Dibaca' : 'Tandai Dibaca' }}
+                    </button>
+                    <NuxtLink
+                      v-if="item.link"
+                      :to="item.link"
+                      :class="[
+                        'px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5 select-none text-center',
+                        item.priority === 'HIGH' && !item.isRead
+                          ? 'bg-[#18191E] dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100'
+                          : 'bg-[#156374] dark:bg-[#2091AA] text-white hover:bg-[#0E434F] dark:hover:bg-[#187589]'
+                      ]"
+                      @click="notificationStore.markAsRead(item.id)"
+                    >
+                      <span>{{ item.actionLabel || 'Lihat' }}</span>
+                      <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2.2" />
+                    </NuxtLink>
+                  </div>
                 </div>
 
-                <!-- Action Button Group on Far Right (Matching Image 1 & 2: Reply & View) -->
-                <div class="flex items-center gap-2 shrink-0 self-center">
+                <!-- Desktop Action Button Group (Hidden on mobile < sm, visible sm+) -->
+                <div class="hidden sm:flex items-center gap-2 shrink-0 self-center">
                   <!-- Secondary Toggle Read Button (Ghost / Outline) -->
                   <button
                     type="button"
@@ -433,10 +523,31 @@
                   <p class="text-xs sm:text-[13px] text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
                     {{ item.quoteSnippet || item.message }}
                   </p>
+
+                  <!-- Mobile Action Buttons (Visible on mobile < sm, stacked underneath) -->
+                  <div class="sm:hidden flex items-center gap-2 pt-2.5 mt-2 border-t border-neutral-100 dark:border-neutral-800/60 w-full [&>*]:flex-1">
+                    <button
+                      type="button"
+                      class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-neutral-700 hover:bg-slate-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 transition-colors cursor-pointer text-center justify-center"
+                      :title="item.isRead ? 'Tandai belum dibaca' : 'Tandai sudah dibaca'"
+                      @click="toggleReadState(item)"
+                    >
+                      {{ item.isRead ? 'Belum Dibaca' : 'Tandai Dibaca' }}
+                    </button>
+                    <NuxtLink
+                      v-if="item.link"
+                      :to="item.link"
+                      class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#156374] dark:bg-[#2091AA] hover:bg-[#0E434F] dark:hover:bg-[#187589] text-white transition-all shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5 select-none text-center"
+                      @click="notificationStore.markAsRead(item.id)"
+                    >
+                      <span>{{ item.actionLabel || 'Lihat' }}</span>
+                      <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2.2" />
+                    </NuxtLink>
+                  </div>
                 </div>
 
-                <!-- Action Button Group on Far Right -->
-                <div class="flex items-center gap-2 shrink-0 self-center">
+                <!-- Desktop Action Button Group (Hidden on mobile < sm, visible sm+) -->
+                <div class="hidden sm:flex items-center gap-2 shrink-0 self-center">
                   <!-- Secondary Toggle Read Button -->
                   <button
                     type="button"
@@ -497,7 +608,8 @@ import {
   ArrowRight01Icon,
   Cancel01Icon,
   Search01Icon,
-  RefreshIcon
+  RefreshIcon,
+  FilterHorizontalIcon
 } from '@hugeicons/core-free-icons'
 
 // SEO Metadata
@@ -520,6 +632,8 @@ const notificationStore = useNotificationStore()
 
 const searchQuery = ref('')
 const selectedFilter = ref<'ALL' | 'UNREAD' | 'PRIORITY' | 'VALIDASI'>('ALL')
+const isFilterDropdownOpen = ref(false)
+const filterDropdownRef = ref<HTMLElement | null>(null)
 
 function setFilter(filter: 'ALL' | 'UNREAD' | 'PRIORITY' | 'VALIDASI') {
   selectedFilter.value = filter
@@ -545,6 +659,11 @@ const filterTabs = computed<PillTabItem[]>(() => {
   ]
 })
 
+const activeFilterLabel = computed(() => {
+  const match = filterTabs.value.find(t => t.id === selectedFilter.value)
+  return match ? match.label : 'Semua'
+})
+
 onMounted(() => {
   notificationStore.initNotifications()
 
@@ -565,6 +684,22 @@ onMounted(() => {
       ease: 'power2.out',
       clearProps: 'all'
     })
+  }
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', handleClickOutside)
+  }
+})
+
+function handleClickOutside(event: MouseEvent) {
+  if (filterDropdownRef.value && !filterDropdownRef.value.contains(event.target as Node)) {
+    isFilterDropdownOpen.value = false
+  }
+}
+
+onUnmounted(() => {
+  if (typeof document !== 'undefined') {
+    document.removeEventListener('click', handleClickOutside)
   }
 })
 

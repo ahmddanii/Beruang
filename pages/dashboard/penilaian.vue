@@ -16,12 +16,12 @@
         </h1>
       </div>
 
-      <div class="flex items-center gap-2.5 shrink-0">
+      <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
         <BActionButton
           variant="green"
           :huge-icon="Comment01Icon"
           to="/dashboard/pesan"
-          custom-class="px-5 py-2.5 text-xs sm:text-sm font-semibold shadow-xs"
+          custom-class="px-5 py-2.5 text-xs sm:text-sm font-semibold shadow-xs justify-center"
           title="Buka pesan untuk konsultasi langsung dengan konsultan pendamping"
         >
           Chat Konsultan

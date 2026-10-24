@@ -63,7 +63,7 @@
 
           <!-- Task Content (Title & Meta) -->
           <div class="min-w-0 flex-1">
-            <div class="flex items-start justify-between gap-3 flex-wrap">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 sm:gap-3">
               <div
                 class="min-w-0 flex-1"
                 :class="collapsible ? 'cursor-pointer' : ''"
@@ -90,12 +90,12 @@
                 </div>
               </div>
 
-              <!-- Right Action Button: e.g. Lihat Berkas -->
-              <div class="flex items-center gap-2 shrink-0">
+              <!-- Right Action Button: e.g. Lihat Berkas (Full-width on mobile) -->
+              <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto pt-1 sm:pt-0">
                 <slot name="action" :task="task">
                   <button
                     type="button"
-                    class="btn-pill-action text-xs shrink-0 cursor-pointer"
+                    class="btn-pill-action text-xs shrink-0 cursor-pointer justify-center"
                     :title="task.actionTitle || 'Lihat Berkas Dokumen'"
                     @click="$emit('action', task)"
                   >

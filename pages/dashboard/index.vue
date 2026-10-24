@@ -15,11 +15,11 @@
         </h1>
       </div>
 
-      <!-- Action Controls: Edit Profil Button (Right-aligned, on the same row as Title) -->
-      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+      <!-- Action Controls: Edit Profil Button (Stacked full-width on mobile, right-aligned on desktop) -->
+      <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
         <NuxtLink
           to="/dashboard/profile"
-          class="btn-pill-action group shrink-0 focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
+          class="btn-pill-action group justify-center focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
           title="Edit Profil Usaha"
         >
           <span>Edit Profil</span>
@@ -552,11 +552,11 @@
           </p>
         </div>
 
-        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
           <!-- Button Unduh Laporan Terbaru (CSV) -->
           <button
             type="button"
-            class="btn-pill-action-green group shrink-0 cursor-pointer"
+            class="btn-pill-action-green group shrink-0 cursor-pointer justify-center"
             title="Unduh Laporan Keuangan Terbaru (CSV)"
             @click="downloadThreeMonthsReport"
           >
@@ -567,7 +567,7 @@
           <!-- Button Lihat Semua (Renamed from Lihat Semua Laporan) -->
           <NuxtLink
             to="/dashboard/progres"
-            class="btn-pill-action group shrink-0"
+            class="btn-pill-action group shrink-0 justify-center"
           >
             <span>Lihat Semua</span>
             <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
@@ -577,8 +577,8 @@
         </div>
       </div>
 
-      <!-- Table Langsung -->
-      <div class="overflow-x-auto w-full">
+      <!-- Table Langsung: Desktop View (hidden on < sm) -->
+      <div class="overflow-x-auto w-full hidden sm:block">
         <table class="w-full text-left text-xs sm:text-[14px] font-poppins">
           <thead>
             <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-[12.5px] font-bold uppercase tracking-wider">
@@ -658,6 +658,61 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Responsive Tactile Card List View (< sm) -->
+      <div class="sm:hidden divide-y divide-neutral-100 dark:divide-neutral-800">
+        <!-- Empty State Mobile -->
+        <div v-if="!latestMonthlyRecords || latestMonthlyRecords.length === 0" class="p-6 text-center space-y-3">
+          <p class="font-poppins text-xs text-neutral-500 dark:text-neutral-400">
+            Belum ada rapor keuangan bulanan.
+          </p>
+          <button
+            type="button"
+            class="btn-pill-action w-full justify-center text-xs"
+            @click="isTransactionDrawerOpen = true"
+          >
+            Catat Kas Pertama
+          </button>
+        </div>
+
+        <div
+          v-for="rec in latestMonthlyRecords"
+          :key="`m-rec-${rec.month}-${rec.year}`"
+          class="p-4 space-y-3 bg-white dark:bg-[#13161F]"
+        >
+          <!-- Top: Periode Bulan & Untung Bersih Pill -->
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+              {{ rec.month }} {{ rec.year }}
+            </span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/70 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tabular-nums">
+              + Rp {{ rec.netProfit.toLocaleString('id-ID') }}
+            </span>
+          </div>
+
+          <!-- Financial Metrics Grid: Total Pendapatan, Modal Jualan, Biaya Operasional -->
+          <div class="grid grid-cols-3 gap-2 pt-1 text-center bg-neutral-50/80 dark:bg-neutral-800/40 p-2.5 rounded-xl border border-neutral-100 dark:border-neutral-800/80">
+            <div>
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Pendapatan</span>
+              <span class="text-xs font-semibold text-neutral-900 dark:text-white tabular-nums block mt-0.5">
+                Rp {{ (rec.omzet / 1000000).toFixed(1) }} Jt
+              </span>
+            </div>
+            <div class="border-x border-neutral-200 dark:border-neutral-700/60">
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Modal Jualan</span>
+              <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 tabular-nums block mt-0.5">
+                Rp {{ (rec.hpp / 1000000).toFixed(1) }} Jt
+              </span>
+            </div>
+            <div>
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Operasional</span>
+              <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 tabular-nums block mt-0.5">
+                Rp {{ (rec.opex / 1000000).toFixed(1) }} Jt
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

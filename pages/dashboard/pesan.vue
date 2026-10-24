@@ -1,9 +1,10 @@
 <template>
   <div class="h-full flex flex-col font-poppins text-neutral-900 dark:text-neutral-100 overflow-hidden select-text">
     <!-- ========================================================================= -->
-    <!-- 1. TOP HEADER: Clean Page Title & Action Controls                         -->
+    <!-- 1. TOP HEADER: Clean Page Title                                           -->
+    <!-- Catatan: Tombol 'Ruang Modal' telah dihapus sesuai instruksi               -->
     <!-- ========================================================================= -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-3.5 shrink-0 min-h-[44px]">
+    <div class="flex items-center justify-between gap-3 mb-3.5 shrink-0 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon
           :icon="Message01Icon"
@@ -15,96 +16,82 @@
           Pesan
         </h1>
       </div>
-
-      <!-- Action Controls: Right-aligned -->
-      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-        <BActionButton
-          variant="default"
-          icon="chevron"
-          to="/dashboard/pendanaan"
-          title="Buka Ruang Modal & Kemitraan"
-        >
-          Ruang Modal
-        </BActionButton>
-      </div>
     </div>
 
     <!-- ========================================================================= -->
     <!-- 2. MAIN UNIFIED CHAT CONTAINER (Clean Minimalist Multi-Pane Split View)    -->
     <!-- Menyatukan 3 panel dalam 1 container frame berestetika tinggi             -->
-    <!-- Kolom 1 (Kiri): Daftar Percakapan & Filter (Pesan Masuk Investor)         -->
+    <!-- Kolom 1 (Kiri): Daftar Percakapan & Filter Cepat                          -->
     <!-- Kolom 2 (Tengah): Ruang Obrolan dengan Header Bersih & Chat Stream        -->
-    <!-- Kolom 3 (Kanan): Rincian Mitra & Dokumen Legalitas (Toggleable Inspector) -->
+    <!-- Kolom 3 (Kanan): Rincian Mitra & Dokumen Legalitas (Smooth Expand/Compact)-->
     <!-- ========================================================================= -->
     <div class="flex-1 min-h-0 card-tactile-gopay rounded-2xl border border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#13161F] flex overflow-hidden shadow-none">
       
       <!-- ======================================================================= -->
-      <!-- PANEL KIRI (Kolom 1: Daftar Percakapan / Pesan Masuk Investor)          -->
+      <!-- PANEL KIRI (Kolom 1: Daftar Percakapan)                                 -->
+      <!-- Catatan: Judul 'Pesan Masuk Investor' & pill '4 Percakapan' telah dihapus-->
       <!-- ======================================================================= -->
       <aside
         :class="[
-          'w-full lg:w-72 xl:w-[300px] shrink-0 border-r border-[#E2E8F0] dark:border-neutral-800 flex flex-col h-full bg-[#FAFBFD] dark:bg-[#11141D]',
+          'w-full lg:w-80 xl:w-[330px] shrink-0 border-r border-[#E2E8F0] dark:border-neutral-800 flex flex-col h-full bg-[#FAFBFD] dark:bg-[#11141D]',
           isMobileChatOpen ? 'hidden lg:flex' : 'flex'
         ]"
       >
-        <!-- Header Panel: Judul 'Pesan Masuk Investor' & Status Ringkas -->
-        <div class="p-3.5 sm:p-4 border-b border-[#E2E8F0] dark:border-neutral-800 space-y-3 shrink-0 bg-white dark:bg-[#13161F]">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <h2 class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white tracking-tight">
-                Pesan Masuk Investor
-              </h2>
+        <!-- Header Panel: Bilah Pencarian & Filter Terpadu (Satu Bar Kompak) -->
+        <div class="p-2.5 sm:p-3 border-b border-[#E2E8F0] dark:border-neutral-800 shrink-0 bg-white dark:bg-[#13161F]">
+          <!-- Unified Search & Category Filter Control Bar -->
+          <div class="relative w-full rounded-xl border border-neutral-200/90 dark:border-neutral-700/80 bg-neutral-100/70 dark:bg-neutral-800/60 focus-within:border-[#00800e] dark:focus-within:border-[#00C058] focus-within:ring-2 focus-within:ring-[#00800e]/20 transition-all flex items-center min-h-[40px] overflow-hidden">
+            <!-- Left: Search icon + input -->
+            <div class="relative flex-1 flex items-center min-w-[100px]">
+              <HugeiconsIcon :icon="Search01Icon" :size="15" class="ml-2.5 text-neutral-400 shrink-0 pointer-events-none" />
+              <input
+                v-model="chatStore.searchQuery"
+                type="text"
+                placeholder="Cari pesan..."
+                class="w-full pl-2 pr-1 py-1.5 text-xs bg-transparent border-0 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-0 font-sans min-w-0"
+              />
             </div>
-            <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-[#00800e] dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 tabular-nums">
-              {{ filteredThreads.length }} Percakapan
-            </span>
-          </div>
 
-          <!-- Clean Minimalist Search Input -->
-          <div class="relative">
-            <HugeiconsIcon :icon="Search01Icon" :size="15" class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-            <input
-              v-model="chatStore.searchQuery"
-              type="text"
-              placeholder="Cari investor, konsultan, atau pesan..."
-              class="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-neutral-100/70 dark:bg-neutral-800/60 border border-neutral-200/70 dark:border-neutral-700/70 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#00800e]/20 transition-all font-sans"
-            />
-          </div>
+            <!-- Divider Line -->
+            <div class="h-4 w-px bg-neutral-300 dark:bg-neutral-700 shrink-0" aria-hidden="true" />
 
-          <!-- Pill Filter Tabs: Semua, Konsultan, Pemodal -->
-          <div class="flex items-center gap-1.5 pt-0.5 overflow-x-auto scrollbar-none">
-            <button
-              v-for="filter in [
-                { id: 'all', label: 'Semua' },
-                { id: 'konsultan', label: 'Konsultan' },
-                { id: 'pemodal', label: 'Pemodal' }
-              ]"
-              :key="filter.id"
-              type="button"
-              :class="[
-                'px-3 py-1 rounded-full text-xs font-medium transition-all duration-150 cursor-pointer whitespace-nowrap',
-                activeFilter === filter.id
-                  ? 'bg-[#00800e] text-white font-semibold shadow-2xs'
-                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/70 dark:hover:bg-neutral-700'
-              ]"
-              @click="activeFilter = filter.id as any"
-            >
-              {{ filter.label }}
-            </button>
+            <!-- Right: Filter Pill Trigger Buttons (Joined seamlessly) -->
+            <div class="flex items-center gap-0.5 px-1 shrink-0">
+              <button
+                v-for="filter in [
+                  { id: 'all', label: 'Semua' },
+                  { id: 'konsultan', label: 'Konsultan' },
+                  { id: 'pemodal', label: 'Pemodal' }
+                ]"
+                :key="filter.id"
+                type="button"
+                :class="[
+                  'px-2 py-0.5 rounded-md text-[11px] font-medium transition-all duration-150 cursor-pointer whitespace-nowrap',
+                  activeFilter === filter.id
+                    ? 'bg-[#00800e] text-white font-semibold shadow-2xs'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-700/60'
+                ]"
+                @click="setFilterCategory(filter.id as any)"
+              >
+                {{ filter.label }}
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- Scrollable Thread Cards List -->
-        <div class="flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-1.5">
+        <!-- Efek Hover: Sama seperti 'btn putih' (bg putih, border slate, shadow-2xs) -->
+        <!-- Efek Active: Sama seperti 'warna btn active' (bg #00800e, text putih) -->
+        <div class="flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-1.5 scrollbar-thin">
           <button
             v-for="thread in filteredThreads"
             :key="thread.id"
             type="button"
             :class="[
-              'w-full text-left p-3 rounded-xl transition-all duration-150 cursor-pointer flex items-start gap-3 border',
+              'thread-card-item group relative w-full text-left p-3 rounded-xl transition-all duration-180 cursor-pointer flex items-start gap-3 border',
               chatStore.activeThreadId === thread.id
-                ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-500/40 dark:border-emerald-700/60 shadow-2xs'
-                : 'bg-transparent border-transparent hover:bg-neutral-100/70 dark:hover:bg-neutral-800/40 text-neutral-900 dark:text-white'
+                ? 'bg-[#00800e] text-white border-[#00800e] shadow-[0_2px_8px_rgba(0,128,14,0.22)] ring-1 ring-[#00800e]'
+                : 'bg-transparent border-transparent text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-[#1A1A1A] hover:border-[#CBD5E1] dark:hover:border-neutral-700 hover:shadow-[0_1.5px_0_rgba(0,0,0,0.06)] active:scale-[0.99]'
             ]"
             @click="selectThread(thread.id)"
           >
@@ -113,36 +100,71 @@
               <img
                 :src="thread.investorAvatar"
                 alt="Foto Profil"
-                class="w-full h-full rounded-full object-cover border border-neutral-200/80 dark:border-neutral-700"
+                class="w-full h-full rounded-full object-cover border"
+                :class="chatStore.activeThreadId === thread.id ? 'border-white/40' : 'border-neutral-200/80 dark:border-neutral-700'"
               />
               <span
-                class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white dark:ring-[#13161F]"
-                :class="thread.online ? 'bg-[#00800e]' : 'bg-neutral-400'"
+                class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2"
+                :class="[
+                  thread.online ? 'bg-emerald-400' : 'bg-neutral-400',
+                  chatStore.activeThreadId === thread.id ? 'ring-[#00800e]' : 'ring-white dark:ring-[#13161F]'
+                ]"
               />
             </div>
 
             <!-- Thread Text Info -->
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between gap-1">
-                <h4 class="font-poppins font-semibold text-xs sm:text-[13px] truncate text-neutral-900 dark:text-white">
+                <h4
+                  :class="[
+                    'font-poppins font-semibold text-xs sm:text-[13px] truncate',
+                    chatStore.activeThreadId === thread.id
+                      ? 'text-white'
+                      : 'text-neutral-900 dark:text-white group-hover:text-neutral-900 dark:group-hover:text-white'
+                  ]"
+                >
                   {{ thread.investorName }}
                 </h4>
-                <span class="text-[10px] text-neutral-400 tabular-nums shrink-0 font-sans">
+                <span
+                  :class="[
+                    'text-[10px] tabular-nums shrink-0 font-sans',
+                    chatStore.activeThreadId === thread.id ? 'text-emerald-100' : 'text-neutral-400'
+                  ]"
+                >
                   {{ thread.lastMessageAt || 'Hari ini' }}
                 </span>
               </div>
               
-              <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5 font-sans leading-normal">
+              <p
+                :class="[
+                  'text-[11px] truncate mt-0.5 font-sans leading-normal',
+                  chatStore.activeThreadId === thread.id
+                    ? 'text-emerald-50'
+                    : 'text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-300'
+                ]"
+              >
                 {{ thread.lastMessage }}
               </p>
 
               <div class="flex items-center gap-1.5 mt-1.5">
-                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 truncate font-sans">
+                <span
+                  :class="[
+                    'text-[10px] font-medium px-2 py-0.5 rounded-full truncate font-sans',
+                    chatStore.activeThreadId === thread.id
+                      ? 'bg-white/20 text-white'
+                      : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 group-hover:bg-neutral-100 dark:group-hover:bg-neutral-800'
+                  ]"
+                >
                   {{ thread.investorLembaga }}
                 </span>
                 <span
                   v-if="thread.unreadUmkm > 0"
-                  class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[#00800e] text-white tabular-nums shrink-0 ml-auto leading-none"
+                  :class="[
+                    'px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums shrink-0 ml-auto leading-none',
+                    chatStore.activeThreadId === thread.id
+                      ? 'bg-white text-[#00800e]'
+                      : 'bg-[#00800e] text-white'
+                  ]"
                 >
                   {{ thread.unreadUmkm }}
                 </span>
@@ -159,7 +181,7 @@
       </aside>
 
       <!-- ======================================================================= -->
-      <!-- PANEL TENGAH (Kolom 2: Ruang Obrolan Utama yang Lega & Tenang)          -->
+      <!-- PANEL TENGAH (Kolom 2: Ruang Obrolan Utama)                             -->
       <!-- ======================================================================= -->
       <section
         v-if="activeThread"
@@ -168,7 +190,7 @@
           !isMobileChatOpen ? 'hidden lg:flex' : 'flex'
         ]"
       >
-        <!-- 1. HEADER CHAT HORIZONTAL: Ramping, Bersih, Tidak Menghabiskan Ruang Vertikal -->
+        <!-- 1. HEADER CHAT: Ramping, Bersih, dengan Tombol Rincian Putih Bulat -->
         <div class="h-16 px-4 sm:px-6 border-b border-[#E2E8F0] dark:border-neutral-800 flex items-center justify-between gap-3 shrink-0 bg-white dark:bg-[#13161F]">
           <div class="flex items-center gap-3 min-w-0">
             <!-- Mobile Back Button -->
@@ -211,23 +233,28 @@
             </div>
           </div>
 
-          <!-- Header Right Actions: Toggle Rincian & Dokumen Panel -->
+          <!-- Header Right Actions: Tombol Putih Bulat untuk Toggle Rincian (Compact / Expand) -->
           <div class="flex items-center gap-2 shrink-0">
             <button
+              ref="toggleDetailBtnRef"
               type="button"
-              class="px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all duration-150 cursor-pointer"
-              :class="isDetailPanelOpen
-                ? 'bg-emerald-50 text-[#00800e] border-emerald-300/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
-                : 'bg-neutral-100/80 dark:bg-neutral-800/80 text-neutral-700 dark:text-neutral-300 border-neutral-200/80 dark:border-neutral-700 hover:bg-neutral-200/70 dark:hover:bg-neutral-700'
-              "
-              :title="isDetailPanelOpen ? 'Sembunyikan Rincian Mitra' : 'Tampilkan Rincian Mitra & Dokumen Legalitas'"
-              @click="isDetailPanelOpen = !isDetailPanelOpen"
+              :class="[
+                'w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer shadow-xs shrink-0',
+                'bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 hover:border-slate-300 dark:hover:border-neutral-600',
+                isDetailPanelOpen
+                  ? 'ring-2 ring-[#00800e]/30 border-[#00800e] text-[#00800e] dark:text-[#00C058]'
+                  : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white'
+              ]"
+              :title="isDetailPanelOpen ? 'Kecilkan Rincian Mitra (Compact)' : 'Tampilkan Rincian Mitra (Expand)'"
+              @click="toggleDetailPanel"
             >
-              <HugeiconsIcon :icon="Folder01Icon" :size="15" />
-              <span class="hidden sm:inline">Rincian</span>
-              <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 tabular-nums">
-                {{ officialDocuments.length }}
-              </span>
+              <div ref="toggleIconWrapperRef" class="flex items-center justify-center">
+                <HugeiconsIcon
+                  :icon="Folder01Icon"
+                  :size="18"
+                  :stroke-width="2.0"
+                />
+              </div>
             </button>
           </div>
         </div>
@@ -246,7 +273,7 @@
             v-for="msg in activeThread.messages"
             :key="msg.id"
             :class="[
-              'flex items-start gap-2.5 max-w-[85%] sm:max-w-[75%]',
+              'chat-bubble-item flex items-start gap-2.5 max-w-[85%] sm:max-w-[75%]',
               msg.senderRole === 'UMKM' ? 'ml-auto flex-row-reverse' : 'mr-auto'
             ]"
           >
@@ -282,18 +309,7 @@
           </div>
         </div>
 
-        <!-- Quick Response Chips: Minimalist & Clean -->
-        <div class="px-4 sm:px-6 py-2 border-t border-[#E2E8F0] dark:border-neutral-800 flex items-center gap-2 overflow-x-auto scrollbar-none shrink-0 bg-white dark:bg-[#13161F]">
-          <button
-            v-for="chip in quickChips"
-            :key="chip"
-            type="button"
-            class="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100/80 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200/80 dark:border-neutral-700 hover:border-[#00800e] hover:text-[#00800e] transition-colors whitespace-nowrap cursor-pointer shrink-0 font-sans"
-            @click="sendQuickMessage(chip)"
-          >
-            {{ chip }}
-          </button>
-        </div>
+        <!-- Catatan: Rekomendasi chat (quick response chips) telah dihapus sesuai instruksi -->
 
         <!-- 3. Minimalist Input Bar -->
         <div class="p-3 sm:p-4 border-t border-[#E2E8F0] dark:border-neutral-800 shrink-0 bg-white dark:bg-[#13161F]">
@@ -342,13 +358,17 @@
       </section>
 
       <!-- ======================================================================= -->
-      <!-- PANEL KANAN (Kolom 3: Rincian Mitra & Dokumen - Toggleable Inspector)    -->
+      <!-- PANEL KANAN (Kolom 3: Rincian Mitra & Dokumen - Animasi Expand/Compact) -->
+      <!-- Animasi GSAP & transisi lebar halus (SaaS-grade smooth collapsible)    -->
       <!-- ======================================================================= -->
       <aside
-        v-if="isDetailPanelOpen"
+        ref="detailPanelRef"
         :class="[
-          'w-72 xl:w-[290px] shrink-0 border-l border-[#E2E8F0] dark:border-neutral-800 flex-col h-full bg-[#FAFBFD] dark:bg-[#11141D] overflow-hidden',
-          'fixed inset-y-0 right-0 z-50 shadow-2xl flex xl:relative xl:z-auto xl:shadow-none'
+          'transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shrink-0 border-l border-[#E2E8F0] dark:border-neutral-800 flex flex-col h-full bg-[#FAFBFD] dark:bg-[#11141D] overflow-hidden',
+          isDetailPanelOpen
+            ? 'w-72 xl:w-[295px] opacity-100 pointer-events-auto'
+            : 'w-0 opacity-0 pointer-events-none border-l-0 -mr-px',
+          'fixed inset-y-0 right-0 z-50 shadow-2xl xl:relative xl:z-auto xl:shadow-none'
         ]"
       >
         <!-- Panel Header -->
@@ -360,22 +380,22 @@
             </h3>
           </div>
 
-          <!-- Close button -->
+          <!-- Close / Compact button -->
           <button
             type="button"
             class="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer transition-colors"
-            title="Tutup Rincian"
-            @click="isDetailPanelOpen = false"
+            title="Kecilkan Rincian (Compact)"
+            @click="toggleDetailPanel"
           >
             ✕
           </button>
         </div>
 
         <!-- Scrollable Shared Media Sections -->
-        <div class="flex-1 overflow-y-auto p-4 space-y-5">
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
           
           <!-- SECTION 1: PROFIL & STATUS MITRA -->
-          <div class="space-y-3">
+          <div class="detail-stagger-item space-y-3">
             <div class="p-3.5 rounded-xl bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 space-y-3">
               <div class="flex items-center gap-2.5">
                 <img
@@ -421,18 +441,22 @@
 
             <!-- Tombol Aksi Cepat Terkait -->
             <div class="grid grid-cols-2 gap-2">
-              <NuxtLink
+              <BActionButton
                 to="/dashboard/rencana-aksi"
-                class="py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200/80 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-semibold text-center transition-colors font-poppins"
+                variant="default"
+                icon="none"
+                custom-class="!h-9 !min-h-9 !text-xs !px-2.5 !w-full justify-center"
               >
                 Progress Tugas
-              </NuxtLink>
-              <NuxtLink
+              </BActionButton>
+              <BActionButton
                 to="/dashboard/pendanaan"
-                class="py-2 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-[#00800e] dark:text-emerald-300 text-xs font-semibold text-center transition-colors font-poppins"
+                variant="green"
+                icon="none"
+                custom-class="!h-9 !min-h-9 !text-xs !px-2.5 !w-full justify-center"
               >
                 Cari Modal
-              </NuxtLink>
+              </BActionButton>
             </div>
           </div>
 
@@ -440,7 +464,7 @@
           <div class="border-t border-[#E2E8F0] dark:border-neutral-800" />
 
           <!-- SECTION 2: DOKUMEN RESMI TOKO -->
-          <div class="space-y-3">
+          <div class="detail-stagger-item space-y-3">
             <div class="flex items-center justify-between">
               <h3 class="font-poppins font-semibold text-xs sm:text-sm text-neutral-900 dark:text-white">
                 Dokumen Usaha
@@ -482,14 +506,14 @@
             </div>
 
             <!-- Upload Button Trigger -->
-            <button
-              type="button"
-              class="w-full py-2.5 px-3 rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 hover:border-[#00800e] text-neutral-600 dark:text-neutral-300 hover:text-[#00800e] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer font-poppins"
+            <BActionButton
+              variant="default"
+              icon="plus"
+              custom-class="!h-9 !min-h-9 !text-xs !w-full justify-center border-dashed"
               @click="triggerUploadDocument"
             >
-              <HugeiconsIcon :icon="Add01Icon" :size="14" />
-              <span>Unggah Berkas Baru</span>
-            </button>
+              Unggah Berkas Baru
+            </BActionButton>
           </div>
 
         </div>
@@ -501,21 +525,18 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import gsap from 'gsap'
 import { useChatStore } from '~/stores/chat'
 import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Message01Icon,
   Search01Icon,
-  CheckmarkCircle01Icon,
   ArrowLeft01Icon,
   SendIcon,
   Folder01Icon,
   SmileIcon,
   Add01Icon,
-  Location01Icon,
-  Building01Icon,
-  Coins01Icon,
   ShieldCheckIcon,
   FileValidationIcon,
   Download01Icon
@@ -533,6 +554,10 @@ const messagesContainer = ref<HTMLElement | null>(null)
 const isMobileChatOpen = ref(false)
 const isDetailPanelOpen = ref(false)
 const activeFilter = ref<'all' | 'konsultan' | 'pemodal'>('all')
+
+const toggleDetailBtnRef = ref<HTMLElement | null>(null)
+const toggleIconWrapperRef = ref<HTMLElement | null>(null)
+const detailPanelRef = ref<HTMLElement | null>(null)
 
 // Filter threads by active filter tab & search query
 const filteredThreads = computed(() => {
@@ -564,14 +589,7 @@ const isKonsultan = computed(() => {
   return lembaga.includes('konsultan') || lembaga.includes('legalitas') || name.includes('maya') || name.includes('shafa')
 })
 
-const quickChips = [
-  'Laporan kas bulan ini sudah tervalidasi konsultan',
-  'Izin akses ruang data privat sudah kami buka',
-  'Kami siap jadwalkan pertemuan daring via Zoom',
-  'Terima kasih banyak atas perhatian Bapak/Ibu'
-]
-
-// Official Documents List (Sesuai Konteks Bisnis UMKM Beruang & Section Dokumen Mockup)
+// Official Documents List (Sesuai Konteks Bisnis UMKM Beruang)
 const officialDocuments = [
   { name: 'NIB OSS RBA - Legalitas Usaha.pdf', size: '1.8 MB', status: 'Dokumen Sah' },
   { name: 'Laporan Rekonsiliasi Kas 30 Hari.pdf', size: '3.2 MB', status: 'Tervalidasi' },
@@ -587,11 +605,21 @@ function scrollToBottom() {
   })
 }
 
+function setFilterCategory(category: 'all' | 'konsultan' | 'pemodal') {
+  activeFilter.value = category
+  nextTick(() => {
+    animateThreadsEntrance()
+  })
+}
+
 function selectThread(threadId: string) {
   chatStore.setActiveThread(threadId)
   chatStore.markAsRead(threadId, 'UMKM')
   isMobileChatOpen.value = true
   scrollToBottom()
+  nextTick(() => {
+    animateMessagesEntrance()
+  })
 }
 
 function handleSendMessage() {
@@ -599,12 +627,9 @@ function handleSendMessage() {
   chatStore.sendMessage(activeThread.value.id, inputMessage.value, 'UMKM')
   inputMessage.value = ''
   scrollToBottom()
-}
-
-function sendQuickMessage(text: string) {
-  if (!activeThread.value) return
-  chatStore.sendMessage(activeThread.value.id, text, 'UMKM')
-  scrollToBottom()
+  nextTick(() => {
+    animateLatestMessageEntrance()
+  })
 }
 
 function triggerAttachmentAlert() {
@@ -619,11 +644,93 @@ function downloadDocument(docName: string) {
   alert(`Memulai unduhan dokumen resmi: ${docName}`)
 }
 
+// =============================================================================
+// GSAP SAAS-GRADE MOTION & TRANSITIONS
+// =============================================================================
+
+function toggleDetailPanel() {
+  isDetailPanelOpen.value = !isDetailPanelOpen.value
+
+  // GSAP: Animate the circular white button icon smoothly
+  if (toggleIconWrapperRef.value) {
+    gsap.fromTo(
+      toggleIconWrapperRef.value,
+      { rotate: isDetailPanelOpen.value ? 0 : 180, scale: 0.85 },
+      {
+        rotate: isDetailPanelOpen.value ? 180 : 0,
+        scale: 1,
+        duration: 0.35,
+        ease: 'power2.out'
+      }
+    )
+  }
+
+  // GSAP: Button tactile spring bounce
+  if (toggleDetailBtnRef.value) {
+    gsap.fromTo(
+      toggleDetailBtnRef.value,
+      { scale: 0.92 },
+      { scale: 1, duration: 0.3, ease: 'back.out(2)' }
+    )
+  }
+
+  // Stagger detail items when expanding
+  if (isDetailPanelOpen.value) {
+    nextTick(() => {
+      gsap.from('.detail-stagger-item', {
+        opacity: 0,
+        y: 10,
+        duration: 0.32,
+        stagger: 0.06,
+        ease: 'power2.out'
+      })
+    })
+  }
+}
+
+function animateThreadsEntrance() {
+  gsap.from('.thread-card-item', {
+    opacity: 0,
+    x: -8,
+    duration: 0.28,
+    stagger: 0.04,
+    ease: 'power2.out'
+  })
+}
+
+function animateMessagesEntrance() {
+  gsap.from('.chat-bubble-item', {
+    opacity: 0,
+    y: 8,
+    duration: 0.25,
+    stagger: 0.03,
+    ease: 'power2.out'
+  })
+}
+
+function animateLatestMessageEntrance() {
+  const bubbles = document.querySelectorAll('.chat-bubble-item')
+  if (bubbles.length > 0) {
+    const lastBubble = bubbles[bubbles.length - 1]
+    gsap.from(lastBubble, {
+      opacity: 0,
+      scale: 0.95,
+      y: 10,
+      duration: 0.25,
+      ease: 'power2.out'
+    })
+  }
+}
+
 onMounted(() => {
   if (chatStore.activeThreadId) {
     chatStore.markAsRead(chatStore.activeThreadId, 'UMKM')
     scrollToBottom()
   }
+
+  // Entrance animations for threads and active messages
+  animateThreadsEntrance()
+  animateMessagesEntrance()
 })
 
 watch(

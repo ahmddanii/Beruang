@@ -73,13 +73,13 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2.5 flex-wrap self-start sm:self-center pt-1 sm:pt-0">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto pt-1 sm:pt-0">
             <!-- Simpan Perubahan Button: di samping kiri Bagikan Profil -->
             <button
               type="button"
               :disabled="!hasUnsavedChanges || isSaving"
               :class="[
-                'group select-none',
+                'group select-none justify-center text-center w-full sm:w-auto',
                 hasUnsavedChanges
                   ? 'btn-pill-action-green'
                   : 'btn-pill-action-muted'
@@ -102,6 +102,7 @@
               variant="default"
               :huge-icon="Share08Icon"
               :icon-size="14"
+              custom-class="w-full sm:w-auto justify-center text-center"
               title="Buka Modal Bagikan Profil Usaha"
               @click="isShareModalOpen = true"
             >
@@ -497,14 +498,17 @@
               </p>
             </div>
 
-            <BActionButton
-              variant="default"
-              icon="plus"
-              :icon-size="15"
-              @click="openAddProductModal"
-            >
-              Tambah Produk
-            </BActionButton>
+            <div class="w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto shrink-0">
+              <BActionButton
+                variant="default"
+                icon="plus"
+                :icon-size="15"
+                custom-class="w-full sm:w-auto justify-center text-center"
+                @click="openAddProductModal"
+              >
+                Tambah Produk
+              </BActionButton>
+            </div>
           </div>
 
           <!-- Product Cards Grid -->
@@ -733,18 +737,18 @@
                 </div>
 
                 <!-- Case B: File Not Uploaded Yet -->
-                <div v-else class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
+                <div v-else class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-0.5">
                   <!-- Green Action Button Positioned on the Left -->
                   <button
                     type="button"
-                    class="btn-pill-action-green !h-8 !px-3 !text-xs !rounded-lg !gap-1.5"
+                    class="btn-pill-action-green !h-8 !px-3 !text-xs !rounded-lg !gap-1.5 w-full sm:w-auto justify-center text-center"
                     @click="triggerDocUpload(doc.id)"
                   >
                     <HugeiconsIcon :icon="Upload04Icon" :size="14" />
                     <span>Unggah Berkas</span>
                   </button>
 
-                  <span class="text-[11px] font-poppins text-neutral-400 dark:text-neutral-500 flex items-center gap-1">
+                  <span class="text-[11px] font-poppins text-neutral-400 dark:text-neutral-500 flex items-center gap-1 justify-center sm:justify-start">
                     <HugeiconsIcon :icon="AlertCircleIcon" :size="13" class="text-amber-500 shrink-0" />
                     <span>Belum ada dokumen</span>
                   </span>

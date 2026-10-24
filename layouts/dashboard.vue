@@ -135,7 +135,7 @@
       <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page, Hidden on Admin, & Hidden on Mobile to Avoid Collision) -->
       <LinkedInChatDock v-if="!isMessagesPage && !isAdminRole" class="hidden lg:block" />
 
-      <!-- Mobile Floating Pill Tab Bar & Quick Access FAB for UMKM (Images 1 & 2) -->
+      <!-- Mobile Floating 5-Icon Pill Tab Bar & Quick Access Sheet for UMKM -->
       <MobilePillTabBar v-if="isUmkmRole" />
     </div>
   </div>

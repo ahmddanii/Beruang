@@ -753,83 +753,8 @@
     </div>
 
 
-    <!-- SLIDE-OVER SHEET 2: Record Cash Entry Sheet -->
-    <BDrawer
-      v-model="isTransactionDrawerOpen"
-      title="Catat Kas Toko Baru"
-      subtitle="Buku Catatan Penjualan & Biaya Harian"
-    >
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Tanggal Pembukuan
-          </label>
-          <input
-            type="date"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-            :value="new Date().toISOString().substring(0, 10)"
-          />
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Total Penjualan Hari Ini
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm text-neutral-500 font-mono font-semibold">Rp</span>
-            <input
-              type="text"
-              placeholder="3.500.000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-semibold"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Biaya Belanja Bahan Baku (Kopi/Susu)
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm text-neutral-500 font-mono font-semibold">Rp</span>
-            <input
-              type="text"
-              placeholder="1.200.000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-semibold"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Catatan Tambahan
-          </label>
-          <textarea
-            rows="3"
-            placeholder="Contoh: Beli 2 karung biji kopi Temanggung di pasar induk..."
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-sans focus:outline-none focus:ring-2 focus:ring-primary-500/20 leading-relaxed"
-          ></textarea>
-        </div>
-      </div>
-
-      <template #footer="{ close }">
-        <div class="flex items-center justify-end gap-3 w-full">
-          <button
-            type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 transition-colors"
-            @click="close"
-          >
-            Batal
-          </button>
-          <button
-            type="button"
-            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors"
-            @click="close"
-          >
-            Simpan Catatan Kas
-          </button>
-        </div>
-      </template>
-    </BDrawer>
+    <!-- SLIDE-OVER SHEET 2: Record Cash Entry Sheet (Redesigned with Tactile System & GSAP) -->
+    <BCashEntryDrawer v-model="isTransactionDrawerOpen" />
 
     <!-- Modal Edit Cepat Nama & Deskripsi UMKM -->
     <BModal
@@ -1146,6 +1071,7 @@ import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
+import BCashEntryDrawer from '~/components/base/BCashEntryDrawer.vue'
 
 definePageMeta({
   layout: 'dashboard',
@@ -1606,6 +1532,9 @@ function handleClickOutsideDashboard(event: MouseEvent) {
 
 function handleKeydownEscape(event: KeyboardEvent) {
   if (event.key === 'Escape') {
+    isTransactionDrawerOpen.value = false
+    isQuickEditModalOpen.value = false
+    isBranchModalOpen.value = false
     isChartTypeDropdownOpen.value = false
     isPeriodDropdownOpen.value = false
   }

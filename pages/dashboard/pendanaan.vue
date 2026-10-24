@@ -1,40 +1,18 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- ========================================================================= -->
-    <!-- 1. TOP HEADER: Title on Left & Stage Switcher on Right                     -->
+    <!-- 1. TOP HEADER: Title on Left                                               -->
     <!-- ========================================================================= -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        <HugeiconsIcon
-          :icon="Award01Icon"
-          :size="26"
-          :stroke-width="2.2"
-          class="text-neutral-900 dark:text-white shrink-0"
-        />
-        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-          Cari Modal
-        </h1>
-      </div>
-
-      <!-- Stage Switcher: Tahap Pengajuan vs Sudah Siap (Lolos) - Full Width Segmented Control on Mobile -->
-      <div class="w-full sm:w-auto grid grid-cols-2 sm:flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs font-poppins shrink-0">
-        <button
-          type="button"
-          class="w-full sm:w-auto px-3 py-2 sm:py-1.5 rounded-lg font-medium transition-all duration-150 cursor-pointer text-center"
-          :class="currentFundingStage === 'PENGAJUAN' ? 'bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white shadow-2xs font-semibold' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'"
-          @click="currentFundingStage = 'PENGAJUAN'"
-        >
-          Tahap Pengajuan
-        </button>
-        <button
-          type="button"
-          class="w-full sm:w-auto px-3 py-2 sm:py-1.5 rounded-lg font-medium transition-all duration-150 cursor-pointer text-center"
-          :class="currentFundingStage === 'READY' ? 'bg-white dark:bg-[#13161F] text-[#00800e] dark:text-[#00C058] shadow-2xs font-semibold' : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'"
-          @click="currentFundingStage = 'READY'"
-        >
-          Sudah Siap (Lolos)
-        </button>
-      </div>
+    <div class="flex items-center gap-2.5 sm:gap-3 min-h-[44px]">
+      <HugeiconsIcon
+        :icon="Award01Icon"
+        :size="26"
+        :stroke-width="2.2"
+        class="text-neutral-900 dark:text-white shrink-0"
+      />
+      <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+        Cari Modal
+      </h1>
     </div>
 
     <!-- ========================================================================= -->

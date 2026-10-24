@@ -1105,153 +1105,8 @@
 
 
 
-    <!-- 8. Slide-Over Sheet: Catat Kas Toko Baru (BDrawer) -->
-    <BDrawer
-      v-model="isCashDrawerOpen"
-      title="Catat Kas Toko Baru"
-      subtitle="Buku Catatan Penjualan & Pengeluaran Toko Harian"
-    >
-      <form @submit.prevent="handleSaveTransaction" class="space-y-4 pt-1 font-poppins">
-        <!-- Tanggal Transaksi -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Tanggal Pembukuan
-          </label>
-          <input
-            v-model="newTxForm.date"
-            type="text"
-            required
-            placeholder="Contoh: 15 Oktober 2026"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
-          />
-        </div>
-
-        <!-- Kategori Transaksi -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Kategori Transaksi
-          </label>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
-                newTxForm.category === 'PEMASUKAN'
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700 shadow-2xs'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="newTxForm.category = 'PEMASUKAN'"
-            >
-              <span>Uang Masuk</span>
-              <span class="text-xs text-neutral-500 font-normal">Penjualan</span>
-            </button>
-            <button
-              type="button"
-              :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
-                newTxForm.category === 'MODAL_JUALAN'
-                  ? 'bg-blue-50 text-blue-800 border-blue-300 dark:bg-blue-950/60 dark:border-blue-700 shadow-2xs'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="newTxForm.category = 'MODAL_JUALAN'"
-            >
-              <span>Modal Jualan</span>
-              <span class="text-xs text-neutral-500 font-normal">Bahan Baku</span>
-            </button>
-            <button
-              type="button"
-              :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
-                newTxForm.category === 'OPERASIONAL'
-                  ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-950/60 dark:border-cyan-700 shadow-2xs'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="newTxForm.category = 'OPERASIONAL'"
-            >
-              <span>Operasional</span>
-              <span class="text-xs text-neutral-500 font-normal">Sewa/Listrik</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Nama Transaksi -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Nama Transaksi / Pengeluaran
-          </label>
-          <input
-            v-model="newTxForm.title"
-            type="text"
-            required
-            placeholder="Contoh: Belanja Biji Kopi Arabika 20kg"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
-          />
-        </div>
-
-        <!-- Nominal Uang -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Nominal Rupiah
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm font-bold text-neutral-500 font-poppins">Rp</span>
-            <input
-              v-model.number="newTxForm.amount"
-              type="number"
-              required
-              min="1000"
-              placeholder="1.500.000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white tabular-nums font-bold focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
-            />
-          </div>
-        </div>
-
-        <!-- Metode Pembayaran -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Metode Pembayaran
-          </label>
-          <select
-            v-model="newTxForm.paymentMethod"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins cursor-pointer"
-          >
-            <option value="QRIS">QRIS / e-Wallet</option>
-            <option value="TRANSFER">Transfer Bank / Giro</option>
-            <option value="TUNAI">Uang Tunai (Kasir Fisik)</option>
-          </select>
-        </div>
-
-        <!-- Catatan Tambahan -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Catatan Tambahan / Nomor Nota
-          </label>
-          <textarea
-            v-model="newTxForm.notes"
-            rows="2"
-            placeholder="Contoh: Pembelian langsung di pasar grosir, nota terlampir fisik."
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins leading-relaxed"
-          ></textarea>
-        </div>
-
-        <div class="pt-3 flex items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-800">
-          <button
-            type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-poppins font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-            @click="isCashDrawerOpen = false"
-          >
-            Batal
-          </button>
-          <BActionButton
-            variant="green"
-            icon="plus"
-            type="submit"
-          >
-            Simpan ke Buku Kas
-          </BActionButton>
-        </div>
-      </form>
-    </BDrawer>
+    <!-- 8. Slide-Over Sidebar Panel: Catat Kas Toko Baru -->
+    <BCashEntryDrawer v-model="isCashDrawerOpen" />
 
     <!-- 8. Modal Lihat Bukti Nota Transaksi -->
     <BModal
@@ -1334,7 +1189,13 @@ import {
   Delete02Icon,
   ViewIcon,
   AnalyticsUpIcon,
-  FilterHorizontalIcon
+  FilterHorizontalIcon,
+  ArrowDownLeft01Icon,
+  ShoppingBag01Icon,
+  Building01Icon,
+  Calendar01Icon,
+  QrCodeIcon,
+  Note01Icon
 } from '@hugeicons/core-free-icons'
 
 // Base components
@@ -1342,6 +1203,7 @@ import BActionButton from '~/components/base/BActionButton.vue'
 import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
+import BCashEntryDrawer from '~/components/base/BCashEntryDrawer.vue'
 
 definePageMeta({
   layout: 'dashboard',
@@ -1834,6 +1696,8 @@ function handleClickOutsideProgres(event: MouseEvent) {
 
 function handleEscapeKeyProgres(event: KeyboardEvent) {
   if (event.key === 'Escape') {
+    isCashDrawerOpen.value = false
+    isReceiptModalOpen.value = false
     isCategoryDropdownOpen.value = false
     isMonthDropdownOpen.value = false
     isPeriodDropdownOpen.value = false
@@ -1900,7 +1764,7 @@ const filteredDailyTransactions = computed(() => {
   return list
 })
 
-// Drawer Form State
+// Drawer State for BCashEntryDrawer
 const route = useRoute()
 const isCashDrawerOpen = ref(false)
 
@@ -1917,40 +1781,6 @@ watch(
   },
   { immediate: true }
 )
-
-const newTxForm = ref({
-  date: '15 Oktober 2026',
-  title: '',
-  category: 'PEMASUKAN' as 'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL',
-  amount: 0,
-  paymentMethod: 'QRIS' as 'QRIS' | 'TRANSFER' | 'TUNAI',
-  notes: ''
-})
-
-function handleSaveTransaction() {
-  if (!newTxForm.value.title || newTxForm.value.amount <= 0) return
-
-  umkmStore.addDailyTransaction({
-    date: newTxForm.value.date,
-    title: newTxForm.value.title,
-    category: newTxForm.value.category,
-    amount: newTxForm.value.amount,
-    paymentMethod: newTxForm.value.paymentMethod,
-    receiptNumber: `NOTA/${Date.now().toString().slice(-6)}`,
-    notes: newTxForm.value.notes
-  })
-
-  // Reset form
-  newTxForm.value = {
-    date: '15 Oktober 2026',
-    title: '',
-    category: 'PEMASUKAN',
-    amount: 0,
-    paymentMethod: 'QRIS',
-    notes: ''
-  }
-  isCashDrawerOpen.value = false
-}
 
 function handleDeleteTx(id: string) {
   if (confirm('Hapus catatan mutasi kas ini?')) {

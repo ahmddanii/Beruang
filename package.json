@@ -3,11 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:server": "npm run dev --prefix server",
+    "build": "nuxt build",
+    "build:server": "npm run build --prefix server",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:push": "npm run prisma:push --prefix server",
+    "db:seed": "npm run prisma:seed --prefix server",
+    "db:studio": "npm run prisma:studio --prefix server"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",

@@ -502,23 +502,25 @@ export async function handleOtpSend(req: Request, res: Response) {
 
     console.log(`📱 [WhatsApp Gateway] Mengirim kode OTP ${otp} ke nomor +${cleanPhone}`);
 
-    // Integrasi Fonnte jika token gateway disetel di environment
-    const fonnteToken = process.env.FONNTE_TOKEN;
+    // Integrasi Fonnte WhatsApp Gateway (klon resmi dari backend Laravel)
+    const fonnteToken = process.env.FONNTE_TOKEN || "iPEqzwJWzo6beGC5PDDC";
     if (fonnteToken) {
       try {
         const formData = new URLSearchParams();
         formData.append("target", cleanPhone);
         formData.append(
           "message",
-          `*Beruang (Ber-Uang)*\nKode verifikasi keamanan masuk akun usaha Anda: *${otp}*\n\nJangan bagikan kode ini kepada siapa pun. Kode berlaku selama 5 menit.`
+          `🐻 *KODE VERIFIKASI BERUANG*\n\nKode verifikasi Anda adalah: *${otp}*\n\nJangan bagikan kode ini kepada siapa pun. Kode berlaku selama 5 menit.`
         );
+        formData.append("countryCode", "62");
 
-        await fetch("https://api.fonnte.com/send", {
+        const fonnteRes = await fetch("https://api.fonnte.com/send", {
           method: "POST",
           headers: { Authorization: fonnteToken },
           body: formData,
         });
-        console.log(`📱 [WhatsApp Gateway Fonnte] Pesan terkirim ke +${cleanPhone}`);
+        const fonnteData = await fonnteRes.json();
+        console.log(`📱 [WhatsApp Gateway Fonnte] Hasil kirim ke +${cleanPhone}:`, fonnteData);
       } catch (fErr: any) {
         console.warn("Fonnte send warning:", fErr?.message);
       }

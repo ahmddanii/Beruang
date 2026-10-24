@@ -297,21 +297,6 @@
             </div>
           </div>
 
-          <!-- Dev / Testing OTP Hint Banner with 1-Click Auto Fill -->
-          <div class="p-3 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-xs text-sky-800 dark:text-sky-300 flex items-center justify-between gap-2 shadow-2xs">
-            <div class="flex items-center gap-2">
-              <HugeiconsIcon :icon="ShieldCheckIcon" :size="16" class="shrink-0 text-[#0081A0] dark:text-[#2091AA]" />
-              <span>Kode OTP: <strong class="font-extrabold tracking-widest text-[#0081A0] dark:text-[#2091AA] text-sm">{{ activeDevOtp || '123456' }}</strong></span>
-            </div>
-            <button
-              type="button"
-              class="px-3 py-1 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-2xs shrink-0"
-              @click="autoFillOtp(activeDevOtp || '123456')"
-            >
-              Isi Otomatis
-            </button>
-          </div>
-
           <!-- 6-Digit Input Boxes -->
           <div class="flex items-center justify-center gap-2 sm:gap-2.5 py-2">
             <input

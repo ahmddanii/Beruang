@@ -191,12 +191,13 @@ export const useAuthStore = defineStore('auth', {
      */
     async fetchMe() {
       try {
-        const res = await useApi<UserProfile>('/auth/me')
-        if (res.data) {
+        const res = await useApi<any>('/auth/me')
+        const userData = res.data?.user || res.data
+        if (userData) {
           this.currentUser = {
             ...this.currentUser,
-            ...res.data,
-            businessName: res.data.businessName || res.data.orgName || this.currentUser?.businessName
+            ...userData,
+            businessName: userData.businessName || userData.businessProfile?.brand || userData.businessProfile?.name || userData.orgName || this.currentUser?.businessName
           }
           this.isAuthenticated = true
         }
@@ -379,6 +380,14 @@ export const useAuthStore = defineStore('auth', {
           tokenCookie.value = res.data.token
           this.token = res.data.token
           this.isAuthenticated = true
+
+          if (res.data?.user) {
+            this.currentUser = {
+              ...this.currentUser,
+              ...res.data.user,
+              businessName: res.data.user.businessProfile?.brand || res.data.user.businessProfile?.name || res.data.user.businessName
+            }
+          }
           await this.fetchMe()
         }
 

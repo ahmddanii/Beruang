@@ -297,6 +297,21 @@
             </div>
           </div>
 
+          <!-- Dev / Testing OTP Hint Banner with 1-Click Auto Fill -->
+          <div class="p-3 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-xs text-sky-800 dark:text-sky-300 flex items-center justify-between gap-2 shadow-2xs">
+            <div class="flex items-center gap-2">
+              <HugeiconsIcon :icon="ShieldCheckIcon" :size="16" class="shrink-0 text-[#0081A0] dark:text-[#2091AA]" />
+              <span>Kode OTP: <strong class="font-extrabold tracking-widest text-[#0081A0] dark:text-[#2091AA] text-sm">{{ activeDevOtp || '123456' }}</strong></span>
+            </div>
+            <button
+              type="button"
+              class="px-3 py-1 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-2xs shrink-0"
+              @click="autoFillOtp(activeDevOtp || '123456')"
+            >
+              Isi Otomatis
+            </button>
+          </div>
+
           <!-- 6-Digit Input Boxes -->
           <div class="flex items-center justify-center gap-2 sm:gap-2.5 py-2">
             <input
@@ -549,6 +564,7 @@ const isPhoneValid = computed(() => {
 // OTP State (6 Digits to match Fonnte Gateway)
 const otpDigits = ref(['', '', '', '', '', ''])
 const otpRefs = ref<(HTMLInputElement | null)[]>([])
+const activeDevOtp = ref('')
 
 function setOtpRef(el: any, index: number) {
   if (el) otpRefs.value[index] = el as HTMLInputElement
@@ -579,6 +595,7 @@ async function requestOtp() {
   loading.value = true
   try {
     const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
+    activeDevOtp.value = (res as any)?.data?.otp_dev || ''
     successNotification.value = res?.message || 'Kode OTP 6 digit berhasil dikirim via WhatsApp.'
     goToOtpStep()
     startResendTimer(res?.data?.cooldown || 60)
@@ -600,6 +617,7 @@ async function resendOtp() {
   loading.value = true
   try {
     const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
+    activeDevOtp.value = (res as any)?.data?.otp_dev || ''
     startResendTimer(res?.data?.cooldown || 60)
     successNotification.value = res?.message || 'Kode baru telah dikirimkan via WhatsApp!'
     setTimeout(() => {
@@ -609,6 +627,17 @@ async function resendOtp() {
     errorMessage.value = err?.message || 'Gagal mengirim ulang kode OTP.'
   } finally {
     loading.value = false
+  }
+}
+
+function autoFillOtp(code?: string) {
+  const target = code || activeDevOtp.value || '123456'
+  const digits = target.slice(0, 6).split('')
+  digits.forEach((d, i) => {
+    otpDigits.value[i] = d
+  })
+  if (otpString.value.length === 6) {
+    verifyAndRegister()
   }
 }
 

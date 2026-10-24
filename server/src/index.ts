@@ -16,9 +16,12 @@ import adminRouter from "./routes/admin.js";
 import chatRouter from "./routes/chat.js";
 import notificationsRouter from "./routes/notifications.js";
 import userRouter from "./routes/user.js";
+dotenv.config({ override: true });
 
-dotenv.config();
-
+// Ensure DATABASE_URL is set to local sqlite if not file:
+if (!process.env.DATABASE_URL || !process.env.DATABASE_URL.startsWith("file:")) {
+  process.env.DATABASE_URL = "file:./dev.db";
+}
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

@@ -27,4 +27,15 @@ describe('Frontend UI Components & Design System Contracts', () => {
   it('Brand Assets & Typography enforce Poppins and proper logos', () => {
     assert.ok(fs.existsSync('public/logo/logoSmall.svg') || fs.existsSync('public/logo.svg'), 'Brand logo must exist in public directory')
   })
+
+  it('DashboardSidebar implements quick theme switcher positioned at bottom, visible only when expanded', () => {
+    const content = fs.readFileSync('components/layout/DashboardSidebar.vue', 'utf8')
+    assert.ok(content.includes('sidebar-theme-footer'), 'DashboardSidebar must include sidebar-theme-footer container')
+    assert.ok(content.includes('Tema'), 'Quick theme switcher must display "Tema" label')
+    assert.ok(content.includes('v-if="!isCollapsed"'), 'Quick theme switcher must disappear when collapsed and only show when expanded')
+    assert.ok(content.includes("selectTheme('system'"), 'Quick theme switcher must support System theme')
+    assert.ok(content.includes("selectTheme('light'"), 'Quick theme switcher must support Light theme')
+    assert.ok(content.includes("selectTheme('dark'"), 'Quick theme switcher must support Dark theme')
+    assert.ok(content.includes('ComputerIcon') && content.includes('Sun03Icon') && content.includes('Moon02Icon'), 'Quick theme switcher must use Hugeicons')
+  })
 })

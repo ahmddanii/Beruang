@@ -569,15 +569,15 @@
           </div>
         </div>
 
-        <!-- SECTION 4: POSTINGAN & AKTIVITAS USAHA (Terhubung ke Halaman Postingan Usaha /dashboard/postingan) -->
-        <div class="card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-100 dark:border-neutral-800 pb-4">
+        <!-- SECTION 4: POSTINGAN & AKTIVITAS USAHA (Terhubung ke Halaman Postingan /dashboard/postingan) -->
+        <div class="card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white">
                 Postingan & Aktivitas Usaha
               </h3>
               <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 mt-1">
-                Kelola dan buat postingan usaha (Single Post maupun Carousel Multi-Slide) di halaman khusus Postingan Usaha.
+                Buat dan kelola postingan anda!
               </p>
             </div>
 
@@ -585,135 +585,13 @@
               <BActionButton
                 to="/dashboard/postingan"
                 variant="green"
-                icon="plus"
+                icon="chevron"
                 :icon-size="15"
                 custom-class="w-full sm:w-auto justify-center text-center"
               >
                 Buat Postingan
               </BActionButton>
             </div>
-          </div>
-
-          <!-- Daftar Postingan UMKM -->
-          <div v-if="myUmkmPosts.length > 0" class="space-y-5">
-            <article
-              v-for="post in myUmkmPosts"
-              :key="post.id"
-              class="rounded-2xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC]/60 dark:bg-neutral-900/40 p-4 sm:p-5 space-y-4"
-            >
-              <!-- Post Header (Proporsional w-12 h-12 sm:w-13 sm:h-13 & gap-0.5 sm:gap-1) -->
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                  <div class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2.5 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden">
-                    <img
-                      :src="umkmStore.profile.ownerAvatarUrl || authStore.currentUser?.avatar || '/logo.svg'"
-                      :alt="post.name"
-                      class="w-full h-full object-contain rounded-full"
-                    />
-                  </div>
-                  <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
-                    <div class="inline-flex items-center gap-1 text-xs font-poppins font-medium text-neutral-500 dark:text-neutral-400 leading-tight">
-                      <HugeiconsIcon :icon="Location01Icon" :size="13" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
-                      <span>{{ post.city }}</span>
-                    </div>
-                    <h4 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white truncate leading-tight">
-                      {{ post.name }}
-                    </h4>
-                    <div class="inline-flex items-center gap-1.5 text-xs font-poppins text-neutral-500 dark:text-neutral-400 leading-tight">
-                      <HugeiconsIcon :icon="Time02Icon" :size="13" class="text-neutral-400 dark:text-neutral-500 shrink-0" />
-                      <span>{{ post.postedAt || 'Baru saja' }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="flex items-center gap-2 shrink-0">
-                  <BBadge variant="emerald" size="sm" pill>
-                    {{ getUmkmPostImages(post).length > 1 ? `Carousel (${getUmkmPostImages(post).length} Slide)` : 'Single Post' }}
-                  </BBadge>
-                  <button
-                    v-if="post.isCustomPost"
-                    type="button"
-                    class="w-8 h-8 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-400 hover:text-red-600 dark:hover:text-red-400 flex items-center justify-center transition-colors cursor-pointer"
-                    title="Hapus Postingan"
-                    @click="handleDeleteUmkmPost(post.id)"
-                  >
-                    <HugeiconsIcon :icon="Delete02Icon" :size="15" />
-                  </button>
-                </div>
-              </div>
-
-              <!-- Caption -->
-              <p class="text-sm font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                "{{ post.pitchSummary }}"
-              </p>
-
-              <!-- Media Carousel Preview (Single Post / Multi-Post) -->
-              <div class="relative w-full max-w-[460px] h-[420px] rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none">
-                <div
-                  class="flex w-full h-full transition-transform duration-300 ease-out"
-                  :style="{ transform: `translateX(-${getUmkmSlideIndex(post.id) * 100}%)` }"
-                >
-                  <div
-                    v-for="(imgUrl, sIdx) in getUmkmPostImages(post)"
-                    :key="`${post.id}-slide-${sIdx}`"
-                    class="w-full h-full shrink-0 relative overflow-hidden bg-neutral-900"
-                  >
-                    <img
-                      :src="imgUrl"
-                      :alt="`${post.name} - Slide ${sIdx + 1}`"
-                      class="w-full h-full object-cover object-center"
-                    />
-                  </div>
-                </div>
-
-                <!-- Slide Counter Pill -->
-                <div
-                  v-if="getUmkmPostImages(post).length > 1"
-                  class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-neutral-950/75 text-white text-xs font-poppins font-semibold tabular-nums border border-white/15 backdrop-blur-xs pointer-events-none"
-                >
-                  {{ getUmkmSlideIndex(post.id) + 1 }} / {{ getUmkmPostImages(post).length }}
-                </div>
-
-                <!-- Before Button (Tanpa efek turun saat ditekan) -->
-                <button
-                  v-if="getUmkmPostImages(post).length > 1 && getUmkmSlideIndex(post.id) > 0"
-                  type="button"
-                  aria-label="Slide Sebelumnya"
-                  class="absolute left-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer"
-                  @click.stop="prevUmkmSlide(post)"
-                >
-                  <HugeiconsIcon :icon="ArrowLeft01Icon" :size="18" :stroke-width="2.4" />
-                </button>
-
-                <!-- Next Button (Tanpa efek turun saat ditekan) -->
-                <button
-                  v-if="getUmkmPostImages(post).length > 1 && getUmkmSlideIndex(post.id) < getUmkmPostImages(post).length - 1"
-                  type="button"
-                  aria-label="Slide Berikutnya"
-                  class="absolute right-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer"
-                  @click.stop="nextUmkmSlide(post)"
-                >
-                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="18" :stroke-width="2.4" />
-                </button>
-
-                <!-- Bottom Dots -->
-                <div
-                  v-if="getUmkmPostImages(post).length > 1"
-                  class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1.5 rounded-full bg-neutral-950/65 backdrop-blur-xs border border-white/15 flex items-center gap-1.5"
-                >
-                  <button
-                    v-for="(_, dIdx) in getUmkmPostImages(post)"
-                    :key="`${post.id}-dot-${dIdx}`"
-                    type="button"
-                    :class="[
-                      'h-1.5 rounded-full transition-all duration-200 cursor-pointer',
-                      getUmkmSlideIndex(post.id) === dIdx ? 'w-4 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
-                    ]"
-                    @click.stop="setUmkmSlideIndex(post.id, dIdx)"
-                  />
-                </div>
-              </div>
-            </article>
           </div>
         </div>
       </div>

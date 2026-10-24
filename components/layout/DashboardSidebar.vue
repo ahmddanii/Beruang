@@ -157,6 +157,78 @@
             </div>
           </nav>
         </div>
+
+        <!-- Bottom Quick Theme Switcher (Visible only when sidebar is expanded) -->
+        <transition
+          enter-active-class="transition-all duration-300 ease-out"
+          enter-from-class="opacity-0 translate-y-2"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition-all duration-200 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-2"
+        >
+          <div
+            v-if="!isCollapsed"
+            class="sidebar-theme-footer shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800/80 px-4 py-3.5 flex items-center justify-between font-poppins select-none bg-white dark:bg-[#13161F]"
+          >
+            <span class="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+              Tema
+            </span>
+
+            <!-- Segmented Pill Switcher (System, Light, Dark) -->
+            <div
+              class="flex items-center p-[3px] rounded-full border border-[#C8D9E0] dark:border-[#1a3a4a] bg-[#EDF5F8] dark:bg-[#0a1929]"
+            >
+              <!-- 1. System Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'system'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Tema Sistem (Otomatis)"
+                aria-label="Tema Sistem"
+                @click="selectTheme('system')"
+              >
+                <HugeiconsIcon :icon="ComputerIcon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 2. Light Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'light'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Terang"
+                aria-label="Mode Terang"
+                @click="selectTheme('light')"
+              >
+                <HugeiconsIcon :icon="Sun03Icon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 3. Dark Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'dark'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Gelap"
+                aria-label="Mode Gelap"
+                @click="selectTheme('dark')"
+              >
+                <HugeiconsIcon :icon="Moon02Icon" :size="16" :stroke-width="1.8" />
+              </button>
+            </div>
+          </div>
+        </transition>
       </div>
     </aside>
 
@@ -276,6 +348,68 @@
               </div>
             </nav>
           </div>
+
+          <!-- Mobile Drawer Bottom Theme Switcher -->
+          <div
+            class="sidebar-theme-footer shrink-0 border-t border-slate-200/80 dark:border-neutral-800/80 px-4 py-3.5 flex items-center justify-between font-poppins select-none bg-white dark:bg-[#13161F]"
+          >
+            <span class="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+              Tema
+            </span>
+
+            <!-- Segmented Pill Switcher (System, Light, Dark) -->
+            <div
+              class="flex items-center p-[3px] rounded-full border border-[#C8D9E0] dark:border-[#1a3a4a] bg-[#EDF5F8] dark:bg-[#0a1929]"
+            >
+              <!-- 1. System Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'system'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Tema Sistem (Otomatis)"
+                aria-label="Tema Sistem"
+                @click="selectTheme('system')"
+              >
+                <HugeiconsIcon :icon="ComputerIcon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 2. Light Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'light'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Terang"
+                aria-label="Mode Terang"
+                @click="selectTheme('light')"
+              >
+                <HugeiconsIcon :icon="Sun03Icon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 3. Dark Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'dark'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Gelap"
+                aria-label="Mode Gelap"
+                @click="selectTheme('dark')"
+              >
+                <HugeiconsIcon :icon="Moon02Icon" :size="16" :stroke-width="1.8" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </Teleport>
@@ -289,6 +423,7 @@ import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useNotificationStore } from '~/stores/notification'
 import { useChatStore } from '~/stores/chat'
+import { useThemeMode, type ThemeMode } from '~/composables/useThemeMode'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { gsap } from 'gsap'
@@ -315,7 +450,10 @@ import {
   Notification01Icon,
   Message01Icon,
   Settings01Icon,
-  Image01Icon
+  Image01Icon,
+  ComputerIcon,
+  Sun03Icon,
+  Moon02Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -332,6 +470,11 @@ const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const notificationStore = useNotificationStore()
 const chatStore = useChatStore()
+const { themeMode, setThemeMode } = useThemeMode()
+
+function selectTheme(mode: ThemeMode) {
+  setThemeMode(mode)
+}
 
 // State Collapse & Mobile Drawer from useSidebar composable
 const { isCollapsed, isMobileOpen, closeMobile, setCollapsed, toggleCollapse } = useSidebar()
@@ -615,9 +758,9 @@ const navigationSections = computed<NavSection[]>(() => {
         title: 'Kelola Usaha',
         items: [
           { to: '/dashboard/profile', label: 'Profil Usaha', icon: UserCircleIcon },
-          { to: '/dashboard/postingan', label: 'Postingan Usaha', icon: Image01Icon },
+          { to: '/dashboard/postingan', label: 'Postingan', icon: Image01Icon },
           { to: '/dashboard/rencana-aksi', label: 'Progress Tugas', icon: Task01Icon },
-          { to: '/dashboard/penilaian', label: 'Cek Kesehatan', icon: AnalyticsUpIcon }
+          { to: '/dashboard/penilaian', label: 'Kesehatan Bisnis', icon: AnalyticsUpIcon }
         ]
       },
       {

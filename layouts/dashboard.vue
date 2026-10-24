@@ -257,7 +257,7 @@ const currentPageInfo = computed(() => {
   }
   if (p.startsWith('/dashboard/penilaian')) {
     return {
-      title: 'Cek Kesehatan',
+      title: 'Kesehatan Bisnis',
       icon: AnalyticsUpIcon,
       description: 'Diagnosa komprehensif kesehatan finansial tokomu berdasarkan data kas dan kepatuhan administrasi.'
     }

@@ -12,7 +12,7 @@
           class="text-neutral-900 dark:text-white shrink-0"
         />
         <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-          Cek Kesehatan
+          Kesehatan Bisnis
         </h1>
       </div>
 
@@ -463,81 +463,144 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 5. BARIS 4: TREN UNTUNG BERSIH (Chart Container Tersendiri di Bawahnya)     -->
-    <!-- Menampilkan BShadcnLineChart Secara Lebar, Rapi, & Sarat Informasi        -->
+    <!-- 5. BARIS 4: TREN UNTUNG BERSIH (Seragam dengan Pergerakan Uang Toko)        -->
     <!-- ========================================================================= -->
-    <div class="card-tactile-gopay rounded-2xl p-5 sm:p-7 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 font-poppins space-y-6 w-full">
-      <div class="pb-3 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <h2 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white">
-              Tren Untung Bersih (Jan - Jun)
-            </h2>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 tabular-nums">
-              +35% Semester 1
-            </span>
-          </div>
-          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-            Grafik pemantauan akumulasi untung bersih toko dari bulan ke bulan sebagai indikator stabilitas finansial
+    <div class="card-tactile-gopay rounded-[18px] p-6 sm:p-8 bg-white dark:bg-[#13161F] border border-[#E2E8F0] dark:border-neutral-800 font-poppins space-y-9 sm:space-y-11 w-full">
+      <!-- Header: Title, Subtitle, and Right Actions (Dropdown Chart Type, Dropdown Period, Button Lihat Detail) -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 sm:pb-3">
+        <!-- Left: Title & Subtitle -->
+        <div class="min-w-0 max-w-xl">
+          <h2 class="text-lg sm:text-[21px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+            Tren Untung Bersih
+          </h2>
+          <p class="text-xs sm:text-[14px] font-poppins text-neutral-500 dark:text-neutral-400 mt-2 sm:mt-2.5 leading-normal">
+            Grafik pemantauan akumulasi untung bersih toko dari waktu ke waktu sebagai indikator stabilitas finansial.
           </p>
         </div>
 
-        <!-- Switcher: Area & Garis vs Grafik Batang -->
-        <div class="flex items-center gap-1 p-0.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700 text-xs font-poppins">
-          <button
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer',
-              chartPreviewMode === 'area'
-                ? 'bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white shadow-2xs font-semibold'
-                : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
-            ]"
-            @click="chartPreviewMode = 'area'"
+        <!-- Right: Actions Control (Dropdown Jenis Grafik + Dropdown Periode + Button Lihat Detail) -->
+        <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap lg:flex-nowrap shrink-0">
+          <!-- 1. Dropdown Jenis Grafik (Bergaya btn-pill-action seperti Pergerakan Uang Toko) -->
+          <div ref="chartTypeDropdownRef" class="relative">
+            <button
+              type="button"
+              :class="[
+                'btn-pill-action group cursor-pointer',
+                isChartTypeDropdownOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30!' : ''
+              ]"
+              aria-haspopup="true"
+              :aria-expanded="isChartTypeDropdownOpen"
+              title="Pilih Jenis Tampilan Grafik"
+              @click="toggleChartTypeDropdown"
+            >
+              <span>{{ activeChartTypeLabel }}</span>
+              <HugeiconsIcon
+                :icon="ArrowDown01Icon"
+                :size="14"
+                :stroke-width="2.2"
+                :class="['text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0', isChartTypeDropdownOpen ? 'rotate-180' : '']"
+              />
+            </button>
+
+            <!-- Popover Dropdown Panel -->
+            <div
+              v-if="isChartTypeDropdownOpen"
+              class="absolute right-0 top-full mt-1.5 w-44 rounded-[8px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-100"
+            >
+              <button
+                v-for="opt in chartTypeOptions"
+                :key="opt.id"
+                type="button"
+                :class="[
+                  'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                  chartPreviewMode === opt.id
+                    ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25'
+                    : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                ]"
+                @click="selectChartType(opt.id)"
+              >
+                <span class="truncate">{{ opt.label }}</span>
+                <span v-if="chartPreviewMode === opt.id" class="w-1.5 h-1.5 rounded-full bg-[#156374] dark:bg-[#50AABF] shrink-0 ml-2" />
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Dropdown Filter Periode / Rentang Waktu (Bergaya btn-pill-action seperti Pergerakan Uang Toko) -->
+          <div ref="periodDropdownRef" class="relative">
+            <button
+              type="button"
+              :class="[
+                'btn-pill-action group cursor-pointer',
+                isPeriodDropdownOpen ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30!' : ''
+              ]"
+              aria-haspopup="true"
+              :aria-expanded="isPeriodDropdownOpen"
+              title="Pilih Rentang Waktu"
+              @click="togglePeriodDropdown"
+            >
+              <HugeiconsIcon
+                :icon="Calendar03Icon"
+                :size="14"
+                :stroke-width="2.0"
+                class="text-neutral-400 dark:text-neutral-500 shrink-0"
+              />
+              <span>{{ activePeriodLabel }}</span>
+              <HugeiconsIcon
+                :icon="ArrowDown01Icon"
+                :size="14"
+                :stroke-width="2.2"
+                :class="['text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0', isPeriodDropdownOpen ? 'rotate-180' : '']"
+              />
+            </button>
+
+            <!-- Popover Dropdown Panel -->
+            <div
+              v-if="isPeriodDropdownOpen"
+              class="absolute right-0 top-full mt-1.5 w-44 rounded-[8px] bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-100"
+            >
+              <button
+                v-for="opt in periodFilterOptions"
+                :key="opt.id"
+                type="button"
+                :class="[
+                  'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 text-left cursor-pointer',
+                  selectedPeriodFilter === opt.id
+                    ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25'
+                    : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
+                ]"
+                @click="selectPeriodFilter(opt.id)"
+              >
+                <span>{{ opt.label }}</span>
+                <span v-if="selectedPeriodFilter === opt.id" class="w-1.5 h-1.5 rounded-full bg-[#156374] dark:bg-[#50AABF]" />
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Button Lihat Detail -->
+          <NuxtLink
+            to="/dashboard/progres"
+            class="btn-pill-action group shrink-0"
+            title="Lihat Detail"
           >
-            Area & Garis
-          </button>
-          <button
-            type="button"
-            :class="[
-              'px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer',
-              chartPreviewMode === 'bar'
-                ? 'bg-white dark:bg-[#13161F] text-neutral-900 dark:text-white shadow-2xs font-semibold'
-                : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
-            ]"
-            @click="chartPreviewMode = 'bar'"
-          >
-            Batang
-          </button>
+            <span>Lihat Detail</span>
+            <HugeiconsIcon
+              :icon="ArrowRight01Icon"
+              :size="16"
+              :stroke-width="2.0"
+              class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+            />
+          </NuxtLink>
         </div>
       </div>
 
-      <!-- Strip 4 Kartu KPI Tren Finansial -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-1">
-        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
-          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Rata-Rata Bulanan</span>
-          <span class="text-sm sm:text-base font-bold text-neutral-900 dark:text-white tabular-nums">Rp 28.150.000</span>
-        </div>
-        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
-          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Bulan Tertinggi</span>
-          <span class="text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">Juni (Rp 32,6 Jt)</span>
-        </div>
-        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
-          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Pertumbuhan Semester</span>
-          <span class="text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">+35,2%</span>
-        </div>
-        <div class="p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800">
-          <span class="text-[11px] text-neutral-500 dark:text-neutral-400 block font-medium">Kestabilan Kas</span>
-          <span class="text-sm sm:text-base font-bold text-[#156374] dark:text-[#50AABF]">Sangat Baik</span>
-        </div>
-      </div>
-
-      <!-- BShadcnLineChart Component: 100% Konsisten dengan Halaman Catatan Kas, Lebar & Breathable -->
-      <div class="relative w-full h-72 sm:h-80 pt-2">
+      <!-- BShadcnLineChart Component: Seragam dengan Pergerakan Uang Toko di Beranda -->
+      <div class="relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
         <BShadcnLineChart
-          :data="profitTrendRecords"
+          :data="filteredProfitTrendRecords"
           index="month"
-          :categories="profitChartCategories"
-          :config="profitChartConfig"
+          :categories="currentProfitChartCategories"
+          :config="currentProfitChartConfig"
+          curve-type="linear"
           :mode="chartPreviewMode"
           :show-area="chartPreviewMode === 'area'"
           :show-grid-line="true"
@@ -551,7 +614,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import Chart from 'chart.js/auto'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
@@ -560,6 +623,7 @@ import {
   AnalyticsUpIcon,
   ArrowRight01Icon,
   ArrowDown01Icon,
+  Calendar03Icon,
   Comment01Icon,
   Task01Icon,
   Coins01Icon,
@@ -664,6 +728,8 @@ onMounted(() => {
     nextTick(() => {
       initDonutChart()
     })
+    document.addEventListener('click', handleClickOutsideChartDropdowns)
+    document.addEventListener('keydown', handleEscapeChartDropdowns)
   }
 })
 
@@ -672,28 +738,132 @@ onBeforeUnmount(() => {
     donutChartInstance.destroy()
     donutChartInstance = null
   }
+  if (import.meta.client) {
+    document.removeEventListener('click', handleClickOutsideChartDropdowns)
+    document.removeEventListener('keydown', handleEscapeChartDropdowns)
+  }
 })
 
-// Data Tren Untung Bersih untuk BShadcnLineChart (Konsisten dengan Catatan Kas)
-const chartPreviewMode = ref<'area' | 'bar'>('area')
+// Data & Kontrol Pill Dropdowns Tren Untung Bersih (Seragam dengan Pergerakan Uang Toko di Beranda)
+const chartTypeDropdownRef = ref<HTMLElement | null>(null)
+const periodDropdownRef = ref<HTMLElement | null>(null)
+const chartPreviewMode = ref<'area' | 'bar' | 'cashflow'>('area')
+const selectedPeriodFilter = ref<'3m' | '6m' | '1y'>('6m')
+const isChartTypeDropdownOpen = ref(false)
+const isPeriodDropdownOpen = ref(false)
 
-const profitTrendRecords = [
-  { month: 'Jan', profit: 24100000 },
-  { month: 'Feb', profit: 26400000 },
-  { month: 'Mar', profit: 28000000 },
-  { month: 'Apr', profit: 29800000 },
-  { month: 'Mei', profit: 30500000 },
-  { month: 'Jun', profit: 32600000 }
+const chartTypeOptions: { id: 'area' | 'bar' | 'cashflow'; label: string }[] = [
+  { id: 'area', label: 'Grafik Area' },
+  { id: 'bar', label: 'Grafik Batang' },
+  { id: 'cashflow', label: 'Arus Kas' }
 ]
 
-const profitChartCategories = ['profit']
+const periodFilterOptions: { id: '3m' | '6m' | '1y'; label: string }[] = [
+  { id: '3m', label: '3 Bulan' },
+  { id: '6m', label: '6 Bulan' },
+  { id: '1y', label: '1 Tahun' }
+]
 
-const profitChartConfig = {
-  profit: {
-    label: 'Untung Bersih',
-    color: '#00AA13'
+const activeChartTypeLabel = computed(() => {
+  return chartTypeOptions.find(o => o.id === chartPreviewMode.value)?.label || 'Grafik Area'
+})
+
+const activePeriodLabel = computed(() => {
+  return periodFilterOptions.find(o => o.id === selectedPeriodFilter.value)?.label || '6 Bulan'
+})
+
+function toggleChartTypeDropdown() {
+  isChartTypeDropdownOpen.value = !isChartTypeDropdownOpen.value
+  if (isChartTypeDropdownOpen.value) {
+    isPeriodDropdownOpen.value = false
   }
 }
+
+function togglePeriodDropdown() {
+  isPeriodDropdownOpen.value = !isPeriodDropdownOpen.value
+  if (isPeriodDropdownOpen.value) {
+    isChartTypeDropdownOpen.value = false
+  }
+}
+
+function selectChartType(mode: 'area' | 'bar' | 'cashflow') {
+  chartPreviewMode.value = mode
+  isChartTypeDropdownOpen.value = false
+}
+
+function selectPeriodFilter(period: '3m' | '6m' | '1y') {
+  selectedPeriodFilter.value = period
+  isPeriodDropdownOpen.value = false
+}
+
+function handleClickOutsideChartDropdowns(event: MouseEvent) {
+  const target = event.target as Node
+  if (chartTypeDropdownRef.value && !chartTypeDropdownRef.value.contains(target)) {
+    isChartTypeDropdownOpen.value = false
+  }
+  if (periodDropdownRef.value && !periodDropdownRef.value.contains(target)) {
+    isPeriodDropdownOpen.value = false
+  }
+}
+
+function handleEscapeChartDropdowns(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    isChartTypeDropdownOpen.value = false
+    isPeriodDropdownOpen.value = false
+  }
+}
+
+const profitTrendRecords = [
+  { month: 'Nov', profit: 19200000, omzet: 68000000, outflow: 48800000 },
+  { month: 'Des', profit: 21500000, omzet: 74000000, outflow: 52500000 },
+  { month: 'Jan', profit: 22400000, omzet: 76500000, outflow: 54100000 },
+  { month: 'Feb', profit: 23800000, omzet: 79000000, outflow: 55200000 },
+  { month: 'Mar', profit: 24100000, omzet: 81000000, outflow: 56900000 },
+  { month: 'Apr', profit: 25600000, omzet: 83500000, outflow: 57900000 },
+  { month: 'Mei', profit: 26400000, omzet: 85000000, outflow: 58600000 },
+  { month: 'Jun', profit: 27900000, omzet: 88000000, outflow: 60100000 },
+  { month: 'Jul', profit: 29100000, omzet: 90500000, outflow: 61400000 },
+  { month: 'Agu', profit: 28000000, omzet: 82000000, outflow: 54000000 },
+  { month: 'Sep', profit: 31500000, omzet: 91000000, outflow: 59500000 },
+  { month: 'Okt', profit: 32600000, omzet: 100000000, outflow: 67400000 }
+]
+
+const filteredProfitTrendRecords = computed(() => {
+  if (selectedPeriodFilter.value === '3m') {
+    return profitTrendRecords.slice(-3)
+  } else if (selectedPeriodFilter.value === '6m') {
+    return profitTrendRecords.slice(-6)
+  }
+  return profitTrendRecords
+})
+
+const currentProfitChartCategories = computed(() => {
+  if (chartPreviewMode.value === 'cashflow') {
+    return ['omzet', 'outflow']
+  }
+  return ['profit']
+})
+
+const currentProfitChartConfig = computed(() => {
+  if (chartPreviewMode.value === 'cashflow') {
+    return {
+      omzet: {
+        label: 'Uang Masuk',
+        color: '#54DE63'
+      },
+      outflow: {
+        label: 'Uang Keluar',
+        color: '#156374'
+      }
+    }
+  }
+  return {
+    profit: {
+      label: 'Untung Bersih',
+      color: '#00AA13'
+    }
+  }
+})
 </script>
 
 <style scoped>

@@ -67,12 +67,23 @@ describe('Investor Role Jaringan & Profil Investor Contracts', () => {
     const investorUmkmDetail = fs.readFileSync('pages/investor/umkm/[id]/index.vue', 'utf8')
 
     assert.ok(
-      sidebarContent.includes("{ to: '/dashboard/postingan', label: 'Postingan Usaha', icon: Image01Icon }"),
-      'UMKM sidebar must include Postingan Usaha link to /dashboard/postingan'
+      sidebarContent.includes("{ to: '/dashboard/postingan', label: 'Postingan', icon: Image01Icon }"),
+      'UMKM sidebar must include Postingan link to /dashboard/postingan'
+    )
+    assert.ok(
+      sidebarContent.includes("{ to: '/dashboard/penilaian', label: 'Kesehatan Bisnis', icon: AnalyticsUpIcon }"),
+      'UMKM sidebar must label /dashboard/penilaian as Kesehatan Bisnis'
     )
     assert.ok(investorStore.includes('createUmkmPost'), 'stores/investor.ts must provide createUmkmPost action')
-    assert.ok(umkmPostPage.includes('Postingan Usaha'), 'pages/dashboard/postingan.vue must have Postingan Usaha header')
-    assert.ok(umkmPostPage.includes('Buat Postingan Baru'), 'pages/dashboard/postingan.vue must provide Buat Postingan Baru studio')
+    assert.ok(umkmPostPage.includes('Postingan'), 'pages/dashboard/postingan.vue must have Postingan header')
+    assert.ok(umkmPostPage.includes('Buat Postingan Baru'), 'pages/dashboard/postingan.vue must provide Buat Postingan Baru trigger & modal')
+    assert.ok(umkmPostPage.includes('Pilih gambar anda'), 'Step 1 of modal must display Pilih gambar anda heading')
+    assert.ok(umkmPostPage.includes('Bagikan gambar atau video di postingan anda'), 'Step 1 of modal must display Bagikan gambar atau video di postingan anda body text')
+    assert.ok(umkmPostPage.includes('Berikutnya'), 'Step 1 of modal must have Berikutnya button to advance to Step 2')
+    assert.ok(umkmPostPage.includes('placeholder="Deskripsikan postingan anda"'), 'Step 2 of modal must have Deskripsikan postingan anda placeholder')
+    assert.ok(umkmPostPage.includes('isDiscardConfirmOpen'), 'Modal must show discard confirmation modal when closing with content')
+    assert.ok(umkmPostPage.includes('<span>Lanjutkan</span>'), 'Discard confirmation modal must have Lanjutkan button')
+    assert.ok(umkmPostPage.includes('Keluar'), 'Discard confirmation modal must have Keluar button')
     assert.ok(umkmPostPage.includes('Daftar Postingan yang Sudah Dibuat'), 'pages/dashboard/postingan.vue must display Daftar Postingan yang Sudah Dibuat')
     assert.ok(umkmPostPage.includes('handleCreateUmkmPost'), 'pages/dashboard/postingan.vue must allow publishing single or multi-slide posts')
     assert.ok(umkmProfile.includes('to="/dashboard/postingan"'), 'UMKM profile page must link Buat Postingan button to /dashboard/postingan')

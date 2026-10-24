@@ -9,7 +9,7 @@ console.log('=================================================================\n
 const pages = [
   { file: 'pages/dashboard/profile.vue', name: 'Profil Usaha', title: 'Profil Usaha' },
   { file: 'pages/dashboard/rencana-aksi.vue', name: 'Progress Tugas', title: 'Progress Tugas' },
-  { file: 'pages/dashboard/penilaian.vue', name: 'Cek Kesehatan', title: 'Cek Kesehatan' },
+  { file: 'pages/dashboard/penilaian.vue', name: 'Kesehatan Bisnis', title: 'Kesehatan Bisnis' },
   { file: 'pages/dashboard/pendanaan.vue', name: 'Cari Modal', title: 'Cari Modal' },
   { file: 'pages/dashboard/pesan.vue', name: 'Pesan', title: 'Pesan' },
   { file: 'pages/dashboard/notifikasi.vue', name: 'Notifikasi', title: 'Notifikasi' }

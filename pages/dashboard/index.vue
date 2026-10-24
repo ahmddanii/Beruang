@@ -23,9 +23,12 @@
           title="Edit Profil Usaha"
         >
           <span>Edit Profil</span>
-          <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
+          <HugeiconsIcon
+            :icon='Edit03Icon'
+            :size='16'
+            :stroke-width='2.0'
+            class='shrink-0 transition-transform duration-200 group-hover:translate-x-0.5'
+          />
         </NuxtLink>
       </div>
     </div>
@@ -912,6 +915,7 @@ import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   CheckmarkBadge01Icon,
   PencilEdit01Icon,
+  Edit03Icon,
   CheckmarkCircle01Icon,
   Alert01Icon,
   BanknoteIcon,

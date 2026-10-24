@@ -4,7 +4,12 @@
     <!-- 1. TOP HEADER: Page Title on Left & Action Buttons on Right               -->
     <!-- Matched exactly with Notifikasi, Progress Tugas, & Catatan Kas            -->
     <!-- ========================================================================= -->
-    <div class="chat-header-row flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shrink-0 mb-6 sm:mb-8 min-h-[44px]">
+    <div
+      :class="[
+        'chat-header-row flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shrink-0 mb-6 sm:mb-8 min-h-[44px]',
+        isMobileChatOpen ? 'hidden lg:flex' : 'flex'
+      ]"
+    >
       <!-- Left: Icon & Title: Pesan -->
       <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon
@@ -14,7 +19,7 @@
           class="text-neutral-900 dark:text-white shrink-0"
         />
         <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-          Pesan
+          {{ t('chat_title') }}
         </h1>
       </div>
 
@@ -25,10 +30,10 @@
           variant="green"
           icon="check"
           custom-class="text-xs sm:text-sm"
-          title="Tandai semua pesan sudah dibaca"
+          :title="t('chat_mark_all_read')"
           @click="handleMarkAllAsRead"
         >
-          Tandai Semua Dibaca
+          {{ t('chat_mark_all_read') }}
         </BActionButton>
 
         <BActionButton
@@ -36,24 +41,61 @@
           icon="chevron"
           to="/dashboard/rencana-aksi"
           custom-class="text-xs sm:text-sm hidden sm:inline-flex"
-          title="Lihat Progress Tugas"
+          :title="t('chat_progress_tugas')"
         >
-          Progress Tugas
+          {{ t('chat_progress_tugas') }}
         </BActionButton>
       </div>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 2. MACRO SEGMENTED PILL TABS: BPillTabs Component (size="md" consistent)  -->
-    <!-- Unified with notifikasi.vue, progres.vue, and brand architecture          -->
+    <!-- 2. FILTER TABS: Compact Horizontal Chips on Mobile, BPillTabs on Desktop    -->
     <!-- ========================================================================= -->
-    <div class="chat-pill-tabs shrink-0 mb-6 sm:mb-8">
-      <BPillTabs
-        v-model="activeFilter"
-        :tabs="filterTabs"
-        size="md"
-        @change="handleFilterChange"
-      />
+    <div
+      :class="[
+        'chat-pill-tabs shrink-0 mb-6 sm:mb-8',
+        isMobileChatOpen ? 'hidden lg:block' : 'block'
+      ]"
+    >
+      <!-- Mobile Horizontal Filter Chips (< sm) -->
+      <div class="sm:hidden flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 no-scrollbar">
+        <button
+          v-for="tab in filterTabs"
+          :key="`mob-pill-${tab.id}`"
+          type="button"
+          :class="[
+            'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-colors cursor-pointer border font-poppins shrink-0',
+            activeFilter === tab.id
+              ? 'bg-[#156374] dark:bg-[#50AABF] text-white dark:text-[#0C121D] border-[#156374] dark:border-[#50AABF] font-semibold shadow-2xs'
+              : 'bg-neutral-100 dark:bg-neutral-800/80 text-neutral-600 dark:text-neutral-300 border-transparent hover:border-slate-300'
+          ]"
+          @click="handleFilterChange(tab.id)"
+        >
+          <HugeiconsIcon :icon="tab.icon" :size="14" :stroke-width="activeFilter === tab.id ? 2.3 : 1.8" />
+          <span>{{ tab.shortLabel || tab.label }}</span>
+          <span
+            v-if="tab.count !== undefined"
+            :class="[
+              'text-[10px] px-1.5 py-0.2 rounded-full tabular-nums font-bold leading-none',
+              activeFilter === tab.id
+                ? 'bg-white/20 text-white dark:bg-[#0C121D]/20 dark:text-[#0C121D]'
+                : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200'
+            ]"
+          >
+            {{ tab.count }}
+          </span>
+        </button>
+      </div>
+
+      <!-- Desktop BPillTabs (sm+) -->
+      <div class="hidden sm:block">
+        <BPillTabs
+          v-model="activeFilter"
+          :tabs="filterTabs"
+          size="md"
+          @change="handleFilterChange"
+        />
+      </div>
     </div>
 
     <!-- ========================================================================= -->
@@ -79,7 +121,7 @@
             <input
               v-model="chatStore.searchQuery"
               type="text"
-              placeholder="Cari pesan atau nama mitra..."
+              :placeholder="t('chat_search_placeholder')"
               class="w-full text-xs sm:text-sm bg-transparent border-0 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-0 font-poppins min-w-0"
             />
             <button
@@ -183,13 +225,15 @@
       </aside>
 
       <!-- ======================================================================= -->
-      <!-- PANEL TENGAH (Kolom 2: Ruang Obrolan Utama)                             -->
+      <!-- PANEL TENGAH (Kolom 2: Ruang Obrolan Utama - Full Screen on Mobile)      -->
       <!-- ======================================================================= -->
       <section
         v-if="activeThread"
         :class="[
-          'flex-1 min-w-0 flex flex-col h-full bg-[#F8FAFC] dark:bg-[#0B0F19] relative',
-          !isMobileChatOpen ? 'hidden lg:flex' : 'flex'
+          'bg-[#F8FAFC] dark:bg-[#0B0F19]',
+          isMobileChatOpen
+            ? 'fixed inset-0 z-50 flex flex-col lg:relative lg:inset-auto lg:z-auto lg:flex-1 lg:min-w-0 lg:h-full'
+            : 'hidden lg:flex lg:flex-1 lg:min-w-0 lg:flex-col lg:h-full relative'
         ]"
       >
         <!-- 1. HEADER CHAT: Ramping, Elegan, dengan Hierarki Proporsional & Tinggi Sejajar 72px -->
@@ -229,7 +273,7 @@
                 <span class="text-neutral-300 dark:text-neutral-700 shrink-0">•</span>
                 <span class="inline-flex items-center gap-1 text-[#00800e] dark:text-[#00C058] font-semibold shrink-0">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="14" class="shrink-0" />
-                  <span>Terverifikasi</span>
+                  <span>{{ t('chat_verified') }}</span>
                 </span>
               </div>
             </div>
@@ -255,7 +299,7 @@
                 :stroke-width="2.0"
                 :class="isDetailPanelOpen ? 'text-white' : 'text-[#00800e] dark:text-[#00C058]'"
               />
-              <span class="hidden sm:inline">Rincian Mitra</span>
+              <span class="hidden sm:inline">{{ t('chat_partner_details') }}</span>
             </button>
           </div>
         </div>
@@ -412,7 +456,7 @@
             <input
               v-model="inputMessage"
               type="text"
-              placeholder="Tulis pesan untuk kelanjutan pendanaan atau konsultasi..."
+              :placeholder="t('chat_input_placeholder')"
               class="flex-1 px-2.5 py-2 text-sm sm:text-base bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none font-sans"
               @keydown.enter.exact.prevent="handleSendMessage"
             />
@@ -640,6 +684,7 @@
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import gsap from 'gsap'
 import { useChatStore } from '~/stores/chat'
+import { useLanguage } from '~/composables/useLanguage'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BPillTabs, { type PillTabItem } from '~/components/base/BPillTabs.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -714,25 +759,27 @@ const pemodalCount = computed(() => {
   ).length
 })
 
+const { t } = useLanguage()
+
 const filterTabs = computed<PillTabItem[]>(() => [
   {
     id: 'all',
-    label: 'Semua Percakapan',
-    shortLabel: 'Semua',
+    label: t('chat_tab_all'),
+    shortLabel: t('chat_tab_all_short'),
     icon: Message01Icon,
     count: totalThreadsCount.value
   },
   {
     id: 'konsultan',
-    label: 'Konsultan Pendamping',
-    shortLabel: 'Konsultan',
+    label: t('chat_tab_konsultan'),
+    shortLabel: t('chat_tab_konsultan_short'),
     icon: UserCheck01Icon,
     count: konsultanCount.value
   },
   {
     id: 'pemodal',
-    label: 'Mitra Pemodal',
-    shortLabel: 'Pemodal',
+    label: t('chat_tab_pemodal'),
+    shortLabel: t('chat_tab_pemodal_short'),
     icon: Coins01Icon,
     count: pemodalCount.value
   }

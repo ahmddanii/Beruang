@@ -86,7 +86,7 @@
           @click="isOpen = false"
         >
           <HugeiconsIcon :icon="UserCircleIcon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
-          <span>{{ authStore.currentUser?.role === 'UMKM' ? 'Lihat Profil Usaha' : 'Profil Saya' }}</span>
+          <span>{{ authStore.currentUser?.role === 'UMKM' ? (currentLang === 'en' ? 'View Business Profile' : 'Lihat Profil Usaha') : (currentLang === 'en' ? 'My Profile' : 'Profil Saya') }}</span>
         </NuxtLink>
 
         <NuxtLink
@@ -95,7 +95,7 @@
           @click="isOpen = false"
         >
           <HugeiconsIcon :icon="Settings01Icon" :size="17" :stroke-width="1.9" class="text-neutral-500 dark:text-neutral-400" />
-          <span>Pengaturan Akun</span>
+          <span>{{ currentLang === 'en' ? 'Account Settings' : 'Pengaturan Akun' }}</span>
         </NuxtLink>
       </div>
 
@@ -103,7 +103,7 @@
       <div class="p-2.5">
         <div class="px-2 py-1 flex items-center justify-between mb-1">
           <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-            Pindah Peran (Uji RBAC)
+            {{ currentLang === 'en' ? 'Switch Role (RBAC Test)' : 'Pindah Peran (Uji RBAC)' }}
           </span>
           <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-medium">
             RBAC
@@ -139,7 +139,7 @@
           @click="handleLogout"
         >
           <HugeiconsIcon :icon="Logout01Icon" :size="17" :stroke-width="2.2" class="text-red-500" />
-          <span>Keluar</span>
+          <span>{{ t('nav_logout') }}</span>
         </button>
       </div>
     </div>
@@ -152,6 +152,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useInvestorStore } from '~/stores/investor'
+import { useLanguage } from '~/composables/useLanguage'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { UserCircleIcon, Settings01Icon, Logout01Icon } from '@hugeicons/core-free-icons'
 
@@ -160,6 +161,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const investorStore = useInvestorStore()
+const { t, currentLang } = useLanguage()
 
 const dropdownRef = ref<HTMLElement | null>(null)
 const isOpen = ref(false)

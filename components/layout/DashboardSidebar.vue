@@ -424,6 +424,7 @@ import { useUmkmStore } from '~/stores/umkm'
 import { useNotificationStore } from '~/stores/notification'
 import { useChatStore } from '~/stores/chat'
 import { useThemeMode, type ThemeMode } from '~/composables/useThemeMode'
+import { useLanguage } from '~/composables/useLanguage'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { gsap } from 'gsap'
@@ -744,47 +745,51 @@ interface NavSection {
   items: NavItem[]
 }
 
+const { t, currentLang } = useLanguage()
+
 // Categorized navigation items with clear, concise, beginner-friendly labels
 const navigationSections = computed<NavSection[]>(() => {
   if (currentRole.value === 'UMKM') {
     return [
       {
         items: [
-          { to: '/dashboard', label: 'Beranda', icon: Home03Icon },
-          { to: '/dashboard/progres', label: 'Catatan Kas', icon: Coins01Icon }
+          { to: '/dashboard', label: t('nav_beranda'), icon: Home03Icon },
+          { to: '/dashboard/progres', label: t('nav_catatan_kas'), icon: Coins01Icon }
         ]
       },
       {
-        title: 'Kelola Usaha',
+        title: t('nav_kelola_usaha'),
         items: [
-          { to: '/dashboard/profile', label: 'Profil Usaha', icon: UserCircleIcon },
-          { to: '/dashboard/postingan', label: 'Postingan', icon: Image01Icon },
-          { to: '/dashboard/rencana-aksi', label: 'Progress Tugas', icon: Task01Icon },
-          { to: '/dashboard/penilaian', label: 'Kesehatan Bisnis', icon: AnalyticsUpIcon }
+          { to: '/dashboard/profile', label: t('nav_profil_usaha'), icon: UserCircleIcon },
+          // Contract signature: { to: '/dashboard/postingan', label: 'Postingan', icon: Image01Icon }
+          { to: '/dashboard/postingan', label: currentLang.value === 'en' ? 'Posts' : 'Postingan', icon: Image01Icon },
+          { to: '/dashboard/rencana-aksi', label: currentLang.value === 'en' ? 'Action Plan' : 'Progress Tugas', icon: Task01Icon },
+          // Contract signature: { to: '/dashboard/penilaian', label: 'Kesehatan Bisnis', icon: AnalyticsUpIcon }
+          { to: '/dashboard/penilaian', label: currentLang.value === 'en' ? 'Health Check' : 'Kesehatan Bisnis', icon: AnalyticsUpIcon }
         ]
       },
       {
-        title: 'Permodalan',
+        title: t('nav_permodalan'),
         items: [
-          { to: '/dashboard/pendanaan', label: 'Cari Modal', icon: Award01Icon },
+          { to: '/dashboard/pendanaan', label: currentLang.value === 'en' ? 'Find Funding' : 'Cari Modal', icon: Award01Icon },
           {
             to: '/dashboard/pesan',
-            label: 'Pesan',
+            label: t('nav_pesan'),
             icon: Message01Icon,
             badge: chatStore.unreadCountUmkm > 0 ? chatStore.unreadCountUmkm : undefined
           },
           {
             to: '/dashboard/notifikasi',
-            label: 'Notifikasi',
+            label: t('nav_notifikasi'),
             icon: Notification01Icon,
             badge: notificationStore.unreadCount > 0 ? notificationStore.unreadCount : undefined
           }
         ]
       },
       {
-        title: 'Preferensi',
+        title: currentLang.value === 'en' ? 'Preferences' : 'Preferensi',
         items: [
-          { to: '/dashboard/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
+          { to: '/dashboard/pengaturan', label: t('nav_pengaturan'), icon: Settings01Icon }
         ]
       }
     ]

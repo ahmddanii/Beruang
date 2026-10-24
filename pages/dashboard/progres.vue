@@ -286,8 +286,7 @@
       >
         <HugeiconsIcon :icon="Coins01Icon" :size="17" :stroke-width="activeTab === 'mutasi' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
         <span class="truncate leading-normal pb-0.5">
-          <span class="hidden sm:inline">Buku Mutasi Kas Harian</span>
-          <span class="sm:hidden">Mutasi Kas</span>
+          {{ isMobile ? t('progres_tab_mutasi_short') : t('progres_tab_mutasi') }}
         </span>
       </button>
 
@@ -300,8 +299,7 @@
       >
         <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="17" :stroke-width="activeTab === 'bulanan' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
         <span class="truncate leading-normal pb-0.5">
-          <span class="hidden sm:inline">Rekap Kas Bulanan</span>
-          <span class="sm:hidden">Rekap Bulanan</span>
+          {{ isMobile ? t('progres_tab_bulanan_short') : t('progres_tab_bulanan') }}
         </span>
       </button>
 
@@ -314,8 +312,7 @@
       >
         <HugeiconsIcon :icon="AnalyticsUpIcon" :size="17" :stroke-width="activeTab === 'tren' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
         <span class="truncate leading-normal pb-0.5">
-          <span class="hidden sm:inline">Grafik Pergerakan Uang</span>
-          <span class="sm:hidden">Grafik Tren</span>
+          {{ isMobile ? t('progres_tab_tren_short') : t('progres_tab_tren') }}
         </span>
       </button>
     </div>
@@ -1174,6 +1171,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, onBeforeUnmount, watch } from 'vue'
 import { useUmkmStore, type DailyTransaction } from '~/stores/umkm'
+import { useLanguage } from '~/composables/useLanguage'
 import gsap from 'gsap'
 import Chart from 'chart.js/auto'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -1211,6 +1209,15 @@ definePageMeta({
 })
 
 const umkmStore = useUmkmStore()
+const { t } = useLanguage()
+
+// Mobile viewport check for responsive tab strings
+const isMobile = ref(false)
+function checkMobile() {
+  if (typeof window !== 'undefined') {
+    isMobile.value = window.innerWidth < 640
+  }
+}
 
 // State Tab Switcher
 const activeTab = ref<'mutasi' | 'bulanan' | 'tren'>('mutasi')
@@ -1818,7 +1825,9 @@ onMounted(() => {
     }
   }, 150)
 
+  checkMobile()
   handleResize = () => {
+    checkMobile()
     updateTabIndicator(true)
   }
   window.addEventListener('resize', handleResize)

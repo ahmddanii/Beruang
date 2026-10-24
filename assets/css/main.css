@@ -1495,6 +1495,12 @@ summary:active,
   padding-bottom: 2px !important;
 }
 
+.segmented-pill-container .segmented-pill-btn span.hidden,
+.segmented-pill-container.is-gopay-green .segmented-pill-btn span.hidden,
+.segmented-pill-container.is-card-pill-ref .segmented-pill-btn span.hidden {
+  display: none !important;
+}
+
 /* Compact / Small size for popovers & navbars */
 .segmented-pill-container.is-gopay-green.is-size-sm,
 .segmented-pill-container.is-card-pill-ref.is-size-sm {

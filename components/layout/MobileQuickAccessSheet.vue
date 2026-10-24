@@ -35,7 +35,7 @@
           <!-- Sheet Header: Pill "Beruang Siap Modal" dihilangkan, ditambahkan tombol tutup halus -->
           <div class="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0] dark:border-neutral-800/80 px-1">
             <span class="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-poppins">
-              Akses Cepat UMKM
+              {{ t('nav_quick_access') || 'Akses Cepat UMKM' }}
             </span>
             <button
               type="button"
@@ -110,6 +110,7 @@ import { computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useChatStore } from '~/stores/chat'
 import { useNotificationStore } from '~/stores/notification'
+import { useLanguage } from '~/composables/useLanguage'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { gsap } from 'gsap'
 import {
@@ -244,55 +245,57 @@ const totalUnreadNotif = computed(() => {
   return notifStore.unreadCount || 0
 })
 
+const { t, currentLang } = useLanguage()
+
 const quickAccessItems = computed(() => [
   {
     id: 'catat-kas',
-    label: 'Catat Kas',
+    label: t('btn_catat_kas_singkat'),
     to: '/dashboard/progres?action=catat-kas',
     icon: Add01Icon,
     isPrimary: true
   },
   {
     id: 'buku-kas',
-    label: 'Buku Kas',
+    label: currentLang.value === 'en' ? 'Cash Book' : 'Buku Kas',
     to: '/dashboard/progres',
     icon: Coins01Icon
   },
   {
     id: 'kesehatan',
-    label: 'Kesiapan',
+    label: currentLang.value === 'en' ? 'Readiness' : 'Kesiapan',
     to: '/dashboard/penilaian',
     icon: AnalyticsUpIcon
   },
   {
     id: 'tugas',
-    label: 'Tugas',
+    label: currentLang.value === 'en' ? 'Tasks' : 'Tugas',
     to: '/dashboard/rencana-aksi',
     icon: Task01Icon
   },
   {
     id: 'modal',
-    label: 'Cari Modal',
+    label: currentLang.value === 'en' ? 'Funding' : 'Cari Modal',
     to: '/dashboard/pendanaan',
     icon: Award01Icon
   },
   {
     id: 'pesan',
-    label: 'Pesan',
+    label: t('nav_pesan'),
     to: '/dashboard/pesan',
     icon: Message01Icon,
     badge: totalUnreadPesan.value
   },
   {
     id: 'notifikasi',
-    label: 'Notifikasi',
+    label: t('nav_notifikasi'),
     to: '/dashboard/notifikasi',
     icon: Notification01Icon,
     badge: totalUnreadNotif.value
   },
   {
     id: 'profile',
-    label: 'Profil Toko',
+    label: currentLang.value === 'en' ? 'Profile' : 'Profil Toko',
     to: '/dashboard/profile',
     icon: Store01Icon
   }

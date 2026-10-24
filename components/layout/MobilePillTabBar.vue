@@ -66,8 +66,8 @@
             : 'hover:bg-neutral-100/60 dark:hover:bg-neutral-800/40 active:scale-95'
         ]"
         :aria-expanded="isQuickAccessOpen"
-        :title="isQuickAccessOpen ? 'Tutup Akses Cepat' : 'Menu Lainnya'"
-        aria-label="Menu Lainnya"
+        :title="isQuickAccessOpen ? t('nav_tutup_menu') : t('nav_menu_lainnya')"
+        :aria-label="t('nav_menu_lainnya')"
         @click="toggleQuickAccess"
       >
         <div class="w-full h-full flex items-center justify-center pb-1 relative">
@@ -106,6 +106,7 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useChatStore } from '~/stores/chat'
 import { useNotificationStore } from '~/stores/notification'
+import { useLanguage } from '~/composables/useLanguage'
 import MobileQuickAccessSheet from './MobileQuickAccessSheet.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { gsap } from 'gsap'
@@ -167,30 +168,32 @@ const totalUnread = computed(() => {
   return pesan + notif
 })
 
+const { t } = useLanguage()
+
 const tabs = computed(() => [
   {
     id: 'beranda',
-    label: 'Beranda',
+    label: t('nav_beranda'),
     to: '/dashboard',
     icon: Home03Icon,
     exact: true
   },
   {
     id: 'kas',
-    label: 'Catatan Kas',
+    label: t('nav_catatan_kas'),
     to: '/dashboard/progres',
     icon: Coins01Icon
   },
   {
     id: 'usaha',
-    label: 'Kelola Usaha',
+    label: t('nav_kelola_usaha'),
     to: '/dashboard/rencana-aksi',
     icon: Task01Icon,
     activePaths: ['/dashboard/rencana-aksi', '/dashboard/profile', '/dashboard/penilaian']
   },
   {
     id: 'modal',
-    label: 'Permodalan',
+    label: t('nav_permodalan'),
     to: '/dashboard/pendanaan',
     icon: Award01Icon,
     activePaths: ['/dashboard/pendanaan', '/dashboard/pesan', '/dashboard/notifikasi'],

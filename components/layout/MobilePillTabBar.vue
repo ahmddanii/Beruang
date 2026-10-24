@@ -1,25 +1,20 @@
 <template>
   <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center justify-center w-[calc(100vw-2rem)] max-w-[390px] sm:max-w-[420px] lg:hidden font-poppins select-none">
-    <!-- The Unified Floating Pill Dock Bar: 5 Icon Slots (Tinggi Lebih Luas & Ergonomis, Aksen Selaras Sidebar) -->
+    <!-- The Unified Floating Pill Dock Bar: 5 Icon Slots (Squircle Active Card, Bottom Accent Stroke, Dark Centered Icon) -->
     <nav
       ref="navRef"
-      class="relative w-full h-[74px] sm:h-[78px] p-2 rounded-full bg-white/95 dark:bg-[#13161F]/95 backdrop-blur-xl border border-[#E2E8F0] dark:border-neutral-800/80 shadow-[0_16px_40px_rgba(15,23,42,0.14),0_4px_16px_rgba(15,23,42,0.06)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7),0_4px_16px_rgba(0,0,0,0.5)] flex items-center justify-between"
+      class="relative w-full h-[70px] sm:h-[74px] p-1.5 rounded-[22px] bg-white/95 dark:bg-[#13161F]/95 backdrop-blur-xl border border-[#E2E8F0] dark:border-neutral-800/80 shadow-[0_16px_40px_rgba(15,23,42,0.12),0_4px_16px_rgba(15,23,42,0.06)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7),0_4px_16px_rgba(0,0,0,0.5)] flex items-center justify-between"
       role="navigation"
       aria-label="Navigasi Utama Mobile"
     >
       <!-- GSAP Animated Active Tab Sliding Squircle Indicator -->
       <div
         ref="indicatorRef"
-        class="absolute top-2 bottom-2 left-0 pointer-events-none z-0 flex items-center justify-center will-change-transform opacity-0"
+        class="absolute top-1.5 bottom-1.5 left-0 pointer-events-none z-0 flex items-center justify-center will-change-transform opacity-0"
       >
-        <div class="w-full max-w-[58px] sm:max-w-[64px] h-full rounded-[20px] bg-[#E6F4F7] dark:bg-[#156374]/25 border border-[#156374]/25 dark:border-[#50AABF]/30 flex flex-col items-center justify-center relative shadow-[0_2px_6px_rgba(21,99,116,0.10)] transition-colors">
-          <!-- Invisible spacer to balance icon space -->
-          <div class="h-6 w-6 opacity-0 pointer-events-none" aria-hidden="true" />
-          <!-- Active Pill Accent Indicator Bar (GSAP animated line) -->
-          <span
-            ref="indicatorLineRef"
-            class="w-6 h-[4px] rounded-full bg-[#156374] dark:bg-[#50AABF] mt-1.5 shrink-0 transition-colors will-change-transform"
-          />
+        <div class="w-full max-w-[58px] sm:max-w-[64px] h-full rounded-[18px] bg-[#F1F5F9] dark:bg-[#181D29] flex flex-col items-center justify-end relative overflow-hidden transition-colors shadow-2xs">
+          <!-- Active Accent Pill Bar sitting flush at the bottom edge -->
+          <div class="w-8 sm:w-9 h-[5px] rounded-t-[4px] bg-[#156374] dark:bg-[#50AABF] shrink-0" />
         </div>
       </div>
 
@@ -30,7 +25,7 @@
         :ref="(el) => setSlotRef(el, idx)"
         :to="tab.to"
         :class="[
-          'flex-1 h-full min-w-0 flex items-center justify-center relative z-10 rounded-[20px] cursor-pointer select-none group transition-all duration-200',
+          'flex-1 h-full min-w-0 flex items-center justify-center relative z-10 rounded-[18px] cursor-pointer select-none group transition-all duration-200',
           activeIndex === idx
             ? 'active-tab'
             : 'hover:bg-neutral-100/60 dark:hover:bg-neutral-800/40 active:scale-95'
@@ -39,20 +34,18 @@
         :title="tab.label"
         @click="handleTabClick(tab)"
       >
-        <div class="w-full h-full max-w-[58px] sm:max-w-[64px] flex flex-col items-center justify-center relative">
+        <div class="w-full h-full flex items-center justify-center pb-1 relative">
           <HugeiconsIcon
             :icon="tab.icon"
             :size="24"
-            :stroke-width="activeIndex === idx ? 2.3 : 1.9"
+            :stroke-width="activeIndex === idx ? 2.4 : 1.9"
             :class="[
               'shrink-0 transition-colors duration-200 will-change-transform',
               activeIndex === idx
-                ? 'text-[#156374] dark:text-[#50AABF]'
-                : 'text-[#64748B] dark:text-neutral-400 group-hover:text-[#156374] dark:group-hover:text-[#50AABF]'
+                ? 'text-neutral-900 dark:text-white'
+                : 'text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white'
             ]"
           />
-          <!-- Spacer matching the active indicator line height so icon vertical alignment stays pixel-perfect -->
-          <div class="w-6 h-[4px] mt-1.5 opacity-0 pointer-events-none" aria-hidden="true" />
         </div>
 
         <!-- Notification Dot Indicator -->
@@ -67,7 +60,7 @@
         :ref="(el) => setSlotRef(el, 4)"
         type="button"
         :class="[
-          'flex-1 h-full min-w-0 flex items-center justify-center relative z-10 rounded-[20px] cursor-pointer select-none group transition-all duration-200',
+          'flex-1 h-full min-w-0 flex items-center justify-center relative z-10 rounded-[18px] cursor-pointer select-none group transition-all duration-200',
           activeIndex === 4
             ? 'active-tab'
             : 'hover:bg-neutral-100/60 dark:hover:bg-neutral-800/40 active:scale-95'
@@ -77,20 +70,18 @@
         aria-label="Menu Lainnya"
         @click="toggleQuickAccess"
       >
-        <div class="w-full h-full max-w-[58px] sm:max-w-[64px] flex flex-col items-center justify-center relative">
+        <div class="w-full h-full flex items-center justify-center pb-1 relative">
           <HugeiconsIcon
             :icon="MoreHorizontalIcon"
             :size="24"
-            :stroke-width="activeIndex === 4 ? 2.3 : 1.9"
+            :stroke-width="activeIndex === 4 ? 2.4 : 1.9"
             :class="[
               'shrink-0 transition-colors duration-200 will-change-transform',
               activeIndex === 4
-                ? 'text-[#156374] dark:text-[#50AABF]'
-                : 'text-[#64748B] dark:text-neutral-400 group-hover:text-[#156374] dark:group-hover:text-[#50AABF]'
+                ? 'text-neutral-900 dark:text-white'
+                : 'text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white'
             ]"
           />
-          <!-- Spacer matching the active indicator line height -->
-          <div class="w-6 h-[4px] mt-1.5 opacity-0 pointer-events-none" aria-hidden="true" />
         </div>
 
         <!-- Notification Dot on More if unread messages/notifs on other pages -->
@@ -135,7 +126,6 @@ const isQuickAccessOpen = ref(false)
 
 const navRef = ref<HTMLElement | null>(null)
 const indicatorRef = ref<HTMLElement | null>(null)
-const indicatorLineRef = ref<HTMLElement | null>(null)
 const slotRefs = ref<(HTMLElement | null)[]>([])
 
 function setSlotRef(el: any, idx: number) {
@@ -245,7 +235,6 @@ function updateIndicator(index: number, immediate = false) {
     const nav = navRef.value
     const target = slotRefs.value[index]
     const indicator = indicatorRef.value
-    const line = indicatorLineRef.value
     if (!nav || !target || !indicator) return
 
     const navRect = nav.getBoundingClientRect()
@@ -255,7 +244,6 @@ function updateIndicator(index: number, immediate = false) {
 
     if (immediate) {
       gsap.set(indicator, { x, width, opacity: 1 })
-      if (line) gsap.set(line, { scaleX: 1, opacity: 1 })
     } else {
       // Smooth linear-exponential glide without any bounce
       gsap.to(indicator, {
@@ -266,15 +254,6 @@ function updateIndicator(index: number, immediate = false) {
         ease: 'power3.out',
         overwrite: 'auto'
       })
-
-      // Active indicator bar smooth expansion without bounce
-      if (line) {
-        gsap.fromTo(
-          line,
-          { scaleX: 0.65, opacity: 0.7 },
-          { scaleX: 1, opacity: 1, duration: 0.28, ease: 'power2.out' }
-        )
-      }
 
       // Smooth active icon focus without bounce
       const targetIcon = target.querySelector('svg')

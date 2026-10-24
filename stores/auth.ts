@@ -239,6 +239,15 @@ export const useAuthStore = defineStore('auth', {
       } catch (err: any) {
         // Fallback demo/mock login jika live API gagal atau mode demo tanpa rekursi
         const demo = DEMO_CREDENTIALS[role]
+        const demoToken = 'demo-' + role.toLowerCase()
+        const tokenCookie = useCookie<string | null>('beruang_token', {
+          maxAge: 60 * 60 * 24 * 7,
+          sameSite: 'lax',
+          path: '/'
+        })
+        tokenCookie.value = demoToken
+        this.token = demoToken
+
         this.currentUser = {
           id: 'demo-' + role.toLowerCase(),
           role,
@@ -249,7 +258,7 @@ export const useAuthStore = defineStore('auth', {
           verified: true
         }
         this.isAuthenticated = true
-        return { user: this.currentUser, token: 'demo-token' }
+        return { user: this.currentUser, token: demoToken }
       } finally {
         this.loading = false
       }
@@ -513,9 +522,16 @@ export const useAuthStore = defineStore('auth', {
               ...res.data.user,
               businessName: res.data.user.businessName || res.data.user.orgName || demo.businessName
             }
-          }
         } catch {
           // Tetap gunakan sesi demo lokal jika live backend offline
+          const tokenCookie = useCookie<string | null>('beruang_token', {
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+            path: '/'
+          })
+          const demoToken = 'demo-' + role.toLowerCase()
+          tokenCookie.value = demoToken
+          this.token = demoToken
         }
       }
     },

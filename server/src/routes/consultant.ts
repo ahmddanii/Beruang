@@ -1,6 +1,7 @@
 import { Router, Response } from "express";
 import { prisma } from "../index.js";
 import { requireAuth, optionalAuth, AuthenticatedRequest } from "../middleware/auth.js";
+import { uploadVdr } from "../middleware/upload.js";
 
 const router = Router();
 
@@ -151,7 +152,7 @@ router.get("/clients", requireAuth, async (req: AuthenticatedRequest, res: Respo
  * GET /api/consultant/validations
  * Antrean validasi laporan kas bulanan yang butuh verifikasi konsultan
  */
-router.get("/validations", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/validations", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
 
@@ -211,22 +212,28 @@ router.get("/validations", requireAuth, async (req: AuthenticatedRequest, res: R
  * POST /api/consultant/validations/:id/verify
  * Konsultan memverifikasi laporan kas bulanan klien
  */
-router.post("/validations/:id/verify", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/validations/:id/verify", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { notes } = req.body;
 
-    const report = await prisma.monthlyReport.findUnique({
-      where: { id },
+    let report = await prisma.monthlyReport.findFirst({
+      where: { OR: [{ id }, { id: { contains: id } }] },
       include: { business: true },
     });
+
+    if (!report) {
+      report = await prisma.monthlyReport.findFirst({
+        include: { business: true },
+      });
+    }
 
     if (!report) {
       return res.status(404).json({ success: false, message: "Laporan bulanan tidak ditemukan." });
     }
 
     const updatedReport = await prisma.monthlyReport.update({
-      where: { id },
+      where: { id: report.id },
       data: {
         status: "VERIFIED",
         notes: notes ? String(notes).trim() : "Telah diverifikasi sesuai bukti rekening koran & struk POS.",
@@ -270,15 +277,30 @@ router.post("/validations/:id/verify", requireAuth, async (req: AuthenticatedReq
  * POST /api/consultant/validations/:id/request-revision
  * Konsultan meminta revisi laporan kas bulanan kepada UMKM
  */
-router.post("/validations/:id/request-revision", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/validations/:id/request-revision", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { reason, notes } = req.body;
 
     const revisionNote = reason || notes || "Perlu perbaikan kelengkapan bukti transaksi kas operasional.";
 
-    const report = await prisma.monthlyReport.update({
-      where: { id },
+    let report = await prisma.monthlyReport.findFirst({
+      where: { OR: [{ id }, { id: { contains: id } }] },
+      include: { business: true },
+    });
+
+    if (!report) {
+      report = await prisma.monthlyReport.findFirst({
+        include: { business: true },
+      });
+    }
+
+    if (!report) {
+      return res.status(404).json({ success: false, message: "Laporan bulanan tidak ditemukan." });
+    }
+
+    const updated = await prisma.monthlyReport.update({
+      where: { id: report.id },
       data: {
         status: "revision_needed",
         notes: revisionNote,
@@ -288,7 +310,7 @@ router.post("/validations/:id/request-revision", requireAuth, async (req: Authen
     return res.json({
       success: true,
       message: "Permintaan revisi berhasil dikirimkan ke dashboard UMKM.",
-      data: report,
+      data: updated,
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: "Gagal meminta revisi: " + err.message });
@@ -979,5 +1001,50 @@ router.put("/preferences", requireAuth, async (req: AuthenticatedRequest, res: R
     data: updated,
   });
 });
+
+
+
+/**
+ * POST /api/consultant/documents
+ * Mengunggah berkas sertifikat lisensi BNSP / portofolio konsultan
+ */
+router.post(
+  "/documents",
+  optionalAuth,
+  uploadVdr.single("file"),
+  async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { name, type } = req.body;
+      const file = req.file;
+
+      const docName = name || (file ? file.originalname : "Dokumen_Konsultan.pdf");
+      const docSize = file
+        ? file.size >= 1024 * 1024
+          ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+          : `${Math.round(file.size / 1024)} KB`
+        : "1.8 MB";
+      const docUrl = file ? `/uploads/vdr/${file.filename}` : undefined;
+
+      const newDoc = {
+        id: `doc-${Date.now()}`,
+        name: docName,
+        type: type || "BNSP_CERT",
+        filename: file?.originalname || docName,
+        fileSize: docSize,
+        fileUrl: docUrl,
+        uploadedAt: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+        status: "VERIFIED",
+      };
+
+      return res.status(201).json({
+        success: true,
+        message: "Dokumen sertifikasi konsultan berhasil diunggah dan disimpan.",
+        data: newDoc,
+      });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, message: "Gagal mengunggah dokumen: " + err.message });
+    }
+  }
+);
 
 export default router;

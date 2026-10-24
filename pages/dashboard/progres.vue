@@ -1582,7 +1582,6 @@ import {
   Note01Icon
 } from '@hugeicons/core-free-icons'
 import { useReportDownloader } from '~/composables/useReportDownloader'
-import { useLanguage } from '~/composables/useLanguage'
 
 // Base components
 import BActionButton from '~/components/base/BActionButton.vue'

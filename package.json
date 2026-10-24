@@ -12,7 +12,9 @@
     "postinstall": "nuxt prepare",
     "db:push": "npm run prisma:push --prefix server",
     "db:seed": "npm run prisma:seed --prefix server",
-    "db:studio": "npm run prisma:studio --prefix server"
+    "db:studio": "npm run prisma:studio --prefix server",
+    "test": "node --test tests/unit/investor-pages.test.mjs tests/unit/admin-pages.test.mjs tests/unit/settings-page.test.mjs tests/unit/mobile-responsiveness.test.mjs tests/unit/verify-all-umkm-pages.mjs tests/unit/stores-behavior.test.mjs tests/unit/components-contract.test.mjs tests/unit/verify-batch1.mjs tests/unit/verify-batch2.mjs tests/unit/verify-batch3.mjs",
+    "test:unit": "npm run test"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",

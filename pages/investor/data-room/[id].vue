@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100 select-none">
+  <div ref="pageRootRef" class="space-y-6 pb-20 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -25,7 +25,7 @@
         class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2091AA] dark:text-[#50AABF] hover:underline transition-colors"
       >
         <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2.2" />
-        <span>Kembali ke Venture Social Feed</span>
+        <span>Kembali ke Katalog Peluang Usaha</span>
       </NuxtLink>
 
       <div class="flex items-center gap-2">
@@ -147,23 +147,12 @@
       </div>
 
       <!-- 2. Macro Navigation Tabs for Data Room (Kas Riil, Vault Berkas, Rencana Aksi) -->
-      <div class="flex items-center gap-2 border-b border-neutral-200 dark:border-neutral-800 pb-px">
-        <button
-          v-for="tab in dataRoomTabs"
-          :key="tab.id"
-          type="button"
-          :class="[
-            'px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 border-b-2 -mb-px',
-            activeDataRoomTab === tab.id
-              ? 'text-[#2091AA] dark:text-[#50AABF] border-[#2091AA] dark:border-[#50AABF] bg-[#E6F4F7]/40 dark:bg-[#2091AA]/10'
-              : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white border-transparent'
-          ]"
-          @click="activeDataRoomTab = tab.id"
-        >
-          <HugeiconsIcon :icon="tab.icon" :size="16" />
-          <span>{{ tab.label }}</span>
-        </button>
-      </div>
+      <BPillTabs
+        v-model="activeDataRoomTab"
+        :tabs="dataRoomTabs"
+        size="md"
+        :full-width="true"
+      />
 
       <!-- ======================================================================================= -->
       <!-- TAB 1: LAPORAN KEUANGAN & PEMBUKUAN KAS RIIL (P&L Audited)                              -->
@@ -568,8 +557,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
 import { useRoute } from 'vue-router'
+import BPillTabs, { type PillTabItem } from '~/components/base/BPillTabs.vue'
 import { useAuthStore } from '~/stores/auth'
 import { useInvestorStore } from '~/stores/investor'
 import { useUmkmStore } from '~/stores/umkm'
@@ -590,7 +581,8 @@ import {
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 const route = useRoute()
@@ -599,6 +591,40 @@ const umkmId = computed(() => (route.params.id as string) || 'umkm-01')
 const authStore = useAuthStore()
 const investorStore = useInvestorStore()
 const umkmStore = useUmkmStore()
+const pageRootRef = ref<HTMLElement | null>(null)
+let gsapCtx: gsap.Context | null = null
+
+onMounted(() => {
+  if (typeof window !== 'undefined' && pageRootRef.value) {
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    if (!prefersReducedMotion) {
+      gsapCtx = gsap.context(() => {
+        const cards = pageRootRef.value?.querySelectorAll('.card-tactile-gopay')
+        if (cards && cards.length > 0) {
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 14 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              stagger: 0.05,
+              ease: 'power2.out',
+              clearProps: 'all'
+            }
+          )
+        }
+      }, pageRootRef.value)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
+})
 
 const item = computed(() => {
   return investorStore.marketplaceList.find(m => m.id === umkmId.value) || investorStore.marketplaceList[0]
@@ -613,10 +639,10 @@ const accessTimestamp = new Date().toLocaleString('id-ID', {
 })
 
 // Tab Navigation
-const dataRoomTabs = [
-  { id: 'pnl', label: 'Laporan Untung Rugi Riil', icon: AnalyticsUpIcon },
-  { id: 'docs', label: 'Vault Berkas & Legalitas', icon: File01Icon },
-  { id: 'actions', label: 'Rekam Jejak Rencana Aksi', icon: Task01Icon }
+const dataRoomTabs: PillTabItem[] = [
+  { id: 'pnl', label: 'Laporan Untung Rugi Riil', shortLabel: 'Untung Rugi', icon: AnalyticsUpIcon },
+  { id: 'docs', label: 'Vault Berkas & Legalitas', shortLabel: 'Berkas Legal', icon: File01Icon },
+  { id: 'actions', label: 'Rekam Jejak Rencana Aksi', shortLabel: 'Rencana Aksi', icon: Task01Icon }
 ]
 const activeDataRoomTab = ref('pnl')
 

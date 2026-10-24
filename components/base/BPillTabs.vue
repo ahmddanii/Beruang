@@ -34,7 +34,9 @@
         :stroke-width="modelValue === tab.id ? 2.2 : 1.8"
         :class="size === 'sm' ? 'mr-1 shrink-0 transition-colors' : 'mr-2 shrink-0 transition-colors'"
       />
-      <span class="truncate leading-normal pb-0.5">{{ tab.label }}</span>
+      <span class="truncate leading-normal pb-0.5">
+        {{ (isMobile && tab.shortLabel) ? tab.shortLabel : tab.label }}
+      </span>
       <span
         v-if="tab.count !== undefined"
         :class="[
@@ -51,13 +53,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useWindowSize } from '@vueuse/core'
 import gsap from 'gsap'
 import { HugeiconsIcon } from '@hugeicons/vue'
+
+const { width } = useWindowSize()
+const isMobile = computed(() => width.value > 0 && width.value < 640)
+
+watch(isMobile, () => {
+  nextTick(() => updateIndicator(true))
+})
 
 export interface PillTabItem {
   id: string
   label: string
+  shortLabel?: string
   icon?: any
   count?: number | string
 }

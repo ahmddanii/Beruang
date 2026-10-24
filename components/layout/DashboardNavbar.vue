@@ -172,7 +172,7 @@ const navItems = computed(() => {
       },
       {
         to: '/dashboard/rencana-aksi',
-        label: 'Rencana Aksi',
+        label: 'Progress Tugas',
         icon: Task01Icon,
         badge: `${umkmStore.tasksCompletedCount}/${umkmStore.tasks.length}`
       },
@@ -214,7 +214,7 @@ const navItems = computed(() => {
     return [
       {
         to: '/investor',
-        label: 'Katalog Usaha',
+        label: 'Katalog',
         icon: Store01Icon
       },
       {

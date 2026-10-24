@@ -107,7 +107,7 @@
       </g>
 
       <!-- Axis Labels (clickable and hoverable) -->
-      <g class="labels font-poppins font-semibold">
+      <g :class="['labels font-poppins font-semibold', compact ? 'text-[10px]' : 'text-xs sm:text-sm']">
         <text
           v-for="(label, index) in labels"
           :key="index"
@@ -124,6 +124,7 @@
         >
           <tspan>{{ label.name }}</tspan>
           <tspan
+            v-if="!compact"
             :x="label.x"
             dy="1.25em"
             class="fill-[#0081A0] dark:fill-[#2091AA] font-extrabold tabular-nums"
@@ -155,12 +156,14 @@ const props = withDefaults(
     maxWidth?: number
     showTarget?: boolean
     selectedIndex?: number | null
+    compact?: boolean
   }>(),
   {
     size: 320,
     maxWidth: undefined,
     showTarget: false,
-    selectedIndex: null
+    selectedIndex: null,
+    compact: false
   }
 )
 
@@ -194,7 +197,7 @@ function handlePointClick(index: number) {
 }
 
 const center = computed(() => props.size / 2)
-const radius = computed(() => (props.size / 2) - 52) // margin for outer text labels
+const radius = computed(() => (props.size / 2) - (props.compact ? 32 : 52)) // margin for outer text labels
 const total = computed(() => props.items.length || 5)
 
 // Helper for angle calculation
@@ -253,7 +256,7 @@ const targetPoints = computed(() => {
 const labels = computed(() => {
   return props.items.map((item, i) => {
     const angle = (Math.PI * 2 / total.value) * i - Math.PI / 2
-    const labelDistance = radius.value + 28
+    const labelDistance = radius.value + (props.compact ? 16 : 28)
     const x = center.value + labelDistance * Math.cos(angle)
     const y = center.value + labelDistance * Math.sin(angle)
 

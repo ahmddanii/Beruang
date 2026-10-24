@@ -1,44 +1,70 @@
 <template>
   <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
 
-    <!-- Editorial Greeting & Profile Header (Without bottom border divider) -->
-    <header class="gsap-header relative z-10">
-      <div class="space-y-1.5 w-full">
-        <!-- Top Row: Name + Verified Checkmark on Left, Edit Profil Button on Right -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex flex-col min-w-0 space-y-2 sm:space-y-2.5">
-            <!-- Ucapan Selamat sesuai Waktu (Pagi / Siang / Sore / Malam) tanpa nama dan emoji -->
-            <div class="flex items-center text-xs sm:text-[14px] font-poppins font-medium text-neutral-500 dark:text-neutral-400 select-none">
-              <span>{{ timeGreeting.text }}</span>
-            </div>
-
-            <!-- Nama UMKM + Verified Badge -->
-            <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap min-w-0">
-              <h1
-                class="text-3xl sm:text-[34px] lg:text-[38px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-[1.15] truncate"
-              >
-                {{ umkmName }}
-              </h1>
-
-              <!-- Verified Badge Rosette Green Gradient (matching Catat Kas button) placed beside UMKM name -->
-              <BVerifiedBadge v-if="isVerified" />
-            </div>
-          </div>
-
-          <!-- Action Button: Edit Profil -->
-          <NuxtLink
-            to="/dashboard/profile"
-            class="btn-pill-action group shrink-0 self-start sm:self-auto focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
-            title="Edit Profil"
-          >
-            <span>Edit Profil</span>
-            <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </NuxtLink>
-        </div>
+    <!-- 1. Top Header: Title on Left & Action Controls (Edit Profil) on Right (1 Baris Sejajar ala Catatan Kas) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <HugeiconsIcon
+          :icon="Home03Icon"
+          :size="26"
+          :stroke-width="2.2"
+          class="text-neutral-900 dark:text-white shrink-0"
+        />
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+          Beranda
+        </h1>
       </div>
-    </header>
+
+      <!-- Action Controls: Filter Lihat Cabang & Edit Profil Button (Stacked full-width on mobile, right-aligned on desktop) -->
+      <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
+        <!-- Filter Lihat Cabang Button -->
+        <button
+          type="button"
+          :class="[
+            'btn-pill-action group justify-center cursor-pointer shadow-none',
+            isBranchModalOpen || umkmStore.selectedBranchIds.length > 0
+              ? 'bg-[#E6F4F7]! text-[#156374]! border-[#156374]/30! dark:bg-[#156374]/25! dark:text-[#50AABF]! dark:border-[#50AABF]/35!'
+              : ''
+          ]"
+          aria-haspopup="dialog"
+          :aria-expanded="isBranchModalOpen"
+          title="Pilih Cabang Usaha untuk Memfilter Pergerakan Uang Toko"
+          @click="isBranchModalOpen = true"
+        >
+          <HugeiconsIcon
+            :icon="Store01Icon"
+            :size="15"
+            :stroke-width="2"
+            class="text-[#156374] dark:text-[#50AABF] shrink-0"
+          />
+          <span>{{ activeBranchButtonLabel }}</span>
+          <HugeiconsIcon
+            :icon="ArrowDown01Icon"
+            :size="15"
+            :stroke-width="2.2"
+            :class="[
+              'text-neutral-400 dark:text-neutral-500 transition-transform duration-200 shrink-0',
+              isBranchModalOpen ? 'rotate-180' : ''
+            ]"
+          />
+        </button>
+
+        <!-- Edit Profil Button -->
+        <NuxtLink
+          to="/dashboard/profile"
+          class="btn-pill-action group justify-center focus-visible:ring-2 focus-visible:ring-[#156374] focus-visible:outline-hidden transition-all duration-150"
+          title="Edit Profil Usaha"
+        >
+          <span>Edit Profil</span>
+          <HugeiconsIcon
+            :icon='Edit03Icon'
+            :size='16'
+            :stroke-width='2.0'
+            class='shrink-0 transition-transform duration-200 group-hover:translate-x-0.5'
+          />
+        </NuxtLink>
+      </div>
+    </div>
 
     <!-- 1. Metric Container: 4 Equal Width Financial Cards (Apple Store Utility Card: rounded.lg 18px, spacing.lg 24px) -->
     <div
@@ -70,7 +96,7 @@
       <template v-else>
         <!-- Card 1: Untung Bersih -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -103,7 +129,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                {{ formatDisplayedAmount(calculatedProfitAmount) }}
+                {{ currentNetProfitDisplay }}
               </span>
             </div>
 
@@ -123,7 +149,7 @@
 
         <!-- Card 2: Modal Jualan -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -147,7 +173,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                {{ formatDisplayedAmount(calculatedHppAmount) }}
+                {{ currentHppDisplay }}
               </span>
             </div>
 
@@ -167,7 +193,7 @@
 
         <!-- Card 3: Uang Masuk -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -189,7 +215,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                {{ formatDisplayedAmount(totalCalculatedOmzet) }}
+                {{ currentInflowDisplay }}
               </span>
             </div>
 
@@ -209,7 +235,7 @@
 
         <!-- Card 4: Uang Keluar -->
         <div class="gsap-stat-card flex-1 w-full">
-          <div class="stat-card-clean select-none transition-all duration-200">
+          <div class="stat-card-clean transition-all duration-200">
             <!-- 1. Top Header: Icon + Title & Badge -->
             <div class="flex items-center justify-between w-full gap-2">
               <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -231,7 +257,7 @@
             <!-- 2. Middle Value Row: Apple lead scale (21px - 24px font-semibold) -->
             <div class="my-auto py-2.5 sm:py-3.5">
               <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-                {{ formatDisplayedAmount(calculatedOutflowAmount) }}
+                {{ currentOutflowDisplay }}
               </span>
             </div>
 
@@ -463,7 +489,7 @@
             </div>
 
             <!-- Informasi Total Kas di Bagian Bawah Kiri -->
-            <div class="pt-3 select-none w-full text-center sm:text-left">
+            <div class="pt-3 w-full text-center sm:text-left">
               <div class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
                 Rp {{ totalCalculatedOmzet.toLocaleString('id-ID') }}
               </div>
@@ -481,7 +507,7 @@
               role="button"
               tabindex="0"
               :aria-label="`${item.label}: Rp ${item.amount.toLocaleString('id-ID')} (${item.percent}%)`"
-              class="card-btn-hover p-3.5 sm:p-4 rounded-[12px] flex items-center justify-between gap-3.5 group cursor-pointer select-none"
+              class="card-btn-hover p-3.5 sm:p-4 rounded-[12px] flex items-center justify-between gap-3.5 group cursor-pointer"
               @mouseenter="activeHoveredItem = item; highlightDonutSegment(idx)"
               @mouseleave="activeHoveredItem = null; highlightDonutSegment(null)"
               @focus="activeHoveredItem = item; highlightDonutSegment(idx)"
@@ -598,11 +624,11 @@
           </p>
         </div>
 
-        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
           <!-- Button Unduh Laporan Terbaru (CSV) -->
           <button
             type="button"
-            class="btn-pill-action-green group shrink-0 cursor-pointer"
+            class="btn-pill-action-green group shrink-0 cursor-pointer justify-center"
             title="Unduh Laporan Keuangan Terbaru (CSV)"
             @click="downloadThreeMonthsReport"
           >
@@ -613,7 +639,7 @@
           <!-- Button Lihat Semua (Renamed from Lihat Semua Laporan) -->
           <NuxtLink
             to="/dashboard/progres"
-            class="btn-pill-action group shrink-0"
+            class="btn-pill-action group shrink-0 justify-center"
           >
             <span>Lihat Semua</span>
             <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
@@ -623,8 +649,8 @@
         </div>
       </div>
 
-      <!-- Table Langsung -->
-      <div class="overflow-x-auto w-full">
+      <!-- Table Langsung: Desktop View (hidden on < sm) -->
+      <div class="overflow-x-auto w-full hidden sm:block">
         <table class="w-full text-left text-xs sm:text-[14px] font-poppins">
           <thead>
             <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-[12.5px] font-bold uppercase tracking-wider">
@@ -705,132 +731,66 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile Responsive Tactile Card List View (< sm) -->
+      <div class="sm:hidden divide-y divide-neutral-100 dark:divide-neutral-800">
+        <!-- Empty State Mobile -->
+        <div v-if="!latestMonthlyRecords || latestMonthlyRecords.length === 0" class="p-6 text-center space-y-3">
+          <p class="font-poppins text-xs text-neutral-500 dark:text-neutral-400">
+            Belum ada rapor keuangan bulanan.
+          </p>
+          <button
+            type="button"
+            class="btn-pill-action w-full justify-center text-xs"
+            @click="isTransactionDrawerOpen = true"
+          >
+            Catat Kas Pertama
+          </button>
+        </div>
+
+        <div
+          v-for="rec in latestMonthlyRecords"
+          :key="`m-rec-${rec.month}-${rec.year}`"
+          class="p-4 space-y-3 bg-white dark:bg-[#13161F]"
+        >
+          <!-- Top: Periode Bulan & Untung Bersih Pill -->
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+              {{ rec.month }} {{ rec.year }}
+            </span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/70 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tabular-nums">
+              + Rp {{ rec.netProfit.toLocaleString('id-ID') }}
+            </span>
+          </div>
+
+          <!-- Financial Metrics Grid: Total Pendapatan, Modal Jualan, Biaya Operasional -->
+          <div class="grid grid-cols-3 gap-2 pt-1 text-center bg-neutral-50/80 dark:bg-neutral-800/40 p-2.5 rounded-xl border border-neutral-100 dark:border-neutral-800/80">
+            <div>
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Pendapatan</span>
+              <span class="text-xs font-semibold text-neutral-900 dark:text-white tabular-nums block mt-0.5">
+                Rp {{ (rec.omzet / 1000000).toFixed(1) }} Jt
+              </span>
+            </div>
+            <div class="border-x border-neutral-200 dark:border-neutral-700/60">
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Modal Jualan</span>
+              <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 tabular-nums block mt-0.5">
+                Rp {{ (rec.hpp / 1000000).toFixed(1) }} Jt
+              </span>
+            </div>
+            <div>
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Operasional</span>
+              <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 tabular-nums block mt-0.5">
+                Rp {{ (rec.opex / 1000000).toFixed(1) }} Jt
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
 
-    <!-- SLIDE-OVER SHEET 2: Record Cash Entry Sheet -->
-    <BDrawer
-      v-model="isTransactionDrawerOpen"
-      title="Catat Kas Toko Baru"
-      subtitle="Buku Catatan Penjualan & Biaya Harian"
-    >
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Tanggal Pembukuan
-          </label>
-          <input
-            v-model="quickTxDate"
-            type="date"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-          />
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Kategori Transaksi
-          </label>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              :class="[
-                'py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
-                quickTxCategory === 'PEMASUKAN'
-                  ? 'bg-emerald-50 text-[#00AA13] border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-700'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="quickTxCategory = 'PEMASUKAN'"
-            >
-              Uang Masuk
-            </button>
-            <button
-              type="button"
-              :class="[
-                'py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
-                quickTxCategory === 'MODAL_JUALAN'
-                  ? 'bg-cyan-50 text-[#156374] border-cyan-300 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-700'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="quickTxCategory = 'MODAL_JUALAN'"
-            >
-              Modal Jualan
-            </button>
-            <button
-              type="button"
-              :class="[
-                'py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
-                quickTxCategory === 'OPERASIONAL'
-                  ? 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="quickTxCategory = 'OPERASIONAL'"
-            >
-              Operasional
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Keterangan Transaksi <span class="text-rose-500">*</span>
-          </label>
-          <input
-            v-model="quickTxTitle"
-            type="text"
-            placeholder="Contoh: Penjualan POS Kasir Shift Pagi"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-sans focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-          />
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Nominal Transaksi (Rp) <span class="text-rose-500">*</span>
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm text-neutral-500 font-mono font-semibold">Rp</span>
-            <input
-              v-model.number="quickTxAmount"
-              type="number"
-              min="0"
-              placeholder="3500000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 font-semibold tabular-nums"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Catatan Tambahan
-          </label>
-          <textarea
-            v-model="quickTxNotes"
-            rows="3"
-            placeholder="Contoh: Pembelian biji kopi dari mitra supplier Lembang..."
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white font-sans focus:outline-none focus:ring-2 focus:ring-primary-500/20 leading-relaxed"
-          ></textarea>
-        </div>
-      </div>
-
-      <template #footer="{ close }">
-        <div class="flex items-center justify-end gap-3 w-full">
-          <button
-            type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 transition-colors cursor-pointer"
-            @click="close"
-          >
-            Batal
-          </button>
-          <button
-            type="button"
-            :disabled="quickTxLoading || !quickTxTitle.trim() || quickTxAmount <= 0"
-            class="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-white text-xs sm:text-sm font-heading font-semibold shadow-xs transition-colors cursor-pointer"
-            @click="handleSaveQuickTransaction"
-          >
-            {{ quickTxLoading ? 'Menyimpan...' : 'Simpan Catatan Kas' }}
-          </button>
-        </div>
-      </template>
-    </BDrawer>
+    <!-- SLIDE-OVER SHEET 2: Record Cash Entry Sheet (Redesigned with Tactile System & GSAP) -->
+    <BCashEntryDrawer v-model="isTransactionDrawerOpen" />
 
     <!-- Modal Edit Cepat Nama & Deskripsi UMKM -->
     <BModal
@@ -940,6 +900,175 @@
         </div>
       </transition>
     </Teleport>
+    <!-- Modal Filter Cabang Toko (Sesuai Konsep Modal Wilayah Jaringan Investor) -->
+    <Teleport to="body">
+      <div
+        v-if="isBranchModalOpen"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150 font-poppins"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-cabang-title"
+        @click.self="isBranchModalOpen = false"
+      >
+        <div class="w-full max-w-2xl rounded-[22px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-800 shadow-none overflow-hidden flex flex-col max-h-[86vh]">
+          <!-- Modal Header -->
+          <div class="px-6 py-4 sm:py-5 border-b border-neutral-100 dark:border-neutral-800 flex items-start justify-between gap-4 shrink-0">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="2" />
+              </div>
+              <div>
+                <h2 id="modal-cabang-title" class="text-base sm:text-lg font-poppins font-bold text-neutral-900 dark:text-white leading-tight">
+                  Pilih Cabang Usaha
+                </h2>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  Centang satu atau beberapa gerai cabang untuk menyaring pergerakan uang toko dan 4 kartu finansial utama.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="w-8 h-8 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              aria-label="Tutup Modal Cabang"
+              @click="isBranchModalOpen = false"
+            >
+              <HugeiconsIcon :icon="Cancel01Icon" :size="18" :stroke-width="2.2" />
+            </button>
+          </div>
+
+          <!-- Search & "Semua Cabang" Master Checklist Row -->
+          <div class="px-6 pt-4 pb-3 border-b border-neutral-100 dark:border-neutral-800 space-y-3 shrink-0 bg-[#F8FAFC]/60 dark:bg-[#18191E]/50">
+            <!-- Search Input inside Modal (Full-width rata kanan-kiri) -->
+            <div class="relative w-full">
+              <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none flex items-center">
+                <HugeiconsIcon :icon="Search01Icon" :size="16" :stroke-width="2" />
+              </span>
+              <input
+                v-model="branchSearchQuery"
+                type="text"
+                placeholder="Cari nama atau lokasi cabang usaha (misal: Riau, Dago, Sudirman)..."
+                class="w-full h-10 pl-10 pr-9 rounded-xl border border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-[#13161F] text-xs sm:text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#156374] dark:focus:border-[#50AABF] focus:ring-2 focus:ring-[#156374]/20 transition-all font-poppins"
+              />
+              <button
+                v-if="branchSearchQuery"
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer"
+                @click="branchSearchQuery = ''"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="14" />
+              </button>
+            </div>
+
+            <!-- Master Option: Semua Cabang -->
+            <div
+              class="p-3 sm:p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 cursor-pointer select-none shadow-none"
+              :class="[
+                umkmStore.selectedBranchIds.length === 0
+                  ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+                  : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+              ]"
+              @click="umkmStore.clearBranchSelection()"
+            >
+              <div class="min-w-0 pr-2">
+                <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
+                  Semua Cabang
+                </span>
+              </div>
+              <div
+                :class="[
+                  'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+                  umkmStore.selectedBranchIds.length === 0
+                    ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                    : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+                ]"
+              >
+                <HugeiconsIcon v-if="umkmStore.selectedBranchIds.length === 0" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Scrollable Checklist Body: Max 3 Columns -->
+          <div class="px-6 py-4 overflow-y-auto space-y-3 flex-1">
+            <template v-if="filteredBranchList.length > 0">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                <div
+                  v-for="branch in filteredBranchList"
+                  :key="branch.id"
+                  class="p-3 rounded-xl border transition-all flex items-center justify-between gap-2.5 cursor-pointer select-none shadow-none"
+                  :class="[
+                    isBranchChecked(branch.id)
+                      ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+                      : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+                  ]"
+                  @click="umkmStore.toggleBranchSelection(branch.id)"
+                >
+                  <div class="min-w-0 pr-1 space-y-0.5">
+                    <span class="text-xs sm:text-[13px] font-semibold text-neutral-800 dark:text-neutral-200 truncate block">
+                      {{ branch.name }}
+                    </span>
+                    <span class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate block">
+                      {{ branch.location }}
+                    </span>
+                  </div>
+                  <div
+                    :class="[
+                      'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+                      isBranchChecked(branch.id)
+                        ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                        : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+                    ]"
+                  >
+                    <HugeiconsIcon v-if="isBranchChecked(branch.id)" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Empty Search Result inside Modal -->
+            <div v-else class="py-8 text-center space-y-2">
+              <p class="text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                Cabang "{{ branchSearchQuery }}" tidak ditemukan
+              </p>
+              <p class="text-xs text-neutral-500">
+                Tambahkan cabang baru melalui menu Profil Usaha.
+              </p>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="px-6 py-4 border-t border-neutral-100 dark:border-neutral-800 bg-[#F8FAFC] dark:bg-[#18191E] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+            <div class="flex items-center gap-3 text-xs">
+              <span class="font-medium text-neutral-600 dark:text-neutral-400">
+                Status:
+                <strong class="text-neutral-900 dark:text-white font-semibold">
+                  {{ umkmStore.selectedBranchIds.length === 0 ? 'Semua Cabang' : `${umkmStore.selectedBranchIds.length} Cabang Dipilih` }}
+                </strong>
+              </span>
+              <button
+                v-if="umkmStore.selectedBranchIds.length > 0"
+                type="button"
+                class="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline cursor-pointer"
+                @click="umkmStore.clearBranchSelection()"
+              >
+                Reset Pilihan
+              </button>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5">
+              <BActionButton
+                variant="green"
+                :huge-icon="CheckmarkCircle01Icon"
+                custom-class="w-full sm:w-auto justify-center"
+                @click="isBranchModalOpen = false"
+              >
+                Terapkan Cabang
+              </BActionButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -949,6 +1078,7 @@ import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   CheckmarkBadge01Icon,
   PencilEdit01Icon,
+  Edit03Icon,
   CheckmarkCircle01Icon,
   Alert01Icon,
   BanknoteIcon,
@@ -956,7 +1086,13 @@ import {
   Money03Icon,
   MoneyBag01Icon,
   Coins01Icon,
-  ArrowDownToLineIcon
+  ArrowDownToLineIcon,
+  Home03Icon,
+  Store01Icon,
+  ArrowDown01Icon,
+  Tick02Icon,
+  Cancel01Icon,
+  Search01Icon
 } from '@hugeicons/core-free-icons'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore, type MonthlyRecord } from '~/stores/umkm'
@@ -971,9 +1107,11 @@ import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
+import BCashEntryDrawer from '~/components/base/BCashEntryDrawer.vue'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
 function handleDownloadReport() {
@@ -984,6 +1122,50 @@ function handleDownloadReport() {
 
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+// Modal Filter Cabang Toko & Logika Per-Cabang
+const isBranchModalOpen = ref(false)
+const branchSearchQuery = ref('')
+
+const filteredBranchList = computed(() => {
+  const q = branchSearchQuery.value.toLowerCase().trim()
+  const list = umkmStore.branches || []
+  if (!q) return list
+  return list.filter(b =>
+    b.name.toLowerCase().includes(q) ||
+    b.location.toLowerCase().includes(q) ||
+    (b.address && b.address.toLowerCase().includes(q))
+  )
+})
+
+const activeBranchButtonLabel = computed(() => {
+  return umkmStore.activeBranchLabel || 'Semua'
+})
+
+function isBranchChecked(branchId: string): boolean {
+  return umkmStore.selectedBranchIds.includes(branchId)
+}
+
+// Active Branch Filter Ratio (scales the 4 financial cards and Pergerakan Uang Toko)
+const activeBranchRatio = computed(() => {
+  return umkmStore.activeBranchRatio || 1
+})
+
+const currentNetProfitDisplay = computed(() => {
+  return 'Rp ' + Math.round(calculatedProfitAmount.value * activeBranchRatio.value).toLocaleString('id-ID')
+})
+
+const currentHppDisplay = computed(() => {
+  return 'Rp ' + Math.round(calculatedHppAmount.value * activeBranchRatio.value).toLocaleString('id-ID')
+})
+
+const currentInflowDisplay = computed(() => {
+  return 'Rp ' + Math.round(totalCalculatedOmzet.value * activeBranchRatio.value).toLocaleString('id-ID')
+})
+
+const currentOutflowDisplay = computed(() => {
+  return 'Rp ' + Math.round(calculatedOutflowAmount.value * activeBranchRatio.value).toLocaleString('id-ID')
+})
 
 // Period selection
 const selectedPeriod = ref('month')
@@ -1206,34 +1388,6 @@ const quickTxAmount = ref<number>(0)
 const quickTxNotes = ref('')
 const quickTxLoading = ref(false)
 
-async function handleSaveQuickTransaction() {
-  if (!quickTxTitle.value.trim() || quickTxAmount.value <= 0) return
-  quickTxLoading.value = true
-  try {
-    await umkmStore.addDailyTransaction({
-      date: quickTxDate.value,
-      title: quickTxTitle.value.trim(),
-      category: quickTxCategory.value,
-      amount: quickTxAmount.value,
-      paymentMethod: 'QRIS',
-      notes: quickTxNotes.value.trim(),
-      receiptNumber: `NOTA/${Date.now().toString().slice(-6)}`
-    })
-    quickTxTitle.value = ''
-    quickTxAmount.value = 0
-    quickTxNotes.value = ''
-    isTransactionDrawerOpen.value = false
-    showToastSuccess.value = true
-    nextTick(() => {
-      initDonutChart()
-    })
-    setTimeout(() => {
-      showToastSuccess.value = false
-    }, 3000)
-  } finally {
-    quickTxLoading.value = false
-  }
-}
 
 // Total Riil Aliran Kas Bulan Ini dari umkmStore.financeSummary
 const financeSummary = computed(() => umkmStore.financeSummary)
@@ -1432,6 +1586,12 @@ watch(donutCanvas, (newEl) => {
   }
 })
 
+watch(activeBranchRatio, () => {
+  nextTick(() => {
+    updateDonutChart()
+  })
+})
+
 // Hero Shadcn UI Chart Config, Preview Switcher & Period Logic
 const chartTypeDropdownRef = ref<HTMLElement | null>(null)
 const periodDropdownRef = ref<HTMLElement | null>(null)
@@ -1466,6 +1626,9 @@ function handleClickOutsideDashboard(event: MouseEvent) {
 
 function handleKeydownEscape(event: KeyboardEvent) {
   if (event.key === 'Escape') {
+    isTransactionDrawerOpen.value = false
+    isQuickEditModalOpen.value = false
+    isBranchModalOpen.value = false
     isChartTypeDropdownOpen.value = false
     isPeriodDropdownOpen.value = false
   }
@@ -1539,9 +1702,15 @@ function selectPeriodFilter(filter: '3m' | '6m' | '1y') {
 }
 
 const heroFilteredRecords = computed(() => {
+  const ratio = activeBranchRatio.value
   const records = (umkmStore.monthlyRecords || []).map(r => ({
     ...r,
-    outflow: (r.hpp || 0) + (r.opex || 0)
+    omzet: Math.round((r.omzet || 0) * ratio),
+    hpp: Math.round((r.hpp || 0) * ratio),
+    opex: Math.round((r.opex || 0) * ratio),
+    outflow: Math.round(((r.hpp || 0) + (r.opex || 0)) * ratio),
+    netProfit: Math.round((r.netProfit || 0) * ratio),
+    cashBalance: Math.round((r.cashBalance || 0) * ratio)
   }))
   if (heroPeriodFilter.value === '3m') {
     return records.slice(-3)
@@ -1647,7 +1816,8 @@ onMounted(() => {
     hppBarWidth.value = 45.1
   }, 200)
 
-  // Initialize Charts
+  // Initialize Branches & Charts
+  umkmStore.initBranchesFromStorage()
   initDonutChart()
 
   if (import.meta.client) {

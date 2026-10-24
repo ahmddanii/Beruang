@@ -1,424 +1,563 @@
 <template>
-  <div class="space-y-8 pb-16 max-w-4xl text-left select-none">
-    <!-- Header -->
-    <div>
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0081A0]/10 text-[#0081A0] dark:text-[#2091AA] text-xs font-bold border border-[#0081A0]/20 mb-2">
-        <span>Tesis & Preferensi Sindikasi</span>
-      </div>
-      <h1 class="text-2xl sm:text-3xl font-heading font-extrabold text-neutral-900 dark:text-neutral-50 tracking-tight">
-        Pengaturan Profil Investor
+  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+    <!-- 1. Top Header Bar: Judul Saja -->
+    <div class="gsap-settings-header flex items-center gap-2.5 sm:gap-3 min-h-[44px]">
+      <HugeiconsIcon
+        :icon="Settings01Icon"
+        :size="26"
+        :stroke-width="2.2"
+        class="text-neutral-900 dark:text-white shrink-0"
+      />
+      <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+        Pengaturan Portofolio Investor
       </h1>
-      <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-        Kelola identitas sindikasi modal, parameter kriteria kurasi bisnis, serta preferensi notifikasi kurasi.
-      </p>
     </div>
 
-    <!-- Alert Notifications -->
+    <!-- Alert Save Success -->
     <div
-      v-if="saveMessage"
-      class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs sm:text-sm font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2 animate-in fade-in"
+      v-if="saved"
+      class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs sm:text-sm font-semibold text-emerald-800 dark:text-emerald-300 flex items-center justify-between gap-3 shadow-none animate-in fade-in"
     >
-      <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="18" class="text-[#00AA13] shrink-0" />
-      <span>{{ saveMessage }}</span>
-    </div>
-
-    <div
-      v-if="errorMessage"
-      class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-xs sm:text-sm font-semibold text-rose-800 dark:text-rose-300 flex items-center gap-2 animate-in fade-in"
-    >
-      <span class="font-bold text-rose-600">!</span>
-      <span>{{ errorMessage }}</span>
-    </div>
-
-    <form @submit.prevent="handleSave" class="space-y-6">
-      <!-- Section 1: Identitas Investor -->
-      <BCard padding="lg" class="border border-[#E4E7EC] dark:border-[#2B2B31] shadow-none space-y-5">
-        <template #header>
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center">
-              <HugeiconsIcon :icon="UserSettings01Icon" :size="18" :stroke-width="1.75" />
-            </div>
-            <div>
-              <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-                1. Identitas Akun & Lembaga Sindikasi
-              </h3>
-              <p class="text-xs text-neutral-500">Informasi profil yang tercantum pada permohonan akses data room dan lembar penawaran modal.</p>
-            </div>
-          </div>
-        </template>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Nama Lengkap Investor <span class="text-rose-500">*</span>
-            </label>
-            <input
-              v-model="form.name"
-              type="text"
-              required
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none font-medium"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Nama Lembaga / Sindikasi Modal <span class="text-rose-500">*</span>
-            </label>
-            <input
-              v-model="form.syndicate"
-              type="text"
-              required
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none font-medium"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Email Resmi <span class="text-rose-500">*</span>
-            </label>
-            <input
-              v-model="form.email"
-              type="email"
-              required
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none font-medium"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Nomor WhatsApp (Alert Transaksi) <span class="text-rose-500">*</span>
-            </label>
-            <input
-              v-model="form.phone"
-              type="tel"
-              required
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none font-medium tabular-nums"
-            />
-          </div>
-        </div>
-      </BCard>
-
-      <!-- Section 2: Tesis & Preferensi Investasi -->
-      <BCard padding="lg" class="border border-[#E4E7EC] dark:border-[#2B2B31] shadow-none space-y-5">
-        <template #header>
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center">
-              <HugeiconsIcon :icon="Briefcase01Icon" :size="18" :stroke-width="1.75" />
-            </div>
-            <div>
-              <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-                2. Tesis & Preferensi Portofolio
-              </h3>
-              <p class="text-xs text-neutral-500">Membantu algoritma mencocokkan UMKM binaan yang sesuai dengan kriteria sindikasi Anda.</p>
-            </div>
-          </div>
-        </template>
-
-        <div class="space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2 font-heading">
-              Sektor Industri Pilihan
-            </label>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="sec in availableSectors"
-                :key="sec"
-                type="button"
-                :class="[
-                  'px-3.5 py-2 rounded-xl text-xs font-heading font-semibold transition-all border cursor-pointer',
-                  form.sectors.includes(sec)
-                    ? 'bg-[#0081A0] text-white border-[#0081A0] shadow-xs'
-                    : 'bg-neutral-50 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
-                ]"
-                @click="toggleSector(sec)"
-              >
-                {{ sec }}
-              </button>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-                Preferensi Skema Pendanaan
-              </label>
-              <select
-                v-model="form.preferredScheme"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-              >
-                <option value="REVENUE_SHARE">Bagi Hasil / Revenue Share</option>
-                <option value="PERFORMANCE_LOAN">Pinjaman Modal Kerja Berbasis Kinerja</option>
-                <option value="EQUITY">Penyertaan Saham Ekuitas Minoritas</option>
-                <option value="ALL">Semua Skema Terbuka</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-                Rentang Rencana Tiket Investasi
-              </label>
-              <select
-                v-model="form.ticketRange"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-              >
-                <option value="50M-150M">Rp 50 Jt - Rp 150 Jt</option>
-                <option value="150M-500M">Rp 150 Jt - Rp 500 Jt</option>
-                <option value="500M-1B">Rp 500 Jt - Rp 1 Miliar</option>
-                <option value="1B_PLUS">&gt; Rp 1 Miliar</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </BCard>
-
-      <!-- Section 3: Notifikasi Transaksi & Akses VDR -->
-      <BCard padding="lg" class="border border-[#E4E7EC] dark:border-[#2B2B31] shadow-none space-y-4">
-        <template #header>
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center">
-              <HugeiconsIcon :icon="ShieldCheckIcon" :size="18" :stroke-width="1.75" />
-            </div>
-            <div>
-              <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-                3. Saluran Notifikasi Transaksi
-              </h3>
-              <p class="text-xs text-neutral-500">Pemberitahuan persetujuan akses ruang data dan pembaruan dokumen.</p>
-            </div>
-          </div>
-        </template>
-
-        <div class="space-y-3">
-          <label class="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/60 cursor-pointer">
-            <div>
-              <p class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                Peringatan WhatsApp Tiket Modal & Chat
-              </p>
-              <p class="text-xs text-neutral-500">Terima pesan instan WhatsApp saat permohonan akses VDR disetujui pemilik toko.</p>
-            </div>
-            <input
-              v-model="form.notifyWhatsapp"
-              type="checkbox"
-              class="w-5 h-5 accent-[#0081A0] rounded cursor-pointer"
-            />
-          </label>
-
-          <label class="flex items-center justify-between p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/60 cursor-pointer">
-            <div>
-              <p class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                Ringkasan Mingguan Katalog Usaha Terverifikasi
-              </p>
-              <p class="text-xs text-neutral-500">Kirimkan daftar UMKM baru yang lolos sertifikasi konsultan ke email resmi.</p>
-            </div>
-            <input
-              v-model="form.notifyEmailReport"
-              type="checkbox"
-              class="w-5 h-5 accent-[#0081A0] rounded cursor-pointer"
-            />
-          </label>
-        </div>
-      </BCard>
-
-      <!-- Section 4: Keamanan Akun (Ganti Sandi) -->
-      <BCard padding="lg" class="border border-[#E4E7EC] dark:border-[#2B2B31] shadow-none space-y-4">
-        <template #header>
-          <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white">
-            4. Keamanan Akun (Ganti Kata Sandi)
-          </h3>
-        </template>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Kata Sandi Saat Ini
-            </label>
-            <input
-              v-model="passwordForm.currentPassword"
-              type="password"
-              placeholder="••••••••"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Kata Sandi Baru
-            </label>
-            <input
-              v-model="passwordForm.newPassword"
-              type="password"
-              placeholder="Minimal 6 karakter"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-heading">
-              Konfirmasi Kata Sandi Baru
-            </label>
-            <input
-              v-model="passwordForm.confirmPassword"
-              type="password"
-              placeholder="Ulangi kata sandi baru"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-        </div>
-      </BCard>
-
-      <div class="flex justify-end pt-2">
-        <button
-          type="submit"
-          :disabled="saving"
-          class="btn-3d-blue px-7 py-3 text-sm font-poppins font-bold shadow-xs cursor-pointer flex items-center gap-2"
-        >
-          <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="18" :stroke-width="2.2" />
-          <span>{{ saving ? 'Menyimpan...' : 'Simpan Seluruh Pengaturan' }}</span>
-        </button>
+      <div class="flex items-center gap-2.5">
+        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="18" class="text-[#00800e] dark:text-[#00C058] shrink-0" />
+        <span>Tesis investasi dan preferensi profil investor Anda berhasil diperbarui.</span>
       </div>
-    </form>
+      <button
+        type="button"
+        class="text-xs text-emerald-700 dark:text-emerald-400 hover:underline cursor-pointer"
+        @click="saved = false"
+      >
+        Tutup
+      </button>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 2. BANNER ARAHAN KATALOG INVESTOR (PALING ATAS, HIGHLIGHT BIRU TERANG)    -->
+    <!-- ========================================================================= -->
+    <div class="gsap-settings-banner rounded-[22px] p-5 sm:p-6 bg-gradient-to-r from-[#54B0C5] via-[#2091AA] to-[#1E869E] dark:from-[#208CA4] dark:via-[#1A768B] dark:to-[#166476] border border-[#54B0C5]/40 dark:border-[#208CA4]/40 text-white !shadow-none flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-start sm:items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-white/20 text-white flex items-center justify-center shrink-0 border border-white/30 backdrop-blur-xs">
+          <HugeiconsIcon :icon="InformationCircleIcon" :size="24" :stroke-width="2" />
+        </div>
+        <div>
+          <p class="text-sm sm:text-base font-bold text-white tracking-tight">
+            Ingin mengeksplorasi UMKM terverifikasi dan mengajukan izin pembukaan data room?
+          </p>
+          <p class="text-xs sm:text-[13px] text-cyan-50/95 mt-0.5 leading-relaxed">
+            Daftar bisnis siap danai dengan metrik pertumbuhan teruji tersedia di Katalog Usaha.
+          </p>
+        </div>
+      </div>
+
+      <div class="shrink-0 w-full sm:w-auto">
+        <NuxtLink
+          to="/investor"
+          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-[#156374] text-xs sm:text-sm font-bold transition-all shadow-none cursor-pointer w-full sm:w-auto"
+        >
+          <span>Buka Katalog Usaha</span>
+          <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2.2" class="shrink-0" />
+        </NuxtLink>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3. TAMPILAN & MODE SISTEM (DENGAN VISUAL MOCKUP MINIATUR)                -->
+    <!-- ========================================================================= -->
+    <div class="gsap-settings-theme">
+      <ThemeMockupSelector />
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 4. CONTAINER 1: TESIS & KRITERIA PORTOFOLIO                              -->
+    <!-- ========================================================================= -->
+    <div class="gsap-setting-card card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none space-y-6">
+      <div class="flex items-center gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+        <div class="w-9 h-9 rounded-xl bg-[#E6F4F7] dark:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+          <HugeiconsIcon :icon="Briefcase01Icon" :size="20" :stroke-width="2" />
+        </div>
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+            Tesis Investasi & Ambang Batas Kelayakan
+          </h2>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Membantu kurasi bot Beruang mencocokkan UMKM terverifikasi yang relevan dengan mandat modal Anda.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sektor Industri -->
+      <div>
+        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+          Sektor Industri Minat Investasi
+        </label>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="sec in availableSectors"
+            :key="sec"
+            type="button"
+            :class="[
+              'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border shadow-none cursor-pointer',
+              thesisForm.sectors.includes(sec)
+                ? 'bg-[#156374] text-white border-[#156374]'
+                : 'bg-[#F8FAFC] dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-[#CBD5E1] dark:border-neutral-700'
+            ]"
+            @click="toggleSector(sec)"
+          >
+            {{ sec }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Skema & Tiket -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+            Preferensi Skema Kerjasama
+          </label>
+          <div class="relative">
+            <select
+              v-model="thesisForm.preferredScheme"
+              class="input-tactile-gopay cursor-pointer appearance-none pr-10"
+            >
+              <option value="REVENUE_SHARE">Bagi Hasil / Revenue Share</option>
+              <option value="PERFORMANCE_LOAN">Pinjaman Modal Kerja Berbasis Kinerja</option>
+              <option value="EQUITY">Penyertaan Saham Ekuitas Minoritas</option>
+              <option value="ALL">Semua Skema Terbuka</option>
+            </select>
+            <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center justify-center">
+              <HugeiconsIcon :icon="ArrowDown01Icon" :size="16" :stroke-width="2.2" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+            Rentang Tiket Modal per Usaha
+          </label>
+          <div class="relative">
+            <select
+              v-model="thesisForm.ticketRange"
+              class="input-tactile-gopay cursor-pointer appearance-none pr-10"
+            >
+              <option value="50M-150M">Rp 50 Juta – Rp 150 Juta (Micro)</option>
+              <option value="150M-500M">Rp 150 Juta – Rp 500 Juta (Growth)</option>
+              <option value="500M-1B">Rp 500 Juta – Rp 1 Miliar (Scale-up)</option>
+              <option value="1B+">&gt; Rp 1 Miliar (Sindikasi Besar)</option>
+            </select>
+            <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center justify-center">
+              <HugeiconsIcon :icon="ArrowDown01Icon" :size="16" :stroke-width="2.2" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ambang Batas Skor -->
+      <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800">
+        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+          Ambang Batas Skor Radar Fundamental Minimum
+        </label>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div class="relative w-full sm:w-56">
+            <select
+              v-model.number="thesisForm.minScore"
+              class="input-tactile-gopay cursor-pointer appearance-none pr-10 font-bold tabular-nums"
+            >
+              <option :value="70">Skor &ge; 70 (Siap Damping)</option>
+              <option :value="75">Skor &ge; 75 (Standar Kelayakan)</option>
+              <option :value="80">Skor &ge; 80 (Kondisi Sangat Sehat)</option>
+              <option :value="85">Skor &ge; 85 (Kelas Unggulan)</option>
+            </select>
+            <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500 flex items-center justify-center">
+              <HugeiconsIcon :icon="ArrowDown01Icon" :size="16" :stroke-width="2.2" />
+            </div>
+          </div>
+          <span class="text-xs text-neutral-500 dark:text-neutral-400">
+            Hanya kirimkan alert dealflow untuk UMKM yang telah memenuhi ambang skor ini.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 5. CONTAINER 2: TEMPLATE BAKU PERMOHONAN RUANG DATA                       -->
+    <!-- ========================================================================= -->
+    <div class="gsap-setting-card card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none space-y-6">
+      <div class="flex items-center gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+        <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-[#156374] dark:text-[#50AABF] flex items-center justify-center shrink-0">
+          <HugeiconsIcon :icon="Message01Icon" :size="20" :stroke-width="2" />
+        </div>
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+            Template Baku Permohonan Izin Ruang Data
+          </h2>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Pesan ini otomatis terisi pada formulir pembukaan berkas privat agar proses due diligence lebih cepat.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+          Draf Salam Pembuka & Rencana Tiket Modal
+        </label>
+        <textarea
+          v-model="templateForm.introMessage"
+          rows="5"
+          class="input-tactile-gopay !h-auto leading-relaxed resize-none"
+        />
+      </div>
+
+      <div class="p-3.5 rounded-xl bg-[#F8FAFC] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-2.5">
+        <HugeiconsIcon :icon="InformationCircleIcon" :size="18" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+        <span>Pesan ini tetap dapat disesuaikan kembali sebelum dikirimkan ke pihak pemilik toko.</span>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 6. CONTAINER 3: PREFERENSI NOTIFIKASI DEALFLOW                            -->
+    <!-- ========================================================================= -->
+    <div class="gsap-setting-card card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none space-y-6">
+      <div class="flex items-center gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] dark:text-[#00C058] flex items-center justify-center shrink-0">
+          <HugeiconsIcon :icon="Notification01Icon" :size="20" :stroke-width="2" />
+        </div>
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+            Peringatan Peluang & Persetujuan Akses
+          </h2>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Pilih jalur notifikasi instan untuk mengamankan kesempatan investasi terbaik sebelum kuota terpenuhi.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div
+          class="p-3.5 sm:p-4 rounded-xl border transition-all flex items-center justify-between gap-4 cursor-pointer select-none shadow-none"
+          :class="[
+            notifyForm.instantDealAlert
+              ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+              : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+          ]"
+          @click="notifyForm.instantDealAlert = !notifyForm.instantDealAlert"
+        >
+          <div class="min-w-0 pr-2">
+            <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
+              Alert Instan UMKM "Ready for Funding" yang Cocok
+            </span>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400 font-normal leading-snug block mt-0.5">
+              Kirimkan notifikasi seketika konsultan meluluskan status pendanaan pada UMKM yang sesuai dengan kriteria tesis Anda.
+            </span>
+          </div>
+          <div
+            :class="[
+              'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+              notifyForm.instantDealAlert
+                ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+            ]"
+          >
+            <HugeiconsIcon v-if="notifyForm.instantDealAlert" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+          </div>
+        </div>
+
+        <div
+          class="p-3.5 sm:p-4 rounded-xl border transition-all flex items-center justify-between gap-4 cursor-pointer select-none shadow-none"
+          :class="[
+            notifyForm.accessApprovedAlert
+              ? 'border-[#00800e]/30 dark:border-[#00C058]/40 bg-[#F6FCF7] dark:bg-[#00800e]/10'
+              : 'border-[#CBD5E1] dark:border-neutral-800 bg-white dark:bg-[#18191E] hover:bg-[#F8FAFC] dark:hover:bg-[#262626]'
+          ]"
+          @click="notifyForm.accessApprovedAlert = !notifyForm.accessApprovedAlert"
+        >
+          <div class="min-w-0 pr-2">
+            <span class="text-xs sm:text-sm font-semibold text-neutral-900 dark:text-white block">
+              Pemberitahuan Persetujuan Akses Ruang Data
+            </span>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400 font-normal leading-snug block mt-0.5">
+              Alert langsung saat pemilik UMKM mengizinkan permohonan buka berkas finansial dan rekening koran.
+            </span>
+          </div>
+          <div
+            :class="[
+              'w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors',
+              notifyForm.accessApprovedAlert
+                ? 'border-[#00800e] dark:border-[#00C058] bg-[#00800e] dark:bg-[#00C058] text-white'
+                : 'border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-transparent'
+            ]"
+          >
+            <HugeiconsIcon v-if="notifyForm.accessApprovedAlert" :icon="Tick02Icon" :size="13" :stroke-width="3" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 7. CONTAINER 4: IDENTITAS & AKREDITASI LEMBAGA                            -->
+    <!-- ========================================================================= -->
+    <div class="gsap-setting-card card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] !shadow-none space-y-6">
+      <div class="flex items-center gap-3 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+        <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+          <HugeiconsIcon :icon="SecurityCheckIcon" :size="20" :stroke-width="2" />
+        </div>
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
+            Identitas Akun & Akreditasi Lembaga
+          </h2>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Informasi resmi yang tercantum pada surat permohonan akses dan perjanjian kerahasiaan data (NDA).
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+            Nama Lengkap Investor
+          </label>
+          <input
+            v-model="identityForm.name"
+            type="text"
+            class="input-tactile-gopay"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+            Nama Lembaga / Sindikasi Modal
+          </label>
+          <input
+            v-model="identityForm.syndicate"
+            type="text"
+            class="input-tactile-gopay"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+            Email Resmi Investor
+          </label>
+          <input
+            v-model="identityForm.email"
+            type="email"
+            class="input-tactile-gopay"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+            Nomor WhatsApp Transaksi (Alert Cepat)
+          </label>
+          <input
+            v-model="identityForm.phone"
+            type="tel"
+            class="input-tactile-gopay"
+          />
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <span class="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white block">
+            Status Akreditasi & KYC Platform
+          </span>
+          <span class="text-xs text-neutral-500 dark:text-neutral-400">
+            Dokumen identitas dan bukti kelayakan modal telah diverifikasi tim kepatuhan Beruang.
+          </span>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 shrink-0 self-start sm:self-auto">
+          Terakreditasi Resmi
+        </span>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 8. BOTTOM ACTION BAR                                                      -->
+    <!-- ========================================================================= -->
+    <div class="gsap-settings-footer flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+      <p class="text-xs text-neutral-500 dark:text-neutral-400">
+        Perubahan kriteria tesis akan otomatis menyaring notifikasi rekomendasi bisnis di katalog Anda.
+      </p>
+
+      <div class="flex items-center gap-3 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
+        <BActionButton
+          variant="green"
+          :huge-icon="CheckmarkCircle01Icon"
+          custom-class="justify-center"
+          @click="handleSave"
+        >
+          {{ isSaving ? 'Menyimpan...' : 'Simpan Pengaturan' }}
+        </BActionButton>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useAuthStore } from '~/stores/auth'
-import { useApi } from '~/composables/useApi'
-import BCard from '~/components/base/BCard.vue'
+import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
+import gsap from 'gsap'
+import ThemeMockupSelector from '~/components/settings/ThemeMockupSelector.vue'
+import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  UserSettings01Icon,
+  Settings01Icon,
+  CheckmarkCircle01Icon,
+  InformationCircleIcon,
   Briefcase01Icon,
-  ShieldCheckIcon,
-  CheckmarkBadge01Icon
+  Message01Icon,
+  Notification01Icon,
+  SecurityCheckIcon,
+  Award01Icon,
+  ArrowDown01Icon,
+  ArrowRight01Icon,
+  Tick02Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  hideHeader: true
 })
 
-const authStore = useAuthStore()
+let gsapCtx: gsap.Context | null = null
 
-const saving = ref(false)
-const saveMessage = ref('')
-const errorMessage = ref('')
+onMounted(async () => {
+  await nextTick()
+  gsapCtx = gsap.context(() => {
+    gsap.from('.gsap-settings-header', {
+      opacity: 0,
+      y: -14,
+      duration: 0.45,
+      ease: 'power2.out'
+    })
+    gsap.from('.gsap-settings-banner', {
+      opacity: 0,
+      y: 18,
+      scale: 0.99,
+      duration: 0.5,
+      ease: 'power3.out',
+      delay: 0.06
+    })
+    gsap.from('.gsap-settings-theme', {
+      opacity: 0,
+      y: 18,
+      duration: 0.52,
+      ease: 'power3.out',
+      delay: 0.12
+    })
+    gsap.from('.gsap-setting-card', {
+      opacity: 0,
+      y: 22,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: 'power3.out',
+      delay: 0.18
+    })
+    gsap.from('.gsap-settings-footer', {
+      opacity: 0,
+      y: 16,
+      duration: 0.45,
+      ease: 'power2.out',
+      delay: 0.45
+    })
+  })
+})
+
+onUnmounted(() => {
+  if (gsapCtx) {
+    gsapCtx.revert()
+    gsapCtx = null
+  }
+})
+
+const saved = ref(false)
+const isSaving = ref(false)
 
 const availableSectors = [
-  'Kuliner & Minuman (F&B)',
-  'Fashion & Kriya',
-  'Ritel & FMCG',
-  'Agroindustri',
-  'Jasa & Katering',
-  'Teknologi Terapan'
+  'Kuliner & F&B',
+  'Retail & Grosir',
+  'Jasa & Kreatif',
+  'Agribisnis',
+  'Logistik & Distribusi'
 ]
 
-const form = ref({
-  name: 'Hendro Wicaksono',
-  syndicate: 'Nusantara Impact Angel Syndicate',
-  email: 'hendro@nusantaraventures.com',
-  phone: '081198765432',
-  sectors: ['Kuliner & Minuman (F&B)', 'Ritel & FMCG', 'Fashion & Kriya'],
+const thesisForm = reactive({
+  sectors: ['Kuliner & F&B', 'Retail & Grosir'],
   preferredScheme: 'REVENUE_SHARE',
   ticketRange: '150M-500M',
-  notifyWhatsapp: true,
-  notifyEmailReport: true
+  minScore: 75
 })
 
-const passwordForm = ref({
-  currentPassword: '',
-  newPassword: '',
-  confirmPassword: ''
+const templateForm = reactive({
+  introMessage: 'Halo Bapak/Ibu Pemilik Usaha,\n\nKami dari Nusantara Angel Syndicate sangat tertarik dengan perkembangan bisnis dan konsistensi perbaikan margin usaha Anda yang tercatat di platform Beruang. Kami berencana mengalokasikan tiket pendanaan modal kerja dan ingin mempelajari laporan performa kas di Ruang Data Anda lebih lanjut.\n\nSalam hangat,\nTim Investasi Nusantara'
 })
 
-async function fetchInvestorData() {
-  try {
-    const res = await useApi<any>('/investor/profile')
-    if (res?.success && res.data) {
-      const d = res.data
-      form.value.name = d.name || 'Hendro Wicaksono'
-      form.value.syndicate = d.syndicate || d.firmName || 'Nusantara Impact Angel Syndicate'
-      form.value.email = d.email || 'hendro@nusantaraventures.com'
-      form.value.phone = d.phone || '081198765432'
-      if (Array.isArray(d.sectors) && d.sectors.length > 0) {
-        form.value.sectors = d.sectors
-      }
-      form.value.preferredScheme = d.preferredScheme || 'REVENUE_SHARE'
-      form.value.ticketRange = d.ticketRange || '150M-500M'
-      form.value.notifyWhatsapp = d.notifyWhatsapp ?? true
-      form.value.notifyEmailReport = d.notifyEmailReport ?? true
-    }
-  } catch (err: any) {
-    console.warn('Fallback lokal investor profile:', err?.message)
-  }
-}
+const notifyForm = reactive({
+  instantDealAlert: true,
+  accessApprovedAlert: true
+})
 
-onMounted(() => {
-  fetchInvestorData()
+const identityForm = reactive({
+  name: 'Hendrawan Pratama, CFA',
+  syndicate: 'Nusantara Angel Syndicate',
+  email: 'hendrawan@nusantaracapital.id',
+  phone: '0811-2233-4455'
 })
 
 function toggleSector(sec: string) {
-  const idx = form.value.sectors.indexOf(sec)
-  if (idx > -1) {
-    form.value.sectors.splice(idx, 1)
+  const index = thesisForm.sectors.indexOf(sec)
+  if (index > -1) {
+    if (thesisForm.sectors.length > 1) {
+      thesisForm.sectors.splice(index, 1)
+    }
   } else {
-    form.value.sectors.push(sec)
+    thesisForm.sectors.push(sec)
   }
 }
 
-async function handleSave() {
-  saving.value = true
-  saveMessage.value = ''
-  errorMessage.value = ''
-
-  try {
-    const res = await useApi<any>('/investor/profile', {
-      method: 'PUT',
-      body: {
-        name: form.value.name,
-        syndicate: form.value.syndicate,
-        firmName: form.value.syndicate,
-        email: form.value.email,
-        phone: form.value.phone,
-        sectors: form.value.sectors,
-        preferredScheme: form.value.preferredScheme,
-        ticketRange: form.value.ticketRange,
-        notifyWhatsapp: form.value.notifyWhatsapp,
-        notifyEmailReport: form.value.notifyEmailReport
-      }
-    })
-
-    if (passwordForm.value.newPassword) {
-      if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
-        throw new Error('Konfirmasi kata sandi baru tidak cocok.')
-      }
-
-      await useApi('/user/password', {
-        method: 'PUT',
-        body: {
-          currentPassword: passwordForm.value.currentPassword,
-          newPassword: passwordForm.value.newPassword,
-          confirmPassword: passwordForm.value.confirmPassword
-        }
-      })
-
-      passwordForm.value.currentPassword = ''
-      passwordForm.value.newPassword = ''
-      passwordForm.value.confirmPassword = ''
-    }
-
-    if (authStore.currentUser) {
-      authStore.currentUser.name = form.value.name
-      authStore.currentUser.email = form.value.email
-      authStore.currentUser.phone = form.value.phone
-    }
-
-    saveMessage.value = res?.message || 'Profil dan preferensi investor berhasil disimpan!'
+function handleSave() {
+  isSaving.value = true
+  setTimeout(() => {
+    isSaving.value = false
+    saved.value = true
     setTimeout(() => {
-      saveMessage.value = ''
-    }, 4000)
-  } catch (err: any) {
-    errorMessage.value = err?.data?.message || err?.message || 'Gagal menyimpan pengaturan.'
-  } finally {
-    saving.value = false
-  }
+      saved.value = false
+    }, 3500)
+  }, 600)
 }
 </script>
+
+<style scoped>
+.input-tactile-gopay {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+  box-shadow: none !important;
+}
+
+select.input-tactile-gopay {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.5rem !important;
+}
+
+:deep(.dark) .input-tactile-gopay,
+html.dark .input-tactile-gopay {
+  border-color: #334155 !important;
+  background-color: #161922 !important;
+  color: #F8FAFC !important;
+}
+
+.input-tactile-gopay:focus {
+  border-color: #156374;
+  box-shadow: none !important;
+}
+</style>

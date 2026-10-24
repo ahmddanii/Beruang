@@ -2,7 +2,7 @@
   <!-- Floating Messaging Dock Container (Bottom-Right, hidden on messages page) -->
   <div
     v-if="!isMessagesPage"
-    class="hidden md:block fixed bottom-0 right-4 sm:right-6 z-50 font-poppins select-none transition-[height] duration-300 ease-out w-[320px] sm:w-[340px]"
+    class="hidden md:block fixed bottom-0 right-4 sm:right-6 z-50 font-poppins transition-[height] duration-300 ease-out w-[320px] sm:w-[340px]"
     :class="[
       !isExpanded
         ? 'h-12'

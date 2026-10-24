@@ -132,40 +132,6 @@ export const useChatStore = defineStore('chat', {
         ]
       },
       {
-        id: 'thread-03',
-        umkmId: 'umkm-03',
-        umkmName: 'Shafa Rizqi Nur Wahidah',
-        umkmOwner: 'Shafa Rizqi Nur Wahidah',
-        umkmSector: 'Konsultan Legalitas & NIB',
-        umkmCity: 'Yogyakarta',
-        umkmAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces',
-        umkmHealthScore: 92,
-        umkmMargin: 55.0,
-        investorId: 'inv-03',
-        investorName: 'Shafa Rizqi Nur Wahidah',
-        investorLembaga: 'Pusat Legalitas Usaha',
-        investorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces',
-        contactName: 'Shafa Rizqi Nur Wahidah',
-        contactAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces',
-        category: 'prioritas',
-        online: true,
-        dealStatus: 'Sertifikasi Terverifikasi',
-        ticketDiscussed: 0,
-        unreadInvestor: 0,
-        unreadUmkm: 0,
-        lastMessage: 'Anda: halo, izin edar BPOM dan NIB sudah kami upload.',
-        lastMessageAt: '14 Mar',
-        messages: [
-          {
-            id: 'm-21',
-            senderRole: 'UMKM',
-            senderName: 'Anda',
-            text: 'Anda: halo, izin edar BPOM dan NIB sudah kami upload.',
-            timestamp: '14 Mar 09:15'
-          }
-        ]
-      },
-      {
         id: 'thread-04',
         umkmId: 'umkm-04',
         umkmName: 'Dra. Maya Suryani',
@@ -281,9 +247,19 @@ export const useChatStore = defineStore('chat', {
       }
     },
 
+    markAllAsRead(role: 'INVESTOR' | 'UMKM' = 'UMKM') {
+      this.threads.forEach(t => {
+        if (role === 'INVESTOR') {
+          t.unreadInvestor = 0
+        } else {
+          t.unreadUmkm = 0
+        }
+      })
+    },
+
     async sendMessage(threadId: string, text: string, senderRole: 'INVESTOR' | 'UMKM', attachment?: ChatAttachment) {
       const thread = this.threads.find(t => t.id === threadId)
-      if (!thread || !text.trim()) return
+      if (!thread || (!text.trim() && !attachment)) return
 
       const now = new Date()
       const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
@@ -299,7 +275,7 @@ export const useChatStore = defineStore('chat', {
       }
 
       thread.messages.push(newMsg)
-      thread.lastMessage = text.trim()
+      thread.lastMessage = text.trim() || (attachment ? `Mengirim berkas: ${attachment.title}` : '')
       thread.lastMessageAt = timeStr
 
       // Tambahkan unread counter ke lawan bicara

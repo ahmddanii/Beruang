@@ -1,5 +1,5 @@
 <template>
-  <div ref="dropdownRef" class="relative select-none font-poppins">
+  <div ref="dropdownRef" class="relative font-poppins">
     <!-- Trigger Button in Navbar: Avatar & Name Only (Dicoding Style) -->
     <button
       type="button"
@@ -14,6 +14,11 @@
       aria-label="Menu Akun Pengguna"
       @click="isOpen = !isOpen"
     >
+      <!-- User Name (Sebelah kiri dari profile image) -->
+      <span class="hidden sm:inline-block text-[13px] sm:text-[14px] font-semibold text-neutral-800 dark:text-neutral-200 truncate max-w-[130px] lg:max-w-[160px] tracking-tight">
+        {{ userName }}
+      </span>
+
       <!-- User Avatar -->
       <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-neutral-700 bg-[#E6F4F7] dark:bg-[#156374]/30 transition-transform duration-150 group-hover:scale-105 flex items-center justify-center">
         <img
@@ -30,11 +35,6 @@
           {{ userInitials }}
         </span>
       </div>
-
-      <!-- User Name -->
-      <span class="hidden sm:inline-block text-[13px] sm:text-[14px] font-semibold text-neutral-800 dark:text-neutral-200 truncate max-w-[130px] lg:max-w-[160px] tracking-tight">
-        {{ userName }}
-      </span>
 
       <!-- Subtle Chevron Indicator -->
       <svg
@@ -53,10 +53,10 @@
       </svg>
     </button>
 
-    <!-- Dicoding-Style Floating Popover Dropdown -->
+    <!-- Dicoding-Style Floating Popover Dropdown (NO DROP SHADOW) -->
     <div
       v-if="isOpen"
-      class="absolute right-0 top-full mt-2 w-72 bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 rounded-[8px] shadow-xl z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
+      class="absolute right-0 top-full mt-2 w-72 bg-[#FFFFFF] dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 rounded-[8px] shadow-none z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
     >
       <!-- User Identity Header -->
       <div class="p-3.5 border-b border-[#E2E8F0] dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30">
@@ -92,24 +92,24 @@
         </div>
       </div>
 
-      <!-- Quick Action: Profil & Pengaturan Sesuai Peran -->
-      <div class="p-2 border-b border-[#E2E8F0] dark:border-neutral-800 space-y-0.5">
+      <!-- Quick Actions: Profil & Pengaturan (Akses langsung ke Settings) -->
+      <div class="p-1.5 border-b border-[#E2E8F0] dark:border-neutral-800 space-y-0.5">
         <NuxtLink
-          :to="profileLink.path"
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          :to="profilePath"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
           @click="isOpen = false"
         >
           <HugeiconsIcon :icon="UserCircleIcon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
-          <span>{{ profileLink.label }}</span>
+          <span>{{ authStore.currentUser?.role === 'UMKM' ? (currentLang === 'en' ? 'View Business Profile' : 'Lihat Profil Usaha') : (currentLang === 'en' ? 'My Profile' : 'Profil Saya') }}</span>
         </NuxtLink>
 
         <NuxtLink
-          :to="settingsLink"
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
+          :to="settingsPath"
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-[8px] text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/80 transition-colors"
           @click="isOpen = false"
         >
-          <HugeiconsIcon :icon="Settings01Icon" :size="17" :stroke-width="1.9" class="text-[#156374] dark:text-[#50AABF]" />
-          <span>Pengaturan & Keamanan</span>
+          <HugeiconsIcon :icon="Settings01Icon" :size="17" :stroke-width="1.9" class="text-neutral-500 dark:text-neutral-400" />
+          <span>{{ currentLang === 'en' ? 'Account Settings' : 'Pengaturan Akun' }}</span>
         </NuxtLink>
       </div>
 
@@ -117,7 +117,7 @@
       <div class="p-2.5">
         <div class="px-2 py-1 flex items-center justify-between mb-1">
           <span class="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-            Pindah Peran (Uji RBAC)
+            {{ currentLang === 'en' ? 'Switch Role (RBAC Test)' : 'Pindah Peran (Uji RBAC)' }}
           </span>
           <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono font-medium">
             RBAC
@@ -131,7 +131,7 @@
             :class="[
               'w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-sm font-poppins transition-all duration-150 cursor-pointer text-left',
               authStore.currentUser?.role === role.id
-                ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-none'
                 : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
             ]"
             @click="handleSwitchRole(role.id, role.path)"
@@ -153,7 +153,7 @@
           @click="handleLogout"
         >
           <HugeiconsIcon :icon="Logout01Icon" :size="17" :stroke-width="2.2" class="text-red-500" />
-          <span>Keluar</span>
+          <span>{{ t('nav_logout') }}</span>
         </button>
       </div>
     </div>
@@ -165,13 +165,17 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
+import { useInvestorStore } from '~/stores/investor'
+import { useLanguage } from '~/composables/useLanguage'
 import { HugeiconsIcon } from '@hugeicons/vue'
-import { UserCircleIcon, Logout01Icon, Settings01Icon } from '@hugeicons/core-free-icons'
+import { UserCircleIcon, Settings01Icon, Logout01Icon } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+const investorStore = useInvestorStore()
+const { t, currentLang } = useLanguage()
 
 const profileLink = computed(() => {
   switch (authStore.currentUser?.role) {
@@ -245,7 +249,14 @@ const userAvatarUrl = computed(() => {
       ''
     )
   }
-  return authStore.currentUser?.avatar || ''
+  if (authStore.currentUser?.role === 'INVESTOR') {
+    return (
+      investorStore.profile.avatarUrl ||
+      authStore.currentUser?.avatar ||
+      '/images/user-profile.png'
+    )
+  }
+  return authStore.currentUser?.avatar || '/images/user-profile.png'
 })
 
 watch(userAvatarUrl, () => {
@@ -258,6 +269,24 @@ const currentRoleLabel = computed(() => {
     case 'INVESTOR': return 'Investor / Funder'
     case 'ADMIN': return 'Admin Platform'
     default: return 'Pelaku Usaha (UMKM)'
+  }
+})
+
+const settingsPath = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return '/konsultan/pengaturan'
+    case 'INVESTOR': return '/investor/pengaturan'
+    case 'ADMIN': return '/admin/pengaturan'
+    default: return '/dashboard/pengaturan'
+  }
+})
+
+const profilePath = computed(() => {
+  switch (authStore.currentUser?.role) {
+    case 'CONSULTANT': return '/konsultan'
+    case 'INVESTOR': return '/investor/profile'
+    case 'ADMIN': return '/admin'
+    default: return '/dashboard/profile'
   }
 })
 

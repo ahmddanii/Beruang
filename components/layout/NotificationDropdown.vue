@@ -38,7 +38,7 @@
     <!-- Notification Popover Card (Stable Fixed Dimensions matching Linear & GitHub standards) -->
     <div
       v-if="isOpen"
-      class="absolute top-full right-0 mt-2.5 w-[calc(100vw-24px)] sm:w-[410px] bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150 select-none"
+      class="absolute top-full right-0 mt-2.5 w-[calc(100vw-24px)] sm:w-[410px] bg-white dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 overflow-hidden font-poppins animate-in fade-in zoom-in-95 duration-150"
     >
       <!-- ========================================================================= -->
       <!-- 1. HEADER (Title, Unread Badge Pill, and 3-Dots Kebab Action Menu)         -->
@@ -46,7 +46,7 @@
       <div class="px-5 py-3.5 bg-white dark:bg-[#13161F] flex items-center justify-between relative z-30">
         <div class="flex items-center gap-2.5">
           <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white tracking-tight">
-            Notifikasi
+            {{ t('notif_title') }}
           </h3>
           <!-- Circle Badge Number (Replaces old '3 Baru' pill) -->
           <span
@@ -85,7 +85,7 @@
               @click="handleMarkAllRead"
             >
               <HugeiconsIcon :icon="CheckmarkSquare02Icon" :size="14" :stroke-width="1.8" class="text-[#00AA13]" />
-              <span>Tandai Semua Dibaca</span>
+              <span>{{ t('notif_mark_all_read') }}</span>
             </button>
             <button
               type="button"
@@ -93,7 +93,7 @@
               @click="notificationStore.resetToDefault(); isKebabOpen = false"
             >
               <HugeiconsIcon :icon="Notification02Icon" :size="14" :stroke-width="1.8" class="text-[#2091AA]" />
-              <span>Segarkan Notifikasi</span>
+              <span>{{ t('notif_refresh') }}</span>
             </button>
             <div class="h-px bg-slate-100 dark:bg-neutral-800 my-1" />
             <NuxtLink
@@ -105,23 +105,31 @@
                 <circle cx="12" cy="12" r="3" />
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83-2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
               </svg>
-              <span>Pengaturan Notifikasi</span>
+              <span>{{ t('notif_settings') }}</span>
             </NuxtLink>
           </div>
         </div>
       </div>
 
       <!-- ========================================================================= -->
-      <!-- 2. SEGMENTED PILL TAB BAR (5 Segment Tabs: Semua, Pesanan, Kas, Investor, Sistem) -->
+      <!-- 2. COMPACT RESPONSIVE FILTER CHIPS (Semua, Pesanan, Kas, Investor, Sistem)-->
       <!-- ========================================================================= -->
-      <div class="px-3 py-2.5 bg-white dark:bg-[#13161F] border-t border-[#E2E8F0] dark:border-neutral-800 relative z-10 overflow-x-auto no-scrollbar">
-        <BPillTabs
-          v-model="activeFilter"
-          :tabs="filterTabs"
-          size="sm"
-          :full-width="true"
-          custom-class="w-full min-w-[360px]"
-        />
+      <div class="px-3.5 py-2 bg-white dark:bg-[#13161F] border-t border-[#E2E8F0] dark:border-neutral-800 relative z-10 overflow-x-auto scrollbar-none flex items-center gap-1.5 no-scrollbar">
+        <button
+          v-for="tab in filterTabs"
+          :key="tab.id"
+          type="button"
+          :class="[
+            'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-150 cursor-pointer shrink-0 select-none border font-poppins',
+            activeFilter === tab.id
+              ? 'bg-[#156374] dark:bg-[#50AABF] text-white dark:text-[#0C121D] border-[#156374] dark:border-[#50AABF] font-semibold shadow-2xs'
+              : 'bg-neutral-100/90 dark:bg-neutral-800/70 hover:bg-neutral-200/80 dark:hover:bg-neutral-700/70 text-neutral-600 dark:text-neutral-300 border-transparent hover:border-slate-300 dark:hover:border-neutral-600 font-medium'
+          ]"
+          @click="activeFilter = tab.id"
+        >
+          <HugeiconsIcon :icon="tab.icon" :size="13" :stroke-width="activeFilter === tab.id ? 2.3 : 1.8" />
+          <span>{{ tab.label }}</span>
+        </button>
       </div>
 
       <!-- ========================================================================= -->
@@ -295,7 +303,7 @@
           title="Buka Halaman Notifikasi Lengkap"
           @click="isOpen = false"
         >
-          <span>Lihat semua notifikasi</span>
+          <span>{{ t('notif_view_all') }}</span>
           <svg class="w-3.5 h-3.5 transition-transform duration-150 group-hover/link:translate-x-1 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
@@ -309,7 +317,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import BPillTabs, { type PillTabItem } from '~/components/base/BPillTabs.vue'
+import { useLanguage } from '~/composables/useLanguage'
 import { useNotificationStore, type AppNotification } from '~/stores/notification'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -417,14 +425,16 @@ const categoryIconConfig: Record<
   }
 }
 
-// 5 Segmented Tabs: Semua, Pesanan, Kas, Investor, Sistem
-const filterTabs = [
-  { id: 'ALL' as const, label: 'Semua', icon: Notification01Icon },
-  { id: 'ORDER' as const, label: 'Pesanan', icon: ShoppingBag01Icon },
-  { id: 'CASH' as const, label: 'Kas', icon: Coins01Icon },
-  { id: 'INVESTOR' as const, label: 'Investor', icon: Award01Icon },
-  { id: 'SYSTEM' as const, label: 'Sistem', icon: Shield01Icon }
-]
+const { t } = useLanguage()
+
+// 5 Filter Tabs: Semua, Pesanan, Kas, Investor, Sistem
+const filterTabs = computed(() => [
+  { id: 'ALL' as const, label: t('notif_tab_all'), icon: Notification01Icon },
+  { id: 'ORDER' as const, label: t('notif_tab_order'), icon: ShoppingBag01Icon },
+  { id: 'CASH' as const, label: t('notif_tab_cash'), icon: Coins01Icon },
+  { id: 'INVESTOR' as const, label: t('notif_tab_investor'), icon: Award01Icon },
+  { id: 'SYSTEM' as const, label: t('notif_tab_system'), icon: Shield01Icon }
+])
 
 const filteredNotifications = computed(() => {
   const list = notificationStore.roleNotifications

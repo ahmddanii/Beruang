@@ -1,26 +1,26 @@
 <template>
-  <div class="space-y-5 sm:space-y-6 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Top Header: Title on Left & Action Controls (Month Filter + Unduh) on Right (Same Row) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none">
-      <div class="flex items-center gap-2 sm:gap-2.5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
+      <div class="flex items-center gap-2.5 sm:gap-3">
         <HugeiconsIcon
           :icon="Coins01Icon"
-          :size="20"
+          :size="26"
           :stroke-width="2.2"
           class="text-neutral-900 dark:text-white shrink-0"
         />
-        <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
           Catatan Kas
         </h1>
       </div>
 
-      <!-- Action Controls: Month Filter Dropdown & Download PDF Button (Right-aligned, on the same row as Title) -->
-      <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+      <!-- Action Controls: Month Filter Dropdown & Download PDF Button (Stacked full-width on mobile, side-by-side on desktop) -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
         <!-- Month Filter Dropdown (Pilih Bulan: "Sekarang", "September 2026", ...) -->
-        <div ref="monthDropdownRef" class="relative inline-block text-left shrink-0">
+        <div ref="monthDropdownRef" class="relative inline-block text-left w-full sm:w-auto shrink-0">
           <button
             type="button"
-            class="btn-pill-action group shrink-0"
+            class="btn-pill-action group w-full sm:w-auto justify-between sm:justify-center shrink-0"
             :aria-expanded="isMonthDropdownOpen"
             title="Pilih Periode Bulan Catatan Keuangan"
             @click="isMonthDropdownOpen = !isMonthDropdownOpen"
@@ -59,7 +59,7 @@
           <!-- Dropdown Menu Popover -->
           <div
             v-if="isMonthDropdownOpen"
-            class="absolute right-0 mt-2 w-48 max-h-72 overflow-y-auto rounded-[8px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
+            class="absolute right-0 mt-2 w-full sm:w-48 max-h-72 overflow-y-auto rounded-[8px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
           >
             <div class="space-y-0.5">
               <button
@@ -85,6 +85,7 @@
           variant="green"
           icon="download"
           title="Unduh Rekapitulasi Kas Resmi"
+          custom-class="w-full sm:w-auto justify-center text-center"
           @click="openExportModal"
         >
           Unduh Buku Kas
@@ -96,7 +97,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch w-full">
       <!-- Card 1: Saldo Kas Toko -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -140,7 +141,7 @@
 
       <!-- Card 2: Modal Jualan (Diposisikan di sebelah kanan Saldo Kas Toko) -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -184,7 +185,7 @@
 
       <!-- Card 3: Uang Masuk -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -226,7 +227,7 @@
 
       <!-- Card 4: Biaya Operasional -->
       <div class="gsap-stat-card flex-1 w-full">
-        <div class="stat-card-clean select-none transition-all duration-200">
+        <div class="stat-card-clean transition-all duration-200">
           <!-- 1. Top Header: Icon + Title & Badge -->
           <div class="flex items-center justify-between w-full gap-1.5">
             <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -284,7 +285,9 @@
         @click="setActiveTab('mutasi')"
       >
         <HugeiconsIcon :icon="Coins01Icon" :size="17" :stroke-width="activeTab === 'mutasi' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
-        <span class="truncate leading-normal pb-0.5">Buku Mutasi Kas Harian</span>
+        <span class="truncate leading-normal pb-0.5">
+          {{ isMobile ? t('progres_tab_mutasi_short') : t('progres_tab_mutasi') }}
+        </span>
       </button>
 
       <button
@@ -295,7 +298,9 @@
         @click="setActiveTab('bulanan')"
       >
         <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="17" :stroke-width="activeTab === 'bulanan' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
-        <span class="truncate leading-normal pb-0.5">Rekap Kas Bulanan</span>
+        <span class="truncate leading-normal pb-0.5">
+          {{ isMobile ? t('progres_tab_bulanan_short') : t('progres_tab_bulanan') }}
+        </span>
       </button>
 
       <button
@@ -306,7 +311,9 @@
         @click="setActiveTab('tren')"
       >
         <HugeiconsIcon :icon="AnalyticsUpIcon" :size="17" :stroke-width="activeTab === 'tren' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
-        <span class="truncate leading-normal pb-0.5">Grafik Pergerakan Uang</span>
+        <span class="truncate leading-normal pb-0.5">
+          {{ isMobile ? t('progres_tab_tren_short') : t('progres_tab_tren') }}
+        </span>
       </button>
     </div>
 
@@ -316,32 +323,63 @@
       <!-- Interactive Daily Ledger Table Card (Matched with Beranda's Rapor Keuangan Bulanan container concept) -->
       <div id="daily-ledger-table" class="card-tactile-gopay rounded-[18px] overflow-hidden font-poppins">
         <!-- Container Header Bar -->
-        <div class="p-6 sm:p-8 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1.5 sm:space-y-2">
-              <h2 class="text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
-                Daftar Mutasi Transaksi Kas Harian
-              </h2>
-              <p class="text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
-                Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota kasir.
-              </p>
+        <!-- Container Header Bar -->
+        <div class="p-5 sm:p-8 space-y-4 border-b border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F]">
+          <div class="space-y-1.5">
+            <h2 class="text-lg sm:text-xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight">
+              Daftar Mutasi Transaksi Kas Harian
+            </h2>
+            <p class="text-xs sm:text-sm font-poppins text-neutral-600 dark:text-neutral-400 leading-normal">
+              Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota kasir.
+            </p>
+          </div>
+
+          <!-- Joined Search & Filter Control Bar (Disatukan / Gabung menjadi satu kontrol ringkas & presisi) -->
+          <div class="relative w-full rounded-[10px] border border-[#CBD5E1] dark:border-neutral-700 bg-neutral-50/70 dark:bg-[#1A1A1A] focus-within:border-[#00800e] dark:focus-within:border-[#00C058] focus-within:ring-2 focus-within:ring-[#00800e]/20 transition-all flex items-center min-h-[46px]">
+            <!-- Left: Search Icon + Input -->
+            <div class="relative flex-1 flex items-center min-w-0">
+              <HugeiconsIcon
+                :icon="Search01Icon"
+                :size="16"
+                :stroke-width="1.8"
+                class="ml-3.5 text-neutral-400 dark:text-neutral-500 shrink-0 pointer-events-none"
+              />
+              <input
+                v-model="searchQuery"
+                type="text"
+                aria-label="Cari transaksi kasir, nota, atau bahan baku"
+                placeholder="Cari transaksi kasir, nota, bahan baku..."
+                class="w-full pl-2.5 pr-2 py-2.5 bg-transparent border-0 text-xs sm:text-sm text-[#18181b] dark:text-[#FDFDFD] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-0 font-poppins min-w-0"
+              />
+              <button
+                v-if="searchQuery"
+                type="button"
+                aria-label="Hapus pencarian"
+                class="p-1.5 mr-1 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer shrink-0"
+                title="Hapus pencarian"
+                @click="searchQuery = ''"
+              >
+                <HugeiconsIcon :icon="Cancel01Icon" :size="15" :stroke-width="2" />
+              </button>
             </div>
 
-            <!-- Category Filter Dropdown (Using Beranda's btn-pill-action) -->
-            <div ref="categoryDropdownRef" class="relative inline-block text-left shrink-0">
-              <!-- Dropdown Trigger Button (Clean label only, no dots, no count) -->
+            <!-- Divider Line -->
+            <div class="h-6 w-px bg-neutral-300 dark:bg-neutral-700 shrink-0" aria-hidden="true" />
+
+            <!-- Right: Filter Button Trigger (Joined seamlessly) -->
+            <div ref="categoryDropdownRef" class="relative shrink-0">
               <button
                 type="button"
-                class="btn-pill-action group shrink-0"
+                class="h-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-poppins font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200/50 dark:hover:bg-neutral-800 transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap min-h-[46px]"
                 :aria-expanded="isCategoryDropdownOpen"
                 title="Filter Kategori Kas"
                 @click="isCategoryDropdownOpen = !isCategoryDropdownOpen"
               >
-                <span>{{ activeCategoryLabel }}</span>
-
-                <!-- Arrow Down Icon -->
+                <HugeiconsIcon :icon="FilterHorizontalIcon" :size="14" :stroke-width="2" class="text-neutral-500 dark:text-neutral-400 shrink-0" />
+                <span class="hidden sm:inline truncate">{{ activeCategoryLabel }}</span>
+                <span class="sm:hidden truncate text-xs">{{ activeCategoryShortLabel }}</span>
                 <svg
-                  class="w-4 h-4 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 shrink-0 group-hover:text-neutral-800 dark:group-hover:text-white ml-0.5"
+                  class="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 shrink-0"
                   :class="{ 'rotate-180': isCategoryDropdownOpen }"
                   viewBox="0 0 24 24"
                   fill="none"
@@ -357,7 +395,7 @@
               <!-- Dropdown Menu Popover -->
               <div
                 v-if="isCategoryDropdownOpen"
-                class="absolute right-0 sm:right-0 mt-2 w-52 rounded-[8px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
+                class="absolute right-0 top-full mt-1.5 w-52 sm:w-56 rounded-[10px] bg-white dark:bg-[#18191E] border border-[#CBD5E1] dark:border-neutral-700 shadow-xl p-1.5 z-50 font-poppins text-sm animate-in fade-in zoom-in-95 duration-150"
               >
                 <div class="space-y-0.5">
                   <button
@@ -378,39 +416,103 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Search Input: Melebar rata kiri kanan di bawah teks, rounded-[8px] sesuai konsep design sistem -->
-          <div class="w-full pt-3 sm:pt-4">
-            <div class="relative w-full">
-              <HugeiconsIcon
-                :icon="Search01Icon"
-                :size="16"
-                :stroke-width="1.8"
-                class="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 pointer-events-none"
-              />
-              <input
-                v-model="searchQuery"
-                type="text"
-                aria-label="Cari transaksi kasir, nota, atau bahan baku"
-                placeholder="Cari transaksi kasir, nota, bahan baku, atau keterangan..."
-                class="w-full pl-10 pr-9 py-2.5 rounded-[8px] text-base min-h-[44px] bg-white dark:bg-[#1A1A1A] border border-[#CBD5E1] dark:border-neutral-700 text-[#18181b] dark:text-[#FDFDFD] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:border-[#156374] dark:focus:border-[#50AABF] focus:ring-2 focus:ring-[#156374]/20 transition-all font-poppins"
-              />
-              <button
-                v-if="searchQuery"
-                type="button"
-                aria-label="Hapus pencarian"
-                class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-neutral-700 dark:hover:text-white cursor-pointer"
-                title="Hapus pencarian"
-                @click="searchQuery = ''"
+        <!-- A. Mobile Tactile Card List View (Substituted for wide table on mobile < sm) -->
+        <div class="sm:hidden divide-y divide-neutral-100 dark:divide-neutral-800">
+          <div
+            v-for="tx in filteredDailyTransactions"
+            :key="`mobile-${tx.id}`"
+            class="p-4 bg-white dark:bg-[#13161F] space-y-2.5"
+          >
+            <!-- Row 1: Tanggal + Kategori Badge -->
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-neutral-500 dark:text-neutral-400 font-poppins tabular-nums">
+                {{ formatShortDate(tx.date) }}
+              </span>
+              <span
+                :class="[
+                  'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border font-poppins',
+                  tx.category === 'PEMASUKAN'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
+                    : tx.category === 'MODAL_JUALAN'
+                      ? 'bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800'
+                      : 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800'
+                ]"
               >
-                <HugeiconsIcon :icon="Cancel01Icon" :size="16" :stroke-width="2" />
-              </button>
+                {{ tx.category === 'PEMASUKAN' ? 'Uang Masuk' : tx.category === 'MODAL_JUALAN' ? 'Modal Jualan' : 'Biaya Operasional' }}
+              </span>
             </div>
+
+            <!-- Row 2: Title & Receipt number -->
+            <div>
+              <p class="text-sm font-poppins font-semibold text-neutral-900 dark:text-white leading-snug">
+                {{ tx.title }}
+              </p>
+              <span class="text-xs font-poppins text-neutral-400 block mt-0.5">
+                {{ tx.receiptNumber || 'NOTA/KASIR/AUTO' }}
+              </span>
+            </div>
+
+            <!-- Row 3: Nominal & Actions -->
+            <div class="flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-800/80">
+              <div>
+                <span
+                  :class="[
+                    'font-bold text-sm tabular-nums block',
+                    tx.category === 'PEMASUKAN'
+                      ? 'text-emerald-700 dark:text-emerald-400'
+                      : 'text-neutral-900 dark:text-white'
+                  ]"
+                >
+                  {{ tx.category === 'PEMASUKAN' ? '+ ' : '- ' }}Rp {{ tx.amount.toLocaleString('id-ID') }}
+                </span>
+                <span class="text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center gap-1 mt-0.5">
+                  <HugeiconsIcon :icon="CreditCardIcon" :size="13" />
+                  <span>{{ tx.paymentMethod }}</span>
+                </span>
+              </div>
+
+              <!-- Mobile Action Buttons -->
+              <div class="flex items-center gap-1">
+                <button
+                  type="button"
+                  aria-label="Lihat bukti nota transaksi"
+                  class="p-2 rounded-lg text-neutral-600 hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-[#E6F4F7] dark:hover:bg-[#156374]/20 transition-all cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+                  title="Lihat Bukti Nota Transaksi"
+                  @click="openReceiptModal(tx)"
+                >
+                  <HugeiconsIcon :icon="ViewIcon" :size="18" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Hapus catatan mutasi kas"
+                  class="p-2 rounded-lg text-neutral-600 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-all cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+                  title="Hapus Catatan Ini"
+                  @click="handleDeleteTx(tx.id)"
+                >
+                  <HugeiconsIcon :icon="Delete02Icon" :size="18" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State Mobile -->
+          <div v-if="filteredDailyTransactions.length === 0" class="py-10 px-4 text-center text-neutral-500 dark:text-neutral-400">
+            <HugeiconsIcon :icon="Coins01Icon" :size="28" class="mx-auto mb-2 text-neutral-300 dark:text-neutral-600" />
+            <p class="font-poppins text-xs">Tidak ada transaksi yang cocok.</p>
+            <button
+              type="button"
+              class="mt-2 text-xs font-semibold text-[#156374] dark:text-[#50AABF]"
+              @click="activeCategoryFilter = 'ALL'; searchQuery = ''"
+            >
+              Reset Filter & Pencarian
+            </button>
           </div>
         </div>
 
-        <!-- Table Langsung (Edge-to-edge inside container) -->
-        <div class="overflow-x-auto w-full">
+        <!-- B. Desktop Table (Hidden on mobile < sm, visible sm+) -->
+        <div class="hidden sm:block overflow-x-auto w-full">
           <table class="w-full text-left text-sm font-poppins">
             <thead>
               <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
@@ -455,7 +557,7 @@
                   <p class="text-sm font-medium font-poppins text-neutral-900 dark:text-white truncate max-w-sm" :title="tx.title">
                     {{ tx.title }}
                   </p>
-                  <span class="text-xs font-mono font-medium text-neutral-600 dark:text-neutral-400 block truncate mt-0.5">
+                  <span class="text-xs font-poppins font-medium text-neutral-600 dark:text-neutral-400 block truncate mt-0.5">
                     {{ tx.receiptNumber || 'NOTA/KASIR/AUTO' }}
                   </span>
                 </td>
@@ -539,8 +641,8 @@
             </p>
           </div>
 
-          <!-- Action Buttons: Upload Laporan & Unduh Rekap (Sejajar) -->
-          <div class="flex items-center gap-2.5 shrink-0 self-start sm:self-center flex-wrap">
+          <!-- Action Buttons: Upload Laporan & Unduh Rekap (Sejajar & Responsive) -->
+          <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
             <BActionButton
               variant="green"
               :huge-icon="Upload04Icon"
@@ -554,6 +656,7 @@
             <BActionButton
               variant="default"
               icon="download"
+              custom-class="w-full sm:w-auto justify-center text-center"
               title="Unduh Rekap Kas Bulanan Lengkap (PDF & CSV)"
               @click="openExportModal"
             >
@@ -562,8 +665,8 @@
           </div>
         </div>
 
-        <!-- Monthly Full Ledger Table (Edge-to-edge inside container, matching Buku Mutasi Kas Harian) -->
-        <div class="overflow-x-auto w-full">
+        <!-- Monthly Full Ledger Table (Desktop view: hidden on < sm) -->
+        <div class="overflow-x-auto w-full hidden sm:block">
           <table class="w-full text-left text-sm font-poppins">
             <thead>
               <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
@@ -663,6 +766,47 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- Monthly Full Ledger: Mobile Responsive Tactile Card List View (< sm) -->
+        <div class="sm:hidden divide-y divide-neutral-100 dark:divide-neutral-800">
+          <div
+            v-for="rec in umkmStore.monthlyRecords"
+            :key="`mobile-monthly-${rec.month}-${rec.year}`"
+            class="p-4 space-y-3 bg-white dark:bg-[#13161F]"
+          >
+            <!-- Top: Periode Bulan & Untung Bersih Pill -->
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+                {{ rec.month }} {{ rec.year }}
+              </span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tabular-nums">
+                + Rp {{ rec.netProfit.toLocaleString('id-ID') }}
+              </span>
+            </div>
+
+            <!-- Financial Metrics Grid -->
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center bg-neutral-50/80 dark:bg-neutral-800/40 p-2.5 rounded-xl border border-neutral-100 dark:border-neutral-800/80">
+              <div>
+                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Pendapatan</span>
+                <span class="text-xs font-semibold text-neutral-900 dark:text-white tabular-nums block mt-0.5">
+                  Rp {{ (rec.omzet / 1000000).toFixed(1) }} Jt
+                </span>
+              </div>
+              <div class="border-x border-neutral-200 dark:border-neutral-700/60">
+                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Modal Jualan</span>
+                <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 tabular-nums block mt-0.5">
+                  Rp {{ (rec.hpp / 1000000).toFixed(1) }} Jt
+                </span>
+              </div>
+              <div>
+                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Saldo Kas</span>
+                <span class="text-xs font-semibold text-[#156374] dark:text-[#50AABF] tabular-nums block mt-0.5">
+                  Rp {{ (rec.cashBalance / 1000000).toFixed(1) }} Jt
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -834,7 +978,7 @@
             </div>
 
             <!-- Informasi Total Kas di Bagian Bawah Kiri -->
-            <div class="pt-3 select-none w-full text-center sm:text-left">
+            <div class="pt-3 w-full text-center sm:text-left">
               <div class="text-xl sm:text-2xl font-poppins font-bold text-neutral-900 dark:text-white tabular-nums tracking-tight">
                 Rp {{ calculatedPeriodOmzet.toLocaleString('id-ID') }}
               </div>
@@ -864,7 +1008,7 @@
               role="button"
               tabindex="0"
               :aria-label="`${item.label}: Rp ${item.amount.toLocaleString('id-ID')} (${item.percent}%)`"
-              class="card-btn-hover p-4 rounded-[12px] flex flex-col gap-2.5 group cursor-pointer select-none transition-all"
+              class="card-btn-hover p-4 rounded-[12px] flex flex-col gap-2.5 group cursor-pointer transition-all"
               @mouseenter="activeHoveredItem = item; highlightDonutSegment(idx)"
               @mouseleave="activeHoveredItem = null; highlightDonutSegment(null)"
               @focus="activeHoveredItem = item; highlightDonutSegment(idx)"
@@ -926,11 +1070,12 @@
             </p>
           </div>
 
-          <!-- Ekspor Button -->
-          <div class="flex items-center gap-2.5 shrink-0">
+          <!-- Ekspor Button (Stacked full-width on mobile) -->
+          <div class="flex items-center gap-2.5 shrink-0 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">
             <BActionButton
               variant="green"
               icon="download"
+              custom-class="w-full sm:w-auto justify-center text-center"
               title="Unduh Tabel Rekapitulasi"
               @click="handleExportPdf"
             >
@@ -939,8 +1084,8 @@
           </div>
         </div>
 
-        <!-- Monthly Breakdown Table (Edge-to-edge inside container, matching Buku Mutasi Kas Harian) -->
-        <div class="overflow-x-auto w-full">
+        <!-- Monthly Breakdown Table (Desktop view: hidden on < sm) -->
+        <div class="overflow-x-auto w-full hidden sm:block">
           <table class="w-full text-left text-sm font-poppins">
             <thead>
               <tr class="bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-poppins text-xs sm:text-sm font-bold uppercase tracking-wider">
@@ -984,158 +1129,54 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Monthly Breakdown: Mobile Responsive Tactile Card List View (< sm) -->
+        <div class="sm:hidden divide-y divide-neutral-100 dark:divide-neutral-800">
+          <div
+            v-for="rec in sortedFilteredRecords"
+            :key="`mobile-breakdown-${rec.month}-${rec.year}`"
+            class="p-4 space-y-3 bg-white dark:bg-[#13161F]"
+          >
+            <!-- Top: Periode Bulan & Untung Bersih Pill -->
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-poppins font-bold text-sm text-neutral-900 dark:text-white">
+                {{ rec.month }} {{ rec.year }}
+              </span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 tabular-nums">
+                + Rp {{ rec.netProfit.toLocaleString('id-ID') }}
+              </span>
+            </div>
+
+            <!-- Financial Metrics Grid -->
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center bg-neutral-50/80 dark:bg-neutral-800/40 p-2.5 rounded-xl border border-neutral-100 dark:border-neutral-800/80">
+              <div>
+                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Pendapatan</span>
+                <span class="text-xs font-semibold text-neutral-900 dark:text-white tabular-nums block mt-0.5">
+                  Rp {{ (rec.omzet / 1000000).toFixed(1) }} Jt
+                </span>
+              </div>
+              <div class="border-x border-neutral-200 dark:border-neutral-700/60">
+                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Modal Jualan</span>
+                <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 tabular-nums block mt-0.5">
+                  Rp {{ (rec.hpp / 1000000).toFixed(1) }} Jt
+                </span>
+              </div>
+              <div>
+                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Saldo Kas</span>
+                <span class="text-xs font-semibold text-[#156374] dark:text-[#50AABF] tabular-nums block mt-0.5">
+                  Rp {{ (rec.cashBalance / 1000000).toFixed(1) }} Jt
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
 
 
-    <!-- 8. Slide-Over Sheet: Catat Kas Toko Baru (BDrawer) -->
-    <BDrawer
-      v-model="isCashDrawerOpen"
-      title="Catat Kas Toko Baru"
-      subtitle="Buku Catatan Penjualan & Pengeluaran Toko Harian"
-    >
-      <form @submit.prevent="handleSaveTransaction" class="space-y-4 pt-1 font-poppins">
-        <!-- Tanggal Transaksi -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Tanggal Pembukuan
-          </label>
-          <input
-            v-model="newTxForm.date"
-            type="text"
-            required
-            placeholder="Contoh: 15 Oktober 2026"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
-          />
-        </div>
-
-        <!-- Kategori Transaksi -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Kategori Transaksi
-          </label>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
-                newTxForm.category === 'PEMASUKAN'
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700 shadow-2xs'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="newTxForm.category = 'PEMASUKAN'"
-            >
-              <span>Uang Masuk</span>
-              <span class="text-xs text-neutral-500 font-normal">Penjualan</span>
-            </button>
-            <button
-              type="button"
-              :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
-                newTxForm.category === 'MODAL_JUALAN'
-                  ? 'bg-blue-50 text-blue-800 border-blue-300 dark:bg-blue-950/60 dark:border-blue-700 shadow-2xs'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="newTxForm.category = 'MODAL_JUALAN'"
-            >
-              <span>Modal Jualan</span>
-              <span class="text-xs text-neutral-500 font-normal">Bahan Baku</span>
-            </button>
-            <button
-              type="button"
-              :class="[
-                'p-2.5 rounded-xl text-xs font-semibold border flex flex-col items-center gap-1 transition-all cursor-pointer min-h-[56px]',
-                newTxForm.category === 'OPERASIONAL'
-                  ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-950/60 dark:border-cyan-700 shadow-2xs'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
-              ]"
-              @click="newTxForm.category = 'OPERASIONAL'"
-            >
-              <span>Operasional</span>
-              <span class="text-xs text-neutral-500 font-normal">Sewa/Listrik</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Nama Transaksi -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Nama Transaksi / Pengeluaran
-          </label>
-          <input
-            v-model="newTxForm.title"
-            type="text"
-            required
-            placeholder="Contoh: Belanja Biji Kopi Arabika 20kg"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
-          />
-        </div>
-
-        <!-- Nominal Uang -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Nominal Rupiah
-          </label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm font-bold text-neutral-500 font-poppins">Rp</span>
-            <input
-              v-model.number="newTxForm.amount"
-              type="number"
-              required
-              min="1000"
-              placeholder="1.500.000"
-              class="w-full pl-10 pr-3.5 py-2.5 text-sm sm:text-base rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white tabular-nums font-bold focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins"
-            />
-          </div>
-        </div>
-
-        <!-- Metode Pembayaran -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Metode Pembayaran
-          </label>
-          <select
-            v-model="newTxForm.paymentMethod"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins cursor-pointer"
-          >
-            <option value="QRIS">QRIS / e-Wallet</option>
-            <option value="TRANSFER">Transfer Bank / Giro</option>
-            <option value="TUNAI">Uang Tunai (Kasir Fisik)</option>
-          </select>
-        </div>
-
-        <!-- Catatan Tambahan -->
-        <div>
-          <label class="block text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
-            Catatan Tambahan / Nomor Nota
-          </label>
-          <textarea
-            v-model="newTxForm.notes"
-            rows="2"
-            placeholder="Contoh: Pembelian langsung di pasar grosir, nota terlampir fisik."
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2091AA]/30 font-poppins leading-relaxed"
-          ></textarea>
-        </div>
-
-        <div class="pt-3 flex items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-800">
-          <button
-            type="button"
-            class="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-poppins font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-            @click="isCashDrawerOpen = false"
-          >
-            Batal
-          </button>
-          <BActionButton
-            variant="green"
-            icon="plus"
-            type="submit"
-          >
-            Simpan ke Buku Kas
-          </BActionButton>
-        </div>
-      </form>
-    </BDrawer>
+    <!-- 8. Slide-Over Sidebar Panel: Catat Kas Toko Baru -->
+    <BCashEntryDrawer v-model="isCashDrawerOpen" />
 
     <!-- 8. Modal Lihat Bukti Nota Transaksi -->
     <BModal
@@ -1511,6 +1552,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, onBeforeUnmount, watch } from 'vue'
 import { useUmkmStore, type DailyTransaction } from '~/stores/umkm'
+import { useLanguage } from '~/composables/useLanguage'
 import gsap from 'gsap'
 import Chart from 'chart.js/auto'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -1530,15 +1572,24 @@ import {
   Upload04Icon,
   File01Icon,
   File02Icon,
-  PrinterIcon
+  PrinterIcon,
+  FilterHorizontalIcon,
+  ArrowDownLeft01Icon,
+  ShoppingBag01Icon,
+  Building01Icon,
+  Calendar01Icon,
+  QrCodeIcon,
+  Note01Icon
 } from '@hugeicons/core-free-icons'
 import { useReportDownloader } from '~/composables/useReportDownloader'
+import { useLanguage } from '~/composables/useLanguage'
 
 // Base components
 import BActionButton from '~/components/base/BActionButton.vue'
 import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
+import BCashEntryDrawer from '~/components/base/BCashEntryDrawer.vue'
 
 import { useAuthStore } from '~/stores/auth'
 
@@ -1550,6 +1601,15 @@ definePageMeta({
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const isDemo = computed(() => authStore.currentUser?.email === 'fikri@kopisenja.id')
+const { t } = useLanguage()
+
+// Mobile viewport check for responsive tab strings
+const isMobile = ref(false)
+function checkMobile() {
+  if (typeof window !== 'undefined') {
+    isMobile.value = window.innerWidth < 640
+  }
+}
 
 // State Tab Switcher
 const activeTab = ref<'mutasi' | 'bulanan' | 'tren'>('mutasi')
@@ -2091,6 +2151,8 @@ function handleClickOutsideProgres(event: MouseEvent) {
 
 function handleEscapeKeyProgres(event: KeyboardEvent) {
   if (event.key === 'Escape') {
+    isCashDrawerOpen.value = false
+    isReceiptModalOpen.value = false
     isCategoryDropdownOpen.value = false
     isMonthDropdownOpen.value = false
     isPeriodDropdownOpen.value = false
@@ -2099,15 +2161,20 @@ function handleEscapeKeyProgres(event: KeyboardEvent) {
 }
 
 const categoryFilterOptions = [
-  { id: 'ALL' as const, label: 'Semua Transaksi' },
-  { id: 'PEMASUKAN' as const, label: 'Uang Masuk' },
-  { id: 'MODAL_JUALAN' as const, label: 'Modal Jualan' },
-  { id: 'OPERASIONAL' as const, label: 'Biaya Operasional' }
+  { id: 'ALL' as const, label: 'Semua Transaksi', shortLabel: 'Semua' },
+  { id: 'PEMASUKAN' as const, label: 'Uang Masuk', shortLabel: 'Masuk' },
+  { id: 'MODAL_JUALAN' as const, label: 'Modal Jualan', shortLabel: 'Modal' },
+  { id: 'OPERASIONAL' as const, label: 'Biaya Operasional', shortLabel: 'Operasional' }
 ]
 
 const activeCategoryLabel = computed(() => {
   const opt = categoryFilterOptions.find(o => o.id === activeCategoryFilter.value)
   return opt ? opt.label : 'Semua Transaksi'
+})
+
+const activeCategoryShortLabel = computed(() => {
+  const opt = categoryFilterOptions.find(o => o.id === activeCategoryFilter.value)
+  return opt ? opt.shortLabel : 'Semua'
 })
 
 function selectCategoryFilter(id: 'ALL' | 'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL') {
@@ -2152,16 +2219,9 @@ const filteredDailyTransactions = computed(() => {
   return list
 })
 
-// Drawer Form State
+// Drawer State for BCashEntryDrawer
+const route = useRoute()
 const isCashDrawerOpen = ref(false)
-const newTxForm = ref({
-  date: '15 Oktober 2026',
-  title: '',
-  category: 'PEMASUKAN' as 'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL',
-  amount: 0,
-  paymentMethod: 'QRIS' as 'QRIS' | 'TRANSFER' | 'TUNAI',
-  notes: ''
-})
 
 async function handleSaveTransaction() {
   if (!newTxForm.value.title || newTxForm.value.amount <= 0) return
@@ -2187,6 +2247,20 @@ async function handleSaveTransaction() {
   }
   isCashDrawerOpen.value = false
 }
+
+function handleOpenCashDrawerEvent() {
+  isCashDrawerOpen.value = true
+}
+
+watch(
+  () => route.query.action,
+  (action) => {
+    if (action === 'catat-kas') {
+      isCashDrawerOpen.value = true
+    }
+  },
+  { immediate: true }
+)
 
 async function handleDeleteTx(id: string) {
   if (confirm('Hapus catatan mutasi kas ini?')) {
@@ -2490,7 +2564,9 @@ onMounted(() => {
     }
   }, 150)
 
+  checkMobile()
   handleResize = () => {
+    checkMobile()
     updateTabIndicator(true)
   }
   window.addEventListener('resize', handleResize)
@@ -2532,12 +2608,18 @@ onMounted(() => {
     document.addEventListener('click', handleClickOutsideProgres)
     document.addEventListener('keydown', handleEscapeKeyProgres)
   }
+  if (typeof window !== 'undefined') {
+    window.addEventListener('open-cash-drawer', handleOpenCashDrawerEvent)
+  }
 })
 
 onBeforeUnmount(() => {
   if (typeof document !== 'undefined') {
     document.removeEventListener('click', handleClickOutsideProgres)
     document.removeEventListener('keydown', handleEscapeKeyProgres)
+  }
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('open-cash-drawer', handleOpenCashDrawerEvent)
   }
   if (handleResize) {
     window.removeEventListener('resize', handleResize)

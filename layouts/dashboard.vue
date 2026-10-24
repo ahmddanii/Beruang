@@ -1,11 +1,12 @@
 <template>
   <div class="h-screen flex flex-col bg-white dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-poppins transition-colors overflow-hidden">
     <!-- Top Workspace Navbar (Full Width Across Top) -->
-    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between select-none shadow-none z-30">
+    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30 relative">
       <!-- Left Side: Mobile Menu Button + Brand Logo & Name: Beruang -->
       <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-        <!-- Mobile Menu Toggle Button (Only on < lg) -->
+        <!-- Mobile Menu Toggle Button (Only on < lg, hidden for UMKM where bottom pill tab bar is primary) -->
         <button
+          v-if="!isUmkmRole"
           type="button"
           class="lg:hidden w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] flex items-center justify-center text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors shrink-0 cursor-pointer"
           aria-label="Buka Menu Navigasi"
@@ -32,19 +33,21 @@
         </NuxtLink>
       </div>
 
-      <!-- Center: Advanced Search Bar in Top Navbar with Embedded Sector Filter (Khusus Role Investor) -->
-      <AdvancedNavbarSearch
+      <!-- Center: Advanced Search Bar in Top Navbar (Centered Horizontally) -->
+      <div
         v-if="isInvestorRole"
-        class="flex-1 max-w-sm sm:max-w-md lg:max-w-xl mx-2 sm:mx-6 min-w-0"
-      />
+        class="hidden sm:flex absolute left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md lg:max-w-lg items-center justify-center pointer-events-none z-10 px-4"
+      >
+        <AdvancedNavbarSearch class="w-full pointer-events-auto" />
+      </div>
 
-      <!-- Right Side: Notification & User Profile Account -->
+      <!-- Right Side: User Profile Account & Notification Bell (Bell di sebelah kanan profile) -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <!-- Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
-        <NotificationDropdown />
-
         <!-- User Account Profile Dropdown (Dicoding Style) -->
         <NavbarProfileDropdown />
+
+        <!-- Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
+        <NotificationDropdown />
       </div>
     </header>
 
@@ -53,48 +56,95 @@
       <!-- Desktop & Mobile Drawer Sidebar (placed below navbar) -->
       <DashboardSidebar class="h-full shrink-0 relative z-20" />
 
-      <!-- Main Dashboard Workspace Content (Centered Dicoding Layout with generous breathing room) -->
+      <!-- Main Dashboard Workspace Content (Centered Dicoding Layout with generous breathing room & Sticky Footer) -->
       <main
         ref="mainContentRef"
         :class="[
-          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D]',
+          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D] flex flex-col scroll-smooth',
           isFixedLayout
-            ? 'overflow-hidden flex flex-col h-full py-4 px-4 sm:px-8 lg:px-12 xl:px-16'
-            : 'overflow-y-auto overflow-x-hidden px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-16'
+            ? 'overflow-hidden h-full'
+            : 'overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]'
         ]"
       >
-        <div class="w-full max-w-7xl mx-auto flex flex-col flex-1">
-          <!-- Page Header: Title + Icon at the very top of main container -->
+        <div
+          :class="[
+            'flex flex-col flex-1',
+            isFixedLayout ? 'h-full min-h-0' : 'min-h-full justify-between'
+          ]"
+        >
+          <!-- Content Container (max-w-7xl centered) -->
           <div
-            v-if="!route.meta.hideHeader"
-            class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8 select-none"
+            :class="[
+              'w-full max-w-7xl mx-auto flex flex-col flex-1',
+              isFixedLayout
+                ? 'min-h-0 px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-6 sm:pb-8'
+                : 'px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-28 sm:pb-32 lg:pb-10'
+            ]"
           >
-            <HugeiconsIcon
-              :icon="currentPageInfo.icon"
-              :size="20"
-              :stroke-width="2.2"
-              class="text-neutral-900 dark:text-white shrink-0"
-            />
-            <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-              {{ currentPageInfo.title }}
-            </h1>
+            <!-- Page Header: Title + Icon at the very top of main container -->
+            <div
+              v-if="!route.meta.hideHeader"
+              class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8"
+            >
+              <HugeiconsIcon
+                :icon="currentPageInfo.icon"
+                :size="20"
+                :stroke-width="2.2"
+                class="text-neutral-900 dark:text-white shrink-0"
+              />
+              <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+                {{ currentPageInfo.title }}
+              </h1>
+            </div>
+
+            <!-- Route Transition Skeleton Screen UI (Zero-Overhead GPU Shimmer) -->
+            <Transition name="skeleton-fade" mode="out-in">
+              <BSkeletonScreen
+                v-if="isRouteLoading"
+                key="skeleton-screen"
+                :variant="currentSkeletonVariant"
+                :show-header="true"
+              />
+              <div
+                v-else
+                key="workspace-content"
+                ref="slotWrapperRef"
+                :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : 'flex-1'"
+              >
+                <slot />
+              </div>
+            </Transition>
           </div>
 
-          <div :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : ''">
-            <slot />
-          </div>
+          <!-- Bottom Footer (Dicoding Style, Sticky at Bottom of Viewport when Content is Short) -->
+          <footer
+            class="w-full shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#0C121D] mt-auto transition-colors font-sans"
+            :class="isUmkmRole ? 'pb-26 sm:pb-4' : 'pb-4'"
+          >
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span>© 2026 Beruang Indonesia</span>
+                <span class="text-neutral-300 dark:text-neutral-700">|</span>
+                <span>Beruang is a trademark of PT Beruang Finansial Indonesia.</span>
+              </div>
+            </div>
+          </footer>
         </div>
       </main>
 
-      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page) -->
-      <LinkedInChatDock v-if="!isMessagesPage" />
+      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page, Hidden on Admin, & Hidden on Mobile to Avoid Collision) -->
+      <LinkedInChatDock v-if="!isMessagesPage && !isAdminRole" class="hidden lg:block" />
+
+      <!-- Mobile Floating 5-Icon Pill Tab Bar & Quick Access Sheet for UMKM -->
+      <MobilePillTabBar v-if="isUmkmRole" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { gsap } from 'gsap'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import DashboardSidebar from '~/components/layout/DashboardSidebar.vue'
@@ -102,6 +152,8 @@ import NotificationDropdown from '~/components/layout/NotificationDropdown.vue'
 import NavbarProfileDropdown from '~/components/layout/NavbarProfileDropdown.vue'
 import LinkedInChatDock from '~/components/layout/LinkedInChatDock.vue'
 import AdvancedNavbarSearch from '~/components/search/AdvancedNavbarSearch.vue'
+import MobilePillTabBar from '~/components/layout/MobilePillTabBar.vue'
+import BSkeletonScreen from '~/components/base/BSkeletonScreen.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Menu01Icon,
@@ -129,20 +181,126 @@ const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const { toggleMobile } = useSidebar()
 const mainContentRef = ref<HTMLElement | null>(null)
+const slotWrapperRef = ref<HTMLElement | null>(null)
+const isRouteLoading = ref(true)
+let routeSkeletonTimer: any = null
+let layoutGsapCtx: gsap.Context | null = null
 
-watch(() => route.path, () => {
-  nextTick(() => {
-    if (mainContentRef.value) {
-      mainContentRef.value.scrollTop = 0
+const currentSkeletonVariant = computed<'dashboard' | 'feed' | 'profile' | 'table'>(() => {
+  const p = route.path
+  if (p === '/investor' || p.startsWith('/dashboard/postingan')) return 'feed'
+  if (p.includes('/profile') || p.includes('/umkm/')) return 'profile'
+  if (
+    p.startsWith('/dashboard/progres') ||
+    p.startsWith('/admin/umkm') ||
+    p.startsWith('/admin/mitra') ||
+    p.startsWith('/admin/audit') ||
+    p.startsWith('/admin/laporan')
+  ) {
+    return 'table'
+  }
+  return 'dashboard'
+})
+
+function runWorkspaceEntranceAnimations() {
+  if (!import.meta.client || !slotWrapperRef.value) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
+
+  layoutGsapCtx = gsap.context(() => {
+    const cards = Array.from(
+      slotWrapperRef.value!.querySelectorAll('.card-tactile-gopay, .stat-card-clean')
+    ).slice(0, 12)
+    if (cards.length > 0) {
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 12 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.38,
+          stagger: 0.035,
+          ease: 'power2.out',
+          overwrite: 'auto',
+          clearProps: 'transform,opacity'
+        }
+      )
     }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-  })
+  }, slotWrapperRef.value)
+}
+
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (import.meta.client && oldPath && newPath !== oldPath) {
+      isRouteLoading.value = true
+      if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+      routeSkeletonTimer = setTimeout(() => {
+        isRouteLoading.value = false
+        nextTick(() => {
+          runWorkspaceEntranceAnimations()
+        })
+      }, 420)
+    }
+
+    nextTick(() => {
+      if (mainContentRef.value) {
+        mainContentRef.value.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      }
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      }
+    })
+
+    if (newPath.startsWith('/investor') && authStore.currentUser?.role !== 'INVESTOR') {
+      authStore.setRole('INVESTOR')
+    } else if (newPath.startsWith('/konsultan') && authStore.currentUser?.role !== 'CONSULTANT') {
+      authStore.setRole('CONSULTANT')
+    } else if (newPath.startsWith('/admin') && authStore.currentUser?.role !== 'ADMIN') {
+      authStore.setRole('ADMIN')
+    } else if (newPath.startsWith('/dashboard') && authStore.currentUser?.role !== 'UMKM') {
+      authStore.setRole('UMKM')
+    }
+  },
+  { immediate: true }
+)
+
+onMounted(() => {
+  if (import.meta.client) {
+    if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+    routeSkeletonTimer = setTimeout(() => {
+      isRouteLoading.value = false
+      nextTick(() => {
+        runWorkspaceEntranceAnimations()
+      })
+    }, 450)
+  } else {
+    isRouteLoading.value = false
+  }
+})
+
+onBeforeUnmount(() => {
+  if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
+})
+
+onBeforeUnmount(() => {
+  if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
 })
 const isFixedLayout = computed(() => {
   const p = route.path
   return (
-    p === '/investor' ||
-    p === '/investor/' ||
     p.startsWith('/investor/pesan') ||
     p.startsWith('/dashboard/pesan')
   )
@@ -153,8 +311,14 @@ const isMessagesPage = computed(() => {
 })
 
 const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const isAdminRole = computed(() => {
+  return currentRole.value === 'ADMIN' || route.path.startsWith('/admin')
+})
 const isInvestorRole = computed(() => {
   return currentRole.value === 'INVESTOR' || route.path.startsWith('/investor')
+})
+const isUmkmRole = computed(() => {
+  return currentRole.value === 'UMKM' && !route.path.startsWith('/investor') && !route.path.startsWith('/konsultan') && !route.path.startsWith('/admin')
 })
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'
@@ -195,14 +359,14 @@ const currentPageInfo = computed(() => {
   }
   if (p.startsWith('/dashboard/rencana-aksi')) {
     return {
-      title: 'Rencana Aksi',
+      title: 'Progress Tugas',
       icon: Task01Icon,
-      description: 'Langkah strategis terarah untuk meningkatkan skor kesiapan dan daya tarik tokomu bagi calon investor.'
+      description: 'Daftar tugas taktis dan pemantauan progres langkah perbaikan tokomu bersama konsultan pendamping.'
     }
   }
   if (p.startsWith('/dashboard/penilaian')) {
     return {
-      title: 'Cek Kesehatan',
+      title: 'Kesehatan Bisnis',
       icon: AnalyticsUpIcon,
       description: 'Diagnosa komprehensif kesehatan finansial tokomu berdasarkan data kas dan kepatuhan administrasi.'
     }
@@ -262,7 +426,7 @@ const currentPageInfo = computed(() => {
 
   // Investor pages
   if (p === '/investor' || p === '/investor/') {
-    return { title: 'Katalog Usaha', icon: Store01Icon }
+    return { title: 'Jaringan', icon: Store01Icon }
   }
   if (p.startsWith('/investor/pesan')) {
     return {
@@ -279,10 +443,13 @@ const currentPageInfo = computed(() => {
     }
   }
   if (p.startsWith('/investor/watchlist')) {
-    return { title: 'Disimpan', icon: StarIcon }
+    return { title: 'Simpan', icon: StarIcon }
   }
   if (p.startsWith('/investor/umkm/')) {
     return { title: 'Detail Prospek UMKM', icon: Store01Icon }
+  }
+  if (p.startsWith('/investor/profile')) {
+    return { title: 'Profil Investor', icon: UserCircleIcon }
   }
   if (p.startsWith('/investor/pengaturan')) {
     return { title: 'Pengaturan Investor', icon: Settings01Icon }
@@ -290,13 +457,31 @@ const currentPageInfo = computed(() => {
 
   // Admin pages
   if (p === '/admin' || p === '/admin/') {
-    return { title: 'Ringkasan', icon: Home03Icon }
+    return { title: 'Beranda', icon: Home03Icon }
+  }
+  if (p.startsWith('/admin/umkm')) {
+    return { title: 'Kemitraan UMKM', icon: Store01Icon }
+  }
+  if (p.startsWith('/admin/daftar-umkm')) {
+    return { title: 'Data UMKM', icon: Store01Icon }
   }
   if (p.startsWith('/admin/penugasan')) {
-    return { title: 'Penugasan Konsultan', icon: UserAdd01Icon }
+    return { title: 'Konsultan', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/admin/investor')) {
+    return { title: 'Data Investor', icon: Coins01Icon }
+  }
+  if (p.startsWith('/admin/sertifikasi')) {
+    return { title: 'Sertifikasi Usaha', icon: Award01Icon }
+  }
+  if (p.startsWith('/admin/investasi')) {
+    return { title: 'Alur Investasi', icon: Coins01Icon }
   }
   if (p.startsWith('/admin/pengguna')) {
     return { title: 'Kelola Pengguna', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/admin/pengaturan')) {
+    return { title: 'Pengaturan', icon: Settings01Icon }
   }
 
   return { title: 'Beranda', icon: Home03Icon }

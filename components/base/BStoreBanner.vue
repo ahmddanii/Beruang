@@ -1,6 +1,6 @@
 <template>
   <!-- Outer Wrapper (Allows Circular Profile Avatar to Overlap Bottom Edge) -->
-  <div class="relative w-full mb-16 sm:mb-20 md:mb-24 select-none">
+  <div class="relative w-full mb-16 sm:mb-20 md:mb-24">
     <!-- Hidden File Input for Banner Image Selection -->
     <input
       ref="fileInputRef"
@@ -34,7 +34,7 @@
         v-if="currentBannerUrl"
         :src="currentBannerUrl"
         :alt="`Banner Toko ${storeName}`"
-        class="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover/banner:scale-105"
+        class="w-full h-full object-cover object-center"
         @error="handleImageError"
       />
       <!-- Default Empty Banner State (Clean aesthetic pattern with camera icon & prompt) -->
@@ -84,13 +84,13 @@
         </div>
       </Transition>
 
-      <!-- 2. Top-Right Action: Dedicated Action Button & Dropdown Menu -->
-      <div class="absolute top-3 sm:top-4 right-3 sm:right-5 z-20 pointer-events-auto">
+      <!-- 2. Top-Right Action: Dedicated Action Button & Dropdown Menu (Hanya tampil jika bukan readonly) -->
+      <div v-if="!readonly" class="absolute top-3 sm:top-4 right-3 sm:right-5 z-20 pointer-events-auto">
         <div ref="menuRef" class="relative">
           <!-- Dedicated Action Trigger Button with Camera Icon & Label -->
           <button
             type="button"
-            class="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/30 text-xs sm:text-sm font-poppins font-medium transition-all duration-150 cursor-pointer shadow-md hover:shadow-lg select-none"
+            class="inline-flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-2 min-h-[42px] rounded-xl bg-black/60 hover:bg-black/80 text-white backdrop-blur-md border border-white/30 text-xs sm:text-sm font-poppins font-medium transition-all duration-150 cursor-pointer shadow-md hover:shadow-lg select-none"
             aria-label="Kelola Sampul Toko"
             title="Kelola & Ganti Sampul Toko"
             @click.stop="toggleMenu"
@@ -100,19 +100,20 @@
               :size="16"
               :stroke-width="2"
             />
+<<<<<<< HEAD
             <span class="font-poppins font-semibold">{{ currentBannerUrl ? 'Ubah Sampul' : 'Tambah Sampul' }}</span>
             <svg
               class="w-3.5 h-3.5 text-white/80 transition-transform duration-200 shrink-0"
+=======
+            <span class="font-poppins font-semibold">{{ t('btn_ubah_sampul') }}</span>
+            <HugeiconsIcon
+              :icon="ArrowDown01Icon"
+              :size="14"
+              :stroke-width="2.2"
+              class="text-white/80 transition-transform duration-200 shrink-0"
+>>>>>>> origin/fe/keps
               :class="{ 'rotate-180': isMenuOpen }"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m6 9 6 6 6-6" />
-            </svg>
+            />
           </button>
 
           <!-- Dropdown Menu for Banner -->
@@ -139,7 +140,7 @@
                   <HugeiconsIcon :icon="Camera01Icon" :size="14" :stroke-width="2" />
                 </div>
                 <div class="flex-1">
-                  <span class="font-heading font-medium block">{{ currentBannerUrl ? 'Ganti Banner' : 'Unggah Banner' }}</span>
+                  <span class="font-heading font-medium block">{{ currentBannerUrl ? t('btn_ganti_banner') : 'Unggah Banner' }}</span>
                 </div>
               </button>
 
@@ -154,7 +155,7 @@
                     <HugeiconsIcon :icon="CropIcon" :size="14" :stroke-width="2" />
                   </div>
                   <div class="flex-1">
-                    <span class="font-heading font-medium block">Atur Ulang Banner</span>
+                    <span class="font-heading font-medium block">{{ t('btn_atur_ulang_banner') }}</span>
                   </div>
                 </button>
 
@@ -168,7 +169,7 @@
                     <HugeiconsIcon :icon="EyeIcon" :size="14" :stroke-width="2" />
                   </div>
                   <div class="flex-1">
-                    <span class="font-heading font-medium block">Lihat Foto Penuh</span>
+                    <span class="font-heading font-medium block">{{ t('btn_lihat_penuh') }}</span>
                   </div>
                 </button>
 
@@ -205,20 +206,20 @@
         <div
           class="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-full border-4 sm:border-[5px] border-white dark:border-[#0F1014] bg-neutral-100 dark:bg-[#18191E] overflow-hidden flex items-center justify-center cursor-pointer select-none transition-all duration-200 shadow-md"
           :class="[
-            isAvatarDragging ? 'ring-4 ring-primary-500 ring-offset-2' : ''
+            !readonly && isAvatarDragging ? 'ring-4 ring-primary-500 ring-offset-2' : ''
           ]"
-          title="Klik untuk opsi foto profil"
-          @dragover.prevent="onAvatarDragOver"
-          @dragleave.prevent="onAvatarDragLeave"
-          @drop.prevent="onAvatarDrop"
-          @click="toggleAvatarMenu"
+          :title="readonly ? 'Klik untuk melihat foto profil penuh' : 'Klik untuk opsi foto profil'"
+          @dragover.prevent="!readonly && onAvatarDragOver($event)"
+          @dragleave.prevent="!readonly && onAvatarDragLeave($event)"
+          @drop.prevent="!readonly && onAvatarDrop($event)"
+          @click="readonly ? onSelectViewFullAvatar() : toggleAvatarMenu()"
         >
           <!-- If avatar exists -->
           <img
             v-if="currentOwnerAvatarUrl"
             :src="currentOwnerAvatarUrl"
             :alt="`Foto Profil ${ownerName}`"
-            class="w-full h-full object-cover object-center transition-transform duration-300 group-hover/avatar:scale-105"
+            class="w-full h-full object-cover object-center"
             @error="handleAvatarError"
           />
 
@@ -233,8 +234,11 @@
             </span>
           </div>
 
-          <!-- Hover Overlay with Camera Icon -->
-          <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1 pointer-events-none">
+          <!-- Hover Overlay with Camera Icon (Hanya jika bukan readonly) -->
+          <div
+            v-if="!readonly"
+            class="absolute inset-0 bg-black/45 backdrop-blur-[1px] opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white gap-1 pointer-events-none"
+          >
             <HugeiconsIcon :icon="Camera01Icon" :size="24" :stroke-width="2" />
             <span class="text-[10px] sm:text-xs font-heading font-medium tracking-wide">
               {{ currentOwnerAvatarUrl ? 'Ubah Foto' : 'Tambah Foto' }}
@@ -243,7 +247,7 @@
 
           <!-- Drag & Drop Active Overlay on Avatar -->
           <div
-            v-if="isAvatarDragging"
+            v-if="!readonly && isAvatarDragging"
             class="absolute inset-0 bg-primary-950/85 backdrop-blur-xs flex flex-col items-center justify-center text-white pointer-events-none text-center p-2"
           >
             <HugeiconsIcon :icon="Camera01Icon" :size="24" class="text-white mb-1" />
@@ -251,8 +255,9 @@
           </div>
         </div>
 
-        <!-- Floating Circular Camera Badge Button (bottom-right of avatar) -->
+        <!-- Floating Circular Camera Badge Button (bottom-right of avatar, hanya jika bukan readonly) -->
         <button
+          v-if="!readonly"
           type="button"
           class="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white dark:bg-[#1E2026] text-neutral-700 dark:text-neutral-200 shadow-md hover:shadow-lg border border-neutral-200/90 dark:border-neutral-700 flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 transition-all cursor-pointer z-10"
           aria-label="Opsi Foto Profil"
@@ -359,7 +364,7 @@
           @click.self="cancelCrop"
         >
           <div
-            class="relative max-w-3xl w-full bg-white dark:bg-[#16171C] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-2xl p-5 sm:p-6 flex flex-col gap-4 text-neutral-900 dark:text-white"
+            class="relative max-w-2xl w-full max-h-[92vh] overflow-y-auto bg-white dark:bg-[#16171C] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-2xl p-4 sm:p-6 flex flex-col gap-4 text-neutral-900 dark:text-white"
             @click.stop
           >
             <!-- Modal Header -->
@@ -370,10 +375,10 @@
                 </div>
                 <div>
                   <h3 class="font-heading font-semibold text-base sm:text-lg text-neutral-900 dark:text-white leading-tight">
-                    {{ cropTarget === 'banner' ? 'Sesuaikan & Potong Banner' : 'Sesuaikan & Potong Foto Profil' }}
+                    {{ cropTarget === 'banner' ? t('banner_crop_title') : 'Sesuaikan & Potong Foto Profil' }}
                   </h3>
                   <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans mt-0.5">
-                    {{ cropTarget === 'banner' ? 'Geser dan atur posisi gambar sesuai ukuran tampilan banner tokomu.' : 'Geser dan atur posisi gambar sesuai bingkai lingkaran profil tokomu.' }}
+                    {{ cropTarget === 'banner' ? t('banner_crop_desc') : 'Geser dan atur posisi gambar sesuai bingkai lingkaran profil tokomu.' }}
                   </p>
                 </div>
               </div>
@@ -390,11 +395,12 @@
 
             <!-- Crop Viewport Container -->
             <div class="space-y-3">
-              <!-- Viewport Banner (16:5) -->
+              <!-- Viewport Banner (Adaptive realistic ratio on mobile, generous min-height) -->
               <div
                 v-if="cropTarget === 'banner'"
                 ref="cropViewportRef"
-                class="relative w-full aspect-[16/5] bg-neutral-950 rounded-2xl overflow-hidden border-2 border-primary-500/80 shadow-inner select-none cursor-grab active:cursor-grabbing flex items-center justify-center"
+                class="relative w-full aspect-[16/9] sm:aspect-[16/6] min-h-[175px] sm:min-h-[220px] bg-neutral-950 rounded-2xl overflow-hidden border-2 border-primary-500/80 shadow-inner select-none cursor-grab active:cursor-grabbing flex items-center justify-center"
+                style="touch-action: none;"
                 @pointerdown="startPan"
                 @pointermove="onPan"
                 @pointerup="endPan"
@@ -412,7 +418,7 @@
                 />
 
                 <!-- Rule of Thirds Grid Overlay -->
-                <div class="absolute inset-0 pointer-events-none grid grid-cols-3 grid-rows-3 opacity-30">
+                <div class="absolute inset-0 pointer-events-none grid grid-cols-3 grid-rows-3 opacity-25">
                   <div class="border-r border-b border-white" />
                   <div class="border-r border-b border-white" />
                   <div class="border-b border-white" />
@@ -423,18 +429,14 @@
                   <div class="border-r border-b border-white" />
                   <div />
                 </div>
-
-                <!-- Floating Helper Badge -->
-                <div class="absolute bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white/90 text-[11px] font-sans font-medium pointer-events-none shadow-xs">
-                  Tahan & geser untuk memposisikan · Scroll untuk zoom
-                </div>
               </div>
 
               <!-- Viewport Avatar (1:1 Circular Mask) -->
               <div
                 v-else
                 ref="cropViewportRef"
-                class="relative w-60 h-60 sm:w-72 sm:h-72 mx-auto aspect-square bg-neutral-950 rounded-full overflow-hidden border-4 border-primary-500 shadow-inner select-none cursor-grab active:cursor-grabbing flex items-center justify-center ring-8 ring-primary-500/15"
+                class="relative w-52 h-52 sm:w-64 sm:h-64 mx-auto aspect-square bg-neutral-950 rounded-full overflow-hidden border-4 border-primary-500 shadow-inner select-none cursor-grab active:cursor-grabbing flex items-center justify-center ring-8 ring-primary-500/15"
+                style="touch-action: none;"
                 @pointerdown="startPan"
                 @pointermove="onPan"
                 @pointerup="endPan"
@@ -463,16 +465,16 @@
                   <div class="border-r border-b border-white" />
                   <div />
                 </div>
-
-                <!-- Floating Helper Badge -->
-                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-white/90 text-[10px] font-sans font-medium pointer-events-none shadow-xs whitespace-nowrap">
-                  Tahan & geser · Scroll zoom
-                </div>
               </div>
 
-              <!-- Zoom Controls Bar -->
-              <div class="flex items-center justify-between gap-3 px-2 pt-1 text-xs text-neutral-600 dark:text-neutral-400">
-                <div class="flex items-center gap-2 flex-1 max-w-xs">
+              <!-- Helper instruction below viewport -->
+              <p class="text-center text-[11px] text-neutral-400 dark:text-neutral-500 font-sans">
+                {{ t('banner_hint') }}
+              </p>
+
+              <!-- Zoom & Positioning Controls Bar -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1 pt-1 text-xs text-neutral-600 dark:text-neutral-400">
+                <div class="flex items-center gap-2 flex-1 max-w-sm">
                   <HugeiconsIcon :icon="ZoomOutIcon" :size="16" class="text-neutral-400 shrink-0" />
                   <input
                     type="range"
@@ -489,15 +491,33 @@
                   </span>
                 </div>
 
-                <!-- Reset Framing Button -->
-                <button
-                  type="button"
-                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-sans font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-                  @click="resetFraming"
-                >
-                  <HugeiconsIcon :icon="ArrowReloadHorizontalIcon" :size="13" />
-                  <span>Tengah</span>
-                </button>
+                <!-- Alignment Presets: Atas, Tengah, Bawah -->
+                <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+                  <span class="text-[11px] text-neutral-400 mr-1 hidden sm:inline">Posisi:</span>
+                  <button
+                    v-if="cropTarget === 'banner'"
+                    type="button"
+                    class="px-2.5 py-1 rounded-lg text-xs font-sans font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
+                    @click="alignPreset('top')"
+                  >
+                    {{ t('banner_top') }}
+                  </button>
+                  <button
+                    type="button"
+                    class="px-2.5 py-1 rounded-lg text-xs font-sans font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
+                    @click="alignPreset('center')"
+                  >
+                    {{ t('banner_center') }}
+                  </button>
+                  <button
+                    v-if="cropTarget === 'banner'"
+                    type="button"
+                    class="px-2.5 py-1 rounded-lg text-xs font-sans font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
+                    @click="alignPreset('bottom')"
+                  >
+                    {{ t('banner_bottom') }}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -508,7 +528,7 @@
                 class="px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 text-xs sm:text-sm font-heading font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
                 @click="cancelCrop"
               >
-                Batal
+                {{ t('btn_batal') }}
               </button>
               <button
                 type="button"
@@ -516,7 +536,7 @@
                 @click="applyCroppedImage"
               >
                 <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="15" />
-                <span>{{ cropTarget === 'banner' ? 'Terapkan Banner' : 'Terapkan Foto Profil' }}</span>
+                <span>{{ cropTarget === 'banner' ? t('banner_apply') : 'Terapkan Foto Profil' }}</span>
               </button>
             </div>
           </div>
@@ -570,6 +590,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { useLanguage } from '~/composables/useLanguage'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   MoreVerticalCircle02Icon,
@@ -579,6 +600,7 @@ import {
   ZoomInIcon,
   ZoomOutIcon,
   ArrowReloadHorizontalIcon,
+  ArrowDown01Icon,
   CheckmarkBadge01Icon,
   Cancel01Icon,
   Delete02Icon,
@@ -593,6 +615,7 @@ const props = withDefaults(
     defaultOwnerAvatarUrl?: string
     bannerUrl?: string
     defaultBannerUrl?: string
+    readonly?: boolean
   }>(),
   {
     storeName: 'Kopi Senja Nusantara',
@@ -600,7 +623,8 @@ const props = withDefaults(
     ownerAvatarUrl: '',
     defaultOwnerAvatarUrl: '',
     bannerUrl: '',
-    defaultBannerUrl: ''
+    defaultBannerUrl: '',
+    readonly: false
   }
 )
 
@@ -610,6 +634,8 @@ const emit = defineEmits<{
   (e: 'update:ownerAvatarUrl', url: string): void
   (e: 'reset:ownerAvatarUrl'): void
 }>()
+
+const { t } = useLanguage()
 
 // File Input References
 const fileInputRef = ref<HTMLInputElement | null>(null)
@@ -965,6 +991,18 @@ function resetFraming() {
   zoomLevel.value = 1
   panX.value = 0
   panY.value = 0
+}
+
+function alignPreset(pos: 'top' | 'center' | 'bottom') {
+  const { maxPanY } = getPanLimits()
+  panX.value = 0
+  if (pos === 'top') {
+    panY.value = maxPanY
+  } else if (pos === 'bottom') {
+    panY.value = -maxPanY
+  } else {
+    panY.value = 0
+  }
 }
 
 function onZoomInput() {

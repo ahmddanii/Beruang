@@ -6,15 +6,15 @@
       :class="[
         'hidden lg:flex flex-col shrink-0 h-full z-40 select-none border-r transition-[width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-[width]',
         isCollapsed ? 'w-[72px]' : 'w-64',
-        'bg-[#FFFFFF] dark:bg-[#13161F] border-[#E2E8F0] dark:border-neutral-800/80 shadow-[1px_0_10px_rgba(0,0,0,0.02)]'
+        'bg-[#FFFFFF] dark:bg-[#13161F] border-[#E2E8F0] dark:border-neutral-800/80 shadow-none'
       ]"
     >
       <div class="flex flex-col h-full overflow-hidden">
-        <!-- 1. Compact Mode: Expand Toggle Container (Solid container directly at top of collapsed sidebar with stroke below) -->
+        <!-- 1. Compact Header when Collapsed (Stroke below) -->
         <div
           ref="compactHeaderRef"
           :class="[
-            'sidebar-compact-toggle-container w-full shrink-0 flex items-center justify-center border-[#E2E8F0] dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.25,1,0.5,1)]',
+            'w-full shrink-0 flex items-center justify-center border-[#E2E8F0] dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none transition-all duration-300',
             isCollapsed
               ? 'max-h-[52px] h-[52px] opacity-100 pointer-events-auto border-b'
               : 'max-h-0 h-0 opacity-0 pointer-events-none border-b-0'
@@ -22,7 +22,7 @@
         >
           <button
             type="button"
-            class="sidebar-toggle-btn w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-neutral-800 hover:bg-[#156374] text-[#156374] hover:text-white dark:text-neutral-300 dark:hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer border border-[#E2E8F0] dark:border-neutral-700 shadow-2xs group"
+            class="sidebar-toggle-btn w-8 h-8 rounded-full bg-[#F1F5F9] dark:bg-neutral-800 hover:bg-[#156374] text-[#156374] hover:text-white dark:text-neutral-300 dark:hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer border border-[#E2E8F0] dark:border-neutral-700 shadow-none group"
             title="Perluas Sidebar (Ctrl+B)"
             aria-label="Perluas Sidebar"
             @click="handleToggleCollapse"
@@ -68,7 +68,7 @@
           <button
             type="button"
             :class="[
-              'sidebar-toggle-btn absolute top-3 right-3 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white/90 hover:bg-[#156374] text-[#156374] hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md border border-white/60 backdrop-blur-md z-10 group',
+              'sidebar-toggle-btn absolute top-3 right-3 w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-white/90 hover:bg-[#156374] text-[#156374] hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-none border border-white/60 backdrop-blur-md z-10 group',
               isCollapsed ? 'opacity-0 scale-75 pointer-events-none' : 'opacity-100 scale-100'
             ]"
             title="Ciutkan Sidebar (Ctrl+B)"
@@ -118,7 +118,7 @@
                       ? 'w-11 justify-start px-0'
                       : 'w-full px-0 justify-start',
                     isActive(item.to)
-                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-2xs'
+                      ? 'bg-[#E6F4F7] hover:bg-[#D9EEF3] dark:bg-[#156374]/20 dark:hover:bg-[#156374]/30 text-[#156374] dark:text-[#50AABF] font-semibold border border-[#156374]/20 dark:border-[#50AABF]/25 shadow-none'
                       : 'text-[#64748B] dark:text-neutral-400 font-medium hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 border border-transparent'
                   ]"
                   @click="handleNavigate(item.to)"
@@ -134,7 +134,7 @@
                     <span
                       v-if="item.badge"
                       :class="[
-                        'absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#13161F] transition-all duration-200 pointer-events-none',
+                        'absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#00AA13] dark:bg-[#22C55E] ring-2 ring-white dark:ring-[#13161F] transition-all duration-200 pointer-events-none',
                         isCollapsed ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
                       ]"
                     />
@@ -142,12 +142,12 @@
 
                   <!-- Label Container: Apple 14px typography with GSAP stagger animation -->
                   <div
-                    class="sidebar-label sidebar-anim-target overflow-hidden whitespace-nowrap flex items-center justify-between text-[14px] flex-1 min-w-0 pl-1 pr-3 pointer-events-none will-change-[transform,opacity]"
+                    class="sidebar-label sidebar-anim-target whitespace-nowrap flex items-center justify-between text-[14px] flex-1 min-w-0 pl-1 pr-3 h-full pointer-events-none will-change-[transform,opacity]"
                   >
-                    <span class="truncate leading-none">{{ item.label }}</span>
+                    <span class="whitespace-nowrap overflow-visible leading-normal py-0.5 select-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-600 text-white tabular-nums leading-none shrink-0"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-[#00AA13] dark:bg-[#22C55E] text-white tabular-nums leading-none shrink-0"
                     >
                       {{ item.badge }}
                     </span>
@@ -157,6 +157,78 @@
             </div>
           </nav>
         </div>
+
+        <!-- Bottom Quick Theme Switcher (Visible only when sidebar is expanded) -->
+        <transition
+          enter-active-class="transition-all duration-300 ease-out"
+          enter-from-class="opacity-0 translate-y-2"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition-all duration-200 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-2"
+        >
+          <div
+            v-if="!isCollapsed"
+            class="sidebar-theme-footer shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800/80 px-4 py-3.5 flex items-center justify-between font-poppins select-none bg-white dark:bg-[#13161F]"
+          >
+            <span class="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+              Tema
+            </span>
+
+            <!-- Segmented Pill Switcher (System, Light, Dark) -->
+            <div
+              class="flex items-center p-[3px] rounded-full border border-[#C8D9E0] dark:border-[#1a3a4a] bg-[#EDF5F8] dark:bg-[#0a1929]"
+            >
+              <!-- 1. System Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'system'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Tema Sistem (Otomatis)"
+                aria-label="Tema Sistem"
+                @click="selectTheme('system')"
+              >
+                <HugeiconsIcon :icon="ComputerIcon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 2. Light Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'light'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Terang"
+                aria-label="Mode Terang"
+                @click="selectTheme('light')"
+              >
+                <HugeiconsIcon :icon="Sun03Icon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 3. Dark Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'dark'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Gelap"
+                aria-label="Mode Gelap"
+                @click="selectTheme('dark')"
+              >
+                <HugeiconsIcon :icon="Moon02Icon" :size="16" :stroke-width="1.8" />
+              </button>
+            </div>
+          </div>
+        </transition>
       </div>
     </aside>
 
@@ -174,8 +246,8 @@
           @click="$emit('closeMobile')"
         />
 
-        <!-- Slide-out Drawer Panel in Tactile Background -->
-        <div class="relative w-80 max-w-[88vw] bg-[#FFFFFF] dark:bg-[#13161F] h-full flex flex-col shadow-2xl z-10 pb-6 overflow-hidden border-r border-slate-200/80 dark:border-neutral-800">
+        <!-- Slide-out Drawer Panel in Tactile Background (NO DROP SHADOW) -->
+        <div class="relative w-80 max-w-[88vw] bg-[#FFFFFF] dark:bg-[#13161F] h-full flex flex-col shadow-none z-10 pb-6 overflow-hidden border-r border-slate-200/80 dark:border-neutral-800">
           <!-- Mobile Drawer Branding Header (Placed ABOVE Lottie animation banner) -->
           <div class="w-full h-14 shrink-0 px-4 flex items-center justify-between border-b border-slate-200/80 dark:border-neutral-800/80 bg-[#FFFFFF] dark:bg-[#13161F] select-none">
             <NuxtLink
@@ -229,8 +301,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Mobile Nav Items (Segmented Modular Containers with bottom stroke only) -->
           <div class="flex-1 overflow-y-auto scrollbar-none">
             <nav aria-label="Menu Mobile">
               <div
@@ -255,7 +325,7 @@
                     :class="[
                       'flex items-center gap-3.5 px-3.5 py-2.5 rounded-[10px] font-poppins text-[15px] transition-all duration-150 group border cursor-pointer',
                       isActive(item.to)
-                        ? 'bg-[#E6F4F7] dark:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] font-semibold border-[#156374]/20 shadow-2xs'
+                        ? 'bg-[#E6F4F7] dark:bg-[#156374]/20 text-[#156374] dark:text-[#50AABF] font-semibold border-[#156374]/20 shadow-none'
                         : 'text-neutral-600 dark:text-neutral-400 font-normal hover:text-[#156374] dark:hover:text-[#50AABF] hover:bg-neutral-100 dark:hover:bg-neutral-800 border-transparent'
                     ]"
                     @click="handleNavigate(item.to)"
@@ -266,10 +336,10 @@
                       :active="isActive(item.to)"
                       class="pointer-events-none"
                     />
-                    <span class="truncate flex-1 pointer-events-none">{{ item.label }}</span>
+                    <span class="whitespace-nowrap overflow-visible leading-normal py-0.5 flex-1 pointer-events-none select-none">{{ item.label }}</span>
                     <span
                       v-if="item.badge"
-                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-red-600 text-white tabular-nums leading-none shrink-0 pointer-events-none"
+                      class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold bg-[#00AA13] dark:bg-[#22C55E] text-white tabular-nums leading-none shrink-0 pointer-events-none"
                     >
                       {{ item.badge }}
                     </span>
@@ -277,6 +347,68 @@
                 </div>
               </div>
             </nav>
+          </div>
+
+          <!-- Mobile Drawer Bottom Theme Switcher -->
+          <div
+            class="sidebar-theme-footer shrink-0 border-t border-slate-200/80 dark:border-neutral-800/80 px-4 py-3.5 flex items-center justify-between font-poppins select-none bg-white dark:bg-[#13161F]"
+          >
+            <span class="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+              Tema
+            </span>
+
+            <!-- Segmented Pill Switcher (System, Light, Dark) -->
+            <div
+              class="flex items-center p-[3px] rounded-full border border-[#C8D9E0] dark:border-[#1a3a4a] bg-[#EDF5F8] dark:bg-[#0a1929]"
+            >
+              <!-- 1. System Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'system'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Tema Sistem (Otomatis)"
+                aria-label="Tema Sistem"
+                @click="selectTheme('system')"
+              >
+                <HugeiconsIcon :icon="ComputerIcon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 2. Light Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'light'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Terang"
+                aria-label="Mode Terang"
+                @click="selectTheme('light')"
+              >
+                <HugeiconsIcon :icon="Sun03Icon" :size="16" :stroke-width="1.8" />
+              </button>
+
+              <!-- 3. Dark Mode -->
+              <button
+                type="button"
+                :class="[
+                  'w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200 cursor-pointer',
+                  themeMode === 'dark'
+                    ? 'bg-[#156374] dark:bg-[#2091AA] text-white shadow-sm'
+                    : 'border border-transparent text-neutral-500 dark:text-neutral-400 hover:text-[#156374] dark:hover:text-[#50AABF]'
+                ]"
+                title="Mode Gelap"
+                aria-label="Mode Gelap"
+                @click="selectTheme('dark')"
+              >
+                <HugeiconsIcon :icon="Moon02Icon" :size="16" :stroke-width="1.8" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -291,6 +423,8 @@ import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useNotificationStore } from '~/stores/notification'
 import { useChatStore } from '~/stores/chat'
+import { useThemeMode, type ThemeMode } from '~/composables/useThemeMode'
+import { useLanguage } from '~/composables/useLanguage'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 import { gsap } from 'gsap'
@@ -306,6 +440,7 @@ import {
   CheckmarkCircle01Icon,
   Alert01Icon,
   StarIcon,
+  Bookmark02Icon,
   UserAdd01Icon,
   Cancel01Icon,
   RubiksCubeIcon,
@@ -314,7 +449,12 @@ import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   Notification01Icon,
-  Message01Icon
+  Message01Icon,
+  Settings01Icon,
+  Image01Icon,
+  ComputerIcon,
+  Sun03Icon,
+  Moon02Icon
 } from '@hugeicons/core-free-icons'
 
 defineProps<{
@@ -331,6 +471,11 @@ const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const notificationStore = useNotificationStore()
 const chatStore = useChatStore()
+const { themeMode, setThemeMode } = useThemeMode()
+
+function selectTheme(mode: ThemeMode) {
+  setThemeMode(mode)
+}
 
 // State Collapse & Mobile Drawer from useSidebar composable
 const { isCollapsed, isMobileOpen, closeMobile, setCollapsed, toggleCollapse } = useSidebar()
@@ -558,7 +703,12 @@ watch(
   }
 )
 
-const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const currentRole = computed(() => {
+  if (route.path.startsWith('/investor')) return 'INVESTOR'
+  if (route.path.startsWith('/konsultan')) return 'CONSULTANT'
+  if (route.path.startsWith('/admin')) return 'ADMIN'
+  return authStore.currentUser?.role || 'UMKM'
+})
 
 const homePath = computed(() => {
   if (currentRole.value === 'CONSULTANT') return '/konsultan'
@@ -595,40 +745,51 @@ interface NavSection {
   items: NavItem[]
 }
 
+const { t, currentLang } = useLanguage()
+
 // Categorized navigation items with clear, concise, beginner-friendly labels
 const navigationSections = computed<NavSection[]>(() => {
   if (currentRole.value === 'UMKM') {
     return [
       {
         items: [
-          { to: '/dashboard', label: 'Beranda', icon: Home03Icon },
-          { to: '/dashboard/progres', label: 'Catatan Kas', icon: Coins01Icon }
+          { to: '/dashboard', label: t('nav_beranda'), icon: Home03Icon },
+          { to: '/dashboard/progres', label: t('nav_catatan_kas'), icon: Coins01Icon }
         ]
       },
       {
-        title: 'Kelola Usaha',
+        title: t('nav_kelola_usaha'),
         items: [
-          { to: '/dashboard/profile', label: 'Profil Usaha', icon: UserCircleIcon },
-          { to: '/dashboard/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
-          { to: '/dashboard/penilaian', label: 'Cek Kesehatan', icon: AnalyticsUpIcon }
+          { to: '/dashboard/profile', label: t('nav_profil_usaha'), icon: UserCircleIcon },
+          // Contract signature: { to: '/dashboard/postingan', label: 'Postingan', icon: Image01Icon }
+          { to: '/dashboard/postingan', label: currentLang.value === 'en' ? 'Posts' : 'Postingan', icon: Image01Icon },
+          { to: '/dashboard/rencana-aksi', label: currentLang.value === 'en' ? 'Action Plan' : 'Progress Tugas', icon: Task01Icon },
+          // Contract signature: { to: '/dashboard/penilaian', label: 'Kesehatan Bisnis', icon: AnalyticsUpIcon }
+          { to: '/dashboard/penilaian', label: currentLang.value === 'en' ? 'Health Check' : 'Kesehatan Bisnis', icon: AnalyticsUpIcon }
         ]
       },
       {
-        title: 'Permodalan',
+        title: t('nav_permodalan'),
         items: [
-          { to: '/dashboard/pendanaan', label: 'Cari Modal', icon: Award01Icon },
+          { to: '/dashboard/pendanaan', label: currentLang.value === 'en' ? 'Find Funding' : 'Cari Modal', icon: Award01Icon },
           {
             to: '/dashboard/pesan',
-            label: 'Pesan Diskusi',
+            label: t('nav_pesan'),
             icon: Message01Icon,
             badge: chatStore.unreadCountUmkm > 0 ? chatStore.unreadCountUmkm : undefined
           },
           {
             to: '/dashboard/notifikasi',
-            label: 'Notifikasi',
+            label: t('nav_notifikasi'),
             icon: Notification01Icon,
             badge: notificationStore.unreadCount > 0 ? notificationStore.unreadCount : undefined
           }
+        ]
+      },
+      {
+        title: currentLang.value === 'en' ? 'Preferences' : 'Preferensi',
+        items: [
+          { to: '/dashboard/pengaturan', label: t('nav_pengaturan'), icon: Settings01Icon }
         ]
       }
     ]
@@ -645,14 +806,38 @@ const navigationSections = computed<NavSection[]>(() => {
         items: [
           { to: '/konsultan/alert', label: 'Peringatan', icon: Alert01Icon }
         ]
+      },
+      {
+        title: 'Preferensi',
+        items: [
+          { to: '/konsultan/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
+        ]
       }
     ]
   } else if (currentRole.value === 'INVESTOR') {
     return [
       {
         items: [
-          { to: '/investor', label: 'Katalog Usaha', icon: Store01Icon },
-          { to: '/investor/watchlist', label: 'Disimpan', icon: StarIcon }
+          { to: '/investor', label: 'Jaringan', icon: Store01Icon },
+          { to: '/investor/watchlist', label: 'Simpan', icon: Bookmark02Icon }
+        ]
+      },
+      {
+        title: 'Kelola Mandat',
+        items: [
+          { to: '/investor/profile', label: 'Profil Investor', icon: UserCircleIcon },
+          {
+            to: '/investor/pesan',
+            label: 'Pesan',
+            icon: Message01Icon,
+            badge: chatStore.unreadCountInvestor > 0 ? chatStore.unreadCountInvestor : undefined
+          }
+        ]
+      },
+      {
+        title: 'Preferensi',
+        items: [
+          { to: '/investor/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
         ]
       }
     ]
@@ -661,9 +846,30 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/admin', label: 'Ringkasan', icon: Home03Icon },
-          { to: '/admin/penugasan', label: 'Penugasan Konsultan', icon: UserAdd01Icon },
+          { to: '/admin', label: 'Beranda', icon: Home03Icon }
+        ]
+      },
+      {
+        title: 'Pemberdayaan',
+        items: [
+          { to: '/admin/umkm', label: 'Kemitraan UMKM', icon: Store01Icon },
+          { to: '/admin/daftar-umkm', label: 'Data UMKM', icon: Store01Icon },
+          { to: '/admin/penugasan', label: 'Konsultan', icon: UserGroupIcon },
+          { to: '/admin/investor', label: 'Investor', icon: Coins01Icon },
+          { to: '/admin/sertifikasi', label: 'Sertifikasi Usaha', icon: Award01Icon }
+        ]
+      },
+      {
+        title: 'Monitoring',
+        items: [
+          { to: '/admin/investasi', label: 'Alur Investasi', icon: Coins01Icon },
           { to: '/admin/pengguna', label: 'Kelola Pengguna', icon: UserGroupIcon }
+        ]
+      },
+      {
+        title: 'Sistem',
+        items: [
+          { to: '/admin/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
         ]
       }
     ]

@@ -522,6 +522,7 @@ export const useAuthStore = defineStore('auth', {
               ...res.data.user,
               businessName: res.data.user.businessName || res.data.user.orgName || demo.businessName
             }
+          }
         } catch {
           // Tetap gunakan sesi demo lokal jika live backend offline
           const tokenCookie = useCookie<string | null>('beruang_token', {

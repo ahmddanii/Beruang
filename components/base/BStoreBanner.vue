@@ -100,18 +100,12 @@
               :size="16"
               :stroke-width="2"
             />
-<<<<<<< HEAD
-            <span class="font-poppins font-semibold">{{ currentBannerUrl ? 'Ubah Sampul' : 'Tambah Sampul' }}</span>
-            <svg
-              class="w-3.5 h-3.5 text-white/80 transition-transform duration-200 shrink-0"
-=======
             <span class="font-poppins font-semibold">{{ t('btn_ubah_sampul') }}</span>
             <HugeiconsIcon
               :icon="ArrowDown01Icon"
               :size="14"
               :stroke-width="2.2"
               class="text-white/80 transition-transform duration-200 shrink-0"
->>>>>>> origin/fe/keps
               :class="{ 'rotate-180': isMenuOpen }"
             />
           </button>

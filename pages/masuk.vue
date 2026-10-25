@@ -363,17 +363,69 @@
 
 
 
+    <!-- ===================================================================== -->
+    <!-- MODAL ABA-ABA: AKUN BELUM TERDAFTAR                                   -->
+    <!-- ===================================================================== -->
+    <BModal
+      v-model="showNotRegisteredModal"
+      title="Akun Belum Terdaftar"
+      size="sm"
+    >
+      <div class="space-y-4 py-2 font-poppins text-left">
+        <div class="flex items-start gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-xs border border-amber-200/60 dark:border-amber-800/50">
+            <HugeiconsIcon :icon="Store01Icon" :size="24" :stroke-width="2" />
+          </div>
+          <div class="space-y-1.5 min-w-0 flex-1">
+            <h4 class="font-bold text-base text-neutral-900 dark:text-neutral-100 leading-snug">
+              {{ unregisteredUser.name ? `Halo, ${unregisteredUser.name}!` : 'Halo, Selamat Datang!' }}
+            </h4>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Akun <span class="font-semibold text-neutral-800 dark:text-neutral-200 break-all">{{ unregisteredUser.email || unregisteredUser.phone || 'ini' }}</span> belum memiliki profil usaha terdaftar di Beruang.
+            </p>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Yuk daftarkan usahamu sekarang agar bisa mulai mencatat kas harian, memantau kesehatan bisnis, dan terhubung dengan pendanaan investor mitra!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="flex items-center justify-end gap-2.5 w-full">
+          <BButton
+            variant="secondary"
+            size="sm"
+            @click="handleCancelRegistration"
+          >
+            Batal
+          </BButton>
+
+          <BButton
+            variant="primary"
+            size="sm"
+            @click="handleProceedRegistration"
+          >
+            <template #icon-right>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" />
+            </template>
+            Daftar Akun Baru
+          </BButton>
+        </div>
+      </template>
+    </BModal>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, reactive, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useGoogleAuth } from '~/composables/useGoogleAuth'
 import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
 import BCloudBackground from '~/components/base/BCloudBackground.vue'
 import BModal from '~/components/base/BModal.vue'
+import BButton from '~/components/base/BButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   ArrowLeft02Icon,
@@ -441,6 +493,26 @@ const errorMessage = ref('')
 const successNotification = ref('')
 const phoneInput = ref('')
 const phoneInputRef = ref<HTMLInputElement | null>(null)
+
+// Modal Aba-aba: Akun Belum Terdaftar
+const showNotRegisteredModal = ref(false)
+const unregisteredUser = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  role: 'UMKM'
+})
+
+function handleProceedRegistration() {
+  showNotRegisteredModal.value = false
+  const targetRole = unregisteredUser.role || 'UMKM'
+  router.push(`/onboarding?role=${targetRole}`)
+}
+
+function handleCancelRegistration() {
+  showNotRegisteredModal.value = false
+  authStore.logout()
+}
 
 // OTP State (6 Digits to match Fonnte Gateway)
 const otpDigits = ref(['', '', '', '', '', ''])
@@ -530,10 +602,14 @@ async function handleGoogleLogin() {
         const isOnboarded = authStore.isOnboarded
 
         if (!isOnboarded) {
-          googleLoadingText.value = 'Mengalihkan ke pendaftaran usaha...'
-          setTimeout(() => {
-            router.push(`/onboarding?role=${role}`)
-          }, 300)
+          // ABA-ABA: Tampilkan konfirmasi pendaftaran akun, jangan langsung redirect otomatis!
+          unregisteredUser.name = authStore.currentUser?.name || ''
+          unregisteredUser.email = authStore.currentUser?.email || ''
+          unregisteredUser.phone = authStore.currentUser?.phone || ''
+          unregisteredUser.role = role
+          isGoogleLoading.value = false
+          loading.value = false
+          showNotRegisteredModal.value = true
         } else {
           const targetRoute = role === 'INVESTOR' ? '/investor' : role === 'CONSULTANT' ? '/konsultan' : '/dashboard'
           googleLoadingText.value = `Mengalihkan ke ${role}...`
@@ -694,8 +770,21 @@ async function verifyAndLogin() {
 
   try {
     await authStore.verifyPhoneOtp(cleanPhone.value, otpString.value)
+    const role = authStore.currentUser?.role || authStore.role || 'UMKM'
+    const isOnboarded = authStore.isOnboarded
+
+    if (!isOnboarded) {
+      unregisteredUser.name = authStore.currentUser?.name || ''
+      unregisteredUser.email = authStore.currentUser?.email || ''
+      unregisteredUser.phone = cleanPhone.value
+      unregisteredUser.role = role
+      loading.value = false
+      showNotRegisteredModal.value = true
+      return
+    }
+
     loadingMessage.value = `✓ Verifikasi berhasil! Mengarahkan...`
-    const targetRoute = authStore.currentRole === 'INVESTOR' ? '/investor' : authStore.currentRole === 'CONSULTANT' ? '/konsultan' : '/dashboard'
+    const targetRoute = role === 'INVESTOR' ? '/investor' : role === 'CONSULTANT' ? '/konsultan' : '/dashboard'
     setTimeout(() => {
       router.push(targetRoute)
     }, 400)

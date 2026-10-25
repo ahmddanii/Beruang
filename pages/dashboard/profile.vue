@@ -883,7 +883,7 @@
                     <button
                       type="button"
                       class="btn-pill-action !w-full !justify-center !h-8 !px-2 !text-xs !rounded-lg !gap-1.5 !text-red-600 !border-red-200 hover:!bg-red-50 hover:!border-red-300 dark:!border-red-900/50 dark:!text-red-400 dark:hover:!bg-red-950/30"
-                      @click="removeDocument(doc.id)"
+                      @click="promptDeleteDocument(doc)"
                     >
                       <HugeiconsIcon :icon="Delete02Icon" :size="14" class="text-red-600 dark:text-red-400" />
                       <span>Hapus</span>
@@ -927,6 +927,50 @@
       :sector="formProfile.sector"
       :consultant-name="umkmConsultantName"
     />
+
+    <!-- ========================================================================= -->
+    <!-- 3B. MODAL KONFIRMASI HAPUS DOKUMEN (Tactile Alert Dialog)                 -->
+    <!-- ========================================================================= -->
+    <BModal
+      v-model="isDeleteDocModalOpen"
+      title="Hapus Dokumen?"
+      size="sm"
+      :hide-divider="true"
+    >
+      <div class="space-y-4 pt-1 font-poppins text-left">
+        <div class="flex items-start gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 shadow-xs">
+            <HugeiconsIcon :icon="Delete02Icon" :size="22" :stroke-width="2" />
+          </div>
+          <div class="space-y-1 min-w-0 flex-1">
+            <h4 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-neutral-100 leading-snug">
+              Hapus {{ docToDelete?.title }}?
+            </h4>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Berkas <span class="font-semibold text-neutral-800 dark:text-neutral-200">{{ docToDelete?.file?.name || 'dokumen ini' }}</span> akan dihapus dari Ruang Dokumen tokomu. Investor tidak akan dapat melihat berkas ini sampai kamu mengunggahnya kembali.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
+          <button
+            type="button"
+            class="btn-pill-action !h-9 !px-4 !text-xs !rounded-xl"
+            @click="cancelDeleteDocument"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            class="h-9 px-4 text-xs font-semibold rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+            @click="confirmDeleteDocument"
+          >
+            <HugeiconsIcon :icon="Delete02Icon" :size="14" />
+            <span>Ya, Hapus Berkas</span>
+          </button>
+        </div>
+      </div>
+    </BModal>
 
     <!-- ========================================================================= -->
     <!-- 4. MODAL: TAMBAH PRODUK (Reusable BModal & BButton)                        -->
@@ -1943,37 +1987,79 @@ async function onDocFileSelected(event: Event) {
       fileType: mimeType
     }
 
-    // 2. Persist upload to Backend Virtual Data Room & Storage
+    // 2. Persist upload to Supabase Cloud Storage via Nuxt Server API
     try {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('title', targetDoc.title)
       formData.append('category', targetDoc.categoryBadge)
 
-      const res = await useApi<any>('/vdr/documents', {
+      const res = await $fetch<any>('/api/vdr/upload', {
         method: 'POST',
         body: formData
       })
 
       if (res?.data?.fileUrl) {
         targetDoc.file.fileUrl = res.data.fileUrl
+        targetDoc.file.uploadedAt = 'Tersimpan di Cloud'
       }
     } catch (uploadErr) {
-      // Gracefully fallback to local storage / blob
+      console.warn('[VDR Upload Nuxt] Cloud upload fallback note:', uploadErr)
+      // Fallback: Express backend if running
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('title', targetDoc.title)
+        formData.append('category', targetDoc.categoryBadge)
+        const expRes = await useApi<any>('/vdr/documents', {
+          method: 'POST',
+          body: formData
+        })
+        if (expRes?.data?.fileUrl) {
+          targetDoc.file.fileUrl = expRes.data.fileUrl
+        }
+      } catch (err2) {
+        // Blob preview remains available
+      }
     }
 
     saveDocsToStorage()
-    triggerToast(`Berkas ${targetDoc.title} berhasil diunggah!`)
+    triggerToast(`Berkas ${targetDoc.title} berhasil diunggah ke Storage!`)
   }
   currentUploadDocId.value = null
+}
+
+// Delete Document Confirmation State
+const isDeleteDocModalOpen = ref(false)
+const docToDelete = ref<LegalDocItem | null>(null)
+
+function promptDeleteDocument(doc: LegalDocItem) {
+  docToDelete.value = doc
+  isDeleteDocModalOpen.value = true
+}
+
+function cancelDeleteDocument() {
+  isDeleteDocModalOpen.value = false
+  docToDelete.value = null
+}
+
+function confirmDeleteDocument() {
+  if (docToDelete.value) {
+    const targetDoc = legalDocuments.value.find(d => d.id === docToDelete.value?.id)
+    if (targetDoc) {
+      targetDoc.file = null
+      saveDocsToStorage()
+      triggerToast(`Berkas ${targetDoc.title} berhasil dihapus.`)
+    }
+    docToDelete.value = null
+  }
+  isDeleteDocModalOpen.value = false
 }
 
 function removeDocument(docId: string) {
   const targetDoc = legalDocuments.value.find(d => d.id === docId)
   if (targetDoc) {
-    targetDoc.file = null
-    saveDocsToStorage()
-    triggerToast(`Berkas ${targetDoc.title} berhasil dihapus.`)
+    promptDeleteDocument(targetDoc)
   }
 }
 

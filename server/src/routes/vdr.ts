@@ -104,26 +104,13 @@ router.post(
 
         // Supabase Storage Cloud Integration (Bucket: vdr-vault)
         const supabaseUrl = process.env.SUPABASE_URL || "https://zqysbqmtqnovxwbjfyxx.supabase.co";
-        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+        const supabaseKey =
+          process.env.SUPABASE_SERVICE_ROLE_KEY ||
+          process.env.SUPABASE_KEY ||
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxeXNicW10cW5vdnh3YmpmeXh4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MTg1OTM5MywiZXhwIjoyMTA3NDM1MzkzfQ.RTbzHfSJsK9yU-jBSdbJat51mwUXBtCEUjsH8RYC_-A";
 
         if (supabaseKey && fs.existsSync(file.path)) {
-            // Auto-ensure storage RLS policy allows operations on vdr-vault
-            try {
-              await prisma.$executeRawUnsafe(`
-                DO $$
-                BEGIN
-                  IF NOT EXISTS (
-                    SELECT 1 FROM pg_policies WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Public Access vdr-vault'
-                  ) THEN
-                    CREATE POLICY "Public Access vdr-vault" ON storage.objects FOR ALL USING (bucket_id = 'vdr-vault') WITH CHECK (bucket_id = 'vdr-vault');
-                  END IF;
-                END
-                $$;
-              `);
-            } catch (pErr: any) {
-              // policy might already exist
-            }
-
+          try {
             // Auto-provision bucket 'vdr-vault' as public bucket if not exists
             await fetch(`${supabaseUrl}/storage/v1/bucket`, {
               method: "POST",

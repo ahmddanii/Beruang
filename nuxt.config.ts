@@ -123,7 +123,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api',
-      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID || ''
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+      supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL || 'https://zqysbqmtqnovxwbjfyxx.supabase.co',
+      supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_QmEBHC4UKXotpvHrCa1VIQ_oI6Uy_gY'
     }
   }
 })

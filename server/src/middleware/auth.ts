@@ -16,20 +16,30 @@ export interface AuthenticatedRequest extends Request {
 
 const JWT_SECRET = process.env.JWT_SECRET || "beruang-super-secret-key-2026-b2b-umkm";
 
+function extractToken(req: Request): string | null {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    return authHeader.split(" ")[1];
+  }
+  if (req.headers.cookie) {
+    const match = req.headers.cookie.match(/(?:^|;\s*)beruang_token=([^;]+)/);
+    if (match) return decodeURIComponent(match[1]);
+  }
+  return null;
+}
+
 export async function requireAuth(
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  const token = extractToken(req);
+  if (!token) {
     return res.status(401).json({
       success: false,
       message: "Akses ditolak. Token otentikasi tidak ditemukan.",
     });
   }
-
-  const token = authHeader.split(" ")[1];
 
   try {
     // 1. Verifikasi JWT
@@ -101,8 +111,8 @@ export async function optionalAuth(
   _res: Response,
   next: NextFunction
 ) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  const token = extractToken(req);
+  if (!token) {
     // Demo default fallback jika mengakses rute investor
     if (req.originalUrl?.includes("investor") || req.baseUrl?.includes("investor")) {
       const invUser = await prisma.user.findFirst({
@@ -121,8 +131,6 @@ export async function optionalAuth(
     }
     return next();
   }
-
-  const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as any;
     const user = await prisma.user.findUnique({

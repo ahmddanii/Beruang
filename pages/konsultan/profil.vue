@@ -508,9 +508,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import gsap from 'gsap'
+import { useAuthStore } from '~/stores/auth'
 import { useKonsultanStore, type ConsultantDocument } from '~/stores/konsultan'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -529,7 +530,12 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 const konsultanStore = useKonsultanStore()
+
+const isDemoMaya = computed(() => {
+  return Boolean(authStore.currentUser?.email?.includes('maya.suryani'))
+})
 
 const activeTab = ref<'personal' | 'documents'>('personal')
 const toastMessage = ref('')
@@ -597,6 +603,36 @@ function setTab(tab: 'personal' | 'documents') {
   })
 }
 
+// Form State for Profile
+const profileData = ref({
+  name: authStore.currentUser?.name || konsultanStore.profile.name || (isDemoMaya.value ? 'Dra. Maya Suryani, M.M.' : ''),
+  title: konsultanStore.profile.title || (isDemoMaya.value ? 'Konsultan Ahli Keuangan & Audit UMKM' : 'Konsultan Bisnis & Keuangan UMKM'),
+  email: authStore.currentUser?.email || konsultanStore.profile.email || (isDemoMaya.value ? 'maya.suryani@beruang.id' : ''),
+  phone: authStore.currentUser?.phone || konsultanStore.profile.phone || (isDemoMaya.value ? '+62 819-8765-4321' : ''),
+  firmName: konsultanStore.profile.firmName || authStore.currentUser?.businessName || (isDemoMaya.value ? 'Maya Advisory Partner' : 'Praktisi Independen'),
+  specialization: konsultanStore.profile.specialization || (isDemoMaya.value ? 'Keuangan & Biaya' : 'Keuangan & Operasional UMKM'),
+  experience: konsultanStore.profile.experience || (isDemoMaya.value ? '5+ Tahun' : '1+ Tahun'),
+  bnspLicense: konsultanStore.profile.bnspLicense || (isDemoMaya.value ? 'BNSP-KONS-2024-8891' : ''),
+  city: konsultanStore.profile.city || (isDemoMaya.value ? 'Bandung, Jawa Barat' : 'Indonesia'),
+  bio: konsultanStore.profile.bio || (isDemoMaya.value ? 'Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.' : ''),
+  maxClients: konsultanStore.profile.maxClients || 10,
+  avatar: authStore.currentUser?.avatar || konsultanStore.profile.avatar || '/images/user-profile.png'
+})
+
+watch(
+  () => authStore.currentUser,
+  (newUser) => {
+    if (newUser) {
+      if (!isDemoMaya.value) {
+        if (newUser.name) profileData.value.name = newUser.name
+        if (newUser.email) profileData.value.email = newUser.email
+        if (newUser.phone && !profileData.value.phone) profileData.value.phone = newUser.phone
+      }
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(async () => {
   if (route.query.tab === 'dokumen' || route.query.tab === 'documents') {
     activeTab.value = 'documents'
@@ -612,18 +648,18 @@ onMounted(async () => {
   try {
     await konsultanStore.fetchProfile()
     profileData.value = {
-      name: konsultanStore.profile.name,
-      title: konsultanStore.profile.title,
-      email: konsultanStore.profile.email,
-      phone: konsultanStore.profile.phone,
-      firmName: konsultanStore.profile.firmName,
-      specialization: konsultanStore.profile.specialization,
-      experience: konsultanStore.profile.experience,
-      bnspLicense: konsultanStore.profile.bnspLicense,
-      city: konsultanStore.profile.city,
-      bio: konsultanStore.profile.bio,
-      maxClients: konsultanStore.profile.maxClients,
-      avatar: konsultanStore.profile.avatar
+      name: konsultanStore.profile.name || authStore.currentUser?.name || (isDemoMaya.value ? 'Dra. Maya Suryani, M.M.' : ''),
+      title: konsultanStore.profile.title || (isDemoMaya.value ? 'Konsultan Ahli Keuangan & Audit UMKM' : 'Konsultan Bisnis & Keuangan UMKM'),
+      email: konsultanStore.profile.email || authStore.currentUser?.email || (isDemoMaya.value ? 'maya.suryani@beruang.id' : ''),
+      phone: konsultanStore.profile.phone || authStore.currentUser?.phone || (isDemoMaya.value ? '+62 819-8765-4321' : ''),
+      firmName: konsultanStore.profile.firmName || authStore.currentUser?.businessName || (isDemoMaya.value ? 'Maya Advisory Partner' : 'Praktisi Independen'),
+      specialization: konsultanStore.profile.specialization || (isDemoMaya.value ? 'Keuangan & Biaya' : 'Keuangan & Operasional UMKM'),
+      experience: konsultanStore.profile.experience || (isDemoMaya.value ? '5+ Tahun' : '1+ Tahun'),
+      bnspLicense: konsultanStore.profile.bnspLicense || (isDemoMaya.value ? 'BNSP-KONS-2024-8891' : ''),
+      city: konsultanStore.profile.city || (isDemoMaya.value ? 'Bandung, Jawa Barat' : 'Indonesia'),
+      bio: konsultanStore.profile.bio || (isDemoMaya.value ? 'Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.' : ''),
+      maxClients: konsultanStore.profile.maxClients || 10,
+      avatar: authStore.currentUser?.avatar || konsultanStore.profile.avatar || '/images/user-profile.png'
     }
   } catch (err) {
     // fallback gracefully to current store state
@@ -634,22 +670,6 @@ onBeforeUnmount(() => {
   if (handleResizeTabs) {
     window.removeEventListener('resize', handleResizeTabs)
   }
-})
-
-// Form State for Profile
-const profileData = ref({
-  name: konsultanStore.profile.name,
-  title: konsultanStore.profile.title,
-  email: konsultanStore.profile.email,
-  phone: konsultanStore.profile.phone,
-  firmName: konsultanStore.profile.firmName,
-  specialization: konsultanStore.profile.specialization,
-  experience: konsultanStore.profile.experience,
-  bnspLicense: konsultanStore.profile.bnspLicense,
-  city: konsultanStore.profile.city,
-  bio: konsultanStore.profile.bio,
-  maxClients: konsultanStore.profile.maxClients,
-  avatar: konsultanStore.profile.avatar
 })
 
 // Form State for Upload Document
@@ -728,12 +748,13 @@ const completenessScore = computed(() => {
 })
 
 const checklistItems = computed(() => {
-  const p = konsultanStore.profile
+  const p = profileData.value
+  const docs = konsultanStore.profile.documents || []
   return [
     { label: 'Data Diri & Gelar Lengkap', done: Boolean(p.name && p.title) },
     { label: 'Kontak WhatsApp & Email', done: Boolean(p.phone && p.email) },
     { label: 'Nomor Lisensi BNSP Resmi', done: Boolean(p.bnspLicense) },
-    { label: 'Minimal 1 Dokumen Terunggah', done: p.documents.length >= 1 }
+    { label: 'Minimal 1 Dokumen Terunggah', done: docs.length >= 1 }
   ]
 })
 

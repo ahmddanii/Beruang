@@ -6,7 +6,7 @@
       <div class="p-6 sm:p-8 lg:p-9 rounded-[calc(1.5rem-0.25rem)] bg-white dark:bg-[#13161F] border border-neutral-200/80 dark:border-white/10 relative overflow-hidden">
         <div class="space-y-2 max-w-3xl relative z-10 text-left">
           <h1 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
-            Halo, {{ konsultanStore.profile.name }}
+            Halo, {{ authStore.currentUser?.name || konsultanStore.profile.name || 'Konsultan' }}
           </h1>
 
           <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans max-w-2xl">
@@ -154,6 +154,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { useAuthStore } from '~/stores/auth'
 import { useKonsultanStore } from '~/stores/konsultan'
 import BMetricBannerCard from '~/components/base/BMetricBannerCard.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -169,6 +170,7 @@ definePageMeta({
   layout: 'dashboard'
 })
 
+const authStore = useAuthStore()
 const konsultanStore = useKonsultanStore()
 
 onMounted(async () => {

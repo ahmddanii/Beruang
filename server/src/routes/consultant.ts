@@ -10,26 +10,43 @@ const router = Router();
  */
 async function resolveConsultantId(req: AuthenticatedRequest): Promise<string | null> {
   if (req.user?.id) {
-    const prof = await prisma.consultantProfile.findUnique({
+    let prof = await prisma.consultantProfile.findUnique({
       where: { userId: req.user.id },
       select: { id: true },
     });
     if (prof) return prof.id;
 
-    // Jika user login bukan akun demo Dra. Maya, jangan bocorkan profil Maya Suryani
-    if (req.user.email && !req.user.email.includes("maya.suryani")) {
-      return null;
+    // Jika user adalah CONSULTANT tapi belum punya profile di DB, auto-create profil bersih untuk user ini
+    if (req.user.role === "CONSULTANT") {
+      prof = await prisma.consultantProfile.create({
+        data: {
+          userId: req.user.id,
+          firmName: req.user.name ? `${req.user.name} Advisory` : "Praktisi Independen",
+          title: "Konsultan Bisnis & Keuangan UMKM",
+          specialization: "Keuangan & Biaya",
+          city: "Indonesia",
+          experience: "1+ Tahun",
+          maxClients: 10
+        },
+        select: { id: true }
+      });
+      return prof.id;
     }
+
+    // Jika user login adalah akun demo Dra. Maya Suryani
+    if (req.user.email && req.user.email.includes("maya.suryani")) {
+      const defaultProf = await prisma.consultantProfile.findFirst({
+        where: { user: { email: { contains: "maya.suryani" } } },
+        select: { id: true },
+      });
+      return defaultProf?.id || "cons-prof-01";
+    }
+
+    return null;
   }
 
-  // Fallback demo untuk pengujian akun Dra. Maya Suryani
-  const defaultProf = await prisma.consultantProfile.findFirst({
-    where: {
-      user: { email: { contains: "maya.suryani" } },
-    },
-    select: { id: true },
-  });
-  return defaultProf?.id || "cons-prof-01";
+  // Jika tidak terotentikasi, JANGAN bocorkan profil konsultan manapun
+  return null;
 }
 
 /**
@@ -45,6 +62,7 @@ router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
         data: {
           name: req.user?.name || "",
           email: req.user?.email || "",
+          avatar: req.user?.avatar || "",
           firmName: "",
           title: "",
           bio: "",
@@ -128,22 +146,22 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
 
     if (name) {
       await prisma.user.update({
-        where: { id: req.user.id },
+        where: { id: userId },
         data: { name }
       });
     }
 
     const updated = await prisma.consultantProfile.upsert({
-      where: { userId: req.user.id },
+      where: { userId },
       create: {
-        userId: req.user.id,
+        userId,
         firmName: firmName || name || "Konsultan Beruang",
-        title: title || "Konsultan Ahli Keuangan & Audit UMKM",
+        title: title || "Konsultan Bisnis & Keuangan UMKM",
         bio: bio || "",
-        specialization: specialization || "F&B & Ritel",
+        specialization: specialization || "Keuangan & Biaya",
         bnspLicense: bnspLicense || "",
-        city: city || "Bandung",
-        experience: experience || "5+ Tahun",
+        city: city || "Indonesia",
+        experience: experience || "1+ Tahun",
         maxClients: Number(maxClients) || 10,
         receiveNewClients: receiveNewClients !== undefined ? Boolean(receiveNewClients) : true,
         waNotification: waNotification !== undefined ? Boolean(waNotification) : true
@@ -169,6 +187,65 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: "Gagal memperbarui profil: " + err.message });
+  }
+});
+
+/**
+ * POST /api/consultant/documents
+ * Tambah dokumen sertifikat atau portofolio konsultan
+ */
+router.post("/documents", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
+    }
+
+    const { name, type, filename, fileSize, fileUrl } = req.body;
+    const doc = await prisma.consultantDocument.create({
+      data: {
+        consultantId,
+        name: name || filename || "Dokumen Pendukung",
+        type: type || "OTHER",
+        filename: filename || "dokumen.pdf",
+        fileSize: fileSize || "1.2 MB",
+        fileUrl: fileUrl || null,
+        status: "VERIFIED"
+      }
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Dokumen berhasil disimpan.",
+      data: doc
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menyimpan dokumen: " + err.message });
+  }
+});
+
+/**
+ * DELETE /api/consultant/documents/:id
+ * Hapus dokumen konsultan
+ */
+router.delete("/documents/:id", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
+    }
+
+    const { id } = req.params;
+    await prisma.consultantDocument.deleteMany({
+      where: { id, consultantId }
+    });
+
+    return res.json({
+      success: true,
+      message: "Dokumen berhasil dihapus."
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menghapus dokumen: " + err.message });
   }
 });
 

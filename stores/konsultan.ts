@@ -1,4 +1,4 @@
-﻿import { defineStore } from 'pinia'
+import { defineStore } from 'pinia'
 import { useApi } from '~/composables/useApi'
 
 export interface ClientUmkm {
@@ -217,8 +217,8 @@ export function getEmptyConsultantProfile(): ConsultantProfileData {
 
 export const useKonsultanStore = defineStore('konsultan', {
   state: () => ({
-    // Profil Konsultan
-    profile: getDemoConsultantProfile(),
+    // Profil Konsultan: Jangan pakai mock Maya Suryani jika bukan akun demo
+    profile: getEmptyConsultantProfile(),
 
     // Daftar Permintaan Bimbingan Masuk dari UMKM
     clientRequests: [] as ClientMentorshipRequest[],
@@ -286,38 +286,106 @@ export const useKonsultanStore = defineStore('konsultan', {
   },
 
   actions: {
-    initProfileForUser(user?: { email?: string; name?: string }) {
-      if (user?.email && !user.email.includes('maya.suryani')) {
+    initProfileForUser(user?: { email?: string; name?: string; phone?: string; businessName?: string }) {
+      if (user?.email && user.email.includes('maya.suryani')) {
+        this.profile = getDemoConsultantProfile()
+      } else if (user) {
         this.profile = {
           ...getEmptyConsultantProfile(),
           name: user.name || '',
-          email: user.email || ''
+          email: user.email || '',
+          phone: user.phone || '',
+          firmName: user.businessName || ''
         }
       } else {
-        this.profile = getDemoConsultantProfile()
+        this.profile = getEmptyConsultantProfile()
       }
     },
 
     async fetchProfile() {
       try {
+        const authStore = useAuthStore()
+        const isDemoMaya = Boolean(authStore.currentUser?.email?.includes('maya.suryani'))
+
         const res = await useApi<any>('/consultant/profile')
         if (res.data) {
+          const d = res.data
+          const fallback = isDemoMaya ? getDemoConsultantProfile() : getEmptyConsultantProfile()
+
           this.profile = {
-            ...this.profile,
-            name: res.data.name || this.profile.name,
-            firmName: res.data.firmName || this.profile.firmName,
-            title: res.data.title || this.profile.title,
-            bio: res.data.bio || this.profile.bio,
-            specialization: res.data.specialization || this.profile.specialization,
-            bnspLicense: res.data.bnspLicense || this.profile.bnspLicense,
-            city: res.data.city || this.profile.city,
-            experience: res.data.experience || this.profile.experience,
-            avatar: res.data.avatar || this.profile.avatar,
-            maxClients: res.data.maxClients || 10
+            name: d.name || authStore.currentUser?.name || this.profile.name || (isDemoMaya ? fallback.name : ''),
+            title: d.title || this.profile.title || (isDemoMaya ? fallback.title : ''),
+            email: d.email || authStore.currentUser?.email || this.profile.email || (isDemoMaya ? fallback.email : ''),
+            phone: d.phone || authStore.currentUser?.phone || this.profile.phone || (isDemoMaya ? fallback.phone : ''),
+            firmName: d.firmName || authStore.currentUser?.businessName || this.profile.firmName || (isDemoMaya ? fallback.firmName : ''),
+            specialization: d.specialization || this.profile.specialization || (isDemoMaya ? fallback.specialization : ''),
+            experience: d.experience || this.profile.experience || (isDemoMaya ? fallback.experience : ''),
+            bnspLicense: d.bnspLicense || this.profile.bnspLicense || (isDemoMaya ? fallback.bnspLicense : ''),
+            city: d.city || this.profile.city || (isDemoMaya ? fallback.city : ''),
+            bio: d.bio || this.profile.bio || (isDemoMaya ? fallback.bio : ''),
+            avatar: d.avatar || authStore.currentUser?.avatar || this.profile.avatar || fallback.avatar,
+            maxClients: d.maxClients || this.profile.maxClients || 10,
+            documents: Array.isArray(d.documents) && d.documents.length > 0
+              ? d.documents
+              : (isDemoMaya ? fallback.documents : (this.profile.documents || []))
+          }
+        } else if (isDemoMaya) {
+          this.profile = getDemoConsultantProfile()
+        } else if (authStore.currentUser) {
+          this.profile = {
+            ...getEmptyConsultantProfile(),
+            name: authStore.currentUser.name || '',
+            email: authStore.currentUser.email || '',
+            phone: authStore.currentUser.phone || ''
           }
         }
       } catch (err: any) {
         console.warn('Gagal memuat profil konsultan dari API:', err?.message)
+      }
+    },
+
+    async uploadDocument(payload: {
+      name: string
+      type: 'BNSP_CERT' | 'PORTOFOLIO' | 'KTP_NPWP' | 'OTHER'
+      filename: string
+      fileSize?: string
+      fileUrl?: string
+    }) {
+      const newDoc: ConsultantDocument = {
+        id: `doc-${Date.now()}`,
+        name: payload.name,
+        type: payload.type,
+        filename: payload.filename,
+        fileSize: payload.fileSize || '1.5 MB',
+        uploadedAt: 'Hari ini',
+        status: 'VERIFIED'
+      }
+      if (!this.profile.documents) {
+        this.profile.documents = []
+      }
+      this.profile.documents.push(newDoc)
+
+      try {
+        await useApi('/consultant/documents', {
+          method: 'POST',
+          body: newDoc
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan dokumen konsultan ke backend:', err?.message)
+      }
+      return newDoc
+    },
+
+    async removeDocument(docId: string) {
+      if (this.profile.documents) {
+        this.profile.documents = this.profile.documents.filter(d => d.id !== docId)
+      }
+      try {
+        await useApi(`/consultant/documents/${docId}`, {
+          method: 'DELETE'
+        })
+      } catch (err: any) {
+        console.warn('Gagal hapus dokumen konsultan di backend:', err?.message)
       }
     },
 

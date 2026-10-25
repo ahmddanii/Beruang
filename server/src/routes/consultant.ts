@@ -306,20 +306,33 @@ router.get("/list", optionalAuth, async (_req: AuthenticatedRequest, res: Respon
 router.get("/stats", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        message: "Statistik konsultan berhasil dimuat.",
+        data: {
+          totalClients: 0,
+          pendingValidations: 0,
+          readyForFunding: 0,
+          activeMentoringSessions: 0,
+        },
+      });
+    }
 
     const totalClients = await prisma.businessProfile.count({
-      where: consultantId ? { consultantId } : {},
+      where: { consultantId },
     });
 
     const pendingValidations = await prisma.monthlyReport.count({
       where: {
+        business: { consultantId },
         status: { in: ["submitted", "PENDING", "revision_needed"] },
       },
     });
 
     const readyForFunding = await prisma.businessProfile.count({
       where: {
-        ...(consultantId ? { consultantId } : {}),
+        consultantId,
         status: "READY_FOR_FUNDING",
       },
     });
@@ -331,7 +344,7 @@ router.get("/stats", requireAuth, async (req: AuthenticatedRequest, res: Respons
         totalClients,
         pendingValidations,
         readyForFunding,
-        activeMentoringSessions: 4,
+        activeMentoringSessions: totalClients,
       },
     });
   } catch (err: any) {
@@ -340,11 +353,20 @@ router.get("/stats", requireAuth, async (req: AuthenticatedRequest, res: Respons
 });
 
 router.get("/dashboard", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
-  // Alias ke stats
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        data: {
+          clientsCount: 0,
+          clients: [],
+        },
+      });
+    }
+
     const clients = await prisma.businessProfile.findMany({
-      where: consultantId ? { consultantId } : {},
+      where: { consultantId },
       include: { user: true, assessment: true, monthlyReports: true, tasks: true },
     });
 
@@ -367,9 +389,16 @@ router.get("/dashboard", requireAuth, async (req: AuthenticatedRequest, res: Res
 router.get("/clients", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        message: "Daftar klien UMKM binaan berhasil dimuat.",
+        data: [],
+      });
+    }
 
     const businesses = await prisma.businessProfile.findMany({
-      where: consultantId ? { consultantId } : {},
+      where: { consultantId },
       include: {
         user: true,
         assessment: true,
@@ -384,7 +413,7 @@ router.get("/clients", requireAuth, async (req: AuthenticatedRequest, res: Respo
 
     const formattedClients = businesses.map((b) => {
       const latestReport = b.monthlyReports[0];
-      const score = b.assessment?.compositeScore ?? 78;
+      const score = b.assessment?.compositeScore ?? 75;
       const completedTasks = b.tasks.filter((t) => t.completed).length;
 
       let status = "healthy";
@@ -396,7 +425,7 @@ router.get("/clients", requireAuth, async (req: AuthenticatedRequest, res: Respo
         name: b.brand || b.name,
         owner: b.user?.name || "Pemilik Usaha",
         sector: b.sector,
-        city: b.city || "Bandung",
+        city: b.city || "Indonesia",
         healthScore: score,
         status,
         fundingStatus: b.status === "READY_FOR_FUNDING" ? "READY_FOR_FUNDING" : "IN_REVIEW",
@@ -406,9 +435,9 @@ router.get("/clients", requireAuth, async (req: AuthenticatedRequest, res: Respo
           : "Baru",
         fundingTarget: b.fundingTarget,
         tasksCompleted: completedTasks,
-        totalTasks: b.tasks.length > 0 ? b.tasks.length : 3,
-        growthPct: 14.5,
-        joinedDate: "12 Juli 2026",
+        totalTasks: b.tasks.length,
+        growthPct: 0,
+        joinedDate: new Date(b.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
         monthlyFee: 1500000,
         durationMonths: 3,
       };
@@ -431,11 +460,18 @@ router.get("/clients", requireAuth, async (req: AuthenticatedRequest, res: Respo
 router.get("/validations", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        message: "Antrean validasi kas bulanan berhasil dimuat.",
+        data: [],
+      });
+    }
 
     // Ambil laporan kas bulanan yang diajukan oleh UMKM binaan
     const reports = await prisma.monthlyReport.findMany({
       where: {
-        ...(consultantId ? { business: { consultantId } } : {}),
+        business: { consultantId },
       },
       include: {
         business: {
@@ -600,9 +636,16 @@ router.post("/validations/:id/request-revision", optionalAuth, async (req: Authe
 router.get("/requests", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        message: "Daftar permohonan bimbingan berhasil dimuat.",
+        data: [],
+      });
+    }
 
     let requests = await prisma.consultantMentorshipRequest.findMany({
-      where: consultantId ? { consultantId } : {},
+      where: { consultantId },
       include: {
         business: {
           include: {
@@ -615,8 +658,9 @@ router.get("/requests", optionalAuth, async (req: AuthenticatedRequest, res: Res
       orderBy: { createdAt: "desc" },
     });
 
-    // Jika akun demo dan database belum memiliki permohonan bimbingan, inisialisasi permohonan riil terhubung ke UMKM
-    if (requests.length === 0 && consultantId) {
+    // Hanya jika akun demo Maya Suryani dan database permohonan bimbingan masih kosong
+    const isDemoMaya = req.user?.email ? req.user.email.includes("maya.suryani") : false;
+    if (requests.length === 0 && isDemoMaya) {
       const existingBizs = await prisma.businessProfile.findMany({ take: 2 });
       if (existingBizs.length > 0) {
         for (let i = 0; i < existingBizs.length; i++) {
@@ -660,9 +704,9 @@ router.get("/requests", optionalAuth, async (req: AuthenticatedRequest, res: Res
         businessName: b.brand || b.name,
         ownerName: b.ownerName || b.user?.name || "Pelaku Usaha",
         sector: b.sector,
-        city: b.city || "Bandung",
-        revenue: latestReport ? latestReport.omzet : 35000000,
-        healthScore: b.assessment?.compositeScore || 75,
+        city: b.city || "-",
+        revenue: latestReport ? latestReport.omzet : (b.monthlyRevenue || 0),
+        healthScore: b.assessment?.compositeScore || null,
         offeredFee: r.offeredFee,
         durationMonths: r.durationMonths,
         message: r.message || "Mohon bimbingan dan pendampingan pengelolaan arus kas usaha.",
@@ -935,11 +979,18 @@ router.post("/clients/:id/certify", requireAuth, async (req: AuthenticatedReques
 router.get("/alerts", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        message: "Daftar peringatan audit berhasil dimuat.",
+        data: [],
+      });
+    }
 
     // Cari laporan yang memiliki rasio HPP tinggi
     const anomalyReports = await prisma.monthlyReport.findMany({
       where: {
-        ...(consultantId ? { business: { consultantId } } : {}),
+        business: { consultantId },
         hppRatio: { gt: 60 },
       },
       include: { business: true },
@@ -975,9 +1026,15 @@ router.get("/alerts", requireAuth, async (req: AuthenticatedRequest, res: Respon
 router.get("/agreements", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        data: [],
+      });
+    }
 
     const agreements = await prisma.consultantAgreement.findMany({
-      where: consultantId ? { consultantId } : {},
+      where: { consultantId },
       include: {
         business: {
           include: { user: true, assessment: true },
@@ -1126,7 +1183,7 @@ router.post("/agreements", requireAuth, async (req: AuthenticatedRequest, res: R
         targetFunding: Number(targetFunding) || 150000000,
         status: "SIGNED_CONSULTANT",
         consultantSignedAt: new Date(),
-        consultantSignerName: consultantSignerName || "Dra. Maya Suryani, M.M.",
+        consultantSignerName: consultantSignerName || req.user?.name || "Konsultan Pendamping",
         consultantSignature: consultantSignature || null,
         consultantSignMode: consultantSignMode || "draw",
         agreementText: agreementText || "Perjanjian kemitraan pendampingan bimbingan usaha UMKM.",
@@ -1141,7 +1198,7 @@ router.post("/agreements", requireAuth, async (req: AuthenticatedRequest, res: R
         targetFunding: Number(targetFunding) || 150000000,
         status: "SIGNED_CONSULTANT",
         consultantSignedAt: new Date(),
-        consultantSignerName: consultantSignerName || "Dra. Maya Suryani, M.M.",
+        consultantSignerName: consultantSignerName || req.user?.name || "Konsultan Pendamping",
         consultantSignature: consultantSignature || null,
         consultantSignMode: consultantSignMode || "draw",
         agreementText: agreementText || "Perjanjian kemitraan pendampingan bimbingan usaha UMKM.",
@@ -1200,7 +1257,7 @@ router.post("/agreements/:id/sign", requireAuth, async (req: AuthenticatedReques
         consultantSignedAt: new Date(),
         consultantSignature: consultantSignature || agreement.consultantSignature,
         consultantSignMode: consultantSignMode || "draw",
-        consultantSignerName: consultantSignerName || "Dra. Maya Suryani, M.M.",
+        consultantSignerName: consultantSignerName || req.user?.name || "Konsultan Pendamping",
       },
     });
 
@@ -1282,9 +1339,12 @@ router.put("/preferences", optionalAuth, async (req: AuthenticatedRequest, res: 
 router.get("/action-plans", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({ success: true, data: [] });
+    }
 
     const tasks = await prisma.actionPlanTask.findMany({
-      where: consultantId ? { business: { consultantId } } : {},
+      where: { business: { consultantId } },
       include: {
         business: { select: { id: true, name: true, brand: true } },
       },
@@ -1443,11 +1503,14 @@ router.delete("/action-plans/:id", optionalAuth, async (req: AuthenticatedReques
 router.get("/milestones", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({ success: true, data: [] });
+    }
     const { businessId } = req.query as { businessId?: string };
 
     const milestones = await prisma.clientMilestone.findMany({
       where: {
-        ...(consultantId ? { consultantId } : {}),
+        consultantId,
         ...(businessId ? { businessId } : {}),
       },
       include: { business: true },

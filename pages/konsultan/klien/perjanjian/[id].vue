@@ -144,13 +144,13 @@
               </div>
               <div class="min-w-0">
                 <h3 class="font-heading font-extrabold text-base text-neutral-900 dark:text-white leading-tight">
-                  {{ konsultanStore.profile.name }}
+                  {{ consultantName }}
                 </h3>
                 <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5 font-medium">
-                  {{ konsultanStore.profile.title }}
+                  {{ consultantTitle }}
                 </p>
                 <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">
-                  Lisensi BNSP: <span class="font-mono font-bold text-neutral-800 dark:text-neutral-200">{{ konsultanStore.profile.bnspLicense }}</span>
+                  Lisensi BNSP: <span class="font-mono font-bold text-neutral-800 dark:text-neutral-200">{{ consultantLicense }}</span>
                 </p>
               </div>
             </div>
@@ -158,15 +158,15 @@
             <div class="pt-2 text-xs text-neutral-600 dark:text-neutral-400 space-y-1 border-t border-neutral-200/50 dark:border-white/5">
               <div class="flex justify-between">
                 <span>Lembaga / Firma:</span>
-                <strong class="text-neutral-800 dark:text-neutral-200">{{ konsultanStore.profile.firmName }}</strong>
+                <strong class="text-neutral-800 dark:text-neutral-200">{{ consultantFirm }}</strong>
               </div>
               <div class="flex justify-between">
                 <span>Spesialisasi:</span>
-                <strong class="text-neutral-800 dark:text-neutral-200">{{ konsultanStore.profile.specialization }}</strong>
+                <strong class="text-neutral-800 dark:text-neutral-200">{{ consultantSpecialization }}</strong>
               </div>
               <div class="flex justify-between">
                 <span>Domisili:</span>
-                <span class="text-neutral-700 dark:text-neutral-300">{{ konsultanStore.profile.city }}</span>
+                <span class="text-neutral-700 dark:text-neutral-300">{{ consultantCity }}</span>
               </div>
             </div>
 
@@ -467,7 +467,7 @@
 
               <!-- Baselines -->
               <div class="absolute bottom-6 left-8 right-8 border-b border-dashed border-neutral-200 dark:border-neutral-800 pointer-events-none flex justify-between text-[10px] text-neutral-400 pt-1 font-mono">
-                <span>{{ konsultanStore.profile.name }}</span>
+                <span>{{ consultantName }}</span>
                 <span>{{ currentDateFormatted }}</span>
               </div>
             </div>
@@ -505,10 +505,10 @@
                   [BERUANG CERTIFIED E-SIGNATURE]
                 </span>
                 <p class="font-serif italic text-2xl sm:text-3xl text-[#0081A0] dark:text-[#2091AA] tracking-wide select-none">
-                  {{ konsultanStore.profile.name }}
+                  {{ consultantName }}
                 </p>
                 <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans">
-                  Lisensi BNSP Konsultan: <strong class="text-neutral-700 dark:text-neutral-300 font-mono">{{ konsultanStore.profile.bnspLicense }}</strong>
+                  Lisensi BNSP Konsultan: <strong class="text-neutral-700 dark:text-neutral-300 font-mono">{{ consultantLicense }}</strong>
                 </p>
               </div>
 
@@ -539,7 +539,7 @@
                 <HugeiconsIcon v-if="agreementChecked" :icon="CheckmarkCircle01Icon" :size="14" :stroke-width="2.5" />
               </div>
               <span class="text-xs sm:text-sm text-neutral-700 dark:text-neutral-200 leading-relaxed font-sans flex-1">
-                Saya, <strong class="text-neutral-900 dark:text-white">{{ konsultanStore.profile.name }}</strong>, menyatakan telah membaca dan menyetujui seluruh klausul perjanjian kemitraan di atas, serta berkomitmen menjalankan pendampingan bimbingan untuk <strong>{{ businessName }}</strong> secara jujur, aktif, dan berintegritas tinggi.
+                Saya, <strong class="text-neutral-900 dark:text-white">{{ consultantName }}</strong>, menyatakan telah membaca dan menyetujui seluruh klausul perjanjian kemitraan di atas, serta berkomitmen menjalankan pendampingan bimbingan untuk <strong>{{ businessName }}</strong> secara jujur, aktif, dan berintegritas tinggi.
               </span>
             </button>
           </div>
@@ -653,6 +653,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '~/stores/auth'
 import { useKonsultanStore, type ClientMentorshipRequest, type ClientUmkm } from '~/stores/konsultan'
 import BModal from '~/components/base/BModal.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -677,7 +678,15 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 const konsultanStore = useKonsultanStore()
+
+const consultantName = computed(() => konsultanStore.profile.name || authStore.currentUser?.name || 'Konsultan Pendamping')
+const consultantTitle = computed(() => konsultanStore.profile.title || 'Konsultan Bisnis & Keuangan UMKM')
+const consultantLicense = computed(() => konsultanStore.profile.bnspLicense || 'BNSP-PENDAMPING-RESMI')
+const consultantFirm = computed(() => konsultanStore.profile.firmName || authStore.currentUser?.businessName || 'Praktisi Konsultan Independen')
+const consultantSpecialization = computed(() => konsultanStore.profile.specialization || 'Keuangan & Operasional UMKM')
+const consultantCity = computed(() => konsultanStore.profile.city || 'Indonesia')
 
 const requestId = computed(() => (route.params.id as string) || '')
 
@@ -871,10 +880,10 @@ async function confirmContractAndAccept() {
     try {
       signatureData = signatureCanvasRef.value.toDataURL('image/png')
     } catch {
-      signatureData = konsultanStore.profile.name
+      signatureData = consultantName.value
     }
   } else {
-    signatureData = konsultanStore.profile.name
+    signatureData = consultantName.value
   }
 
   try {
@@ -889,7 +898,7 @@ async function confirmContractAndAccept() {
         targetFunding: fundingTarget.value,
         consultantSignature: signatureData,
         consultantSignMode: signatureMode.value,
-        consultantSignerName: konsultanStore.profile.name,
+        consultantSignerName: consultantName.value,
         agreementText: `Perjanjian kemitraan pendampingan bimbingan usaha ${businessName.value}.`
       }
     })
@@ -925,7 +934,15 @@ function printDocument() {
   window.print()
 }
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    await konsultanStore.fetchProfile()
+    if (konsultanStore.clientRequests.length === 0) {
+      await konsultanStore.fetchClients()
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat profil konsultan:', err?.message)
+  }
   nextTick(() => {
     setTimeout(() => {
       initSignatureCanvas()

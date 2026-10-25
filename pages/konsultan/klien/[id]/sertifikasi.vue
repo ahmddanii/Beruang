@@ -150,7 +150,7 @@
       :city="client?.city || ''"
       :health-score="client?.healthScore || 80"
       :ticket-size="fundingTicket"
-      :consultant-name="konsultanStore.profile.name || 'Konsultan Pendamping'"
+      :consultant-name="konsultanStore.profile.name || authStore.currentUser?.name || 'Konsultan Pendamping'"
     />
   </div>
 </template>
@@ -161,6 +161,7 @@ import { useRoute } from 'vue-router'
 import confetti from 'canvas-confetti'
 import { useKonsultanStore } from '~/stores/konsultan'
 import { useUmkmStore } from '~/stores/umkm'
+import { useAuthStore } from '~/stores/auth'
 import BCard from '~/components/base/BCard.vue'
 import BButton from '~/components/base/BButton.vue'
 import BCertificateModal from '~/components/base/BCertificateModal.vue'
@@ -176,6 +177,7 @@ const isCertificateModalOpen = ref(false)
 const route = useRoute()
 const clientId = computed(() => route.params.id as string || 'umkm-01')
 
+const authStore = useAuthStore()
 const konsultanStore = useKonsultanStore()
 const umkmStore = useUmkmStore()
 

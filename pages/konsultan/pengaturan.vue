@@ -383,7 +383,7 @@
           <input
             type="email"
             disabled
-            value="maya.suryani@konsultan.beruang.id"
+            :value="konsultanEmail"
             class="input-tactile-gopay !bg-neutral-100 dark:!bg-neutral-900 !text-neutral-500 cursor-not-allowed"
           />
         </div>
@@ -438,8 +438,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import gsap from 'gsap'
+import { useAuthStore } from '~/stores/auth'
 import ThemeMockupSelector from '~/components/settings/ThemeMockupSelector.vue'
 import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -463,16 +464,16 @@ definePageMeta({
   hideHeader: true
 })
 
+const authStore = useAuthStore()
 const konsultanStore = useKonsultanStore()
+const konsultanEmail = computed(() => authStore.currentUser?.email || konsultanStore.profile.email || '')
 let gsapCtx: gsap.Context | null = null
 
 onMounted(async () => {
   try {
     await konsultanStore.fetchProfile()
     capacityForm.maxClients = konsultanStore.profile.maxClients || 8
-    if (konsultanStore.profile.phone) {
-      accountForm.phone = konsultanStore.profile.phone
-    }
+    accountForm.phone = authStore.currentUser?.phone || konsultanStore.profile.phone || ''
   } catch (err: any) {
     console.warn('Gagal sinkron pengaturan konsultan:', err?.message)
   }
@@ -554,7 +555,7 @@ const notifyForm = reactive({
 })
 
 const accountForm = reactive({
-  phone: '0811-9988-7766'
+  phone: ''
 })
 
 function toggleSector(sector: string) {

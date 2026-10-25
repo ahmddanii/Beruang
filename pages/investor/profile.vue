@@ -171,7 +171,7 @@
               <input
                 v-model="formProfile.name"
                 type="text"
-                class="input-tactile-gopay"
+                class="input-tactile-gopay w-full"
                 placeholder="Contoh: Fikri Setiawan"
               />
             </div>
@@ -183,7 +183,7 @@
               <input
                 v-model="formProfile.companyName"
                 type="text"
-                class="input-tactile-gopay"
+                class="input-tactile-gopay w-full"
                 placeholder="Contoh: PT Nusantara Kapital Investama"
               />
             </div>
@@ -195,7 +195,7 @@
               <input
                 v-model="formProfile.roleTitle"
                 type="text"
-                class="input-tactile-gopay"
+                class="input-tactile-gopay w-full"
                 placeholder="Contoh: Managing Partner / Principal"
               />
             </div>
@@ -207,7 +207,7 @@
               <div class="relative">
                 <select
                   v-model="formProfile.investorType"
-                  class="input-tactile-gopay cursor-pointer appearance-none pr-10"
+                  class="input-tactile-gopay w-full cursor-pointer appearance-none pr-10"
                 >
                   <option value="Angel Investor & Sindikasi Institusi">Angel Investor & Sindikasi Institusi</option>
                   <option value="Venture Capital (Micro VC)">Venture Capital (Micro VC)</option>
@@ -228,7 +228,7 @@
               <input
                 v-model="formProfile.city"
                 type="text"
-                class="input-tactile-gopay"
+                class="input-tactile-gopay w-full"
                 placeholder="Contoh: Jakarta Selatan"
               />
             </div>
@@ -242,7 +242,7 @@
                 type="number"
                 min="1990"
                 max="2026"
-                class="input-tactile-gopay tabular-nums"
+                class="input-tactile-gopay w-full tabular-nums"
               />
             </div>
           </div>
@@ -266,7 +266,7 @@
                 <input
                   v-model="formProfile.email"
                   type="email"
-                  class="input-tactile-gopay text-xs"
+                  class="input-tactile-gopay w-full text-xs"
                   placeholder="fikri@nusantarakapital.co.id"
                 />
               </div>
@@ -278,7 +278,7 @@
                 <input
                   v-model="formProfile.whatsapp"
                   type="text"
-                  class="input-tactile-gopay text-xs tabular-nums"
+                  class="input-tactile-gopay w-full text-xs tabular-nums"
                   placeholder="+62 811-xxxx-xxxx"
                 />
               </div>
@@ -290,7 +290,7 @@
                 <input
                   v-model="formProfile.website"
                   type="text"
-                  class="input-tactile-gopay text-xs"
+                  class="input-tactile-gopay w-full text-xs"
                   placeholder="nusantarakapital.co.id"
                 />
               </div>
@@ -312,7 +312,7 @@
               v-model="formProfile.description"
               rows="4"
               maxlength="350"
-              class="input-tactile-gopay resize-none transition-all duration-300 focus:ring-2 focus:ring-[#00AA13]/30"
+              class="input-tactile-gopay w-full resize-none transition-all duration-300 focus:ring-2 focus:ring-[#00AA13]/30"
               placeholder="Jelaskan kriteria UMKM yang Anda cari, nilai tambah jaringan distribusi yang Anda miliki, serta komitmen pendampingan modal..."
             />
           </div>
@@ -349,7 +349,7 @@
                     type="number"
                     step="10000000"
                     min="25000000"
-                    class="input-tactile-gopay !h-11 !pl-11 !pr-4 !font-bold !font-poppins tabular-nums !rounded-xl bg-white dark:bg-[#13161F]"
+                    class="input-tactile-gopay w-full !h-11 !pl-11 !pr-4 !font-bold !font-poppins tabular-nums !rounded-xl"
                   />
                 </div>
                 <span class="text-[11px] text-neutral-500 block">
@@ -370,7 +370,7 @@
                     type="number"
                     step="25000000"
                     min="50000000"
-                    class="input-tactile-gopay !h-11 !pl-11 !pr-4 !font-bold !font-poppins tabular-nums !rounded-xl bg-white dark:bg-[#13161F]"
+                    class="input-tactile-gopay w-full !h-11 !pl-11 !pr-4 !font-bold !font-poppins tabular-nums !rounded-xl"
                   />
                 </div>
                 <span class="text-[11px] text-neutral-500 block">
@@ -388,7 +388,7 @@
               <input
                 v-model="formProfile.preferredSectors"
                 type="text"
-                class="input-tactile-gopay"
+                class="input-tactile-gopay w-full"
                 placeholder="Contoh: Kuliner & Minuman (F&B), Oleh-oleh & FMCG, Agroindustri"
               />
             </div>
@@ -400,7 +400,7 @@
               <div class="relative">
                 <select
                   v-model="formProfile.investmentScheme"
-                  class="input-tactile-gopay cursor-pointer appearance-none pr-10"
+                  class="input-tactile-gopay w-full cursor-pointer appearance-none pr-10"
                 >
                   <option value="Bagi Hasil Usaha">Bagi Hasil Usaha</option>
                   <option value="Sindikasi Ekspansi Cabang">Sindikasi Ekspansi Cabang</option>
@@ -419,7 +419,7 @@
               <input
                 v-model="formProfile.targetRoiRange"
                 type="text"
-                class="input-tactile-gopay tabular-nums"
+                class="input-tactile-gopay w-full tabular-nums"
                 placeholder="Contoh: 14% – 20% per Tahun"
               />
             </div>
@@ -445,7 +445,7 @@
               <input
                 v-model="formProfile.npwpEntity"
                 type="text"
-                class="input-tactile-gopay tabular-nums"
+                class="input-tactile-gopay w-full tabular-nums"
                 placeholder="16 Digit NPWP"
               />
               <p class="text-[11px] font-poppins text-neutral-400">
@@ -460,7 +460,7 @@
               <input
                 v-model="formProfile.nibEntity"
                 type="text"
-                class="input-tactile-gopay tabular-nums"
+                class="input-tactile-gopay w-full tabular-nums"
                 placeholder="Nomor NIB / AHU PT"
               />
               <p class="text-[11px] font-poppins text-neutral-400">
@@ -796,3 +796,58 @@ function saveProfile() {
   }, 300)
 }
 </script>
+
+<style scoped>
+.input-tactile-gopay {
+  width: 100%;
+  display: block;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+  box-shadow: none !important;
+}
+
+select.input-tactile-gopay {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.5rem !important;
+}
+
+:deep(.dark) .input-tactile-gopay,
+html.dark .input-tactile-gopay,
+.dark .input-tactile-gopay {
+  border-color: #334155 !important;
+  background-color: #161922 !important;
+  color: #F8FAFC !important;
+}
+
+.input-tactile-gopay:focus {
+  border-color: #156374;
+  box-shadow: none !important;
+}
+
+:deep(.dark) .input-tactile-gopay:focus,
+html.dark .input-tactile-gopay:focus,
+.dark .input-tactile-gopay:focus {
+  border-color: #50AABF !important;
+}
+
+.input-tactile-gopay::placeholder {
+  color: #94A3B8;
+}
+
+:deep(.dark) .input-tactile-gopay::placeholder,
+html.dark .input-tactile-gopay::placeholder,
+.dark .input-tactile-gopay::placeholder {
+  color: #64748B !important;
+}
+</style>
+

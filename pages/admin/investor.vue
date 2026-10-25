@@ -14,8 +14,8 @@
           to="/admin/investasi"
           class="btn-pill-action justify-center"
         >
-          <HugeiconsIcon :icon="ArrowLeft01Icon" :size="16" :stroke-width="2" />
           <span>Alur Investasi</span>
+          <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2" />
         </NuxtLink>
       </div>
     </div>
@@ -507,7 +507,19 @@ const paginatedList = computed(() => {
   return filteredList.value.slice(start, start + pageSize.value)
 })
 
+async function fetchInvestors() {
+  try {
+    const res = await useApi<any>('/admin/investors')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      investorsList.value = res.data
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat daftar investor dari backend:', err?.message)
+  }
+}
+
 onMounted(() => {
+  fetchInvestors()
   if (!investorPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

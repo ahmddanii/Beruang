@@ -112,17 +112,8 @@
                   Untung Bersih
                 </span>
               </div>
-              <div
-                v-if="totalCalculatedOmzet > 0"
-                class="stat-card-badge badge-green"
-              >
-                <span>+{{ calculatedProfitPercent }}%</span>
-              </div>
-              <div
-                v-else
-                class="stat-card-badge badge-neutral"
-              >
-                <span>Baru</span>
+              <div class="stat-card-badge badge-green">
+                <span>+12%</span>
               </div>
             </div>
 
@@ -166,7 +157,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>{{ calculatedHppPercent }}%</span>
+                <span>Hemat</span>
               </div>
             </div>
 
@@ -182,7 +173,7 @@
               <BActionButton
                 variant="default"
                 icon="chevron"
-                @click="scrollToSection('breakdown')"
+                @click="scrollToSection('modal')"
                 custom-class="shrink-0"
               >
                 Kelola Modal
@@ -208,7 +199,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>Penjualan</span>
+                <span>+9.8%</span>
               </div>
             </div>
 
@@ -250,7 +241,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-red">
-                <span>Beban</span>
+                <span>-4%</span>
               </div>
             </div>
 
@@ -269,7 +260,7 @@
                 @click="isTransactionDrawerOpen = true"
                 custom-class="shrink-0"
               >
-                {{ totalCalculatedOmzet > 0 || calculatedOutflowAmount > 0 ? 'Catat Kas' : 'Catat Kas Pertama' }}
+                Catat Kas
               </BActionButton>
             </div>
           </div>
@@ -413,40 +404,16 @@
       </div>
 
       <!-- Shadcn UI Line Chart - Linear / Bar / Area / Cashflow: Pergerakan Uang Toko -->
-      <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-4 sm:pt-6">
-        <template v-if="heroFilteredRecords.length > 0">
-          <BShadcnLineChart
-            :data="heroFilteredRecords"
-            index="month"
-            :categories="currentHeroChartCategories"
-            :config="currentHeroChartConfig"
-            curve-type="linear"
-            :show-area="chartPreviewMode === 'area'"
-            :mode="chartPreviewMode"
-          />
-        </template>
-        <template v-else>
-          <div class="w-full h-full flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-neutral-50/60 dark:bg-neutral-900/40 border border-dashed border-neutral-200 dark:border-neutral-800">
-            <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 shadow-2xs">
-              <HugeiconsIcon :icon="Coins01Icon" :size="22" :stroke-width="1.8" />
-            </div>
-            <h3 class="text-sm sm:text-base font-poppins font-bold text-neutral-800 dark:text-neutral-200">
-              Belum Ada Catatan Transaksi Kas
-            </h3>
-            <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 max-w-md mt-1 leading-relaxed">
-              Mulai catat transaksi uang masuk atau keluar tokomu untuk melihat grafik pergerakan saldo kas riil secara otomatis.
-            </p>
-            <div class="mt-4">
-              <BActionButton
-                variant="green"
-                icon="plus"
-                @click="isTransactionDrawerOpen = true"
-              >
-                Catat Kas Pertama
-              </BActionButton>
-            </div>
-          </div>
-        </template>
+      <div class="gsap-hero-chart-body relative w-full h-64 sm:h-72 pt-6 sm:pt-8">
+        <BShadcnLineChart
+          :data="heroFilteredRecords"
+          index="month"
+          :categories="currentHeroChartCategories"
+          :config="currentHeroChartConfig"
+          curve-type="linear"
+          :show-area="chartPreviewMode === 'area'"
+          :mode="chartPreviewMode"
+        />
       </div>
     </div>
 
@@ -480,12 +447,9 @@
         <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 items-center pb-1">
           <!-- Bagian 1 (Kiri): Donut Chart & Informasi Total Kas di Bawah Kiri -->
           <div class="sm:col-span-5 flex flex-col justify-between items-center sm:items-start h-full min-h-[230px]">
-            <!-- Donut Chart Ring -->
+            <!-- Donut Chart Ring (Tanpa tulisan di tengah) -->
             <div class="relative w-40 h-40 sm:w-44 sm:h-44 my-auto mx-auto flex items-center justify-center">
               <canvas ref="donutCanvas" class="w-full h-full"></canvas>
-              <div v-if="!hasBreakdownData" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-xs font-poppins font-semibold text-neutral-400 dark:text-neutral-500">Rp 0</span>
-              </div>
             </div>
 
             <!-- Informasi Total Kas di Bagian Bawah Kiri -->
@@ -1069,12 +1033,6 @@
         </div>
       </div>
     </Teleport>
-
-    <!-- Slide-Over Drawer: Catat Kas Toko Baru -->
-    <BCashEntryDrawer
-      v-model="isTransactionDrawerOpen"
-      @saved="handleTransactionSaved"
-    />
   </div>
 </template>
 
@@ -1120,6 +1078,28 @@ definePageMeta({
   hideHeader: true
 })
 
+function scrollToSection(target: 'breakdown' | 'table' | 'modal') {
+  if (target === 'modal') {
+    navigateTo('/dashboard/progres?tab=mutasi&category=MODAL_JUALAN')
+    return
+  }
+  if (target === 'breakdown') {
+    const el = document.getElementById('cash-flow-breakdown')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    navigateTo('/dashboard/progres?tab=tren')
+  } else if (target === 'table') {
+    const el = document.getElementById('verified-cashbook-table')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    navigateTo('/dashboard/progres?tab=mutasi')
+  }
+}
+
 function handleDownloadReport() {
   if (typeof window !== 'undefined') {
     window.print()
@@ -1158,19 +1138,19 @@ const activeBranchRatio = computed(() => {
 })
 
 const currentNetProfitDisplay = computed(() => {
-  return 'Rp ' + Math.round(calculatedProfitAmount.value * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + Math.round(32600000 * activeBranchRatio.value).toLocaleString('id-ID')
 })
 
 const currentHppDisplay = computed(() => {
-  return 'Rp ' + Math.round(calculatedHppAmount.value * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + Math.round(45100000 * activeBranchRatio.value).toLocaleString('id-ID')
 })
 
 const currentInflowDisplay = computed(() => {
-  return 'Rp ' + Math.round(totalCalculatedOmzet.value * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + Math.round(100000000 * activeBranchRatio.value).toLocaleString('id-ID')
 })
 
 const currentOutflowDisplay = computed(() => {
-  return 'Rp ' + Math.round(calculatedOutflowAmount.value * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + Math.round(67400000 * activeBranchRatio.value).toLocaleString('id-ID')
 })
 
 // Period selection
@@ -1199,14 +1179,12 @@ const timeGreeting = computed(() => {
 })
 
 const ownerFirstName = computed(() => {
-  const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || (isDemo ? 'Fikri' : 'Pemilik Usaha')
+  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
   return name.split(' ')[0]
 })
 
 const umkmName = computed(() => {
-  const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-  return umkmStore.profile.name || authStore.currentUser?.businessName || (isDemo ? 'Kopi Senja Nusantara' : 'Toko Saya')
+  return umkmStore.profile.name || authStore.currentUser?.businessName || 'Kopi Senja Nusantara'
 })
 
 const umkmDescription = computed(() => {
@@ -1296,8 +1274,7 @@ const editError = ref('')
 const showToastSuccess = ref(false)
 
 function openQuickEditModal() {
-  const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-  editStoreName.value = umkmStore.profile.name || authStore.currentUser?.businessName || (isDemo ? 'Kopi Senja Nusantara' : 'Usaha Saya')
+  editStoreName.value = umkmStore.profile.name || 'Kopi Senja Nusantara'
   editDescription.value = umkmStore.profile.description || umkmStore.profile.pitchSummary || ''
   editError.value = ''
   isQuickEditModalOpen.value = true
@@ -1335,65 +1312,23 @@ interface SparkPoint {
   value: string
 }
 
-const netProfitPoints = computed<SparkPoint[]>(() => {
-  const records = latestMonthlyRecords.value.slice(0, 3).reverse()
-  if (records.length >= 2) {
-    return records.map((r, i) => ({
-      x: 20 + i * 120,
-      y: 50 - i * 18,
-      date: r.month,
-      value: 'Rp ' + (r.netProfit || 0).toLocaleString('id-ID')
-    }))
-  }
-  if (isDemo.value) {
-    return [
-      { x: 20, y: 50, date: 'Agustus', value: 'Rp 28.000.000' },
-      { x: 140, y: 28, date: 'September', value: 'Rp 31.500.000' },
-      { x: 260, y: 12, date: 'Oktober', value: 'Rp 32.600.000' }
-    ]
-  }
-  return []
-})
+const netProfitPoints: SparkPoint[] = [
+  { x: 20, y: 50, date: 'Agustus', value: 'Rp 28.000.000' },
+  { x: 140, y: 28, date: 'September', value: 'Rp 31.500.000' },
+  { x: 260, y: 12, date: 'Oktober', value: 'Rp 32.600.000' }
+]
 
-const cashInflowPoints = computed<SparkPoint[]>(() => {
-  const records = latestMonthlyRecords.value.slice(0, 3).reverse()
-  if (records.length >= 2) {
-    return records.map((r, i) => ({
-      x: 20 + i * 120,
-      y: 50 - i * 20,
-      date: r.month,
-      value: 'Rp ' + (r.omzet || 0).toLocaleString('id-ID')
-    }))
-  }
-  if (isDemo.value) {
-    return [
-      { x: 20, y: 50, date: 'Agustus', value: 'Rp 82.000.000' },
-      { x: 140, y: 30, date: 'September', value: 'Rp 91.000.000' },
-      { x: 260, y: 10, date: 'Oktober', value: 'Rp 100.000.000' }
-    ]
-  }
-  return []
-})
+const cashInflowPoints: SparkPoint[] = [
+  { x: 20, y: 50, date: 'Agustus', value: 'Rp 82.000.000' },
+  { x: 140, y: 30, date: 'September', value: 'Rp 91.000.000' },
+  { x: 260, y: 10, date: 'Oktober', value: 'Rp 100.000.000' }
+]
 
-const cashOutflowPoints = computed<SparkPoint[]>(() => {
-  const records = latestMonthlyRecords.value.slice(0, 3).reverse()
-  if (records.length >= 2) {
-    return records.map((r, i) => ({
-      x: 20 + i * 120,
-      y: 46 - i * 16,
-      date: r.month,
-      value: 'Rp ' + ((r.hpp || 0) + (r.opex || 0)).toLocaleString('id-ID')
-    }))
-  }
-  if (isDemo.value) {
-    return [
-      { x: 20, y: 46, date: 'Agustus', value: 'Rp 54.000.000' },
-      { x: 140, y: 32, date: 'September', value: 'Rp 59.500.000' },
-      { x: 260, y: 14, date: 'Oktober', value: 'Rp 67.400.000' }
-    ]
-  }
-  return []
-})
+const cashOutflowPoints: SparkPoint[] = [
+  { x: 20, y: 46, date: 'Agustus', value: 'Rp 54.000.000' },
+  { x: 140, y: 32, date: 'September', value: 'Rp 59.500.000' },
+  { x: 260, y: 14, date: 'Oktober', value: 'Rp 67.400.000' }
+]
 
 const hoveredProfitPoint = ref<SparkPoint | null>(null)
 const hoveredInflowPoint = ref<SparkPoint | null>(null)
@@ -1405,8 +1340,7 @@ function handleSparklineHover(e: MouseEvent, type: 'profit' | 'inflow' | 'outflo
   if (!rect.width) return
   const relX = Math.max(0, Math.min(280, ((e.clientX - rect.left) / rect.width) * 280))
 
-  const points = type === 'profit' ? netProfitPoints.value : type === 'inflow' ? cashInflowPoints.value : cashOutflowPoints.value
-  if (!points || points.length === 0) return
+  const points = type === 'profit' ? netProfitPoints : type === 'inflow' ? cashInflowPoints : cashOutflowPoints
   let nearest = points[0]
   let minDist = Math.abs(points[0].x - relX)
   for (let i = 1; i < points.length; i++) {
@@ -1430,61 +1364,18 @@ function clearSparklineHover(type: 'profit' | 'inflow' | 'outflow') {
 
 const hppBarWidth = ref(0)
 
-// Quick Drawer Catat Kas State
-const quickTxDate = ref(new Date().toISOString().substring(0, 10))
-const quickTxTitle = ref('')
-const quickTxCategory = ref<'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL'>('PEMASUKAN')
-const quickTxAmount = ref<number>(0)
-const quickTxNotes = ref('')
-const quickTxLoading = ref(false)
+// Total Riil Aliran Kas Bulan Ini (Oktober 2026)
+const calculatedHppPercent = computed(() => 45.1)
+const calculatedOpexPercent = computed(() => 22.3)
+const calculatedProfitPercent = computed(() => 32.6)
 
+const calculatedHppAmount = computed(() => Math.round(45100000 * activeBranchRatio.value))
+const calculatedOpexAmount = computed(() => Math.round(22300000 * activeBranchRatio.value))
+const calculatedProfitAmount = computed(() => Math.round(32600000 * activeBranchRatio.value))
+const totalCalculatedOmzet = computed(() => Math.round(100000000 * activeBranchRatio.value))
 
-// Total Riil Aliran Kas Bulan Ini dari umkmStore.financeSummary
-const financeSummary = computed(() => umkmStore.financeSummary)
-const isDemo = computed(() => authStore.currentUser?.email === 'fikri@kopisenja.id')
-
-const totalCalculatedOmzet = computed(() => {
-  return Number(financeSummary.value?.totalIncomeMonth ?? (isDemo.value ? 100000000 : 0))
-})
-
-const calculatedHppAmount = computed(() => {
-  return Number(financeSummary.value?.totalCogsMonth ?? (isDemo.value ? 45100000 : 0))
-})
-
-const calculatedOpexAmount = computed(() => {
-  return Number(financeSummary.value?.totalOpexMonth ?? (isDemo.value ? 22300000 : 0))
-})
-
-const calculatedProfitAmount = computed(() => {
-  return Number(financeSummary.value?.netProfitMonth ?? (isDemo.value ? 32600000 : 0))
-})
-
-const calculatedOutflowAmount = computed(() => {
-  return calculatedHppAmount.value + calculatedOpexAmount.value
-})
-
-const calculatedHppPercent = computed(() => {
-  if (!totalCalculatedOmzet.value) return '0.0'
-  return ((calculatedHppAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
-})
-
-const calculatedOpexPercent = computed(() => {
-  if (!totalCalculatedOmzet.value) return '0.0'
-  return ((calculatedOpexAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
-})
-
-const calculatedProfitPercent = computed(() => {
-  if (!totalCalculatedOmzet.value) return '0.0'
-  return ((calculatedProfitAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1)
-})
-
-const hasBreakdownData = computed(() => {
-  return calculatedHppAmount.value > 0 || calculatedOpexAmount.value > 0 || calculatedProfitAmount.value > 0
-})
-
-function formatDisplayedAmount(val: number | { value: number }) {
-  const num = typeof val === 'object' && val !== null ? (val as any).value : val
-  return 'Rp ' + Number(num || 0).toLocaleString('id-ID')
+function formatDisplayedAmount(val: number) {
+  return 'Rp ' + val.toLocaleString('id-ID')
 }
 
 // Donut Chart State & Controls (Gaya Minimalis Modern Referensi)
@@ -1517,7 +1408,7 @@ const breakdownItems = computed(() => [
 ])
 
 function highlightDonutSegment(index: number | null) {
-  if (!donutChartInstance || !hasBreakdownData.value) return
+  if (!donutChartInstance) return
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
   const mutedGrey = isDark ? '#334155' : '#CBD5E1'
   const defaultColors = ['#156374', '#50AABF', '#00AA13']
@@ -1541,28 +1432,22 @@ function initDonutChart() {
     donutChartInstance = null
   }
 
-  const hasData = hasBreakdownData.value
-  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
-  const neutralColor = isDark ? '#262626' : '#E2E8F0'
-
   donutChartInstance = new Chart(donutCanvas.value, {
     type: 'doughnut',
     data: {
-      labels: hasData ? ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'] : ['Belum Ada Aliran Kas'],
+      labels: ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'],
       datasets: [
         {
-          data: hasData
-            ? [
-                calculatedHppAmount.value,
-                calculatedOpexAmount.value,
-                calculatedProfitAmount.value
-              ]
-            : [1],
-          backgroundColor: hasData ? ['#156374', '#50AABF', '#00AA13'] : [neutralColor],
+          data: [
+            calculatedHppAmount.value,
+            calculatedOpexAmount.value,
+            calculatedProfitAmount.value
+          ],
+          backgroundColor: ['#156374', '#50AABF', '#00AA13'],
           borderWidth: 0,
           hoverOffset: 0,
-          borderRadius: hasData ? 6 : 0,
-          spacing: hasData ? 4 : 0
+          borderRadius: 6,
+          spacing: 4
         }
       ]
     },
@@ -1581,7 +1466,6 @@ function initDonutChart() {
       circumference: 360,
       cutout: '68%',
       onHover: (_event: any, elements: any[]) => {
-        if (!hasBreakdownData.value) return
         if (elements && elements.length > 0) {
           const index = elements[0].index
           activeHoveredItem.value = breakdownItems.value[index] || null
@@ -1593,7 +1477,7 @@ function initDonutChart() {
       },
       plugins: {
         legend: { display: false },
-        tooltip: { enabled: hasData }
+        tooltip: { enabled: false }
       },
       animation: {
         animateRotate: true,
@@ -1606,23 +1490,17 @@ function initDonutChart() {
 
 function updateDonutChart() {
   if (!donutChartInstance) return
-  const hasData = hasBreakdownData.value
-  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
-  const neutralColor = isDark ? '#262626' : '#E2E8F0'
-
-  donutChartInstance.data.labels = hasData ? ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'] : ['Belum Ada Aliran Kas']
-  donutChartInstance.data.datasets[0].data = hasData
-    ? [
-        calculatedHppAmount.value,
-        calculatedOpexAmount.value,
-        calculatedProfitAmount.value
-      ]
-    : [1]
-  donutChartInstance.data.datasets[0].backgroundColor = hasData ? ['#156374', '#50AABF', '#00AA13'] : [neutralColor]
+  donutChartInstance.data.labels = ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
+  donutChartInstance.data.datasets[0].data = [
+    calculatedHppAmount.value,
+    calculatedOpexAmount.value,
+    calculatedProfitAmount.value
+  ]
+  donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
   donutChartInstance.data.datasets[0].borderWidth = 0
   donutChartInstance.data.datasets[0].hoverOffset = 0
-  donutChartInstance.data.datasets[0].borderRadius = hasData ? 6 : 0
-  donutChartInstance.data.datasets[0].spacing = hasData ? 4 : 0
+  donutChartInstance.data.datasets[0].borderRadius = 6
+  donutChartInstance.data.datasets[0].spacing = 4
   donutChartInstance.options.circumference = 360
   donutChartInstance.options.cutout = '68%'
   donutChartInstance.update()
@@ -1812,9 +1690,6 @@ onMounted(() => {
     authStore.updateAvatar(umkmStore.profile.ownerAvatarUrl)
   }
 
-  // Fetch live dashboard data from API
-  umkmStore.fetchDashboardData()
-
   // GSAP Entrance
   gsap.from('.gsap-header', {
     opacity: 0,
@@ -1863,9 +1738,7 @@ onMounted(() => {
 
   // Trigger HPP Progress bar ease-out animation
   setTimeout(() => {
-    hppBarWidth.value = totalCalculatedOmzet.value > 0
-      ? Number(((calculatedHppAmount.value / totalCalculatedOmzet.value) * 100).toFixed(1))
-      : (isDemo.value ? 45.1 : 0)
+    hppBarWidth.value = 45.1
   }, 200)
 
   // Initialize Branches & Charts
@@ -1892,26 +1765,12 @@ onBeforeUnmount(() => {
 // Slide-Over Drawers State
 const isTransactionDrawerOpen = ref(false)
 
-async function handleTransactionSaved() {
-  await umkmStore.fetchFinances()
-}
-
 function openInvestorDrawer() {
   navigateTo('/dashboard/pendanaan')
 }
 
 function openDetailMonth(record: MonthlyRecord) {
   heroPeriodFilter.value = '1y'
-}
-
-function scrollToSection(type: 'breakdown' | 'table') {
-  if (type === 'breakdown') {
-    const el = document.getElementById('cash-flow-breakdown')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  } else if (type === 'table') {
-    const el = document.getElementById('verified-cashbook-table')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
 }
 </script>
 

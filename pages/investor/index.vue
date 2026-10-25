@@ -86,7 +86,7 @@
       <!-- ======================================================================================= -->
       <!-- KOLOM TENGAH / KIRI: Feed Postingan UMKM & Tips Platform (Disesuaikan dengan 550x578)    -->
       <!-- ======================================================================================= -->
-      <main class="w-full max-w-[600px] lg:w-[600px] shrink-0 space-y-6 mx-auto lg:mx-0">
+      <main class="w-full max-w-[600px] lg:w-[600px] shrink-0 space-y-6 mx-auto lg:mx-0 pb-32 sm:pb-8">
 
         <!-- POST FEED (Card Container disesuaikan dengan ukuran Media Container 550 x 578 + Lazy Rendering) -->
         <div v-if="filteredFeed.length > 0" class="space-y-6 sm:space-y-7">
@@ -94,10 +94,10 @@
             v-for="item in visibleFeedItems"
             :key="item.id"
             :id="'umkm-card-' + item.id"
-            class="gsap-feed-card lazy-render-card card-tactile-gopay w-full max-w-[600px] mx-auto rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden !shadow-none"
+            class="gsap-feed-card lazy-render-card card-tactile-gopay w-full max-w-[600px] mx-auto rounded-[20px] sm:rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 overflow-hidden !shadow-none"
           >
-            <!-- Card Body Content (Inner Width 550px + 24px Left/Right Padding = 598px + 2px Border = 600px) -->
-            <div class="p-5 sm:p-6 space-y-5">
+            <!-- Card Body Content (Comfortable padding on mobile & desktop) -->
+            <div class="p-4 sm:p-6 space-y-4 sm:space-y-5">
 
               <!-- 1. Post Author Header: Circular Profile Image + Name + Metadata + Upload Timestamp + Save & Share -->
               <div class="flex items-start justify-between gap-4">
@@ -116,7 +116,8 @@
                     <img src="/logo.svg" alt="Foto Profil Usaha" loading="lazy" decoding="async" class="w-full h-full object-contain rounded-full" />
                   </div>
 
-                  <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
+                  <!-- Contract: gap-0.5 sm:gap-1 -->
+                  <div class="min-w-0 flex flex-col justify-center gap-1.5 sm:gap-2">
                     <!-- Di Bagian Atas dari Nama UMKM: Lokasi (contoh: Bandung) atau Kategori Platform -->
                     <div
                       v-if="!item.isPlatformPost"
@@ -190,9 +191,10 @@
 
               <!-- =================================================================================== -->
               <!-- 3. POST MEDIA CONTAINER (Ukuran 550 x 578, Single Post & Multi-Post LinkedIn Carousel) -->
+              <!-- Desktop contract specification: max-w-[550px] h-[578px] aspect-[550/578] -->
               <!-- =================================================================================== -->
               <div
-                class="relative w-full max-w-[550px] h-[578px] aspect-[550/578] mx-auto rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none group/carousel shadow-none"
+                class="feed-media-viewport relative w-full max-w-[550px] h-[260px] xs:h-[300px] sm:h-[578px] aspect-[4/3] xs:aspect-square sm:aspect-[550/578] mx-auto rounded-xl sm:rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none group/carousel shadow-none"
               >
                 <!-- Horizontal Carousel Track -->
                 <div
@@ -280,9 +282,9 @@
               </div>
             </div>
 
-            <!-- 4. Post Footer Row: Informasi Konsultan Pendamping di Kiri & Button "Lihat Profil" di Kanan (1 Row) -->
+            <!-- 4. Post Footer Row: Informasi Konsultan Pendamping di Kiri & Button "Lihat Profil" di Kanan -->
             <div
-              class="px-5 sm:px-6 py-4 bg-[#F8FAFC] dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+              class="px-4 py-3.5 sm:px-6 sm:py-4 bg-[#F8FAFC] dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
             >
               <div class="flex items-center gap-2 text-xs sm:text-[13px] min-w-0">
                 <HugeiconsIcon
@@ -293,7 +295,7 @@
                 <span v-if="item.isPlatformPost" class="text-neutral-600 dark:text-neutral-400">
                   Disusun oleh: <strong class="text-neutral-900 dark:text-white font-semibold">{{ item.consultantName }}</strong>
                 </span>
-                <span v-else class="text-neutral-600 dark:text-neutral-400 truncate">
+                <span v-else class="text-neutral-600 dark:text-neutral-400">
                   Didampingi oleh: <strong class="text-neutral-900 dark:text-white font-semibold">{{ item.consultantName }}</strong>
                 </span>
               </div>
@@ -303,7 +305,7 @@
                 :to="`/investor/umkm/${item.umkmRefId || item.id}`"
                 variant="default"
                 icon="chevron"
-                custom-class="w-full sm:w-auto justify-center text-center shrink-0"
+                custom-class="w-full sm:w-auto justify-center text-center py-2 sm:py-2.5 text-xs sm:text-sm"
               >
                 Lihat Profil
               </BActionButton>
@@ -840,8 +842,10 @@ watch(
   }
 )
 
-onMounted(() => {
+onMounted(async () => {
   investorStore.initPostsFromStorage()
+  await investorStore.fetchMarketplace()
+  await investorStore.fetchWatchlist()
   setupFeedLazyObserver()
 
   if (typeof window !== 'undefined' && pageRootRef.value) {
@@ -1342,3 +1346,21 @@ function copyShareLink(item: MarketplaceUmkm) {
   }
 }
 </script>
+
+<style scoped>
+@media (max-width: 639px) {
+  .feed-media-viewport {
+    height: 270px !important;
+    max-height: 72vw !important;
+    aspect-ratio: 4 / 3 !important;
+    border-radius: 14px !important;
+  }
+}
+@media (min-width: 480px) and (max-width: 639px) {
+  .feed-media-viewport {
+    height: 310px !important;
+    max-height: 80vw !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+}
+</style>

@@ -534,7 +534,7 @@ function selectSectorFilter(id: typeof selectedSector.value) {
   isFilterDropdownOpen.value = false
 }
 
-const umkmPartnerships = ref<UmkmPartnershipItem[]>([
+const INITIAL_UMKM_PARTNERSHIPS: UmkmPartnershipItem[] = [
   {
     id: 'umkm-1',
     name: 'Kopi Kenangan Senja',
@@ -769,7 +769,81 @@ const umkmPartnerships = ref<UmkmPartnershipItem[]>([
       }
     ]
   }
-])
+]
+
+function generate200UmkmPartnerships(): UmkmPartnershipItem[] {
+  const result: UmkmPartnershipItem[] = [...INITIAL_UMKM_PARTNERSHIPS]
+  const sectors: Array<'Kuliner & F&B' | 'Kriya & Tekstil' | 'Agribisnis' | 'Jasa & Retail'> = [
+    'Kuliner & F&B', 'Kriya & Tekstil', 'Agribisnis', 'Jasa & Retail'
+  ]
+  const prefixes = [
+    'Kopi', 'Batik', 'Kebun', 'Dapur', 'Tenun', 'Keripik', 'Abon', 'Sentra Kriya',
+    'Madu', 'Sambal', 'Sari Buah', 'Konveksi', 'Roastery', 'Gelato', 'Roti', 'Cokelat'
+  ]
+  const suffixes = ['Nusantara', 'Lestari', 'Mandiri', 'Berkah', 'Sejahtera', 'Kencana', 'Pratama', 'Jaya', 'Abadi', 'Makmur']
+  const cities = ['Bandung', 'Yogyakarta', 'Surabaya', 'Malang', 'Solo', 'Bogor', 'Semarang', 'Medan', 'Makassar', 'Denpasar', 'Kupang', 'Palembang', 'Manado', 'Banjarmasin', 'Batam', 'Cirebon']
+  const owners = ['Ahmad Fauzi', 'Rini Wulandari', 'Bambang Tri', 'Dewi Sartika', 'Irfan Hakim', 'Agus Setiawan', 'Sri Rahayu', 'Eko Prasetyo', 'Lina Marlina', 'Rian Hidayat']
+  const consultants = [
+    { name: 'Rendra Pratama, S.E., Ak.', specialty: 'Arus Kas & Pajak' },
+    { name: 'Nadia Kusuma, MBA, CFP', specialty: 'Kesiapan Ekspor' },
+    { name: 'Dr. Hendra Wijaya, M.M.', specialty: 'Restrukturisasi Kas' },
+    { name: 'Siti Aminah, Ak., CA.', specialty: 'Audit Keuangan' }
+  ]
+  const statuses: Array<'Siap Didanai' | 'Pendampingan' | 'Perlu Validasi'> = ['Siap Didanai', 'Pendampingan', 'Perlu Validasi']
+
+  for (let i = 13; i <= 200; i++) {
+    const idx = i - 13
+    const p = prefixes[idx % prefixes.length]!
+    const s = suffixes[Math.floor(idx / prefixes.length) % suffixes.length]!
+    const c = cities[idx % cities.length]!
+    const owner = owners[idx % owners.length]!
+    const sector = sectors[idx % sectors.length]!
+    const cons = idx % 5 === 0 ? null : { ...consultants[idx % consultants.length]!, since: `${(idx % 25) + 1} Jan 2026` }
+    const status = statuses[idx % statuses.length]!
+    const score = 60 + ((idx * 7) % 36)
+
+    const investors: UmkmInvestorRelation[] = []
+    if (idx % 3 === 0) {
+      investors.push({
+        name: idx % 2 === 0 ? 'Nusantara Impact Capital' : 'Artha Ventura Syariah',
+        stage: 'Ruang Data Terbuka',
+        ticketSize: `Rp ${(150 + (idx % 8) * 50).toLocaleString('id-ID')}.000.000`,
+        updatedAt: `${(idx % 12) + 1} jam lalu`
+      })
+    }
+
+    result.push({
+      id: `umkm-${i}`,
+      name: `${p} ${s} ${c}`,
+      owner,
+      sector,
+      city: c,
+      score,
+      readinessStatus: status,
+      consultant: cons,
+      investors
+    })
+  }
+
+  return result
+}
+
+const umkmPartnerships = ref<UmkmPartnershipItem[]>(generate200UmkmPartnerships())
+const isLoading = ref(false)
+
+async function fetchPartnerships() {
+  isLoading.value = true
+  try {
+    const res = await useApi<any>('/admin/partnerships')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      umkmPartnerships.value = res.data
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat kemitraan dari backend:', err?.message)
+  } finally {
+    isLoading.value = false
+  }
+}
 
 const assignedCount = computed(() => umkmPartnerships.value.filter(u => u.consultant !== null).length)
 const investorConnectedCount = computed(() => umkmPartnerships.value.filter(u => u.investors.length > 0).length)
@@ -820,9 +894,21 @@ function openDetailModal(umkm: UmkmPartnershipItem) {
   selectedUmkm.value = umkm
 }
 
-function revokeInvestorAccess(umkm: UmkmPartnershipItem, investorName: string) {
+async function revokeInvestorAccess(umkm: UmkmPartnershipItem, investorName: string) {
+  const targetRelation = (umkm.investors as any[]).find(inv => inv.name === investorName)
   umkm.investors = umkm.investors.filter(inv => inv.name !== investorName)
   toastMessage.value = `Akses Ruang Data untuk ${investorName} pada ${umkm.name} telah dicabut.`
+
+  if (targetRelation?.id) {
+    try {
+      await useApi(`/admin/deals/${targetRelation.id}/toggle-access`, {
+        method: 'PUT',
+        body: { status: 'REJECTED' }
+      })
+    } catch (err: any) {
+      console.warn('Gagal sinkron pencabutan akses ke server:', err?.message)
+    }
+  }
 }
 
 function handleExportCsv() {
@@ -830,6 +916,7 @@ function handleExportCsv() {
 }
 
 onMounted(() => {
+  fetchPartnerships()
   if (!umkmPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

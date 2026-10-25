@@ -1,5 +1,5 @@
 <template>
-  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-32 sm:pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -103,15 +103,26 @@
 
           <!-- Investor Action Buttons on Right (Menggunakan BActionButton) -->
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto pt-1 sm:pt-0">
-            <!-- Simpan Usaha Button -->
+            <!-- Simpan Usaha / Hapus dari Simpan Button -->
             <BActionButton
-              :variant="item.bookmarked ? 'green' : 'default'"
-              :huge-icon="Bookmark02Icon"
-              :icon-size="14"
+              :variant="isItemBookmarked ? 'red' : 'default'"
               custom-class="w-full sm:w-auto justify-center text-center"
-              @click="toggleBookmark"
+              @click="toggleBookmark()"
             >
-              {{ item.bookmarked ? 'Tersimpan' : 'Simpan Usaha' }}
+              <template #icon>
+                <HugeiconsIcon
+                  :icon="Bookmark02Icon"
+                  :size="15"
+                  :stroke-width="2"
+                  :class="[
+                    'shrink-0 transition-colors',
+                    isItemBookmarked
+                      ? '[&_path]:fill-current fill-current text-white'
+                      : 'text-neutral-500 dark:text-neutral-400'
+                  ]"
+                />
+              </template>
+              <span>{{ isItemBookmarked ? (t('profile_remove_from_saved') || 'Hapus dari Simpan') : (t('profile_save_business') || 'Simpan Usaha') }}</span>
             </BActionButton>
 
             <!-- Hubungi UMKM Button -->
@@ -548,142 +559,180 @@
         </div>
 
         <!-- SECTION 4: POSTINGAN & AKTIVITAS USAHA -->
-        <div class="card-tactile-gopay rounded-[22px] p-6 sm:p-7 border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] space-y-6 !shadow-none">
-          <div class="border-b border-neutral-100 dark:border-neutral-800 pb-4">
-            <h3 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white">
-              Postingan & Aktivitas Usaha
-            </h3>
-            <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 mt-1">
-              Pembaruan kegiatan operasional, perkembangan gerai, dan capaian yang dipublikasikan oleh {{ item.name }}.
-            </p>
+        <div class="space-y-4 sm:space-y-5">
+          <!-- Section Heading (Clean without redundant wrapping card) -->
+          <div class="flex items-center justify-between pb-1">
+            <div>
+              <h3 class="text-base sm:text-lg font-poppins font-semibold text-neutral-900 dark:text-white">
+                Postingan & Aktivitas Usaha
+              </h3>
+              <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 mt-0.5">
+                Pembaruan kegiatan operasional, perkembangan gerai, dan capaian yang dipublikasikan oleh {{ item.name }}.
+              </p>
+            </div>
           </div>
 
-          <div class="space-y-6">
+          <!-- Feed Posts matching Jaringan Concept: Rata kiri di desktop, maks 2 kolom saat ada postingan berikutnya -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start">
             <article
               v-for="post in umkmPosts"
               :key="post.id"
-              class="rounded-2xl border border-[#CBD5E1] dark:border-neutral-800 bg-[#F8FAFC]/60 dark:bg-neutral-900/40 p-5 sm:p-6 space-y-5 shadow-none"
+              :id="'umkm-card-' + post.id"
+              class="gsap-feed-card lazy-render-card card-tactile-gopay w-full rounded-[20px] sm:rounded-[22px] border border-[#CBD5E1] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] font-poppins overflow-hidden !shadow-none transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 flex flex-col justify-between"
             >
-              <!-- Post Header (Proporsional w-12 h-12 sm:w-13 sm:h-13 & gap-0.5 sm:gap-1) -->
-              <div class="flex items-start justify-between gap-4">
-                <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                  <div class="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2.5 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden shadow-none">
-                    <img
-                      :src="profileData.avatarUrl"
-                      :alt="post.name"
-                      loading="lazy"
-                      decoding="async"
-                      class="w-full h-full object-contain rounded-full"
-                    />
+              <div class="p-4 sm:p-5 space-y-3.5 sm:space-y-4 flex-1 flex flex-col justify-between">
+                <!-- 1. Post Author Header: Avatar + Info Stack + Top-Right Save & Share Action Buttons (Identical to Jaringan) -->
+                <div class="flex items-start justify-between gap-2.5 sm:gap-3">
+                  <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+                    <!-- Circular Avatar (w-11 h-11 sm:w-12 sm:h-12 rounded-full) -->
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-amber-400/90 dark:bg-amber-500/90 p-2 shrink-0 flex items-center justify-center border border-amber-300/60 overflow-hidden shadow-none">
+                      <img
+                        :src="profileData.avatarUrl"
+                        :alt="post.name"
+                        loading="lazy"
+                        decoding="async"
+                        class="w-full h-full object-contain rounded-full"
+                      />
+                    </div>
+
+                    <!-- 3-line info stack matching Jaringan: Location, Name, Upload Timestamp -->
+                    <div class="min-w-0 flex-1 flex flex-col justify-center gap-1">
+                      <div class="inline-flex items-center gap-1 text-[11px] sm:text-xs font-poppins font-medium text-neutral-500 dark:text-neutral-400 leading-tight">
+                        <HugeiconsIcon :icon="Location01Icon" :size="12" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
+                        <span class="truncate">{{ post.city }}</span>
+                      </div>
+
+                      <h4 class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight truncate">
+                        {{ post.name }}
+                      </h4>
+
+                      <div class="inline-flex items-center gap-1 text-[11px] sm:text-xs font-poppins text-neutral-500 dark:text-neutral-400 leading-tight">
+                        <HugeiconsIcon :icon="Time02Icon" :size="12" class="text-neutral-400 dark:text-neutral-500 shrink-0" />
+                        <span>{{ post.postedAt || '2 jam yang lalu' }}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
-                    <div class="inline-flex items-center gap-1 text-xs font-poppins font-medium text-neutral-500 dark:text-neutral-400 leading-tight">
-                      <HugeiconsIcon :icon="Location01Icon" :size="13" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
-                      <span>{{ post.city }}</span>
-                    </div>
+                  <!-- Right Corner: Save (Bookmark) & Share Buttons (Identical to Jaringan) -->
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      :aria-label="post.bookmarked || item.bookmarked ? 'Hapus UMKM dari daftar simpan' : 'Simpan UMKM ke daftar simpan'"
+                      :class="[
+                        'w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-lg sm:rounded-xl transition-colors cursor-pointer flex items-center justify-center border shadow-none',
+                        post.bookmarked || item.bookmarked
+                          ? 'bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] border-[#156374]/35 dark:border-[#50AABF]/40'
+                          : 'bg-white dark:bg-[#18191E] text-neutral-600 dark:text-neutral-300 border-[#CBD5E1] dark:border-neutral-700 hover:bg-[#F8FAFC] dark:hover:bg-[#262626] hover:text-neutral-900 dark:hover:text-white'
+                      ]"
+                      :title="post.bookmarked || item.bookmarked ? 'Hapus dari Simpanan' : 'Simpan ke Daftar Simpan'"
+                      @click="toggleBookmark(post)"
+                    >
+                      <HugeiconsIcon
+                        :icon="Bookmark02Icon"
+                        :size="16"
+                        :stroke-width="2"
+                        :class="post.bookmarked || item.bookmarked ? '[&_path]:fill-current fill-current' : ''"
+                      />
+                    </button>
 
-                    <h4 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white truncate leading-tight">
-                      {{ post.name }}
-                    </h4>
-
-                    <div class="inline-flex items-center gap-1.5 text-xs font-poppins text-neutral-500 dark:text-neutral-400 leading-tight">
-                      <HugeiconsIcon :icon="Time02Icon" :size="13" class="text-neutral-400 dark:text-neutral-500 shrink-0" />
-                      <span>{{ post.postedAt || '2 jam yang lalu' }}</span>
-                    </div>
+                    <button
+                      type="button"
+                      aria-label="Bagikan Tautan Postingan"
+                      class="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-lg sm:rounded-xl bg-white dark:bg-[#18191E] text-neutral-600 dark:text-neutral-300 border border-[#CBD5E1] dark:border-neutral-700 hover:bg-[#F8FAFC] dark:hover:bg-[#262626] hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center justify-center cursor-pointer shadow-none"
+                      title="Bagikan Tautan Postingan"
+                      @click="isShareModalOpen = true"
+                    >
+                      <HugeiconsIcon :icon="Share08Icon" :size="16" :stroke-width="2" />
+                    </button>
                   </div>
                 </div>
 
-                <BBadge variant="emerald" size="sm" pill>
-                  {{ getPostImages(post).length > 1 ? `Carousel (${getPostImages(post).length} Slide)` : 'Single Post' }}
-                </BBadge>
-              </div>
+                <!-- 2. Post Caption / Pitch Text (Matching Jaringan) -->
+                <p class="text-xs sm:text-sm font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed line-clamp-3">
+                  "{{ post.pitchSummary }}"
+                </p>
 
-              <!-- Caption -->
-              <p class="text-[14px] sm:text-[15px] font-poppins text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                "{{ post.pitchSummary }}"
-              </p>
-
-              <!-- Media Carousel (550 x 578) -->
-              <div
-                class="relative w-full max-w-[550px] h-[578px] aspect-[550/578] mx-auto rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none shadow-none"
-              >
+                <!-- 3. Media Carousel (Matching responsive dimensions for multi-column grid) -->
                 <div
-                  class="flex w-full h-full transition-transform duration-300 ease-out"
-                  :style="{ transform: `translateX(-${getSlideIndex(post.id) * 100}%)` }"
+                  class="feed-media-viewport relative w-full aspect-[4/3] sm:aspect-square rounded-xl sm:rounded-2xl overflow-hidden border border-[#E2E8F0] dark:border-neutral-800 bg-neutral-900 select-none group/carousel shadow-none"
                 >
                   <div
-                    v-for="(imgUrl, sIdx) in getPostImages(post)"
-                    :key="`${post.id}-slide-${sIdx}`"
-                    class="w-full h-full shrink-0 relative overflow-hidden bg-neutral-900"
+                    class="flex w-full h-full transition-transform duration-300 ease-out"
+                    :style="{ transform: `translateX(-${getSlideIndex(post.id) * 100}%)` }"
                   >
-                    <img
-                      :src="imgUrl"
-                      :alt="`${post.name} - Slide ${sIdx + 1}`"
-                      loading="lazy"
-                      decoding="async"
-                      class="w-full h-full object-cover object-center cursor-pointer"
-                      @click="openFullscreenPreview(post, getSlideIndex(post.id))"
+                    <div
+                      v-for="(imgUrl, sIdx) in getPostImages(post)"
+                      :key="`${post.id}-slide-${sIdx}`"
+                      class="w-full h-full shrink-0 relative overflow-hidden bg-neutral-900"
+                    >
+                      <img
+                        :src="imgUrl"
+                        :alt="`${post.name} - Slide ${sIdx + 1}`"
+                        loading="lazy"
+                        decoding="async"
+                        class="w-full h-full object-cover object-center cursor-pointer"
+                        @click="openFullscreenPreview(post, getSlideIndex(post.id))"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Top-Left Slide Counter Pill -->
+                  <div
+                    v-if="getPostImages(post).length > 1"
+                    class="absolute top-3 left-3 z-20 px-2 py-0.5 rounded-full bg-neutral-950/75 text-white text-[11px] font-poppins font-semibold tabular-nums border border-white/15 backdrop-blur-xs pointer-events-none"
+                  >
+                    {{ getSlideIndex(post.id) + 1 }} / {{ getPostImages(post).length }}
+                  </div>
+
+                  <!-- Top-Right FullScreenIcon Button -->
+                  <button
+                    type="button"
+                    aria-label="Pratinjau Layar Penuh"
+                    title="Pratinjau Layar Penuh"
+                    class="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/20 backdrop-blur-xs flex items-center justify-center transition-all duration-200 cursor-pointer shadow-none"
+                    @click.stop="openFullscreenPreview(post, getSlideIndex(post.id))"
+                  >
+                    <HugeiconsIcon :icon="FullScreenIcon" :size="15" :stroke-width="2.2" />
+                  </button>
+
+                  <!-- Before Button -->
+                  <button
+                    v-if="getPostImages(post).length > 1 && getSlideIndex(post.id) > 0"
+                    type="button"
+                    aria-label="Slide Sebelumnya"
+                    class="carousel-before-btn absolute left-2.5 inset-y-0 my-auto z-20 w-8 h-8 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
+                    @click.stop="prevSlide(post)"
+                  >
+                    <HugeiconsIcon :icon="ArrowLeft01Icon" :size="16" :stroke-width="2.4" />
+                  </button>
+
+                  <!-- Next Button -->
+                  <button
+                    v-if="getPostImages(post).length > 1 && getSlideIndex(post.id) < getPostImages(post).length - 1"
+                    type="button"
+                    aria-label="Slide Berikutnya"
+                    class="carousel-next-btn absolute right-2.5 inset-y-0 my-auto z-20 w-8 h-8 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
+                    @click.stop="nextSlide(post)"
+                  >
+                    <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2.4" />
+                  </button>
+
+                  <!-- Bottom Dots -->
+                  <div
+                    v-if="getPostImages(post).length > 1"
+                    class="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 px-2 py-1 rounded-full bg-neutral-950/65 backdrop-blur-xs border border-white/15 flex items-center gap-1.5"
+                  >
+                    <button
+                      v-for="(_, dIdx) in getPostImages(post)"
+                      :key="`${post.id}-dot-${dIdx}`"
+                      type="button"
+                      :class="[
+                        'h-1.5 rounded-full transition-all duration-200 cursor-pointer',
+                        getSlideIndex(post.id) === dIdx ? 'w-3.5 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
+                      ]"
+                      @click.stop="setSlideIndex(post.id, dIdx)"
                     />
                   </div>
-                </div>
-
-                <!-- Top-Left Slide Counter Pill -->
-                <div
-                  v-if="getPostImages(post).length > 1"
-                  class="absolute top-3.5 left-3.5 z-20 px-2.5 py-1 rounded-full bg-neutral-950/75 text-white text-xs font-poppins font-semibold tabular-nums border border-white/15 backdrop-blur-xs pointer-events-none"
-                >
-                  {{ getSlideIndex(post.id) + 1 }} / {{ getPostImages(post).length }}
-                </div>
-
-                <!-- Top-Right FullScreenIcon Button -->
-                <button
-                  type="button"
-                  aria-label="Pratinjau Layar Penuh"
-                  title="Pratinjau Layar Penuh"
-                  class="absolute top-3.5 right-3.5 z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/20 backdrop-blur-xs flex items-center justify-center transition-all duration-200 cursor-pointer shadow-none"
-                  @click.stop="openFullscreenPreview(post, getSlideIndex(post.id))"
-                >
-                  <HugeiconsIcon :icon="FullScreenIcon" :size="17" :stroke-width="2.2" />
-                </button>
-
-                <!-- Before Button (Tanpa efek turun saat ditekan) -->
-                <button
-                  v-if="getPostImages(post).length > 1 && getSlideIndex(post.id) > 0"
-                  type="button"
-                  aria-label="Slide Sebelumnya"
-                  class="absolute left-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
-                  @click.stop="prevSlide(post)"
-                >
-                  <HugeiconsIcon :icon="ArrowLeft01Icon" :size="18" :stroke-width="2.4" />
-                </button>
-
-                <!-- Next Button (Tanpa efek turun saat ditekan) -->
-                <button
-                  v-if="getPostImages(post).length > 1 && getSlideIndex(post.id) < getPostImages(post).length - 1"
-                  type="button"
-                  aria-label="Slide Berikutnya"
-                  class="absolute right-3 inset-y-0 my-auto z-20 w-9 h-9 rounded-full bg-neutral-950/75 hover:bg-neutral-950 text-white border border-white/25 backdrop-blur-xs flex items-center justify-center transition-colors duration-200 cursor-pointer shadow-none"
-                  @click.stop="nextSlide(post)"
-                >
-                  <HugeiconsIcon :icon="ArrowRight01Icon" :size="18" :stroke-width="2.4" />
-                </button>
-
-                <!-- Bottom Dots -->
-                <div
-                  v-if="getPostImages(post).length > 1"
-                  class="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1.5 rounded-full bg-neutral-950/65 backdrop-blur-xs border border-white/15 flex items-center gap-1.5"
-                >
-                  <button
-                    v-for="(_, dIdx) in getPostImages(post)"
-                    :key="`${post.id}-dot-${dIdx}`"
-                    type="button"
-                    :class="[
-                      'h-1.5 rounded-full transition-all duration-200 cursor-pointer',
-                      getSlideIndex(post.id) === dIdx ? 'w-4 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
-                    ]"
-                    @click.stop="setSlideIndex(post.id, dIdx)"
-                  />
                 </div>
               </div>
             </article>
@@ -763,11 +812,11 @@
             <div class="pt-2">
               <NuxtLink
                 v-if="item.accessStatus === 'APPROVED'"
-                :to="`/investor/data-room/${item.id}`"
+                :to="`/investor/pesan?umkm=${item.id}`"
                 class="btn-pill-action btn-pill-action-green w-full justify-center text-center shadow-none"
               >
-                <HugeiconsIcon :icon="FileValidationIcon" :size="15" />
-                <span>Buka Ruang Data Finansial</span>
+                <HugeiconsIcon :icon="Comment01Icon" :size="15" />
+                <span>Buka Diskusi UMKM</span>
               </NuxtLink>
               <NuxtLink
                 v-else-if="item.accessStatus === 'NONE'"
@@ -1060,6 +1109,7 @@ definePageMeta({
 const route = useRoute()
 const investorStore = useInvestorStore()
 const umkmStore = useUmkmStore()
+const { t } = useLanguage()
 const pageRootRef = ref<HTMLElement | null>(null)
 let gsapCtx: gsap.Context | null = null
 
@@ -1077,6 +1127,13 @@ const item = computed<MarketplaceUmkm>(() => {
       m => m.id === umkmId.value || m.umkmRefId === umkmId.value
     ) || sourceList[0]!
   )
+})
+
+const isItemBookmarked = computed(() => {
+  const targetId = item.value?.id
+  if (!targetId) return false
+  const found = (investorStore.marketplaceList || []).find(m => m.id === targetId || m.umkmRefId === targetId)
+  return found ? Boolean(found.bookmarked) : Boolean(item.value?.bookmarked)
 })
 
 // Rich Profile Metadata per UMKM ID (Synced with umkmStore for umkm-01)
@@ -1387,12 +1444,29 @@ function triggerToast(msg: string) {
   }, 2500)
 }
 
-function toggleBookmark() {
-  investorStore.toggleBookmark(item.value.id)
-  if (item.value.bookmarked) {
-    triggerToast(`${item.value.name} disimpan ke daftar Simpan!`)
+function toggleBookmark(post?: any) {
+  // If post is a DOM Event or missing valid id, default to item.value
+  const isPostObject = post && typeof post === 'object' && 'id' in post && typeof post.id === 'string' && !('target' in post)
+  const targetId = isPostObject ? post.id : item.value.id
+  const targetName = isPostObject ? post.name : item.value.name
+
+  investorStore.toggleBookmark(targetId)
+
+  // Sync item.value if in fallback list or local ref
+  if (item.value && item.value.id === targetId) {
+    const storeItem = (investorStore.marketplaceList || []).find(m => m.id === targetId)
+    if (storeItem) {
+      item.value.bookmarked = storeItem.bookmarked
+    } else {
+      item.value.bookmarked = !item.value.bookmarked
+    }
+  }
+
+  const isNowBookmarked = item.value.id === targetId ? isItemBookmarked.value : Boolean(post?.bookmarked)
+  if (isNowBookmarked) {
+    triggerToast(`${targetName} disimpan ke daftar Simpan!`)
   } else {
-    triggerToast(`${item.value.name} dihapus dari daftar Simpan.`)
+    triggerToast(`${targetName} dihapus dari daftar Simpan.`)
   }
 }
 
@@ -1537,5 +1611,13 @@ html.dark .input-tactile-gopay {
 .input-tactile-gopay:focus {
   border-color: #156374;
   box-shadow: none !important;
+}
+
+@media (max-width: 639px) {
+  .feed-media-viewport {
+    height: 270px !important;
+    max-height: 72vw !important;
+    aspect-ratio: 4 / 3 !important;
+  }
 }
 </style>

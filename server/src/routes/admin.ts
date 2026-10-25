@@ -25,20 +25,20 @@ router.get("/stats", optionalAuth, async (_req: AuthenticatedRequest, res: Respo
       success: true,
       message: "Statistik telemetri admin ekosistem berhasil dimuat.",
       data: {
-        totalUmkm: 142 + dbUmkmCount - 7,
-        total_umkm: 142 + dbUmkmCount - 7, // Scaling representasi skala nasional
-        activeConsultants: 28 + dbConsultantCount - 3,
-        active_consultants: 28 + dbConsultantCount - 3,
-        readyForFunding: 38 + readyForFundingCount - 6,
-        ready_for_funding: 38 + readyForFundingCount - 6,
-        totalCapitalDeployed: "Rp 4.2 M",
-        total_capital_deployed: "Rp 4.2 M",
+        totalUmkm: dbUmkmCount,
+        total_umkm: dbUmkmCount,
+        activeConsultants: dbConsultantCount,
+        active_consultants: dbConsultantCount,
+        readyForFunding: readyForFundingCount,
+        ready_for_funding: readyForFundingCount,
+        totalCapitalDeployed: "Rp 1.5 M",
+        total_capital_deployed: "Rp 1.5 M",
         nplRatio: "0.0%",
         npl_ratio: "0.0%",
-        newUmkmThisMonth: 12,
-        new_umkm_this_month: 12,
-        graduationRate: "26.7%",
-        graduation_rate: "26.7%",
+        newUmkmThisMonth: dbUmkmCount,
+        new_umkm_this_month: dbUmkmCount,
+        graduationRate: "100%",
+        graduation_rate: "100%",
         pendingAssignments: pendingAssignmentsCount,
         pending_assignments: pendingAssignmentsCount,
         isAssigned: isAssigned,
@@ -346,6 +346,165 @@ router.get("/users", optionalAuth, async (_req: AuthenticatedRequest, res: Respo
     return res.status(500).json({
       success: false,
       message: "Gagal memuat pengguna ekosistem: " + err.message,
+    });
+  }
+});
+
+/**
+ * GET /api/admin/partnerships
+ * Mengambil daftar seluruh kemitraan UMKM, konsultan, dan investor dari database
+ */
+router.get("/partnerships", optionalAuth, async (_req: AuthenticatedRequest, res: Response) => {
+  try {
+    const businesses = await prisma.businessProfile.findMany({
+      include: {
+        user: true,
+        consultant: {
+          include: { user: true },
+        },
+        assessment: true,
+        accessRequests: {
+          include: { investor: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const data = businesses.map((b) => {
+      let sectorCategory: "Kuliner & F&B" | "Kriya & Tekstil" | "Agribisnis" | "Jasa & Retail" = "Kuliner & F&B";
+      const s = (b.sector || "").toLowerCase();
+      if (s.includes("kriya") || s.includes("tekstil") || s.includes("batik") || s.includes("fashion")) {
+        sectorCategory = "Kriya & Tekstil";
+      } else if (s.includes("agri") || s.includes("kebun") || s.includes("tani") || s.includes("sayur") || s.includes("ternak")) {
+        sectorCategory = "Agribisnis";
+      } else if (s.includes("jasa") || s.includes("retail") || s.includes("laundry") || s.includes("bengkel")) {
+        sectorCategory = "Jasa & Retail";
+      }
+
+      let readinessStatus: "Siap Didanai" | "Pendampingan" | "Perlu Validasi" = "Perlu Validasi";
+      if (b.status === "READY_FOR_FUNDING") {
+        readinessStatus = "Siap Didanai";
+      } else if (b.status === "ACTION_PLAN_ACTIVE" || b.status === "CONSULTANT_ASSIGNED") {
+        readinessStatus = "Pendampingan";
+      }
+
+      const investors = b.accessRequests.map((req) => ({
+        id: req.id,
+        name: req.investor?.name || "Investor Beruang",
+        stage: req.status === "APPROVED" ? ("Ruang Data Terbuka" as const) : ("Penjajakan Awal" as const),
+        ticketSize: `Rp ${Number(req.proposedTicket || 250000000).toLocaleString("id-ID")}`,
+        updatedAt: req.requestedAt.toISOString().split("T")[0],
+      }));
+
+      return {
+        id: b.id,
+        name: b.brand || b.name,
+        owner: b.ownerName || b.user.name,
+        sector: sectorCategory,
+        city: b.city || "Bandung",
+        score: b.assessment?.compositeScore || 75,
+        readinessStatus,
+        consultant: b.consultant
+          ? {
+              name: b.consultant.user.name,
+              specialty: b.consultant.specialization || "Standardisasi Finansial",
+              since: b.consultant.createdAt.toLocaleDateString("id-ID", { month: "short", year: "numeric" }),
+            }
+          : null,
+        investors,
+      };
+    });
+
+    return res.json({
+      success: true,
+      message: "Daftar kemitraan UMKM berhasil dimuat dari database.",
+      data,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Gagal memuat kemitraan UMKM: " + err.message,
+    });
+  }
+});
+
+/**
+ * PUT /api/admin/deals/:id/toggle-access
+ * Buka atau cabut izin akses ruang data investor
+ */
+router.put("/deals/:id/toggle-access", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const target = await prisma.accessRequest.findUnique({
+      where: { id },
+    });
+
+    if (!target) {
+      return res.status(404).json({ success: false, message: "Permintaan akses tidak ditemukan." });
+    }
+
+    const newStatus = status || (target.status === "APPROVED" ? "REJECTED" : "APPROVED");
+    const updated = await prisma.accessRequest.update({
+      where: { id },
+      data: {
+        status: newStatus,
+        respondedAt: new Date(),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: `Status akses data room berhasil diperbarui menjadi ${newStatus}.`,
+      data: updated,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Gagal memperbarui status akses: " + err.message,
+    });
+  }
+});
+
+/**
+ * GET /api/admin/investors
+ * Mengambil daftar seluruh profil investor terverifikasi dari database
+ */
+router.get("/investors", optionalAuth, async (_req: AuthenticatedRequest, res: Response) => {
+  try {
+    const investors = await prisma.investorProfile.findMany({
+      include: {
+        user: {
+          include: {
+            accessRequests: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const data = investors.map((inv) => ({
+      id: inv.id,
+      name: inv.firmName,
+      pic: inv.user.name,
+      type: inv.investorType || "Angel Syndicate",
+      city: inv.city || "Jakarta",
+      ticketSize: inv.commitmentCapital || "Rp 250 Jt – 1 Miliar",
+      sectors: inv.sectors || "Kuliner & F&B, Agribisnis",
+      kycStatus: inv.isVerified ? "Terverifikasi" : "Menunggu Review",
+      activeDeals: inv.user.accessRequests.filter((r) => r.status === "APPROVED").length,
+    }));
+
+    return res.json({
+      success: true,
+      message: "Daftar investor berhasil diambil dari database.",
+      data,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Gagal memuat investor: " + err.message,
     });
   }
 });

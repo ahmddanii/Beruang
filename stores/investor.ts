@@ -528,6 +528,44 @@ export const useInvestorStore = defineStore('investor', {
     },
 
     /**
+     * GET /api/investor/marketplace
+     */
+    async fetchMarketplace() {
+      try {
+        const res = await useApi<any>('/investor/marketplace')
+        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+          const customPosts = this.marketplaceList.filter(m => m.isCustomPost)
+          const apiPosts: MarketplaceUmkm[] = res.data.map((item: any) => ({
+            id: item.id,
+            umkmRefId: item.umkmRefId || item.id,
+            name: item.name,
+            code: item.code || `BERU-${(item.city || 'UMK').substring(0, 3).toUpperCase()}-01`,
+            sector: item.sector,
+            city: item.city,
+            establishedYear: item.establishedYear || 2021,
+            postedAt: item.postedAt || 'Terverifikasi',
+            fundingTarget: item.fundingTarget || 250000000,
+            marginPercentage: item.marginPercentage || 45,
+            growthYoY: item.growthYoY || 30,
+            healthScore: item.healthScore || 80,
+            certifiedAt: item.certifiedAt || 'BNSP Terakreditasi',
+            consultantName: item.consultantName || 'Dra. Maya Suryani, M.M.',
+            pitchSummary: item.pitchSummary || '',
+            postImageUrl: item.postImageUrl || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
+            postImages: item.postImages && item.postImages.length > 0 ? item.postImages : ['https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80'],
+            postAspectRatio: item.postAspectRatio || '3:4',
+            tags: item.tags || ['UMKM Binaan'],
+            accessStatus: item.accessStatus || 'NONE',
+            bookmarked: Boolean(item.bookmarked)
+          }))
+          this.marketplaceList = [...customPosts, ...apiPosts]
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat marketplace live:', err?.message)
+      }
+    },
+
+    /**
      * POST /api/investor/requests
      */
     async requestAccess(umkmId: string, ticketSize: number, notes: string, scheme: string = 'REVENUE_SHARE') {

@@ -11,13 +11,13 @@
     >
       <div
         v-if="isOpen"
-        class="fixed inset-0 z-50 bg-black/40 dark:bg-black/70 backdrop-blur-xs lg:hidden"
+        class="fixed inset-0 z-50 bg-black/60 dark:bg-black/80 backdrop-blur-xs lg:hidden"
         aria-hidden="true"
         @click="emit('close')"
       />
     </Transition>
 
-    <!-- Liquid Reveal Elevated Bento Grid Menu Modal (Selaras Konsep & Warna Sidebar) -->
+    <!-- Liquid Reveal Elevated Bento Grid Menu Modal (Solid Opaque Background) -->
     <Transition
       :css="false"
       @before-enter="onModalBeforeEnter"
@@ -31,9 +31,9 @@
         aria-modal="true"
         aria-label="Menu Akses Cepat UMKM"
       >
-        <div class="p-4 sm:p-5 rounded-[28px] bg-white/95 dark:bg-[#13161F]/95 backdrop-blur-xl border border-[#E2E8F0] dark:border-neutral-800/80 shadow-[0_24px_60px_rgba(15,23,42,0.18),0_4px_16px_rgba(15,23,42,0.06)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.7),0_4px_16px_rgba(0,0,0,0.5)] space-y-3 font-poppins text-neutral-900 dark:text-white">
+        <div class="p-4 sm:p-5 rounded-[28px] bg-[#FFFFFF] dark:bg-[#13161F] border border-[#CBD5E1] dark:border-neutral-700 shadow-2xl space-y-3 font-poppins text-neutral-900 dark:text-white">
           <!-- Sheet Header: Pill "Beruang Siap Modal" dihilangkan, ditambahkan tombol tutup halus -->
-          <div class="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0] dark:border-neutral-800/80 px-1">
+          <div class="flex items-center justify-between pb-2.5 border-b border-[#E2E8F0] dark:border-neutral-800 px-1">
             <span class="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-poppins">
               {{ t('nav_quick_access') || 'Akses Cepat UMKM' }}
             </span>
@@ -57,8 +57,8 @@
               :class="[
                 'quick-access-tile flex flex-col items-center justify-center p-2 sm:p-2.5 min-h-[76px] sm:min-h-[80px] rounded-2xl border transition-all text-center group cursor-pointer relative active:scale-95 will-change-transform',
                 item.isPrimary
-                  ? 'bg-[#E6F4F7] dark:bg-[#156374]/25 border-[#156374]/30 dark:border-[#50AABF]/35 hover:bg-[#D9EEF3] dark:hover:bg-[#156374]/35'
-                  : 'bg-[#F8FAFC] dark:bg-[#181C26] border-[#E2E8F0] dark:border-neutral-800/80 hover:border-[#156374]/30 hover:bg-[#E6F4F7]/40 dark:hover:bg-[#156374]/15'
+                  ? 'bg-[#E6F4F7] dark:bg-[#156374]/30 border-[#156374]/40 dark:border-[#50AABF]/40 hover:bg-[#D9EEF3]'
+                  : 'bg-[#F8FAFC] dark:bg-[#1A1F2C] border-[#E2E8F0] dark:border-neutral-700 hover:border-[#156374]/40 hover:bg-[#E6F4F7]/40 dark:hover:bg-[#156374]/20'
               ]"
               @click="handleNavigate(item)"
             >
@@ -76,7 +76,7 @@
                   'tile-icon-box w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all shadow-2xs will-change-transform',
                   item.isPrimary
                     ? 'bg-[#156374] dark:bg-[#50AABF] text-white dark:text-[#0A0D14] shadow-xs'
-                    : 'bg-white dark:bg-[#121620] border border-[#E2E8F0] dark:border-neutral-700/80 text-[#64748B] dark:text-neutral-300 group-hover:text-[#156374] dark:group-hover:text-[#50AABF] group-hover:border-[#156374]/30'
+                    : 'bg-white dark:bg-[#121620] border border-[#CBD5E1] dark:border-neutral-700 text-[#64748B] dark:text-neutral-300 group-hover:text-[#156374] dark:group-hover:text-[#50AABF]'
                 ]"
               >
                 <HugeiconsIcon
@@ -107,7 +107,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore } from '~/stores/auth'
 import { useChatStore } from '~/stores/chat'
 import { useNotificationStore } from '~/stores/notification'
 import { useLanguage } from '~/composables/useLanguage'
@@ -122,8 +123,19 @@ import {
   Message01Icon,
   Notification01Icon,
   Store01Icon,
+  Settings01Icon,
+  Bookmark02Icon,
+  UserCircleIcon,
+  UserGroupIcon,
+  Home03Icon,
   Cancel01Icon
 } from '@hugeicons/core-free-icons'
+
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+const chatStore = useChatStore()
+const notifStore = useNotificationStore()
 
 const props = defineProps<{
   isOpen: boolean
@@ -133,10 +145,6 @@ const emit = defineEmits<{
   (e: 'close'): void
   (e: 'open-catat-kas'): void
 }>()
-
-const router = useRouter()
-const chatStore = useChatStore()
-const notifStore = useNotificationStore()
 
 // Smooth Reveal Transition Hooks: Mulai dari container, baru reveal icon dari pertama kiri pojok atas satu per satu perlahan (smooth tanpa efek bouncy)
 function onModalBeforeEnter(el: Element) {
@@ -247,59 +255,157 @@ const totalUnreadNotif = computed(() => {
 
 const { t, currentLang } = useLanguage()
 
-const quickAccessItems = computed(() => [
-  {
-    id: 'catat-kas',
-    label: t('btn_catat_kas_singkat'),
-    to: '/dashboard/progres?action=catat-kas',
-    icon: Add01Icon,
-    isPrimary: true
-  },
-  {
-    id: 'buku-kas',
-    label: currentLang.value === 'en' ? 'Cash Book' : 'Buku Kas',
-    to: '/dashboard/progres',
-    icon: Coins01Icon
-  },
-  {
-    id: 'kesehatan',
-    label: currentLang.value === 'en' ? 'Readiness' : 'Kesiapan',
-    to: '/dashboard/penilaian',
-    icon: AnalyticsUpIcon
-  },
-  {
-    id: 'tugas',
-    label: currentLang.value === 'en' ? 'Tasks' : 'Tugas',
-    to: '/dashboard/rencana-aksi',
-    icon: Task01Icon
-  },
-  {
-    id: 'modal',
-    label: currentLang.value === 'en' ? 'Funding' : 'Cari Modal',
-    to: '/dashboard/pendanaan',
-    icon: Award01Icon
-  },
-  {
-    id: 'pesan',
-    label: t('nav_pesan'),
-    to: '/dashboard/pesan',
-    icon: Message01Icon,
-    badge: totalUnreadPesan.value
-  },
-  {
-    id: 'notifikasi',
-    label: t('nav_notifikasi'),
-    to: '/dashboard/notifikasi',
-    icon: Notification01Icon,
-    badge: totalUnreadNotif.value
-  },
-  {
-    id: 'profile',
-    label: currentLang.value === 'en' ? 'Profile' : 'Profil Toko',
-    to: '/dashboard/profile',
-    icon: Store01Icon
+const quickAccessItems = computed(() => {
+  const role = authStore.currentUser?.role || (route.path.startsWith('/investor') ? 'INVESTOR' : route.path.startsWith('/admin') ? 'ADMIN' : 'UMKM')
+
+  if (role === 'INVESTOR') {
+    return [
+      {
+        id: 'jaringan',
+        label: 'Jaringan',
+        to: '/investor',
+        icon: Store01Icon,
+        isPrimary: true
+      },
+      {
+        id: 'simpan',
+        label: 'Simpan',
+        to: '/investor/watchlist',
+        icon: Bookmark02Icon
+      },
+      {
+        id: 'profile',
+        label: currentLang.value === 'en' ? 'Profile' : 'Profil Saya',
+        to: '/investor/profile',
+        icon: UserCircleIcon
+      },
+      {
+        id: 'pesan',
+        label: t('nav_pesan'),
+        to: '/investor/pesan',
+        icon: Message01Icon,
+        badge: chatStore.unreadCountInvestor || 0
+      },
+      {
+        id: 'notifikasi',
+        label: t('nav_notifikasi'),
+        to: '/dashboard/notifikasi',
+        icon: Notification01Icon,
+        badge: totalUnreadNotif.value
+      },
+      {
+        id: 'pengaturan',
+        label: currentLang.value === 'en' ? 'Settings' : 'Pengaturan',
+        to: '/investor/pengaturan',
+        icon: Settings01Icon
+      }
+    ]
   }
-])
+
+  if (role === 'ADMIN') {
+    return [
+      {
+        id: 'beranda',
+        label: 'Beranda',
+        to: '/admin',
+        icon: Home03Icon,
+        isPrimary: true
+      },
+      {
+        id: 'umkm',
+        label: 'Kemitraan',
+        to: '/admin/umkm',
+        icon: Store01Icon
+      },
+      {
+        id: 'investor',
+        label: 'Investor',
+        to: '/admin/investor',
+        icon: Coins01Icon
+      },
+      {
+        id: 'sertifikasi',
+        label: 'Sertifikasi',
+        to: '/admin/sertifikasi',
+        icon: Award01Icon
+      },
+      {
+        id: 'penugasan',
+        label: 'Konsultan',
+        to: '/admin/penugasan',
+        icon: UserGroupIcon
+      },
+      {
+        id: 'notifikasi',
+        label: t('nav_notifikasi'),
+        to: '/dashboard/notifikasi',
+        icon: Notification01Icon,
+        badge: totalUnreadNotif.value
+      },
+      {
+        id: 'pengaturan',
+        label: currentLang.value === 'en' ? 'Settings' : 'Pengaturan',
+        to: '/admin/pengaturan',
+        icon: Settings01Icon
+      }
+    ]
+  }
+
+  // UMKM (8 Items, including Settings)
+  return [
+    {
+      id: 'catat-kas',
+      label: t('btn_catat_kas_singkat'),
+      to: '/dashboard/progres?action=catat-kas',
+      icon: Add01Icon,
+      isPrimary: true
+    },
+    {
+      id: 'buku-kas',
+      label: currentLang.value === 'en' ? 'Cash Book' : 'Buku Kas',
+      to: '/dashboard/progres',
+      icon: Coins01Icon
+    },
+    {
+      id: 'modal',
+      label: currentLang.value === 'en' ? 'Funding' : 'Cari Modal',
+      to: '/dashboard/pendanaan',
+      icon: Award01Icon
+    },
+    {
+      id: 'tugas',
+      label: currentLang.value === 'en' ? 'Tasks' : 'Tugas',
+      to: '/dashboard/rencana-aksi',
+      icon: Task01Icon
+    },
+    {
+      id: 'pesan',
+      label: t('nav_pesan'),
+      to: '/dashboard/pesan',
+      icon: Message01Icon,
+      badge: totalUnreadPesan.value
+    },
+    {
+      id: 'notifikasi',
+      label: t('nav_notifikasi'),
+      to: '/dashboard/notifikasi',
+      icon: Notification01Icon,
+      badge: totalUnreadNotif.value
+    },
+    {
+      id: 'profile',
+      label: currentLang.value === 'en' ? 'Profile' : 'Profil Toko',
+      to: '/dashboard/profile',
+      icon: Store01Icon
+    },
+    {
+      id: 'pengaturan',
+      label: currentLang.value === 'en' ? 'Settings' : 'Pengaturan',
+      to: '/dashboard/pengaturan',
+      icon: Settings01Icon
+    }
+  ]
+})
 
 function handleNavigate(item: any) {
   emit('close')

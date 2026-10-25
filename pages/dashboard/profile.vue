@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div class="space-y-6 sm:space-y-8 pb-32 sm:pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Top Page Header: Title on Left & Simpan Perubahan on Right (1 Baris Sejajar) -->
     <div class="flex items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">
@@ -39,13 +39,13 @@
             <!-- 1. Lokasi & Tahun Berdiri -->
             <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
               <HugeiconsIcon :icon="Location01Icon" :size="15" class="text-neutral-400 dark:text-neutral-500 shrink-0" />
-              <span>{{ formProfile.city || (isDemoUser ? 'Bandung, Jawa Barat' : 'Lokasi Belum Diatur') }}, sejak {{ formProfile.establishedYear || '-' }}</span>
+              <span>{{ formProfile.city }}, sejak {{ formProfile.establishedYear }}</span>
             </p>
 
             <!-- 2. Nama Brand UMKM + Badge Terverifikasi -->
             <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap py-0.5">
               <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight">
-                {{ formProfile.name || (isDemoUser ? 'Kopi Senja Nusantara' : (authStore.currentUser?.businessName || 'Nama Usaha Belum Diatur')) }}
+                {{ formProfile.name || 'Kopi Senja Nusantara' }}
               </h2>
               <BVerifiedBadge />
             </div>
@@ -54,7 +54,7 @@
             <div class="flex items-center flex-wrap gap-y-2 gap-x-2.5 sm:gap-x-3.5 pt-1.5 text-xs sm:text-[13px] font-poppins text-neutral-600 dark:text-neutral-400">
               <div class="inline-flex items-center gap-1.5">
                 <HugeiconsIcon :icon="Building03Icon" :size="15" class="text-neutral-500 dark:text-neutral-400 shrink-0" />
-                <span>{{ formProfile.sector || (isDemoUser ? 'Kuliner & Minuman (F&B)' : 'Sektor Usaha Belum Dipilih') }}</span>
+                <span>{{ formProfile.sector }}</span>
               </div>
 
               <span class="w-1.5 h-1.5 rounded-full bg-neutral-400 dark:bg-neutral-500 self-end mb-[1px] shrink-0" aria-hidden="true" />
@@ -586,19 +586,7 @@
           </div>
 
           <!-- Product Cards Grid -->
-          <div v-if="featuredProducts.length === 0" class="p-8 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-800 text-center flex flex-col items-center justify-center space-y-2">
-            <p class="text-xs sm:text-sm font-poppins text-neutral-500 dark:text-neutral-400">
-              Belum ada produk unggulan yang ditambahkan.
-            </p>
-            <button
-              type="button"
-              class="text-xs font-poppins font-semibold text-[#00AA13] dark:text-emerald-400 hover:underline cursor-pointer"
-              @click="openAddProductModal"
-            >
-              + Tambah produk pertama Anda
-            </button>
-          </div>
-          <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div
               v-for="prod in featuredProducts"
               :key="prod.id"
@@ -698,31 +686,20 @@
             </p>
           </div>
 
-          <div v-if="hasAssignedConsultant" class="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-200/80 dark:border-neutral-800">
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-200/80 dark:border-neutral-800">
             <img
               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80"
-              :alt="consultantDisplayName"
+              alt="Dra. Maya Suryani"
               class="w-12 h-12 rounded-xl object-cover shrink-0"
             />
             <div class="min-w-0">
               <span class="text-xs font-poppins font-bold text-neutral-900 dark:text-white block truncate">
-                {{ consultantDisplayName }}
+                Dra. Maya Suryani, M.M.
               </span>
               <span class="text-[11px] font-poppins text-neutral-500 dark:text-neutral-400 block truncate">
                 Advisor Kurasi Finansial & Legalitas
               </span>
             </div>
-          </div>
-          <div v-else class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-dashed border-neutral-300 dark:border-neutral-700 text-center space-y-2">
-            <div class="w-10 h-10 mx-auto rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-400">
-              <HugeiconsIcon :icon="UserCircleIcon" :size="20" />
-            </div>
-            <p class="text-xs font-poppins font-semibold text-neutral-800 dark:text-neutral-200">
-              Belum Ditugaskan Konsultan
-            </p>
-            <p class="text-[11px] font-poppins text-neutral-500 dark:text-neutral-400 max-w-xs mx-auto leading-normal">
-              Konsultan pendamping resmi akan ditugaskan untuk mengawal validasi tokomu setelah profil usaha dan legalitas dilengkapi.
-            </p>
           </div>
         </div>
 
@@ -1315,43 +1292,28 @@ function formatTargetWords(val: number): string {
   return `Rp ${new Intl.NumberFormat('id-ID').format(val)}`
 }
 
-const isDemoUser = computed(() => {
-  const email = authStore.currentUser?.email?.toLowerCase() || ''
-  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
-})
-
-const hasAssignedConsultant = computed(() => {
-  if (isDemoUser.value) return true
-  return Boolean(umkmStore.profile.consultantId)
-})
-
-const consultantDisplayName = computed(() => {
-  if (isDemoUser.value) return 'Dra. Maya Suryani, M.M.'
-  return umkmStore.profile.consultantName || 'Konsultan Pendamping'
-})
-
 // Owner First Name
 const ownerFirstName = computed(() => {
-  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || (isDemoUser.value ? 'Fikri' : 'Pengguna')
+  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
   return name.split(' ')[0]
 })
 
 // Profile Form State
 const formProfile = reactive({
-  name: umkmStore.profile.name || authStore.currentUser?.businessName || (isDemoUser.value ? 'Kopi Senja Nusantara' : ''),
-  ownerName: umkmStore.profile.ownerName || authStore.currentUser?.name || (isDemoUser.value ? 'Fikri Setiawan' : ''),
-  sector: umkmStore.profile.sector || (isDemoUser.value ? 'Kuliner & Minuman (F&B)' : ''),
-  city: umkmStore.profile.city || (isDemoUser.value ? 'Bandung, Jawa Barat' : ''),
-  establishedYear: umkmStore.profile.establishedYear || (isDemoUser.value ? 2021 : new Date().getFullYear()),
-  outletsCount: umkmStore.branches.length || umkmStore.profile.outletsCount || (isDemoUser.value ? 3 : 1),
-  employeesCount: umkmStore.profile.employeesCount || (isDemoUser.value ? 14 : 1),
-  fundingTarget: umkmStore.profile.fundingTarget || (isDemoUser.value ? 250000000 : 0),
-  plannedFundUse: isDemoUser.value ? 'Ekspansi 2 gerai cloud kitchen di area Bandung Timur dan pengadaan mesin roastery kapasitas 5kg terpusat.' : '',
-  description: umkmStore.profile.description || umkmStore.profile.pitchSummary || (isDemoUser.value ? 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.' : ''),
-  nib: umkmStore.profile.nib || (isDemoUser.value ? '1209000123456' : ''),
-  npwp: umkmStore.profile.npwp || (isDemoUser.value ? '81.423.891.4-429.000' : ''),
-  halalNumber: umkmStore.profile.halalNumber || (isDemoUser.value ? 'ID321100019283' : ''),
-  hkiNumber: umkmStore.profile.hkiNumber || (isDemoUser.value ? 'IPT20250918290' : '')
+  name: umkmStore.profile.name || 'Kopi Senja Nusantara',
+  ownerName: umkmStore.profile.ownerName || 'Fikri Setiawan',
+  sector: umkmStore.profile.sector || 'Kuliner & Minuman (F&B)',
+  city: umkmStore.profile.city || 'Bandung, Jawa Barat',
+  establishedYear: umkmStore.profile.establishedYear || 2021,
+  outletsCount: umkmStore.branches.length || umkmStore.profile.outletsCount || 3,
+  employeesCount: umkmStore.profile.employeesCount || 14,
+  fundingTarget: umkmStore.profile.fundingTarget || 250000000,
+  plannedFundUse: 'Ekspansi 2 gerai cloud kitchen di area Bandung Timur dan pengadaan mesin roastery kapasitas 5kg terpusat.',
+  description: umkmStore.profile.description || umkmStore.profile.pitchSummary || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
+  nib: umkmStore.profile.nib || '1209000123456',
+  npwp: umkmStore.profile.npwp || '81.423.891.4-429.000',
+  halalNumber: umkmStore.profile.halalNumber || 'ID321100019283',
+  hkiNumber: umkmStore.profile.hkiNumber || 'IPT20250918290'
 })
 
 // Branch Management Logic (Daftar Gerai & Cabang Usaha)
@@ -1405,7 +1367,7 @@ const isDescriptionExpanded = ref(false)
 const descriptionThreshold = 180
 
 const displayedDescription = computed(() => {
-  const desc = formProfile.description || (isDemoUser.value ? 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.' : '')
+  const desc = formProfile.description || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.'
   if (desc.length <= descriptionThreshold || isDescriptionExpanded.value) {
     return desc
   }
@@ -1413,7 +1375,7 @@ const displayedDescription = computed(() => {
 })
 
 const hasLongDescription = computed(() => {
-  const desc = formProfile.description || ''
+  const desc = formProfile.description || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.'
   return desc.length > descriptionThreshold
 })
 
@@ -1427,13 +1389,13 @@ function scrollToEditDescription() {
 
 // Store Contacts State
 const storeContacts = reactive({
-  whatsapp: isDemoUser.value ? '+62 812-3456-7890' : (authStore.currentUser?.phone || ''),
-  instagram: isDemoUser.value ? 'kopisenja.nusantara' : '',
-  address: isDemoUser.value ? 'Jl. LLRE Martadinata (Riau) No. 45, Bandung' : ''
+  whatsapp: '+62 812-3456-7890',
+  instagram: 'kopisenja.nusantara',
+  address: 'Jl. LLRE Martadinata (Riau) No. 45, Bandung'
 })
 
 // Sector Custom Choice
-const selectedSectorChoice = ref(isDemoUser.value ? 'Kuliner & Minuman (F&B)' : (formProfile.sector || ''))
+const selectedSectorChoice = ref('Kuliner & Minuman (F&B)')
 const customSectorInput = ref('')
 
 // Unsaved Changes Tracking (Dynamic button state: Green when dirty, Grey when clean)
@@ -1520,7 +1482,7 @@ export interface FeaturedProduct {
   imageUrl?: string
 }
 
-const demoFeaturedProducts: FeaturedProduct[] = [
+const featuredProducts = ref<FeaturedProduct[]>([
   {
     id: 'prod-1',
     name: 'Kopi Susu Senja Aren 1L',
@@ -1551,9 +1513,7 @@ const demoFeaturedProducts: FeaturedProduct[] = [
     description: 'Ekstrak seduh dingin 18 jam dengan sirup vanila organik & susu krim segar.',
     imageUrl: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=350&auto=format&fit=crop&q=80'
   }
-]
-
-const featuredProducts = ref<FeaturedProduct[]>(isDemoUser.value ? [...demoFeaturedProducts] : [])
+])
 
 const isAddProductModalOpen = ref(false)
 const newProductForm = reactive({
@@ -1617,36 +1577,13 @@ const newPostForm = reactive({
 })
 
 const myUmkmPosts = computed<MarketplaceUmkm[]>(() => {
-  const currentUserId = authStore.currentUser?.id
-  const currentEmail = authStore.currentUser?.email?.toLowerCase()
-  const currentBizName = (formProfile.name || authStore.currentUser?.businessName || '').toLowerCase().trim()
-
-  return investorStore.marketplaceList.filter(m => {
-    if (currentEmail === 'fikri@kopisenja.id') {
-      return (
-        m.id === 'umkm-01' ||
-        m.umkmRefId === 'umkm-01' ||
-        (currentBizName && m.name.toLowerCase().trim() === currentBizName)
-      )
-    }
-
-    if (m.id === 'umkm-01' || (m.umkmRefId === 'umkm-01' && !m.authorUserId)) {
-      return false
-    }
-
-    if (m.authorUserId && currentUserId && m.authorUserId === currentUserId) {
-      return true
-    }
-    if (m.authorEmail && currentEmail && m.authorEmail === currentEmail) {
-      return true
-    }
-
-    if (m.isCustomPost && currentBizName && m.name.toLowerCase().trim() === currentBizName) {
-      return true
-    }
-
-    return false
-  })
+  const currentName = (formProfile.name || 'Kopi Senja Nusantara').toLowerCase().trim()
+  return investorStore.marketplaceList.filter(
+    m =>
+      m.id === 'umkm-01' ||
+      m.umkmRefId === 'umkm-01' ||
+      m.name.toLowerCase().trim() === currentName
+  )
 })
 
 function getUmkmPostImages(post: MarketplaceUmkm): string[] {
@@ -1732,19 +1669,14 @@ function removeDraftPostImage(idx: number) {
 function handleCreateUmkmPost() {
   if (!newPostForm.pitchSummary.trim()) return
 
-  const currentUserId = authStore.currentUser?.id
-  const currentEmail = authStore.currentUser?.email
-
   investorStore.createUmkmPost({
-    umkmRefId: currentUserId || (isDemoUser.value ? 'umkm-01' : 'umkm-user'),
-    authorUserId: currentUserId,
-    authorEmail: currentEmail,
-    name: formProfile.name || authStore.currentUser?.businessName || (isDemoUser.value ? 'Kopi Senja Nusantara' : 'Usaha Saya'),
-    city: formProfile.city || (isDemoUser.value ? 'Bandung' : 'Kota'),
-    sector: formProfile.sector || (isDemoUser.value ? 'Kuliner & Minuman (F&B)' : 'Sektor Usaha'),
-    establishedYear: formProfile.establishedYear || new Date().getFullYear(),
-    fundingTarget: formProfile.fundingTarget || 0,
-    consultantName: umkmStore.profile.consultantName || (isDemoUser.value ? 'Dra. Maya Suryani, M.M.' : 'Belum Ditugaskan'),
+    umkmRefId: 'umkm-01',
+    name: formProfile.name || 'Kopi Senja Nusantara',
+    city: formProfile.city || 'Bandung',
+    sector: formProfile.sector || 'Kuliner & Minuman (F&B)',
+    establishedYear: formProfile.establishedYear || 2021,
+    fundingTarget: formProfile.fundingTarget || 250000000,
+    consultantName: 'Dra. Maya Suryani, M.M.',
     pitchSummary: newPostForm.pitchSummary.trim(),
     postImages: [...newPostForm.postImages]
   })
@@ -1761,8 +1693,7 @@ function handleDeleteUmkmPost(postId: string) {
 function saveProductsToStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-      localStorage.setItem(`umkm_featured_products${userKey}`, JSON.stringify(featuredProducts.value))
+      localStorage.setItem('umkm_featured_products', JSON.stringify(featuredProducts.value))
     } catch (e) {
       // ignore
     }
@@ -1772,18 +1703,11 @@ function saveProductsToStorage() {
 function initProductsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-      const saved = localStorage.getItem(`umkm_featured_products${userKey}`) || (isDemoUser.value ? localStorage.getItem('umkm_featured_products') : null)
+      const saved = localStorage.getItem('umkm_featured_products')
       if (saved) {
         const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed)) {
-          if (!isDemoUser.value && saved.includes('Kopi Susu Senja')) {
-            localStorage.removeItem(`umkm_featured_products${userKey}`)
-            localStorage.removeItem('umkm_featured_products')
-            featuredProducts.value = []
-          } else {
-            featuredProducts.value = parsed
-          }
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          featuredProducts.value = parsed
         }
       }
     } catch (e) {
@@ -1795,8 +1719,7 @@ function initProductsFromStorage() {
 function saveContactsToStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-      localStorage.setItem(`umkm_contacts${userKey}`, JSON.stringify(storeContacts))
+      localStorage.setItem('umkm_contacts', JSON.stringify(storeContacts))
     } catch (e) {
       // ignore
     }
@@ -1806,16 +1729,10 @@ function saveContactsToStorage() {
 function initContactsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-      const saved = localStorage.getItem(`umkm_contacts${userKey}`) || (isDemoUser.value ? localStorage.getItem('umkm_contacts') : null)
+      const saved = localStorage.getItem('umkm_contacts')
       if (saved) {
         const parsed = JSON.parse(saved)
-        if (!isDemoUser.value && (saved.includes('kopisenja') || saved.includes('Martadinata'))) {
-          localStorage.removeItem(`umkm_contacts${userKey}`)
-          localStorage.removeItem('umkm_contacts')
-        } else {
-          Object.assign(storeContacts, parsed)
-        }
+        Object.assign(storeContacts, parsed)
       }
     } catch (e) {
       // ignore
@@ -1838,19 +1755,19 @@ export interface LegalDocItem {
   } | null
 }
 
-const getDemoLegalDocs = (): LegalDocItem[] => [
+const legalDocuments = ref<LegalDocItem[]>([
   {
     id: 'sku',
     title: 'Surat Keterangan Usaha (SKU)',
     subtitle: 'Surat Keterangan Usaha resmi dari kelurahan/kecamatan setempat yang menerangkan kepemilikan unit usaha aktif.',
     categoryBadge: 'Wajib UMKM',
     requirementNote: 'Syarat dasar kelayakan operasional usaha',
-    file: isDemoUser.value ? {
+    file: {
       name: 'SKU_Kopi_Senja_Nusantara_2026.pdf',
       size: '1.4 MB',
       uploadedAt: '12 Oktober 2026',
       isVerified: true
-    } : null
+    }
   },
   {
     id: 'akta',
@@ -1858,12 +1775,12 @@ const getDemoLegalDocs = (): LegalDocItem[] => [
     subtitle: 'Dokumen autentik pendirian badan usaha (PT Perorangan, PT, CV, atau Firma) yang disahkan oleh Notaris.',
     categoryBadge: 'Badan Usaha / PT / CV',
     requirementNote: 'Bukti legalitas pendirian entitas bisnis resmi',
-    file: isDemoUser.value ? {
+    file: {
       name: 'Akta_Notaris_PT_Senja_Berkah_Abadi.pdf',
       size: '3.2 MB',
       uploadedAt: '15 September 2026',
       isVerified: true
-    } : null
+    }
   },
   {
     id: 'kemenkumham',
@@ -1871,12 +1788,12 @@ const getDemoLegalDocs = (): LegalDocItem[] => [
     subtitle: 'Surat Keputusan Pengesahan Badan Hukum resmi dari Kementerian Hukum dan HAM Republik Indonesia.',
     categoryBadge: 'Pengesahan Hukum',
     requirementNote: 'Terdaftar resmi di database Administrasi Hukum Umum (AHU)',
-    file: isDemoUser.value ? {
+    file: {
       name: 'SK_Kemenkumham_AHU_0029182_2024.pdf',
       size: '1.1 MB',
       uploadedAt: '18 September 2026',
       isVerified: true
-    } : null
+    }
   },
   {
     id: 'halal',
@@ -1884,12 +1801,12 @@ const getDemoLegalDocs = (): LegalDocItem[] => [
     subtitle: 'Sertifikasi jaminan produk halal resmi dari BPJPH Kementerian Agama (diperlukan jika produk makanan atau minuman/FnB).',
     categoryBadge: 'Khusus FnB / Kuliner',
     requirementNote: 'Wajib kepatuhan sektor FnB konsumen muslim',
-    file: isDemoUser.value ? {
+    file: {
       name: 'Sertifikat_Halal_BPJPH_ID321100019283.pdf',
       size: '2.5 MB',
       uploadedAt: '20 Agustus 2026',
       isVerified: true
-    } : null
+    }
   },
   {
     id: 'pirt',
@@ -1905,12 +1822,12 @@ const getDemoLegalDocs = (): LegalDocItem[] => [
     subtitle: 'Surat pendaftaran merek dagang atau logo usaha melalui DJKI (Direktorat Jenderal Kekayaan Intelektual) untuk melindungi identitas brand.',
     categoryBadge: 'Perlindungan Brand',
     requirementNote: 'Mencegah plagiarisme dan mengunci valuasi brand',
-    file: isDemoUser.value ? {
+    file: {
       name: 'HAKI_DJKI_Merek_KopiSenja_IPT2025.pdf',
       size: '1.8 MB',
       uploadedAt: '05 Juli 2026',
       isVerified: true
-    } : null
+    }
   },
   {
     id: 'bpom',
@@ -1920,9 +1837,7 @@ const getDemoLegalDocs = (): LegalDocItem[] => [
     requirementNote: 'Standar regulasi peredaran skala manufaktur/pabrikasi',
     file: null
   }
-]
-
-const legalDocuments = ref<LegalDocItem[]>(getDemoLegalDocs())
+])
 
 // Document Specific Icon Helper (Pure black icon, context-driven)
 function getDocIcon(id: string) {
@@ -2014,8 +1929,7 @@ function removeDocument(docId: string) {
 function saveDocsToStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-      localStorage.setItem(`umkm_data_room_docs${userKey}`, JSON.stringify(legalDocuments.value))
+      localStorage.setItem('umkm_data_room_docs', JSON.stringify(legalDocuments.value))
     } catch (e) {
       // ignore
     }
@@ -2025,18 +1939,11 @@ function saveDocsToStorage() {
 function initDocsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
-      const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-      const saved = localStorage.getItem(`umkm_data_room_docs${userKey}`) || (isDemoUser.value ? localStorage.getItem('umkm_data_room_docs') : null)
+      const saved = localStorage.getItem('umkm_data_room_docs')
       if (saved) {
         const parsed = JSON.parse(saved)
         if (Array.isArray(parsed) && parsed.length > 0) {
-          if (!isDemoUser.value && saved.includes('Kopi_Senja')) {
-            localStorage.removeItem(`umkm_data_room_docs${userKey}`)
-            localStorage.removeItem('umkm_data_room_docs')
-            legalDocuments.value = getDemoLegalDocs()
-          } else {
-            legalDocuments.value = parsed
-          }
+          legalDocuments.value = parsed
         }
       }
     } catch (e) {
@@ -2060,16 +1967,11 @@ function handlePreviewInvestor() {
 }
 
 function handleCopyProfileLink() {
-  const bizSlug = (formProfile.name || (isDemoUser.value ? 'kopi-senja-nusantara' : 'usaha-saya'))
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-  const shareUrl = `https://beruang.id/etalase/${bizSlug}`
   if (typeof navigator !== 'undefined' && navigator.clipboard) {
-    navigator.clipboard.writeText(shareUrl)
+    navigator.clipboard.writeText('https://beruang.id/etalase/kopi-senja-nusantara')
     triggerToast('Tautan profil publik berhasil disalin ke clipboard!')
   } else {
-    triggerToast(`Tautan publik: ${shareUrl}`)
+    triggerToast('Tautan publik: https://beruang.id/etalase/kopi-senja-nusantara')
   }
 }
 
@@ -2080,8 +1982,8 @@ function saveProfile() {
     formProfile.sector = selectedSectorChoice.value
   }
 
-  umkmStore.profile.name = formProfile.name.trim() || (isDemoUser.value ? 'Kopi Senja Nusantara' : '')
-  umkmStore.profile.ownerName = formProfile.ownerName.trim() || (isDemoUser.value ? 'Fikri Setiawan' : (authStore.currentUser?.name || ''))
+  umkmStore.profile.name = formProfile.name.trim() || 'Kopi Senja Nusantara'
+  umkmStore.profile.ownerName = formProfile.ownerName.trim() || 'Fikri Setiawan'
   umkmStore.profile.sector = formProfile.sector
   umkmStore.profile.city = formProfile.city.trim()
   umkmStore.profile.establishedYear = formProfile.establishedYear
@@ -2105,17 +2007,16 @@ function saveProfile() {
   saveDocsToStorage()
 
   if (typeof localStorage !== 'undefined') {
-    const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-    localStorage.setItem(`umkm_profile_name${userKey}`, formProfile.name)
-    localStorage.setItem(`umkm_profile_desc${userKey}`, formProfile.description)
-    localStorage.setItem(`umkm_profile_sector${userKey}`, formProfile.sector)
-    localStorage.setItem(`umkm_profile_city${userKey}`, formProfile.city)
-    localStorage.setItem(`umkm_profile_nib${userKey}`, formProfile.nib)
-    localStorage.setItem(`umkm_profile_npwp${userKey}`, formProfile.npwp)
-    localStorage.setItem(`umkm_profile_halal${userKey}`, formProfile.halalNumber || '')
-    localStorage.setItem(`umkm_profile_hki${userKey}`, formProfile.hkiNumber || '')
-    localStorage.setItem(`umkm_profile_funding_target${userKey}`, String(formProfile.fundingTarget))
-    localStorage.setItem(`umkm_profile_planned_fund_use${userKey}`, formProfile.plannedFundUse || '')
+    localStorage.setItem('umkm_profile_name', formProfile.name)
+    localStorage.setItem('umkm_profile_desc', formProfile.description)
+    localStorage.setItem('umkm_profile_sector', formProfile.sector)
+    localStorage.setItem('umkm_profile_city', formProfile.city)
+    localStorage.setItem('umkm_profile_nib', formProfile.nib)
+    localStorage.setItem('umkm_profile_npwp', formProfile.npwp)
+    localStorage.setItem('umkm_profile_halal', formProfile.halalNumber || '')
+    localStorage.setItem('umkm_profile_hki', formProfile.hkiNumber || '')
+    localStorage.setItem('umkm_profile_funding_target', String(formProfile.fundingTarget))
+    localStorage.setItem('umkm_profile_planned_fund_use', formProfile.plannedFundUse || '')
   }
 
   // Update snapshot so hasUnsavedChanges resets to false (button returns to grey)
@@ -2127,12 +2028,7 @@ function saveProfile() {
 
 let gsapCtx: gsap.Context | null = null
 
-onMounted(async () => {
-  try {
-    await umkmStore.fetchProfile()
-  } catch (e) {
-    // ignore
-  }
+onMounted(() => {
   umkmStore.initBranchesFromStorage()
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
@@ -2143,27 +2039,10 @@ onMounted(async () => {
   initContactsFromStorage()
   initDocsFromStorage()
 
-  if (umkmStore.profile.name) {
-    if (!isDemoUser.value && umkmStore.profile.name === 'Kopi Senja Nusantara') {
-      formProfile.name = authStore.currentUser?.businessName || ''
-    } else {
-      formProfile.name = umkmStore.profile.name
-    }
-  }
-  if (umkmStore.profile.ownerName) {
-    if (!isDemoUser.value && umkmStore.profile.ownerName === 'Fikri Setiawan') {
-      formProfile.ownerName = authStore.currentUser?.name || ''
-    } else {
-      formProfile.ownerName = umkmStore.profile.ownerName
-    }
-  }
+  if (umkmStore.profile.name) formProfile.name = umkmStore.profile.name
+  if (umkmStore.profile.ownerName) formProfile.ownerName = umkmStore.profile.ownerName
   if (umkmStore.profile.description || umkmStore.profile.pitchSummary) {
-    const d = umkmStore.profile.description || umkmStore.profile.pitchSummary
-    if (!isDemoUser.value && d?.includes('Spesialis kopi arabika')) {
-      formProfile.description = ''
-    } else {
-      formProfile.description = d
-    }
+    formProfile.description = umkmStore.profile.description || umkmStore.profile.pitchSummary
   }
   if (umkmStore.profile.sector) {
     formProfile.sector = umkmStore.profile.sector
@@ -2176,19 +2055,13 @@ onMounted(async () => {
   if (umkmStore.profile.hkiNumber) formProfile.hkiNumber = umkmStore.profile.hkiNumber
 
   if (typeof localStorage !== 'undefined') {
-    const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
-    const savedFundingTarget = localStorage.getItem(`umkm_profile_funding_target${userKey}`) || (isDemoUser.value ? localStorage.getItem('umkm_profile_funding_target') : null)
+    const savedFundingTarget = localStorage.getItem('umkm_profile_funding_target')
     if (savedFundingTarget && Number(savedFundingTarget)) {
       formProfile.fundingTarget = Number(savedFundingTarget)
     }
-    const savedFundUse = localStorage.getItem(`umkm_profile_planned_fund_use${userKey}`) || (isDemoUser.value ? localStorage.getItem('umkm_profile_planned_fund_use') : null)
+    const savedFundUse = localStorage.getItem('umkm_profile_planned_fund_use')
     if (savedFundUse) {
-      if (!isDemoUser.value && savedFundUse.includes('cloud kitchen di area Bandung Timur')) {
-        localStorage.removeItem(`umkm_profile_planned_fund_use${userKey}`)
-        localStorage.removeItem('umkm_profile_planned_fund_use')
-      } else {
-        formProfile.plannedFundUse = savedFundUse
-      }
+      formProfile.plannedFundUse = savedFundUse
     }
   }
 

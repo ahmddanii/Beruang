@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="totalItems > pageSize"
-    class="flex flex-col sm:flex-row items-center justify-between gap-3.5 px-6 py-4 border-t border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] text-xs sm:text-sm font-poppins"
+    class="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 sm:px-6 py-3 sm:py-4 border-t border-[#E2E8F0] dark:border-neutral-800 bg-[#FFFFFF] dark:bg-[#13161F] text-xs sm:text-sm font-poppins"
   >
     <!-- Counter summary text -->
-    <div class="text-neutral-500 dark:text-neutral-400">
+    <div class="text-neutral-500 dark:text-neutral-400 text-xs sm:text-sm text-center sm:text-left">
       Menampilkan
       <strong class="font-semibold text-neutral-900 dark:text-white tabular-nums">
         {{ startIndex }}–{{ endIndex }}
@@ -18,19 +18,21 @@
 
     <!-- Navigation Controls -->
     <div class="inline-flex items-center gap-1.5 sm:gap-2">
-      <!-- Prev Button -->
+      <!-- Prev Button (Icon only on mobile, text visible on desktop) -->
       <button
         type="button"
         :disabled="currentPage <= 1"
         :class="[
-          'btn-pill-action px-3 py-1.5 text-xs inline-flex items-center gap-1',
-          currentPage <= 1 ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer'
+          'h-8 px-2 sm:px-3 rounded-[10px] text-xs font-semibold inline-flex items-center justify-center gap-1.5 border transition-all duration-150',
+          currentPage <= 1
+            ? 'opacity-40 cursor-not-allowed pointer-events-none border-neutral-200 dark:border-neutral-800 text-neutral-400 bg-neutral-50 dark:bg-neutral-900'
+            : 'cursor-pointer border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
         ]"
         title="Halaman Sebelumnya"
         aria-label="Halaman Sebelumnya"
         @click="goToPage(currentPage - 1)"
       >
-        <HugeiconsIcon :icon="ArrowLeft01Icon" :size="14" :stroke-width="2" />
+        <HugeiconsIcon :icon="ArrowLeft01Icon" :size="15" :stroke-width="2.2" />
         <span class="hidden sm:inline">Sebelumnya</span>
       </button>
 
@@ -39,7 +41,7 @@
         <template v-for="(p, idx) in visiblePages" :key="`page-${idx}`">
           <span
             v-if="p === '...'"
-            class="px-2 py-1 text-neutral-400 select-none text-xs"
+            class="px-1.5 sm:px-2 py-1 text-neutral-400 select-none text-xs"
           >
             …
           </span>
@@ -47,7 +49,7 @@
             v-else
             type="button"
             :class="[
-              'min-w-[32px] h-8 px-2.5 rounded-[10px] text-xs font-semibold tabular-nums transition-all duration-150 flex items-center justify-center cursor-pointer',
+              'min-w-[28px] sm:min-w-[32px] h-8 px-1.5 sm:px-2.5 rounded-[10px] text-xs font-semibold tabular-nums transition-all duration-150 flex items-center justify-center cursor-pointer',
               currentPage === p
                 ? 'bg-[#00800e] text-white shadow-none border border-[#00800e]'
                 : 'bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 border border-[#CBD5E1] dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800'
@@ -60,20 +62,22 @@
         </template>
       </div>
 
-      <!-- Next Button -->
+      <!-- Next Button (Icon only on mobile, text visible on desktop) -->
       <button
         type="button"
         :disabled="currentPage >= totalPages"
         :class="[
-          'btn-pill-action px-3 py-1.5 text-xs inline-flex items-center gap-1',
-          currentPage >= totalPages ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer'
+          'h-8 px-2 sm:px-3 rounded-[10px] text-xs font-semibold inline-flex items-center justify-center gap-1.5 border transition-all duration-150',
+          currentPage >= totalPages
+            ? 'opacity-40 cursor-not-allowed pointer-events-none border-neutral-200 dark:border-neutral-800 text-neutral-400 bg-neutral-50 dark:bg-neutral-900'
+            : 'cursor-pointer border-[#CBD5E1] dark:border-neutral-700 bg-white dark:bg-[#18191E] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
         ]"
         title="Halaman Berikutnya"
         aria-label="Halaman Berikutnya"
         @click="goToPage(currentPage + 1)"
       >
         <span class="hidden sm:inline">Berikutnya</span>
-        <HugeiconsIcon :icon="ArrowRight01Icon" :size="14" :stroke-width="2" />
+        <HugeiconsIcon :icon="ArrowRight01Icon" :size="15" :stroke-width="2.2" />
       </button>
     </div>
   </div>

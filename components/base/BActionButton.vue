@@ -21,7 +21,7 @@
     @click="$emit('click', $event)"
   >
     <!-- Label Text -->
-    <span>
+    <span v-if="$slots.default">
       <slot />
     </span>
 

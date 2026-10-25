@@ -104,6 +104,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '~/stores/auth'
 import { useChatStore } from '~/stores/chat'
 import { useNotificationStore } from '~/stores/notification'
 import { useLanguage } from '~/composables/useLanguage'
@@ -115,13 +116,25 @@ import {
   Coins01Icon,
   Task01Icon,
   Award01Icon,
-  MoreHorizontalIcon
+  MoreHorizontalIcon,
+  Store01Icon,
+  Bookmark02Icon,
+  UserCircleIcon,
+  Message01Icon
 } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 const chatStore = useChatStore()
 const notifStore = useNotificationStore()
+
+const currentRole = computed(() => {
+  if (route.path.startsWith('/investor')) return 'INVESTOR'
+  if (route.path.startsWith('/admin')) return 'ADMIN'
+  if (route.path.startsWith('/konsultan')) return 'CONSULTANT'
+  return authStore.currentUser?.role || 'UMKM'
+})
 
 const isQuickAccessOpen = ref(false)
 
@@ -170,40 +183,120 @@ const totalUnread = computed(() => {
 
 const { t } = useLanguage()
 
-const tabs = computed(() => [
-  {
-    id: 'beranda',
-    label: t('nav_beranda'),
-    to: '/dashboard',
-    icon: Home03Icon,
-    exact: true
-  },
-  {
-    id: 'kas',
-    label: t('nav_catatan_kas'),
-    to: '/dashboard/progres',
-    icon: Coins01Icon
-  },
-  {
-    id: 'usaha',
-    label: t('nav_kelola_usaha'),
-    to: '/dashboard/rencana-aksi',
-    icon: Task01Icon,
-    activePaths: ['/dashboard/rencana-aksi', '/dashboard/profile', '/dashboard/penilaian']
-  },
-  {
-    id: 'modal',
-    label: t('nav_permodalan'),
-    to: '/dashboard/pendanaan',
-    icon: Award01Icon,
-    activePaths: ['/dashboard/pendanaan', '/dashboard/pesan', '/dashboard/notifikasi'],
-    hasBadge: totalUnread.value > 0
+const tabs = computed(() => {
+  if (currentRole.value === 'INVESTOR') {
+    return [
+      {
+        id: 'jaringan',
+        label: 'Jaringan',
+        to: '/investor',
+        icon: Store01Icon
+      },
+      {
+        id: 'simpan',
+        label: 'Simpan',
+        to: '/investor/watchlist',
+        icon: Bookmark02Icon
+      },
+      {
+        id: 'profile',
+        label: 'Profil',
+        to: '/investor/profile',
+        icon: UserCircleIcon
+      },
+      {
+        id: 'pesan',
+        label: 'Pesan',
+        to: '/investor/pesan',
+        icon: Message01Icon,
+        hasBadge: (chatStore.unreadCountInvestor || 0) > 0
+      }
+    ]
   }
-])
+
+  if (currentRole.value === 'ADMIN') {
+    return [
+      {
+        id: 'beranda',
+        label: 'Beranda',
+        to: '/admin',
+        icon: Home03Icon
+      },
+      {
+        id: 'umkm',
+        label: 'Kemitraan',
+        to: '/admin/umkm',
+        icon: Store01Icon
+      },
+      {
+        id: 'investor',
+        label: 'Investor',
+        to: '/admin/investor',
+        icon: Coins01Icon
+      },
+      {
+        id: 'sertifikasi',
+        label: 'Sertifikasi',
+        to: '/admin/sertifikasi',
+        icon: Award01Icon
+      }
+    ]
+  }
+
+  return [
+    {
+      id: 'beranda',
+      label: t('nav_beranda'),
+      to: '/dashboard',
+      icon: Home03Icon,
+      exact: true
+    },
+    {
+      id: 'kas',
+      label: t('nav_catatan_kas'),
+      to: '/dashboard/progres',
+      icon: Coins01Icon
+    },
+    {
+      id: 'usaha',
+      label: t('nav_kelola_usaha'),
+      to: '/dashboard/rencana-aksi',
+      icon: Task01Icon,
+      activePaths: ['/dashboard/rencana-aksi', '/dashboard/profile', '/dashboard/penilaian']
+    },
+    {
+      id: 'modal',
+      label: t('nav_permodalan'),
+      to: '/dashboard/pendanaan',
+      icon: Award01Icon,
+      activePaths: ['/dashboard/pendanaan', '/dashboard/pesan', '/dashboard/notifikasi'],
+      hasBadge: totalUnread.value > 0
+    }
+  ]
+})
 
 const activeIndex = computed(() => {
   if (isQuickAccessOpen.value) return 4
   const currentPath = route.path
+
+  if (currentRole.value === 'INVESTOR') {
+    if (currentPath === '/investor' || currentPath === '/investor/') return 0
+    if (currentPath.startsWith('/investor/watchlist')) return 1
+    if (currentPath.startsWith('/investor/profile')) return 2
+    if (currentPath.startsWith('/investor/pesan')) return 3
+    if (currentPath.startsWith('/investor/pengaturan')) return 4
+    return 0
+  }
+
+  if (currentRole.value === 'ADMIN') {
+    if (currentPath === '/admin' || currentPath === '/admin/') return 0
+    if (currentPath.startsWith('/admin/umkm') || currentPath.startsWith('/admin/daftar-umkm')) return 1
+    if (currentPath.startsWith('/admin/investor')) return 2
+    if (currentPath.startsWith('/admin/sertifikasi')) return 3
+    if (currentPath.startsWith('/admin/pengaturan')) return 4
+    return 0
+  }
+
   if (currentPath === '/dashboard' || currentPath === '/dashboard/') return 0
   if (currentPath.startsWith('/dashboard/progres')) return 1
   if (

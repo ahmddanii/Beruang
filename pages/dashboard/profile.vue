@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div class="space-y-6 sm:space-y-8 pb-32 sm:pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Top Page Header: Title on Left & Simpan Perubahan on Right (1 Baris Sejajar) -->
     <div class="flex items-center justify-between gap-4 min-h-[44px]">
       <div class="flex items-center gap-2.5 sm:gap-3">

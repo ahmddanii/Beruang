@@ -2,19 +2,8 @@
   <div class="h-screen flex flex-col bg-white dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-poppins transition-colors overflow-hidden">
     <!-- Top Workspace Navbar (Full Width Across Top) -->
     <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30 relative">
-      <!-- Left Side: Mobile Menu Button + Brand Logo & Name: Beruang -->
+      <!-- Left Side: Brand Logo & Name: Beruang -->
       <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-        <!-- Mobile Menu Toggle Button (Only on < lg, hidden for UMKM where bottom pill tab bar is primary) -->
-        <button
-          v-if="!isUmkmRole"
-          type="button"
-          class="lg:hidden w-11 h-11 min-w-[44px] min-h-[44px] rounded-[8px] flex items-center justify-center text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors shrink-0 cursor-pointer"
-          aria-label="Buka Menu Navigasi"
-          @click="toggleMobile"
-        >
-          <HugeiconsIcon :icon="Menu01Icon" :size="20" :stroke-width="2.0" />
-        </button>
-
         <!-- Brand Logo & Name: Beruang -->
         <NuxtLink
           :to="homePath"
@@ -118,8 +107,7 @@
 
           <!-- Bottom Footer (Dicoding Style, Sticky at Bottom of Viewport when Content is Short) -->
           <footer
-            class="w-full shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#0C121D] mt-auto transition-colors font-sans"
-            :class="isUmkmRole ? 'pb-26 sm:pb-4' : 'pb-4'"
+            class="w-full shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#0C121D] mt-auto transition-colors font-sans pb-26 sm:pb-4"
           >
             <div class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
               <div class="flex items-center gap-2 flex-wrap">
@@ -135,8 +123,8 @@
       <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page, Hidden on Admin, & Hidden on Mobile to Avoid Collision) -->
       <LinkedInChatDock v-if="!isMessagesPage && !isAdminRole" class="hidden lg:block" />
 
-      <!-- Mobile Floating 5-Icon Pill Tab Bar & Quick Access Sheet for UMKM -->
-      <MobilePillTabBar v-if="isUmkmRole" />
+      <!-- Mobile Floating 5-Icon Pill Tab Bar & Quick Access Sheet for All Roles -->
+      <MobilePillTabBar />
     </div>
   </div>
 </template>

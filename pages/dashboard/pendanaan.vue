@@ -528,37 +528,84 @@
       subtitle="Kirim berkas tokomu untuk diverifikasi oleh konsultan kurator pembina"
       size="md"
     >
-      <div class="space-y-4 font-poppins pt-1">
-        <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200/70 dark:border-neutral-700 space-y-2 text-xs">
-          <div class="flex items-center justify-between font-semibold text-neutral-800 dark:text-neutral-200">
-            <span>Usaha Terdaftar:</span>
-            <span>{{ umkmStore.profile.name }}</span>
+      <template #header>
+        <div class="flex items-start gap-3 pr-2 min-w-0 flex-1">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800/60 text-[#00800e] dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+            <HugeiconsIcon :icon="Award01Icon" :size="20" />
           </div>
-          <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
-            <span>Konsultan Pendamping:</span>
-            <span>{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</span>
+          <div class="min-w-0 flex-1">
+            <h3 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-100 tracking-tight leading-snug break-words">
+              Pengajuan Peninjauan Kelayakan Pendanaan
+            </h3>
+            <p class="text-xs font-poppins text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
+              Kirim berkas tokomu untuk diverifikasi oleh konsultan kurator pembina
+            </p>
           </div>
-          <div class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
-            <span>Tugas Selesai:</span>
-            <span class="font-bold text-[#00800e]">{{ completedTasksCount }} dari {{ totalTasksCount }} Tugas ({{ readinessPercentage }}%)</span>
+        </div>
+      </template>
+
+      <div class="space-y-4 font-poppins pt-1 text-xs">
+        <!-- Summary Info Card (Mobile optimized: stacked label & value to prevent text overflow) -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-[#F6F8FA] dark:bg-[#13161F] border border-neutral-200/80 dark:border-neutral-800 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 pb-2.5 border-b border-neutral-200/60 dark:border-neutral-800">
+            <span class="text-neutral-500 dark:text-neutral-400 text-xs">Usaha Terdaftar</span>
+            <span class="font-semibold text-neutral-900 dark:text-white truncate text-xs sm:text-sm">{{ umkmStore.profile.name }}</span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 pb-2.5 border-b border-neutral-200/60 dark:border-neutral-800">
+            <span class="text-neutral-500 dark:text-neutral-400 text-xs">Konsultan Pendamping</span>
+            <span class="font-medium text-neutral-800 dark:text-neutral-200 truncate text-xs sm:text-sm">{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
+            <span class="text-neutral-500 dark:text-neutral-400 text-xs">Kelengkapan Tugas</span>
+            <span class="font-bold text-[#00800e] dark:text-[#00C058] tabular-nums text-xs sm:text-sm">
+              {{ completedTasksCount }} dari {{ totalTasksCount }} Tugas Selesai ({{ readinessPercentage }}%)
+            </span>
+          </div>
+
+          <!-- Progress Bar inside summary card -->
+          <div class="h-2 w-full rounded-full bg-neutral-200/80 dark:bg-neutral-800 overflow-hidden mt-1 p-0.5">
+            <div
+              class="h-full rounded-full bg-gradient-to-r from-[#00C058] to-[#00800e] transition-all duration-300"
+              :style="{ width: `${readinessPercentage}%` }"
+            />
           </div>
         </div>
 
-        <p class="text-xs text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-          Dengan mengajukan peninjauan ini, konsultan kuratormu akan memeriksa rekonsiliasi kas riil dan berkas data room tokomu untuk penerbitan sertifikat kelayakan investasi resmi.
-        </p>
+        <!-- Verification Points -->
+        <div class="space-y-2 py-0.5">
+          <div class="flex items-start gap-2.5 text-xs text-neutral-700 dark:text-neutral-300">
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-[#00800e] dark:text-[#00C058] shrink-0 mt-0.5" />
+            <span class="leading-relaxed">Seluruh catatan mutasi kas riil telah terhubung dan siap diverifikasi.</span>
+          </div>
+          <div class="flex items-start gap-2.5 text-xs text-neutral-700 dark:text-neutral-300">
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-[#00800e] dark:text-[#00C058] shrink-0 mt-0.5" />
+            <span class="leading-relaxed">Berkas legalitas SKU dan kepatuhan data room lengkap untuk kurator.</span>
+          </div>
+        </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+        <!-- Info Note ala GoPay UMKM -->
+        <div class="p-3 sm:p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/50 flex items-start gap-2.5">
+          <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-[#00800e] dark:text-[#00C058] shrink-0 mt-0.5" />
+          <p class="text-[11px] sm:text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed font-poppins">
+            Konsultan kurator tokomu akan memeriksa rekonsiliasi kas riil dan berkas tokomu untuk menerbitkan sertifikat kelayakan investasi resmi dalam 1-2 hari kerja.
+          </p>
+        </div>
+
+        <!-- Action Buttons: Full width & stacked on mobile (flex-col-reverse), side-by-side on desktop -->
+        <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
           <button
             type="button"
-            class="px-4 py-2 text-xs font-semibold rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            class="w-full sm:w-auto px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 sm:border-0 transition-colors text-center cursor-pointer min-h-[42px] flex items-center justify-center"
             @click="isSubmitModalOpen = false"
           >
             Batal
           </button>
           <BActionButton
             variant="green"
-            custom-class="px-5 py-2 text-xs font-semibold"
+            custom-class="w-full sm:w-auto justify-center text-center px-5 py-2.5 text-xs sm:text-sm font-semibold min-h-[42px]"
+            title="Konfirmasi & Kirim Pengajuan"
             @click="handleSubmitApplication"
           >
             Konfirmasi & Kirim Pengajuan
@@ -612,7 +659,7 @@
         <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
           <button
             type="button"
-            class="px-4 py-2 text-xs font-semibold rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 transition-colors"
+            class="w-full sm:w-auto px-4 py-2.5 text-xs font-semibold rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 transition-colors text-center cursor-pointer min-h-[40px] flex items-center justify-center"
             @click="isEvidenceModalOpen = false"
           >
             Tutup

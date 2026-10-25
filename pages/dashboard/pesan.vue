@@ -237,69 +237,53 @@
         ]"
       >
         <!-- 1. HEADER CHAT: Ramping, Elegan, dengan Hierarki Proporsional & Tinggi Sejajar 72px -->
-        <div class="h-[72px] min-h-[72px] px-5 sm:px-6 border-b border-[#E2E8F0] dark:border-neutral-800 flex items-center justify-between gap-3 shrink-0 bg-white dark:bg-[#13161F] z-10 relative">
-          <div class="flex items-center gap-3.5 min-w-0">
+        <div class="h-[72px] min-h-[72px] px-4 sm:px-6 border-b border-[#E2E8F0] dark:border-neutral-800 flex items-center justify-between gap-3 shrink-0 bg-white dark:bg-[#13161F] z-10 relative">
+          <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
             <!-- Mobile Back Button -->
             <button
               type="button"
-              class="lg:hidden p-2 -ml-1 rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
+              class="lg:hidden p-2 -ml-1 rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer shrink-0"
               aria-label="Kembali ke Daftar Pesan"
               @click="isMobileChatOpen = false"
             >
               <HugeiconsIcon :icon="ArrowLeft01Icon" :size="20" />
             </button>
 
-            <!-- Counterpart Avatar with Online Badge -->
-            <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full shrink-0">
-              <img
-                :src="activeThread.investorAvatar || '/images/user-profile.png'"
-                :alt="activeThread.investorName"
-                class="w-full h-full rounded-full object-cover border border-neutral-200 dark:border-neutral-700"
-              />
-              <span
-                class="absolute bottom-0 right-0 w-3 h-3 rounded-full ring-2 ring-white dark:ring-[#13161F]"
-                :class="activeThread.online ? 'bg-[#00800e]' : 'bg-neutral-400'"
-              />
-            </div>
-
-            <!-- Partner Identity Details -->
-            <div class="min-w-0">
-              <h2 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white truncate leading-tight">
-                {{ activeThread.investorName }}
-              </h2>
-              
-              <div class="flex items-center gap-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-sans truncate">
-                <span class="truncate font-medium">{{ activeThread.investorLembaga }}</span>
-                <span class="text-neutral-300 dark:text-neutral-700 shrink-0">•</span>
-                <span class="inline-flex items-center gap-1 text-[#00800e] dark:text-[#00C058] font-semibold shrink-0">
-                  <HugeiconsIcon :icon="ShieldCheckIcon" :size="14" class="shrink-0" />
-                  <span>{{ t('chat_verified') }}</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Header Right Actions: Clean Tactile Toggle Rincian (Tanpa icon berputar!) -->
-          <div class="flex items-center gap-2 shrink-0">
+            <!-- Clickable Partner Profile & Info Header (Avatar + Title) -->
             <button
-              ref="toggleDetailBtnRef"
               type="button"
-              :class="[
-                'inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer shadow-2xs shrink-0 border',
-                isDetailPanelOpen
-                  ? 'bg-[#00800e] text-white border-[#00800e] shadow-[0_2px_8px_rgba(0,128,14,0.22)] font-semibold'
-                  : 'bg-white dark:bg-[#18191E] border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300'
-              ]"
-              title="Tampilkan rincian kemitraan dan dokumen"
+              class="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1 text-left cursor-pointer group p-1 -m-1 rounded-xl hover:bg-neutral-100/60 dark:hover:bg-neutral-800/50 transition-colors"
+              title="Ketuk untuk melihat profil, Tentang Bisnis Saya, dan berkas dokumen"
               @click="toggleDetailPanel"
             >
-              <HugeiconsIcon
-                :icon="Folder01Icon"
-                :size="17"
-                :stroke-width="2.0"
-                :class="isDetailPanelOpen ? 'text-white' : 'text-[#00800e] dark:text-[#00C058]'"
-              />
-              <span class="hidden sm:inline">{{ t('chat_partner_details') }}</span>
+              <!-- Counterpart Avatar with Online Badge -->
+              <div class="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full shrink-0">
+                <img
+                  :src="activeThread.investorAvatar || '/images/user-profile.png'"
+                  :alt="activeThread.investorName"
+                  class="w-full h-full rounded-full object-cover border border-neutral-200 dark:border-neutral-700 group-hover:scale-105 transition-transform"
+                />
+                <span
+                  class="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ring-2 ring-white dark:ring-[#13161F]"
+                  :class="activeThread.online ? 'bg-[#00800e]' : 'bg-neutral-400'"
+                />
+              </div>
+
+              <!-- Partner Identity Details -->
+              <div class="min-w-0 flex-1">
+                <h2 class="font-poppins font-bold text-sm sm:text-lg text-neutral-900 dark:text-white truncate leading-tight group-hover:text-[#00800e] dark:group-hover:text-[#00C058] transition-colors">
+                  {{ activeThread.investorName }}
+                </h2>
+                
+                <div class="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-sans truncate">
+                  <span class="truncate font-medium">{{ activeThread.investorLembaga }}</span>
+                  <span class="text-neutral-300 dark:text-neutral-700 shrink-0">•</span>
+                  <span class="inline-flex items-center gap-1 text-[#00800e] dark:text-[#00C058] font-semibold shrink-0">
+                    <HugeiconsIcon :icon="ShieldCheckIcon" :size="13" class="shrink-0" />
+                    <span>{{ t('chat_verified') }}</span>
+                  </span>
+                </div>
+              </div>
             </button>
           </div>
         </div>
@@ -427,8 +411,8 @@
           </button>
         </div>
 
-        <!-- 4. Minimalist Input Bar with Working File Attachment -->
-        <div class="p-4 sm:p-5 border-t border-[#E2E8F0] dark:border-neutral-800 shrink-0 bg-white dark:bg-[#13161F]">
+        <!-- 4. Minimalist Input Bar with Working File Attachment (Fully Responsive on Mobile) -->
+        <div class="p-2.5 sm:p-5 border-t border-[#E2E8F0] dark:border-neutral-800 shrink-0 bg-white dark:bg-[#13161F]">
           <!-- Hidden Native File Input for Real Chat Attachments -->
           <input
             ref="chatFileInputRef"
@@ -439,25 +423,25 @@
           />
 
           <form
-            class="relative flex items-center gap-2.5 px-4 py-2 rounded-xl bg-neutral-100/90 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 focus-within:ring-2 focus-within:ring-[#00800e]/20 focus-within:border-[#00800e] transition-all min-h-[52px]"
+            class="relative flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-neutral-100/90 dark:bg-[#18191E] border border-neutral-200 dark:border-neutral-700 focus-within:ring-2 focus-within:ring-[#00800e]/20 focus-within:border-[#00800e] transition-all min-h-[48px] sm:min-h-[52px] w-full min-w-0"
             @submit.prevent="handleSendMessage"
           >
             <!-- Add / Attach Button (+) -->
             <button
               type="button"
-              class="w-9 h-9 rounded-xl bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center justify-center shadow-2xs transition-transform hover:scale-105 shrink-0 cursor-pointer"
+              class="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center justify-center shadow-2xs transition-transform hover:scale-105 shrink-0 cursor-pointer"
               title="Lampirkan Dokumen atau Foto"
               @click="chatFileInputRef?.click()"
             >
-              <HugeiconsIcon :icon="Add01Icon" :size="18" />
+              <HugeiconsIcon :icon="Add01Icon" :size="17" />
             </button>
 
-            <!-- Text Input -->
+            <!-- Text Input (min-w-0 to prevent flex blowout on small screens) -->
             <input
               v-model="inputMessage"
               type="text"
               :placeholder="t('chat_input_placeholder')"
-              class="flex-1 px-2.5 py-2 text-sm sm:text-base bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none font-sans"
+              class="flex-1 min-w-0 px-2 py-1 text-xs sm:text-base bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none font-sans"
               @keydown.enter.exact.prevent="handleSendMessage"
             />
 
@@ -465,7 +449,7 @@
             <button
               type="button"
               :class="[
-                'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition-colors',
+                'w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition-colors',
                 showEmojiPicker
                   ? 'text-[#00800e] dark:text-[#00C058] bg-emerald-50 dark:bg-emerald-950/40'
                   : 'text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'
@@ -473,17 +457,17 @@
               title="Pilihan Balasan Cepat & Emoji"
               @click="showEmojiPicker = !showEmojiPicker"
             >
-              <HugeiconsIcon :icon="SmileIcon" :size="19" />
+              <HugeiconsIcon :icon="SmileIcon" :size="18" />
             </button>
 
             <!-- Send Button -->
             <button
               type="submit"
               :disabled="!inputMessage.trim()"
-              class="w-10 h-10 rounded-xl bg-[#00800e] hover:bg-[#006e0c] disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center shadow-xs transition-transform active:scale-95 shrink-0 cursor-pointer"
+              class="w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#00800e] hover:bg-[#006e0c] disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center shadow-xs transition-transform active:scale-95 shrink-0 cursor-pointer"
               title="Kirim Pesan"
             >
-              <HugeiconsIcon :icon="SendIcon" :size="18" />
+              <HugeiconsIcon :icon="SendIcon" :size="16" />
             </button>
           </form>
         </div>
@@ -506,72 +490,72 @@
       >
         <div
           v-if="isDetailPanelOpen"
-          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 select-none"
+          class="fixed inset-0 z-50 flex items-center justify-center p-0 sm:py-8 sm:px-4 md:py-12 md:px-6 bg-black/60 select-none"
           @click.self="isDetailPanelOpen = false"
         >
           <Transition
             enter-active-class="transition-all duration-200 ease-in-out transform"
-            enter-from-class="scale-95 opacity-0 translate-y-3"
-            enter-to-class="scale-100 opacity-100 translate-y-0"
+            enter-from-class="opacity-0 translate-y-4 sm:scale-95 sm:translate-y-2"
+            enter-to-class="opacity-100 translate-y-0 sm:scale-100"
             leave-active-class="transition-all duration-150 ease-in-out transform"
-            leave-from-class="scale-100 opacity-100 translate-y-0"
-            leave-to-class="scale-95 opacity-0 translate-y-3"
+            leave-from-class="opacity-100 translate-y-0 sm:scale-100"
+            leave-to-class="opacity-0 translate-y-4 sm:scale-95 sm:translate-y-2"
           >
             <div
               v-if="isDetailPanelOpen"
-              class="w-full max-w-lg bg-white dark:bg-[#13161F] rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-2xl overflow-hidden flex flex-col font-poppins text-neutral-900 dark:text-white"
+              class="w-full h-full sm:h-auto sm:max-h-[90vh] sm:w-[94vw] max-w-none sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl bg-white dark:bg-[#13161F] rounded-none sm:rounded-2xl border-0 sm:border border-neutral-200 dark:border-neutral-800 shadow-2xl overflow-hidden flex flex-col font-poppins text-neutral-900 dark:text-white"
               role="dialog"
               aria-modal="true"
               aria-labelledby="modal-rincian-title"
             >
               <!-- Modal Header -->
-              <div class="px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] dark:text-[#00C058] flex items-center justify-center shrink-0">
-                    <HugeiconsIcon :icon="Folder01Icon" :size="18" />
+              <div class="px-6 sm:px-8 lg:px-10 py-5 sm:py-6 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between shrink-0 bg-white dark:bg-[#13161F]">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e] dark:text-[#00C058] flex items-center justify-center shrink-0">
+                    <HugeiconsIcon :icon="UserCircleIcon" :size="22" />
                   </div>
-                  <div>
-                    <h3 id="modal-rincian-title" class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white leading-tight">
-                      Rincian Kemitraan
+                  <div class="min-w-0">
+                    <h3 id="modal-rincian-title" class="font-poppins font-bold text-base sm:text-lg lg:text-xl text-neutral-900 dark:text-white leading-tight truncate">
+                      Rincian Profil & Berkas
                     </h3>
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400 font-sans mt-0.5">
-                      Ruang data & berkas terverifikasi
+                    <p class="hidden sm:block text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-sans mt-0.5 truncate">
+                      Informasi profil, berkas legalitas, dan tautan halaman resmi
                     </p>
                   </div>
                 </div>
 
                 <button
                   type="button"
-                  class="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
+                  class="w-10 h-10 min-w-10 min-h-10 aspect-square rounded-full bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer shrink-0 ml-3"
                   title="Tutup (Esc)"
                   aria-label="Tutup Rincian"
                   @click="isDetailPanelOpen = false"
                 >
-                  ✕
+                  <HugeiconsIcon :icon="Cancel01Icon" :size="18" :stroke-width="2.2" />
                 </button>
               </div>
 
-              <!-- Modal Body -->
-              <div class="p-6 space-y-5 overflow-y-auto max-h-[75vh]">
-                <!-- Profil Mitra (Fokus Diskusi & Status Kerjasama telah dihapus) -->
-                <div v-if="activeThread" class="p-4 rounded-xl bg-neutral-50/80 dark:bg-[#151922] border border-neutral-200/80 dark:border-neutral-800 flex items-center gap-3.5">
-                  <div class="relative w-12 h-12 rounded-full shrink-0">
+              <!-- Modal Body with generous gaps for profile, about, action button, and documents -->
+              <div class="flex-1 px-6 sm:px-8 lg:px-10 pt-7 pb-10 sm:pt-9 sm:pb-14 space-y-6 sm:space-y-7 overflow-y-auto max-h-none sm:max-h-[75vh] overscroll-contain">
+                <!-- 1. Profil Mitra Identity Card -->
+                <div v-if="activeThread" class="py-5 sm:py-6 px-6 sm:px-7 rounded-2xl bg-neutral-50/80 dark:bg-[#151922] border border-neutral-200/80 dark:border-neutral-800 flex items-center gap-4">
+                  <div class="relative w-13 h-13 rounded-full shrink-0">
                     <img
-                      :src="activeThread.investorAvatar"
+                      :src="activeThread.investorAvatar || '/images/user-profile.png'"
                       alt="Avatar"
                       class="w-full h-full rounded-full object-cover border border-neutral-200 dark:border-neutral-700"
                     />
                     <span
-                      class="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full ring-2 ring-white dark:ring-[#151922]"
+                      class="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-[#151922]"
                       :class="activeThread.online ? 'bg-emerald-400' : 'bg-neutral-400'"
                     />
                   </div>
                   <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-1.5">
-                      <h4 class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white truncate">
+                    <div class="flex items-center gap-2">
+                      <h4 class="font-poppins font-bold text-base sm:text-lg text-neutral-900 dark:text-white truncate">
                         {{ activeThread.investorName }}
                       </h4>
-                      <HugeiconsIcon :icon="ShieldCheckIcon" :size="16" class="text-[#00800e] dark:text-[#00C058] shrink-0" />
+                      <HugeiconsIcon :icon="ShieldCheckIcon" :size="18" class="text-[#00800e] dark:text-[#00C058] shrink-0" />
                     </div>
                     <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 truncate font-sans mt-0.5">
                       {{ activeThread.investorLembaga }}
@@ -579,48 +563,71 @@
                   </div>
                 </div>
 
-                <!-- Berkas & Dokumen Legalitas (Real Working Download & Upload) -->
-                <div class="space-y-3">
+                <!-- 2. Tentang Bisnis Saya / Tentang Mitra Card -->
+                <div class="py-6 sm:py-7 px-6 sm:px-8 space-y-3 rounded-2xl bg-[#F6F8FA] dark:bg-[#151922] border border-neutral-200/80 dark:border-neutral-800">
+                  <h4 class="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-2 font-poppins">
+                    <HugeiconsIcon :icon="Store01Icon" :size="17" class="text-[#00800e] dark:text-[#00C058]" />
+                    Tentang Bisnis Saya
+                  </h4>
+                  <p class="text-xs sm:text-sm lg:text-base text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
+                    {{ partnerBusinessAbout }}
+                  </p>
+                </div>
+
+                <!-- 3. Button Mengarah ke Halaman Profile Dia -->
+                <div>
+                  <BActionButton
+                    variant="green"
+                    custom-class="w-full justify-center text-center py-3.5 sm:py-4 text-xs sm:text-sm font-semibold min-h-[50px] sm:min-h-[54px] shadow-sm"
+                    :huge-icon="UserCircleIcon"
+                    :icon-size="18"
+                    title="Buka Halaman Profil Lengkap"
+                    @click="navigateToPartnerProfile"
+                  >
+                    Buka Halaman Profil Lengkap
+                  </BActionButton>
+                </div>
+
+                <!-- 4. Dokumen -->
+                <div class="pt-4 pb-2 space-y-4">
                   <div class="flex items-center justify-between">
                     <span class="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-2 font-poppins">
-                      <HugeiconsIcon :icon="FileValidationIcon" :size="16" class="text-[#00800e] dark:text-[#00C058]" />
-                      Berkas & Dokumen Legalitas
+                      <HugeiconsIcon :icon="FileValidationIcon" :size="17" class="text-[#00800e] dark:text-[#00C058]" />
+                      Dokumen
                     </span>
                     <span class="text-xs text-neutral-400 tabular-nums font-sans">
-                      {{ officialDocuments.length }} Berkas
+                      {{ officialDocuments.length }} Dokumen
                     </span>
                   </div>
 
-                  <!-- Documents list -->
-                  <div class="space-y-2">
+                  <!-- Documents list with download buttons -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                     <div
                       v-for="doc in officialDocuments"
                       :key="doc.name"
-                      class="p-3 rounded-xl bg-white dark:bg-[#151922] border border-neutral-200 dark:border-neutral-800 flex items-center justify-between gap-3 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors shadow-2xs"
+                      class="py-4 sm:py-4.5 px-4 sm:px-5 rounded-xl bg-white dark:bg-[#151922] border border-neutral-200 dark:border-neutral-800 flex items-center justify-between gap-3 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors shadow-2xs"
                     >
-                      <div class="flex items-center gap-2.5 min-w-0">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-[#00800e] dark:text-[#00C058] flex items-center justify-center shrink-0">
-                          <HugeiconsIcon :icon="File01Icon" :size="16" />
+                      <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-[#00800e] dark:text-[#00C058] flex items-center justify-center shrink-0">
+                          <HugeiconsIcon :icon="File01Icon" :size="18" />
                         </div>
                         <div class="min-w-0">
                           <p class="text-xs sm:text-sm font-medium text-neutral-900 dark:text-white truncate font-sans">
                             {{ doc.name }}
                           </p>
-                          <div class="flex items-center gap-2 text-xs text-neutral-400 font-sans mt-0.5">
-                            <span>{{ doc.size }}</span>
-                            <span>•</span>
-                            <span class="text-[#00800e] dark:text-emerald-400 font-medium">{{ doc.status }}</span>
-                          </div>
+                          <p class="text-xs text-neutral-400 font-sans mt-0.5">
+                            {{ doc.size }}
+                          </p>
                         </div>
                       </div>
 
                       <button
                         type="button"
-                        class="w-8 h-8 rounded-lg text-neutral-500 hover:text-[#00800e] dark:hover:text-[#00C058] hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
+                        class="w-9 h-9 rounded-lg text-neutral-500 hover:text-[#00800e] dark:hover:text-[#00C058] hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
                         :title="`Unduh ${doc.name}`"
                         @click="downloadDocument(doc.name)"
                       >
-                        <HugeiconsIcon :icon="Download01Icon" :size="16" />
+                        <HugeiconsIcon :icon="Download01Icon" :size="17" />
                       </button>
                     </div>
                   </div>
@@ -636,23 +643,12 @@
                   <BActionButton
                     variant="default"
                     icon="plus"
-                    custom-class="!h-10 !min-h-10 !text-xs sm:!text-sm !w-full justify-center border-dashed"
+                    custom-class="!h-11 sm:!h-12 !min-h-11 sm:!min-h-12 !text-xs sm:!text-sm !w-full justify-center border-dashed"
                     @click="officialDocInputRef?.click()"
                   >
-                    Unggah Berkas Baru
+                    Unggah Dokumen
                   </BActionButton>
                 </div>
-              </div>
-
-              <!-- Modal Footer -->
-              <div class="px-6 py-3.5 bg-neutral-50 dark:bg-neutral-900/40 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-end">
-                <BActionButton
-                  variant="default"
-                  custom-class="text-xs sm:text-sm"
-                  @click="isDetailPanelOpen = false"
-                >
-                  Tutup
-                </BActionButton>
               </div>
             </div>
           </Transition>
@@ -682,6 +678,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import gsap from 'gsap'
 import { useChatStore } from '~/stores/chat'
 import { useLanguage } from '~/composables/useLanguage'
@@ -702,7 +699,10 @@ import {
   UserCheck01Icon,
   Coins01Icon,
   CheckmarkCircle01Icon,
-  File01Icon
+  File01Icon,
+  UserCircleIcon,
+  Store01Icon,
+  Cancel01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -710,6 +710,7 @@ definePageMeta({
   hideHeader: true
 })
 
+const router = useRouter()
 const chatStore = useChatStore()
 
 const inputMessage = ref('')
@@ -812,6 +813,28 @@ const isKonsultan = computed(() => {
   const name = activeThread.value.investorName.toLowerCase()
   return lembaga.includes('konsultan') || lembaga.includes('legalitas') || name.includes('maya')
 })
+
+const partnerBusinessAbout = computed(() => {
+  if (!activeThread.value) return 'Profil mitra pendamping dan pendanaan resmi platform Beruang.'
+  const name = (activeThread.value.investorName || '').toLowerCase()
+  const lembaga = (activeThread.value.investorLembaga || '').toLowerCase()
+  if (name.includes('maya') || lembaga.includes('konsultan')) {
+    return 'Konsultan pendamping kurator resmi Beruang yang berfokus pada kurasi dan validasi kepatuhan tata kelola finansial UMKM, pembukuan kas harian, serta persiapan due diligence investasi permodalan.'
+  }
+  if (lembaga.includes('ventures') || lembaga.includes('investor') || name.includes('franklyn')) {
+    return 'Lembaga pemodal ventura dan angel investor terakreditasi yang berfokus pada kemitraan modal bertumbuh untuk unit usaha UMKM sektor F&B, retail, dan FMCG dengan margin sehat di atas 40%.'
+  }
+  return `Mitra terverifikasi resmi Beruang (${activeThread.value.investorLembaga}) yang mengawal pembukuan dan pendanaan usaha UMKM.`
+})
+
+function navigateToPartnerProfile() {
+  isDetailPanelOpen.value = false
+  if (activeThread.value?.investorId === 'inv-04' || activeThread.value?.investorName.includes('Maya')) {
+    router.push('/dashboard')
+  } else {
+    router.push('/investor/profile')
+  }
+}
 
 function showToast(msg: string) {
   toastMessage.value = msg

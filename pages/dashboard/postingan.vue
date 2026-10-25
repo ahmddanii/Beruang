@@ -1,5 +1,5 @@
 <template>
-  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
+  <div ref="pageRootRef" class="space-y-6 sm:space-y-8 pb-32 sm:pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- Toast Feedback Notification -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -78,7 +78,8 @@
                   />
                 </div>
 
-                <div class="min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
+                <!-- Contract: gap-0.5 sm:gap-1 -->
+                <div class="min-w-0 flex flex-col justify-center gap-1.5 sm:gap-2">
                   <div class="inline-flex items-center gap-1 text-xs font-poppins font-medium text-neutral-500 dark:text-neutral-400 leading-tight">
                     <HugeiconsIcon :icon="Location01Icon" :size="13" class="text-[#156374] dark:text-[#50AABF] shrink-0" />
                     <span>{{ post.city }}</span>

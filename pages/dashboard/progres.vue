@@ -284,7 +284,7 @@
         :class="activeTab === 'mutasi' ? 'is-active' : 'is-inactive'"
         @click="setActiveTab('mutasi')"
       >
-        <HugeiconsIcon :icon="Coins01Icon" :size="17" :stroke-width="activeTab === 'mutasi' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
+        <HugeiconsIcon :icon="Coins01Icon" :size="isMobile ? 15 : 17" :stroke-width="activeTab === 'mutasi' ? 2.2 : 1.8" class="mr-1.5 sm:mr-2 shrink-0 transition-colors" />
         <span class="truncate leading-normal pb-0.5">
           {{ isMobile ? t('progres_tab_mutasi_short') : t('progres_tab_mutasi') }}
         </span>
@@ -297,7 +297,7 @@
         :class="activeTab === 'bulanan' ? 'is-active' : 'is-inactive'"
         @click="setActiveTab('bulanan')"
       >
-        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="17" :stroke-width="activeTab === 'bulanan' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
+        <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="isMobile ? 15 : 17" :stroke-width="activeTab === 'bulanan' ? 2.2 : 1.8" class="mr-1.5 sm:mr-2 shrink-0 transition-colors" />
         <span class="truncate leading-normal pb-0.5">
           {{ isMobile ? t('progres_tab_bulanan_short') : t('progres_tab_bulanan') }}
         </span>
@@ -310,7 +310,7 @@
         :class="activeTab === 'tren' ? 'is-active' : 'is-inactive'"
         @click="setActiveTab('tren')"
       >
-        <HugeiconsIcon :icon="AnalyticsUpIcon" :size="17" :stroke-width="activeTab === 'tren' ? 2.2 : 1.8" class="mr-2 shrink-0 transition-colors" />
+        <HugeiconsIcon :icon="AnalyticsUpIcon" :size="isMobile ? 15 : 17" :stroke-width="activeTab === 'tren' ? 2.2 : 1.8" class="mr-1.5 sm:mr-2 shrink-0 transition-colors" />
         <span class="truncate leading-normal pb-0.5">
           {{ isMobile ? t('progres_tab_tren_short') : t('progres_tab_tren') }}
         </span>
@@ -1218,6 +1218,12 @@ function checkMobile() {
     isMobile.value = window.innerWidth < 640
   }
 }
+
+watch(isMobile, () => {
+  nextTick(() => {
+    updateTabIndicator(true)
+  })
+})
 
 // State Tab Switcher
 const activeTab = ref<'mutasi' | 'bulanan' | 'tren'>('mutasi')

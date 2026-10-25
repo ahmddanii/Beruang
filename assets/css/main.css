@@ -1501,6 +1501,42 @@ summary:active,
   display: none !important;
 }
 
+/* Mobile responsive sizing to eliminate text overlapping & horizontal scroll on small screens */
+@media (max-width: 639px) {
+  .segmented-pill-container.is-gopay-green,
+  .segmented-pill-container.is-card-pill-ref {
+    padding: 0.2rem !important;
+    gap: 0.2rem !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+  }
+
+  .segmented-pill-container.is-gopay-green .segmented-pill-indicator,
+  .segmented-pill-container.is-card-pill-ref .segmented-pill-indicator {
+    top: 0.2rem !important;
+    height: calc(100% - 0.4rem) !important;
+    border-radius: 9px !important;
+  }
+
+  .segmented-pill-container.is-gopay-green .segmented-pill-btn,
+  .segmented-pill-container.is-card-pill-ref .segmented-pill-btn {
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+    padding: 0 0.5rem !important;
+    font-size: 0.775rem !important;
+    min-width: 0 !important;
+    border-radius: 9px !important;
+  }
+
+  .segmented-pill-container.is-gopay-green .segmented-pill-btn svg,
+  .segmented-pill-container.is-card-pill-ref .segmented-pill-btn svg {
+    margin-right: 0.35rem !important;
+    width: 15px !important;
+    height: 15px !important;
+  }
+}
+
 /* Compact / Small size for popovers & navbars */
 .segmented-pill-container.is-gopay-green.is-size-sm,
 .segmented-pill-container.is-card-pill-ref.is-size-sm {
@@ -1688,6 +1724,70 @@ main,
 .skeleton-fade-enter-from,
 .skeleton-fade-leave-to {
   opacity: 0;
+}
+
+/* ==========================================================================
+   INPUT TACTILE GOPAY (Konsisten di semua form input, select, & textarea)
+   ========================================================================== */
+.input-tactile-gopay {
+  width: 100%;
+  display: block;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+  box-shadow: none !important;
+}
+
+select.input-tactile-gopay {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.5rem !important;
+}
+
+.input-tactile-gopay.has-prefix-rp {
+  padding-left: 2.75rem !important;
+}
+
+.input-tactile-gopay.has-prefix-icon {
+  padding-left: 2.5rem !important;
+}
+
+.input-tactile-gopay.has-prefix-at {
+  padding-left: 2.25rem !important;
+}
+
+.dark .input-tactile-gopay,
+html.dark .input-tactile-gopay {
+  border-color: #334155 !important;
+  background-color: #161922 !important;
+  color: #F8FAFC !important;
+}
+
+.input-tactile-gopay:focus {
+  border-color: #156374;
+  box-shadow: none !important;
+}
+
+.dark .input-tactile-gopay:focus,
+html.dark .input-tactile-gopay:focus {
+  border-color: #50AABF !important;
+}
+
+.input-tactile-gopay::placeholder {
+  color: #94A3B8;
+}
+
+.dark .input-tactile-gopay::placeholder,
+html.dark .input-tactile-gopay::placeholder {
+  color: #64748B !important;
 }
 
 

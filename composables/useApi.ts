@@ -24,8 +24,8 @@ export class ApiError extends Error {
 }
 
 /**
- * Universal API fetch wrapper for Beruang Live Laravel Backend
- * Automatically handles baseURL, Sanctum Bearer token, and 401 unauthorized redirect.
+ * Universal API fetch wrapper for Beruang Express.js + Prisma Backend
+ * Automatically handles baseURL, JWT Bearer token, and 401 unauthorized redirect.
  */
 export const useApi = async <T = any>(
   endpoint: string,
@@ -44,10 +44,9 @@ export const useApi = async <T = any>(
     normalizedEndpoint = normalizedEndpoint.replace('/api/', '/')
   }
 
-  let baseUrl = config.public.apiBaseUrl || 'https://beruang-api.fly.dev/api'
+  let baseUrl = config.public.apiBaseUrl || 'http://localhost:5000/api'
 
-  // If in browser on localhost / local IP, route through Nitro proxy (/api/proxy)
-  // to strip browser Origin and prevent Laravel Sanctum's stateful CSRF interception (HTTP 419)
+  // In browser on localhost, route through Nitro proxy (/api/proxy) to port 5000
   if (import.meta.client && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
     baseUrl = '/api/proxy'
   }

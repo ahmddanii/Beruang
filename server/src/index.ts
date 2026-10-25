@@ -20,17 +20,13 @@ import userRouter from "./routes/user.js";
 import { optionalAuth, requireAuth } from "./middleware/auth.js";
 dotenv.config({ override: true });
 
-// Ensure DATABASE_URL is set to local sqlite if not file:
-if (!process.env.DATABASE_URL || !process.env.DATABASE_URL.startsWith("file:")) {
-  process.env.DATABASE_URL = "file:./dev.db";
-}
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
 import { prisma } from "./prisma.js";
-export { prisma };
+export { app, prisma };
 
 // Middleware
 app.use(cors());
@@ -40,6 +36,15 @@ app.use(express.urlencoded({ extended: true }));
 // Static uploads directory serving
 const uploadDir = path.resolve(__dirname, "../uploads");
 app.use("/uploads", express.static(uploadDir));
+
+// Root status route
+app.get("/", (_req: Request, res: Response) => {
+  res.json({
+    name: "Beruang API Backend",
+    status: "online",
+    health: "/api/health",
+  });
+});
 
 // Health check route
 app.get("/api/health", (_req: Request, res: Response) => {
@@ -80,9 +85,13 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-// Start Server
-app.listen(port, () => {
-  console.log(`🚀 Beruang API server running at http://localhost:${port}`);
-  console.log(`📡 Health check: http://localhost:${port}/api/health`);
-  console.log(`📁 Uploads served from: ${uploadDir}`);
-});
+// Start Server (only when not in Vercel serverless environment)
+if (process.env.VERCEL !== "1") {
+  app.listen(port, () => {
+    console.log(`🚀 Beruang API server running at http://localhost:${port}`);
+    console.log(`📡 Health check: http://localhost:${port}/api/health`);
+    console.log(`📁 Uploads served from: ${uploadDir}`);
+  });
+}
+
+export default app;

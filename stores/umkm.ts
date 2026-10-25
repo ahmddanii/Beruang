@@ -447,15 +447,23 @@ export const useUmkmStore = defineStore('umkm', {
       }
     },
 
-    toggleTaskStep(taskId: string, stepId: string) {
+    async toggleTaskStep(taskId: string, stepId: string) {
       const task = this.tasks.find(t => t.id === taskId)
       if (task && task.steps) {
         const step = task.steps.find(s => s.id === stepId)
         if (step) {
           step.completed = !step.completed
+          const wasCompleted = task.completed
           // Tugas pokok otomatis selesai jika semua anak tugas selesai
           task.completed = task.steps.every(s => s.completed)
           task.status = task.completed ? 'DONE' : 'TODO'
+          if (task.completed !== wasCompleted) {
+            try {
+              await useApi(`/umkm/tasks/${taskId}/toggle`, { method: 'PATCH' })
+            } catch (err: any) {
+              console.warn('Gagal sinkron status tugas ke live API:', err?.message)
+            }
+          }
         }
       }
     },

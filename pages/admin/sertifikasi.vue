@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="sertifikasiPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
@@ -430,63 +430,7 @@ function selectFilter(id: typeof activeFilter.value) {
   isFilterDropdownOpen.value = false
 }
 
-const submissions = ref<CertificationItem[]>([
-  {
-    id: 'cert-1',
-    umkmName: 'Sayur Hidroponik Segar',
-    owner: 'Hendra Wijaya',
-    sector: 'Agribisnis',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    submittedAt: '2 jam lalu',
-    bankMutation: '3 Bulan Terverifikasi',
-    status: 'Menunggu',
-    notes: 'Arus kas positif konsisten dan stok panen stabil.'
-  },
-  {
-    id: 'cert-2',
-    umkmName: 'Tenun Ikat Nusantara',
-    owner: 'Maria Fransiska',
-    sector: 'Kriya & Tekstil',
-    consultantName: 'Dr. Hendra Wijaya, M.M.',
-    submittedAt: '5 jam lalu',
-    bankMutation: '3 Bulan Terverifikasi',
-    status: 'Menunggu',
-    notes: 'Kontrak pembeli ritel Bali telah berjalan rutin.'
-  },
-  {
-    id: 'cert-3',
-    umkmName: 'Kopi Kenangan Senja',
-    owner: 'Budi Santoso',
-    sector: 'Kuliner & F&B',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    submittedAt: '2 hari lalu',
-    bankMutation: '6 Bulan Terverifikasi',
-    status: 'Disahkan',
-    notes: 'Telah memenuhi seluruh 5 pilar kesiapan modal.'
-  },
-  {
-    id: 'cert-4',
-    umkmName: 'Batik Sekar Jagad',
-    owner: 'Siti Lestari',
-    sector: 'Kriya & Tekstil',
-    consultantName: 'Nadia Kusuma, MBA, CFP',
-    submittedAt: '4 hari lalu',
-    bankMutation: '6 Bulan Terverifikasi',
-    status: 'Disahkan',
-    notes: 'Dokumen NIB dan laporan ekspor lengkap.'
-  },
-  {
-    id: 'cert-5',
-    umkmName: 'Sambal Bu Rudy Jaya',
-    owner: 'Rudi Hartono',
-    sector: 'Kuliner & F&B',
-    consultantName: 'Nadia Kusuma, MBA, CFP',
-    submittedAt: '1 minggu lalu',
-    bankMutation: '6 Bulan Terverifikasi',
-    status: 'Disahkan',
-    notes: 'Sertifikasi PIRT dan sertifikat halal aktif.'
-  }
-])
+const submissions = ref<CertificationItem[]>([])
 
 const pendingCount = computed(() => submissions.value.filter(s => s.status === 'Menunggu').length)
 const approvedCount = computed(() => submissions.value.filter(s => s.status === 'Disahkan').length)
@@ -515,7 +459,7 @@ const isApproving = ref(false)
 async function fetchCertifications() {
   try {
     const res = await useApi<any>('/admin/certifications')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+    if (res.data && Array.isArray(res.data)) {
       submissions.value = res.data.map((c: any) => ({
         id: c.id,
         umkmName: c.businessName,

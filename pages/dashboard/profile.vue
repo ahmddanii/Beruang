@@ -1975,27 +1975,38 @@ function handleCopyProfileLink() {
   }
 }
 
-function saveProfile() {
+async function saveProfile() {
   if (selectedSectorChoice.value === 'Lainnya' && customSectorInput.value.trim()) {
     formProfile.sector = customSectorInput.value.trim()
   } else {
     formProfile.sector = selectedSectorChoice.value
   }
 
-  umkmStore.profile.name = formProfile.name.trim() || 'Kopi Senja Nusantara'
-  umkmStore.profile.ownerName = formProfile.ownerName.trim() || 'Fikri Setiawan'
-  umkmStore.profile.sector = formProfile.sector
-  umkmStore.profile.city = formProfile.city.trim()
-  umkmStore.profile.establishedYear = formProfile.establishedYear
-  umkmStore.profile.outletsCount = formProfile.outletsCount
-  umkmStore.profile.employeesCount = formProfile.employeesCount
-  umkmStore.profile.fundingTarget = formProfile.fundingTarget
-  umkmStore.profile.description = formProfile.description.trim()
-  umkmStore.profile.pitchSummary = formProfile.description.trim()
-  umkmStore.profile.nib = formProfile.nib.trim()
-  umkmStore.profile.npwp = formProfile.npwp.trim()
-  umkmStore.profile.halalNumber = formProfile.halalNumber?.trim() || ''
-  umkmStore.profile.hkiNumber = formProfile.hkiNumber?.trim() || ''
+  isSaving.value = true
+
+  const profilePayload = {
+    name: formProfile.name.trim() || 'Kopi Senja Nusantara',
+    brand: formProfile.name.trim() || 'Kopi Senja Nusantara',
+    ownerName: formProfile.ownerName.trim() || 'Fikri Setiawan',
+    sector: formProfile.sector,
+    city: formProfile.city.trim(),
+    establishedYear: formProfile.establishedYear,
+    outletsCount: formProfile.outletsCount,
+    employeesCount: formProfile.employeesCount,
+    fundingTarget: formProfile.fundingTarget,
+    description: formProfile.description.trim(),
+    pitchSummary: formProfile.description.trim(),
+    nib: formProfile.nib.trim(),
+    npwp: formProfile.npwp.trim(),
+    halalNumber: formProfile.halalNumber?.trim() || '',
+    hkiNumber: formProfile.hkiNumber?.trim() || ''
+  }
+
+  try {
+    await umkmStore.updateProfile(profilePayload)
+  } catch (err: any) {
+    console.warn('Gagal sinkron profil UMKM ke database:', err?.message)
+  }
 
   if (authStore.currentUser) {
     authStore.currentUser.businessName = formProfile.name.trim()
@@ -2028,7 +2039,13 @@ function saveProfile() {
 
 let gsapCtx: gsap.Context | null = null
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    await umkmStore.fetchProfile()
+  } catch (e) {
+    // ignore
+  }
+
   umkmStore.initBranchesFromStorage()
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()

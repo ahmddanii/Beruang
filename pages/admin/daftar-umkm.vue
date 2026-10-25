@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="daftarUmkmPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
@@ -422,140 +422,7 @@ watch([searchQuery, selectedSector], () => {
   currentPage.value = 1
 })
 
-const umkmList = ref<UmkmRecord[]>([
-  {
-    id: 'u-1',
-    name: 'Kopi Kenangan Senja',
-    owner: 'Budi Santoso',
-    sector: 'Kuliner & F&B',
-    city: 'Bandung',
-    nib: '9120001234567',
-    status: 'Siap Didanai',
-    consultant: 'Rendra Pratama, S.E., Ak.',
-    cashStatus: 'Aktif 6 Bulan Berturut-turut'
-  },
-  {
-    id: 'u-2',
-    name: 'Batik Sekar Jagad',
-    owner: 'Siti Lestari',
-    sector: 'Kriya & Tekstil',
-    city: 'Yogyakarta',
-    nib: '9120007890123',
-    status: 'Siap Didanai',
-    consultant: 'Nadia Kusuma, MBA, CFP',
-    cashStatus: 'Aktif 8 Bulan Berturut-turut'
-  },
-  {
-    id: 'u-3',
-    name: 'Sayur Hidroponik Segar',
-    owner: 'Hendra Wijaya',
-    sector: 'Agribisnis',
-    city: 'Bogor',
-    nib: '9120004561238',
-    status: 'Pendampingan',
-    consultant: 'Rendra Pratama, S.E., Ak.',
-    cashStatus: 'Aktif 4 Bulan'
-  },
-  {
-    id: 'u-4',
-    name: 'Roastery Puncak Klasik',
-    owner: 'Dimas Anggara',
-    sector: 'Kuliner & F&B',
-    city: 'Bogor',
-    nib: '9120009876543',
-    status: 'Perlu Validasi',
-    consultant: null,
-    cashStatus: 'Perlu Verifikasi'
-  },
-  {
-    id: 'u-5',
-    name: 'Tenun Ikat Nusantara',
-    owner: 'Maria Fransiska',
-    sector: 'Kriya & Tekstil',
-    city: 'Kupang',
-    nib: '9120003456789',
-    status: 'Pendampingan',
-    consultant: 'Dr. Hendra Wijaya, M.M.',
-    cashStatus: 'Aktif 5 Bulan'
-  },
-  {
-    id: 'u-6',
-    name: 'Sambal Bu Rudy Jaya',
-    owner: 'Rudi Hartono',
-    sector: 'Kuliner & F&B',
-    city: 'Surabaya',
-    nib: '9120008765432',
-    status: 'Siap Didanai',
-    consultant: 'Nadia Kusuma, MBA, CFP',
-    cashStatus: 'Aktif 9 Bulan'
-  },
-  {
-    id: 'u-7',
-    name: 'Madu Hutan Sumbawa',
-    owner: 'Fahri Hamzah',
-    sector: 'Agribisnis',
-    city: 'Sumbawa',
-    nib: '9120002345678',
-    status: 'Siap Didanai',
-    consultant: 'Rendra Pratama, S.E., Ak.',
-    cashStatus: 'Aktif 6 Bulan'
-  },
-  {
-    id: 'u-8',
-    name: 'Keramik Dinoyo Art',
-    owner: 'Anugrah Saputra',
-    sector: 'Kriya & Tekstil',
-    city: 'Malang',
-    nib: '9120006543210',
-    status: 'Pendampingan',
-    consultant: 'Dr. Hendra Wijaya, M.M.',
-    cashStatus: 'Aktif 3 Bulan'
-  },
-  {
-    id: 'u-9',
-    name: 'Sepatu Kulit Mandiri',
-    owner: 'Taufik Hidayat',
-    sector: 'Kriya & Tekstil',
-    city: 'Garut',
-    nib: '9120005432109',
-    status: 'Siap Didanai',
-    consultant: 'Nadia Kusuma, MBA, CFP',
-    cashStatus: 'Aktif 7 Bulan'
-  },
-  {
-    id: 'u-10',
-    name: 'Kripik Tempe Barokah',
-    owner: 'Siti Aminah',
-    sector: 'Kuliner & F&B',
-    city: 'Ngawi',
-    nib: '9120004321098',
-    status: 'Perlu Validasi',
-    consultant: null,
-    cashStatus: 'Perlu Verifikasi'
-  },
-  {
-    id: 'u-11',
-    name: 'Cokelat Ransiki Papua',
-    owner: 'Yohanes Rumkabu',
-    sector: 'Agribisnis',
-    city: 'Manokwari',
-    nib: '9120003210987',
-    status: 'Siap Didanai',
-    consultant: 'Rendra Pratama, S.E., Ak.',
-    cashStatus: 'Aktif 10 Bulan'
-  },
-  {
-    id: 'u-12',
-    name: 'Lumbung Beras Organik',
-    owner: 'Surono',
-    sector: 'Agribisnis',
-    city: 'Klaten',
-    nib: '9120002109876',
-    status: 'Siap Didanai',
-    consultant: 'Dr. Hendra Wijaya, M.M.',
-    cashStatus: 'Aktif 8 Bulan'
-  }
-])
+const umkmList = ref<UmkmRecord[]>([])
 
 const verifiedNibCount = computed(() => umkmList.value.filter(u => Boolean(u.nib)).length)
 const readyCount = computed(() => umkmList.value.filter(u => u.status === 'Siap Didanai').length)
@@ -583,7 +450,7 @@ const paginatedList = computed(() => {
 async function fetchUmkms() {
   try {
     const res = await useApi<any>('/admin/partnerships')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+    if (res.data && Array.isArray(res.data)) {
       umkmList.value = res.data.map((item: any) => ({
         id: item.id,
         name: item.name,

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="penggunaPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Page Title: Identical to UMKM Pages -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
@@ -491,71 +491,7 @@ function selectRoleFilter(id: typeof selectedRole.value) {
   isFilterDropdownOpen.value = false
 }
 
-const users = ref<UserAccount[]>([
-  {
-    id: 'usr-1',
-    name: 'Budi Santoso',
-    email: 'budi@kopisenja.id',
-    role: 'UMKM',
-    organization: 'Kopi Kenangan Senja',
-    credential: 'NIB 9120319281',
-    status: 'Aktif'
-  },
-  {
-    id: 'usr-2',
-    name: 'Siti Lestari',
-    email: 'siti@batiksekar.id',
-    role: 'UMKM',
-    organization: 'Batik Sekar Jagad',
-    credential: 'NIB 8192039102',
-    status: 'Aktif'
-  },
-  {
-    id: 'usr-3',
-    name: 'Rendra Pratama, S.E., Ak.',
-    email: 'rendra.pratama@beruang.id',
-    role: 'CONSULTANT',
-    organization: 'KJA Pratama & Rekan',
-    credential: 'BNSP-KUMKM-2025-089',
-    status: 'Aktif'
-  },
-  {
-    id: 'usr-4',
-    name: 'Nadia Kusuma, MBA, CFP',
-    email: 'nadia.kusuma@beruang.id',
-    role: 'CONSULTANT',
-    organization: 'Kusuma Advisory',
-    credential: 'BNSP-KUMKM-2025-114',
-    status: 'Aktif'
-  },
-  {
-    id: 'usr-5',
-    name: 'Arif Wicaksono',
-    email: 'investment@nusantaracapital.vc',
-    role: 'INVESTOR',
-    organization: 'Nusantara Impact Capital',
-    credential: 'Pemodal Institusi KYC',
-    status: 'Aktif'
-  },
-  {
-    id: 'usr-6',
-    name: 'Farhan Syahputra',
-    email: 'farhan@arthasyariah.co.id',
-    role: 'INVESTOR',
-    organization: 'Artha Ventura Syariah',
-    credential: 'Pemodal Syariah KYC',
-    status: 'Aktif'
-  },
-  {
-    id: 'usr-7',
-    name: 'Admin Utama Ekosistem',
-    email: 'admin.pusat@beruang.id',
-    role: 'ADMIN',
-    organization: 'Direktorat Tata Kelola Beruang',
-    credential: 'Otoritas Penuh',
-    status: 'Aktif'
-  }
-])
+const users = ref<UserAccount[]>([])
 
 const umkmAccountsCount = computed(() => users.value.filter(u => u.role === 'UMKM').length)
 const consultantAccountsCount = computed(() => users.value.filter(u => u.role === 'CONSULTANT').length)
@@ -595,7 +531,7 @@ function getRoleLabel(role: AccountRole): string {
 async function fetchUsers() {
   try {
     const res = await useApi<any>('/admin/users')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+    if (res.data && Array.isArray(res.data)) {
       users.value = res.data.map((u: any) => ({
         id: u.id,
         name: u.name,

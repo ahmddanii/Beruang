@@ -267,7 +267,6 @@ import {
   ShieldCheckIcon,
   Comment01Icon
 } from '@hugeicons/core-free-icons'
-import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 
 definePageMeta({
@@ -275,7 +274,6 @@ definePageMeta({
   hideHeader: true
 })
 
-const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
 

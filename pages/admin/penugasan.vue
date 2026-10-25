@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="penugasanPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
@@ -453,73 +453,7 @@ function selectStatusFilter(id: typeof selectedStatusFilter.value) {
 }
 
 // Data pemantauan pendampingan aktif
-const assignmentHistory = ref([
-  {
-    id: 'rel-1',
-    umkmName: 'Kopi Kenangan Senja',
-    owner: 'Budi Santoso',
-    sector: 'Kuliner & F&B',
-    city: 'Bandung',
-    monthlyRevenue: 'Rp 65.000.000',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    consultantSpecialty: 'Arus Kas & Pajak',
-    assignedDate: '12 Jan 2026',
-    status: 'Siap Didanai' as const,
-    focusArea: 'Penyusunan laporan arus kas bulanan terverifikasi dan pembukuan bahan baku.'
-  },
-  {
-    id: 'rel-2',
-    umkmName: 'Batik Sekar Jagad',
-    owner: 'Siti Lestari',
-    sector: 'Kriya & Tekstil',
-    city: 'Yogyakarta',
-    monthlyRevenue: 'Rp 82.000.000',
-    consultantName: 'Nadia Kusuma, MBA, CFP',
-    consultantSpecialty: 'Kesiapan Ekspor',
-    assignedDate: '04 Feb 2026',
-    status: 'Siap Didanai' as const,
-    focusArea: 'Tata kelola persediaan kain malam dan kesiapan dokumen sertifikasi usaha.'
-  },
-  {
-    id: 'rel-3',
-    umkmName: 'Sayur Hidroponik Segar',
-    owner: 'Hendra Wijaya',
-    sector: 'Agribisnis',
-    city: 'Bogor',
-    monthlyRevenue: 'Rp 45.000.000',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    consultantSpecialty: 'Rantai Pasok Agribisnis',
-    assignedDate: '19 Feb 2026',
-    status: 'Sedang Didampingi' as const,
-    focusArea: 'Pencatatan kas siklus panen dan efisiensi biaya logistik distribusi sayur.'
-  },
-  {
-    id: 'rel-4',
-    umkmName: 'Tenun Ikat Nusantara',
-    owner: 'Maria Fransiska',
-    sector: 'Kriya & Tekstil',
-    city: 'Kupang',
-    monthlyRevenue: 'Rp 52.000.000',
-    consultantName: 'Dr. Hendra Wijaya, M.M.',
-    consultantSpecialty: 'Restrukturisasi Kas',
-    assignedDate: '28 Feb 2026',
-    status: 'Sedang Didampingi' as const,
-    focusArea: 'Pemisahan kas keluarga dari modal kerja perajin tenun rumahan.'
-  },
-  {
-    id: 'rel-5',
-    umkmName: 'Roastery Puncak Klasik',
-    owner: 'Dimas Anggara',
-    sector: 'Kuliner & F&B',
-    city: 'Bogor',
-    monthlyRevenue: 'Rp 38.000.000',
-    consultantName: '',
-    consultantSpecialty: '',
-    assignedDate: '',
-    status: 'Meninjau Konsultan' as const,
-    focusArea: 'Pelaku UMKM sedang meninjau profil 3 konsultan spesialis F&B.'
-  }
-])
+const assignmentHistory = ref<any[]>([])
 
 const totalConsultantsCount = computed(() => {
   const set = new Set(assignmentHistory.value.map(a => a.consultantName).filter(Boolean))
@@ -557,7 +491,7 @@ function openDetailModal(item: any) {
 async function fetchAssignmentData() {
   try {
     const res = await useApi<any>('/admin/partnerships')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+    if (res.data && Array.isArray(res.data)) {
       assignmentHistory.value = res.data.map((item: any) => ({
         id: item.id,
         umkmName: item.name,

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="investorPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
@@ -416,74 +416,7 @@ watch([searchQuery, selectedType], () => {
   currentPage.value = 1
 })
 
-const investorsList = ref<InvestorRecord[]>([
-  {
-    id: 'inv-1',
-    name: 'Nusantara Impact Capital',
-    pic: 'Raditya Wicaksono',
-    type: 'Venture Capital',
-    city: 'Jakarta Selatan',
-    ticketSize: 'Rp 250 Jt – 1 Miliar',
-    sectors: 'Kuliner & F&B, Agribisnis',
-    kycStatus: 'Terverifikasi',
-    activeDeals: 3
-  },
-  {
-    id: 'inv-2',
-    name: 'Artha Ventura Syariah',
-    pic: 'Farhan Maulana',
-    type: 'Syariah Fund',
-    city: 'Jakarta Pusat',
-    ticketSize: 'Rp 100 Jt – 500 Jt',
-    sectors: 'Kuliner & F&B, Retail',
-    kycStatus: 'Terverifikasi',
-    activeDeals: 2
-  },
-  {
-    id: 'inv-3',
-    name: 'Koperasi Pemodal Lokal',
-    pic: 'Sri Wahyuni',
-    type: 'Family Office',
-    city: 'Surabaya',
-    ticketSize: 'Rp 50 Jt – 250 Jt',
-    sectors: 'Agribisnis, Kriya',
-    kycStatus: 'Terverifikasi',
-    activeDeals: 2
-  },
-  {
-    id: 'inv-4',
-    name: 'Timur Berkarya Fund',
-    pic: 'Albertinus Lado',
-    type: 'Angel Investor',
-    city: 'Denpasar',
-    ticketSize: 'Rp 100 Jt – 300 Jt',
-    sectors: 'Kriya & Tekstil, Pariwisata',
-    kycStatus: 'Terverifikasi',
-    activeDeals: 1
-  },
-  {
-    id: 'inv-5',
-    name: 'AgriInvest Ventura',
-    pic: 'Bambang Soediro',
-    type: 'Venture Capital',
-    city: 'Semarang',
-    ticketSize: 'Rp 200 Jt – 1 Miliar',
-    sectors: 'Agribisnis, Pangan',
-    kycStatus: 'Terverifikasi',
-    activeDeals: 2
-  },
-  {
-    id: 'inv-6',
-    name: 'Bina Mandiri Angel Club',
-    pic: 'Dewi Lestari',
-    type: 'Angel Investor',
-    city: 'Bandung',
-    ticketSize: 'Rp 50 Jt – 200 Jt',
-    sectors: 'Kuliner & F&B, Jasa',
-    kycStatus: 'Terverifikasi',
-    activeDeals: 1
-  }
-])
+const investorsList = ref<InvestorRecord[]>([])
 
 const kycPassedCount = computed(() => investorsList.value.filter(i => i.kycStatus === 'Terverifikasi').length)
 
@@ -510,7 +443,7 @@ const paginatedList = computed(() => {
 async function fetchInvestors() {
   try {
     const res = await useApi<any>('/admin/investors')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+    if (res.data && Array.isArray(res.data)) {
       investorsList.value = res.data
     }
   } catch (err: any) {

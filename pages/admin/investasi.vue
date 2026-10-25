@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="investasiPageRef" class="space-y-6 sm:space-y-8 pb-16 font-poppins text-neutral-900 dark:text-neutral-100">
     <!-- 1. Page Title & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
@@ -547,107 +547,7 @@ function selectStageFilter(id: typeof selectedStage.value) {
   currentPage.value = 1
 }
 
-const dealItems = ref<DealFlowItem[]>([
-  {
-    id: 'deal-1',
-    investorName: 'Nusantara Impact Capital',
-    investorType: 'Venture Capital • Jakarta',
-    umkmName: 'Kopi Kenangan Senja',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    stage: 'Ruang Data Terbuka',
-    updatedAt: '2 jam lalu'
-  },
-  {
-    id: 'deal-2',
-    investorName: 'Nusantara Impact Capital',
-    investorType: 'Venture Capital • Jakarta',
-    umkmName: 'Batik Sekar Jagad',
-    consultantName: 'Nadia Kusuma, MBA, CFP',
-    stage: 'Ruang Data Terbuka',
-    updatedAt: '4 jam lalu'
-  },
-  {
-    id: 'deal-3',
-    investorName: 'Artha Ventura Syariah',
-    investorType: 'Dana Syariah • Bandung',
-    umkmName: 'Kopi Kenangan Senja',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    stage: 'Penjajakan Awal',
-    updatedAt: '1 hari lalu'
-  },
-  {
-    id: 'deal-4',
-    investorName: 'Timur Berkarya Fund',
-    investorType: 'Impact Fund • Bali',
-    umkmName: 'Tenun Ikat Nusantara',
-    consultantName: 'Dr. Hendra Wijaya, M.M.',
-    stage: 'Penjajakan Awal',
-    updatedAt: '5 jam lalu'
-  },
-  {
-    id: 'deal-5',
-    investorName: 'Koperasi Pemodal Lokal',
-    investorType: 'Angel Syndicate • Bogor',
-    umkmName: 'Sayur Hidroponik Segar',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    stage: 'Ruang Data Terbuka',
-    updatedAt: '3 hari lalu'
-  },
-  {
-    id: 'deal-6',
-    investorName: 'Surabaya Angel Network',
-    investorType: 'Angel Investor • Surabaya',
-    umkmName: 'Sambal Bu Rudy Binaan',
-    consultantName: 'Siti Rahmawati, S.E., M.Ak.',
-    stage: 'Penjajakan Awal',
-    updatedAt: '6 jam lalu'
-  },
-  {
-    id: 'deal-7',
-    investorName: 'Mandiri Mitra Usaha',
-    investorType: 'Dana Ventura • Jakarta',
-    umkmName: 'Keripik Tempe Barokah',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    stage: 'Ruang Data Terbuka',
-    updatedAt: '1 hari lalu'
-  },
-  {
-    id: 'deal-8',
-    investorName: 'Artha Ventura Syariah',
-    investorType: 'Dana Syariah • Bandung',
-    umkmName: 'Tenun Ikat Nusantara',
-    consultantName: 'Dr. Hendra Wijaya, M.M.',
-    stage: 'Akses Dicabut',
-    updatedAt: '4 hari lalu'
-  },
-  {
-    id: 'deal-9',
-    investorName: 'Timur Berkarya Fund',
-    investorType: 'Impact Fund • Bali',
-    umkmName: 'Kopi Kenangan Senja',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    stage: 'Penjajakan Awal',
-    updatedAt: '12 jam lalu'
-  },
-  {
-    id: 'deal-10',
-    investorName: 'Nusantara Impact Capital',
-    investorType: 'Venture Capital • Jakarta',
-    umkmName: 'Sayur Hidroponik Segar',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    stage: 'Ruang Data Terbuka',
-    updatedAt: '5 hari lalu'
-  },
-  {
-    id: 'deal-11',
-    investorName: 'Koperasi Pemodal Lokal',
-    investorType: 'Angel Syndicate • Bogor',
-    umkmName: 'Batik Sekar Jagad',
-    consultantName: 'Nadia Kusuma, MBA, CFP',
-    stage: 'Penjajakan Awal',
-    updatedAt: '2 hari lalu'
-  }
-])
+const dealItems = ref<DealFlowItem[]>([])
 
 const activeDataRoomCount = computed(() => dealItems.value.filter(d => d.stage === 'Ruang Data Terbuka').length)
 const uniqueInvestorsCount = computed(() => new Set(dealItems.value.map(d => d.investorName)).size)
@@ -675,7 +575,7 @@ const paginatedDeals = computed(() => {
 async function loadDeals() {
   try {
     const res = await useApi<any>('/admin/deals')
-    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+    if (res.data && Array.isArray(res.data)) {
       dealItems.value = res.data.map((d: any) => ({
         id: d.id,
         investorName: d.investorName,

@@ -1115,12 +1115,31 @@ let gsapCtx: gsap.Context | null = null
 
 const umkmId = computed(() => (route.params.id as string) || 'umkm-01')
 
-const item = computed<MarketplaceUmkm | null>(() => {
+const item = computed<MarketplaceUmkm>(() => {
   const sourceList = investorStore.marketplaceList || []
   return (
     sourceList.find(
       m => m.id === umkmId.value || m.umkmRefId === umkmId.value
-    ) || sourceList[0] || null
+    ) || sourceList[0] || {
+      id: 'umkm-01',
+      umkmRefId: 'umkm-01',
+      name: 'Kopi Senja Nusantara',
+      code: 'BERU-KOP-01',
+      sector: 'Kuliner & Minuman (F&B)',
+      city: 'Bandung',
+      establishedYear: 2021,
+      postedAt: 'Terverifikasi',
+      fundingTarget: 250000000,
+      marginPercentage: 54.4,
+      growthYoY: 34.2,
+      healthScore: 79,
+      certifiedAt: '18 Sep 2026',
+      consultantName: 'Dra. Maya Suryani, M.M.',
+      pitchSummary: 'Spesialis kopi arabika-robusta dengan 3 gerai offline di Bandung. Margin kotor konsisten di atas 48% dengan SOP barista standar.',
+      tags: ['F&B', 'Ready for Funding'],
+      accessStatus: 'NONE',
+      bookmarked: false
+    }
   )
 })
 

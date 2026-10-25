@@ -14,7 +14,10 @@
     "db:seed": "npm run prisma:seed --prefix server",
     "db:studio": "npm run prisma:studio --prefix server",
     "test": "node --test tests/unit/investor-pages.test.mjs tests/unit/admin-pages.test.mjs tests/unit/settings-page.test.mjs tests/unit/mobile-responsiveness.test.mjs tests/unit/verify-all-umkm-pages.mjs tests/unit/stores-behavior.test.mjs tests/unit/components-contract.test.mjs tests/unit/verify-batch1.mjs tests/unit/verify-batch2.mjs tests/unit/verify-batch3.mjs",
-    "test:unit": "npm run test"
+    "test:unit": "npm run test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",
@@ -38,6 +41,7 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.2",
+    "@playwright/test": "^1.64.1",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22.13.4",
     "autoprefixer": "^10.4.20",

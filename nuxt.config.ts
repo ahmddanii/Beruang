@@ -4,6 +4,16 @@ import { fileURLToPath } from 'node:url'
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false }, // reload trigger 2
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000
+  },
+
+  ignore: [
+    '**/playwright-report/**',
+    '**/test-results/**',
+    '**/tests/**'
+  ],
 
   experimental: {
     appManifest: false
@@ -22,6 +32,7 @@ export default defineNuxtConfig({
         'pinia',
         'gsap',
         'chart.js',
+        'chart.js/auto',
         'vue-chartjs'
       ]
     },

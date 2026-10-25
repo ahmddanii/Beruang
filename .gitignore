@@ -77,5 +77,6 @@ coverage/
 #    # Tambahan berkas export lokal:
 #    temp_reports/*.xlsx
 #    dump_backup.json
-# ==============================================================================
 .vercel
+playwright-report/
+test-results/

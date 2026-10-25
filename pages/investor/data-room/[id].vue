@@ -397,74 +397,20 @@
     </div>
 
     <!-- ========================================================================================= -->
-    <!-- MODAL 1: INTERACTIVE DOCUMENT PREVIEW WITH DYNAMIC SECURITY WATERMARK                     -->
     <!-- ========================================================================================= -->
-    <div
-      v-if="activePreviewDoc"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-150"
-      @click.self="activePreviewDoc = null"
-    >
-      <div class="card-tactile-gopay rounded-3xl p-6 border max-w-2xl w-full space-y-5 bg-white dark:bg-[#13161F] shadow-2xl relative">
-        <div class="flex items-start justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
-          <div class="space-y-0.5">
-            <span class="text-[10px] font-mono font-bold text-[#00AA13] uppercase tracking-wider block">
-              DOKUMEN RESMI TERVERIFIKASI
-            </span>
-            <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
-              {{ activePreviewDoc.name }}
-            </h3>
-          </div>
-          <button
-            type="button"
-            class="p-1 rounded-lg text-neutral-400 hover:text-neutral-600 dark:hover:text-white cursor-pointer"
-            @click="activePreviewDoc = null"
-          >
-            ✕
-          </button>
-        </div>
-
-        <!-- Document Preview Canvas with Heavy Security Watermark -->
-        <div class="relative rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-6 sm:p-8 min-h-[300px] flex flex-col items-center justify-center text-center overflow-hidden select-none">
-          <!-- Dynamic Diagonal Watermark -->
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10 dark:opacity-15 transform -rotate-15">
-            <p class="font-mono font-extrabold text-sm text-neutral-900 dark:text-white text-center leading-loose">
-              BERUANG SECURE DATA ROOM • {{ authStore.currentUser?.name }} • {{ accessTimestamp }}<br />
-              CONFIDENTIAL • PROPRIETARY & PROTECTED
-            </p>
-          </div>
-
-          <!-- Document Graphic Emblem -->
-          <div class="w-16 h-16 rounded-2xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-[#2091AA] shadow-sm mb-3">
-            <HugeiconsIcon :icon="File01Icon" :size="32" :stroke-width="1.8" />
-          </div>
-
-          <h4 class="font-poppins font-bold text-sm text-neutral-900 dark:text-white mb-1">
-            {{ activePreviewDoc.name }}
-          </h4>
-          <p class="text-xs text-neutral-500 font-sans max-w-sm mb-4">
-            Dokumen asli telah dipindai, dienkripsi, dan dicocokkan keabsahannya dengan basis data instansi penerbit resmi.
-          </p>
-
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-[#00AA13] dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 text-xs font-semibold">
-            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
-            <span>Kesesuaian 100% Sah & Legal</span>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between pt-2">
-          <span class="text-[11px] text-neutral-400 font-mono">
-            Audit ID: SEC-{{ umkmId }}-DOK
-          </span>
-          <button
-            type="button"
-            class="px-4 py-2 rounded-xl text-xs font-semibold bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 cursor-pointer"
-            @click="activePreviewDoc = null"
-          >
-            Tutup Pratinjau
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- MODAL 1: INTERACTIVE DOCUMENT PREVIEW GOOGLE DRIVE STYLE (BDocumentViewerModal)             -->
+    <!-- ========================================================================================= -->
+    <BDocumentViewerModal
+      :model-value="!!activePreviewDoc"
+      :doc="activePreviewDoc ? { id: activePreviewDoc.id || 'doc', title: activePreviewDoc.name || activePreviewDoc.title, subtitle: activePreviewDoc.category, categoryBadge: activePreviewDoc.category, file: activePreviewDoc.file || { name: activePreviewDoc.name, size: activePreviewDoc.size || '1.2 MB', uploadedAt: 'Terverifikasi', isVerified: true, fileUrl: activePreviewDoc.fileUrl } } : null"
+      :business-name="businessProfile.name"
+      :owner-name="businessProfile.ownerName || 'Pemilik Usaha'"
+      :business-address="businessProfile.city ? `${businessProfile.city}, Indonesia` : ''"
+      :sector="businessProfile.sector"
+      :consultant-name="businessProfile.consultantName"
+      @update:model-value="(val) => { if (!val) activePreviewDoc = null }"
+      @close="activePreviewDoc = null"
+    />
 
     <!-- ========================================================================================= -->
     <!-- MODAL 2: AJUKAN MINAT PENDANAAN / TERM SHEET (Deal-Making Proposal Action)                 -->
@@ -564,6 +510,7 @@ import BPillTabs, { type PillTabItem } from '~/components/base/BPillTabs.vue'
 import { useAuthStore } from '~/stores/auth'
 import { useInvestorStore } from '~/stores/investor'
 import { useUmkmStore } from '~/stores/umkm'
+import BDocumentViewerModal from '~/components/base/BDocumentViewerModal.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   ArrowLeft01Icon,

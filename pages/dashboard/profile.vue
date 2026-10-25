@@ -916,78 +916,17 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 3. MODAL: DOKUMEN VIEWER (Reusable BModal & BButton)                       -->
+    <!-- 3. MODAL: DOKUMEN VIEWER GOOGLE DRIVE STYLE (BDocumentViewerModal)        -->
     <!-- ========================================================================= -->
-    <BModal
+    <BDocumentViewerModal
       v-model="isDocPreviewModalOpen"
-      :title="activePreviewDoc?.title || 'Pratinjau Dokumen'"
-      size="lg"
-    >
-      <div v-if="activePreviewDoc" class="space-y-4 font-poppins">
-        <!-- Document Certificate Preview Frame -->
-        <div class="rounded-2xl border border-neutral-200 dark:border-neutral-800 p-6 bg-neutral-50 dark:bg-neutral-900 text-center space-y-4">
-          <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] flex items-center justify-center">
-            <HugeiconsIcon :icon="Certificate01Icon" :size="32" />
-          </div>
-
-          <div class="space-y-1">
-            <BBadge variant="success" size="sm" pill dot class="mb-1">
-              Dokumen Terverifikasi Sah
-            </BBadge>
-            <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
-              {{ activePreviewDoc.title }}
-            </h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
-              {{ activePreviewDoc.subtitle }}
-            </p>
-          </div>
-
-          <!-- Metadata Spec -->
-          <div class="inline-grid grid-cols-2 gap-4 p-3 rounded-xl bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800 text-xs text-left max-w-sm mx-auto w-full">
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Nama Berkas:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200 truncate block">
-                {{ activePreviewDoc.file?.name }}
-              </span>
-            </div>
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Ukuran:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200 tabular-nums block">
-                {{ activePreviewDoc.file?.size }}
-              </span>
-            </div>
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Kategori:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200 block">
-                {{ activePreviewDoc.categoryBadge }}
-              </span>
-            </div>
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Status:</span>
-              <span class="font-bold text-[#00AA13] block">
-                Tervalidasi Sistem
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <p class="text-[11px] text-neutral-400 text-center leading-relaxed">
-          Dokumen ini diunggah oleh pemilik usaha dan telah diautentikasi oleh konsultan pendamping resmi Beruang.
-        </p>
-      </div>
-
-      <template #footer>
-        <div class="flex items-center justify-end gap-2 w-full">
-          <BButton
-            variant="secondary"
-            size="sm"
-            @click="isDocPreviewModalOpen = false"
-          >
-            Tutup
-          </BButton>
-        </div>
-      </template>
-    </BModal>
+      :doc="activePreviewDoc"
+      :business-name="formProfile.name || authStore.currentUser?.businessName"
+      :owner-name="formProfile.ownerName || authStore.currentUser?.name"
+      :business-address="formProfile.city ? `${formProfile.city}, Indonesia` : ''"
+      :sector="formProfile.sector"
+      :consultant-name="umkmConsultantName"
+    />
 
     <!-- ========================================================================= -->
     <!-- 4. MODAL: TAMBAH PRODUK (Reusable BModal & BButton)                        -->
@@ -1268,6 +1207,7 @@ import BActionButton from '~/components/base/BActionButton.vue'
 import BButton from '~/components/base/BButton.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShareModal from '~/components/base/BShareModal.vue'
+import BDocumentViewerModal from '~/components/base/BDocumentViewerModal.vue'
 import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -1858,6 +1798,10 @@ export interface LegalDocItem {
     size: string
     uploadedAt: string
     isVerified: boolean
+    fileUrl?: string
+    blobUrl?: string
+    fileType?: string
+    dataUrl?: string
   } | null
 }
 
@@ -1974,24 +1918,50 @@ function triggerDocUpload(docId: string) {
   }
 }
 
-function onDocFileSelected(event: Event) {
+async function onDocFileSelected(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   if (!file || !currentUploadDocId.value) return
 
-  if (file.size > 10 * 1024 * 1024) {
-    alert('Ukuran berkas melebihi batas 10 MB. Silakan kompresi berkas terlebih dahulu.')
+  if (file.size > 15 * 1024 * 1024) {
+    alert('Ukuran berkas melebihi batas 15 MB. Silakan kompresi berkas terlebih dahulu.')
     return
   }
 
   const targetDoc = legalDocuments.value.find(d => d.id === currentUploadDocId.value)
   if (targetDoc) {
+    // 1. Instant local Blob URL for immediate Google Drive-style preview
+    const localBlobUrl = URL.createObjectURL(file)
+    const mimeType = file.type || (file.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'image/jpeg')
+
     targetDoc.file = {
       name: file.name,
       size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
       uploadedAt: 'Hari ini',
-      isVerified: true
+      isVerified: true,
+      blobUrl: localBlobUrl,
+      fileType: mimeType
     }
+
+    // 2. Persist upload to Backend Virtual Data Room & Storage
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('title', targetDoc.title)
+      formData.append('category', targetDoc.categoryBadge)
+
+      const res = await useApi<any>('/vdr/documents', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (res?.data?.fileUrl) {
+        targetDoc.file.fileUrl = res.data.fileUrl
+      }
+    } catch (uploadErr) {
+      // Gracefully fallback to local storage / blob
+    }
+
     saveDocsToStorage()
     triggerToast(`Berkas ${targetDoc.title} berhasil diunggah!`)
   }
@@ -2018,7 +1988,7 @@ function saveDocsToStorage() {
   }
 }
 
-function initDocsFromStorage() {
+async function initDocsFromStorage() {
   if (typeof window !== 'undefined') {
     try {
       const userKey = authStore.currentUser?.id ? `_${authStore.currentUser.id}` : ''
@@ -2032,6 +2002,29 @@ function initDocsFromStorage() {
     } catch (e) {
       // ignore
     }
+  }
+
+  // Attempt to sync documents from Backend Virtual Data Room
+  try {
+    const res = await useApi<any>('/vdr/documents')
+    if (res?.data && Array.isArray(res.data) && res.data.length > 0) {
+      for (const sDoc of res.data) {
+        const match = legalDocuments.value.find(
+          d => d.title.toLowerCase() === sDoc.name?.toLowerCase() || d.id === sDoc.category?.toLowerCase()
+        )
+        if (match && !match.file) {
+          match.file = {
+            name: sDoc.name,
+            size: sDoc.size || '1.0 MB',
+            uploadedAt: 'Tersimpan',
+            isVerified: true,
+            fileUrl: sDoc.fileUrl
+          }
+        }
+      }
+    }
+  } catch (err) {
+    // ignore
   }
 }
 

@@ -934,78 +934,17 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODAL: PRATINJAU DOKUMEN PERIZINAN (Sama persis dengan Profil Usaha UMKM)  -->
+    <!-- MODAL: PRATINJAU DOKUMEN PERIZINAN GOOGLE DRIVE STYLE                     -->
     <!-- ========================================================================= -->
-    <BModal
+    <BDocumentViewerModal
       v-model="isDocPreviewModalOpen"
-      :title="activePreviewDoc?.title || 'Pratinjau Dokumen'"
-      size="lg"
-    >
-      <div v-if="activePreviewDoc" class="space-y-4 font-poppins">
-        <!-- Document Certificate Preview Frame -->
-        <div class="rounded-2xl border border-neutral-200 dark:border-neutral-800 p-6 bg-neutral-50 dark:bg-neutral-900 text-center space-y-4">
-          <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] flex items-center justify-center">
-            <HugeiconsIcon :icon="Certificate01Icon" :size="32" />
-          </div>
-
-          <div class="space-y-1">
-            <BBadge variant="success" size="sm" pill dot class="mb-1">
-              Dokumen Terverifikasi Sah
-            </BBadge>
-            <h3 class="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
-              {{ activePreviewDoc.title }}
-            </h3>
-            <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
-              {{ activePreviewDoc.subtitle }}
-            </p>
-          </div>
-
-          <!-- Metadata Spec -->
-          <div class="inline-grid grid-cols-2 gap-4 p-3 rounded-xl bg-white dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800 text-xs text-left max-w-sm mx-auto w-full">
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Nama Berkas:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200 truncate block">
-                {{ activePreviewDoc.file?.name }}
-              </span>
-            </div>
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Ukuran:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200 tabular-nums block">
-                {{ activePreviewDoc.file?.size }}
-              </span>
-            </div>
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Kategori:</span>
-              <span class="font-medium text-neutral-800 dark:text-neutral-200 block">
-                {{ activePreviewDoc.categoryBadge }}
-              </span>
-            </div>
-            <div>
-              <span class="text-neutral-400 block text-[10px]">Status:</span>
-              <span class="font-bold text-[#00AA13] block">
-                Tervalidasi Sistem
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <p class="text-[11px] text-neutral-400 text-center leading-relaxed">
-          Dokumen ini diunggah oleh pemilik usaha dan telah diautentikasi oleh konsultan pendamping resmi Beruang.
-        </p>
-      </div>
-
-      <template #footer>
-        <div class="flex items-center justify-end gap-2 w-full">
-          <BButton
-            variant="secondary"
-            size="sm"
-            @click="isDocPreviewModalOpen = false"
-          >
-            Tutup
-          </BButton>
-        </div>
-      </template>
-    </BModal>
+      :doc="activePreviewDoc"
+      :business-name="item.name"
+      :owner-name="item.ownerName || 'Pemilik Usaha'"
+      :business-address="item.city ? `${item.city}, Indonesia` : ''"
+      :sector="item.sector"
+      :consultant-name="item.consultantName"
+    />
 
     <!-- Reusable Share Profile Modal Component -->
     <BShareModal
@@ -1093,6 +1032,7 @@ import BActionButton from '~/components/base/BActionButton.vue'
 import BButton from '~/components/base/BButton.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShareModal from '~/components/base/BShareModal.vue'
+import BDocumentViewerModal from '~/components/base/BDocumentViewerModal.vue'
 import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
 import BInvestmentRoiCalculator from '~/components/investor/BInvestmentRoiCalculator.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'

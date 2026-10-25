@@ -103,6 +103,35 @@ router.post(
         size = formatBytes(file.size);
         storagePath = file.path;
         fileUrl = `/api/vdr/documents/file/${file.filename}`;
+
+        // Supabase Storage Cloud Integration (Bucket: vdr-vault)
+        const supabaseUrl = process.env.SUPABASE_URL || "https://zqysbqmtqnovxwbjfyxx.supabase.co";
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+
+        if (supabaseKey && fs.existsSync(file.path)) {
+          try {
+            const fileBuffer = fs.readFileSync(file.path);
+            const contentType = file.mimetype || "application/octet-stream";
+            const uploadPath = `${businessId}/${file.filename}`;
+
+            const uploadRes = await fetch(`${supabaseUrl}/storage/v1/object/vdr-vault/${uploadPath}`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${supabaseKey}`,
+                "Content-Type": contentType,
+                "x-upsert": "true",
+              },
+              body: fileBuffer,
+            });
+
+            if (uploadRes.ok) {
+              fileUrl = `${supabaseUrl}/storage/v1/object/public/vdr-vault/${uploadPath}`;
+              storagePath = `vdr-vault/${uploadPath}`;
+            }
+          } catch (e: any) {
+            console.warn("[Storage] Supabase storage upload skipped or failed, using local fallback:", e?.message);
+          }
+        }
       } else if (req.body.size) {
         size = req.body.size;
       }

@@ -384,13 +384,67 @@
       </div>
     </div>
 
+    <!-- ===================================================================== -->
+    <!-- MODAL PERINGATAN: AKUN SUDAH TERDAFTAR (GABOLEH DOUBLE)               -->
+    <!-- ===================================================================== -->
+    <BModal
+      v-model="showAccountExistsModal"
+      title="Akun Sudah Terdaftar"
+      size="sm"
+      @close="handleCancelAccountExists"
+    >
+      <div class="space-y-4 py-2 font-poppins text-left">
+        <div class="flex items-start gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-xs border border-amber-200/60 dark:border-amber-800/50">
+            <HugeiconsIcon :icon="Alert01Icon" :size="24" :stroke-width="2" />
+          </div>
+          <div class="space-y-1.5 min-w-0 flex-1">
+            <h4 class="font-bold text-base text-neutral-900 dark:text-neutral-100 leading-snug">
+              {{ existingAccount.name ? `Halo, ${existingAccount.name}!` : 'Akun Sudah Ada' }}
+            </h4>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Akun dengan <span class="font-semibold text-neutral-800 dark:text-neutral-200 break-all">{{ existingAccount.email || existingAccount.phone }}</span> sudah terdaftar di Beruang.
+            </p>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Akun tidak boleh didaftarkan ganda. Silakan langsung masuk (login) untuk melanjutkan aktivitas tokomu.
+            </p>
+          </div>
+        </div>
 
+        <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 text-[11px] text-amber-800 dark:text-amber-300 leading-normal">
+          💡 <strong>Tips:</strong> Kamu tidak perlu mendaftar ulang. Seluruh data bisnismu sudah tersimpan aman di akunmu.
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="flex items-center justify-end gap-2.5 w-full">
+          <BButton
+            variant="secondary"
+            size="sm"
+            @click="handleCancelAccountExists"
+          >
+            Gunakan Akun Lain
+          </BButton>
+
+          <BButton
+            variant="primary"
+            size="sm"
+            @click="handleRedirectToLogin"
+          >
+            <template #icon-right>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" />
+            </template>
+            Masuk ke Akun
+          </BButton>
+        </div>
+      </template>
+    </BModal>
 
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useGoogleAuth } from '~/composables/useGoogleAuth'
@@ -398,6 +452,7 @@ import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
 import BCloudBackground from '~/components/base/BCloudBackground.vue'
 import BStepper from '~/components/base/BStepper.vue'
 import BModal from '~/components/base/BModal.vue'
+import BButton from '~/components/base/BButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   ArrowLeft02Icon,
@@ -407,6 +462,7 @@ import {
   Store01Icon,
   UserGroupIcon,
   Coins01Icon,
+  Alert01Icon,
   CheckmarkCircle01Icon
 } from '@hugeicons/core-free-icons'
 
@@ -465,6 +521,26 @@ const successNotification = ref('')
 const resendCountdown = ref(60)
 let timerInterval: any = null
 const phoneInput = ref('')
+const showAccountExistsModal = ref(false)
+const existingAccount = reactive({
+  email: '',
+  phone: '',
+  name: '',
+  role: 'UMKM' as UserRole
+})
+
+function handleCancelAccountExists() {
+  showAccountExistsModal.value = false
+  isGoogleLoading.value = false
+  isWhatsappLoading.value = false
+  googleLoadingText.value = 'Menghubungkan akun Google...'
+  loading.value = false
+}
+
+function handleRedirectToLogin() {
+  showAccountExistsModal.value = false
+  router.push('/masuk')
+}
 
 const activeRoleMeta = computed(() => {
   return roleCards.find(r => r.key === selectedRole.value) || roleCards[0]
@@ -595,6 +671,24 @@ async function requestOtp() {
   successNotification.value = ''
   loading.value = true
   try {
+    // 1. Cek apakah nomor telepon sudah terdaftar di database (gaboleh double)
+    try {
+      const checkRes = await useApi<any>(`/auth/check?phone=${cleanPhone.value}`)
+      if (checkRes?.data?.exists || (checkRes as any)?.exists) {
+        const found = checkRes?.data?.data || (checkRes as any)?.data || {}
+        existingAccount.phone = `+62 ${cleanPhone.value}`
+        existingAccount.email = found.email || ''
+        existingAccount.name = found.name || ''
+        existingAccount.role = found.role || selectedRole.value
+        showAccountExistsModal.value = true
+        errorMessage.value = `Nomor WhatsApp (+62 ${cleanPhone.value}) sudah terdaftar di Beruang. Silakan masuk ke akun Anda.`
+        loading.value = false
+        return
+      }
+    } catch (checkErr) {
+      // lanjut ke flow OTP jika endpoint check error
+    }
+
     const res = await authStore.sendWhatsAppOtp(cleanPhone.value)
     activeDevOtp.value = (res as any)?.data?.otp_dev || ''
     successNotification.value = res?.message || 'Kode OTP 6 digit berhasil dikirim via WhatsApp.'
@@ -725,13 +819,22 @@ async function handleGoogleRegister() {
       loading.value = true
       googleLoadingText.value = `Mendaftarkan sebagai ${activeRoleMeta.value.shortTitle}...`
       try {
-        await authStore.loginWithGoogle(credential, selectedRole.value)
+        await authStore.loginWithGoogle(credential, selectedRole.value, undefined, 'register')
         googleLoadingText.value = `Membuka pendaftaran ${activeRoleMeta.value.shortTitle}...`
         setTimeout(() => {
           router.push(`/onboarding?role=${selectedRole.value}`)
         }, 300)
       } catch (err: any) {
-        errorMessage.value = err?.data?.message || err?.message || 'Pendaftaran dengan Google gagal'
+        const isExists = err?.data?.code === 'ACCOUNT_EXISTS' || err?.status === 409 || err?.data?.status === 409 || err?.message?.toLowerCase().includes('sudah terdaftar')
+        if (isExists) {
+          existingAccount.email = err?.data?.data?.email || googleAuth.user.value?.email || ''
+          existingAccount.name = err?.data?.data?.name || googleAuth.user.value?.name || ''
+          existingAccount.role = err?.data?.data?.role || selectedRole.value
+          showAccountExistsModal.value = true
+          errorMessage.value = `Akun Google (${existingAccount.email || 'ini'}) sudah terdaftar di Beruang. Silakan masuk ke akun Anda.`
+        } else {
+          errorMessage.value = err?.data?.message || err?.message || 'Pendaftaran dengan Google gagal'
+        }
         isGoogleLoading.value = false
       } finally {
         loading.value = false
@@ -786,14 +889,25 @@ async function verifyAndRegister() {
       specialization: '',
       otp_code: otpString.value
     })
-  } catch (err: any) {
-    console.warn('Registrasi live fallback / demo session:', err?.message)
-  } finally {
+
     loading.value = false
     loadingMessage.value = `✓ Berhasil! Membuka pendaftaran ${roleMeta.shortTitle}...`
     setTimeout(() => {
       router.push(`/onboarding?role=${selectedRole.value}`)
     }, 400)
+  } catch (err: any) {
+    loading.value = false
+    const isExists = err?.data?.code === 'ACCOUNT_EXISTS' || err?.status === 409 || err?.data?.status === 409 || err?.message?.toLowerCase().includes('sudah terdaftar')
+    if (isExists) {
+      existingAccount.phone = `+62 ${cleanPhone.value}`
+      existingAccount.email = err?.data?.data?.email || email
+      existingAccount.name = err?.data?.data?.name || ''
+      existingAccount.role = err?.data?.data?.role || selectedRole.value
+      showAccountExistsModal.value = true
+      errorMessage.value = `Nomor WhatsApp (+62 ${cleanPhone.value}) sudah terdaftar di Beruang. Silakan masuk ke akun Anda.`
+      return
+    }
+    errorMessage.value = err?.data?.message || err?.message || 'Pendaftaran akun gagal. Silakan coba kembali.'
   }
 }
 </script>

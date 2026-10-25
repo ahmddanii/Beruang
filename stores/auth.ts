@@ -385,7 +385,8 @@ export const useAuthStore = defineStore('auth', {
     async loginWithGoogle(
       googleToken: string,
       role?: UserRole,
-      preloadedProfile?: { name?: string; email?: string; picture?: string }
+      preloadedProfile?: { name?: string; email?: string; picture?: string },
+      mode?: 'login' | 'register'
     ) {
       this.loading = true
       this.error = null
@@ -399,7 +400,8 @@ export const useAuthStore = defineStore('auth', {
           method: 'POST',
           body: {
             token: googleToken,
-            ...(role ? { role } : {})
+            ...(role ? { role } : {}),
+            ...(mode ? { mode } : {})
           }
         })
 

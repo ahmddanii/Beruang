@@ -138,14 +138,28 @@ router.post("/register", async (req: Request, res: Response) => {
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
-    const existing = await prisma.user.findUnique({
-      where: { email: cleanEmail },
+    const cleanPhone = phone ? String(phone).replace(/\D/g, "") : null;
+
+    const conditions: any[] = [{ email: cleanEmail }];
+    if (cleanPhone && cleanPhone.length >= 8) {
+      conditions.push({ phone: { contains: cleanPhone.slice(-9) } });
+    }
+
+    const existing = await prisma.user.findFirst({
+      where: { OR: conditions },
     });
 
     if (existing) {
       return res.status(409).json({
         success: false,
-        message: "Email sudah terdaftar. Silakan gunakan email lain atau masuk.",
+        code: "ACCOUNT_EXISTS",
+        message: `Akun (${existing.email || existing.phone}) sudah terdaftar di Beruang. Silakan masuk ke akun Anda.`,
+        data: {
+          email: existing.email,
+          phone: existing.phone,
+          name: existing.name,
+          role: existing.role,
+        },
       });
     }
 
@@ -388,12 +402,57 @@ async function verifyGoogleToken(token: string): Promise<{ email: string; name?:
 }
 
 /**
+ * GET /api/auth/check
+ * Cek apakah email atau nomor telepon sudah terdaftar di Beruang
+ */
+router.get("/check", async (req: Request, res: Response) => {
+  try {
+    const { email, phone } = req.query;
+    if (!email && !phone) {
+      return res.status(400).json({ success: false, message: "Email atau nomor telepon diperlukan." });
+    }
+
+    const cleanEmail = email ? String(email).trim().toLowerCase() : null;
+    const cleanPhone = phone ? String(phone).replace(/\D/g, "") : null;
+
+    const conditions: any[] = [];
+    if (cleanEmail) conditions.push({ email: cleanEmail });
+    if (cleanPhone && cleanPhone.length >= 8) {
+      conditions.push({ phone: { contains: cleanPhone.slice(-9) } });
+    }
+
+    const user = await prisma.user.findFirst({
+      where: { OR: conditions },
+      select: { id: true, name: true, email: true, phone: true, role: true, onboardingCompleted: true }
+    });
+
+    if (user) {
+      return res.json({
+        success: true,
+        exists: true,
+        message: `Akun (${user.email}) sudah terdaftar di Beruang.`,
+        data: user
+      });
+    }
+
+    return res.json({
+      success: true,
+      exists: false,
+      message: "Akun belum terdaftar.",
+      data: null
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+/**
  * POST /api/auth/google
  * Validasi otentikasi Google OAuth, firstOrCreate pengguna, dan penerbitan JWT resmi
  */
 router.post("/google", async (req: Request, res: Response) => {
   try {
-    const { token, credential, id_token, role, email: directEmail, name: directName, picture: directPicture } = req.body;
+    const { token, credential, id_token, role, email: directEmail, name: directName, picture: directPicture, mode, action } = req.body;
     const rawToken = token || credential || id_token;
 
     let googleProfile = null;
@@ -413,6 +472,7 @@ router.post("/google", async (req: Request, res: Response) => {
     }
 
     const resolvedRole = (role || "UMKM").toUpperCase();
+    const isRegisterMode = mode === "register" || action === "register";
 
     // firstOrCreate User
     let user = await prisma.user.findUnique({
@@ -423,6 +483,19 @@ router.post("/google", async (req: Request, res: Response) => {
         investorProfile: true,
       },
     });
+
+    if (user && isRegisterMode) {
+      return res.status(409).json({
+        success: false,
+        code: "ACCOUNT_EXISTS",
+        message: `Akun dengan email ${user.email} sudah terdaftar di Beruang. Silakan masuk ke akun Anda.`,
+        data: {
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        },
+      });
+    }
 
     if (!user) {
       const salt = await bcrypt.genSalt(10);

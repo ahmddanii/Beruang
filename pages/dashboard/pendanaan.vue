@@ -690,6 +690,18 @@
         </div>
       </div>
     </Transition>
+
+    <!-- Modal Cetak Sertifikat Resmi -->
+    <BCertificateModal
+      v-model="isCertificateModalOpen"
+      :business-name="umkmStore.profile.name || 'Kopi Senja Nusantara'"
+      :owner-name="umkmStore.profile.ownerName || 'Fikri Setiawan'"
+      :sector="umkmStore.profile.sector || 'Kuliner & Minuman (F&B)'"
+      :city="umkmStore.profile.city || 'Bandung'"
+      :health-score="85"
+      :ticket-size="250000000"
+      :consultant-name="umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.'"
+    />
   </div>
 </template>
 
@@ -700,6 +712,7 @@ import { useUmkmStore } from '~/stores/umkm'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BModal from '~/components/base/BModal.vue'
 import BTaskCategoryCard from '~/components/base/BTaskCategoryCard.vue'
+import BCertificateModal from '~/components/base/BCertificateModal.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Award01Icon,
@@ -922,11 +935,11 @@ function handleGmail() {
   window.open(targetUrl, '_blank')
 }
 
+const isCertificateModalOpen = ref(false)
+
 // Certificate download/print
 function handleDownloadCertificate() {
-  if (typeof window !== 'undefined') {
-    window.print()
-  }
+  isCertificateModalOpen.value = true
 }
 
 let gsapCtx: gsap.Context | null = null

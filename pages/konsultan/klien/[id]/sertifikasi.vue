@@ -16,10 +16,23 @@
     <!-- Alert Certified -->
     <div
       v-if="certifiedSuccess"
-      class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 space-y-1"
+      class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 space-y-2.5"
     >
-      <p class="font-heading font-bold text-sm">Sertifikasi Berhasil Diterbitkan!</p>
-      <p>Klien telah dinyatakan Ready for Funding. Profil bisnis kini aktif di Katalog Marketplace Investor.</p>
+      <div>
+        <p class="font-heading font-bold text-sm">Sertifikasi Berhasil Diterbitkan!</p>
+        <p>Klien telah dinyatakan Ready for Funding. Profil bisnis kini aktif di Katalog Marketplace Investor.</p>
+      </div>
+      <div class="pt-1">
+        <BButton
+          variant="success"
+          size="sm"
+          class="inline-flex items-center gap-1.5"
+          @click="isCertificateModalOpen = true"
+        >
+          <HugeiconsIcon :icon="Award01Icon" :size="15" />
+          <span>Lihat & Cetak Sertifikat Resmi (PDF)</span>
+        </BButton>
+      </div>
     </div>
 
     <!-- Main Certification Card -->
@@ -127,6 +140,18 @@
         </BButton>
       </div>
     </BCard>
+
+    <!-- Modal Cetak Sertifikat Resmi -->
+    <BCertificateModal
+      v-model="isCertificateModalOpen"
+      :business-name="client?.name || 'Kopi Senja Nusantara'"
+      :owner-name="client?.owner || 'Fikri Setiawan'"
+      :sector="client?.sector || 'Kuliner & Minuman (F&B)'"
+      :city="client?.city || 'Bandung'"
+      :health-score="client?.healthScore || 85"
+      :ticket-size="fundingTicket"
+      :consultant-name="konsultanStore.profile.name || 'Dra. Maya Suryani, M.M.'"
+    />
   </div>
 </template>
 
@@ -138,12 +163,15 @@ import { useKonsultanStore } from '~/stores/konsultan'
 import { useUmkmStore } from '~/stores/umkm'
 import BCard from '~/components/base/BCard.vue'
 import BButton from '~/components/base/BButton.vue'
+import BCertificateModal from '~/components/base/BCertificateModal.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { Award01Icon } from '@hugeicons/core-free-icons'
 
 definePageMeta({
   layout: 'dashboard'
 })
+
+const isCertificateModalOpen = ref(false)
 
 const route = useRoute()
 const clientId = computed(() => route.params.id as string || 'umkm-01')

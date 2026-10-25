@@ -1173,6 +1173,18 @@
         </div>
       </div>
     </BModal>
+
+    <!-- Modal Pratinjau & Cetak Laporan Kas Bulanan Resmi -->
+    <BCashReportPrintModal
+      v-model="isReportPrintModalOpen"
+      :business-name="umkmStore.profile.name || 'Kopi Senja Nusantara'"
+      :sector="umkmStore.profile.sector || 'Kuliner & Minuman (F&B)'"
+      :city="umkmStore.profile.city || 'Bandung'"
+      :consultant-name="umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.'"
+      :total-in="totalIncome"
+      :total-out="totalHppExpense + totalOpexExpense"
+      :balance="displayedCashBalance"
+    />
   </div>
 </template>
 
@@ -1211,6 +1223,7 @@ import BModal from '~/components/base/BModal.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
 import BCashEntryDrawer from '~/components/base/BCashEntryDrawer.vue'
 import BPagination from '~/components/base/BPagination.vue'
+import BCashReportPrintModal from '~/components/base/BCashReportPrintModal.vue'
 
 definePageMeta({
   layout: 'dashboard',
@@ -1219,6 +1232,12 @@ definePageMeta({
 
 const umkmStore = useUmkmStore()
 const { t } = useLanguage()
+
+// Ekspor Laporan PDF Modal State
+const isReportPrintModalOpen = ref(false)
+function handleExportPdf() {
+  isReportPrintModalOpen.value = true
+}
 
 // Mobile viewport check for responsive tab strings
 const isMobile = ref(false)
@@ -1855,10 +1874,6 @@ const selectedTx = ref<DailyTransaction | null>(null)
 function openReceiptModal(tx: DailyTransaction) {
   selectedTx.value = tx
   isReceiptModalOpen.value = true
-}
-
-function handleExportPdf() {
-  alert('Menyiapkan berkas Buku Kas Resmi (PDF) Kopi Senja Nusantara untuk laporan pemodal...')
 }
 
 let handleResize: (() => void) | null = null

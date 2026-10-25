@@ -189,9 +189,16 @@ const item = computed(() => {
   return investorStore.marketplaceList.find(m => m.id === umkmId.value) || investorStore.marketplaceList[0]
 })
 
-const ticketSize = ref(150000000)
+const initialAmount = Number(route.query.amount) || 150000000
+const initialTenor = route.query.tenor ? String(route.query.tenor) : '24'
+const initialShare = route.query.share ? String(route.query.share) : '15'
+
+const ticketSize = ref(initialAmount)
 const scheme = ref('REVENUE_SHARE')
-const message = ref('Halo, kami sangat tertarik dengan konsistensi margin dan rencana ekspansi 2 gerai baru di Jawa Barat.')
+const defaultPitchNote = route.query.amount
+  ? `Halo, berdasarkan simulasi kalkulator ROI dengan rencana komitmen modal Rp ${new Intl.NumberFormat('id-ID').format(initialAmount)} (tenor ${initialTenor} bulan, porsi bagi hasil ${initialShare}%), kami bermaksud mengajukan pembukaan data room privat untuk kajian uji tuntas resmi.`
+  : 'Halo, kami sangat tertarik dengan konsistensi margin dan rencana ekspansi 2 gerai baru di Jawa Barat.'
+const message = ref(defaultPitchNote)
 const ndaAgreed = ref(true)
 const loading = ref(false)
 const submitted = ref(false)

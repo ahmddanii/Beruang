@@ -26,7 +26,7 @@ test.describe('E2E: Authentication & RBAC Guard', () => {
     // Check headline
     await expect(page.locator('h1')).toContainText(/Halo, senang melihatmu kembali!/i);
 
-    // Direct phone entry step via query parameter
+    // Switch to phone entry step via query parameter
     await page.goto('/masuk?step=phone');
     await page.waitForLoadState('domcontentloaded');
     const phoneInput = page.locator('#loginPhone');
@@ -43,8 +43,10 @@ test.describe('E2E: Authentication & RBAC Guard', () => {
 
   test('3. Unauthenticated access to private admin route redirects to /masuk', async ({ page }) => {
     await logout(page);
-    await page.goto('/admin');
-    await page.waitForLoadState('domcontentloaded');
+    try {
+      await page.goto('/admin', { waitUntil: 'commit' });
+    } catch {}
+    await page.waitForURL(/\/masuk/);
     await expect(page).toHaveURL(/\/masuk/);
   });
 

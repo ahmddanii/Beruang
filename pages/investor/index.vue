@@ -300,15 +300,24 @@
                 </span>
               </div>
 
-              <BActionButton
-                v-if="!item.isPlatformPost"
-                :to="`/investor/umkm/${item.umkmRefId || item.id}`"
-                variant="default"
-                icon="chevron"
-                custom-class="w-full sm:w-auto justify-center text-center py-2 sm:py-2.5 text-xs sm:text-sm"
-              >
-                Lihat Profil
-              </BActionButton>
+              <div v-if="!item.isPlatformPost" class="flex items-center gap-2 w-full sm:w-auto">
+                <BActionButton
+                  :to="`/investor/umkm/${item.umkmRefId || item.id}#kalkulator-roi`"
+                  variant="green"
+                  custom-class="flex-1 sm:flex-initial justify-center text-center py-2 sm:py-2.5 text-xs sm:text-sm"
+                >
+                  Simulasi ROI
+                </BActionButton>
+
+                <BActionButton
+                  :to="`/investor/umkm/${item.umkmRefId || item.id}`"
+                  variant="default"
+                  icon="chevron"
+                  custom-class="flex-1 sm:flex-initial justify-center text-center py-2 sm:py-2.5 text-xs sm:text-sm"
+                >
+                  Lihat Profil
+                </BActionButton>
+              </div>
             </div>
           </article>
 

@@ -390,7 +390,8 @@ const authStore = useAuthStore()
 const googleAuth = useGoogleAuth()
 
 // Step state: 'main' | 'phone' | 'otp' (identik dengan proses daftar)
-const step = ref<'main' | 'phone' | 'otp'>('main')
+const initialStep = (route.query.step === 'phone' || route.query.step === 'otp') ? (route.query.step as 'phone' | 'otp') : 'main'
+const step = ref<'main' | 'phone' | 'otp'>(initialStep)
 
 // Official Lottie Animation URL (Local Cached Asset)
 const lottieAnimationUrl = '/animations/hero.lottie'

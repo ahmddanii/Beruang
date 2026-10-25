@@ -136,6 +136,18 @@
               Hubungi UMKM
             </BActionButton>
 
+            <!-- Simulasi ROI Button -->
+            <BActionButton
+              variant="default"
+              :huge-icon="AnalyticsUpIcon"
+              :icon-size="14"
+              custom-class="w-full sm:w-auto justify-center text-center"
+              title="Buka Kalkulator Simulasi Bagi Hasil"
+              @click="scrollToCalculator()"
+            >
+              Simulasi ROI
+            </BActionButton>
+
             <!-- Bagikan Profil Button -->
             <BActionButton
               variant="default"
@@ -399,6 +411,15 @@
               class="input-tactile-gopay resize-none cursor-default"
             />
           </div>
+        </div>
+
+        <!-- SECTION: KALKULATOR SIMULASI ROI & BAGI HASIL INVESTOR -->
+        <div id="kalkulator-roi" class="scroll-mt-6">
+          <BInvestmentRoiCalculator
+            :business-name="item.name"
+            :default-investment="item.fundingTarget || 50000000"
+            @submit-offer="handleCalculatorOffer"
+          />
         </div>
 
         <!-- SECTION 2: LEGALITAS & KEPATUHAN RESMI -->
@@ -1073,6 +1094,7 @@ import BButton from '~/components/base/BButton.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShareModal from '~/components/base/BShareModal.vue'
 import BVerifiedBadge from '~/components/base/BVerifiedBadge.vue'
+import BInvestmentRoiCalculator from '~/components/investor/BInvestmentRoiCalculator.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   UserCircleIcon,
@@ -1098,7 +1120,8 @@ import {
   HalalIcon,
   Package01Icon,
   CopyrightIcon,
-  MedicineBottle01Icon
+  MedicineBottle01Icon,
+  AnalyticsUpIcon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -1499,6 +1522,27 @@ function formatTargetWords(val: number): string {
     return `${jt} Juta Rupiah`
   }
   return `Rp ${new Intl.NumberFormat('id-ID').format(val)}`
+}
+
+function scrollToCalculator() {
+  const el = document.getElementById('kalkulator-roi')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
+function handleCalculatorOffer(offer: { amount: number; tenor: number; share: number }) {
+  triggerToast(`Simulasi komitmen Rp ${new Intl.NumberFormat('id-ID').format(offer.amount)} tersimpan! Meneruskan...`)
+  setTimeout(() => {
+    navigateTo({
+      path: `/investor/umkm/${item.value.id}/ajukan-akses`,
+      query: {
+        amount: offer.amount,
+        tenor: offer.tenor,
+        share: offer.share
+      }
+    })
+  }, 1000)
 }
 
 onMounted(async () => {

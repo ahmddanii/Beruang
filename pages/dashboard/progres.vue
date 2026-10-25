@@ -174,7 +174,7 @@
             <BActionButton
               variant="default"
               icon="chevron"
-              @click="setActiveTab('mutasi'); activeCategoryFilter = 'MODAL_JUALAN'"
+              @click="filterCategoryAndScroll('MODAL_JUALAN')"
               custom-class="shrink-0"
             >
               Cek Modal Jualan
@@ -216,7 +216,7 @@
             <BActionButton
               variant="default"
               icon="chevron"
-              @click="setActiveTab('mutasi'); activeCategoryFilter = 'PEMASUKAN'"
+              @click="filterCategoryAndScroll('PEMASUKAN')"
               custom-class="shrink-0"
             >
               Lihat Uang Masuk
@@ -258,7 +258,7 @@
             <BActionButton
               variant="default"
               icon="chevron"
-              @click="setActiveTab('mutasi'); activeCategoryFilter = 'OPERASIONAL'"
+              @click="filterCategoryAndScroll('OPERASIONAL')"
               custom-class="shrink-0"
             >
               Cek Beban Toko
@@ -421,7 +421,7 @@
         <!-- A. Mobile Tactile Card List View (Substituted for wide table on mobile < sm) -->
         <div class="sm:hidden divide-y divide-neutral-100 dark:divide-neutral-800">
           <div
-            v-for="tx in filteredDailyTransactions"
+            v-for="tx in paginatedDailyTransactions"
             :key="`mobile-${tx.id}`"
             class="p-4 bg-white dark:bg-[#13161F] space-y-2.5"
           >
@@ -525,7 +525,7 @@
             </thead>
             <tbody class="divide-y divide-neutral-100 dark:divide-neutral-800/80 text-neutral-800 dark:text-neutral-200">
               <tr
-                v-for="tx in filteredDailyTransactions"
+                v-for="tx in paginatedDailyTransactions"
                 :key="tx.id"
                 class="bg-white dark:bg-[#13161F] hover:bg-neutral-50/80 dark:hover:bg-neutral-800/50 transition-colors"
               >
@@ -624,6 +624,14 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls for 200+ Daily Transactions -->
+        <BPagination
+          v-model:current-page="currentDailyTxPage"
+          :total-items="filteredDailyTransactions.length"
+          :page-size="dailyTxPageSize"
+          item-label="transaksi"
+        />
       </div>
     </div>
 
@@ -1202,6 +1210,7 @@ import BDrawer from '~/components/base/BDrawer.vue'
 import BModal from '~/components/base/BModal.vue'
 import BShadcnLineChart from '~/components/base/BShadcnLineChart.vue'
 import BCashEntryDrawer from '~/components/base/BCashEntryDrawer.vue'
+import BPagination from '~/components/base/BPagination.vue'
 
 definePageMeta({
   layout: 'dashboard',
@@ -1777,6 +1786,31 @@ const filteredDailyTransactions = computed(() => {
   return list
 })
 
+// Pagination State for 200+ Daily Transactions
+const currentDailyTxPage = ref(1)
+const dailyTxPageSize = ref(15)
+
+const paginatedDailyTransactions = computed(() => {
+  const start = (currentDailyTxPage.value - 1) * dailyTxPageSize.value
+  return filteredDailyTransactions.value.slice(start, start + dailyTxPageSize.value)
+})
+
+watch([searchQuery, activeCategoryFilter, selectedMonthId], () => {
+  currentDailyTxPage.value = 1
+})
+
+function filterCategoryAndScroll(category: 'PEMASUKAN' | 'MODAL_JUALAN' | 'OPERASIONAL') {
+  setActiveTab('mutasi')
+  activeCategoryFilter.value = category
+  currentDailyTxPage.value = 1
+  nextTick(() => {
+    const el = document.getElementById('daily-ledger-table')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  })
+}
+
 // Drawer State for BCashEntryDrawer
 const route = useRoute()
 const isCashDrawerOpen = ref(false)
@@ -1786,10 +1820,23 @@ function handleOpenCashDrawerEvent() {
 }
 
 watch(
-  () => route.query.action,
-  (action) => {
+  () => [route.query.action, route.query.tab, route.query.category],
+  ([action, tab, cat]) => {
     if (action === 'catat-kas') {
       isCashDrawerOpen.value = true
+    }
+    if (tab === 'mutasi' || tab === 'bulanan' || tab === 'tren') {
+      setActiveTab(tab as any)
+    }
+    if (cat && ['ALL', 'PEMASUKAN', 'MODAL_JUALAN', 'OPERASIONAL'].includes(cat as string)) {
+      activeCategoryFilter.value = cat as any
+      currentDailyTxPage.value = 1
+      nextTick(() => {
+        const el = document.getElementById('daily-ledger-table')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
     }
   },
   { immediate: true }

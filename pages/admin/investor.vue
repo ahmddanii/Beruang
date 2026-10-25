@@ -14,8 +14,8 @@
           to="/admin/investasi"
           class="btn-pill-action justify-center"
         >
-          <HugeiconsIcon :icon="ArrowLeft01Icon" :size="16" :stroke-width="2" />
           <span>Alur Investasi</span>
+          <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2" />
         </NuxtLink>
       </div>
     </div>

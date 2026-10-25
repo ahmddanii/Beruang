@@ -286,7 +286,7 @@ const SAMPLE_IMAGE_SETS: string[][] = [
 export function build150MarketplaceUmkms(): MarketplaceUmkm[] {
   const generated: MarketplaceUmkm[] = [...INITIAL_CURATED_UMKM]
 
-  for (let i = 7; i <= 150; i++) {
+  for (let i = 7; i <= 200; i++) {
     const idx = i - 7
     const prefix = SAMPLE_UMKM_PREFIXES[idx % SAMPLE_UMKM_PREFIXES.length]!
     const suffix = SAMPLE_UMKM_SUFFIXES[Math.floor(idx / SAMPLE_UMKM_PREFIXES.length) % SAMPLE_UMKM_SUFFIXES.length]!
@@ -324,6 +324,8 @@ export function build150MarketplaceUmkms(): MarketplaceUmkm[] {
 
   return generated
 }
+
+export const build200MarketplaceUmkms = build150MarketplaceUmkms
 
 export const useInvestorStore = defineStore('investor', {
   state: () => ({

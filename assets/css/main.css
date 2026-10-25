@@ -364,6 +364,10 @@ input, textarea, select, button {
   white-space: nowrap !important;
 }
 
+.btn-pill-action > span.hidden {
+  display: none !important;
+}
+
 .btn-pill-action > svg {
   display: inline-block !important;
   width: 1rem !important;

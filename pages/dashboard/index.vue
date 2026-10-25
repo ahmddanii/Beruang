@@ -173,7 +173,7 @@
               <BActionButton
                 variant="default"
                 icon="chevron"
-                @click="scrollToSection('breakdown')"
+                @click="scrollToSection('modal')"
                 custom-class="shrink-0"
               >
                 Kelola Modal
@@ -1078,6 +1078,28 @@ definePageMeta({
   hideHeader: true
 })
 
+function scrollToSection(target: 'breakdown' | 'table' | 'modal') {
+  if (target === 'modal') {
+    navigateTo('/dashboard/progres?tab=mutasi&category=MODAL_JUALAN')
+    return
+  }
+  if (target === 'breakdown') {
+    const el = document.getElementById('cash-flow-breakdown')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    navigateTo('/dashboard/progres?tab=tren')
+  } else if (target === 'table') {
+    const el = document.getElementById('verified-cashbook-table')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    navigateTo('/dashboard/progres?tab=mutasi')
+  }
+}
+
 function handleDownloadReport() {
   if (typeof window !== 'undefined') {
     window.print()
@@ -1749,16 +1771,6 @@ function openInvestorDrawer() {
 
 function openDetailMonth(record: MonthlyRecord) {
   heroPeriodFilter.value = '1y'
-}
-
-function scrollToSection(type: 'breakdown' | 'table') {
-  if (type === 'breakdown') {
-    const el = document.getElementById('cash-flow-breakdown')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  } else if (type === 'table') {
-    const el = document.getElementById('verified-cashbook-table')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
 }
 </script>
 

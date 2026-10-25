@@ -575,6 +575,13 @@ async function handleSave() {
       maxClients: capacityForm.maxClients,
       phone: accountForm.phone
     })
+    await useApi('/consultant/preferences', {
+      method: 'PUT',
+      body: {
+        acceptNewRequests: capacityForm.status === 'AVAILABLE',
+        whatsappNotification: notifyForm.pendingValidationAlert
+      }
+    })
     saved.value = true
     setTimeout(() => {
       saved.value = false

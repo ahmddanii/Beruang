@@ -813,6 +813,34 @@ const officialDocuments = ref([
   { name: 'Mutasi_Rekening_Giro_BCA_3Bln.pdf', size: '4.8 MB', status: 'Rekonsiliasi Selesai' }
 ])
 
+async function loadThreadDocuments(umkmId?: string) {
+  if (!umkmId) return
+  try {
+    const res = await useApi<any>(`/vdr/documents?businessId=${umkmId}`)
+    if (res?.data && Array.isArray(res.data) && res.data.length > 0) {
+      officialDocuments.value = res.data.map((d: any) => ({
+        name: d.name || d.filename || 'Dokumen_UMKM.pdf',
+        size: d.fileSize || d.size || '1.5 MB',
+        status: d.status === 'VERIFIED' ? 'Terverifikasi' : 'Tervalidasi',
+        url: d.fileUrl || '#'
+      }))
+      return
+    }
+  } catch (err) {
+    console.warn('Gagal memuat dokumen VDR obrolan:', err)
+  }
+}
+
+watch(
+  () => activeThread.value?.umkmId,
+  (newUmkmId) => {
+    if (newUmkmId) {
+      loadThreadDocuments(newUmkmId)
+    }
+  },
+  { immediate: true }
+)
+
 const investorQuickPhrases = [
   'Bagaimana proyeksi dividen tahun ini?',
   'Bisa kirim rekening koran 3 bulan terakhir?',
@@ -824,6 +852,9 @@ function selectThread(threadId: string) {
   chatStore.setActiveThread(threadId)
   chatStore.markAsRead(threadId, 'INVESTOR')
   isMobileChatOpen.value = true
+  if (chatStore.activeThread?.umkmId) {
+    loadThreadDocuments(chatStore.activeThread.umkmId)
+  }
   scrollToBottom()
   animateMessagesReveal()
 }

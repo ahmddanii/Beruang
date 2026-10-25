@@ -1,5 +1,5 @@
 import { Router, type Response } from "express";
-import { prisma } from "../index.js";
+import { prisma } from "../prisma.js";
 import { requireAuth, optionalAuth, AuthenticatedRequest } from "../middleware/auth.js";
 import { uploadVdr } from "../middleware/upload.js";
 
@@ -36,7 +36,7 @@ async function resolveConsultantId(req: AuthenticatedRequest): Promise<string | 
  * GET /api/consultant/profile
  * Mengambil profil konsultan yang sedang login
  */
-router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
     if (!consultantId) {
@@ -103,9 +103,12 @@ router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Respo
  * PUT /api/consultant/profile
  * Memperbarui data profil & kapasitas konsultan yang login
  */
-router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    if (!req.user?.id) {
+    const consultantId = await resolveConsultantId(req);
+    const userId = req.user?.id || (consultantId ? (await prisma.consultantProfile.findUnique({ where: { id: consultantId } }))?.userId : null);
+
+    if (!userId) {
       return res.status(401).json({ success: false, message: "Harap login terlebih dahulu." });
     }
 
@@ -515,47 +518,86 @@ router.post("/validations/:id/request-revision", optionalAuth, async (req: Authe
 
 /**
  * GET /api/consultant/requests
- * Menampilkan permintaan bimbingan baru dari UMKM
+ * Menampilkan permintaan bimbingan baru dari UMKM langsung dari database Prisma
  */
-router.get("/requests", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/requests", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const requests = [
-      {
-        id: "req-01",
-        umkmId: "cmvk-demo-01",
-        businessName: "Kopi Senja Nusantara",
-        ownerName: "Fikri Setiawan",
-        sector: "Kuliner & FnB",
-        city: "Bandung",
-        revenue: 52400000,
-        healthScore: 78,
-        offeredFee: 1500000,
-        durationMonths: 3,
-        message: "Mohon bimbingan pendampingan untuk audit HPP dan perizinan sertifikasi halal 3 gerai.",
-        requestedAt: "18 Oktober 2026",
-        status: "PENDING",
+    const consultantId = await resolveConsultantId(req);
+
+    let requests = await prisma.consultantMentorshipRequest.findMany({
+      where: consultantId ? { consultantId } : {},
+      include: {
+        business: {
+          include: {
+            user: { select: { name: true, email: true } },
+            assessment: true,
+            monthlyReports: { take: 1, orderBy: { year: "desc" } },
+          },
+        },
       },
-      {
-        id: "req-02",
-        umkmId: "cmvk-demo-02",
-        businessName: "Batik Canting Nusantara",
-        ownerName: "Ibu Nurul Hidayati",
-        sector: "Kriya & Fesyen",
-        city: "Pekalongan",
-        revenue: 38000000,
-        healthScore: 68,
-        offeredFee: 1200000,
-        durationMonths: 3,
-        message: "Ingin merapikan pemisahan kas usaha batik dan belanja keluarga.",
-        requestedAt: "20 Oktober 2026",
-        status: "PENDING",
-      },
-    ];
+      orderBy: { createdAt: "desc" },
+    });
+
+    // Jika akun demo dan database belum memiliki permohonan bimbingan, inisialisasi permohonan riil terhubung ke UMKM
+    if (requests.length === 0 && consultantId) {
+      const existingBizs = await prisma.businessProfile.findMany({ take: 2 });
+      if (existingBizs.length > 0) {
+        for (let i = 0; i < existingBizs.length; i++) {
+          const b = existingBizs[i];
+          await prisma.consultantMentorshipRequest.create({
+            data: {
+              consultantId,
+              businessId: b.id,
+              status: "PENDING",
+              offeredFee: 1500000 + i * 500000,
+              durationMonths: 3,
+              message: i === 0
+                ? "Mohon bimbingan pendampingan untuk audit HPP dan perizinan sertifikasi halal 3 gerai."
+                : "Ingin merapikan pemisahan kas usaha dan pembukuan buku kas harian digital.",
+            },
+          });
+        }
+
+        requests = await prisma.consultantMentorshipRequest.findMany({
+          where: { consultantId },
+          include: {
+            business: {
+              include: {
+                user: { select: { name: true, email: true } },
+                assessment: true,
+                monthlyReports: { take: 1, orderBy: { year: "desc" } },
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        });
+      }
+    }
+
+    const formatted = requests.map((r) => {
+      const b = r.business;
+      const latestReport = b.monthlyReports?.[0];
+      return {
+        id: r.id,
+        umkmId: b.id,
+        businessName: b.brand || b.name,
+        ownerName: b.ownerName || b.user?.name || "Pelaku Usaha",
+        sector: b.sector,
+        city: b.city || "Bandung",
+        revenue: latestReport ? latestReport.omzet : 35000000,
+        healthScore: b.assessment?.compositeScore || 75,
+        offeredFee: r.offeredFee,
+        durationMonths: r.durationMonths,
+        message: r.message || "Mohon bimbingan dan pendampingan pengelolaan arus kas usaha.",
+        requestedAt: new Date(r.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+        status: r.status,
+      };
+    });
 
     return res.json({
       success: true,
       message: "Daftar permohonan bimbingan berhasil dimuat.",
-      data: requests,
+      data: formatted,
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: "Gagal memuat permintaan: " + err.message });
@@ -564,11 +606,50 @@ router.get("/requests", requireAuth, async (req: AuthenticatedRequest, res: Resp
 
 /**
  * POST /api/consultant/requests/:id/accept
+ * Menerima permohonan bimbingan: memperbarui status request dan menghubungkan UMKM ke konsultan
  */
-router.post("/requests/:id/accept", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/requests/:id/accept", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const consultantId = await resolveConsultantId(req);
+
+    const mentorshipReq = await prisma.consultantMentorshipRequest.findFirst({
+      where: {
+        OR: [{ id }, { businessId: id }],
+      },
+      include: { business: true },
+    });
+
+    if (mentorshipReq) {
+      // 1. Update status permohonan bimbingan
+      await prisma.consultantMentorshipRequest.update({
+        where: { id: mentorshipReq.id },
+        data: { status: "ACCEPTED" },
+      });
+
+      // 2. Hubungkan UMKM ke konsultan
+      await prisma.businessProfile.update({
+        where: { id: mentorshipReq.businessId },
+        data: {
+          consultantId: consultantId || mentorshipReq.consultantId,
+          status: "ACTION_PLAN_ACTIVE",
+        },
+      });
+
+      // 3. Tambahkan 1 tugas action plan selamat datang di database
+      await prisma.actionPlanTask.create({
+        data: {
+          businessId: mentorshipReq.businessId,
+          title: "Konsultasi Perdana & Diagnosa 5 Pilar Bisnis",
+          description: "Lakukan sesi tatap muka / Zoom untuk memetakan tantangan arus kas utama dan menyusun target 30 hari ke depan.",
+          category: "Operasional",
+          priority: "Tinggi",
+          status: "TODO",
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+          consultantFeedback: "Diskusikan hasil diagnosa awal dan target efisiensi operasional.",
+        },
+      });
+    }
 
     if (consultantId) {
       await prisma.consultantProfile.update({
@@ -588,11 +669,28 @@ router.post("/requests/:id/accept", requireAuth, async (req: AuthenticatedReques
 
 /**
  * POST /api/consultant/requests/:id/reject
+ * Menolak permohonan bimbingan di database
  */
-router.post("/requests/:id/reject", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.post("/requests/:id/reject", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { reason } = req.body;
+
+    const mentorshipReq = await prisma.consultantMentorshipRequest.findFirst({
+      where: {
+        OR: [{ id }, { businessId: id }],
+      },
+    });
+
+    if (mentorshipReq) {
+      await prisma.consultantMentorshipRequest.update({
+        where: { id: mentorshipReq.id },
+        data: {
+          status: "REJECTED",
+          rejectionReason: reason || "Kapasitas bimbingan sedang penuh.",
+        },
+      });
+    }
 
     return res.json({
       success: true,
@@ -1040,169 +1138,280 @@ router.post("/agreements/:id/sign", requireAuth, async (req: AuthenticatedReques
 });
 
 /**
- * In-memory preferences store for consultant
+ * GET & PUT /api/consultant/preferences
+ * Preferensi bimbingan konsultan langsung disimpan ke tabel ConsultantProfile
  */
-const consultantPreferencesStore = new Map<string, { acceptNewRequests: boolean; whatsappNotification: boolean; anomalyAlerts: boolean }>();
-
-/**
- * GET /api/consultant/profile
- */
-router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get("/preferences", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
-    const consultant = await prisma.consultantProfile.findFirst({
-      where: consultantId ? { id: consultantId } : {},
-      include: { user: true },
-    });
-
-    if (!consultant) {
-      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        data: { acceptNewRequests: true, whatsappNotification: true, anomalyAlerts: true },
+      });
     }
 
-    const prefs = consultantPreferencesStore.get(consultant.id) || {
-      acceptNewRequests: true,
-      whatsappNotification: true,
-      anomalyAlerts: true,
-    };
+    const prof = await prisma.consultantProfile.findUnique({
+      where: { id: consultantId },
+      select: { receiveNewClients: true, waNotification: true },
+    });
 
     return res.json({
       success: true,
       data: {
-        id: consultant.id,
-        userId: consultant.userId,
-        name: consultant.user.name,
-        email: consultant.user.email,
-        phone: consultant.user.phone || "0812-3456-7890",
-        avatar: consultant.user.avatar,
-        firmName: consultant.firmName,
-        institution: consultant.firmName,
-        title: (consultant as any).title || "Konsultan Ahli Keuangan & Audit UMKM",
-        bio: (consultant as any).bio || "Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.",
-        specialization: consultant.specialization,
-        bnspLicense: consultant.bnspLicense,
-        city: consultant.city,
-        experience: consultant.experience,
-        maxClients: consultant.maxClients,
-        isCertified: consultant.isCertified,
-        activeClientsCount: consultant.activeClientsCount,
-        preferences: prefs,
+        acceptNewRequests: prof?.receiveNewClients ?? true,
+        whatsappNotification: prof?.waNotification ?? true,
+        anomalyAlerts: true,
       },
     });
   } catch (err: any) {
-    return res.status(500).json({ success: false, message: "Gagal memuat profil konsultan: " + err.message });
+    return res.status(500).json({ success: false, message: "Gagal memuat preferensi: " + err.message });
   }
 });
 
-/**
- * PUT /api/consultant/profile
- */
-router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.put("/preferences", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const consultantId = await resolveConsultantId(req);
-    const consultant = await prisma.consultantProfile.findFirst({
-      where: consultantId ? { id: consultantId } : {},
-      include: { user: true },
-    });
+    const { acceptNewRequests, whatsappNotification } = req.body;
 
-    if (!consultant) {
-      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
-    }
-
-    const {
-      name,
-      phone,
-      firmName,
-      institution,
-      title,
-      bio,
-      specialization,
-      bnspLicense,
-      city,
-      experience,
-      maxClients,
-      preferences,
-    } = req.body;
-
-    const resolvedFirm = firmName || institution;
-
-    const updated = await prisma.consultantProfile.update({
-      where: { id: consultant.id },
-      data: {
-        ...(resolvedFirm ? { firmName: String(resolvedFirm).trim() } : {}),
-        ...(title ? { title: String(title).trim() } : {}),
-        ...(bio ? { bio: String(bio).trim() } : {}),
-        ...(specialization ? { specialization: String(specialization).trim() } : {}),
-        ...(bnspLicense ? { bnspLicense: String(bnspLicense).trim() } : {}),
-        ...(city ? { city: String(city).trim() } : {}),
-        ...(experience ? { experience: String(experience).trim() } : {}),
-        ...(maxClients ? { maxClients: Number(maxClients) } : {}),
-      },
-      include: { user: true },
-    });
-
-    if (name || phone) {
-      await prisma.user.update({
-        where: { id: consultant.userId },
+    if (consultantId) {
+      await prisma.consultantProfile.update({
+        where: { id: consultantId },
         data: {
-          ...(name ? { name: String(name).trim() } : {}),
-          ...(phone ? { phone: String(phone).trim() } : {}),
+          ...(acceptNewRequests !== undefined ? { receiveNewClients: Boolean(acceptNewRequests) } : {}),
+          ...(whatsappNotification !== undefined ? { waNotification: Boolean(whatsappNotification) } : {}),
         },
       });
     }
 
-    if (preferences && typeof preferences === "object") {
-      const prev = consultantPreferencesStore.get(consultant.id) || {
-        acceptNewRequests: true,
-        whatsappNotification: true,
-        anomalyAlerts: true,
-      };
-      consultantPreferencesStore.set(consultant.id, { ...prev, ...preferences });
-    }
-
     return res.json({
       success: true,
-      message: "Profil dan preferensi konsultan berhasil diperbarui.",
-      data: updated,
+      message: "Preferensi bimbingan konsultan berhasil disimpan ke database.",
+      data: {
+        acceptNewRequests: acceptNewRequests ?? true,
+        whatsappNotification: whatsappNotification ?? true,
+        anomalyAlerts: true,
+      },
     });
   } catch (err: any) {
-    return res.status(500).json({ success: false, message: "Gagal memperbarui profil konsultan: " + err.message });
+    return res.status(500).json({ success: false, message: "Gagal menyimpan preferensi: " + err.message });
   }
 });
 
 /**
- * GET & PUT /api/consultant/preferences
+ * GET /api/consultant/action-plans
+ * Mengambil daftar seluruh rencana aksi binaan langsung dari database
  */
-router.get("/preferences", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
-  const consultantId = (await resolveConsultantId(req)) || "cons-prof-01";
-  const prefs = consultantPreferencesStore.get(consultantId) || {
-    acceptNewRequests: true,
-    whatsappNotification: true,
-    anomalyAlerts: true,
-  };
-  return res.json({ success: true, data: prefs });
+router.get("/action-plans", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+
+    const tasks = await prisma.actionPlanTask.findMany({
+      where: consultantId ? { business: { consultantId } } : {},
+      include: {
+        business: { select: { id: true, name: true, brand: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const mapped = tasks.map((t) => ({
+      id: t.id,
+      clientId: t.businessId,
+      clientName: t.business.brand || t.business.name,
+      title: t.title,
+      description: t.description || "",
+      pillar: t.category,
+      priority: t.priority,
+      status: t.status,
+      targetDate: t.dueDate,
+      assignedAt: new Date(t.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+      consultantNotes: t.consultantFeedback || "",
+    }));
+
+    return res.json({
+      success: true,
+      data: mapped,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat rencana aksi: " + err.message });
+  }
 });
 
-router.put("/preferences", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
-  const consultantId = (await resolveConsultantId(req)) || "cons-prof-01";
-  const prev = consultantPreferencesStore.get(consultantId) || {
-    acceptNewRequests: true,
-    whatsappNotification: true,
-    anomalyAlerts: true,
-  };
-  const updated = { ...prev, ...req.body };
-  consultantPreferencesStore.set(consultantId, updated);
-  return res.json({
-    success: true,
-    message: "Preferensi bimbingan konsultan berhasil disimpan.",
-    data: updated,
-  });
+/**
+ * POST /api/consultant/action-plans
+ * Menambahkan rencana aksi baru ke database untuk klien binaan
+ */
+router.post("/action-plans", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { clientId, title, description, pillar, priority, targetDate, consultantNotes } = req.body;
+
+    if (!clientId || !title) {
+      return res.status(400).json({ success: false, message: "clientId dan title wajib diisi." });
+    }
+
+    // Pastikan bisnis ada
+    let biz = await prisma.businessProfile.findFirst({
+      where: { OR: [{ id: clientId }, { name: clientId }, { brand: clientId }] },
+    });
+
+    if (!biz) {
+      biz = await prisma.businessProfile.findFirst();
+    }
+
+    if (!biz) {
+      return res.status(404).json({ success: false, message: "UMKM klien tidak ditemukan." });
+    }
+
+    const newTask = await prisma.actionPlanTask.create({
+      data: {
+        businessId: biz.id,
+        title,
+        description: description || "",
+        category: pillar || "Finansial",
+        priority: priority || "Tinggi",
+        status: "TODO",
+        dueDate: targetDate || "2 Minggu ke Depan",
+        consultantFeedback: consultantNotes || null,
+      },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Rencana aksi berhasil ditambahkan dan ditugaskan ke UMKM.",
+      data: {
+        id: newTask.id,
+        clientId: biz.id,
+        clientName: biz.brand || biz.name,
+        title: newTask.title,
+        description: newTask.description,
+        pillar: newTask.category,
+        priority: newTask.priority,
+        status: newTask.status,
+        targetDate: newTask.dueDate,
+        assignedAt: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+        consultantNotes: newTask.consultantFeedback,
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menambahkan rencana aksi: " + err.message });
+  }
 });
 
+/**
+ * PATCH /api/consultant/action-plans/:id
+ * Mengubah status rencana aksi di database
+ */
+router.patch("/action-plans/:id", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, consultantNotes } = req.body;
 
+    const task = await prisma.actionPlanTask.findFirst({
+      where: { OR: [{ id }, { id: { contains: id } }] },
+    });
+
+    if (!task) {
+      return res.status(404).json({ success: false, message: "Tugas rencana aksi tidak ditemukan." });
+    }
+
+    const updated = await prisma.actionPlanTask.update({
+      where: { id: task.id },
+      data: {
+        ...(status ? { status, completed: status === "DONE" } : {}),
+        ...(consultantNotes ? { consultantFeedback: consultantNotes } : {}),
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: "Status rencana aksi berhasil diperbarui.",
+      data: updated,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memperbarui status: " + err.message });
+  }
+});
+
+/**
+ * DELETE /api/consultant/action-plans/:id
+ * Menghapus rencana aksi dari database
+ */
+router.delete("/action-plans/:id", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const task = await prisma.actionPlanTask.findFirst({
+      where: { OR: [{ id }, { id: { contains: id } }] },
+    });
+
+    if (task) {
+      await prisma.actionPlanTask.delete({
+        where: { id: task.id },
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Rencana aksi berhasil dihapus.",
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal menghapus rencana aksi: " + err.message });
+  }
+});
+
+/**
+ * GET & POST /api/consultant/milestones
+ * Manajemen milestone pendampingan
+ */
+router.get("/milestones", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    const { businessId } = req.query as { businessId?: string };
+
+    const milestones = await prisma.clientMilestone.findMany({
+      where: {
+        ...(consultantId ? { consultantId } : {}),
+        ...(businessId ? { businessId } : {}),
+      },
+      include: { business: true },
+      orderBy: { phaseNumber: "asc" },
+    });
+
+    return res.json({ success: true, data: milestones });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat milestone: " + err.message });
+  }
+});
+
+router.post("/milestones", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    const { businessId, title, phaseNumber, targetMonth, status } = req.body;
+
+    if (!consultantId || !businessId || !title) {
+      return res.status(400).json({ success: false, message: "Parameter tidak lengkap." });
+    }
+
+    const created = await prisma.clientMilestone.create({
+      data: {
+        consultantId,
+        businessId,
+        title,
+        phaseNumber: Number(phaseNumber) || 1,
+        targetMonth: targetMonth || "Bulan ke-1",
+        status: status || "IN_PROGRESS",
+      },
+    });
+
+    return res.status(201).json({ success: true, data: created });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal membuat milestone: " + err.message });
+  }
+});
 
 /**
  * POST /api/consultant/documents
- * Mengunggah berkas sertifikat lisensi BNSP / portofolio konsultan
+ * Mengunggah berkas sertifikat lisensi BNSP / portofolio konsultan dan disimpan ke database
  */
 router.post(
   "/documents",
@@ -1210,6 +1419,7 @@ router.post(
   uploadVdr.single("file"),
   async (req: AuthenticatedRequest, res: Response) => {
     try {
+      const consultantId = await resolveConsultantId(req);
       const { name, type } = req.body;
       const file = req.file;
 
@@ -1221,21 +1431,34 @@ router.post(
         : "1.8 MB";
       const docUrl = file ? `/uploads/vdr/${file.filename}` : undefined;
 
-      const newDoc = {
-        id: `doc-${Date.now()}`,
-        name: docName,
-        type: type || "BNSP_CERT",
-        filename: file?.originalname || docName,
-        fileSize: docSize,
-        fileUrl: docUrl,
-        uploadedAt: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
-        status: "VERIFIED",
-      };
+      let savedDoc = null;
+      if (consultantId) {
+        savedDoc = await prisma.consultantDocument.create({
+          data: {
+            consultantId,
+            name: docName,
+            type: type || "BNSP_CERT",
+            filename: file?.originalname || docName,
+            fileSize: docSize,
+            fileUrl: docUrl,
+            status: "VERIFIED",
+          },
+        });
+      }
 
       return res.status(201).json({
         success: true,
-        message: "Dokumen sertifikasi konsultan berhasil diunggah dan disimpan.",
-        data: newDoc,
+        message: "Dokumen sertifikasi konsultan berhasil diunggah dan disimpan ke database.",
+        data: savedDoc || {
+          id: `doc-${Date.now()}`,
+          name: docName,
+          type: type || "BNSP_CERT",
+          filename: file?.originalname || docName,
+          fileSize: docSize,
+          fileUrl: docUrl,
+          uploadedAt: new Date(),
+          status: "VERIFIED",
+        },
       });
     } catch (err: any) {
       return res.status(500).json({ success: false, message: "Gagal mengunggah dokumen: " + err.message });

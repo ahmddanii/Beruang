@@ -1048,8 +1048,22 @@ export const useKonsultanStore = defineStore('konsultan', {
       }
     },
 
+    async fetchActionPlans() {
+      try {
+        const res = await useApi<any>('/consultant/action-plans')
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data as any).data
+          if (Array.isArray(list) && list.length > 0) {
+            this.actionPlans = list
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat action plans:', err?.message)
+      }
+    },
+
     // 3. Tambah Action Plan untuk UMKM Binaan
-    addActionPlan(payload: {
+    async addActionPlan(payload: {
       clientId: string
       title: string
       description: string
@@ -1082,11 +1096,23 @@ export const useKonsultanStore = defineStore('konsultan', {
         client.totalTasks = (client.totalTasks || 0) + 1
       }
 
+      try {
+        const res = await useApi<any>('/consultant/action-plans', {
+          method: 'POST',
+          body: payload
+        })
+        if (res?.data?.id) {
+          newPlan.id = res.data.id
+        }
+      } catch (err: any) {
+        console.warn('Gagal simpan action plan ke backend:', err?.message)
+      }
+
       return newPlan
     },
 
     // 4. Update Status Action Plan
-    updateActionPlanStatus(planId: string, status: 'TODO' | 'IN_PROGRESS' | 'DONE') {
+    async updateActionPlanStatus(planId: string, status: 'TODO' | 'IN_PROGRESS' | 'DONE') {
       const plan = this.actionPlans.find(p => p.id === planId)
       if (!plan) return
 
@@ -1102,10 +1128,19 @@ export const useKonsultanStore = defineStore('konsultan', {
           client.tasksCompleted = Math.max(0, (client.tasksCompleted || 0) - 1)
         }
       }
+
+      try {
+        await useApi(`/consultant/action-plans/${planId}`, {
+          method: 'PATCH',
+          body: { status }
+        })
+      } catch (err: any) {
+        console.warn('Gagal update status action plan di backend:', err?.message)
+      }
     },
 
     // 5. Hapus Action Plan
-    deleteActionPlan(planId: string) {
+    async deleteActionPlan(planId: string) {
       const idx = this.actionPlans.findIndex(p => p.id === planId)
       if (idx !== -1) {
         const plan = this.actionPlans[idx]
@@ -1117,6 +1152,14 @@ export const useKonsultanStore = defineStore('konsultan', {
           }
         }
         this.actionPlans.splice(idx, 1)
+      }
+
+      try {
+        await useApi(`/consultant/action-plans/${planId}`, {
+          method: 'DELETE'
+        })
+      } catch (err: any) {
+        console.warn('Gagal hapus action plan di backend:', err?.message)
       }
     },
 

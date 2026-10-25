@@ -29,7 +29,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
-export const prisma = new PrismaClient();
+import { prisma } from "./prisma.js";
+export { prisma };
 
 // Middleware
 app.use(cors());

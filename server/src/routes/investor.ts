@@ -113,7 +113,7 @@ router.get("/marketplace", optionalAuth, async (req: AuthenticatedRequest, res: 
     const investorUserId = await resolveInvestorUserId(req);
 
     // Ambil semua bisnis yang statusnya READY_FOR_FUNDING (atau seluruh bisnis terdaftar)
-    const businesses = await prisma.businessProfile.findMany({
+    let businesses = await prisma.businessProfile.findMany({
       where: {
         status: "READY_FOR_FUNDING",
       },
@@ -132,6 +132,26 @@ router.get("/marketplace", optionalAuth, async (req: AuthenticatedRequest, res: 
       },
       orderBy: { createdAt: "desc" },
     });
+
+    // Fallback: Jika belum ada UMKM yang disahkan ke status READY_FOR_FUNDING, tampilkan seluruh UMKM terdaftar
+    if (businesses.length === 0) {
+      businesses = await prisma.businessProfile.findMany({
+        include: {
+          assessment: true,
+          monthlyReports: {
+            orderBy: { year: "desc" },
+            take: 3,
+          },
+          accessRequests: {
+            where: { investorId: investorUserId },
+          },
+          watchlists: {
+            where: { userId: investorUserId },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    }
 
     // Format data sesuai interface MarketplaceUmkm yang diharapkan frontend
     const mappedList = businesses.map((b) => {

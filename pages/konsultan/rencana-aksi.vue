@@ -462,6 +462,13 @@ definePageMeta({
 
 const konsultanStore = useKonsultanStore()
 
+onMounted(async () => {
+  await Promise.all([
+    konsultanStore.fetchClients(),
+    konsultanStore.fetchActionPlans()
+  ])
+})
+
 // Filter State
 const selectedClientId = ref<string>('ALL')
 const selectedStatus = ref<string>('ALL')

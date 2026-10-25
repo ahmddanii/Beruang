@@ -84,138 +84,69 @@
       </div>
 
       <!-- Urgent Issue Action Cards -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Item 1: Anomali Dapur Mama Catering (Severity High) -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#18191E] border border-rose-200 dark:border-rose-900/40 shadow-xs flex flex-col justify-between space-y-3">
+      <div v-if="urgentIssues.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div
+          v-for="issue in urgentIssues"
+          :key="issue.id"
+          class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#18191E] border shadow-xs flex flex-col justify-between space-y-3"
+          :class="issue.borderClass"
+        >
           <div class="space-y-1.5">
             <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
-                Kritis • Margin Turun
+              <span
+                class="px-2 py-0.5 rounded text-[10px] font-bold uppercase"
+                :class="issue.badgeClass"
+              >
+                {{ issue.badgeText }}
               </span>
-              <span class="text-[11px] text-neutral-400">23 Sep 2026</span>
+              <span class="text-[11px] text-neutral-400 font-sans">{{ issue.timestamp }}</span>
             </div>
-            <h3 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight">
-              Dapur Mama Catering: Margin Bersih Kritis (&lt;5%)
+            <h3 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight font-heading">
+              {{ issue.title }}
             </h3>
             <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-              Biaya logistik katering naik 30% tanpa penyesuaian harga menu. Skor kesehatan usaha turun ke 54/100 (Bahaya).
+              {{ issue.description }}
             </p>
           </div>
 
           <div class="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-white/5 gap-2">
-            <span class="text-[11px] text-neutral-400">Yogyakarta</span>
+            <span class="text-[11px] text-neutral-400 font-sans">{{ issue.location }}</span>
             <div class="flex items-center gap-2">
               <NuxtLink
-                to="/konsultan/klien/umkm-04"
-                class="px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 hover:border-rose-500 text-rose-600 dark:text-rose-400 font-bold text-xs transition-colors"
+                v-if="issue.secondaryAction"
+                :to="issue.secondaryAction.to"
+                class="px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 font-bold text-xs transition-colors"
+                :class="issue.secondaryAction.class"
               >
-                Diagnosa Usaha
+                {{ issue.secondaryAction.label }}
               </NuxtLink>
               <NuxtLink
-                to="/konsultan/rencana-aksi?client=umkm-04"
-                class="px-3.5 py-1.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-all shadow-2xs flex items-center gap-1"
+                :to="issue.primaryAction.to"
+                class="px-3.5 py-1.5 rounded-full text-white font-bold text-xs transition-all shadow-2xs flex items-center gap-1"
+                :class="issue.primaryAction.class"
               >
-                <span>Beri Solusi</span>
+                <span>{{ issue.primaryAction.label }}</span>
                 <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2" />
               </NuxtLink>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Item 2: Anomali Kopi Senja Nusantara (Severity Medium) -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#18191E] border border-amber-200 dark:border-amber-900/40 shadow-xs flex flex-col justify-between space-y-3">
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                Peringatan • HPP Naik
-              </span>
-              <span class="text-[11px] text-neutral-400">25 Sep 2026</span>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight">
-              Kopi Senja Nusantara: Lonjakan HPP Biji Kopi (+12.4%)
-            </h3>
-            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-              HPP naik dari 38% ke 47.2% dari omzet di bulan September. Disarankan evaluasi kontrak supplier petani Ciwidey.
-            </p>
-          </div>
-
-          <div class="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-white/5 gap-2">
-            <span class="text-[11px] text-neutral-400">Bandung</span>
-            <div class="flex items-center gap-2">
-              <NuxtLink
-                to="/konsultan/klien/umkm-01"
-                class="px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700 hover:border-amber-500 text-amber-600 dark:text-amber-400 font-bold text-xs transition-colors"
-              >
-                Diagnosa Usaha
-              </NuxtLink>
-              <NuxtLink
-                to="/konsultan/rencana-aksi?client=umkm-01"
-                class="px-3.5 py-1.5 rounded-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition-all shadow-2xs flex items-center gap-1"
-              >
-                <span>Beri Action Plan</span>
-                <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2" />
-              </NuxtLink>
-            </div>
-          </div>
+      <!-- Empty State if All Healthy -->
+      <div
+        v-else
+        class="py-8 px-6 rounded-2xl bg-white dark:bg-[#18191E] border border-emerald-200 dark:border-emerald-900/40 text-center space-y-2"
+      >
+        <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+          <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="24" :stroke-width="2" />
         </div>
-
-        <!-- Item 3: Permintaan Binaan Baru Menunggu Konfirmasi -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#18191E] border border-[#0081A0]/30 dark:border-[#0081A0]/20 shadow-xs flex flex-col justify-between space-y-3">
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#0081A0]/10 text-[#0081A0] dark:bg-[#0081A0]/20 dark:text-[#2091AA]">
-                3 Permintaan Masuk
-              </span>
-              <span class="text-[11px] text-neutral-400">Hari ini, 09:15</span>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight">
-              Dapoer Renyah Nusantara & 2 UMKM Lainnya
-            </h3>
-            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-              "Halo Bu Maya, kami butuh bimbingan profesional untuk memisahkan keuangan usaha dan merapikan pencatatan kas..."
-            </p>
-          </div>
-
-          <div class="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-white/5 gap-2">
-            <span class="text-[11px] text-neutral-400">Bandung & Garut</span>
-            <NuxtLink
-              to="/konsultan/klien?tab=permintaan"
-              class="px-3.5 py-1.5 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-xs transition-all shadow-2xs flex items-center gap-1"
-            >
-              <span>Tinjau & Terima Permintaan</span>
-              <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2" />
-            </NuxtLink>
-          </div>
-        </div>
-
-        <!-- Item 4: Antrean Validasi Kas Bulanan -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#18191E] border border-emerald-200 dark:border-emerald-900/40 shadow-xs flex flex-col justify-between space-y-3">
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                1 Laporan Menunggu Sah
-              </span>
-              <span class="text-[11px] text-neutral-400">25 Sep 2026</span>
-            </div>
-            <h3 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight">
-              Batik Lestari Heritage: Laporan Kas September (Rp 42 Jt)
-            </h3>
-            <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-              Klien telah melampirkan rekening koran dan nota penjualan Tokopedia. Butuh verifikasi keabsahan dari konsultan.
-            </p>
-          </div>
-
-          <div class="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-white/5 gap-2">
-            <span class="text-[11px] text-neutral-400">Pekalongan</span>
-            <NuxtLink
-              to="/konsultan/validasi"
-              class="px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-2xs flex items-center gap-1"
-            >
-              <span>Validasi Laporan Kas</span>
-              <HugeiconsIcon :icon="ArrowRight01Icon" :size="12" :stroke-width="2" />
-            </NuxtLink>
-          </div>
-        </div>
+        <h3 class="font-bold text-base text-neutral-900 dark:text-white">
+          Semua Klien Terpantau Sehat & Tertib
+        </h3>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
+          Tidak ada anomali lonjakan biaya atau permohonan yang menunggu konfirmasi saat ini. Semua laporan kas bulan berjalan terkendali.
+        </p>
       </div>
     </div>
   </div>
@@ -240,8 +171,15 @@ definePageMeta({
 
 const konsultanStore = useKonsultanStore()
 
-onMounted(() => {
-  konsultanStore.fetchDashboard()
+onMounted(async () => {
+  await Promise.all([
+    konsultanStore.fetchProfile(),
+    konsultanStore.fetchClients(),
+    konsultanStore.fetchRequests(),
+    konsultanStore.fetchActionPlans(),
+    konsultanStore.fetchValidations(),
+    konsultanStore.fetchAlerts(),
+  ])
 })
 
 const readyCount = computed(() => {
@@ -250,5 +188,99 @@ const readyCount = computed(() => {
 
 const completedPlansCount = computed(() => {
   return konsultanStore.actionPlans.filter(p => p.status === 'DONE').length
+})
+
+interface DashboardUrgentIssue {
+  id: string
+  badgeText: string
+  badgeClass: string
+  borderClass: string
+  timestamp: string
+  title: string
+  description: string
+  location: string
+  primaryAction: { label: string; to: string; class: string }
+  secondaryAction?: { label: string; to: string; class: string }
+}
+
+const urgentIssues = computed<DashboardUrgentIssue[]>(() => {
+  const issues: DashboardUrgentIssue[] = []
+
+  // 1. Alerts Anomali dari DB
+  for (const alert of konsultanStore.alerts) {
+    if (alert.dismissed) continue
+    const isHigh = alert.severity === 'high'
+    issues.push({
+      id: alert.id,
+      badgeText: isHigh ? 'Kritis • Margin Turun' : 'Peringatan • HPP Naik',
+      badgeClass: isHigh
+        ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+        : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
+      borderClass: isHigh
+        ? 'border-rose-200 dark:border-rose-900/40'
+        : 'border-amber-200 dark:border-amber-900/40',
+      timestamp: alert.timestamp || 'Hari ini',
+      title: `${alert.clientName}: ${alert.title}`,
+      description: alert.message,
+      location: 'UMKM Binaan',
+      secondaryAction: {
+        label: 'Diagnosa Usaha',
+        to: `/konsultan/klien/${alert.clientId}`,
+        class: isHigh ? 'text-rose-600 dark:text-rose-400 hover:border-rose-500' : 'text-amber-600 dark:text-amber-400 hover:border-amber-500',
+      },
+      primaryAction: {
+        label: isHigh ? 'Beri Solusi' : 'Beri Action Plan',
+        to: `/konsultan/rencana-aksi?client=${alert.clientId}`,
+        class: isHigh ? 'bg-rose-600 hover:bg-rose-700' : 'bg-amber-600 hover:bg-amber-700',
+      },
+    })
+  }
+
+  // 2. Permintaan bimbingan masuk
+  if (konsultanStore.pendingRequestsCount > 0) {
+    const firstReq = konsultanStore.clientRequests.find(r => r.status === 'PENDING')
+    const count = konsultanStore.pendingRequestsCount
+    issues.push({
+      id: 'pending-requests',
+      badgeText: `${count} Permintaan Masuk`,
+      badgeClass: 'bg-[#0081A0]/10 text-[#0081A0] dark:bg-[#0081A0]/20 dark:text-[#2091AA]',
+      borderClass: 'border-[#0081A0]/30 dark:border-[#0081A0]/20',
+      timestamp: firstReq?.requestedAt || 'Hari ini',
+      title: count > 1
+        ? `${firstReq?.businessName || 'UMKM Baru'} & ${count - 1} UMKM Lainnya`
+        : `${firstReq?.businessName || 'UMKM Baru'}: Pengajuan Bimbingan Baru`,
+      description: firstReq?.message
+        ? `"${firstReq.message}"`
+        : 'Pelaku usaha memerlukan bimbingan terstruktur untuk penataan kas dan persiapan pendanaan usaha.',
+      location: firstReq?.city || 'Jawa Barat',
+      primaryAction: {
+        label: 'Tinjau & Terima Permintaan',
+        to: '/konsultan/klien?tab=permintaan',
+        class: 'bg-[#0081A0] hover:bg-[#00708C]',
+      },
+    })
+  }
+
+  // 3. Antrean validasi kas bulanan
+  if (konsultanStore.validationsQueue.length > 0) {
+    const firstVal = konsultanStore.validationsQueue[0]
+    issues.push({
+      id: 'pending-validations',
+      badgeText: `${konsultanStore.validationsQueue.length} Laporan Menunggu Sah`,
+      badgeClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300',
+      borderClass: 'border-emerald-200 dark:border-emerald-900/40',
+      timestamp: firstVal.submittedAt || 'Bulan ini',
+      title: `${firstVal.clientName}: Validasi Kas ${firstVal.month}`,
+      description: firstVal.notes || 'Pelaku UMKM telah melampirkan berkas pembukuan kas bulanan dan butuh verifikasi konsultan.',
+      location: 'Laporan Kas Klien',
+      primaryAction: {
+        label: 'Validasi Laporan Kas',
+        to: '/konsultan/validasi',
+        class: 'bg-emerald-600 hover:bg-emerald-700',
+      },
+    })
+  }
+
+  return issues
 })
 </script>

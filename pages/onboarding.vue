@@ -1461,9 +1461,44 @@ function syncAuthToForms() {
 }
 
 onMounted(() => {
+  // Jika user sebenarnya sudah menyelesaikan onboarding, langsung alihkan ke dasbor
+  if (authStore.isAuthenticated && authStore.isOnboarded && !route.query.edit) {
+    const target = activeRole.value === 'CONSULTANT' ? '/konsultan' : activeRole.value === 'INVESTOR' ? '/investor' : '/dashboard'
+    navigateTo(target, { replace: true })
+    return
+  }
+
+  // Restore draft isian sebelumnya jika tersedia di localStorage
+  if (import.meta.client) {
+    try {
+      const savedDraft = localStorage.getItem('beruang_draft_onboarding_umkm')
+      if (savedDraft) {
+        const parsed = JSON.parse(savedDraft)
+        if (parsed && typeof parsed === 'object') {
+          formUmkm.value = { ...formUmkm.value, ...parsed }
+          if (formUmkm.value.monthlyRevenue) {
+            displayMonthlyRevenue.value = Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID')
+          }
+          if (formUmkm.value.targetFunding) {
+            displayTargetFunding.value = Number(formUmkm.value.targetFunding).toLocaleString('id-ID')
+          }
+        }
+      }
+    } catch {}
+  }
+
   syncAuthToForms()
   fetchConsultants()
 })
+
+// Auto-save isian UMKM ke draft localStorage agar input user tidak hilang saat reload/redirect
+watch(formUmkm, (val) => {
+  if (import.meta.client && val) {
+    try {
+      localStorage.setItem('beruang_draft_onboarding_umkm', JSON.stringify(val))
+    } catch {}
+  }
+}, { deep: true })
 
 // Pastikan sinkron bila data user terhidrasi secara asinkron dari Google OAuth / Cookie
 watch(() => authStore.currentUser, () => {
@@ -1483,6 +1518,18 @@ async function finishOnboarding() {
       path: '/'
     })
     onboardedCookie.value = 'true'
+
+    if (import.meta.client) {
+      try {
+        localStorage.setItem('beruang_onboarded', 'true')
+        if (authStore.currentUser?.id) {
+          localStorage.setItem(`beruang_onboarded_${authStore.currentUser.id}`, 'true')
+        }
+        if (authStore.currentUser?.email) {
+          localStorage.setItem(`beruang_onboarded_${authStore.currentUser.email.toLowerCase()}`, 'true')
+        }
+      } catch {}
+    }
 
     // Kunci role pada state sesi pengguna aktif saat ini
     if (authStore.currentUser) {
@@ -1520,7 +1567,6 @@ async function finishOnboarding() {
         if (res?.data?.id) {
           savedBizId = res.data.id
         }
-        await authStore.fetchMe()
       } catch (err: any) {
         console.warn('Gagal simpan onboarding ke live API, tetap lanjut ke dashboard:', err?.message)
       }
@@ -1587,7 +1633,14 @@ async function finishOnboarding() {
         }
       })
 
-      router.push('/dashboard')
+      // Bersihkan draft setelah onboarding sukses
+      if (import.meta.client) {
+        try {
+          localStorage.removeItem('beruang_draft_onboarding_umkm')
+        } catch {}
+      }
+
+      await navigateTo('/dashboard', { replace: true })
     } else if (activeRole.value === 'CONSULTANT') {
       try {
         await useApi('/onboarding/consultant', {
@@ -1629,7 +1682,7 @@ async function finishOnboarding() {
         }
       })
 
-      router.push('/konsultan')
+      await navigateTo('/konsultan', { replace: true })
     } else if (activeRole.value === 'INVESTOR') {
       try {
         await useApi('/onboarding/investor', {
@@ -1670,7 +1723,7 @@ async function finishOnboarding() {
         }
       })
 
-      router.push('/investor')
+      await navigateTo('/investor', { replace: true })
     }
   } catch (err: any) {
     console.warn('Onboarding error:', err)

@@ -44,7 +44,15 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
     const bankAccountNumber = b.bank_account_number || b.bankAccountNumber || null;
     const bankAccountHolder = b.bank_account_holder || b.bankAccountHolder || brand;
 
-    const consultantId = b.consultant_id || b.consultantId || null;
+    let consultantId = b.consultant_id || b.consultantId || null;
+    if (consultantId) {
+      const validCons = await prisma.consultantProfile.findUnique({
+        where: { id: consultantId }
+      }).catch(() => null);
+      if (!validCons) {
+        consultantId = null;
+      }
+    }
 
     // 1. Update user
     await prisma.user.update({
@@ -76,7 +84,7 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
         bankAccountHolder,
         outletsCount,
         employeesCount,
-        consultantId: consultantId || undefined,
+        consultantId: consultantId || null,
         status: consultantId ? "CONSULTANT_ASSIGNED" : "ACTION_PLAN_ACTIVE",
       },
       create: {
@@ -97,53 +105,61 @@ async function handleUmkmOnboarding(req: AuthenticatedRequest, res: Response) {
         bankAccountHolder,
         outletsCount,
         employeesCount,
-        consultantId: consultantId || undefined,
+        consultantId: consultantId || null,
         status: consultantId ? "CONSULTANT_ASSIGNED" : "ACTION_PLAN_ACTIVE",
       },
     });
 
     // 3. Jika konsultan dipilih, buat relasi assignment dan increment klien aktif
     if (consultantId) {
-      const existingAssignment = await prisma.consultantAssignment.findFirst({
-        where: { businessId: profile.id, consultantId },
-      });
-
-      if (!existingAssignment) {
-        await prisma.consultantAssignment.create({
-          data: {
-            consultantId,
-            businessId: profile.id,
-            slaDays: 7,
-            notes: `Pendampingan bisnis dimulai resmi pasca-onboarding oleh ${ownerName}.`,
-          },
+      try {
+        const existingAssignment = await prisma.consultantAssignment.findFirst({
+          where: { businessId: profile.id, consultantId },
         });
 
-        await prisma.consultantProfile.update({
-          where: { id: consultantId },
-          data: { activeClientsCount: { increment: 1 } },
-        }).catch(() => {});
+        if (!existingAssignment) {
+          await prisma.consultantAssignment.create({
+            data: {
+              consultantId,
+              businessId: profile.id,
+              slaDays: 7,
+              notes: `Pendampingan bisnis dimulai resmi pasca-onboarding oleh ${ownerName}.`,
+            },
+          });
+
+          await prisma.consultantProfile.update({
+            where: { id: consultantId },
+            data: { activeClientsCount: { increment: 1 } },
+          }).catch(() => {});
+        }
+      } catch (assignErr) {
+        console.warn("Non-fatal: assignment creation failed:", assignErr);
       }
     }
 
     // 4. Pastikan assessment radar awal terpasang
-    const existingAssessment = await prisma.assessment.findUnique({
-      where: { businessId: profile.id },
-    });
-
-    if (!existingAssessment) {
-      await prisma.assessment.create({
-        data: {
-          businessId: profile.id,
-          financial: 55,
-          operationsHpp: 50,
-          marketing: 45,
-          hrTeam: 50,
-          legal: 60,
-          compositeScore: 52,
-          isVerified: false,
-          consultantNotes: "Asesmen baseline awal tokomu. Jadwalkan audit 5 aspek bersama konsultan pembimbing untuk memperkuat kesiapan modal usahamu.",
-        },
+    try {
+      const existingAssessment = await prisma.assessment.findUnique({
+        where: { businessId: profile.id },
       });
+
+      if (!existingAssessment) {
+        await prisma.assessment.create({
+          data: {
+            businessId: profile.id,
+            financial: 55,
+            operationsHpp: 50,
+            marketing: 45,
+            hrTeam: 50,
+            legal: 60,
+            compositeScore: 52,
+            isVerified: false,
+            consultantNotes: "Asesmen baseline awal tokomu. Jadwalkan audit 5 aspek bersama konsultan pembimbing untuk memperkuat kesiapan modal usahamu.",
+          },
+        });
+      }
+    } catch (assessErr) {
+      console.warn("Non-fatal: assessment creation failed:", assessErr);
     }
 
     // 5. Buat 3 langkah rencana aksi (Action Plan) awal untuk UMKM baru

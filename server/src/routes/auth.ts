@@ -22,6 +22,7 @@ function generateToken(user: { id: string; email: string; role: string }): strin
 
 function computeIsOnboarded(user: any): boolean {
   if (user.onboardingCompleted) return true;
+  if (user.role === "ADMIN") return true;
   if (user.role === "UMKM") {
     return Boolean(
       user.businessProfile &&

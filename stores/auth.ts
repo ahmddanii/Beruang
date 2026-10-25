@@ -139,6 +139,7 @@ export const useAuthStore = defineStore('auth', {
     userAvatar: (state): string => state.currentUser?.avatar || '',
     isOnboarded: (state): boolean => {
       if (!state.isAuthenticated || !state.currentUser) return false
+      if (state.currentUser.role === 'ADMIN') return true
       // Akun demo bawaan selalu dianggap sudah onboarded
       const email = state.currentUser.email?.toLowerCase() || ''
       if (
@@ -150,6 +151,25 @@ export const useAuthStore = defineStore('auth', {
         return true
       }
       if (state.currentUser.onboardingCompleted) return true
+
+      // Cek cookie / localStorage onboarding flag
+      try {
+        const onboardedCookie = useCookie<string | null>('beruang_onboarded').value
+        if (onboardedCookie === 'true') return true
+      } catch {}
+
+      if (import.meta.client) {
+        try {
+          if (
+            localStorage.getItem('beruang_onboarded') === 'true' ||
+            localStorage.getItem(`beruang_onboarded_${state.currentUser.id}`) === 'true' ||
+            localStorage.getItem(`beruang_onboarded_${email}`) === 'true'
+          ) {
+            return true
+          }
+        } catch {}
+      }
+
       // Auto-check jika user sudah memiliki profil usaha/kelembagaan aktif
       const biz = state.currentUser.businessProfile
       if (biz && (biz.brand || biz.name) && biz.status !== 'PROFILE_INCOMPLETE') return true
@@ -281,10 +301,19 @@ export const useAuthStore = defineStore('auth', {
         const res = await useApi<any>('/auth/me')
         const userData = res.data?.user || res.data
         if (userData) {
+          const wasOnboarded = Boolean(
+            this.currentUser?.onboardingCompleted ||
+            this.isOnboarded ||
+            (import.meta.client && localStorage.getItem('beruang_onboarded') === 'true')
+          )
           this.currentUser = {
             ...this.currentUser,
             ...userData,
-            businessName: userData.businessName || userData.businessProfile?.brand || userData.businessProfile?.name || userData.orgName || this.currentUser?.businessName
+            onboardingCompleted: (userData.onboardingCompleted ?? false) || wasOnboarded,
+            businessName: userData.businessName || userData.businessProfile?.brand || userData.businessProfile?.name || userData.orgName || this.currentUser?.businessName,
+            businessProfile: userData.businessProfile || this.currentUser?.businessProfile,
+            consultantProfile: userData.consultantProfile || this.currentUser?.consultantProfile,
+            investorProfile: userData.investorProfile || this.currentUser?.investorProfile
           }
           this.isAuthenticated = true
           this.syncRoleStores()

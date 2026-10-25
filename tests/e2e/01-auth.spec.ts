@@ -90,4 +90,20 @@ test.describe('E2E: Authentication & RBAC Guard', () => {
     await expect(page).toHaveURL(/\/masuk/);
   });
 
+  test('9. Onboarded user visiting /onboarding is redirected to /dashboard and stays on dashboard without bounce', async ({ page }) => {
+    await loginAs(page, 'UMKM');
+    await page.goto('/onboarding?role=UMKM');
+    await page.waitForLoadState('networkidle');
+
+    // Should immediately bounce away to /dashboard
+    await expect(page).toHaveURL(/\/dashboard/);
+    await expect(page.locator('body')).toContainText(/Untung Bersih|Beranda|Catatan Kas/i);
+
+    // Reloading /dashboard should keep user on /dashboard
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(/\/dashboard/);
+  });
+
 });
+

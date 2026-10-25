@@ -1,4 +1,4 @@
-﻿import { defineStore } from 'pinia'
+import { defineStore } from 'pinia'
 import { useApi } from '~/composables/useApi'
 
 export interface MarketplaceUmkm {
@@ -59,9 +59,14 @@ export interface InvestorProfile {
   description: string
 }
 
+export function build150MarketplaceUmkms(): MarketplaceUmkm[] {
+  // Replaced by live backend API: GET /api/investor/marketplace
+  return []
+}
+
 export function getDemoInvestorProfile(): InvestorProfile {
   return {
-    name: 'Fikri Setiawan',
+    name: 'Hendro Wicaksono',
     roleTitle: 'Managing Partner',
     companyName: 'PT Nusantara Kapital Investama',
     investorType: 'Angel Investor & Sindikasi Institusi',
@@ -74,7 +79,7 @@ export function getDemoInvestorProfile(): InvestorProfile {
     preferredSectors: 'Kuliner & Minuman (F&B), Oleh-oleh & FMCG, Agroindustri',
     investmentScheme: 'Bagi Hasil Usaha',
     targetRoiRange: '14% – 20% per Tahun',
-    email: 'fikri@kopisenja.id',
+    email: 'hendro@nusantaraventures.com',
     whatsapp: '+62 811-9283-7465',
     website: 'nusantarakapital.co.id',
     npwpEntity: '02.918.374.1-012.000',
@@ -345,7 +350,7 @@ export const useInvestorStore = defineStore('investor', {
     },
 
     initProfileForUser(user?: { email?: string; name?: string }) {
-      if (user?.email && !user.email.includes('kopisenja') && !user.email.includes('hendro')) {
+      if (user?.email && !user.email.includes('hendro')) {
         this.profile = {
           ...getEmptyInvestorProfile(),
           name: user.name || '',

@@ -45,7 +45,7 @@
             <!-- 2. Nama Investor + Badge Terverifikasi -->
             <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap py-0.5">
               <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight">
-                {{ formProfile.name || 'Fikri Setiawan' }}
+                {{ formProfile.name || authStore.currentUser?.name || (isDemoHendro ? 'Hendro Wicaksono' : 'Investor') }}
               </h2>
               <BVerifiedBadge />
             </div>
@@ -644,29 +644,33 @@ function formatTargetWords(val: number): string {
   return `Rp ${new Intl.NumberFormat('id-ID').format(val)}`
 }
 
+const isDemoHendro = computed(() => {
+  return authStore.currentUser?.email?.includes('hendro')
+})
+
 const investorFirstName = computed(() => {
-  const name = formProfile.name || authStore.currentUser?.name || 'Fikri'
+  const name = formProfile.name || authStore.currentUser?.name || (isDemoHendro.value ? 'Hendro' : 'Investor')
   return name.split(' ')[0]
 })
 
 const formProfile = reactive({
-  name: investorStore.profile.name || 'Fikri Setiawan',
-  roleTitle: investorStore.profile.roleTitle || 'Managing Partner',
-  companyName: investorStore.profile.companyName || 'PT Nusantara Kapital Investama',
+  name: investorStore.profile.name || authStore.currentUser?.name || (isDemoHendro.value ? 'Hendro Wicaksono' : ''),
+  roleTitle: investorStore.profile.roleTitle || (isDemoHendro.value ? 'Managing Partner' : 'Investor Rekanan'),
+  companyName: investorStore.profile.companyName || authStore.currentUser?.businessName || (isDemoHendro.value ? 'PT Nusantara Kapital Investama' : ''),
   investorType: investorStore.profile.investorType || 'Angel Investor & Sindikasi Institusi',
-  city: investorStore.profile.city || 'Jakarta Selatan',
-  establishedYear: investorStore.profile.establishedYear || 2020,
+  city: investorStore.profile.city || authStore.currentUser?.city || (isDemoHendro.value ? 'Jakarta Selatan' : ''),
+  establishedYear: investorStore.profile.establishedYear || (isDemoHendro.value ? 2020 : new Date().getFullYear()),
   minTicket: investorStore.profile.minTicket || 100000000,
   maxTicket: investorStore.profile.maxTicket || 500000000,
-  preferredSectors: investorStore.profile.preferredSectors || 'Kuliner & Minuman (F&B), Oleh-oleh & FMCG, Agroindustri',
+  preferredSectors: investorStore.profile.preferredSectors || (isDemoHendro.value ? 'Kuliner & Minuman (F&B), Oleh-oleh & FMCG, Agroindustri' : ''),
   investmentScheme: investorStore.profile.investmentScheme || 'Bagi Hasil Usaha',
-  targetRoiRange: investorStore.profile.targetRoiRange || '14% – 20% per Tahun',
-  email: investorStore.profile.email || 'fikri@nusantarakapital.co.id',
-  whatsapp: investorStore.profile.whatsapp || '+62 811-9283-7465',
-  website: investorStore.profile.website || 'nusantarakapital.co.id',
-  npwpEntity: investorStore.profile.npwpEntity || '02.918.374.1-012.000',
-  nibEntity: investorStore.profile.nibEntity || '9120301928374',
-  description: investorStore.profile.description || 'Fokus mendanai ekspansi gerai dan peningkatan kapasitas produksi UMKM sektor F&B, FMCG, dan Agroindustri di Indonesia yang memiliki pencatatan kas rapi dan telah divalidasi oleh konsultan pendamping resmi.'
+  targetRoiRange: investorStore.profile.targetRoiRange || (isDemoHendro.value ? '14% – 20% per Tahun' : ''),
+  email: investorStore.profile.email || authStore.currentUser?.email || (isDemoHendro.value ? 'hendro@nusantaraventures.com' : ''),
+  whatsapp: investorStore.profile.whatsapp || authStore.currentUser?.phone || (isDemoHendro.value ? '+62 811-9283-7465' : ''),
+  website: investorStore.profile.website || (isDemoHendro.value ? 'nusantarakapital.co.id' : ''),
+  npwpEntity: investorStore.profile.npwpEntity || (isDemoHendro.value ? '02.918.374.1-012.000' : ''),
+  nibEntity: investorStore.profile.nibEntity || (isDemoHendro.value ? '9120301928374' : ''),
+  description: investorStore.profile.description || (isDemoHendro.value ? 'Fokus mendanai ekspansi gerai dan peningkatan kapasitas produksi UMKM sektor F&B, FMCG, dan Agroindustri di Indonesia yang memiliki pencatatan kas rapi dan telah divalidasi oleh konsultan pendamping resmi.' : '')
 })
 
 const isDescriptionExpanded = ref(false)

@@ -1177,10 +1177,10 @@
     <!-- Modal Pratinjau & Cetak Laporan Kas Bulanan Resmi -->
     <BCashReportPrintModal
       v-model="isReportPrintModalOpen"
-      :business-name="umkmStore.profile.name || 'Kopi Senja Nusantara'"
-      :sector="umkmStore.profile.sector || 'Kuliner & Minuman (F&B)'"
-      :city="umkmStore.profile.city || 'Bandung'"
-      :consultant-name="umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.'"
+      :business-name="umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya'"
+      :sector="umkmStore.profile.sector || authStore.currentUser?.sector || 'Sektor Usaha'"
+      :city="umkmStore.profile.city || authStore.currentUser?.city || 'Indonesia'"
+      :consultant-name="umkmStore.profile.consultantName || 'Konsultan Pendamping'"
       :total-in="totalIncome"
       :total-out="totalHppExpense + totalOpexExpense"
       :balance="displayedCashBalance"
@@ -1190,6 +1190,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, onBeforeUnmount, watch } from 'vue'
+import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore, type DailyTransaction } from '~/stores/umkm'
 import { useLanguage } from '~/composables/useLanguage'
 import gsap from 'gsap'
@@ -1230,6 +1231,7 @@ definePageMeta({
   hideHeader: true
 })
 
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const { t } = useLanguage()
 
@@ -1304,38 +1306,86 @@ function setActiveTab(tab: 'mutasi' | 'bulanan' | 'tren') {
   })
 }
 
-// Latest Monthly Record (Bulan Aktif / Rekonsiliasi Terakhir)
-const latestMonthRecord = computed(() => {
-  const records = umkmStore.monthlyRecords || []
-  return records[records.length - 1] || {
-    month: 'Oktober',
-    year: 2026,
-    omzet: 100000000,
-    hpp: 45100000,
-    opex: 22300000,
-    netProfit: 32600000,
-    cashBalance: 75500000,
-    status: 'VERIFIED'
-  }
-})
+// Evaluasi status akun demo vs riil
+const isDemoFikri = computed(() => authStore.currentUser?.email === 'fikri@kopisenja.id')
 
-// Summary Metrics for Daily Cashflow
+// Summary Metrics for Daily Cashflow (Live dinamis dari backend & mutasi kas)
 const totalIncome = computed(() => {
-  return (umkmStore.dailyTransactions || [])
+  if (umkmStore.financeSummary?.totalIncomeMonth && umkmStore.financeSummary.totalIncomeMonth > 0) {
+    return umkmStore.financeSummary.totalIncomeMonth
+  }
+  const txSum = (umkmStore.dailyTransactions || [])
     .filter(t => t.category === 'PEMASUKAN')
-    .reduce((acc, t) => acc + t.amount, 0)
+    .reduce((acc, t) => acc + (Number(t.amount) || 0), 0)
+  if (txSum > 0) return txSum
+  if (isDemoFikri.value) return 100000000
+  return Number(authStore.currentUser?.monthlyRevenue || 0)
 })
 
 const totalHppExpense = computed(() => {
-  return (umkmStore.dailyTransactions || [])
+  if (umkmStore.financeSummary?.totalCogsMonth && umkmStore.financeSummary.totalCogsMonth > 0) {
+    return umkmStore.financeSummary.totalCogsMonth
+  }
+  const txSum = (umkmStore.dailyTransactions || [])
     .filter(t => t.category === 'MODAL_JUALAN')
-    .reduce((acc, t) => acc + t.amount, 0)
+    .reduce((acc, t) => acc + (Number(t.amount) || 0), 0)
+  if (txSum > 0) return txSum
+  if (isDemoFikri.value) return 45100000
+  if (totalIncome.value > 0) return Math.round(totalIncome.value * 0.451)
+  return 0
 })
 
 const totalOpexExpense = computed(() => {
-  return (umkmStore.dailyTransactions || [])
+  if (umkmStore.financeSummary?.totalOpexMonth && umkmStore.financeSummary.totalOpexMonth > 0) {
+    return umkmStore.financeSummary.totalOpexMonth
+  }
+  const txSum = (umkmStore.dailyTransactions || [])
     .filter(t => t.category === 'OPERASIONAL')
-    .reduce((acc, t) => acc + t.amount, 0)
+    .reduce((acc, t) => acc + (Number(t.amount) || 0), 0)
+  if (txSum > 0) return txSum
+  if (isDemoFikri.value) return 22300000
+  if (totalIncome.value > 0) return Math.round(totalIncome.value * 0.223)
+  return 0
+})
+
+const displayedCashBalance = computed(() => {
+  if (selectedMonthId.value === 'current') {
+    if (umkmStore.financeSummary?.cashBalance && umkmStore.financeSummary.cashBalance > 0) {
+      return umkmStore.financeSummary.cashBalance
+    }
+    if (isDemoFikri.value) return 75500000
+    const net = totalIncome.value - totalHppExpense.value - totalOpexExpense.value
+    return net > 0 ? net : 0
+  }
+  return selectedMonthRecord.value?.cashBalance || 0
+})
+
+// Latest Monthly Record (Bulan Aktif / Rekonsiliasi Terakhir)
+const latestMonthRecord = computed(() => {
+  const records = umkmStore.monthlyRecords || []
+  if (records.length > 0) return records[records.length - 1]
+  if (isDemoFikri.value) {
+    return {
+      month: 'Oktober',
+      year: 2026,
+      omzet: 100000000,
+      hpp: 45100000,
+      opex: 22300000,
+      netProfit: 32600000,
+      cashBalance: 75500000,
+      status: 'VERIFIED'
+    }
+  }
+  return {
+    month: 'Bulan Ini',
+    year: 2026,
+    omzet: totalIncome.value,
+    hpp: totalHppExpense.value,
+    opex: totalOpexExpense.value,
+    netProfit: totalIncome.value - totalHppExpense.value - totalOpexExpense.value,
+    cashBalance: displayedCashBalance.value,
+    status: 'DRAFT'
+  }
 })
 
 // Month Selector State & Controls
@@ -1382,29 +1432,25 @@ const selectedMonthRecord = computed(() => {
   return found || current
 })
 
-const displayedCashBalance = computed(() => {
-  return selectedMonthRecord.value.cashBalance || 75500000
-})
-
 const displayedIncome = computed(() => {
   if (selectedMonthId.value === 'current') {
     return totalIncome.value
   }
-  return selectedMonthRecord.value.omzet || 0
+  return selectedMonthRecord.value?.omzet || 0
 })
 
 const displayedHpp = computed(() => {
   if (selectedMonthId.value === 'current') {
     return totalHppExpense.value
   }
-  return selectedMonthRecord.value.hpp || 0
+  return selectedMonthRecord.value?.hpp || 0
 })
 
 const displayedOpex = computed(() => {
   if (selectedMonthId.value === 'current') {
     return totalOpexExpense.value
   }
-  return selectedMonthRecord.value.opex || 0
+  return selectedMonthRecord.value?.opex || 0
 })
 
 // Trend Chart Filter & Type State (Matched 100% with Beranda)
@@ -1879,7 +1925,13 @@ function openReceiptModal(tx: DailyTransaction) {
 let handleResize: (() => void) | null = null
 let gsapCtx: gsap.Context | null = null
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    await umkmStore.fetchDashboardData()
+  } catch (err: any) {
+    console.warn('Gagal memuat dataset keuangan live:', err?.message)
+  }
+
   nextTick(() => {
     updateTabIndicator(true)
     if (activeTab.value === 'tren') {

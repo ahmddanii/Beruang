@@ -129,7 +129,7 @@
                 <span>Sesi Validasi Aktif:</span>
               </div>
               <p class="text-[11px] text-neutral-500 font-mono">
-                {{ authStore.currentUser?.name || 'Fikri Setiawan' }} • {{ accessTimestamp }}
+                {{ authStore.currentUser?.name || 'Investor Rekanan' }} • {{ accessTimestamp }}
               </p>
             </div>
 

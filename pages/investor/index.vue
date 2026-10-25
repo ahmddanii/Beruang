@@ -302,14 +302,6 @@
 
               <div v-if="!item.isPlatformPost" class="flex items-center gap-2 w-full sm:w-auto">
                 <BActionButton
-                  :to="`/investor/umkm/${item.umkmRefId || item.id}#kalkulator-roi`"
-                  variant="green"
-                  custom-class="flex-1 sm:flex-initial justify-center text-center py-2 sm:py-2.5 text-xs sm:text-sm"
-                >
-                  Simulasi ROI
-                </BActionButton>
-
-                <BActionButton
                   :to="`/investor/umkm/${item.umkmRefId || item.id}`"
                   variant="default"
                   icon="chevron"
@@ -392,10 +384,10 @@
             <!-- Investor Name on Right & Company / PT Name Below -->
             <div class="min-w-0 flex-1">
               <h3 class="font-poppins font-semibold text-sm sm:text-base text-neutral-900 dark:text-white truncate group-hover:text-[#156374] dark:group-hover:text-[#50AABF] transition-colors">
-                {{ investorStore.profile.name || authStore.currentUser?.name || 'Fikri Setiawan' }}
+                {{ investorStore.profile.name || authStore.currentUser?.name || 'Investor Rekanan' }}
               </h3>
               <p class="text-xs sm:text-[13px] font-poppins text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-                {{ investorStore.profile.companyName || 'PT Nusantara Kapital Investama' }}
+                {{ investorStore.profile.companyName || authStore.currentUser?.businessName || 'PT Nusantara Kapital Investama' }}
               </p>
             </div>
           </NuxtLink>

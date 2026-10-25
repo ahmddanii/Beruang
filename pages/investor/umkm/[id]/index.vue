@@ -1144,22 +1144,22 @@ const item = computed<MarketplaceUmkm>(() => {
     sourceList.find(
       m => m.id === umkmId.value || m.umkmRefId === umkmId.value
     ) || sourceList[0] || {
-      id: 'umkm-01',
-      umkmRefId: 'umkm-01',
-      name: 'Kopi Senja Nusantara',
-      code: 'BERU-KOP-01',
-      sector: 'Kuliner & Minuman (F&B)',
-      city: 'Bandung',
-      establishedYear: 2021,
+      id: umkmId.value || 'umkm-01',
+      umkmRefId: umkmId.value || 'umkm-01',
+      name: umkmStore.profile.name || 'Usaha UMKM',
+      code: 'BERU-UMK-01',
+      sector: umkmStore.profile.sector || 'Kuliner & Minuman (F&B)',
+      city: umkmStore.profile.city || 'Indonesia',
+      establishedYear: umkmStore.profile.establishedYear || 2021,
       postedAt: 'Terverifikasi',
       fundingTarget: 250000000,
-      marginPercentage: 54.4,
-      growthYoY: 34.2,
-      healthScore: 79,
-      certifiedAt: '18 Sep 2026',
-      consultantName: 'Dra. Maya Suryani, M.M.',
-      pitchSummary: 'Spesialis kopi arabika-robusta dengan 3 gerai offline di Bandung. Margin kotor konsisten di atas 48% dengan SOP barista standar.',
-      tags: ['F&B', 'Ready for Funding'],
+      marginPercentage: 48,
+      growthYoY: 25,
+      healthScore: 80,
+      certifiedAt: 'Terakreditasi BNSP',
+      consultantName: 'Konsultan Mitra Beruang',
+      pitchSummary: umkmStore.profile.description || umkmStore.profile.pitchSummary || 'Usaha bertumbuh dengan tata kelola keuangan terverifikasi konsultan mitra.',
+      tags: ['Ready for Funding'],
       accessStatus: 'NONE',
       bookmarked: false
     }
@@ -1173,16 +1173,16 @@ const isItemBookmarked = computed(() => {
   return found ? Boolean(found.bookmarked) : Boolean(item.value?.bookmarked)
 })
 
-// Rich Profile Metadata per UMKM ID (Synced with umkmStore for umkm-01)
+// Rich Profile Metadata per UMKM ID (Synced with umkmStore for primary/active UMKM)
 const profileData = computed(() => {
   const current = item.value
-  const isPrimaryUmkm = current.id === 'umkm-01' || current.umkmRefId === 'umkm-01'
+  const isPrimaryUmkm = current.id === 'umkm-01' || current.umkmRefId === 'umkm-01' || current.id === umkmStore.profile.id
 
   return {
-    ownerName: isPrimaryUmkm ? (umkmStore.profile.ownerName || 'Fikri Setiawan') : `Founder ${current.name}`,
-    city: isPrimaryUmkm ? (umkmStore.profile.city || 'Bandung, Jawa Barat') : `${current.city}, Indonesia`,
-    outletsCount: isPrimaryUmkm ? (umkmStore.profile.outletsCount || 3) : 2,
-    employeesCount: isPrimaryUmkm ? (umkmStore.profile.employeesCount || 14) : 12,
+    ownerName: isPrimaryUmkm ? (umkmStore.profile.ownerName || 'Pemilik Usaha') : `Founder ${current.name}`,
+    city: isPrimaryUmkm ? (umkmStore.profile.city || 'Indonesia') : `${current.city}, Indonesia`,
+    outletsCount: isPrimaryUmkm ? (umkmStore.profile.outletsCount || 1) : 1,
+    employeesCount: isPrimaryUmkm ? (umkmStore.profile.employeesCount || 5) : 5,
     bannerUrl: isPrimaryUmkm
       ? (umkmStore.profile.bannerUrl || '/images/default-store-banner.jpg')
       : (current.postImageUrl || '/images/default-store-banner.jpg'),

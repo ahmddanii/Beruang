@@ -45,7 +45,7 @@
             <!-- 2. Nama Brand UMKM + Badge Terverifikasi -->
             <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap py-0.5">
               <h2 class="text-2xl sm:text-3xl font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight">
-                {{ formProfile.name || 'Kopi Senja Nusantara' }}
+                {{ formProfile.name || authStore.currentUser?.businessName || 'Usaha Saya' }}
               </h2>
               <BVerifiedBadge />
             </div>
@@ -1292,28 +1292,30 @@ function formatTargetWords(val: number): string {
   return `Rp ${new Intl.NumberFormat('id-ID').format(val)}`
 }
 
+const isDemoFikri = computed(() => authStore.currentUser?.email === 'fikri@kopisenja.id')
+
 // Owner First Name
 const ownerFirstName = computed(() => {
-  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
+  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || (isDemoFikri.value ? 'Fikri' : 'Pemilik')
   return name.split(' ')[0]
 })
 
 // Profile Form State
 const formProfile = reactive({
-  name: umkmStore.profile.name || 'Kopi Senja Nusantara',
-  ownerName: umkmStore.profile.ownerName || 'Fikri Setiawan',
-  sector: umkmStore.profile.sector || 'Kuliner & Minuman (F&B)',
-  city: umkmStore.profile.city || 'Bandung, Jawa Barat',
-  establishedYear: umkmStore.profile.establishedYear || 2021,
-  outletsCount: umkmStore.branches.length || umkmStore.profile.outletsCount || 3,
-  employeesCount: umkmStore.profile.employeesCount || 14,
-  fundingTarget: umkmStore.profile.fundingTarget || 250000000,
-  plannedFundUse: 'Ekspansi 2 gerai cloud kitchen di area Bandung Timur dan pengadaan mesin roastery kapasitas 5kg terpusat.',
-  description: umkmStore.profile.description || umkmStore.profile.pitchSummary || 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
-  nib: umkmStore.profile.nib || '1209000123456',
-  npwp: umkmStore.profile.npwp || '81.423.891.4-429.000',
-  halalNumber: umkmStore.profile.halalNumber || 'ID321100019283',
-  hkiNumber: umkmStore.profile.hkiNumber || 'IPT20250918290'
+  name: umkmStore.profile.name || authStore.currentUser?.businessName || (isDemoFikri.value ? 'Kopi Senja Nusantara' : ''),
+  ownerName: umkmStore.profile.ownerName || authStore.currentUser?.name || (isDemoFikri.value ? 'Fikri Setiawan' : ''),
+  sector: umkmStore.profile.sector || authStore.currentUser?.sector || (isDemoFikri.value ? 'Kuliner & Minuman (F&B)' : 'Perdagangan Umum'),
+  city: umkmStore.profile.city || authStore.currentUser?.city || (isDemoFikri.value ? 'Bandung, Jawa Barat' : ''),
+  establishedYear: umkmStore.profile.establishedYear || authStore.currentUser?.establishedYear || (isDemoFikri.value ? 2021 : new Date().getFullYear()),
+  outletsCount: umkmStore.branches.length || umkmStore.profile.outletsCount || authStore.currentUser?.outletsCount || 1,
+  employeesCount: umkmStore.profile.employeesCount || authStore.currentUser?.employeesCount || 1,
+  fundingTarget: umkmStore.profile.fundingTarget || authStore.currentUser?.fundingTarget || 0,
+  plannedFundUse: isDemoFikri.value ? 'Ekspansi 2 gerai cloud kitchen di area Bandung Timur dan pengadaan mesin roastery kapasitas 5kg terpusat.' : '',
+  description: umkmStore.profile.description || umkmStore.profile.pitchSummary || authStore.currentUser?.description || (isDemoFikri.value ? 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.' : ''),
+  nib: umkmStore.profile.nib || authStore.currentUser?.nib || (isDemoFikri.value ? '1209000123456' : ''),
+  npwp: umkmStore.profile.npwp || authStore.currentUser?.npwp || (isDemoFikri.value ? '81.423.891.4-429.000' : ''),
+  halalNumber: umkmStore.profile.halalNumber || (isDemoFikri.value ? 'ID321100019283' : ''),
+  hkiNumber: umkmStore.profile.hkiNumber || (isDemoFikri.value ? 'IPT20250918290' : '')
 })
 
 // Branch Management Logic (Daftar Gerai & Cabang Usaha)
@@ -1577,11 +1579,11 @@ const newPostForm = reactive({
 })
 
 const myUmkmPosts = computed<MarketplaceUmkm[]>(() => {
-  const currentName = (formProfile.name || 'Kopi Senja Nusantara').toLowerCase().trim()
+  const currentName = (formProfile.name || authStore.currentUser?.businessName || 'Usaha Saya').toLowerCase().trim()
   return investorStore.marketplaceList.filter(
     m =>
-      m.id === 'umkm-01' ||
-      m.umkmRefId === 'umkm-01' ||
+      (m.id === 'umkm-01' && isDemoFikri.value) ||
+      (m.umkmRefId === 'umkm-01' && isDemoFikri.value) ||
       m.name.toLowerCase().trim() === currentName
   )
 })
@@ -1670,13 +1672,13 @@ function handleCreateUmkmPost() {
   if (!newPostForm.pitchSummary.trim()) return
 
   investorStore.createUmkmPost({
-    umkmRefId: 'umkm-01',
-    name: formProfile.name || 'Kopi Senja Nusantara',
-    city: formProfile.city || 'Bandung',
-    sector: formProfile.sector || 'Kuliner & Minuman (F&B)',
-    establishedYear: formProfile.establishedYear || 2021,
-    fundingTarget: formProfile.fundingTarget || 250000000,
-    consultantName: 'Dra. Maya Suryani, M.M.',
+    umkmRefId: umkmStore.profile.id || 'umkm-user',
+    name: formProfile.name || authStore.currentUser?.businessName || 'Usaha Saya',
+    city: formProfile.city || authStore.currentUser?.city || 'Indonesia',
+    sector: formProfile.sector || authStore.currentUser?.sector || 'Sektor Usaha',
+    establishedYear: formProfile.establishedYear || authStore.currentUser?.establishedYear || 2024,
+    fundingTarget: formProfile.fundingTarget || authStore.currentUser?.fundingTarget || 0,
+    consultantName: umkmStore.profile.consultantName || 'Konsultan Pendamping',
     pitchSummary: newPostForm.pitchSummary.trim(),
     postImages: [...newPostForm.postImages]
   })
@@ -1985,9 +1987,9 @@ async function saveProfile() {
   isSaving.value = true
 
   const profilePayload = {
-    name: formProfile.name.trim() || 'Kopi Senja Nusantara',
-    brand: formProfile.name.trim() || 'Kopi Senja Nusantara',
-    ownerName: formProfile.ownerName.trim() || 'Fikri Setiawan',
+    name: formProfile.name.trim() || authStore.currentUser?.businessName || 'Usaha Saya',
+    brand: formProfile.name.trim() || authStore.currentUser?.businessName || 'Usaha Saya',
+    ownerName: formProfile.ownerName.trim() || authStore.currentUser?.name || 'Pemilik Usaha',
     sector: formProfile.sector,
     city: formProfile.city.trim(),
     establishedYear: formProfile.establishedYear,

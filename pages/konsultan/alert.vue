@@ -252,8 +252,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useChatStore } from '~/stores/chat'
+import { useKonsultanStore } from '~/stores/konsultan'
+import { useAuthStore } from '~/stores/auth'
 import BButton from '~/components/base/BButton.vue'
 import BDrawer from '~/components/base/BDrawer.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -269,6 +271,8 @@ definePageMeta({
 })
 
 const chatStore = useChatStore()
+const konsultanStore = useKonsultanStore()
+const authStore = useAuthStore()
 const selectedSeverity = ref<string>('ALL')
 const drawerOpen = ref(false)
 const selectedAlert = ref<any | null>(null)
@@ -323,8 +327,36 @@ const alertsList = ref([
   }
 ])
 
+const isDemoMaya = computed(() => {
+  return authStore.currentUser?.email?.includes('maya.suryani')
+})
+
 const activeAlerts = computed(() => {
-  return alertsList.value.filter(a => !a.dismissed)
+  if (konsultanStore.alerts && konsultanStore.alerts.length > 0) {
+    return konsultanStore.alerts.map(a => ({
+      id: a.id,
+      clientId: a.clientId,
+      clientName: a.clientName || 'UMKM Binaan',
+      title: a.title || 'Peringatan Rasio Kas & Belanja Modal',
+      message: a.message,
+      recommendation: (a as any).recommendation || 'Evaluasi harga bahan baku atau negosiasi ulang dengan vendor utama.',
+      deviation: (a as any).deviation || (a.severity === 'high' ? '+15.2% variansi' : '+8.5% variansi'),
+      severity: a.severity || 'high',
+      timestamp: (a as any).date || a.timestamp || 'Hari ini',
+      dismissed: a.dismissed || false
+    })).filter(a => !a.dismissed)
+  }
+  if (isDemoMaya.value) {
+    return alertsList.value.filter(a => !a.dismissed)
+  }
+  return []
+})
+
+onMounted(async () => {
+  await Promise.all([
+    konsultanStore.fetchAlerts(),
+    konsultanStore.fetchClients()
+  ])
 })
 
 const filteredAlerts = computed(() => {
@@ -345,11 +377,11 @@ const scanStepText = ref('')
 function runAiScan() {
   isScanning.value = true
   scanProgress.value = 15
-  scanStepText.value = 'Membaca 128 rekaman mutasi kas klien dari database...'
+  scanStepText.value = 'Membaca rekaman mutasi kas klien dari database...'
 
   setTimeout(() => {
     scanProgress.value = 50
-    scanStepText.value = 'Membandingkan rasio belanja modal vs tren historis 3 bulan...'
+    scanStepText.value = 'Membandingkan rasio belanja modal vs tren historis...'
   }, 700)
 
   setTimeout(() => {
@@ -357,12 +389,12 @@ function runAiScan() {
     scanStepText.value = 'Menerapkan model AI Beruang Finance Guard...'
   }, 1400)
 
-  setTimeout(() => {
+  setTimeout(async () => {
     scanProgress.value = 100
     isScanning.value = false
-    // Restore any dismissed alerts for testing
+    await konsultanStore.fetchAlerts()
     alertsList.value.forEach(a => { a.dismissed = false })
-    triggerToast('Pemindaian selesai! Beruang AI menemukan 3 catatan anomali aktif.')
+    triggerToast('Pemindaian selesai! Beruang AI Finance Guard telah diperbarui.')
   }, 2100)
 }
 

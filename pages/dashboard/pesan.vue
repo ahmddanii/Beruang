@@ -322,7 +322,7 @@
             <div class="space-y-1.5 min-w-0" :class="msg.senderRole === 'UMKM' ? 'items-end text-right' : 'items-start'">
               <div class="flex items-center gap-2 text-xs" :class="msg.senderRole === 'UMKM' ? 'justify-end' : ''">
                 <span class="font-semibold text-neutral-900 dark:text-white font-poppins">
-                  {{ msg.senderRole === 'UMKM' ? 'Anda (Kopi Senja)' : activeThread.investorName }}
+                  {{ msg.senderRole === 'UMKM' ? `Anda (${currentBusinessName})` : activeThread.investorName }}
                 </span>
                 <span class="text-neutral-400 dark:text-neutral-500 tabular-nums font-sans">{{ msg.timestamp }}</span>
               </div>
@@ -681,6 +681,8 @@ import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import gsap from 'gsap'
 import { useChatStore } from '~/stores/chat'
+import { useAuthStore } from '~/stores/auth'
+import { useUmkmStore } from '~/stores/umkm'
 import { useLanguage } from '~/composables/useLanguage'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BPillTabs, { type PillTabItem } from '~/components/base/BPillTabs.vue'
@@ -712,6 +714,12 @@ definePageMeta({
 
 const router = useRouter()
 const chatStore = useChatStore()
+const authStore = useAuthStore()
+const umkmStore = useUmkmStore()
+
+const currentBusinessName = computed(() => {
+  return authStore.currentUser?.businessName || umkmStore.profile.name || 'Usaha Anda'
+})
 
 const inputMessage = ref('')
 const messagesContainer = ref<HTMLElement | null>(null)

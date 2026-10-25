@@ -144,19 +144,19 @@
     <!-- Modal Cetak Sertifikat Resmi -->
     <BCertificateModal
       v-model="isCertificateModalOpen"
-      :business-name="client?.name || 'Kopi Senja Nusantara'"
-      :owner-name="client?.owner || 'Fikri Setiawan'"
-      :sector="client?.sector || 'Kuliner & Minuman (F&B)'"
-      :city="client?.city || 'Bandung'"
-      :health-score="client?.healthScore || 85"
+      :business-name="client?.name || 'Usaha Binaan'"
+      :owner-name="client?.owner || 'Pemilik Usaha'"
+      :sector="client?.sector || 'Sektor Usaha'"
+      :city="client?.city || ''"
+      :health-score="client?.healthScore || 80"
       :ticket-size="fundingTicket"
-      :consultant-name="konsultanStore.profile.name || 'Dra. Maya Suryani, M.M.'"
+      :consultant-name="konsultanStore.profile.name || 'Konsultan Pendamping'"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import confetti from 'canvas-confetti'
 import { useKonsultanStore } from '~/stores/konsultan'
@@ -178,6 +178,13 @@ const clientId = computed(() => route.params.id as string || 'umkm-01')
 
 const konsultanStore = useKonsultanStore()
 const umkmStore = useUmkmStore()
+
+onMounted(async () => {
+  await Promise.all([
+    konsultanStore.fetchClients(),
+    konsultanStore.fetchProfile()
+  ])
+})
 
 const client = computed(() => {
   return konsultanStore.clients.find(c => c.id === clientId.value) || konsultanStore.clients[0]

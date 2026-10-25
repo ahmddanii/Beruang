@@ -1415,7 +1415,7 @@ const editError = ref('')
 const showToastSuccess = ref(false)
 
 function openQuickEditModal() {
-  editStoreName.value = umkmStore.profile.name || 'Kopi Senja Nusantara'
+  editStoreName.value = umkmStore.profile.name || authStore.currentUser?.businessName || (isDemoFikri.value ? 'Kopi Senja Nusantara' : '')
   editDescription.value = umkmStore.profile.description || umkmStore.profile.pitchSummary || ''
   editError.value = ''
   isQuickEditModalOpen.value = true

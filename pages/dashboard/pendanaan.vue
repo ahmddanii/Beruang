@@ -294,7 +294,7 @@
           <div class="w-24 h-20 sm:w-32 sm:h-24 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 shrink-0 shadow-2xs">
             <img
               :src="umkmStore.profile.bannerUrl || '/images/default-store-banner.jpg'"
-              :alt="umkmStore.profile.name || 'Kopi Senja Nusantara'"
+              :alt="umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya'"
               class="w-full h-full object-cover"
               @error="(e: any) => { e.target.src = '/images/default-store-banner.jpg' }"
             />
@@ -302,13 +302,13 @@
 
           <div class="space-y-1 sm:space-y-1.5 min-w-0">
             <h3 class="font-poppins font-semibold text-xl sm:text-2xl text-neutral-900 dark:text-white tracking-tight leading-snug">
-              {{ umkmStore.profile.name || 'Kopi Senja Nusantara' }}
+              {{ umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya' }}
             </h3>
             <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-              Pemilik bisnis: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.ownerName || 'Fikri Setiawan' }}</strong>
+              Pemilik bisnis: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.ownerName || authStore.currentUser?.name || 'Pemilik Usaha' }}</strong>
             </p>
             <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-              Konsultan: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.' }}</strong>
+              Konsultan: <strong class="text-neutral-700 dark:text-neutral-200">{{ umkmStore.profile.consultantName || 'Konsultan Pendamping' }}</strong>
             </p>
           </div>
         </div>
@@ -325,7 +325,7 @@
 
         <!-- 3. Official Narrative Paragraph -->
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans text-justify">
-          Sertifikasi kelayakan ini diterbitkan resmi oleh platform Beruang sebagai bukti bahwa <strong class="text-neutral-800 dark:text-neutral-100">{{ umkmStore.profile.name || 'Kopi Senja Nusantara' }}</strong> telah memenuhi seluruh kualifikasi fundamental tata kelola keuangan UMKM modern. Evaluasi menyeluruh mencakup kedisiplinan pencatatan kas riil, pemisahan rekening operasional, kepatuhan legalitas dasar, serta kepemilikan margin untung bersih yang sehat dan telah siap menerima penawaran permodalan bagi hasil.
+          Sertifikasi kelayakan ini diterbitkan resmi oleh platform Beruang sebagai bukti bahwa <strong class="text-neutral-800 dark:text-neutral-100">{{ umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya' }}</strong> telah memenuhi seluruh kualifikasi fundamental tata kelola keuangan UMKM modern. Evaluasi menyeluruh mencakup kedisiplinan pencatatan kas riil, pemisahan rekening operasional, kepatuhan legalitas dasar, serta kepemilikan margin untung bersih yang sehat dan telah siap menerima penawaran permodalan bagi hasil.
         </p>
 
         <!-- 4. Detailed Verified Criteria Section -->
@@ -694,13 +694,13 @@
     <!-- Modal Cetak Sertifikat Resmi -->
     <BCertificateModal
       v-model="isCertificateModalOpen"
-      :business-name="umkmStore.profile.name || 'Kopi Senja Nusantara'"
-      :owner-name="umkmStore.profile.ownerName || 'Fikri Setiawan'"
-      :sector="umkmStore.profile.sector || 'Kuliner & Minuman (F&B)'"
-      :city="umkmStore.profile.city || 'Bandung'"
-      :health-score="85"
-      :ticket-size="250000000"
-      :consultant-name="umkmStore.profile.consultantName || 'Dra. Maya Suryani, M.M.'"
+      :business-name="umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya'"
+      :owner-name="umkmStore.profile.ownerName || authStore.currentUser?.name || 'Pemilik Usaha'"
+      :sector="umkmStore.profile.sector || authStore.currentUser?.sector || 'Sektor Usaha'"
+      :city="umkmStore.profile.city || authStore.currentUser?.city || 'Indonesia'"
+      :health-score="overallHealthScore"
+      :ticket-size="umkmStore.profile.fundingTarget || authStore.currentUser?.fundingTarget || 0"
+      :consultant-name="umkmStore.profile.consultantName || 'Konsultan Pendamping'"
     />
   </div>
 </template>
@@ -708,6 +708,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { gsap } from 'gsap'
+import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import BActionButton from '~/components/base/BActionButton.vue'
 import BModal from '~/components/base/BModal.vue'
@@ -735,6 +736,7 @@ definePageMeta({
   hideHeader: true
 })
 
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
 // State: Tahap Pengajuan (ketika user mau mengajukan / meninjau kelayakan) vs Sudah Siap (Lolos Sertifikasi)
@@ -907,7 +909,8 @@ function handleCopyLink() {
 }
 
 function handleWhatsApp() {
-  const text = `Lihat profil usaha ${umkmStore.profile.name || 'Kopi Senja Nusantara'} di platform Beruang:\n${effectiveShareUrl.value}`
+  const bizName = umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya'
+  const text = `Lihat profil usaha ${bizName} di platform Beruang:\n${effectiveShareUrl.value}`
   const targetUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`
   window.open(targetUrl, '_blank')
 }
@@ -929,8 +932,9 @@ function handleLinkedIn() {
 }
 
 function handleGmail() {
-  const subject = `Profil Usaha: ${umkmStore.profile.name || 'Kopi Senja Nusantara'} - Beruang`
-  const body = `Halo,\n\nSilakan cek profil usaha ${umkmStore.profile.name || 'Kopi Senja Nusantara'} di platform Beruang melalui tautan berikut:\n${effectiveShareUrl.value}`
+  const bizName = umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya'
+  const subject = `Profil Usaha: ${bizName} - Beruang`
+  const body = `Halo,\n\nSilakan cek profil usaha ${bizName} di platform Beruang melalui tautan berikut:\n${effectiveShareUrl.value}`
   const targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   window.open(targetUrl, '_blank')
 }
@@ -944,7 +948,13 @@ function handleDownloadCertificate() {
 
 let gsapCtx: gsap.Context | null = null
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    await umkmStore.fetchDashboardData()
+  } catch (err: any) {
+    console.warn('Gagal memuat dataset pendanaan:', err?.message)
+  }
+
   if (import.meta.client && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     nextTick(() => {
       gsapCtx = gsap.context(() => {

@@ -699,8 +699,8 @@ const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 const investorStore = useInvestorStore()
 
-const umkmName = computed(() => umkmStore.profile.name || 'Kopi Senja Nusantara')
-const umkmCity = computed(() => (umkmStore.profile.city || 'Bandung').split(',')[0]!.trim())
+const umkmName = computed(() => umkmStore.profile.name || authStore.currentUser?.businessName || 'Usaha Saya')
+const umkmCity = computed(() => (umkmStore.profile.city || authStore.currentUser?.city || 'Indonesia').split(',')[0]!.trim())
 
 // Toast Feedback
 const toastMessage = ref('')

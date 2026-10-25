@@ -2,390 +2,321 @@
   <Teleport to="body">
     <div
       v-if="modelValue && doc"
-      class="fixed inset-0 z-[140] flex flex-col bg-[#0C0F17]/95 backdrop-blur-md text-white select-none overflow-hidden animate-in fade-in duration-200"
+      class="fixed inset-0 z-[120] flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto bg-neutral-950/75 backdrop-blur-md animate-in fade-in duration-200 font-poppins"
       @click.self="close"
     >
-      <!-- ===================================================================== -->
-      <!-- 1. GOOGLE DRIVE TOP NAVIGATION & TOOLBAR                              -->
-      <!-- ===================================================================== -->
-      <header
-        class="h-14 sm:h-16 px-3 sm:px-6 flex items-center justify-between border-b border-white/10 bg-[#121620]/90 shrink-0 z-20 gap-2 sm:gap-4"
+      <!-- Modal Box: Tactile Card Beruang Style -->
+      <div
+        class="relative w-full max-w-5xl bg-white dark:bg-[#10141D] rounded-[28px] shadow-2xl border border-neutral-200/90 dark:border-neutral-800 overflow-hidden flex flex-col my-auto max-h-[92vh] card-tactile-gopay"
       >
-        <!-- Left: Document Type Icon + Name & Verified Pill -->
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-          <button
-            type="button"
-            class="w-9 h-9 rounded-full flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
-            title="Tutup Pratinjau (Esc)"
-            @click="close"
-          >
-            <HugeiconsIcon :icon="Cancel01Icon" :size="18" />
-          </button>
-
-          <!-- File Type Chip -->
-          <div
-            v-if="isPdf"
-            class="px-2 py-0.5 rounded bg-red-600/90 text-white font-mono text-[10px] font-bold shrink-0 tracking-wider"
-          >
-            PDF
-          </div>
-          <div
-            v-else-if="isImage"
-            class="px-2 py-0.5 rounded bg-blue-600/90 text-white font-mono text-[10px] font-bold shrink-0 tracking-wider"
-          >
-            IMG
-          </div>
-          <div
-            v-else
-            class="px-2 py-0.5 rounded bg-emerald-600/90 text-white font-mono text-[10px] font-bold shrink-0 tracking-wider"
-          >
-            DOC
-          </div>
-
-          <!-- Document Title & Filename -->
-          <div class="min-w-0 flex flex-col">
-            <div class="flex items-center gap-2">
-              <span
-                class="font-poppins font-semibold text-xs sm:text-sm text-white truncate max-w-[140px] sm:max-w-xs md:max-w-md block"
-                :title="doc.title"
-              >
-                {{ doc.title }}
-              </span>
-              <span
-                class="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-medium shrink-0"
-              >
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Terverifikasi Sah</span>
-              </span>
-            </div>
-            <span
-              class="text-[11px] font-poppins text-neutral-400 truncate max-w-[140px] sm:max-w-xs block"
-              :title="doc.file?.name || doc.subtitle"
-            >
-              {{ doc.file?.name || doc.subtitle }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Center: Google Drive Floating Zoom & Page Controls -->
-        <div class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#1E2330]/90 border border-white/10 shadow-lg shrink-0">
-          <!-- Zoom Out -->
-          <button
-            type="button"
-            class="w-7 h-7 rounded-full flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors disabled:opacity-40 cursor-pointer"
-            :disabled="zoomLevel <= 50"
-            title="Perkecil (-)"
-            @click="zoomOut"
-          >
-            <HugeiconsIcon :icon="ZoomOutIcon" :size="15" />
-          </button>
-
-          <!-- Zoom Percentage Indicator -->
-          <button
-            type="button"
-            class="px-2 py-0.5 rounded text-xs font-mono font-medium text-neutral-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            title="Klik untuk reset zoom ke 100%"
-            @click="resetZoom"
-          >
-            {{ zoomLevel }}%
-          </button>
-
-          <!-- Zoom In -->
-          <button
-            type="button"
-            class="w-7 h-7 rounded-full flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors disabled:opacity-40 cursor-pointer"
-            :disabled="zoomLevel >= 200"
-            title="Perbesar (+)"
-            @click="zoomIn"
-          >
-            <HugeiconsIcon :icon="ZoomInIcon" :size="15" />
-          </button>
-
-          <span class="w-px h-4 bg-white/20 mx-1" />
-
-          <!-- Fit to Width / Reset -->
-          <button
-            type="button"
-            class="px-2 py-0.5 rounded text-[11px] font-poppins text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            title="Sesuaikan Lebar"
-            @click="fitToWidth"
-          >
-            Pas
-          </button>
-
-          <span class="w-px h-4 bg-white/20 mx-1" />
-
-          <!-- Page Indicator -->
-          <span class="text-[11px] font-mono text-neutral-400 px-1">
-            1 / 1
-          </span>
-        </div>
-
-        <!-- Right: Actions (Open New Tab, Print, Download, Close) -->
-        <div class="flex items-center gap-1 sm:gap-2 shrink-0">
-          <!-- Buka di Tab Baru -->
-          <button
-            v-if="effectiveFileUrl"
-            type="button"
-            class="w-9 h-9 rounded-xl flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            title="Buka Dokumen di Tab Baru"
-            @click="openInNewTab"
-          >
-            <HugeiconsIcon :icon="ArrowUpRight01Icon" :size="16" />
-          </button>
-
-          <!-- Cetak Dokumen -->
-          <button
-            type="button"
-            class="w-9 h-9 rounded-xl flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            title="Cetak Dokumen"
-            @click="handlePrint"
-          >
-            <HugeiconsIcon :icon="PrinterIcon" :size="16" />
-          </button>
-
-          <!-- Unduh Berkas -->
-          <button
-            type="button"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-poppins font-semibold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-colors cursor-pointer"
-            title="Unduh Berkas ke Komputer"
-            @click="handleDownload"
-          >
-            <HugeiconsIcon :icon="Download01Icon" :size="14" />
-            <span class="hidden md:inline">Unduh</span>
-          </button>
-
-          <!-- Close Button -->
-          <button
-            type="button"
-            class="w-9 h-9 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            title="Tutup (Esc)"
-            @click="close"
-          >
-            <HugeiconsIcon :icon="Cancel01Icon" :size="18" />
-          </button>
-        </div>
-      </header>
-
-      <!-- ===================================================================== -->
-      <!-- 2. DOCUMENT VIEWPORT CANVAS (CENTER STAGE)                             -->
-      <!-- ===================================================================== -->
-      <main
-        class="flex-1 overflow-auto flex items-start sm:items-center justify-center p-3 sm:p-8 bg-[#151922] relative"
-        @click.self="close"
-      >
-        <div
-          class="transition-transform duration-150 ease-out origin-top mx-auto my-auto"
-          :style="{ transform: `scale(${zoomLevel / 100})` }"
+        <!-- ===================================================================== -->
+        <!-- 1. BERUANG TOP TOOLBAR (Clean, Ice-Blue / Soft Gray Tactile Header)   -->
+        <!-- ===================================================================== -->
+        <header
+          class="px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between border-b border-neutral-100 dark:border-neutral-800/80 bg-neutral-50/90 dark:bg-[#13161F] shrink-0 gap-3"
         >
-          <!-- CASE A: EMBEDDED REAL PDF VIEWER -->
-          <div
-            v-if="isPdf && effectiveFileUrl"
-            class="w-[850px] max-w-[95vw] h-[1050px] max-h-[82vh] bg-white rounded-lg shadow-2xl overflow-hidden ring-1 ring-black/20"
-          >
-            <iframe
-              :src="effectiveFileUrl"
-              class="w-full h-full border-0"
-              title="Pratinjau Dokumen PDF"
-            />
-          </div>
-
-          <!-- CASE B: EMBEDDED REAL IMAGE VIEWER -->
-          <div
-            v-else-if="isImage && effectiveFileUrl"
-            class="max-w-[90vw] max-h-[80vh] flex items-center justify-center bg-white/5 rounded-xl p-2 shadow-2xl ring-1 ring-white/10"
-          >
-            <img
-              :src="effectiveFileUrl"
-              :alt="doc.title"
-              class="max-w-full max-h-[78vh] object-contain rounded-lg shadow-2xl bg-white"
-            />
-          </div>
-
-          <!-- CASE C: AUTHENTIC OFFICIAL INDONESIAN LEGAL DOCUMENT CANVAS (A4 SHEET) -->
-          <div
-            v-else
-            id="gdrive-document-print-sheet"
-            class="w-[794px] max-w-[95vw] min-h-[1050px] bg-white text-neutral-900 p-8 sm:p-14 shadow-2xl rounded-sm ring-1 ring-black/15 relative overflow-hidden font-serif select-text"
-          >
-            <!-- Watermark Diagonal Keamanan -->
+          <!-- Sisi Kiri: Ikon Dokumen + Judul + Nama Berkas + Badge -->
+          <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <!-- Ikon Badge Beruang -->
             <div
-              class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.06] select-none transform -rotate-30"
-              aria-hidden="true"
+              class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] flex items-center justify-center shrink-0 border border-emerald-200/60 dark:border-emerald-800/60 shadow-xs"
             >
-              <div class="text-center font-mono font-black text-2xl sm:text-4xl leading-loose tracking-widest text-neutral-900">
-                BERUANG DATA ROOM VAULT<br />
-                TERVERIFIKASI SAH & DILINDUNGI HUKUM<br />
-                {{ authStore.currentUser?.name || 'UMKM BINAAN' }} • 2026
+              <HugeiconsIcon :icon="Certificate01Icon" :size="20" />
+            </div>
+
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="font-poppins font-bold text-sm sm:text-base text-neutral-900 dark:text-white truncate max-w-[180px] sm:max-w-xs md:max-w-md">
+                  {{ doc.title }}
+                </h3>
+                <span
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-[#00AA13] dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-[10px] font-semibold shrink-0"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#00AA13] animate-pulse" />
+                  <span>Sah & Tervalidasi</span>
+                </span>
               </div>
+              <p class="text-[11px] font-poppins text-neutral-400 dark:text-neutral-500 truncate max-w-[180px] sm:max-w-xs">
+                {{ doc.file?.name || doc.subtitle }} · <span class="tabular-nums">{{ doc.file?.size || '0.8 MB' }}</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Sisi Tengah: Zoom Controls (Tactile Pill Beruang) -->
+          <div class="hidden md:flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white dark:bg-[#1A1F2C] border border-neutral-200/80 dark:border-neutral-700/80 shadow-xs shrink-0 text-xs text-neutral-600 dark:text-neutral-300">
+            <button
+              type="button"
+              class="w-6 h-6 rounded-lg flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors disabled:opacity-30 cursor-pointer"
+              :disabled="zoomLevel <= 60"
+              title="Perkecil (-)"
+              @click="zoomOut"
+            >
+              <HugeiconsIcon :icon="ZoomOutIcon" :size="14" />
+            </button>
+
+            <button
+              type="button"
+              class="px-2 py-0.5 rounded text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer tabular-nums"
+              title="Klik untuk reset zoom ke 100%"
+              @click="resetZoom"
+            >
+              {{ zoomLevel }}%
+            </button>
+
+            <button
+              type="button"
+              class="w-6 h-6 rounded-lg flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors disabled:opacity-30 cursor-pointer"
+              :disabled="zoomLevel >= 160"
+              title="Perbesar (+)"
+              @click="zoomIn"
+            >
+              <HugeiconsIcon :icon="ZoomInIcon" :size="14" />
+            </button>
+
+            <span class="w-px h-3.5 bg-neutral-200 dark:bg-neutral-700 mx-0.5" />
+
+            <button
+              type="button"
+              class="px-2 py-0.5 rounded text-[11px] font-medium text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              title="Sesuaikan Skala"
+              @click="fitToWidth"
+            >
+              Pas
+            </button>
+          </div>
+
+          <!-- Sisi Kanan: Action Buttons (Cetak, Unduh, Tutup) -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <!-- Buka di Tab Baru (jika ada file binary asli) -->
+            <button
+              v-if="effectiveFileUrl"
+              type="button"
+              class="btn-pill-action !h-8 !w-8 !p-0 !justify-center"
+              title="Buka Dokumen di Tab Baru"
+              @click="openInNewTab"
+            >
+              <HugeiconsIcon :icon="ArrowUpRight01Icon" :size="14" />
+            </button>
+
+            <!-- Cetak Dokumen -->
+            <button
+              type="button"
+              class="btn-pill-action !h-8 !px-2.5 sm:!px-3 !text-xs !gap-1.5 cursor-pointer"
+              title="Cetak Salinan Dokumen Resmi"
+              @click="handlePrint"
+            >
+              <HugeiconsIcon :icon="PrinterIcon" :size="14" />
+              <span class="hidden sm:inline">Cetak</span>
+            </button>
+
+            <!-- Unduh Berkas (Hijau GoPay / Beruang 10% Aksen) -->
+            <button
+              type="button"
+              class="btn-pill-action-green !h-8 !px-3 sm:!px-3.5 !text-xs !gap-1.5 cursor-pointer"
+              title="Unduh Berkas Resmi"
+              @click="handleDownload"
+            >
+              <HugeiconsIcon :icon="Download01Icon" :size="14" />
+              <span>Unduh</span>
+            </button>
+
+            <!-- Tutup Tombol X -->
+            <button
+              type="button"
+              class="w-8 h-8 rounded-xl flex items-center justify-center text-neutral-400 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              title="Tutup Pratinjau (Esc)"
+              @click="close"
+            >
+              <HugeiconsIcon :icon="Cancel01Icon" :size="16" />
+            </button>
+          </div>
+        </header>
+
+        <!-- ===================================================================== -->
+        <!-- 2. DOCUMENT CANVAS STAGE (Ice-Blue Background with Premium Card)      -->
+        <!-- ===================================================================== -->
+        <main
+          class="flex-1 overflow-auto p-4 sm:p-6 md:p-8 bg-[#F3F8FC] dark:bg-[#0B0F15] flex items-center justify-center relative min-h-[460px]"
+          @click.self="close"
+        >
+          <div
+            class="transition-transform duration-150 ease-out origin-top mx-auto my-auto w-full max-w-3xl flex justify-center"
+            :style="{ transform: `scale(${zoomLevel / 100})` }"
+          >
+            <!-- CASE A: EMBEDDED REAL PDF -->
+            <div
+              v-if="isPdf && effectiveFileUrl"
+              class="w-full h-[680px] bg-white rounded-2xl shadow-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 ring-1 ring-black/5"
+            >
+              <iframe
+                :src="effectiveFileUrl"
+                class="w-full h-full border-0"
+                title="Pratinjau Berkas PDF"
+              />
             </div>
 
-            <!-- Authentic Kop Surat Pemerintah / Notaris Indonesia -->
-            <div class="text-center border-b-4 border-double border-neutral-900 pb-4 mb-6 relative">
-              <div class="flex items-center justify-center gap-4 mb-2">
-                <!-- Lambang Burung Garuda / Lambang Resmi Koperasi -->
-                <div class="w-14 h-14 rounded-full border border-neutral-300 flex items-center justify-center text-amber-700 bg-amber-50/50 shrink-0">
-                  <HugeiconsIcon :icon="Certificate01Icon" :size="32" />
-                </div>
-                <div>
-                  <h3 class="font-serif font-bold text-sm sm:text-base tracking-wider uppercase text-neutral-900 leading-tight">
-                    PEMERINTAH DAERAH KABUPATEN / KOTA
-                  </h3>
-                  <h4 class="font-serif font-bold text-xs sm:text-sm tracking-wide uppercase text-neutral-800 leading-tight">
-                    DINAS PENANAMAN MODAL & PELAYANAN TERPADU SATU PINTU (DPMPTSP)
-                  </h4>
-                  <p class="font-sans text-[10px] text-neutral-600 mt-0.5">
-                    Jl. Jenderal Sudirman Kav. 12, Kompleks Perkantoran Terpadu • Telepon: (021) 7890-1234
-                  </p>
+            <!-- CASE B: EMBEDDED REAL IMAGE -->
+            <div
+              v-else-if="isImage && effectiveFileUrl"
+              class="w-full flex items-center justify-center p-3 bg-white dark:bg-[#13161F] rounded-2xl shadow-xl border border-neutral-200 dark:border-neutral-800"
+            >
+              <img
+                :src="effectiveFileUrl"
+                :alt="doc.title"
+                class="max-w-full max-h-[70vh] object-contain rounded-xl shadow-xs"
+              />
+            </div>
+
+            <!-- CASE C: AUTHENTIC BERUANG LUXURY ACCREDITATION DOCUMENT (POPPINS STYLE) -->
+            <div
+              v-else
+              id="gdrive-document-print-sheet"
+              class="w-full bg-white dark:bg-[#13161F] text-neutral-900 dark:text-neutral-100 p-6 sm:p-10 rounded-[24px] shadow-xl border-[2.5px] border-[#156374]/30 dark:border-[#50AABF]/30 relative overflow-hidden font-poppins select-text"
+            >
+              <!-- Luxury Corner Accents -->
+              <div class="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-[#156374] dark:border-[#50AABF]" />
+              <div class="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-[#156374] dark:border-[#50AABF]" />
+              <div class="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-[#156374] dark:border-[#50AABF]" />
+              <div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-[#156374] dark:border-[#50AABF]" />
+
+              <!-- Subtle Watermark Security Badge -->
+              <div
+                class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.035] dark:opacity-[0.05] select-none transform -rotate-12"
+                aria-hidden="true"
+              >
+                <div class="text-center font-poppins font-black text-3xl sm:text-5xl leading-tight tracking-wider text-neutral-900 dark:text-white uppercase">
+                  BERUANG DATA ROOM VAULT<br />
+                  TERVERIFIKASI SAH & RESMI
                 </div>
               </div>
-            </div>
 
-            <!-- Judul Dokumen & Nomor Registrasi -->
-            <div class="text-center my-6 space-y-1">
-              <h2 class="font-serif font-bold text-lg sm:text-2xl text-neutral-950 uppercase tracking-wide underline underline-offset-4 decoration-2">
-                {{ doc.title }}
-              </h2>
-              <p class="font-mono text-xs text-neutral-700">
-                Nomor: 503/SKU-BERUANG/X/2026/{{ doc.id.toUpperCase() }}
-              </p>
-            </div>
+              <!-- Header Branding Resmi Beruang -->
+              <div class="text-center space-y-1.5 pb-5 border-b border-neutral-200/80 dark:border-neutral-800 relative">
+                <div class="flex items-center justify-center gap-2.5">
+                  <img src="/logo.svg" alt="Beruang" class="w-7 h-7 object-contain" />
+                  <span class="font-poppins font-bold text-lg sm:text-xl tracking-tight text-neutral-900 dark:text-white">
+                    BERUANG <span class="text-neutral-400 text-xs sm:text-sm font-normal">| DATA ROOM RESMI</span>
+                  </span>
+                </div>
+                <p class="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#156374] dark:text-[#50AABF] font-semibold">
+                  Komite Standardisasi & Kurasi Perizinan Usaha UMKM
+                </p>
+              </div>
 
-            <!-- Pernyataan Pembuka -->
-            <div class="space-y-4 text-xs sm:text-[13px] text-neutral-800 leading-relaxed font-serif">
-              <p>
-                Yang bertanda tangan di bawah ini, Kepala Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu serta Pejabat Otoritas Kurasi Data Room Kemitraan UMKM Beruang, menerangkan dengan sebenarnya bahwa:
-              </p>
+              <!-- Judul Dokumen & Nomor Registrasi -->
+              <div class="text-center my-6 space-y-1">
+                <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white uppercase">
+                  {{ doc.title }}
+                </h2>
+                <p class="text-xs text-neutral-500 font-mono">
+                  Nomor Arsip: SEC-VDR-{{ doc.id.toUpperCase() }}-2026
+                </p>
+              </div>
 
-              <!-- Identitas Pemilik & Unit Usaha -->
-              <table class="w-full text-xs sm:text-[13px] font-sans my-4 border-collapse">
-                <tbody>
-                  <tr class="border-b border-neutral-150">
-                    <td class="py-1.5 w-48 font-medium text-neutral-600">Nama Pemilik Usaha</td>
-                    <td class="py-1.5 w-4 font-bold">:</td>
-                    <td class="py-1.5 font-bold text-neutral-900">{{ effectiveOwnerName }}</td>
-                  </tr>
-                  <tr class="border-b border-neutral-150">
-                    <td class="py-1.5 font-medium text-neutral-600">Nomor Induk Kependudukan (NIK)</td>
-                    <td class="py-1.5 font-bold">:</td>
-                    <td class="py-1.5 font-mono text-neutral-800">3273-0982-1988-0004</td>
-                  </tr>
-                  <tr class="border-b border-neutral-150">
-                    <td class="py-1.5 font-medium text-neutral-600">Nama Usaha / Merk Dagang</td>
-                    <td class="py-1.5 font-bold">:</td>
-                    <td class="py-1.5 font-bold text-neutral-900">{{ effectiveBusinessName }}</td>
-                  </tr>
-                  <tr class="border-b border-neutral-150">
-                    <td class="py-1.5 font-medium text-neutral-600">Sektor / Bidang Usaha</td>
-                    <td class="py-1.5 font-bold">:</td>
-                    <td class="py-1.5 text-neutral-800">{{ effectiveSector }}</td>
-                  </tr>
-                  <tr class="border-b border-neutral-150">
-                    <td class="py-1.5 font-medium text-neutral-600">Alamat Tempat Usaha</td>
-                    <td class="py-1.5 font-bold">:</td>
-                    <td class="py-1.5 text-neutral-800">{{ effectiveAddress }}</td>
-                  </tr>
-                  <tr class="border-b border-neutral-150">
-                    <td class="py-1.5 font-medium text-neutral-600">Klasifikasi Dokumen</td>
-                    <td class="py-1.5 font-bold">:</td>
-                    <td class="py-1.5 font-semibold text-emerald-700">{{ doc.categoryBadge || 'Wajib UMKM' }}</td>
-                  </tr>
-                  <tr>
-                    <td class="py-1.5 font-medium text-neutral-600">ID Registri Virtual Data Room</td>
-                    <td class="py-1.5 font-bold">:</td>
-                    <td class="py-1.5 font-mono text-neutral-800">SEC-VDR-{{ doc.id.toUpperCase() }}-2026</td>
-                  </tr>
-                </tbody>
-              </table>
+              <!-- Body Statement -->
+              <div class="space-y-4 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300">
+                <p class="text-center text-xs text-neutral-500">
+                  Dengan ini menerangkan bahwa unit usaha yang terdaftar di Virtual Data Room Beruang:
+                </p>
 
-              <!-- Isi Pengesahan -->
-              <p>
-                Berdasarkan verifikasi lapangan serta pencocokan berkas digital pada Virtual Data Room platform Beruang, nama dan unit usaha yang bersangkutan di atas adalah <strong>benar beroperasi aktif, sah secara yuridis, dan telah melengkapi standar kepatuhan legalitas dasar</strong> yang disyaratkan untuk penelaahan kemitraan dan investasi modal.
-              </p>
-              <p>
-                Surat Keterangan ini diterbitkan untuk dipergunakan sebagaimana mestinya dalam rangka pemenuhan persyaratan pendanaan, keterbukaan informasi investor, dan legalitas usaha perbankan/institusi pembiayaan.
-              </p>
-            </div>
-
-            <!-- Tanda Tangan & Stempel Resmi -->
-            <div class="mt-10 pt-4 flex items-end justify-between font-sans">
-              <!-- QR Code Keaslian Dokumen -->
-              <div class="flex items-center gap-3">
-                <div class="w-20 h-20 border-2 border-neutral-900 p-1 bg-white shrink-0 flex flex-col items-center justify-center">
-                  <!-- Simulated QR Grid -->
-                  <div class="grid grid-cols-4 gap-0.5 w-full h-full p-1 bg-neutral-950 text-white text-[8px] font-mono flex items-center justify-center">
-                    QR
+                <!-- Bento Grid Spesifikasi Entitas Usaha -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-xl mx-auto my-3 text-xs">
+                  <div class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 space-y-0.5">
+                    <span class="text-[10px] text-neutral-400 block font-medium">Nama Pemilik Usaha</span>
+                    <strong class="font-bold text-neutral-900 dark:text-white block truncate">{{ effectiveOwnerName }}</strong>
+                  </div>
+                  <div class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 space-y-0.5">
+                    <span class="text-[10px] text-neutral-400 block font-medium">Nama Brand / Entitas</span>
+                    <strong class="font-bold text-neutral-900 dark:text-white block truncate">{{ effectiveBusinessName }}</strong>
+                  </div>
+                  <div class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 space-y-0.5">
+                    <span class="text-[10px] text-neutral-400 block font-medium">Sektor Usaha</span>
+                    <span class="font-medium text-neutral-800 dark:text-neutral-200 block truncate">{{ effectiveSector }}</span>
+                  </div>
+                  <div class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 space-y-0.5">
+                    <span class="text-[10px] text-neutral-400 block font-medium">Kategori Kepatuhan</span>
+                    <span class="font-bold text-[#00AA13] block truncate">{{ doc.categoryBadge || 'Wajib UMKM' }}</span>
                   </div>
                 </div>
-                <div class="text-[10px] text-neutral-500 max-w-[170px] leading-tight">
-                  <span class="font-bold text-neutral-800 block">Autentikasi Digital SHA-256</span>
-                  Pindai QR untuk memeriksa keaslian arsip pada basis data resmi Beruang.
+
+                <p class="leading-relaxed text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-400 text-center max-w-xl mx-auto">
+                  Telah melewati verifikasi kelayakan dokumen, transparansi data kamar berkas, dan pencocokan keabsahan kegiatan operasional bersama konsultan pendamping resmi Beruang, serta dinyatakan sah memenuhi standar uji tuntas kemitraan pembiayaan.
+                </p>
+
+                <!-- Status Pill Box -->
+                <div class="flex items-center justify-center my-2">
+                  <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
+                    <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" class="text-[#00AA13]" />
+                    <span>Terakreditasi Sah & Aktif Beroperasi</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Bagian Pengesahan & Stempel Basah Digital -->
-              <div class="text-center relative w-56">
-                <p class="text-xs text-neutral-600 mb-1">
-                  Ditetapkan di: Jakarta<br />
-                  Pada tanggal: 25 Oktober 2026
-                </p>
-                <p class="text-xs font-semibold text-neutral-900 mb-12">
-                  Konsultan Pendamping Terakreditasi,
-                </p>
-
-                <!-- Stempel Bulat Beruang (Lingkaran Hijau Stempel Resmi) -->
-                <div
-                  class="absolute top-10 left-3 w-28 h-28 rounded-full border-2 border-[#00AA13] text-[#00AA13] flex flex-col items-center justify-center pointer-events-none opacity-85 transform -rotate-12 select-none"
-                  aria-hidden="true"
-                >
-                  <span class="text-[7px] font-bold uppercase tracking-wider">KOMITE VERIFIKASI RESMI</span>
-                  <span class="text-[10px] font-black uppercase my-0.5 border-y border-[#00AA13] px-2">TERVALIDASI</span>
-                  <span class="text-[6px] font-bold uppercase tracking-widest">BERUANG DATA ROOM</span>
+              <!-- Signature & Validation Footer -->
+              <div class="grid grid-cols-2 gap-4 pt-6 mt-6 border-t border-neutral-200/80 dark:border-neutral-800 text-center text-xs">
+                <!-- Kolom Konsultan Pendamping -->
+                <div class="space-y-1">
+                  <p class="text-[10px] text-neutral-400">Konsultan Pendamping Resmi</p>
+                  <div class="h-10 flex items-center justify-center">
+                    <span class="font-bold text-sm text-neutral-900 dark:text-white">
+                      {{ effectiveConsultantName }}
+                    </span>
+                  </div>
+                  <p class="text-[10px] text-neutral-500 font-mono">Reg. KONS-BERUANG-2026</p>
                 </div>
 
-                <div class="relative z-10">
-                  <p class="font-bold text-sm text-neutral-950 underline underline-offset-2">
-                    {{ effectiveConsultantName }}
-                  </p>
-                  <p class="text-[11px] text-neutral-500 font-mono">
-                    NIP / REG: 19780512-200501-2-004
-                  </p>
+                <!-- Kolom Komite Verifikasi Beruang dengan Stempel -->
+                <div class="space-y-1 relative">
+                  <p class="text-[10px] text-neutral-400">Otoritas Kurasi Data Room</p>
+                  <div class="h-10 flex items-center justify-center relative">
+                    <!-- Stempel Bulat Beruang Hijau -->
+                    <div
+                      class="absolute -top-3 w-16 h-16 rounded-full border-2 border-[#00AA13]/50 text-[#00AA13] flex flex-col items-center justify-center text-[7px] font-black uppercase pointer-events-none select-none rotate-[-10deg]"
+                      aria-hidden="true"
+                    >
+                      <span class="text-[6px]">VERIFIED</span>
+                      <span class="text-[8px] leading-tight">BERUANG</span>
+                      <span class="text-[5px]">DATA ROOM</span>
+                    </div>
+                    <span class="font-bold text-sm text-neutral-900 dark:text-white">
+                      Komite Legalitas Beruang
+                    </span>
+                  </div>
+                  <p class="text-[10px] text-neutral-500 font-mono">ID: SEC-REG-01-VDR</p>
                 </div>
               </div>
-            </div>
 
-            <!-- Footer Keamanan Cetak -->
-            <div class="mt-8 pt-3 border-t border-neutral-200 text-[10px] text-neutral-400 font-mono flex items-center justify-between">
-              <span>Dicetak via Platform Beruang Data Room</span>
-              <span>Dokumen Elektronik Sah Berdasarkan UU ITE No. 11/2008</span>
+              <!-- Barcode & Verifikasi URL -->
+              <div class="pt-4 text-[10px] text-neutral-400 flex items-center justify-between border-t border-dashed border-neutral-200 dark:border-neutral-800 mt-5">
+                <span>Diterbitkan di Jakarta, 25 Oktober 2026</span>
+                <span class="font-mono text-neutral-500">Hash: SHA256-{{ doc.id.toUpperCase() }}-VALID</span>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <!-- ===================================================================== -->
-      <!-- 3. GOOGLE DRIVE BOTTOM STATUS BAR                                      -->
-      <!-- ===================================================================== -->
-      <footer
-        class="h-9 px-4 sm:px-6 flex items-center justify-between text-[11px] text-neutral-400 bg-[#0F121A] border-t border-white/5 shrink-0 z-20"
-      >
-        <div class="flex items-center gap-2 truncate">
-          <span class="text-neutral-300 font-medium truncate">{{ doc.file?.name || doc.title }}</span>
-          <span>•</span>
-          <span class="font-mono text-neutral-400 tabular-nums">{{ doc.file?.size || '0.8 MB' }}</span>
-          <span>•</span>
-          <span class="text-emerald-400 flex items-center gap-1">
-            <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" />
-            <span>Terverifikasi Sistem</span>
-          </span>
-        </div>
+        <!-- ===================================================================== -->
+        <!-- 3. FOOTER STATUS BAR (GoPay / Beruang Soft Bottom Strip)               -->
+        <!-- ===================================================================== -->
+        <footer
+          class="px-4 sm:px-6 py-2.5 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 bg-white dark:bg-[#13161F] border-t border-neutral-100 dark:border-neutral-800 shrink-0"
+        >
+          <div class="flex items-center gap-2 truncate text-[11px]">
+            <span class="font-medium text-neutral-800 dark:text-neutral-200 truncate">{{ doc.title }}</span>
+            <span>•</span>
+            <span class="text-[#00AA13] flex items-center gap-1 font-semibold">
+              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="13" />
+              <span>Tervalidasi Sistem</span>
+            </span>
+          </div>
 
-        <div class="hidden sm:flex items-center gap-3 font-mono text-[10px] text-neutral-500">
-          <span>Enkripsi SHA-256</span>
-          <span>•</span>
-          <span>Virtual Data Room Beruang</span>
-        </div>
-      </footer>
+          <div class="hidden sm:flex items-center gap-2 text-[10px] text-neutral-400 font-mono">
+            <span>Enkripsi SHA-256</span>
+            <span>•</span>
+            <span>Virtual Data Room Beruang</span>
+          </div>
+        </footer>
+      </div>
     </div>
   </Teleport>
 </template>
@@ -446,14 +377,14 @@ const { downloadLegalDoc, downloadFile } = useReportDownloader()
 const zoomLevel = ref(100)
 
 function zoomIn() {
-  if (zoomLevel.value < 200) {
-    zoomLevel.value = Math.min(200, zoomLevel.value + 15)
+  if (zoomLevel.value < 160) {
+    zoomLevel.value = Math.min(160, zoomLevel.value + 15)
   }
 }
 
 function zoomOut() {
-  if (zoomLevel.value > 50) {
-    zoomLevel.value = Math.max(50, zoomLevel.value - 15)
+  if (zoomLevel.value > 60) {
+    zoomLevel.value = Math.max(60, zoomLevel.value - 15)
   }
 }
 

@@ -337,6 +337,16 @@
               >
                 <span>Tutup</span>
               </button>
+              <button
+                v-if="selectedSubmission.status !== 'Disahkan'"
+                type="button"
+                :disabled="isApproving"
+                class="btn-pill-action-green justify-center"
+                @click="approveCertification(selectedSubmission)"
+              >
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="16" :stroke-width="2" />
+                <span>{{ isApproving ? 'Mengesahkan...' : 'Sahkan Sertifikasi' }}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -500,7 +510,50 @@ const paginatedSubmissions = computed(() => {
   return filteredSubmissions.value.slice(start, start + pageSize.value)
 })
 
-onMounted(() => {
+const isApproving = ref(false)
+
+async function fetchCertifications() {
+  try {
+    const res = await useApi<any>('/admin/certifications')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      submissions.value = res.data.map((c: any) => ({
+        id: c.id,
+        umkmName: c.businessName,
+        owner: c.ownerName,
+        sector: c.sector,
+        consultantName: c.consultantName,
+        submittedAt: c.approvedAt || 'Baru Saja',
+        bankMutation: `${c.validMonthsCount} Bulan Terverifikasi`,
+        status: c.status === 'APPROVED' ? 'Disahkan' : 'Menunggu',
+        notes: c.status === 'APPROVED' ? `Tersertifikasi resmi (${c.certificateNo || 'Aktif'}).` : `Skor kesiapan ${c.compositeScore}/100 siap disahkan.`
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat sertifikasi live:', err?.message)
+  }
+}
+
+async function approveCertification(item: CertificationItem) {
+  isApproving.value = true
+  try {
+    const res = await useApi<any>(`/admin/certifications/${item.id}/approve`, {
+      method: 'PUT'
+    })
+    item.status = 'Disahkan'
+    item.notes = `Resmi disahkan dengan nomor ${res.data?.certificateNo || 'CERT-BERUANG'}.`
+    toastMessage.value = `Sertifikasi untuk ${item.umkmName} berhasil disahkan!`
+    setTimeout(() => {
+      selectedSubmission.value = null
+    }, 1200)
+  } catch (err: any) {
+    toastMessage.value = 'Gagal mengesahkan sertifikasi: ' + (err?.message || 'Error server')
+  } finally {
+    isApproving.value = false
+  }
+}
+
+onMounted(async () => {
+  await fetchCertifications()
   if (!sertifikasiPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

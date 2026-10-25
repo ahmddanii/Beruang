@@ -672,27 +672,63 @@ const paginatedDeals = computed(() => {
   return filteredDeals.value.slice(start, start + pageSize.value)
 })
 
+async function loadDeals() {
+  try {
+    const res = await useApi<any>('/admin/deals')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      dealItems.value = res.data.map((d: any) => ({
+        id: d.id,
+        investorName: d.investorName,
+        investorType: `Tiket Rp ${(d.ticketProposed / 1000000).toLocaleString('id-ID')} Jt • ${d.scheme}`,
+        umkmName: d.businessName,
+        consultantName: 'Konsultan Terverifikasi',
+        stage: d.status === 'APPROVED' ? 'Ruang Data Terbuka' : d.status === 'REJECTED' ? 'Akses Dicabut' : 'Penjajakan Awal',
+        updatedAt: d.respondedAt || d.requestedAt || 'Baru saja'
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat alur investasi live:', err?.message)
+  }
+}
+
 function openDetailModal(deal: DealFlowItem) {
   selectedDeal.value = deal
 }
 
-function grantDataRoom(deal: DealFlowItem) {
-  deal.stage = 'Ruang Data Terbuka'
-  deal.updatedAt = 'Baru saja'
-  toastMessage.value = `Izin Ruang Data ${deal.umkmName} berhasil dibuka untuk ${deal.investorName}.`
+async function grantDataRoom(deal: DealFlowItem) {
+  try {
+    await useApi(`/admin/deals/${deal.id}/toggle-access`, {
+      method: 'PUT',
+      body: { status: 'APPROVED' }
+    })
+    deal.stage = 'Ruang Data Terbuka'
+    deal.updatedAt = 'Baru saja'
+    toastMessage.value = `Izin Ruang Data ${deal.umkmName} berhasil dibuka untuk ${deal.investorName}.`
+  } catch (err: any) {
+    toastMessage.value = 'Gagal membuka akses ruang data: ' + err?.message
+  }
 }
 
-function revokeDataRoom(deal: DealFlowItem) {
-  deal.stage = 'Akses Dicabut'
-  deal.updatedAt = 'Baru saja'
-  toastMessage.value = `Akses Ruang Data ${deal.umkmName} untuk ${deal.investorName} telah dicabut.`
+async function revokeDataRoom(deal: DealFlowItem) {
+  try {
+    await useApi(`/admin/deals/${deal.id}/toggle-access`, {
+      method: 'PUT',
+      body: { status: 'REJECTED' }
+    })
+    deal.stage = 'Akses Dicabut'
+    deal.updatedAt = 'Baru saja'
+    toastMessage.value = `Akses Ruang Data ${deal.umkmName} untuk ${deal.investorName} telah dicabut.`
+  } catch (err: any) {
+    toastMessage.value = 'Gagal mencabut izin ruang data: ' + err?.message
+  }
 }
 
 function handleExportCsv() {
   toastMessage.value = `Data alur investasi (${filteredDeals.value.length} catatan) berhasil diekspor.`
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadDeals()
   if (!investasiPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

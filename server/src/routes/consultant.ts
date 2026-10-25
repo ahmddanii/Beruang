@@ -1,4 +1,4 @@
-import { Router, Response } from "express";
+import { Router, type Response } from "express";
 import { prisma } from "../index.js";
 import { requireAuth, optionalAuth, AuthenticatedRequest } from "../middleware/auth.js";
 import { uploadVdr } from "../middleware/upload.js";

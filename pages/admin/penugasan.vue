@@ -40,7 +40,7 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              3 Profesional
+              {{ totalConsultantsCount }} Profesional
             </span>
           </div>
         </div>
@@ -59,12 +59,12 @@
               </span>
             </div>
             <div class="stat-card-badge badge-green">
-              <span>80% Aktif</span>
+              <span>{{ assignmentHistory.length ? Math.round((assistedCount / assignmentHistory.length) * 100) : 0 }}% Aktif</span>
             </div>
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              4 / 5 Usaha
+              {{ assistedCount }} / {{ assignmentHistory.length }} Usaha
             </span>
           </div>
         </div>
@@ -88,7 +88,7 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              1 Usaha
+              {{ reviewingCount }} Usaha
             </span>
           </div>
         </div>
@@ -521,6 +521,14 @@ const assignmentHistory = ref([
   }
 ])
 
+const totalConsultantsCount = computed(() => {
+  const set = new Set(assignmentHistory.value.map(a => a.consultantName).filter(Boolean))
+  return Math.max(set.size, 1)
+})
+
+const assistedCount = computed(() => assignmentHistory.value.filter(a => a.consultantName).length)
+const reviewingCount = computed(() => assignmentHistory.value.filter(a => !a.consultantName).length)
+
 const filteredHistory = computed(() => {
   return assignmentHistory.value.filter((item) => {
     const matchStatus = selectedStatusFilter.value === 'ALL' || item.status === selectedStatusFilter.value
@@ -546,7 +554,31 @@ function openDetailModal(item: any) {
   selectedRelation.value = item
 }
 
-onMounted(() => {
+async function fetchAssignmentData() {
+  try {
+    const res = await useApi<any>('/admin/partnerships')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      assignmentHistory.value = res.data.map((item: any) => ({
+        id: item.id,
+        umkmName: item.name,
+        owner: item.owner,
+        sector: item.sector,
+        city: item.city || 'Bandung',
+        monthlyRevenue: 'Rp 45.000.000',
+        consultantName: item.consultant?.name || '',
+        consultantSpecialty: item.consultant?.specialty || 'Standardisasi Finansial',
+        assignedDate: item.consultant?.since || '',
+        status: item.readinessStatus === 'READY_FOR_FUNDING' ? 'Siap Didanai' : item.consultant ? 'Sedang Didampingi' : 'Meninjau Konsultan',
+        focusArea: item.consultant ? `Didampingi dalam audit kas dan standar operasional oleh ${item.consultant.name}.` : 'Menunggu penetapan konsultan pendamping resmi.'
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat penugasan live:', err?.message)
+  }
+}
+
+onMounted(async () => {
+  await fetchAssignmentData()
   if (!penugasanPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

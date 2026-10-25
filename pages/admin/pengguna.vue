@@ -71,7 +71,7 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              142 Akun
+              {{ umkmAccountsCount }} Akun
             </span>
           </div>
         </div>
@@ -94,7 +94,7 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              28 Akun
+              {{ consultantAccountsCount }} Akun
             </span>
           </div>
         </div>
@@ -117,7 +117,7 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              19 Akun
+              {{ investorAccountsCount }} Akun
             </span>
           </div>
         </div>
@@ -140,7 +140,7 @@
           </div>
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              4 Akun
+              {{ adminAccountsCount }} Akun
             </span>
           </div>
         </div>
@@ -557,6 +557,11 @@ const users = ref<UserAccount[]>([
   }
 ])
 
+const umkmAccountsCount = computed(() => users.value.filter(u => u.role === 'UMKM').length)
+const consultantAccountsCount = computed(() => users.value.filter(u => u.role === 'CONSULTANT').length)
+const investorAccountsCount = computed(() => users.value.filter(u => u.role === 'INVESTOR').length)
+const adminAccountsCount = computed(() => users.value.filter(u => u.role === 'ADMIN').length)
+
 const filteredUsers = computed(() => {
   return users.value.filter((u) => {
     const matchRole = selectedRole.value === 'ALL' || u.role === selectedRole.value
@@ -587,32 +592,74 @@ function getRoleLabel(role: AccountRole): string {
   return 'Admin'
 }
 
-function toggleUserStatus(user: UserAccount) {
-  user.status = user.status === 'Aktif' ? 'Dibekukan' : 'Aktif'
-  toastMessage.value = `Status akun ${user.name} diperbarui menjadi ${user.status}.`
+async function fetchUsers() {
+  try {
+    const res = await useApi<any>('/admin/users')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      users.value = res.data.map((u: any) => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role as AccountRole,
+        organization: u.orgOrBusiness || 'Mitra Beruang',
+        credential: u.role === 'UMKM' ? 'Profil Usaha' : u.role === 'CONSULTANT' ? 'Lisensi BNSP' : u.role === 'INVESTOR' ? 'KYC Terverifikasi' : 'Otoritas Sistem',
+        status: u.status === 'FROZEN' ? 'Dibekukan' : 'Aktif'
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat pengguna live:', err?.message)
+  }
+}
+
+async function toggleUserStatus(user: UserAccount) {
+  const targetStatus = user.status === 'Aktif' ? 'FROZEN' : 'ACTIVE'
+  try {
+    await useApi(`/admin/users/${user.id}/status`, {
+      method: 'PATCH',
+      body: { status: targetStatus }
+    })
+    user.status = user.status === 'Aktif' ? 'Dibekukan' : 'Aktif'
+    toastMessage.value = `Status akun ${user.name} diperbarui menjadi ${user.status}.`
+  } catch (err: any) {
+    toastMessage.value = 'Gagal memperbarui status akun: ' + err?.message
+  }
 }
 
 function exportData() {
   toastMessage.value = `Daftar pengguna (${filteredUsers.value.length} akun) berhasil diunduh.`
 }
 
-function saveNewUser() {
+async function saveNewUser() {
   if (!newUser.value.name.trim() || !newUser.value.email.trim()) return
-  users.value.unshift({
-    id: `usr-${Date.now()}`,
-    name: newUser.value.name.trim(),
-    email: newUser.value.email.trim(),
-    role: newUser.value.role,
-    organization: newUser.value.organization.trim() || 'Mitra Beruang',
-    credential: 'Terverifikasi Sistem',
-    status: 'Aktif'
-  })
-  isAddModalOpen.value = false
-  toastMessage.value = `Akun ${newUser.value.name} berhasil ditambahkan.`
-  newUser.value = { name: '', email: '', role: 'UMKM', organization: '' }
+  try {
+    const res = await useApi<any>('/admin/users', {
+      method: 'POST',
+      body: {
+        name: newUser.value.name.trim(),
+        email: newUser.value.email.trim(),
+        role: newUser.value.role,
+        orgName: newUser.value.organization.trim()
+      }
+    })
+    users.value.unshift({
+      id: res.data?.id || `usr-${Date.now()}`,
+      name: newUser.value.name.trim(),
+      email: newUser.value.email.trim(),
+      role: newUser.value.role,
+      organization: newUser.value.organization.trim() || 'Mitra Beruang',
+      credential: 'Baru Dibuat',
+      status: 'Aktif'
+    })
+    isAddModalOpen.value = false
+    toastMessage.value = `Akun ${newUser.value.name} berhasil ditambahkan.`
+    newUser.value = { name: '', email: '', role: 'UMKM', organization: '' }
+  } catch (err: any) {
+    toastMessage.value = 'Gagal membuat pengguna baru: ' + err?.message
+  }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await fetchUsers()
   if (!penggunaPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

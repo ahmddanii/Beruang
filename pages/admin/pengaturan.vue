@@ -224,6 +224,7 @@ definePageMeta({
 let gsapCtx: gsap.Context | null = null
 
 onMounted(async () => {
+  await loadSettings()
   await nextTick()
   gsapCtx = gsap.context(() => {
     gsap.from('.gsap-settings-header', {
@@ -279,15 +280,45 @@ const cycleForm = reactive({
   validationWindowDays: 5
 })
 
-function handleSave() {
+async function loadSettings() {
+  try {
+    const res = await useApi<any>('/admin/settings')
+    if (res.data) {
+      certForm.minCompositeScore = res.data.minCompositeScore ?? 75
+      certForm.minGuidanceMonths = res.data.minGuidanceMonths ?? 3
+      certForm.requireBankStatements = res.data.requireBankStatements ?? true
+      cycleForm.openDay = res.data.openCycleDay ?? 25
+      cycleForm.closeDay = res.data.closeCycleDay ?? 30
+      cycleForm.validationWindowDays = res.data.validationWindowDays ?? 5
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat pengaturan sistem live:', err?.message)
+  }
+}
+
+async function handleSave() {
   isSaving.value = true
-  setTimeout(() => {
-    isSaving.value = false
+  try {
+    await useApi('/admin/settings', {
+      method: 'PUT',
+      body: {
+        minCompositeScore: certForm.minCompositeScore,
+        minGuidanceMonths: certForm.minGuidanceMonths,
+        requireBankStatements: certForm.requireBankStatements,
+        openCycleDay: cycleForm.openDay,
+        closeCycleDay: cycleForm.closeDay,
+        validationWindowDays: cycleForm.validationWindowDays
+      }
+    })
     saved.value = true
     setTimeout(() => {
       saved.value = false
     }, 3500)
-  }, 600)
+  } catch (err: any) {
+    console.warn('Gagal menyimpan pengaturan platform:', err?.message)
+  } finally {
+    isSaving.value = false
+  }
 }
 </script>
 

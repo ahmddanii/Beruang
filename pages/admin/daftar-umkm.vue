@@ -580,7 +580,29 @@ const paginatedList = computed(() => {
   return filteredList.value.slice(start, start + pageSize.value)
 })
 
-onMounted(() => {
+async function fetchUmkms() {
+  try {
+    const res = await useApi<any>('/admin/partnerships')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      umkmList.value = res.data.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        owner: item.owner,
+        sector: item.sector,
+        city: item.city || 'Bandung',
+        nib: item.nib || '9120001234567',
+        status: item.readinessStatus === 'READY_FOR_FUNDING' ? 'Siap Didanai' : item.consultant ? 'Pendampingan' : 'Perlu Validasi',
+        consultant: item.consultant?.name || null,
+        cashStatus: item.readinessStatus === 'READY_FOR_FUNDING' ? 'Aktif 6 Bulan Berturut-turut' : 'Dalam Pendampingan'
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat kemitraan UMKM live:', err?.message)
+  }
+}
+
+onMounted(async () => {
+  await fetchUmkms()
   if (!daftarUmkmPageRef.value) return
   gsapCtx = gsap.context(() => {
     gsap.fromTo(

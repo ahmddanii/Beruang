@@ -47,13 +47,13 @@
               </span>
             </div>
             <div class="stat-card-badge badge-green">
-              <span>+12 Baru</span>
+              <span>+{{ stats.newUmkmThisMonth || 0 }} Baru</span>
             </div>
           </div>
 
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              142 Usaha
+              {{ stats.totalUmkm }} Usaha
             </span>
           </div>
 
@@ -85,7 +85,7 @@
 
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              28 Mitra
+              {{ stats.activeConsultants }} Mitra
             </span>
           </div>
 
@@ -117,7 +117,7 @@
 
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              38 Usaha
+              {{ stats.readyForFunding }} Usaha
             </span>
           </div>
 
@@ -149,7 +149,7 @@
 
           <div class="my-auto py-2.5 sm:py-3.5">
             <span class="text-xl sm:text-[22px] lg:text-[21px] xl:text-[24px] font-poppins font-semibold text-neutral-900 dark:text-white tabular-nums tracking-[-0.02em] whitespace-nowrap block leading-tight">
-              Rp 4.200.000.000
+              {{ stats.totalCapitalDeployed }}
             </span>
           </div>
 
@@ -271,7 +271,7 @@
           <canvas ref="donutCanvas" class="max-w-[190px] max-h-[190px]" />
           <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
             <span class="text-2xl sm:text-3xl font-bold font-poppins text-neutral-900 dark:text-white tabular-nums leading-none">
-              142
+              {{ stats.totalUmkm }}
             </span>
             <span class="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-medium mt-1">
               Total UMKM
@@ -287,7 +287,7 @@
               <span class="text-xs text-neutral-700 dark:text-neutral-300 font-medium truncate">Siap Didanai</span>
             </div>
             <p class="text-sm font-bold text-neutral-900 dark:text-white tabular-nums mt-1">
-              38 <span class="text-xs font-normal text-neutral-500 dark:text-neutral-400">(26,8%)</span>
+              {{ stats.readyForFunding }} <span class="text-xs font-normal text-neutral-500 dark:text-neutral-400">({{ stats.totalUmkm ? Math.round((stats.readyForFunding / stats.totalUmkm) * 100) : 0 }}%)</span>
             </p>
           </div>
 
@@ -297,7 +297,7 @@
               <span class="text-xs text-neutral-700 dark:text-neutral-300 font-medium truncate">Pendampingan</span>
             </div>
             <p class="text-sm font-bold text-neutral-900 dark:text-white tabular-nums mt-1">
-              74 <span class="text-xs font-normal text-neutral-500 dark:text-neutral-400">(52,1%)</span>
+              {{ inMentoringCount }} <span class="text-xs font-normal text-neutral-500 dark:text-neutral-400">({{ stats.totalUmkm ? Math.round((inMentoringCount / stats.totalUmkm) * 100) : 0 }}%)</span>
             </p>
           </div>
 
@@ -307,7 +307,7 @@
               <span class="text-xs text-neutral-700 dark:text-neutral-300 font-medium truncate">Inkubasi Awal</span>
             </div>
             <p class="text-sm font-bold text-neutral-900 dark:text-white tabular-nums mt-1">
-              30 <span class="text-xs font-normal text-neutral-500 dark:text-neutral-400">(21,1%)</span>
+              {{ stats.pendingAssignments }} <span class="text-xs font-normal text-neutral-500 dark:text-neutral-400">({{ stats.totalUmkm ? Math.round((stats.pendingAssignments / stats.totalUmkm) * 100) : 0 }}%)</span>
             </p>
           </div>
         </div>
@@ -349,9 +349,9 @@
             </div>
             <p
               class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed line-clamp-2 overflow-hidden"
-              :title="act.desc"
+              :title="act.detail"
             >
-              {{ act.desc }}
+              {{ act.detail }}
             </p>
           </div>
         </div>
@@ -361,7 +361,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import Chart from 'chart.js/auto'
 import { gsap } from 'gsap'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -387,16 +387,36 @@ useHead({
 const adminOverviewRef = ref<HTMLElement | null>(null)
 let gsapCtx: gsap.Context | null = null
 
+// Live Stats State
+const stats = reactive({
+  totalUmkm: 0,
+  activeConsultants: 0,
+  readyForFunding: 0,
+  totalCapitalDeployed: 'Rp 0',
+  pendingAssignments: 0,
+  newUmkmThisMonth: 0
+})
+
+const inMentoringCount = computed(() => {
+  return Math.max(0, stats.totalUmkm - stats.readyForFunding - stats.pendingAssignments)
+})
+
 // Donut Chart State
 const donutCanvas = ref<HTMLCanvasElement | null>(null)
 let donutChartInstance: any = null
 
-function initDonutChart() {
+function updateDonutChart() {
   if (!donutCanvas.value) return
   if (donutChartInstance) {
     donutChartInstance.destroy()
     donutChartInstance = null
   }
+
+  const dataValues = [
+    stats.readyForFunding || 1,
+    inMentoringCount.value || 1,
+    stats.pendingAssignments || 1
+  ]
 
   donutChartInstance = new Chart(donutCanvas.value, {
     type: 'doughnut',
@@ -404,7 +424,7 @@ function initDonutChart() {
       labels: ['Siap Didanai', 'Dalam Pendampingan', 'Tahap Inkubasi Awal'],
       datasets: [
         {
-          data: [38, 74, 30],
+          data: dataValues,
           backgroundColor: ['#00800e', '#156374', '#F59E0B'],
           borderWidth: 0,
           borderRadius: 4,
@@ -429,67 +449,62 @@ function initDonutChart() {
   })
 }
 
-const topPartnerships = [
-  {
-    id: 1,
-    name: 'Kopi Kenangan Senja',
-    owner: 'Budi Santoso',
-    sector: 'Kuliner & F&B',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    investorName: 'Nusantara Impact Capital',
-    investorStage: 'Ruang Data Terbuka'
-  },
-  {
-    id: 2,
-    name: 'Batik Sekar Jagad',
-    owner: 'Siti Lestari',
-    sector: 'Kriya & Tekstil',
-    consultantName: 'Nadia Kusuma, MBA, CFP',
-    investorName: 'Nusantara Impact Capital',
-    investorStage: 'Ruang Data Terbuka'
-  },
-  {
-    id: 3,
-    name: 'Sayur Hidroponik Segar',
-    owner: 'Hendra Wijaya',
-    sector: 'Agribisnis',
-    consultantName: 'Rendra Pratama, S.E., Ak.',
-    investorName: 'Koperasi Pemodal Lokal',
-    investorStage: 'Pantau Portofolio'
-  }
-]
+const topPartnerships = ref<any[]>([])
+const activityList = ref<any[]>([])
 
-const activityList = [
-  {
-    id: 1,
-    title: 'Kopi Kenangan Senja Mengunggah Kas Bulanan',
-    desc: 'Pemasukan kas bulan berjalan sebesar Rp 100.000.000 berhasil diverifikasi konsultan.',
-    time: '12 menit lalu'
-  },
-  {
-    id: 2,
-    title: 'Rendra Pratama Memvalidasi Legalitas Usaha',
-    desc: 'Sertifikat Halal dan NIB milik Kopi Kenangan Senja dinyatakan lengkap.',
-    time: '45 menit lalu'
-  },
-  {
-    id: 3,
-    title: 'Nusantara Impact Capital Mengajukan Akses Ruang Data',
-    desc: 'Izin pembukaan Ruang Data keuangan diajukan pada Kopi Kenangan Senja.',
-    time: '2 jam lalu'
-  },
-  {
-    id: 4,
-    title: 'Batik Sekar Jagad Lolos Kesiapan Pendanaan',
-    desc: 'Sertifikasi kesiapan usaha dinyatakan lengkap oleh konsultan pendamping.',
-    time: '4 jam lalu'
+async function loadDashboardData() {
+  try {
+    const statsRes = await useApi<any>('/admin/stats')
+    if (statsRes.data) {
+      Object.assign(stats, {
+        totalUmkm: statsRes.data.totalUmkm ?? statsRes.data.total_umkm ?? 0,
+        activeConsultants: statsRes.data.activeConsultants ?? statsRes.data.active_consultants ?? 0,
+        readyForFunding: statsRes.data.readyForFunding ?? statsRes.data.ready_for_funding ?? 0,
+        totalCapitalDeployed: statsRes.data.totalCapitalDeployed ?? statsRes.data.total_capital_deployed ?? 'Rp 1.5 M',
+        pendingAssignments: statsRes.data.pendingAssignments ?? statsRes.data.pending_assignments ?? 0,
+        newUmkmThisMonth: statsRes.data.newUmkmThisMonth ?? statsRes.data.new_umkm_this_month ?? 0
+      })
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat stats admin:', err?.message)
   }
-]
 
-onMounted(() => {
-  nextTick(() => {
-    initDonutChart()
-  })
+  try {
+    const partRes = await useApi<any>('/admin/partnerships')
+    if (partRes.data && Array.isArray(partRes.data)) {
+      topPartnerships.value = partRes.data.slice(0, 3).map((item: any, idx: number) => ({
+        id: item.id || idx + 1,
+        name: item.name,
+        owner: item.owner,
+        sector: item.sector,
+        consultantName: item.consultant?.name || 'Menunggu Penugasan',
+        investorName: item.investors?.[0]?.name || 'Terbuka bagi Investor',
+        investorStage: item.investors?.[0]?.status === 'APPROVED' ? 'Ruang Data Terbuka' : 'Katalog Usaha'
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat kemitraan:', err?.message)
+  }
+
+  try {
+    const actRes = await useApi<any>('/admin/activity-logs')
+    if (actRes.data && Array.isArray(actRes.data)) {
+      activityList.value = actRes.data.slice(0, 4).map((l: any, idx: number) => ({
+        id: l.id || idx + 1,
+        title: l.title,
+        detail: l.detail || 'Pencatatan kas dan status operasional tervalidasi.',
+        time: l.time || 'Baru saja'
+      }))
+    }
+  } catch (err: any) {
+    console.warn('Gagal memuat log aktivitas:', err?.message)
+  }
+
+  updateDonutChart()
+}
+
+onMounted(async () => {
+  await loadDashboardData()
 
   if (!adminOverviewRef.value) return
   gsapCtx = gsap.context(() => {

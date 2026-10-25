@@ -113,7 +113,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>+12%</span>
+                <span>{{ netProfitMarginBadge }}</span>
               </div>
             </div>
 
@@ -157,7 +157,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>Hemat</span>
+                <span>{{ hppStatusBadge }}</span>
               </div>
             </div>
 
@@ -199,7 +199,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-green">
-                <span>+9.8%</span>
+                <span>{{ inflowStatusBadge }}</span>
               </div>
             </div>
 
@@ -241,7 +241,7 @@
                 </span>
               </div>
               <div class="stat-card-badge badge-red">
-                <span>-4%</span>
+                <span>{{ outflowStatusBadge }}</span>
               </div>
             </div>
 
@@ -1137,20 +1137,154 @@ const activeBranchRatio = computed(() => {
   return umkmStore.activeBranchRatio || 1
 })
 
+// Evaluasi data finansial riil dari database & transaksi kas langsung
+const isDemoFikri = computed(() => {
+  return authStore.currentUser?.email === 'fikri@kopisenja.id'
+})
+
+const liveInflow = computed(() => {
+  // 1. Live summary dari backend API (saldo kas dan uang masuk bulan berjalan)
+  if (umkmStore.financeSummary?.totalIncomeMonth && umkmStore.financeSummary.totalIncomeMonth > 0) {
+    return umkmStore.financeSummary.totalIncomeMonth
+  }
+  // 2. Akumulasi mutasi transaksi harian kategori PEMASUKAN
+  const txSum = (umkmStore.dailyTransactions || [])
+    .filter(t => t.category === 'PEMASUKAN')
+    .reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
+  if (txSum > 0) return txSum
+
+  // 3. Rapor bulanan terbaru dari database
+  if (umkmStore.latestMonthlyRecord?.omzet && umkmStore.latestMonthlyRecord.omzet > 0) {
+    return umkmStore.latestMonthlyRecord.omzet
+  }
+  // 4. Pendapatan bulanan riil yang diisi pengguna saat onboarding
+  const declaredRevenue = Number(authStore.currentUser?.monthlyRevenue || umkmStore.profile.monthlyRevenue || 0)
+  if (declaredRevenue > 0) return declaredRevenue
+
+  // 5. Fallback hanya untuk akun demonstrasi Fikri (Kopi Senja)
+  if (isDemoFikri.value) return 100000000
+
+  // 6. Pengguna baru dengan kas kosong (belum ada transaksi)
+  return 0
+})
+
+const liveHpp = computed(() => {
+  // 1. Live summary dari backend API (beban pokok penjualan / modal jualan bulan berjalan)
+  if (umkmStore.financeSummary?.totalCogsMonth && umkmStore.financeSummary.totalCogsMonth > 0) {
+    return umkmStore.financeSummary.totalCogsMonth
+  }
+  // 2. Akumulasi mutasi transaksi harian kategori MODAL_JUALAN
+  const txSum = (umkmStore.dailyTransactions || [])
+    .filter(t => t.category === 'MODAL_JUALAN')
+    .reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
+  if (txSum > 0) return txSum
+
+  // 3. Rapor bulanan terbaru dari database
+  if (umkmStore.latestMonthlyRecord?.hpp && umkmStore.latestMonthlyRecord.hpp > 0) {
+    return umkmStore.latestMonthlyRecord.hpp
+  }
+  // 4. Fallback hanya untuk akun demo Fikri
+  if (isDemoFikri.value) return 45100000
+
+  // 5. Estimasi modal jualan proporsional jika baru ada omzet baseline
+  if (liveInflow.value > 0) {
+    return Math.round(liveInflow.value * 0.451)
+  }
+  return 0
+})
+
+const liveOpex = computed(() => {
+  // 1. Live summary dari backend API (biaya operasional bulan berjalan)
+  if (umkmStore.financeSummary?.totalOpexMonth && umkmStore.financeSummary.totalOpexMonth > 0) {
+    return umkmStore.financeSummary.totalOpexMonth
+  }
+  // 2. Akumulasi mutasi transaksi harian kategori OPERASIONAL
+  const txSum = (umkmStore.dailyTransactions || [])
+    .filter(t => t.category === 'OPERASIONAL')
+    .reduce((sum, t) => sum + (Number(t.amount) || 0), 0)
+  if (txSum > 0) return txSum
+
+  // 3. Rapor bulanan terbaru dari database
+  if (umkmStore.latestMonthlyRecord?.opex && umkmStore.latestMonthlyRecord.opex > 0) {
+    return umkmStore.latestMonthlyRecord.opex
+  }
+  // 4. Fallback demo Fikri
+  if (isDemoFikri.value) return 22300000
+
+  // 5. Estimasi operasional proporsional jika baru ada omzet baseline
+  if (liveInflow.value > 0) {
+    return Math.round(liveInflow.value * 0.223)
+  }
+  return 0
+})
+
+const liveOutflow = computed(() => {
+  return liveHpp.value + liveOpex.value
+})
+
+const liveNetProfit = computed(() => {
+  if (umkmStore.financeSummary?.netProfitMonth && umkmStore.financeSummary.netProfitMonth !== 0) {
+    return umkmStore.financeSummary.netProfitMonth
+  }
+  if (umkmStore.latestMonthlyRecord?.netProfit && umkmStore.latestMonthlyRecord.netProfit !== 0) {
+    return umkmStore.latestMonthlyRecord.netProfit
+  }
+  if (isDemoFikri.value && liveInflow.value === 100000000) return 32600000
+  return liveInflow.value - liveOutflow.value
+})
+
+// Skala nilai terhadap rasio cabang aktif
+const calculatedInflowAmount = computed(() => Math.round(liveInflow.value * activeBranchRatio.value))
+const calculatedHppAmount = computed(() => Math.round(liveHpp.value * activeBranchRatio.value))
+const calculatedOpexAmount = computed(() => Math.round(liveOpex.value * activeBranchRatio.value))
+const calculatedOutflowAmount = computed(() => Math.round(liveOutflow.value * activeBranchRatio.value))
+const calculatedProfitAmount = computed(() => Math.round(liveNetProfit.value * activeBranchRatio.value))
+
 const currentNetProfitDisplay = computed(() => {
-  return 'Rp ' + Math.round(32600000 * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + calculatedProfitAmount.value.toLocaleString('id-ID')
 })
 
 const currentHppDisplay = computed(() => {
-  return 'Rp ' + Math.round(45100000 * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + calculatedHppAmount.value.toLocaleString('id-ID')
 })
 
 const currentInflowDisplay = computed(() => {
-  return 'Rp ' + Math.round(100000000 * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + calculatedInflowAmount.value.toLocaleString('id-ID')
 })
 
 const currentOutflowDisplay = computed(() => {
-  return 'Rp ' + Math.round(67400000 * activeBranchRatio.value).toLocaleString('id-ID')
+  return 'Rp ' + calculatedOutflowAmount.value.toLocaleString('id-ID')
+})
+
+// Status badge reaktif untuk 4 kartu metrik utama
+const netProfitMarginBadge = computed(() => {
+  if (umkmStore.financeSummary?.marginPercentage > 0) {
+    return `+${umkmStore.financeSummary.marginPercentage}%`
+  }
+  if (calculatedInflowAmount.value > 0 && calculatedProfitAmount.value !== 0) {
+    const margin = Math.round((calculatedProfitAmount.value / calculatedInflowAmount.value) * 100)
+    return `${margin >= 0 ? '+' : ''}${margin}%`
+  }
+  return '+12%'
+})
+
+const hppStatusBadge = computed(() => {
+  if (calculatedHppPercent.value > 0) {
+    return `${calculatedHppPercent.value}%`
+  }
+  return 'Hemat'
+})
+
+const inflowStatusBadge = computed(() => {
+  return calculatedInflowAmount.value > 0 ? '+9.8%' : 'Baru'
+})
+
+const outflowStatusBadge = computed(() => {
+  if (calculatedInflowAmount.value > 0 && calculatedOutflowAmount.value > 0) {
+    const pct = Math.round((calculatedOutflowAmount.value / calculatedInflowAmount.value) * 100)
+    return `-${pct}%`
+  }
+  return '-4%'
 })
 
 // Period selection
@@ -1179,12 +1313,19 @@ const timeGreeting = computed(() => {
 })
 
 const ownerFirstName = computed(() => {
-  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Fikri'
+  const name = authStore.currentUser?.name || umkmStore.profile.ownerName || 'Pemilik Usaha'
   return name.split(' ')[0]
 })
 
 const umkmName = computed(() => {
-  return umkmStore.profile.name || authStore.currentUser?.businessName || 'Kopi Senja Nusantara'
+  return (
+    umkmStore.profile.name ||
+    umkmStore.profile.brand ||
+    authStore.currentUser?.businessName ||
+    authStore.currentUser?.businessProfile?.brand ||
+    authStore.currentUser?.businessProfile?.name ||
+    'Usaha Saya'
+  )
 })
 
 const umkmDescription = computed(() => {
@@ -1364,15 +1505,23 @@ function clearSparklineHover(type: 'profit' | 'inflow' | 'outflow') {
 
 const hppBarWidth = ref(0)
 
-// Total Riil Aliran Kas Bulan Ini (Oktober 2026)
-const calculatedHppPercent = computed(() => 45.1)
-const calculatedOpexPercent = computed(() => 22.3)
-const calculatedProfitPercent = computed(() => 32.6)
+// Total Riil Aliran Kas Bulan Ini (Dihitung dari data aktual transaksi & profil UMKM)
+const totalCalculatedOmzet = computed(() => calculatedInflowAmount.value)
 
-const calculatedHppAmount = computed(() => Math.round(45100000 * activeBranchRatio.value))
-const calculatedOpexAmount = computed(() => Math.round(22300000 * activeBranchRatio.value))
-const calculatedProfitAmount = computed(() => Math.round(32600000 * activeBranchRatio.value))
-const totalCalculatedOmzet = computed(() => Math.round(100000000 * activeBranchRatio.value))
+const calculatedHppPercent = computed(() => {
+  if (calculatedInflowAmount.value <= 0) return 0
+  return Number(((calculatedHppAmount.value / calculatedInflowAmount.value) * 100).toFixed(1))
+})
+
+const calculatedOpexPercent = computed(() => {
+  if (calculatedInflowAmount.value <= 0) return 0
+  return Number(((calculatedOpexAmount.value / calculatedInflowAmount.value) * 100).toFixed(1))
+})
+
+const calculatedProfitPercent = computed(() => {
+  if (calculatedInflowAmount.value <= 0) return 0
+  return Number(((calculatedProfitAmount.value / calculatedInflowAmount.value) * 100).toFixed(1))
+})
 
 function formatDisplayedAmount(val: number) {
   return 'Rp ' + val.toLocaleString('id-ID')
@@ -1432,22 +1581,28 @@ function initDonutChart() {
     donutChartInstance = null
   }
 
+  const hasData = (calculatedHppAmount.value > 0 || calculatedOpexAmount.value > 0 || calculatedProfitAmount.value > 0)
+  const chartData = hasData
+    ? [calculatedHppAmount.value, calculatedOpexAmount.value, calculatedProfitAmount.value]
+    : [1]
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const neutralColor = isDark ? '#334155' : '#E2E8F0'
+  const chartColors = hasData
+    ? ['#156374', '#50AABF', '#00AA13']
+    : [neutralColor]
+
   donutChartInstance = new Chart(donutCanvas.value, {
     type: 'doughnut',
     data: {
-      labels: ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'],
+      labels: hasData ? ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'] : ['Belum Ada Catatan Kas'],
       datasets: [
         {
-          data: [
-            calculatedHppAmount.value,
-            calculatedOpexAmount.value,
-            calculatedProfitAmount.value
-          ],
-          backgroundColor: ['#156374', '#50AABF', '#00AA13'],
+          data: chartData,
+          backgroundColor: chartColors,
           borderWidth: 0,
           hoverOffset: 0,
           borderRadius: 6,
-          spacing: 4
+          spacing: hasData ? 4 : 0
         }
       ]
     },
@@ -1466,7 +1621,7 @@ function initDonutChart() {
       circumference: 360,
       cutout: '68%',
       onHover: (_event: any, elements: any[]) => {
-        if (elements && elements.length > 0) {
+        if (elements && elements.length > 0 && hasData) {
           const index = elements[0].index
           activeHoveredItem.value = breakdownItems.value[index] || null
           highlightDonutSegment(index)
@@ -1490,17 +1645,18 @@ function initDonutChart() {
 
 function updateDonutChart() {
   if (!donutChartInstance) return
-  donutChartInstance.data.labels = ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih']
-  donutChartInstance.data.datasets[0].data = [
-    calculatedHppAmount.value,
-    calculatedOpexAmount.value,
-    calculatedProfitAmount.value
-  ]
-  donutChartInstance.data.datasets[0].backgroundColor = ['#156374', '#50AABF', '#00AA13']
-  donutChartInstance.data.datasets[0].borderWidth = 0
-  donutChartInstance.data.datasets[0].hoverOffset = 0
-  donutChartInstance.data.datasets[0].borderRadius = 6
-  donutChartInstance.data.datasets[0].spacing = 4
+  const hasData = (calculatedHppAmount.value > 0 || calculatedOpexAmount.value > 0 || calculatedProfitAmount.value > 0)
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+  const neutralColor = isDark ? '#334155' : '#E2E8F0'
+
+  donutChartInstance.data.labels = hasData ? ['Modal Jualan', 'Biaya Operasional', 'Untung Bersih'] : ['Belum Ada Catatan Kas']
+  donutChartInstance.data.datasets[0].data = hasData
+    ? [calculatedHppAmount.value, calculatedOpexAmount.value, calculatedProfitAmount.value]
+    : [1]
+  donutChartInstance.data.datasets[0].backgroundColor = hasData
+    ? ['#156374', '#50AABF', '#00AA13']
+    : [neutralColor]
+  donutChartInstance.data.datasets[0].spacing = hasData ? 4 : 0
   donutChartInstance.options.circumference = 360
   donutChartInstance.options.cutout = '68%'
   donutChartInstance.update()
@@ -1514,9 +1670,10 @@ watch(donutCanvas, (newEl) => {
   }
 })
 
-watch(activeBranchRatio, () => {
+watch([activeBranchRatio, calculatedHppAmount, calculatedOpexAmount, calculatedProfitAmount], () => {
   nextTick(() => {
     updateDonutChart()
+    hppBarWidth.value = calculatedHppPercent.value || 0
   })
 })
 
@@ -1678,7 +1835,7 @@ function downloadThreeMonthsReport() {
   URL.revokeObjectURL(url)
 }
 
-onMounted(() => {
+onMounted(async () => {
   // Restore custom banner, avatar, & profile from localStorage if exists
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
@@ -1688,6 +1845,26 @@ onMounted(() => {
   }
   if (umkmStore.profile.ownerAvatarUrl) {
     authStore.updateAvatar(umkmStore.profile.ownerAvatarUrl)
+  }
+
+  // Muat data live UMKM dari backend (profil bisnis, ringkasan kas, transaksi & asesmen)
+  try {
+    await Promise.allSettled([
+      umkmStore.fetchProfile(),
+      umkmStore.fetchFinances(),
+      umkmStore.fetchTasks(),
+      umkmStore.fetchAssessment()
+    ])
+    if (umkmStore.profile.name && authStore.currentUser) {
+      authStore.currentUser.businessName = umkmStore.profile.name
+    }
+    if (umkmStore.profile.ownerName && authStore.currentUser && !authStore.currentUser.name) {
+      authStore.currentUser.name = umkmStore.profile.ownerName
+    }
+    updateDonutChart()
+    hppBarWidth.value = calculatedHppPercent.value || 0
+  } catch (err: any) {
+    console.warn('Gagal sinkronisasi data live dashboard:', err?.message)
   }
 
   // GSAP Entrance
@@ -1738,7 +1915,7 @@ onMounted(() => {
 
   // Trigger HPP Progress bar ease-out animation
   setTimeout(() => {
-    hppBarWidth.value = 45.1
+    hppBarWidth.value = calculatedHppPercent.value || 0
   }, 200)
 
   // Initialize Branches & Charts

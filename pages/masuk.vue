@@ -370,6 +370,7 @@
       v-model="showNotRegisteredModal"
       title="Akun Belum Terdaftar"
       size="sm"
+      @close="handleCancelRegistration"
     >
       <div class="space-y-4 py-2 font-poppins text-left">
         <div class="flex items-start gap-3.5">
@@ -496,6 +497,7 @@ const phoneInputRef = ref<HTMLInputElement | null>(null)
 
 // Modal Aba-aba: Akun Belum Terdaftar
 const showNotRegisteredModal = ref(false)
+let isProceedingToRegister = false
 const unregisteredUser = reactive({
   name: '',
   email: '',
@@ -504,15 +506,40 @@ const unregisteredUser = reactive({
 })
 
 function handleProceedRegistration() {
+  isProceedingToRegister = true
   showNotRegisteredModal.value = false
+  isGoogleLoading.value = false
+  loading.value = false
+  googleLoadingText.value = 'Menghubungkan akun Google...'
   const targetRole = unregisteredUser.role || 'UMKM'
   router.push(`/onboarding?role=${targetRole}`)
 }
 
 function handleCancelRegistration() {
+  isProceedingToRegister = false
   showNotRegisteredModal.value = false
+  resetLoginState()
+}
+
+function resetLoginState() {
+  isGoogleLoading.value = false
+  isWhatsappLoading.value = false
+  loading.value = false
+  googleLoadingText.value = 'Menghubungkan akun Google...'
   authStore.logout()
 }
+
+// Watcher: Jika modal aba-aba ditutup (lewat tombol X, klik backdrop, ESC, atau Batal), reset total status login
+watch(showNotRegisteredModal, (isOpen) => {
+  if (!isOpen) {
+    isGoogleLoading.value = false
+    loading.value = false
+    googleLoadingText.value = 'Menghubungkan akun Google...'
+    if (!isProceedingToRegister) {
+      resetLoginState()
+    }
+  }
+})
 
 // OTP State (6 Digits to match Fonnte Gateway)
 const otpDigits = ref(['', '', '', '', '', ''])
@@ -591,8 +618,46 @@ async function handleGoogleLogin() {
   errorMessage.value = ''
   isGoogleLoading.value = true
   googleLoadingText.value = 'Menghubungkan akun Google...'
+
+  // Safety timer: hentikan spinner otomatis jika popup ditutup tanpa respons dari Google
+  let safetyTimer: any = null
+  const cleanupSafety = () => {
+    if (safetyTimer) {
+      clearTimeout(safetyTimer)
+      safetyTimer = null
+    }
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('focus', onWindowFocus)
+    }
+  }
+
+  // Jika user menutup jendela popup Google (kembali fokus ke window utama)
+  const onWindowFocus = () => {
+    setTimeout(() => {
+      if (isGoogleLoading.value && !loading.value && !showNotRegisteredModal.value) {
+        isGoogleLoading.value = false
+        googleLoadingText.value = 'Menghubungkan akun Google...'
+      }
+      cleanupSafety()
+    }, 1200)
+  }
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('focus', onWindowFocus)
+  }
+
+  safetyTimer = setTimeout(() => {
+    if (isGoogleLoading.value && !showNotRegisteredModal.value) {
+      isGoogleLoading.value = false
+      loading.value = false
+      googleLoadingText.value = 'Menghubungkan akun Google...'
+    }
+    cleanupSafety()
+  }, 15000)
+
   try {
     await googleAuth.triggerGoogleLogin(async (credential: string) => {
+      cleanupSafety()
       loading.value = true
       googleLoadingText.value = 'Memproses autentikasi Google...'
       try {
@@ -609,6 +674,7 @@ async function handleGoogleLogin() {
           unregisteredUser.role = role
           isGoogleLoading.value = false
           loading.value = false
+          googleLoadingText.value = 'Menghubungkan akun Google...'
           showNotRegisteredModal.value = true
         } else {
           const targetRoute = role === 'INVESTOR' ? '/investor' : role === 'CONSULTANT' ? '/konsultan' : '/dashboard'
@@ -625,11 +691,13 @@ async function handleGoogleLogin() {
       }
     })
   } catch (err: any) {
+    cleanupSafety()
     errorMessage.value = err?.message || 'Gagal membuka login Google'
     isGoogleLoading.value = false
   }
 
   if (googleAuth.error.value) {
+    cleanupSafety()
     errorMessage.value = googleAuth.error.value
     isGoogleLoading.value = false
   }

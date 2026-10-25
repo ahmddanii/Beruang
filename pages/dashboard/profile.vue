@@ -409,19 +409,46 @@
               </p>
             </div>
 
-            <button
-              type="button"
-              class="btn-pill-action btn-pill-action-green cursor-pointer shrink-0 self-start sm:self-auto shadow-none"
+            <BActionButton
+              variant="green"
+              :huge-icon="PlusSignIcon"
+              :icon-size="15"
               title="Tambah Cabang Usaha Baru"
+              custom-class="shrink-0 self-start sm:self-auto cursor-pointer"
               @click="openAddBranchModal"
             >
-              <HugeiconsIcon :icon="PlusSignIcon" :size="15" :stroke-width="2.2" />
-              <span>Tambah Cabang</span>
+              Tambah Cabang
+            </BActionButton>
+          </div>
+
+          <!-- Empty State jika belum ada cabang -->
+          <div
+            v-if="umkmStore.branches.length === 0"
+            class="p-6 rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-800 bg-[#F8FAFC]/60 dark:bg-[#18191E]/40 text-center space-y-3"
+          >
+            <div class="w-11 h-11 rounded-xl bg-[#E6F4F7] dark:bg-[#156374]/25 text-[#156374] dark:text-[#50AABF] flex items-center justify-center mx-auto">
+              <HugeiconsIcon :icon="Store01Icon" :size="22" :stroke-width="2" />
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+                Belum ada gerai atau cabang terdaftar
+              </p>
+              <p class="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
+                Tambahkan gerai utama atau unit cabang tokomu untuk memperkuat profil operasional di mata investor.
+              </p>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-[#16A34A] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800 transition-colors cursor-pointer"
+              @click="openAddBranchModal"
+            >
+              <HugeiconsIcon :icon="PlusSignIcon" :size="14" :stroke-width="2.2" />
+              <span>Tambah Cabang Baru</span>
             </button>
           </div>
 
           <!-- Grid Daftar Cabang (Maksimal 3 Kolom) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
             <div
               v-for="(branch, bIdx) in umkmStore.branches"
               :key="branch.id"
@@ -1211,15 +1238,15 @@
               <span>Batal</span>
             </button>
 
-            <button
-              type="button"
-              class="btn-pill-action btn-pill-action-green cursor-pointer shadow-none"
+            <BActionButton
+              variant="green"
+              :huge-icon="CheckmarkCircle01Icon"
+              :icon-size="15"
               :disabled="!newBranchForm.name.trim() || !newBranchForm.city.trim() || !newBranchForm.address.trim()"
               @click="submitNewBranch"
             >
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="15" :stroke-width="2.0" />
-              <span>Simpan Cabang</span>
-            </button>
+              Simpan Cabang
+            </BActionButton>
           </div>
         </div>
       </div>

@@ -151,52 +151,74 @@ export interface AnomalyAlert {
   dismissed: boolean
 }
 
+export function getDemoConsultantProfile(): ConsultantProfileData {
+  return {
+    name: 'Dra. Maya Suryani, M.M.',
+    title: 'Konsultan Ahli Keuangan & Audit UMKM',
+    email: 'maya.suryani@beruang.id',
+    phone: '+62 819-8765-4321',
+    firmName: 'Maya Advisory Partner',
+    specialization: 'Keuangan & Biaya',
+    experience: '5+ Tahun',
+    bnspLicense: 'BNSP-KONS-2024-8891',
+    city: 'Bandung, Jawa Barat',
+    bio: 'Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.',
+    maxClients: 10,
+    avatar: '/images/user-profile.png',
+    documents: [
+      {
+        id: 'doc-01',
+        name: 'Sertifikat Lisensi BNSP Konsultan Bisnis',
+        type: 'BNSP_CERT',
+        filename: 'Sertifikat_BNSP_Maya_Suryani_2024.pdf',
+        fileSize: '2.4 MB',
+        uploadedAt: '12 Jan 2026',
+        status: 'VERIFIED'
+      },
+      {
+        id: 'doc-02',
+        name: 'Portofolio Pendampingan 25+ UMKM Binaan',
+        type: 'PORTOFOLIO',
+        filename: 'Portofolio_Pendampingan_UMKM_Maya.pdf',
+        fileSize: '5.1 MB',
+        uploadedAt: '15 Jan 2026',
+        status: 'VERIFIED'
+      },
+      {
+        id: 'doc-03',
+        name: 'Nomor Pokok Wajib Pajak (NPWP) Konsultan',
+        type: 'KTP_NPWP',
+        filename: 'NPWP_Maya_Suryani.pdf',
+        fileSize: '1.2 MB',
+        uploadedAt: '15 Jan 2026',
+        status: 'VERIFIED'
+      }
+    ] as ConsultantDocument[]
+  }
+}
+
+export function getEmptyConsultantProfile(): ConsultantProfileData {
+  return {
+    name: '',
+    title: '',
+    email: '',
+    phone: '',
+    firmName: '',
+    specialization: '',
+    experience: '',
+    bnspLicense: '',
+    city: '',
+    bio: '',
+    maxClients: 10,
+    avatar: '/images/user-profile.png',
+    documents: [] as ConsultantDocument[]
+  }
+}
+
 export const useKonsultanStore = defineStore('konsultan', {
   state: () => ({
     // Profil Konsultan
-    profile: {
-      name: 'Dra. Maya Suryani, M.M.',
-      title: 'Konsultan Ahli Keuangan & Audit UMKM',
-      email: 'maya.suryani@gmail.com',
-      phone: '+62 819-8765-4321',
-      firmName: 'Maya Advisory Partner',
-      specialization: 'Keuangan & Biaya',
-      experience: '5+ Tahun',
-      bnspLicense: 'BNSP-KONS-2024-8891',
-      city: 'Bandung, Jawa Barat',
-      bio: 'Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.',
-      maxClients: 10,
-      avatar: '/images/user-profile.png',
-      documents: [
-        {
-          id: 'doc-01',
-          name: 'Sertifikat Lisensi BNSP Konsultan Bisnis',
-          type: 'BNSP_CERT',
-          filename: 'Sertifikat_BNSP_Maya_Suryani_2024.pdf',
-          fileSize: '2.4 MB',
-          uploadedAt: '12 Jan 2026',
-          status: 'VERIFIED'
-        },
-        {
-          id: 'doc-02',
-          name: 'Portofolio Pendampingan 25+ UMKM Binaan',
-          type: 'PORTOFOLIO',
-          filename: 'Portofolio_Pendampingan_UMKM_Maya.pdf',
-          fileSize: '5.1 MB',
-          uploadedAt: '15 Jan 2026',
-          status: 'VERIFIED'
-        },
-        {
-          id: 'doc-03',
-          name: 'Nomor Pokok Wajib Pajak (NPWP) Konsultan',
-          type: 'KTP_NPWP',
-          filename: 'NPWP_Maya_Suryani.pdf',
-          fileSize: '1.2 MB',
-          uploadedAt: '15 Jan 2026',
-          status: 'VERIFIED'
-        }
-      ] as ConsultantDocument[]
-    } as ConsultantProfileData,
+    profile: getDemoConsultantProfile(),
 
     // Daftar Permintaan Bimbingan Masuk dari UMKM
     clientRequests: [
@@ -826,6 +848,64 @@ export const useKonsultanStore = defineStore('konsultan', {
   },
 
   actions: {
+    initProfileForUser(user?: { email?: string; name?: string }) {
+      if (user?.email && !user.email.includes('maya.suryani')) {
+        this.profile = {
+          ...getEmptyConsultantProfile(),
+          name: user.name || '',
+          email: user.email || ''
+        }
+      } else {
+        this.profile = getDemoConsultantProfile()
+      }
+    },
+
+    async fetchProfile() {
+      try {
+        const res = await useApi<any>('/consultant/profile')
+        if (res.data) {
+          this.profile = {
+            ...this.profile,
+            name: res.data.name || this.profile.name,
+            firmName: res.data.firmName || this.profile.firmName,
+            title: res.data.title || this.profile.title,
+            bio: res.data.bio || this.profile.bio,
+            specialization: res.data.specialization || this.profile.specialization,
+            bnspLicense: res.data.bnspLicense || this.profile.bnspLicense,
+            city: res.data.city || this.profile.city,
+            experience: res.data.experience || this.profile.experience,
+            avatar: res.data.avatar || this.profile.avatar,
+            maxClients: res.data.maxClients || 10
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat profil konsultan dari API:', err?.message)
+      }
+    },
+
+    async updateProfile(payload: Partial<ConsultantProfileData>) {
+      this.profile = { ...this.profile, ...payload }
+      try {
+        await useApi('/consultant/profile', {
+          method: 'PUT',
+          body: {
+            name: this.profile.name,
+            title: this.profile.title,
+            phone: this.profile.phone,
+            firmName: this.profile.firmName,
+            specialization: this.profile.specialization,
+            experience: this.profile.experience,
+            bnspLicense: this.profile.bnspLicense,
+            city: this.profile.city,
+            bio: this.profile.bio,
+            maxClients: this.profile.maxClients
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan profil konsultan ke backend:', err?.message)
+      }
+    },
+
     async fetchDashboard() {
       try {
         const res = await useApi<any>('/consultant/dashboard')

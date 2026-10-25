@@ -15,13 +15,159 @@ async function resolveConsultantId(req: AuthenticatedRequest): Promise<string | 
       select: { id: true },
     });
     if (prof) return prof.id;
+
+    // Jika user login bukan akun demo Dra. Maya, jangan bocorkan profil Maya Suryani
+    if (req.user.email && !req.user.email.includes("maya.suryani")) {
+      return null;
+    }
   }
-  // Fallback demo untuk Dra. Maya Suryani
+
+  // Fallback demo untuk pengujian akun Dra. Maya Suryani
   const defaultProf = await prisma.consultantProfile.findFirst({
+    where: {
+      user: { email: { contains: "maya.suryani" } },
+    },
     select: { id: true },
   });
   return defaultProf?.id || "cons-prof-01";
 }
+
+/**
+ * GET /api/consultant/profile
+ * Mengambil profil konsultan yang sedang login
+ */
+router.get("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const consultantId = await resolveConsultantId(req);
+    if (!consultantId) {
+      return res.json({
+        success: true,
+        data: {
+          name: req.user?.name || "",
+          email: req.user?.email || "",
+          firmName: "",
+          title: "",
+          bio: "",
+          specialization: "",
+          bnspLicense: "",
+          city: "",
+          experience: "",
+          maxClients: 10,
+          receiveNewClients: true,
+          waNotification: true,
+          documents: []
+        }
+      });
+    }
+
+    const prof = await prisma.consultantProfile.findUnique({
+      where: { id: consultantId },
+      include: {
+        user: { select: { name: true, email: true, avatar: true } },
+        documents: true
+      }
+    });
+
+    if (!prof) {
+      return res.status(404).json({ success: false, message: "Profil konsultan tidak ditemukan." });
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        id: prof.id,
+        name: prof.user?.name || prof.firmName,
+        email: prof.user?.email || "",
+        avatar: prof.user?.avatar || "",
+        firmName: prof.firmName,
+        title: prof.title,
+        bio: prof.bio,
+        specialization: prof.specialization,
+        bnspLicense: prof.bnspLicense,
+        city: prof.city,
+        experience: prof.experience,
+        maxClients: prof.maxClients,
+        activeClientsCount: prof.activeClientsCount,
+        isCertified: prof.isCertified,
+        receiveNewClients: prof.receiveNewClients,
+        waNotification: prof.waNotification,
+        documents: prof.documents || []
+      }
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat profil konsultan: " + err.message });
+  }
+});
+
+/**
+ * PUT /api/consultant/profile
+ * Memperbarui data profil & kapasitas konsultan yang login
+ */
+router.put("/profile", requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user?.id) {
+      return res.status(401).json({ success: false, message: "Harap login terlebih dahulu." });
+    }
+
+    const {
+      name,
+      firmName,
+      title,
+      bio,
+      specialization,
+      bnspLicense,
+      city,
+      experience,
+      maxClients,
+      receiveNewClients,
+      waNotification
+    } = req.body;
+
+    if (name) {
+      await prisma.user.update({
+        where: { id: req.user.id },
+        data: { name }
+      });
+    }
+
+    const updated = await prisma.consultantProfile.upsert({
+      where: { userId: req.user.id },
+      create: {
+        userId: req.user.id,
+        firmName: firmName || name || "Konsultan Beruang",
+        title: title || "Konsultan Ahli Keuangan & Audit UMKM",
+        bio: bio || "",
+        specialization: specialization || "F&B & Ritel",
+        bnspLicense: bnspLicense || "",
+        city: city || "Bandung",
+        experience: experience || "5+ Tahun",
+        maxClients: Number(maxClients) || 10,
+        receiveNewClients: receiveNewClients !== undefined ? Boolean(receiveNewClients) : true,
+        waNotification: waNotification !== undefined ? Boolean(waNotification) : true
+      },
+      update: {
+        ...(firmName !== undefined ? { firmName } : {}),
+        ...(title !== undefined ? { title } : {}),
+        ...(bio !== undefined ? { bio } : {}),
+        ...(specialization !== undefined ? { specialization } : {}),
+        ...(bnspLicense !== undefined ? { bnspLicense } : {}),
+        ...(city !== undefined ? { city } : {}),
+        ...(experience !== undefined ? { experience } : {}),
+        ...(maxClients !== undefined ? { maxClients: Number(maxClients) } : {}),
+        ...(receiveNewClients !== undefined ? { receiveNewClients: Boolean(receiveNewClients) } : {}),
+        ...(waNotification !== undefined ? { waNotification: Boolean(waNotification) } : {})
+      }
+    });
+
+    return res.json({
+      success: true,
+      message: "Profil konsultan berhasil diperbarui.",
+      data: updated
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memperbarui profil: " + err.message });
+  }
+});
 
 /**
  * GET /api/consultant/list

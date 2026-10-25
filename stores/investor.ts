@@ -86,7 +86,7 @@ const INITIAL_CURATED_UMKM: MarketplaceUmkm[] = [
     postAspectRatio: '3:4',
     tags: ['F&B', 'Ready for Funding', 'Margin >45%', 'Halal'],
     accessStatus: 'APPROVED',
-    bookmarked: true
+    bookmarked: false
   },
   {
     id: 'umkm-03',
@@ -139,7 +139,7 @@ const INITIAL_CURATED_UMKM: MarketplaceUmkm[] = [
     postAspectRatio: '3:4',
     tags: ['Agroindustri', 'Ready for Funding', 'P-IRT', 'Halal'],
     accessStatus: 'PENDING',
-    bookmarked: true
+    bookmarked: false
   },
   {
     id: 'umkm-07',
@@ -328,6 +328,54 @@ export function build150MarketplaceUmkms(): MarketplaceUmkm[] {
   return generated
 }
 
+export function getDemoInvestorProfile(): InvestorProfile {
+  return {
+    name: 'Fikri Setiawan',
+    roleTitle: 'Managing Partner',
+    companyName: 'PT Nusantara Kapital Investama',
+    investorType: 'Angel Investor & Sindikasi Institusi',
+    city: 'Jakarta Selatan',
+    establishedYear: 2020,
+    avatarUrl: '/images/user-profile.png',
+    bannerUrl: '/images/default-store-banner.jpg',
+    minTicket: 100000000,
+    maxTicket: 500000000,
+    preferredSectors: 'Kuliner & Minuman (F&B), Oleh-oleh & FMCG, Agroindustri',
+    investmentScheme: 'Bagi Hasil Usaha',
+    targetRoiRange: '14% – 20% per Tahun',
+    email: 'fikri@kopisenja.id',
+    whatsapp: '+62 811-9283-7465',
+    website: 'nusantarakapital.co.id',
+    npwpEntity: '02.918.374.1-012.000',
+    nibEntity: '9120301928374',
+    description: 'Fokus mendanai ekspansi gerai dan peningkatan kapasitas produksi UMKM sektor F&B, FMCG, dan Agroindustri di Indonesia yang memiliki pencatatan kas rapi dan telah divalidasi oleh konsultan pendamping resmi.'
+  }
+}
+
+export function getEmptyInvestorProfile(): InvestorProfile {
+  return {
+    name: '',
+    roleTitle: '',
+    companyName: '',
+    investorType: 'Angel Investor & Sindikasi Institusi',
+    city: '',
+    establishedYear: new Date().getFullYear(),
+    avatarUrl: '/images/user-profile.png',
+    bannerUrl: '/images/default-store-banner.jpg',
+    minTicket: 50000000,
+    maxTicket: 500000000,
+    preferredSectors: '',
+    investmentScheme: 'Bagi Hasil Usaha',
+    targetRoiRange: '',
+    email: '',
+    whatsapp: '',
+    website: '',
+    npwpEntity: '',
+    nibEntity: '',
+    description: ''
+  }
+}
+
 export const useInvestorStore = defineStore('investor', {
   state: () => ({
     searchQuery: '',
@@ -337,27 +385,7 @@ export const useInvestorStore = defineStore('investor', {
     minMargin: 0,
     selectedTicketSize: 'ALL',
 
-    profile: {
-      name: 'Fikri Setiawan',
-      roleTitle: 'Managing Partner',
-      companyName: 'PT Nusantara Kapital Investama',
-      investorType: 'Angel Investor & Sindikasi Institusi',
-      city: 'Jakarta Selatan',
-      establishedYear: 2020,
-      avatarUrl: '/images/user-profile.png',
-      bannerUrl: '/images/default-store-banner.jpg',
-      minTicket: 100000000,
-      maxTicket: 500000000,
-      preferredSectors: 'Kuliner & Minuman (F&B), Oleh-oleh & FMCG, Agroindustri',
-      investmentScheme: 'Bagi Hasil Usaha',
-      targetRoiRange: '14% – 20% per Tahun',
-      email: 'fikri@nusantarakapital.co.id',
-      whatsapp: '+62 811-9283-7465',
-      website: 'nusantarakapital.co.id',
-      npwpEntity: '02.918.374.1-012.000',
-      nibEntity: '9120301928374',
-      description: 'Fokus mendanai ekspansi gerai dan peningkatan kapasitas produksi UMKM sektor F&B, FMCG, dan Agroindustri di Indonesia yang memiliki pencatatan kas rapi dan telah divalidasi oleh konsultan pendamping resmi.'
-    } as InvestorProfile,
+    profile: getDemoInvestorProfile(),
 
     marketplaceList: build150MarketplaceUmkms(),
 
@@ -597,8 +625,91 @@ export const useInvestorStore = defineStore('investor', {
       }
     },
 
-    updateInvestorProfile(payload: Partial<InvestorProfile>) {
+    initProfileForUser(user?: { email?: string; name?: string }) {
+      if (user?.email && !user.email.includes('kopisenja') && !user.email.includes('hendro')) {
+        this.profile = {
+          ...getEmptyInvestorProfile(),
+          name: user.name || '',
+          email: user.email || ''
+        }
+      } else {
+        this.profile = getDemoInvestorProfile()
+      }
+    },
+
+    async fetchProfile() {
+      try {
+        const res = await useApi<any>('/investor/profile')
+        if (res.data) {
+          this.profile = {
+            ...this.profile,
+            name: res.data.name || this.profile.name,
+            companyName: res.data.companyName || this.profile.companyName,
+            investorType: res.data.investorType || this.profile.investorType,
+            city: res.data.city || this.profile.city,
+            preferredSectors: res.data.sectors ? (Array.isArray(res.data.sectors) ? res.data.sectors.join(', ') : res.data.sectors) : this.profile.preferredSectors,
+            minTicket: res.data.minTicket || this.profile.minTicket,
+            maxTicket: res.data.maxTicket || this.profile.maxTicket,
+            investmentScheme: res.data.investmentScheme || this.profile.investmentScheme,
+            whatsapp: res.data.whatsapp || this.profile.whatsapp,
+            website: res.data.website || this.profile.website,
+            nibEntity: res.data.nibEntity || this.profile.nibEntity,
+            npwpEntity: res.data.npwpEntity || this.profile.npwpEntity,
+            description: res.data.description || this.profile.description
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat profil investor live:', err?.message)
+      }
+    },
+
+    async fetchMyAccessRequests() {
+      try {
+        const res = await useApi<any>('/investor/my-requests')
+        if (res.data && Array.isArray(res.data)) {
+          this.applications = res.data.map((r: any) => ({
+            umkmId: r.businessId,
+            ticketSize: r.proposedTicket,
+            notes: r.introMessage || '',
+            submittedAt: r.requestedAt
+          }))
+          // Sinkronkan accessStatus pada marketplaceList
+          for (const req of res.data) {
+            const item = this.marketplaceList.find(m => m.id === req.businessId || m.umkmRefId === req.businessId)
+            if (item) {
+              item.accessStatus = req.status
+            }
+          }
+        }
+      } catch (err: any) {
+        console.warn('Gagal memuat permohonan akses live:', err?.message)
+      }
+    },
+
+    async updateInvestorProfile(payload: Partial<InvestorProfile>) {
       this.profile = { ...this.profile, ...payload }
+      try {
+        await useApi('/investor/profile', {
+          method: 'PUT',
+          body: {
+            name: this.profile.name,
+            companyName: this.profile.companyName,
+            investorType: this.profile.investorType,
+            city: this.profile.city,
+            preferredSectors: this.profile.preferredSectors,
+            minTicket: this.profile.minTicket,
+            maxTicket: this.profile.maxTicket,
+            investmentScheme: this.profile.investmentScheme,
+            whatsapp: this.profile.whatsapp,
+            website: this.profile.website,
+            nibEntity: this.profile.nibEntity,
+            npwpEntity: this.profile.npwpEntity,
+            description: this.profile.description
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan profil investor ke server:', err?.message)
+      }
     },
 
     updateInvestorBanner(newUrl: string) {

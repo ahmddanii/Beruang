@@ -463,9 +463,20 @@ definePageMeta({
   hideHeader: true
 })
 
+const konsultanStore = useKonsultanStore()
 let gsapCtx: gsap.Context | null = null
 
 onMounted(async () => {
+  try {
+    await konsultanStore.fetchProfile()
+    capacityForm.maxClients = konsultanStore.profile.maxClients || 8
+    if (konsultanStore.profile.phone) {
+      accountForm.phone = konsultanStore.profile.phone
+    }
+  } catch (err: any) {
+    console.warn('Gagal sinkron pengaturan konsultan:', err?.message)
+  }
+
   await nextTick()
   gsapCtx = gsap.context(() => {
     gsap.from('.gsap-settings-header', {
@@ -557,15 +568,22 @@ function toggleSector(sector: string) {
   }
 }
 
-function handleSave() {
+async function handleSave() {
   isSaving.value = true
-  setTimeout(() => {
-    isSaving.value = false
+  try {
+    await konsultanStore.updateProfile({
+      maxClients: capacityForm.maxClients,
+      phone: accountForm.phone
+    })
     saved.value = true
     setTimeout(() => {
       saved.value = false
     }, 3500)
-  }, 600)
+  } catch (err: any) {
+    console.warn('Gagal menyimpan pengaturan:', err?.message)
+  } finally {
+    isSaving.value = false
+  }
 }
 </script>
 

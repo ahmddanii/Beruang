@@ -43,11 +43,16 @@ model ConsultantProfile {
   maxClients         Int      @default(10)
   isCertified        Boolean  @default(true)
   activeClientsCount Int      @default(0)
+  receiveNewClients  Boolean  @default(true)
+  waNotification     Boolean  @default(true)
   createdAt          DateTime @default(now())
 
-  businesses  BusinessProfile[]
-  assignments ConsultantAssignment[]
-  agreements  ConsultantAgreement[]
+  businesses         BusinessProfile[]
+  assignments        ConsultantAssignment[]
+  agreements         ConsultantAgreement[]
+  mentorshipRequests ConsultantMentorshipRequest[]
+  milestones         ClientMilestone[]
+  documents          ConsultantDocument[]
 }
 
 model InvestorProfile {
@@ -60,6 +65,15 @@ model InvestorProfile {
   sectors           String?  @default("F&B, FMCG, Agroindustri")
   minMargin         Float?   @default(40.0)
   city              String?  @default("Jakarta")
+  phone             String?
+  whatsapp          String?
+  website           String?
+  nibEntity         String?
+  npwpEntity        String?
+  kycStatus         String   @default("VERIFIED") // VERIFIED, PENDING
+  minTicket         Float?   @default(50000000)
+  maxTicket         Float?   @default(1000000000)
+  investmentScheme  String?  @default("REVENUE_SHARE") // REVENUE_SHARE, EQUITY, CONVERTIBLE
   isVerified        Boolean  @default(true)
   createdAt         DateTime @default(now())
 }
@@ -93,17 +107,20 @@ model BusinessProfile {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  assessment       Assessment?
-  tasks            ActionPlanTask[]
-  dailyTxs         DailyTransaction[]
-  monthlyReports   MonthlyReport[]
-  documents        DataRoomDocument[]
-  accessRequests   AccessRequest[]
-  watchlists       InvestorWatchlist[]
-  assignments      ConsultantAssignment[]
-  chatThreads      ChatThread[]
-  agreements       ConsultantAgreement[]
-  featuredProducts FeaturedProduct[]
+  assessment         Assessment?
+  tasks              ActionPlanTask[]
+  dailyTxs           DailyTransaction[]
+  monthlyReports     MonthlyReport[]
+  documents          DataRoomDocument[]
+  accessRequests     AccessRequest[]
+  watchlists         InvestorWatchlist[]
+  assignments        ConsultantAssignment[]
+  chatThreads        ChatThread[]
+  agreements         ConsultantAgreement[]
+  featuredProducts   FeaturedProduct[]
+  mentorshipRequests ConsultantMentorshipRequest[]
+  milestones         ClientMilestone[]
+  fundingCertificate FundingCertificate?
 }
 
 model FeaturedProduct {
@@ -346,4 +363,93 @@ model VdrAuditLog {
   userAgent   String?
   accessedAt  DateTime          @default(now())
 }
+
+// 1. Konfigurasi Parameter Sistem Global (Admin Pengaturan)
+model SystemSetting {
+  id                    String   @id @default("global-config")
+  minCompositeScore     Int      @default(75)    // Ambang skor lulus sertifikasi
+  minGuidanceMonths     Int      @default(3)     // Durasi bimbingan wajib (bulan)
+  requireBankStatements Boolean  @default(true)  // Wajib mutasi bank 3 bulan
+  openCycleDay          Int      @default(25)    // Tanggal buka siklus pelaporan kas
+  closeCycleDay         Int      @default(30)    // Tanggal tutup siklus
+  validationWindowDays  Int      @default(5)     // Batas waktu validasi konsultan (hari)
+  updatedAt             DateTime @updatedAt
+  updatedBy             String?  // ID Admin yang memperbarui
+}
+
+// 2. Sertifikat Kelayakan Pendanaan Resmi (Admin Sertifikasi)
+model FundingCertificate {
+  id                String          @id @default(cuid())
+  businessId        String          @unique
+  business          BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  certificateNo     String          @unique // e.g. "CERT-BERUANG-2026-0042"
+  compositeScore    Int
+  financialScore    Int
+  operationsScore   Int
+  legalScore        Int
+  approvedByAdminId String
+  approvedAt        DateTime        @default(now())
+  validUntil        DateTime        // Masa berlaku 12 bulan
+  certificatePdfUrl String?
+}
+
+// 3. Log Audit Aktivitas Ekosistem (Admin Beranda & Keamanan)
+model PlatformActivityLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String   // e.g. "CERTIFICATION_APPROVED", "VDR_ACCESS_GRANTED", "CONSULTANT_ASSIGNED"
+  entityType String   // "BUSINESS", "USER", "ACCESS_REQUEST"
+  entityId   String
+  title      String
+  detail     String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}
+
+// 4. Permohonan Bimbingan Masuk (Konsultan Request)
+model ConsultantMentorshipRequest {
+  id              String            @id @default(cuid())
+  consultantId    String
+  businessId      String
+  status          String            @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  offeredFee      Float             @default(1500000)
+  durationMonths  Int               @default(3)
+  message         String?
+  rejectionReason String?
+  createdAt       DateTime          @default(now())
+
+  consultant      ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+  business        BusinessProfile   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+// 5. Berkas Lisensi & Portofolio Konsultan
+model ConsultantDocument {
+  id           String            @id @default(cuid())
+  consultantId String
+  name         String
+  type         String            // BNSP_CERT, PORTOFOLIO, NPWP, OTHER
+  filename     String
+  fileSize     String
+  fileUrl      String?
+  status       String            @default("VERIFIED") // PENDING, VERIFIED, REJECTED
+  uploadedAt   DateTime          @default(now())
+
+  consultant   ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+}
+
+// 6. Milestone Tahapan Bimbingan
+model ClientMilestone {
+  id           String            @id @default(cuid())
+  businessId   String
+  consultantId String
+  title        String
+  phaseNumber  Int               @default(1)
+  targetMonth  String            // e.g. "Bulan ke-1"
+  status       String            @default("IN_PROGRESS") // TODO, IN_PROGRESS, COMPLETED
+  createdAt    DateTime          @default(now())
+
+  business     BusinessProfile   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  consultant   ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+}
+
 

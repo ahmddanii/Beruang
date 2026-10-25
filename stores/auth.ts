@@ -220,6 +220,7 @@ export const useAuthStore = defineStore('auth', {
               const parsed = JSON.parse(cachedUser)
               if (parsed && typeof parsed === 'object') {
                 this.currentUser = parsed
+                this.syncRoleStores()
               }
             }
           } catch {
@@ -238,6 +239,19 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    syncRoleStores() {
+      if (!this.currentUser) return
+      try {
+        if (this.currentUser.role === 'CONSULTANT') {
+          useKonsultanStore().initProfileForUser(this.currentUser)
+        } else if (this.currentUser.role === 'INVESTOR') {
+          useInvestorStore().initProfileForUser(this.currentUser)
+        }
+      } catch {
+        // ignore in SSR
+      }
+    },
+
     /**
      * Pasang data pengguna dari Google OAuth segera ke state
      */
@@ -251,6 +265,7 @@ export const useAuthStore = defineStore('auth', {
         verified: true
       } as UserProfile
       this.isAuthenticated = true
+      this.syncRoleStores()
       if (import.meta.client && this.currentUser) {
         try {
           localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
@@ -272,6 +287,7 @@ export const useAuthStore = defineStore('auth', {
             businessName: userData.businessName || userData.businessProfile?.brand || userData.businessProfile?.name || userData.orgName || this.currentUser?.businessName
           }
           this.isAuthenticated = true
+          this.syncRoleStores()
           if (import.meta.client && this.currentUser) {
             try {
               localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
@@ -313,6 +329,7 @@ export const useAuthStore = defineStore('auth', {
           businessName: res.data.user.businessName || res.data.user.orgName
         }
         this.isAuthenticated = true
+        this.syncRoleStores()
 
         if (import.meta.client) {
           try {
@@ -344,6 +361,7 @@ export const useAuthStore = defineStore('auth', {
           verified: true
         }
         this.isAuthenticated = true
+        this.syncRoleStores()
 
         if (import.meta.client) {
           try {

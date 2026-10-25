@@ -723,7 +723,30 @@ const hasUnsavedChanges = computed(() => {
   return getFormSnapshot() !== initialSnapshot.value
 })
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    await investorStore.fetchProfile()
+    Object.assign(formProfile, {
+      name: investorStore.profile.name || formProfile.name,
+      roleTitle: investorStore.profile.roleTitle || formProfile.roleTitle,
+      companyName: investorStore.profile.companyName || formProfile.companyName,
+      investorType: investorStore.profile.investorType || formProfile.investorType,
+      city: investorStore.profile.city || formProfile.city,
+      minTicket: investorStore.profile.minTicket || formProfile.minTicket,
+      maxTicket: investorStore.profile.maxTicket || formProfile.maxTicket,
+      preferredSectors: investorStore.profile.preferredSectors || formProfile.preferredSectors,
+      investmentScheme: investorStore.profile.investmentScheme || formProfile.investmentScheme,
+      targetRoiRange: investorStore.profile.targetRoiRange || formProfile.targetRoiRange,
+      whatsapp: investorStore.profile.whatsapp || formProfile.whatsapp,
+      website: investorStore.profile.website || formProfile.website,
+      npwpEntity: investorStore.profile.npwpEntity || formProfile.npwpEntity,
+      nibEntity: investorStore.profile.nibEntity || formProfile.nibEntity,
+      description: investorStore.profile.description || formProfile.description
+    })
+  } catch (err: any) {
+    console.warn('Gagal sinkron profil investor:', err?.message)
+  }
+
   initialSnapshot.value = getFormSnapshot()
 
   if (typeof window !== 'undefined' && pageRootRef.value) {
@@ -783,17 +806,20 @@ function onAvatarReset() {
   triggerToast('Foto profil dikembalikan ke setelan awal.')
 }
 
-function saveProfile() {
+async function saveProfile() {
   isSaving.value = true
-  setTimeout(() => {
-    investorStore.updateInvestorProfile({ ...formProfile })
+  try {
+    await investorStore.updateInvestorProfile({ ...formProfile })
     if (authStore.currentUser) {
       authStore.currentUser.name = formProfile.name
     }
     initialSnapshot.value = getFormSnapshot()
-    isSaving.value = false
     triggerToast('Perubahan profil investor berhasil disimpan!')
-  }, 300)
+  } catch (err: any) {
+    triggerToast('Gagal menyimpan profil investor ke server.')
+  } finally {
+    isSaving.value = false
+  }
 }
 </script>
 

@@ -748,12 +748,21 @@ router.get("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
         userId: investor.userId,
         name: investor.user.name,
         syndicate: investor.firmName,
+        companyName: investor.firmName,
         firmName: investor.firmName,
         email: investor.user.email,
-        phone: investor.user.phone || "081198765432",
+        phone: investor.phone || investor.user.phone || "081198765432",
+        whatsapp: investor.whatsapp || investor.user.phone || "",
+        website: investor.website || "",
+        nibEntity: investor.nibEntity || "",
+        npwpEntity: investor.npwpEntity || "",
+        kycStatus: investor.kycStatus || (investor.isVerified ? "VERIFIED" : "PENDING"),
         avatar: investor.user.avatar,
         sectors: parsedSectors,
         minMargin: `${investor.minMargin || 35}%`,
+        minTicket: investor.minTicket || 50000000,
+        maxTicket: investor.maxTicket || 1000000000,
+        investmentScheme: investor.investmentScheme || prefs.preferredScheme,
         city: investor.city,
         commitmentCapital: investor.commitmentCapital,
         investorType: investor.investorType || "Kelompok Modal",
@@ -786,10 +795,19 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
     const {
       name,
       syndicate,
+      companyName,
       firmName,
       email,
       phone,
+      whatsapp,
+      website,
+      nibEntity,
+      npwpEntity,
+      minTicket,
+      maxTicket,
+      investmentScheme,
       sectors,
+      preferredSectors,
       preferredScheme,
       ticketRange,
       minMargin,
@@ -799,8 +817,9 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
       notifyEmailReport,
     } = req.body;
 
-    const resolvedFirm = syndicate || firmName;
-    const sectorsStr = Array.isArray(sectors) ? sectors.join(", ") : (sectors ? String(sectors).trim() : undefined);
+    const resolvedFirm = companyName || syndicate || firmName;
+    const resolvedSectors = preferredSectors || sectors;
+    const sectorsStr = Array.isArray(resolvedSectors) ? resolvedSectors.join(", ") : (resolvedSectors ? String(resolvedSectors).trim() : undefined);
 
     const updated = await prisma.investorProfile.update({
       where: { id: investor.id },
@@ -808,8 +827,16 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
         ...(resolvedFirm ? { firmName: String(resolvedFirm).trim() } : {}),
         ...(sectorsStr ? { sectors: sectorsStr } : {}),
         ...(minMargin ? { minMargin: parseFloat(String(minMargin).replace(/[^0-9.]/g, "")) } : {}),
+        ...(minTicket ? { minTicket: Number(minTicket) } : {}),
+        ...(maxTicket ? { maxTicket: Number(maxTicket) } : {}),
+        ...(investmentScheme ? { investmentScheme: String(investmentScheme).trim() } : {}),
         ...(investorType ? { investorType: String(investorType).trim() } : {}),
         ...(city ? { city: String(city).trim() } : {}),
+        ...(phone ? { phone: String(phone).trim() } : {}),
+        ...(whatsapp ? { whatsapp: String(whatsapp).trim() } : {}),
+        ...(website ? { website: String(website).trim() } : {}),
+        ...(nibEntity ? { nibEntity: String(nibEntity).trim() } : {}),
+        ...(npwpEntity ? { npwpEntity: String(npwpEntity).trim() } : {}),
       },
       include: { user: true },
     });
@@ -846,6 +873,41 @@ router.put("/profile", optionalAuth, async (req: AuthenticatedRequest, res: Resp
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: "Gagal memperbarui profil investor: " + err.message });
+  }
+});
+
+/**
+ * GET /api/investor/my-requests
+ * Riwayat dan status permohonan akses data room privat investor
+ */
+router.get("/my-requests", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const investorUserId = await resolveInvestorUserId(req);
+    const requests = await prisma.accessRequest.findMany({
+      where: { investorId: investorUserId },
+      include: {
+        business: true,
+      },
+      orderBy: { requestedAt: "desc" },
+    });
+
+    return res.json({
+      success: true,
+      message: "Daftar permohonan akses data room berhasil dimuat.",
+      data: requests.map((r) => ({
+        id: r.id,
+        businessId: r.businessId,
+        businessName: r.business?.brand || r.business?.name || "UMKM",
+        status: r.status,
+        proposedTicket: r.proposedTicket,
+        investmentScheme: r.investmentScheme,
+        introMessage: r.introMessage,
+        requestedAt: r.requestedAt,
+        respondedAt: r.respondedAt,
+      })),
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: "Gagal memuat permohonan akses: " + err.message });
   }
 });
 

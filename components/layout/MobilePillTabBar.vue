@@ -120,7 +120,9 @@ import {
   Store01Icon,
   Bookmark02Icon,
   UserCircleIcon,
-  Message01Icon
+  Message01Icon,
+  UserGroupIcon,
+  CheckmarkCircle01Icon
 } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
@@ -239,6 +241,36 @@ const tabs = computed(() => {
         label: 'Sertifikasi',
         to: '/admin/sertifikasi',
         icon: Award01Icon
+      }
+    ]
+  }
+
+  if (currentRole.value === 'CONSULTANT') {
+    return [
+      {
+        id: 'beranda',
+        label: 'Beranda',
+        to: '/konsultan',
+        icon: Home03Icon,
+        exact: true
+      },
+      {
+        id: 'klien',
+        label: 'Klien',
+        to: '/konsultan/klien',
+        icon: UserGroupIcon
+      },
+      {
+        id: 'aksi',
+        label: 'Aksi',
+        to: '/konsultan/rencana-aksi',
+        icon: Task01Icon
+      },
+      {
+        id: 'validasi',
+        label: 'Validasi',
+        to: '/konsultan/validasi',
+        icon: CheckmarkCircle01Icon
       }
     ]
   }

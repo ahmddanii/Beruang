@@ -397,19 +397,60 @@ const currentPageInfo = computed(() => {
 
   // Konsultan pages
   if (p === '/konsultan' || p === '/konsultan/') {
-    return { title: 'Daftar Klien', icon: UserGroupIcon }
+    return {
+      title: 'Beranda Konsultan',
+      icon: Home03Icon,
+      description: 'Rangkuman aktivitas pendampingan UMKM, metrik portofolio binaan, dan diagnosa prioritas.'
+    }
   }
-  if (p.startsWith('/konsultan/validasi')) {
-    return { title: 'Validasi Kas', icon: CheckmarkCircle01Icon }
-  }
-  if (p.startsWith('/konsultan/alert')) {
-    return { title: 'Peringatan', icon: Alert01Icon }
+  if (p === '/konsultan/klien' || p === '/konsultan/klien/') {
+    return {
+      title: 'Daftar Klien Binaan',
+      icon: UserGroupIcon,
+      description: 'Kelola seluruh daftar UMKM binaan dan tinjau permohonan bimbingan baru.'
+    }
   }
   if (p.startsWith('/konsultan/klien/')) {
-    return { title: 'Diagnosa Klien UMKM', icon: AnalyticsUpIcon }
+    return {
+      title: 'Diagnosa Klien UMKM',
+      icon: AnalyticsUpIcon,
+      description: 'Analisis mendalam kondisi finansial, laporan kas, dan kemajuan bimbingan pelaku usaha.'
+    }
+  }
+  if (p.startsWith('/konsultan/rencana-aksi')) {
+    return {
+      title: 'Rencana Aksi',
+      icon: Task01Icon,
+      description: 'Daftar arahan perbaikan dan pendampingan finansial untuk pelaku usaha binaan.'
+    }
+  }
+  if (p.startsWith('/konsultan/validasi')) {
+    return {
+      title: 'Validasi Kas',
+      icon: CheckmarkCircle01Icon,
+      description: 'Verifikasi berkas mutasi dan pencatatan kas riil UMKM untuk menjaga kepatuhan.'
+    }
+  }
+  if (p.startsWith('/konsultan/alert')) {
+    return {
+      title: 'Peringatan Anomali',
+      icon: Alert01Icon,
+      description: 'Pantau anomali pengeluaran dan peringatan dini potensi risiko pada usaha binaan.'
+    }
+  }
+  if (p.startsWith('/konsultan/profil')) {
+    return {
+      title: 'Profil Konsultan',
+      icon: UserCircleIcon,
+      description: 'Kelola kredensial profesional, sertifikasi, dan reputasi bimbinganmu.'
+    }
   }
   if (p.startsWith('/konsultan/pengaturan')) {
-    return { title: 'Pengaturan Konsultan', icon: Settings01Icon }
+    return {
+      title: 'Pengaturan Konsultan',
+      icon: Settings01Icon,
+      description: 'Kelola preferensi akun, integrasi komunikasi, dan keamanan akun konsultan.'
+    }
   }
 
   // Investor pages

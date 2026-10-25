@@ -128,7 +128,9 @@ import {
   UserCircleIcon,
   UserGroupIcon,
   Home03Icon,
-  Cancel01Icon
+  Cancel01Icon,
+  CheckmarkCircle01Icon,
+  Alert01Icon
 } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
@@ -346,6 +348,61 @@ const quickAccessItems = computed(() => {
         id: 'pengaturan',
         label: currentLang.value === 'en' ? 'Settings' : 'Pengaturan',
         to: '/admin/pengaturan',
+        icon: Settings01Icon
+      }
+    ]
+  }
+
+  if (role === 'CONSULTANT') {
+    return [
+      {
+        id: 'beranda',
+        label: 'Beranda',
+        to: '/konsultan',
+        icon: Home03Icon,
+        isPrimary: true
+      },
+      {
+        id: 'klien',
+        label: 'Daftar Klien',
+        to: '/konsultan/klien',
+        icon: UserGroupIcon
+      },
+      {
+        id: 'aksi',
+        label: 'Rencana Aksi',
+        to: '/konsultan/rencana-aksi',
+        icon: Task01Icon
+      },
+      {
+        id: 'validasi',
+        label: 'Validasi Kas',
+        to: '/konsultan/validasi',
+        icon: CheckmarkCircle01Icon
+      },
+      {
+        id: 'alert',
+        label: 'Peringatan',
+        to: '/konsultan/alert',
+        icon: Alert01Icon
+      },
+      {
+        id: 'profil',
+        label: 'Profil',
+        to: '/konsultan/profil',
+        icon: UserCircleIcon
+      },
+      {
+        id: 'notifikasi',
+        label: t('nav_notifikasi'),
+        to: '/dashboard/notifikasi',
+        icon: Notification01Icon,
+        badge: totalUnreadNotif.value
+      },
+      {
+        id: 'pengaturan',
+        label: currentLang.value === 'en' ? 'Settings' : 'Pengaturan',
+        to: '/konsultan/pengaturan',
         icon: Settings01Icon
       }
     ]

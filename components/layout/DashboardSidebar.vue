@@ -797,19 +797,27 @@ const navigationSections = computed<NavSection[]>(() => {
     return [
       {
         items: [
-          { to: '/konsultan', label: 'Daftar Klien', icon: UserGroupIcon },
+          { to: '/konsultan', label: 'Beranda', icon: Home03Icon }
+        ]
+      },
+      {
+        title: 'Pendampingan',
+        items: [
+          { to: '/konsultan/klien', label: 'Daftar Klien', icon: UserGroupIcon },
+          { to: '/konsultan/rencana-aksi', label: 'Rencana Aksi', icon: Task01Icon },
           { to: '/konsultan/validasi', label: 'Validasi Kas', icon: CheckmarkCircle01Icon }
         ]
       },
       {
         title: 'Pengawasan',
         items: [
-          { to: '/konsultan/alert', label: 'Peringatan', icon: Alert01Icon }
+          { to: '/konsultan/alert', label: 'Peringatan Anomali', icon: Alert01Icon }
         ]
       },
       {
         title: 'Preferensi',
         items: [
+          { to: '/konsultan/profil', label: 'Profil Konsultan', icon: UserCircleIcon },
           { to: '/konsultan/pengaturan', label: 'Pengaturan', icon: Settings01Icon }
         ]
       }

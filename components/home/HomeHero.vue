@@ -1,46 +1,49 @@
 <template>
-  <section class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 pt-16 pb-24">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+  <section class="w-full max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 pt-8 sm:pt-14 pb-12 sm:pb-20 font-sans">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-center">
       
       <!-- Left Column: Editorial Headline & Value Prop -->
-      <div class="flex flex-col gap-8">
-
-
-        <div class="flex flex-col gap-4">
-          <h1 class="text-[42px] sm:text-[68px]  font-extrabold text-neutral-900 dark:text-white tracking-tight leading-[52px] sm:leading-[84px] text-balance">
+      <div class="lg:col-span-7 flex flex-col gap-6 sm:gap-7">
+        <!-- Headline & Description -->
+        <div class="space-y-3.5">
+          <h1 class="text-3xl sm:text-5xl lg:text-5xl xl:text-[56px] font-poppins font-bold text-neutral-900 dark:text-white tracking-tight leading-tight lg:leading-[1.15] text-balance">
             Bisnismu, Terverifikasi & Siap Didanai.
           </h1>
 
-          <p class="text-[16px] text-neutral-600 dark:text-neutral-300 max-w-[50ch] leading-[24px] ">
+          <p class="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-300 font-poppins leading-relaxed max-w-2xl">
             Audit 5 pilar bersama konsultan bisnis profesional. Rapikan arus kas, raih sertifikasi kelayakan, dan terhubung langsung dengan investor terpercaya.
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-4">
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center gap-3.5 pt-1">
           <NuxtLink
             to="/daftar"
-            class="group pl-6 pr-2 py-2 h-[48px] rounded-[24px]  font-bold text-[16px] bg-primary-500 hover:bg-primary-600 text-white shadow-xs transition-all duration-300 active:scale-[0.98] inline-flex items-center gap-3 cursor-pointer leading-[32px]"
+            class="btn-3d-blue group px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-poppins font-semibold inline-flex items-center gap-2.5 shadow-sm"
           >
             <span>Mulai Audit Usaha Gratis</span>
-            <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
-              <HugeiconsIcon :icon="ArrowRight01Icon" :size="16" :stroke-width="2" />
-            </span>
+            <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
           </NuxtLink>
 
           <NuxtLink
             to="/investor"
-            class="px-6 py-2 h-[48px] inline-flex items-center justify-center rounded-[24px]  font-semibold text-[16px] border border-[#EAEAEA] dark:border-[#26272F] bg-white dark:bg-[#15161A] hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-200 transition-all duration-150 active:scale-[0.98] leading-[32px]"
+            class="btn-pill-action group px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm"
           >
-            <span>Katalog Usaha</span>
+            <span>Katalog Usaha Terverifikasi</span>
+            <svg class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
           </NuxtLink>
         </div>
-
-
       </div>
 
-      <!-- Right Column: Simple Lottie Animation (same as login) -->
-      <div class="flex justify-center items-center">
-        <div class="w-full max-w-[480px] aspect-square relative flex items-center justify-center">
+      <!-- Right Column: Lottie Animation -->
+      <div class="lg:col-span-5 flex justify-center items-center">
+        <div class="w-full max-w-[380px] sm:max-w-[440px] lg:max-w-[500px] aspect-square relative flex items-center justify-center">
           <BLottiePlayer
             :src="lottieAnimationUrl"
             :autoplay="true"
@@ -55,13 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { HugeiconsIcon } from '@hugeicons/vue'
-import {
-  ArrowRight01Icon,
-  CheckmarkCircle01Icon,
-  LockKeyIcon
-} from '@hugeicons/core-free-icons'
 import BLottiePlayer from '~/components/base/BLottiePlayer.vue'
 
-const lottieAnimationUrl = 'https://lottie.host/c484a436-22e4-4f84-b255-0d4edc5a280d/eJzWl0Bciv.lottie'
+const lottieAnimationUrl = '/animations/hero.lottie'
 </script>

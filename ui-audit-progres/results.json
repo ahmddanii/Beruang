@@ -1,0 +1,5064 @@
+{
+  "target": "http://localhost:3000/dashboard/progres",
+  "profile": "general",
+  "profile_label": "Umum (WCAG AA)",
+  "date": "2026-10-22 07:03",
+  "score": 89,
+  "category_scores": {
+    "typo": 89,
+    "size": 86,
+    "layout": 96,
+    "color": 91,
+    "ux": 100
+  },
+  "counts": {
+    "error": 0,
+    "warn": 18,
+    "info": 6
+  },
+  "instances": {
+    "error": 0,
+    "warn": 82,
+    "info": 22
+  },
+  "viewports": [
+    {
+      "label": "mobile",
+      "w": 375,
+      "h": 812,
+      "page_height": 812,
+      "image": "screens/mobile.annotated.png",
+      "clean": "screens/mobile.png",
+      "parts": [
+        "screens\\mobile.annotated.part1.png"
+      ],
+      "js_errors": [],
+      "elements": 298,
+      "issue_count": 17
+    },
+    {
+      "label": "tablet",
+      "w": 768,
+      "h": 1024,
+      "page_height": 1024,
+      "image": "screens/tablet.annotated.png",
+      "clean": "screens/tablet.png",
+      "parts": [
+        "screens\\tablet.annotated.part1.png"
+      ],
+      "js_errors": [],
+      "elements": 314,
+      "issue_count": 15
+    },
+    {
+      "label": "desktop",
+      "w": 1440,
+      "h": 900,
+      "page_height": 900,
+      "image": "screens/desktop.annotated.png",
+      "clean": "screens/desktop.png",
+      "parts": [
+        "screens\\desktop.annotated.part1.png"
+      ],
+      "js_errors": [],
+      "elements": 370,
+      "issue_count": 22
+    }
+  ],
+  "issues_by_viewport": {
+    "mobile": [
+      {
+        "rule": "COLOR-02",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Batas kolom kontras 1.5:1 (minimum 3:1).",
+        "fix": "border: 2px solid #6b7280;",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 41,
+              "y": 1266,
+              "w": 293,
+              "h": 46
+            },
+            "msg": "Batas kolom kontras 1.5:1 (minimum 3:1)."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "375×812",
+        "n": 1
+      },
+      {
+        "rule": "COLOR-03",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token.",
+        "fix": "Ganti #171717 dengan #18181b.",
+        "targets": [
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Sekarang",
+            "rect": {
+              "x": 61,
+              "y": 137,
+              "w": 68.734375,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Lihat Uang Masuk",
+            "rect": {
+              "x": 52,
+              "y": 498,
+              "w": 124.0625,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Modal Jualan",
+            "rect": {
+              "x": 52,
+              "y": 688,
+              "w": 125.75,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Beban Toko",
+            "rect": {
+              "x": 52,
+              "y": 878,
+              "w": 112.28125,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Semua Transaksi",
+            "rect": {
+              "x": 58,
+              "y": 1209,
+              "w": 123.21875,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          }
+        ],
+        "n_targets": 5,
+        "viewport_size": "375×812",
+        "n": 2
+      },
+      {
+        "rule": "COLOR-03",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "13 warna teks berbeda (target ≤ 9).",
+        "fix": "Batasi: teks utama, teks sekunder, link, error, sukses, putih.",
+        "targets": [
+          {
+            "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#156374\\].dark\\:text-\\[\\#50AABF\\]",
+            "text": "Ber",
+            "rect": {
+              "x": 113.140625,
+              "y": 13.5,
+              "w": 34.0625,
+              "h": 28
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#00800e\\].dark\\:text-\\[\\#00C058\\]",
+            "text": "uang",
+            "rect": {
+              "x": 147.203125,
+              "y": 13.5,
+              "w": 54.125,
+              "h": 28
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+            "text": "Unduh Buku Kas",
+            "rect": {
+              "x": 199.734375,
+              "y": 137,
+              "w": 115.78125,
+              "h": 14
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+            "text": "Catat Kas",
+            "rect": {
+              "x": 52,
+              "y": 308,
+              "w": 69.078125,
+              "h": 14
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Terkontrol",
+            "rect": {
+              "x": 269.921875,
+              "y": 786,
+              "w": 61.078125,
+              "h": 16
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+            "text": "Buku Mutasi Kas Harian",
+            "rect": {
+              "x": 62,
+              "y": 970,
+              "w": 168.203125,
+              "h": 14
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "375×812",
+        "n": 3
+      },
+      {
+        "rule": "COLOR-05",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Placeholder kontras 2.6:1.",
+        "fix": "color: #6b7280; /* ≥4.5:1 di latar putih */",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 41,
+              "y": 1266,
+              "w": 293,
+              "h": 46
+            },
+            "msg": "Placeholder kontras 2.6:1."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "375×812",
+        "n": 4
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 21,
+              "y": 955,
+              "w": 225.203125,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 250.203125,
+              "y": 955,
+              "w": 194.484375,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "375×812",
+        "n": 5
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 250.203125,
+              "y": 955,
+              "w": 194.484375,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 448.6875,
+              "y": 955,
+              "w": 227.46875,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "375×812",
+        "n": 6
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Jarak antar target hanya 8px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+            "text": "",
+            "rect": {
+              "x": 237,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 8px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.flex.items-center > div.relative.select-none > button.flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 289,
+              "y": 5.5,
+              "w": 70,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 8px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "375×812",
+        "n": 7
+      },
+      {
+        "rule": "SIZE-04",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Lebar 106px, saudara sekelasnya 148px.",
+        "fix": "Samakan lebar (grid/flex: 1 1 0).",
+        "targets": [
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Tanggal",
+            "rect": {
+              "x": 17,
+              "y": 1337,
+              "w": 105.828125,
+              "h": 48.5
+            },
+            "msg": "Lebar 106px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Kategori",
+            "rect": {
+              "x": 122.828125,
+              "y": 1337,
+              "w": 174.328125,
+              "h": 48.5
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Keterangan Transaksi",
+            "rect": {
+              "x": 297.15625,
+              "y": 1337,
+              "w": 422.90625,
+              "h": 48.5
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          }
+        ],
+        "n_targets": 3,
+        "viewport_size": "375×812",
+        "n": 8
+      },
+      {
+        "rule": "SIZE-04",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Lebar 106px, saudara sekelasnya 148px.",
+        "fix": "Samakan lebar (grid/flex: 1 1 0).",
+        "targets": [
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 17,
+              "y": 1385.5,
+              "w": 105.828125,
+              "h": 77
+            },
+            "msg": "Lebar 106px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 122.828125,
+              "y": 1385.5,
+              "w": 174.328125,
+              "h": 77
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 297.15625,
+              "y": 1385.5,
+              "w": 422.90625,
+              "h": 77
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 17,
+              "y": 1462.5,
+              "w": 105.828125,
+              "h": 77
+            },
+            "msg": "Lebar 106px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 122.828125,
+              "y": 1462.5,
+              "w": 174.328125,
+              "h": 77
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 297.15625,
+              "y": 1462.5,
+              "w": 422.90625,
+              "h": 77
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 17,
+              "y": 1539.5,
+              "w": 105.828125,
+              "h": 77
+            },
+            "msg": "Lebar 106px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 122.828125,
+              "y": 1539.5,
+              "w": 174.328125,
+              "h": 77
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 297.15625,
+              "y": 1539.5,
+              "w": 422.90625,
+              "h": 77
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 17,
+              "y": 1616.5,
+              "w": 105.828125,
+              "h": 77
+            },
+            "msg": "Lebar 106px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 122.828125,
+              "y": 1616.5,
+              "w": 174.328125,
+              "h": 77
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 297.15625,
+              "y": 1616.5,
+              "w": 422.90625,
+              "h": 77
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          }
+        ],
+        "n_targets": 24,
+        "viewport_size": "375×812",
+        "n": 9
+      },
+      {
+        "rule": "TYPO-02",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Teks isi 14px, disarankan ≥ 16px.",
+        "fix": "font-size: 1rem;",
+        "targets": [
+          {
+            "sel": "div.flex.flex-col > div.space-y-1\\.5.sm\\:space-y-2 > p.text-sm.sm\\:text-base",
+            "text": "Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota",
+            "rect": {
+              "x": 41,
+              "y": 1115,
+              "w": 293,
+              "h": 63
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "375×812",
+        "n": 10
+      },
+      {
+        "rule": "TYPO-02",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "Teks isi 14px, disarankan ≥ 16px.",
+        "fix": "font-size: 1rem;",
+        "targets": [
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Kopi Susu Aren POS Kasir",
+            "rect": {
+              "x": 317.15625,
+              "y": 1405,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Biji Kopi Arabika Malabar 25kg (Bahan Baku)",
+            "rect": {
+              "x": 317.15625,
+              "y": 1482,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Susu Fresh Milk Pasteurisasi 60 Liter",
+            "rect": {
+              "x": 317.15625,
+              "y": 1559,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago",
+            "rect": {
+              "x": 317.15625,
+              "y": 1636,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2",
+            "rect": {
+              "x": 317.15625,
+              "y": 1713,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Pengadaan Cup Biodegradable & Paper Straw",
+            "rect": {
+              "x": 317.15625,
+              "y": 1790,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Maintenance Rutin Mesin Espresso Simonelli",
+            "rect": {
+              "x": 317.15625,
+              "y": 1867,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Hari Kerja (Senin - Rabu)",
+            "rect": {
+              "x": 317.15625,
+              "y": 1944,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          }
+        ],
+        "n_targets": 8,
+        "viewport_size": "375×812",
+        "n": 11
+      },
+      {
+        "rule": "TYPO-04",
+        "sev": "warn",
+        "vp": "mobile",
+        "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran.",
+        "fix": "Ganti 14px menjadi 12px.",
+        "targets": [
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Sekarang",
+            "rect": {
+              "x": 61,
+              "y": 137,
+              "w": 68.734375,
+              "h": 14
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+            "text": "Unduh Buku Kas",
+            "rect": {
+              "x": 199.734375,
+              "y": 137,
+              "w": 115.78125,
+              "h": 14
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+            "text": "Catat Kas",
+            "rect": {
+              "x": 52,
+              "y": 308,
+              "w": 69.078125,
+              "h": 14
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Lihat Uang Masuk",
+            "rect": {
+              "x": 52,
+              "y": 498,
+              "w": 124.0625,
+              "h": 14
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Modal Jualan",
+            "rect": {
+              "x": 52,
+              "y": 688,
+              "w": 125.75,
+              "h": 14
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Beban Toko",
+            "rect": {
+              "x": 52,
+              "y": 878,
+              "w": 112.28125,
+              "h": 14
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "375×812",
+        "n": 12
+      },
+      {
+        "rule": "COLOR-01",
+        "sev": "info",
+        "vp": "mobile",
+        "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot.",
+        "fix": "Tambahkan overlay gelap atau latar solid di belakang teks.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+            "text": "Unduh Buku Kas",
+            "rect": {
+              "x": 199.734375,
+              "y": 137,
+              "w": 115.78125,
+              "h": 14
+            },
+            "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+            "text": "Catat Kas",
+            "rect": {
+              "x": 52,
+              "y": 308,
+              "w": 69.078125,
+              "h": 14
+            },
+            "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "375×812",
+        "n": 13
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "mobile",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "header.w-full.h-14 > div.flex.items-center > button.lg\\:hidden.w-11",
+            "text": "",
+            "rect": {
+              "x": 16,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "375×812",
+        "n": 14
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "mobile",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+            "text": "",
+            "rect": {
+              "x": 237,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "375×812",
+        "n": 15
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "mobile",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > div.relative.select-none > button.flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 289,
+              "y": 5.5,
+              "w": 70,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "375×812",
+        "n": 16
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "mobile",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 888.5,
+              "y": 1402,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 944.5,
+              "y": 1402,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 888.5,
+              "y": 1479,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 944.5,
+              "y": 1479,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 888.5,
+              "y": 1556,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 944.5,
+              "y": 1556,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 888.5,
+              "y": 1633,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 944.5,
+              "y": 1633,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 888.5,
+              "y": 1710,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 944.5,
+              "y": 1710,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 888.5,
+              "y": 1787,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 944.5,
+              "y": 1787,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 16,
+        "viewport_size": "375×812",
+        "n": 17
+      }
+    ],
+    "tablet": [
+      {
+        "rule": "COLOR-02",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Batas kolom kontras 1.5:1 (minimum 3:1).",
+        "fix": "border: 2px solid #6b7280;",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 65,
+              "y": 811,
+              "w": 638,
+              "h": 46
+            },
+            "msg": "Batas kolom kontras 1.5:1 (minimum 3:1)."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "768×1024",
+        "n": 1
+      },
+      {
+        "rule": "COLOR-03",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token.",
+        "fix": "Ganti #171717 dengan #18181b.",
+        "targets": [
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Sekarang",
+            "rect": {
+              "x": 440.484375,
+              "y": 103,
+              "w": 68.734375,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Lihat Uang Masuk",
+            "rect": {
+              "x": 432,
+              "y": 292,
+              "w": 124.0625,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Modal Jualan",
+            "rect": {
+              "x": 68,
+              "y": 494,
+              "w": 125.75,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Beban Toko",
+            "rect": {
+              "x": 432,
+              "y": 494,
+              "w": 112.28125,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Semua Transaksi",
+            "rect": {
+              "x": 536.78125,
+              "y": 730,
+              "w": 123.21875,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          }
+        ],
+        "n_targets": 5,
+        "viewport_size": "768×1024",
+        "n": 2
+      },
+      {
+        "rule": "COLOR-03",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "13 warna teks berbeda (target ≤ 9).",
+        "fix": "Batasi: teks utama, teks sekunder, link, error, sukses, putih.",
+        "targets": [
+          {
+            "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#156374\\].dark\\:text-\\[\\#50AABF\\]",
+            "text": "Ber",
+            "rect": {
+              "x": 123.140625,
+              "y": 13.5,
+              "w": 34.0625,
+              "h": 28
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#00800e\\].dark\\:text-\\[\\#00C058\\]",
+            "text": "uang",
+            "rect": {
+              "x": 157.203125,
+              "y": 13.5,
+              "w": 54.125,
+              "h": 28
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Terkontrol",
+            "rect": {
+              "x": 646.921875,
+              "y": 394,
+              "w": 61.078125,
+              "h": 16
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+            "text": "Buku Mutasi Kas Harian",
+            "rect": {
+              "x": 79.71875,
+              "y": 596,
+              "w": 168.203125,
+              "h": 14
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+            "text": "Rekap Kas Bulanan",
+            "rect": {
+              "x": 327.75,
+              "y": 596,
+              "w": 137.484375,
+              "h": 14
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+            "text": "Grafik Pergerakan Uang",
+            "rect": {
+              "x": 543.921875,
+              "y": 596,
+              "w": 170.46875,
+              "h": 14
+            },
+            "msg": "13 warna teks berbeda (target ≤ 9)."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "768×1024",
+        "n": 3
+      },
+      {
+        "rule": "COLOR-05",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Placeholder kontras 2.6:1.",
+        "fix": "color: #6b7280; /* ≥4.5:1 di latar putih */",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 65,
+              "y": 811,
+              "w": 638,
+              "h": 46
+            },
+            "msg": "Placeholder kontras 2.6:1."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "768×1024",
+        "n": 4
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 37,
+              "y": 581,
+              "w": 228.65625,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 269.65625,
+              "y": 581,
+              "w": 228.671875,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "768×1024",
+        "n": 5
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 269.65625,
+              "y": 581,
+              "w": 228.671875,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 502.328125,
+              "y": 581,
+              "w": 228.671875,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "768×1024",
+        "n": 6
+      },
+      {
+        "rule": "SIZE-04",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Lebar 115px, saudara sekelasnya 148px.",
+        "fix": "Samakan lebar (grid/flex: 1 1 0).",
+        "targets": [
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Tanggal",
+            "rect": {
+              "x": 33,
+              "y": 890,
+              "w": 115.453125,
+              "h": 60.5
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Kategori",
+            "rect": {
+              "x": 148.453125,
+              "y": 890,
+              "w": 174.328125,
+              "h": 60.5
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Keterangan Transaksi",
+            "rect": {
+              "x": 322.78125,
+              "y": 890,
+              "w": 422.90625,
+              "h": 60.5
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          }
+        ],
+        "n_targets": 3,
+        "viewport_size": "768×1024",
+        "n": 7
+      },
+      {
+        "rule": "SIZE-04",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Lebar 115px, saudara sekelasnya 148px.",
+        "fix": "Samakan lebar (grid/flex: 1 1 0).",
+        "targets": [
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 33,
+              "y": 950.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 148.453125,
+              "y": 950.5,
+              "w": 174.328125,
+              "h": 85
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 322.78125,
+              "y": 950.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 33,
+              "y": 1035.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 148.453125,
+              "y": 1035.5,
+              "w": 174.328125,
+              "h": 85
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 322.78125,
+              "y": 1035.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 33,
+              "y": 1120.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 148.453125,
+              "y": 1120.5,
+              "w": 174.328125,
+              "h": 85
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 322.78125,
+              "y": 1120.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 33,
+              "y": 1205.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 148.453125,
+              "y": 1205.5,
+              "w": 174.328125,
+              "h": 85
+            },
+            "msg": "Lebar 174px, saudara sekelasnya 148px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 322.78125,
+              "y": 1205.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 148px."
+          }
+        ],
+        "n_targets": 24,
+        "viewport_size": "768×1024",
+        "n": 8
+      },
+      {
+        "rule": "TYPO-02",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "Teks isi 14px, disarankan ≥ 16px.",
+        "fix": "font-size: 1rem;",
+        "targets": [
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Kopi Susu Aren POS Kasir",
+            "rect": {
+              "x": 342.78125,
+              "y": 974,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Biji Kopi Arabika Malabar 25kg (Bahan Baku)",
+            "rect": {
+              "x": 342.78125,
+              "y": 1059,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Susu Fresh Milk Pasteurisasi 60 Liter",
+            "rect": {
+              "x": 342.78125,
+              "y": 1144,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago",
+            "rect": {
+              "x": 342.78125,
+              "y": 1229,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2",
+            "rect": {
+              "x": 342.78125,
+              "y": 1314,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Pengadaan Cup Biodegradable & Paper Straw",
+            "rect": {
+              "x": 342.78125,
+              "y": 1399,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Maintenance Rutin Mesin Espresso Simonelli",
+            "rect": {
+              "x": 342.78125,
+              "y": 1484,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Hari Kerja (Senin - Rabu)",
+            "rect": {
+              "x": 342.78125,
+              "y": 1569,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          }
+        ],
+        "n_targets": 8,
+        "viewport_size": "768×1024",
+        "n": 9
+      },
+      {
+        "rule": "TYPO-04",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran.",
+        "fix": "Ganti 12px menjadi 14px.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Sehat",
+            "rect": {
+              "x": 309.15625,
+              "y": 192,
+              "w": 34.84375,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "+9.8%",
+            "rect": {
+              "x": 672.203125,
+              "y": 192,
+              "w": 35.796875,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Hemat",
+            "rect": {
+              "x": 303.21875,
+              "y": 394,
+              "w": 40.78125,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Terkontrol",
+            "rect": {
+              "x": 646.921875,
+              "y": 394,
+              "w": 61.078125,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > span.inline-flex.items-center",
+            "text": "Uang Masuk",
+            "rect": {
+              "x": 168.453125,
+              "y": 980,
+              "w": 97.828125,
+              "h": 26
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > span.text-xs.font-mono",
+            "text": "INV/20261015/POS/089",
+            "rect": {
+              "x": 342.78125,
+              "y": 996,
+              "w": 382.90625,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "768×1024",
+        "n": 10
+      },
+      {
+        "rule": "TYPO-04",
+        "sev": "warn",
+        "vp": "tablet",
+        "msg": "14px dan 16px dipakai bersamaan; satukan ke satu ukuran.",
+        "fix": "Ganti 16px menjadi 14px.",
+        "targets": [
+          {
+            "sel": "div.flex.flex-col > div.space-y-1\\.5.sm\\:space-y-2 > p.text-sm.sm\\:text-base",
+            "text": "Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota",
+            "rect": {
+              "x": 65,
+              "y": 731,
+              "w": 438.78125,
+              "h": 48
+            },
+            "msg": "14px dan 16px dipakai bersamaan; satukan ke satu ukuran."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "768×1024",
+        "n": 11
+      },
+      {
+        "rule": "COLOR-01",
+        "sev": "info",
+        "vp": "tablet",
+        "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot.",
+        "fix": "Tambahkan overlay gelap atau latar solid di belakang teks.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+            "text": "Unduh Buku Kas",
+            "rect": {
+              "x": 579.21875,
+              "y": 103,
+              "w": 115.78125,
+              "h": 14
+            },
+            "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+            "text": "Catat Kas",
+            "rect": {
+              "x": 68,
+              "y": 292,
+              "w": 69.078125,
+              "h": 14
+            },
+            "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "768×1024",
+        "n": 12
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "tablet",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "header.w-full.h-14 > div.flex.items-center > button.lg\\:hidden.w-11",
+            "text": "",
+            "rect": {
+              "x": 24,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "768×1024",
+        "n": 13
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "tablet",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+            "text": "",
+            "rect": {
+              "x": 503.078125,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "768×1024",
+        "n": 14
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "tablet",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 914.125,
+              "y": 971,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 970.125,
+              "y": 971,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 914.125,
+              "y": 1056,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 970.125,
+              "y": 1056,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 914.125,
+              "y": 1141,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 970.125,
+              "y": 1141,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 914.125,
+              "y": 1226,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 970.125,
+              "y": 1226,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 914.125,
+              "y": 1311,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 970.125,
+              "y": 1311,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 914.125,
+              "y": 1396,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 970.125,
+              "y": 1396,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 16,
+        "viewport_size": "768×1024",
+        "n": 15
+      }
+    ],
+    "desktop": [
+      {
+        "rule": "COLOR-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Batas kolom kontras 1.5:1 (minimum 3:1).",
+        "fix": "border: 2px solid #6b7280;",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 353,
+              "y": 585,
+              "w": 990,
+              "h": 46
+            },
+            "msg": "Batas kolom kontras 1.5:1 (minimum 3:1)."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 1
+      },
+      {
+        "rule": "COLOR-03",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token.",
+        "fix": "Ganti #171717 dengan #18181b.",
+        "targets": [
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Sekarang",
+            "rect": {
+              "x": 1080.484375,
+              "y": 103,
+              "w": 68.734375,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Lihat Uang Masuk",
+            "rect": {
+              "x": 630,
+              "y": 292,
+              "w": 124.0625,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Modal Jualan",
+            "rect": {
+              "x": 902,
+              "y": 292,
+              "w": 125.75,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+            "text": "Cek Beban Toko",
+            "rect": {
+              "x": 1174,
+              "y": 292,
+              "w": 112.28125,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          },
+          {
+            "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+            "text": "Semua Transaksi",
+            "rect": {
+              "x": 1176.78125,
+              "y": 516,
+              "w": 123.21875,
+              "h": 14
+            },
+            "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+          }
+        ],
+        "n_targets": 5,
+        "viewport_size": "1440×900",
+        "n": 2
+      },
+      {
+        "rule": "COLOR-03",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "14 warna teks berbeda (target ≤ 9).",
+        "fix": "Batasi: teks utama, teks sekunder, link, error, sukses, putih.",
+        "targets": [
+          {
+            "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#156374\\].dark\\:text-\\[\\#50AABF\\]",
+            "text": "Ber",
+            "rect": {
+              "x": 75.140625,
+              "y": 13.5,
+              "w": 34.0625,
+              "h": 28
+            },
+            "msg": "14 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#00800e\\].dark\\:text-\\[\\#00C058\\]",
+            "text": "uang",
+            "rect": {
+              "x": 109.203125,
+              "y": 13.5,
+              "w": 54.125,
+              "h": 28
+            },
+            "msg": "14 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "a.router-link-active.router-link-exact-active > div.sidebar-label.sidebar-anim-target > span.truncate.leading-none",
+            "text": "Catatan Kas",
+            "rect": {
+              "x": 62,
+              "y": 259,
+              "w": 89.09375,
+              "h": 14
+            },
+            "msg": "14 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Terkontrol",
+            "rect": {
+              "x": 1284.921875,
+              "y": 192,
+              "w": 61.078125,
+              "h": 16
+            },
+            "msg": "14 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+            "text": "Buku Mutasi Kas Harian",
+            "rect": {
+              "x": 426.390625,
+              "y": 394,
+              "w": 168.203125,
+              "h": 14
+            },
+            "msg": "14 warna teks berbeda (target ≤ 9)."
+          },
+          {
+            "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+            "text": "Rekap Kas Bulanan",
+            "rect": {
+              "x": 791.75,
+              "y": 394,
+              "w": 137.484375,
+              "h": 14
+            },
+            "msg": "14 warna teks berbeda (target ≤ 9)."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "1440×900",
+        "n": 3
+      },
+      {
+        "rule": "COLOR-05",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Placeholder kontras 2.6:1.",
+        "fix": "color: #6b7280; /* ≥4.5:1 di latar putih */",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 353,
+              "y": 585,
+              "w": 990,
+              "h": 46
+            },
+            "msg": "Placeholder kontras 2.6:1."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 4
+      },
+      {
+        "rule": "LAYOUT-05",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18).",
+        "fix": "Kelompokkan, sembunyikan aksi sekunder, utamakan satu aksi.",
+        "targets": [
+          {
+            "sel": "header.w-full.h-14 > div.flex.items-center > a.flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 32,
+              "y": 5.5,
+              "w": 131.328125,
+              "h": 44
+            },
+            "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+          },
+          {
+            "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+            "text": "",
+            "rect": {
+              "x": 1167.078125,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+          },
+          {
+            "sel": "div.flex.items-center > div.relative.select-none > button.flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1223.078125,
+              "y": 5.5,
+              "w": 184.921875,
+              "h": 44
+            },
+            "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+          },
+          {
+            "sel": "div.flex.flex-col > div.sidebar-banner.relative > button.sidebar-toggle-btn.absolute",
+            "text": "",
+            "rect": {
+              "x": 207,
+              "y": 68,
+              "w": 36,
+              "h": 36
+            },
+            "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 196,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.router-link-active.router-link-exact-active",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 244,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "1440×900",
+        "n": 5
+      },
+      {
+        "rule": "SIZE-01",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Target 36×36px, disarankan ≥ 44px.",
+        "fix": "min-height: 44px;",
+        "targets": [
+          {
+            "sel": "div.flex.flex-col > div.sidebar-banner.relative > button.sidebar-toggle-btn.absolute",
+            "text": "",
+            "rect": {
+              "x": 207,
+              "y": 68,
+              "w": 36,
+              "h": 36
+            },
+            "msg": "Target 36×36px, disarankan ≥ 44px."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 6
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 196,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.router-link-active.router-link-exact-active",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 244,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 7
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 337,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 385,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 8
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 385,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 433,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 9
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 526,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+            "text": "",
+            "rect": {
+              "x": 14,
+              "y": 574,
+              "w": 227,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 10
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 325,
+              "y": 379,
+              "w": 346,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 675,
+              "y": 379,
+              "w": 346,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 11
+      },
+      {
+        "rule": "SIZE-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+        "fix": "gap: 8px;",
+        "targets": [
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 675,
+              "y": 379,
+              "w": 346,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          },
+          {
+            "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+            "text": "",
+            "rect": {
+              "x": 1025,
+              "y": 379,
+              "w": 346,
+              "h": 44
+            },
+            "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 12
+      },
+      {
+        "rule": "SIZE-04",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Lebar 115px, saudara sekelasnya 174px.",
+        "fix": "Samakan lebar (grid/flex: 1 1 0).",
+        "targets": [
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Tanggal",
+            "rect": {
+              "x": 321,
+              "y": 664,
+              "w": 115.453125,
+              "h": 60.5
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Keterangan Transaksi",
+            "rect": {
+              "x": 610.78125,
+              "y": 664,
+              "w": 422.90625,
+              "h": 60.5
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+            "text": "Tindakan",
+            "rect": {
+              "x": 1227,
+              "y": 664,
+              "w": 148,
+              "h": 60.5
+            },
+            "msg": "Lebar 148px, saudara sekelasnya 174px."
+          }
+        ],
+        "n_targets": 3,
+        "viewport_size": "1440×900",
+        "n": 13
+      },
+      {
+        "rule": "SIZE-04",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Lebar 115px, saudara sekelasnya 174px.",
+        "fix": "Samakan lebar (grid/flex: 1 1 0).",
+        "targets": [
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 321,
+              "y": 724.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 610.78125,
+              "y": 724.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 1227,
+              "y": 724.5,
+              "w": 148,
+              "h": 85
+            },
+            "msg": "Lebar 148px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 321,
+              "y": 809.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 610.78125,
+              "y": 809.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 1227,
+              "y": 809.5,
+              "w": 148,
+              "h": 85
+            },
+            "msg": "Lebar 148px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 321,
+              "y": 894.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 610.78125,
+              "y": 894.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 1227,
+              "y": 894.5,
+              "w": 148,
+              "h": 85
+            },
+            "msg": "Lebar 148px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 321,
+              "y": 979.5,
+              "w": 115.453125,
+              "h": 85
+            },
+            "msg": "Lebar 115px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 610.78125,
+              "y": 979.5,
+              "w": 422.90625,
+              "h": 85
+            },
+            "msg": "Lebar 423px, saudara sekelasnya 174px."
+          },
+          {
+            "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+            "text": "",
+            "rect": {
+              "x": 1227,
+              "y": 979.5,
+              "w": 148,
+              "h": 85
+            },
+            "msg": "Lebar 148px, saudara sekelasnya 174px."
+          }
+        ],
+        "n_targets": 24,
+        "viewport_size": "1440×900",
+        "n": 14
+      },
+      {
+        "rule": "SIZE-06",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Lebar 990px pada desktop: terlalu lebar.",
+        "fix": "max-width: 480px;",
+        "targets": [
+          {
+            "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+            "text": "",
+            "rect": {
+              "x": 353,
+              "y": 585,
+              "w": 990,
+              "h": 46
+            },
+            "msg": "Lebar 990px pada desktop: terlalu lebar."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 15
+      },
+      {
+        "rule": "TYPO-02",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "Teks isi 14px, disarankan ≥ 16px.",
+        "fix": "font-size: 1rem;",
+        "targets": [
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Kopi Susu Aren POS Kasir",
+            "rect": {
+              "x": 630.78125,
+              "y": 748,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Biji Kopi Arabika Malabar 25kg (Bahan Baku)",
+            "rect": {
+              "x": 630.78125,
+              "y": 833,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Susu Fresh Milk Pasteurisasi 60 Liter",
+            "rect": {
+              "x": 630.78125,
+              "y": 918,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago",
+            "rect": {
+              "x": 630.78125,
+              "y": 1003,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2",
+            "rect": {
+              "x": 630.78125,
+              "y": 1088,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Pengadaan Cup Biodegradable & Paper Straw",
+            "rect": {
+              "x": 630.78125,
+              "y": 1173,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Maintenance Rutin Mesin Espresso Simonelli",
+            "rect": {
+              "x": 630.78125,
+              "y": 1258,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          },
+          {
+            "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+            "text": "Penjualan Hari Kerja (Senin - Rabu)",
+            "rect": {
+              "x": 630.78125,
+              "y": 1343,
+              "w": 382.90625,
+              "h": 20
+            },
+            "msg": "Teks isi 14px, disarankan ≥ 16px."
+          }
+        ],
+        "n_targets": 8,
+        "viewport_size": "1440×900",
+        "n": 16
+      },
+      {
+        "rule": "TYPO-04",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran.",
+        "fix": "Ganti 12px menjadi 14px.",
+        "targets": [
+          {
+            "sel": "div.sidebar-container-module.border-b > div.sidebar-section-title.sidebar-anim-target > span.text-xs.font-semibold",
+            "text": "Kelola Usaha",
+            "rect": {
+              "x": 14,
+              "y": 313,
+              "w": 103.6875,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.sidebar-container-module.border-b > div.sidebar-section-title.sidebar-anim-target > span.text-xs.font-semibold",
+            "text": "Permodalan",
+            "rect": {
+              "x": 14,
+              "y": 502,
+              "w": 97.703125,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "a.sidebar-nav-item.h-11 > div.sidebar-label.sidebar-anim-target > span.ml-1\\.5.px-2",
+            "text": "3",
+            "rect": {
+              "x": 204.796875,
+              "y": 588,
+              "w": 23.203125,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Sehat",
+            "rect": {
+              "x": 495.15625,
+              "y": 192,
+              "w": 34.84375,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "+9.8%",
+            "rect": {
+              "x": 766.203125,
+              "y": 192,
+              "w": 35.796875,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          },
+          {
+            "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+            "text": "Hemat",
+            "rect": {
+              "x": 1033.21875,
+              "y": 192,
+              "w": 40.78125,
+              "h": 16
+            },
+            "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+          }
+        ],
+        "n_targets": 6,
+        "viewport_size": "1440×900",
+        "n": 17
+      },
+      {
+        "rule": "TYPO-04",
+        "sev": "warn",
+        "vp": "desktop",
+        "msg": "14px dan 16px dipakai bersamaan; satukan ke satu ukuran.",
+        "fix": "Ganti 16px menjadi 14px.",
+        "targets": [
+          {
+            "sel": "div.flex.flex-col > div.space-y-1\\.5.sm\\:space-y-2 > p.text-sm.sm\\:text-base",
+            "text": "Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota",
+            "rect": {
+              "x": 353,
+              "y": 529,
+              "w": 705.546875,
+              "h": 24
+            },
+            "msg": "14px dan 16px dipakai bersamaan; satukan ke satu ukuran."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 18
+      },
+      {
+        "rule": "COLOR-01",
+        "sev": "info",
+        "vp": "desktop",
+        "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot.",
+        "fix": "Tambahkan overlay gelap atau latar solid di belakang teks.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+            "text": "Unduh Buku Kas",
+            "rect": {
+              "x": 1219.21875,
+              "y": 103,
+              "w": 115.78125,
+              "h": 14
+            },
+            "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+          },
+          {
+            "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+            "text": "Catat Kas",
+            "rect": {
+              "x": 358,
+              "y": 292,
+              "w": 69.078125,
+              "h": 14
+            },
+            "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+          }
+        ],
+        "n_targets": 2,
+        "viewport_size": "1440×900",
+        "n": 19
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "desktop",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+            "text": "",
+            "rect": {
+              "x": 1167.078125,
+              "y": 5.5,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 20
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "desktop",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "div.flex.flex-col > div.sidebar-banner.relative > button.sidebar-toggle-btn.absolute",
+            "text": "",
+            "rect": {
+              "x": 207,
+              "y": 68,
+              "w": 36,
+              "h": 36
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 1,
+        "viewport_size": "1440×900",
+        "n": 21
+      },
+      {
+        "rule": "UX-08",
+        "sev": "info",
+        "vp": "desktop",
+        "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+        "fix": "Tambahkan teks di samping ikon.",
+        "targets": [
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1251,
+              "y": 745,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1307,
+              "y": 745,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1251,
+              "y": 830,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1307,
+              "y": 830,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1251,
+              "y": 915,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1307,
+              "y": 915,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1251,
+              "y": 1000,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1307,
+              "y": 1000,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1251,
+              "y": 1085,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1307,
+              "y": 1085,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1251,
+              "y": 1170,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          },
+          {
+            "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+            "text": "",
+            "rect": {
+              "x": 1307,
+              "y": 1170,
+              "w": 44,
+              "h": 44
+            },
+            "msg": "Kontrol hanya berisi ikon tanpa label teks."
+          }
+        ],
+        "n_targets": 16,
+        "viewport_size": "1440×900",
+        "n": 22
+      }
+    ]
+  },
+  "issues": [
+    {
+      "rule": "COLOR-02",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Batas kolom kontras 1.5:1 (minimum 3:1).",
+      "fix": "border: 2px solid #6b7280;",
+      "targets": [
+        {
+          "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+          "text": "",
+          "rect": {
+            "x": 41,
+            "y": 1266,
+            "w": 293,
+            "h": 46
+          },
+          "msg": "Batas kolom kontras 1.5:1 (minimum 3:1)."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "375×812",
+      "n": 1,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          1
+        ],
+        [
+          "tablet",
+          1
+        ],
+        [
+          "desktop",
+          1
+        ]
+      ]
+    },
+    {
+      "rule": "COLOR-03",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token.",
+      "fix": "Ganti #171717 dengan #18181b.",
+      "targets": [
+        {
+          "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+          "text": "Sekarang",
+          "rect": {
+            "x": 61,
+            "y": 137,
+            "w": 68.734375,
+            "h": 14
+          },
+          "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+          "text": "Lihat Uang Masuk",
+          "rect": {
+            "x": 52,
+            "y": 498,
+            "w": 124.0625,
+            "h": 14
+          },
+          "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+          "text": "Cek Modal Jualan",
+          "rect": {
+            "x": 52,
+            "y": 688,
+            "w": 125.75,
+            "h": 14
+          },
+          "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+          "text": "Cek Beban Toko",
+          "rect": {
+            "x": 52,
+            "y": 878,
+            "w": 112.28125,
+            "h": 14
+          },
+          "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+        },
+        {
+          "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+          "text": "Semua Transaksi",
+          "rect": {
+            "x": 58,
+            "y": 1209,
+            "w": 123.21875,
+            "h": 14
+          },
+          "msg": "Warna teks #18181b dan #171717 nyaris sama (Δ=4); satukan jadi satu token."
+        }
+      ],
+      "n_targets": 5,
+      "viewport_size": "375×812",
+      "n": 2,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          2
+        ],
+        [
+          "tablet",
+          2
+        ],
+        [
+          "desktop",
+          2
+        ]
+      ]
+    },
+    {
+      "rule": "COLOR-03",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "13 warna teks berbeda (target ≤ 9).",
+      "fix": "Batasi: teks utama, teks sekunder, link, error, sukses, putih.",
+      "targets": [
+        {
+          "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#156374\\].dark\\:text-\\[\\#50AABF\\]",
+          "text": "Ber",
+          "rect": {
+            "x": 113.140625,
+            "y": 13.5,
+            "w": 34.0625,
+            "h": 28
+          },
+          "msg": "13 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#00800e\\].dark\\:text-\\[\\#00C058\\]",
+          "text": "uang",
+          "rect": {
+            "x": 147.203125,
+            "y": 13.5,
+            "w": 54.125,
+            "h": 28
+          },
+          "msg": "13 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+          "text": "Unduh Buku Kas",
+          "rect": {
+            "x": 199.734375,
+            "y": 137,
+            "w": 115.78125,
+            "h": 14
+          },
+          "msg": "13 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+          "text": "Catat Kas",
+          "rect": {
+            "x": 52,
+            "y": 308,
+            "w": 69.078125,
+            "h": 14
+          },
+          "msg": "13 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Terkontrol",
+          "rect": {
+            "x": 269.921875,
+            "y": 786,
+            "w": 61.078125,
+            "h": 16
+          },
+          "msg": "13 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+          "text": "Buku Mutasi Kas Harian",
+          "rect": {
+            "x": 62,
+            "y": 970,
+            "w": 168.203125,
+            "h": 14
+          },
+          "msg": "13 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#156374\\].dark\\:text-\\[\\#50AABF\\]",
+          "text": "Ber",
+          "rect": {
+            "x": 75.140625,
+            "y": 13.5,
+            "w": 34.0625,
+            "h": 28
+          },
+          "msg": "14 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "a.flex.items-center > span.font-heading.font-bold > span.text-\\[\\#00800e\\].dark\\:text-\\[\\#00C058\\]",
+          "text": "uang",
+          "rect": {
+            "x": 109.203125,
+            "y": 13.5,
+            "w": 54.125,
+            "h": 28
+          },
+          "msg": "14 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "a.router-link-active.router-link-exact-active > div.sidebar-label.sidebar-anim-target > span.truncate.leading-none",
+          "text": "Catatan Kas",
+          "rect": {
+            "x": 62,
+            "y": 259,
+            "w": 89.09375,
+            "h": 14
+          },
+          "msg": "14 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Terkontrol",
+          "rect": {
+            "x": 1284.921875,
+            "y": 192,
+            "w": 61.078125,
+            "h": 16
+          },
+          "msg": "14 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+          "text": "Buku Mutasi Kas Harian",
+          "rect": {
+            "x": 426.390625,
+            "y": 394,
+            "w": 168.203125,
+            "h": 14
+          },
+          "msg": "14 warna teks berbeda (target ≤ 9)."
+        },
+        {
+          "sel": "div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group > span.truncate",
+          "text": "Rekap Kas Bulanan",
+          "rect": {
+            "x": 791.75,
+            "y": 394,
+            "w": 137.484375,
+            "h": 14
+          },
+          "msg": "14 warna teks berbeda (target ≤ 9)."
+        }
+      ],
+      "n_targets": 6,
+      "viewport_size": "375×812",
+      "n": 3,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          3
+        ],
+        [
+          "tablet",
+          3
+        ],
+        [
+          "desktop",
+          3
+        ]
+      ]
+    },
+    {
+      "rule": "COLOR-05",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Placeholder kontras 2.6:1.",
+      "fix": "color: #6b7280; /* ≥4.5:1 di latar putih */",
+      "targets": [
+        {
+          "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+          "text": "",
+          "rect": {
+            "x": 41,
+            "y": 1266,
+            "w": 293,
+            "h": 46
+          },
+          "msg": "Placeholder kontras 2.6:1."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "375×812",
+      "n": 4,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          4
+        ],
+        [
+          "tablet",
+          4
+        ],
+        [
+          "desktop",
+          4
+        ]
+      ]
+    },
+    {
+      "rule": "LAYOUT-05",
+      "sev": "warn",
+      "vp": "desktop",
+      "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18).",
+      "fix": "Kelompokkan, sembunyikan aksi sekunder, utamakan satu aksi.",
+      "targets": [
+        {
+          "sel": "header.w-full.h-14 > div.flex.items-center > a.flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 32,
+            "y": 5.5,
+            "w": 131.328125,
+            "h": 44
+          },
+          "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+        },
+        {
+          "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+          "text": "",
+          "rect": {
+            "x": 1167.078125,
+            "y": 5.5,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+        },
+        {
+          "sel": "div.flex.items-center > div.relative.select-none > button.flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 1223.078125,
+            "y": 5.5,
+            "w": 184.921875,
+            "h": 44
+          },
+          "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+        },
+        {
+          "sel": "div.flex.flex-col > div.sidebar-banner.relative > button.sidebar-toggle-btn.absolute",
+          "text": "",
+          "rect": {
+            "x": 207,
+            "y": 68,
+            "w": 36,
+            "h": 36
+          },
+          "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+        },
+        {
+          "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+          "text": "",
+          "rect": {
+            "x": 14,
+            "y": 196,
+            "w": 227,
+            "h": 44
+          },
+          "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+        },
+        {
+          "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.router-link-active.router-link-exact-active",
+          "text": "",
+          "rect": {
+            "x": 14,
+            "y": 244,
+            "w": 227,
+            "h": 44
+          },
+          "msg": "26 kontrol interaktif di layar pertama (disarankan ≤ 18)."
+        }
+      ],
+      "n_targets": 6,
+      "viewport_size": "1440×900",
+      "n": 5,
+      "vps": [
+        "desktop"
+      ],
+      "refs": [
+        [
+          "desktop",
+          5
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-01",
+      "sev": "warn",
+      "vp": "desktop",
+      "msg": "Target 36×36px, disarankan ≥ 44px.",
+      "fix": "min-height: 44px;",
+      "targets": [
+        {
+          "sel": "div.flex.flex-col > div.sidebar-banner.relative > button.sidebar-toggle-btn.absolute",
+          "text": "",
+          "rect": {
+            "x": 207,
+            "y": 68,
+            "w": 36,
+            "h": 36
+          },
+          "msg": "Target 36×36px, disarankan ≥ 44px."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "1440×900",
+      "n": 6,
+      "vps": [
+        "desktop"
+      ],
+      "refs": [
+        [
+          "desktop",
+          6
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-02",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+      "fix": "gap: 8px;",
+      "targets": [
+        {
+          "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+          "text": "",
+          "rect": {
+            "x": 21,
+            "y": 955,
+            "w": 225.203125,
+            "h": 44
+          },
+          "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+        },
+        {
+          "sel": "div.space-y-6.sm\\:space-y-8 > div.segmented-pill-container.is-gopay-green > button.segmented-pill-btn.group",
+          "text": "",
+          "rect": {
+            "x": 250.203125,
+            "y": 955,
+            "w": 194.484375,
+            "h": 44
+          },
+          "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+        }
+      ],
+      "n_targets": 2,
+      "viewport_size": "375×812",
+      "n": 5,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          5
+        ],
+        [
+          "mobile",
+          6
+        ],
+        [
+          "tablet",
+          5
+        ],
+        [
+          "tablet",
+          6
+        ],
+        [
+          "desktop",
+          11
+        ],
+        [
+          "desktop",
+          12
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-02",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Jarak antar target hanya 8px (disarankan ≥ 8px).",
+      "fix": "gap: 8px;",
+      "targets": [
+        {
+          "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+          "text": "",
+          "rect": {
+            "x": 237,
+            "y": 5.5,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Jarak antar target hanya 8px (disarankan ≥ 8px)."
+        },
+        {
+          "sel": "div.flex.items-center > div.relative.select-none > button.flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 289,
+            "y": 5.5,
+            "w": 70,
+            "h": 44
+          },
+          "msg": "Jarak antar target hanya 8px (disarankan ≥ 8px)."
+        }
+      ],
+      "n_targets": 2,
+      "viewport_size": "375×812",
+      "n": 7,
+      "vps": [
+        "mobile"
+      ],
+      "refs": [
+        [
+          "mobile",
+          7
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-02",
+      "sev": "warn",
+      "vp": "desktop",
+      "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px).",
+      "fix": "gap: 8px;",
+      "targets": [
+        {
+          "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.sidebar-nav-item.h-11",
+          "text": "",
+          "rect": {
+            "x": 14,
+            "y": 196,
+            "w": 227,
+            "h": 44
+          },
+          "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+        },
+        {
+          "sel": "div.sidebar-container-module.border-b > div.space-y-1 > a.router-link-active.router-link-exact-active",
+          "text": "",
+          "rect": {
+            "x": 14,
+            "y": 244,
+            "w": 227,
+            "h": 44
+          },
+          "msg": "Jarak antar target hanya 4px (disarankan ≥ 8px)."
+        }
+      ],
+      "n_targets": 2,
+      "viewport_size": "1440×900",
+      "n": 7,
+      "vps": [
+        "desktop"
+      ],
+      "refs": [
+        [
+          "desktop",
+          7
+        ],
+        [
+          "desktop",
+          8
+        ],
+        [
+          "desktop",
+          9
+        ],
+        [
+          "desktop",
+          10
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-04",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Lebar 106px, saudara sekelasnya 148px.",
+      "fix": "Samakan lebar (grid/flex: 1 1 0).",
+      "targets": [
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Tanggal",
+          "rect": {
+            "x": 17,
+            "y": 1337,
+            "w": 105.828125,
+            "h": 48.5
+          },
+          "msg": "Lebar 106px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Kategori",
+          "rect": {
+            "x": 122.828125,
+            "y": 1337,
+            "w": 174.328125,
+            "h": 48.5
+          },
+          "msg": "Lebar 174px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Keterangan Transaksi",
+          "rect": {
+            "x": 297.15625,
+            "y": 1337,
+            "w": 422.90625,
+            "h": 48.5
+          },
+          "msg": "Lebar 423px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Tanggal",
+          "rect": {
+            "x": 33,
+            "y": 890,
+            "w": 115.453125,
+            "h": 60.5
+          },
+          "msg": "Lebar 115px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Tanggal",
+          "rect": {
+            "x": 321,
+            "y": 664,
+            "w": 115.453125,
+            "h": 60.5
+          },
+          "msg": "Lebar 115px, saudara sekelasnya 174px."
+        },
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Keterangan Transaksi",
+          "rect": {
+            "x": 610.78125,
+            "y": 664,
+            "w": 422.90625,
+            "h": 60.5
+          },
+          "msg": "Lebar 423px, saudara sekelasnya 174px."
+        },
+        {
+          "sel": "thead > tr.bg-\\[\\#FFFFFF\\].dark\\:bg-\\[\\#13161F\\] > th.py-4.sm\\:py-5",
+          "text": "Tindakan",
+          "rect": {
+            "x": 1227,
+            "y": 664,
+            "w": 148,
+            "h": 60.5
+          },
+          "msg": "Lebar 148px, saudara sekelasnya 174px."
+        }
+      ],
+      "n_targets": 3,
+      "viewport_size": "375×812",
+      "n": 8,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          8
+        ],
+        [
+          "tablet",
+          7
+        ],
+        [
+          "desktop",
+          13
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-04",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Lebar 106px, saudara sekelasnya 148px.",
+      "fix": "Samakan lebar (grid/flex: 1 1 0).",
+      "targets": [
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 17,
+            "y": 1385.5,
+            "w": 105.828125,
+            "h": 77
+          },
+          "msg": "Lebar 106px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 122.828125,
+            "y": 1385.5,
+            "w": 174.328125,
+            "h": 77
+          },
+          "msg": "Lebar 174px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 297.15625,
+            "y": 1385.5,
+            "w": 422.90625,
+            "h": 77
+          },
+          "msg": "Lebar 423px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 17,
+            "y": 1462.5,
+            "w": 105.828125,
+            "h": 77
+          },
+          "msg": "Lebar 106px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 122.828125,
+            "y": 1462.5,
+            "w": 174.328125,
+            "h": 77
+          },
+          "msg": "Lebar 174px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 297.15625,
+            "y": 1462.5,
+            "w": 422.90625,
+            "h": 77
+          },
+          "msg": "Lebar 423px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 17,
+            "y": 1539.5,
+            "w": 105.828125,
+            "h": 77
+          },
+          "msg": "Lebar 106px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 122.828125,
+            "y": 1539.5,
+            "w": 174.328125,
+            "h": 77
+          },
+          "msg": "Lebar 174px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 297.15625,
+            "y": 1539.5,
+            "w": 422.90625,
+            "h": 77
+          },
+          "msg": "Lebar 423px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 17,
+            "y": 1616.5,
+            "w": 105.828125,
+            "h": 77
+          },
+          "msg": "Lebar 106px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 122.828125,
+            "y": 1616.5,
+            "w": 174.328125,
+            "h": 77
+          },
+          "msg": "Lebar 174px, saudara sekelasnya 148px."
+        },
+        {
+          "sel": "tbody.divide-y.divide-neutral-100 > tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5",
+          "text": "",
+          "rect": {
+            "x": 297.15625,
+            "y": 1616.5,
+            "w": 422.90625,
+            "h": 77
+          },
+          "msg": "Lebar 423px, saudara sekelasnya 148px."
+        }
+      ],
+      "n_targets": 24,
+      "viewport_size": "375×812",
+      "n": 9,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          9
+        ],
+        [
+          "tablet",
+          8
+        ],
+        [
+          "desktop",
+          14
+        ]
+      ]
+    },
+    {
+      "rule": "SIZE-06",
+      "sev": "warn",
+      "vp": "desktop",
+      "msg": "Lebar 990px pada desktop: terlalu lebar.",
+      "fix": "max-width: 480px;",
+      "targets": [
+        {
+          "sel": "div.w-full.pt-3 > div.relative.w-full > input.w-full.pl-10",
+          "text": "",
+          "rect": {
+            "x": 353,
+            "y": 585,
+            "w": 990,
+            "h": 46
+          },
+          "msg": "Lebar 990px pada desktop: terlalu lebar."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "1440×900",
+      "n": 15,
+      "vps": [
+        "desktop"
+      ],
+      "refs": [
+        [
+          "desktop",
+          15
+        ]
+      ]
+    },
+    {
+      "rule": "TYPO-02",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Teks isi 14px, disarankan ≥ 16px.",
+      "fix": "font-size: 1rem;",
+      "targets": [
+        {
+          "sel": "div.flex.flex-col > div.space-y-1\\.5.sm\\:space-y-2 > p.text-sm.sm\\:text-base",
+          "text": "Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota",
+          "rect": {
+            "x": 41,
+            "y": 1115,
+            "w": 293,
+            "h": 63
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "375×812",
+      "n": 10,
+      "vps": [
+        "mobile"
+      ],
+      "refs": [
+        [
+          "mobile",
+          10
+        ]
+      ]
+    },
+    {
+      "rule": "TYPO-02",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "Teks isi 14px, disarankan ≥ 16px.",
+      "fix": "font-size: 1rem;",
+      "targets": [
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Penjualan Kopi Susu Aren POS Kasir",
+          "rect": {
+            "x": 317.15625,
+            "y": 1405,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Biji Kopi Arabika Malabar 25kg (Bahan Baku)",
+          "rect": {
+            "x": 317.15625,
+            "y": 1482,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Susu Fresh Milk Pasteurisasi 60 Liter",
+          "rect": {
+            "x": 317.15625,
+            "y": 1559,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago",
+          "rect": {
+            "x": 317.15625,
+            "y": 1636,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2",
+          "rect": {
+            "x": 317.15625,
+            "y": 1713,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Pengadaan Cup Biodegradable & Paper Straw",
+          "rect": {
+            "x": 317.15625,
+            "y": 1790,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Maintenance Rutin Mesin Espresso Simonelli",
+          "rect": {
+            "x": 317.15625,
+            "y": 1867,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > p.text-sm.font-medium",
+          "text": "Penjualan Hari Kerja (Senin - Rabu)",
+          "rect": {
+            "x": 317.15625,
+            "y": 1944,
+            "w": 382.90625,
+            "h": 20
+          },
+          "msg": "Teks isi 14px, disarankan ≥ 16px."
+        }
+      ],
+      "n_targets": 8,
+      "viewport_size": "375×812",
+      "n": 11,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          11
+        ],
+        [
+          "tablet",
+          9
+        ],
+        [
+          "desktop",
+          16
+        ]
+      ]
+    },
+    {
+      "rule": "TYPO-04",
+      "sev": "warn",
+      "vp": "mobile",
+      "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran.",
+      "fix": "Ganti 14px menjadi 12px.",
+      "targets": [
+        {
+          "sel": "div.relative.inline-block > button.btn-pill-action.group > span",
+          "text": "Sekarang",
+          "rect": {
+            "x": 61,
+            "y": 137,
+            "w": 68.734375,
+            "h": 14
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+          "text": "Unduh Buku Kas",
+          "rect": {
+            "x": 199.734375,
+            "y": 137,
+            "w": 115.78125,
+            "h": 14
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+          "text": "Catat Kas",
+          "rect": {
+            "x": 52,
+            "y": 308,
+            "w": 69.078125,
+            "h": 14
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+          "text": "Lihat Uang Masuk",
+          "rect": {
+            "x": 52,
+            "y": 498,
+            "w": 124.0625,
+            "h": 14
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+          "text": "Cek Modal Jualan",
+          "rect": {
+            "x": 52,
+            "y": 688,
+            "w": 125.75,
+            "h": 14
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action.group > span",
+          "text": "Cek Beban Toko",
+          "rect": {
+            "x": 52,
+            "y": 878,
+            "w": 112.28125,
+            "h": 14
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        }
+      ],
+      "n_targets": 6,
+      "viewport_size": "375×812",
+      "n": 12,
+      "vps": [
+        "mobile"
+      ],
+      "refs": [
+        [
+          "mobile",
+          12
+        ]
+      ]
+    },
+    {
+      "rule": "TYPO-04",
+      "sev": "warn",
+      "vp": "tablet",
+      "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran.",
+      "fix": "Ganti 12px menjadi 14px.",
+      "targets": [
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Sehat",
+          "rect": {
+            "x": 309.15625,
+            "y": 192,
+            "w": 34.84375,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "+9.8%",
+          "rect": {
+            "x": 672.203125,
+            "y": 192,
+            "w": 35.796875,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Hemat",
+          "rect": {
+            "x": 303.21875,
+            "y": 394,
+            "w": 40.78125,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Terkontrol",
+          "rect": {
+            "x": 646.921875,
+            "y": 394,
+            "w": 61.078125,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > span.inline-flex.items-center",
+          "text": "Uang Masuk",
+          "rect": {
+            "x": 168.453125,
+            "y": 980,
+            "w": 97.828125,
+            "h": 26
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "tr.bg-white.dark\\:bg-\\[\\#13161F\\] > td.py-4.sm\\:py-5 > span.text-xs.font-mono",
+          "text": "INV/20261015/POS/089",
+          "rect": {
+            "x": 342.78125,
+            "y": 996,
+            "w": 382.90625,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        }
+      ],
+      "n_targets": 6,
+      "viewport_size": "768×1024",
+      "n": 10,
+      "vps": [
+        "tablet"
+      ],
+      "refs": [
+        [
+          "tablet",
+          10
+        ]
+      ]
+    },
+    {
+      "rule": "TYPO-04",
+      "sev": "warn",
+      "vp": "tablet",
+      "msg": "14px dan 16px dipakai bersamaan; satukan ke satu ukuran.",
+      "fix": "Ganti 16px menjadi 14px.",
+      "targets": [
+        {
+          "sel": "div.flex.flex-col > div.space-y-1\\.5.sm\\:space-y-2 > p.text-sm.sm\\:text-base",
+          "text": "Setiap catatan transaksi uang masuk dan keluar tersinkronisasi dengan bukti nota",
+          "rect": {
+            "x": 65,
+            "y": 731,
+            "w": 438.78125,
+            "h": 48
+          },
+          "msg": "14px dan 16px dipakai bersamaan; satukan ke satu ukuran."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "768×1024",
+      "n": 11,
+      "vps": [
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "tablet",
+          11
+        ],
+        [
+          "desktop",
+          18
+        ]
+      ]
+    },
+    {
+      "rule": "TYPO-04",
+      "sev": "warn",
+      "vp": "desktop",
+      "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran.",
+      "fix": "Ganti 12px menjadi 14px.",
+      "targets": [
+        {
+          "sel": "div.sidebar-container-module.border-b > div.sidebar-section-title.sidebar-anim-target > span.text-xs.font-semibold",
+          "text": "Kelola Usaha",
+          "rect": {
+            "x": 14,
+            "y": 313,
+            "w": 103.6875,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.sidebar-container-module.border-b > div.sidebar-section-title.sidebar-anim-target > span.text-xs.font-semibold",
+          "text": "Permodalan",
+          "rect": {
+            "x": 14,
+            "y": 502,
+            "w": 97.703125,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "a.sidebar-nav-item.h-11 > div.sidebar-label.sidebar-anim-target > span.ml-1\\.5.px-2",
+          "text": "3",
+          "rect": {
+            "x": 204.796875,
+            "y": 588,
+            "w": 23.203125,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Sehat",
+          "rect": {
+            "x": 495.15625,
+            "y": 192,
+            "w": 34.84375,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "+9.8%",
+          "rect": {
+            "x": 766.203125,
+            "y": 192,
+            "w": 35.796875,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        },
+        {
+          "sel": "div.flex.items-center > div.inline-flex.items-center > span",
+          "text": "Hemat",
+          "rect": {
+            "x": 1033.21875,
+            "y": 192,
+            "w": 40.78125,
+            "h": 16
+          },
+          "msg": "12px dan 14px dipakai bersamaan; satukan ke satu ukuran."
+        }
+      ],
+      "n_targets": 6,
+      "viewport_size": "1440×900",
+      "n": 17,
+      "vps": [
+        "desktop"
+      ],
+      "refs": [
+        [
+          "desktop",
+          17
+        ]
+      ]
+    },
+    {
+      "rule": "COLOR-01",
+      "sev": "info",
+      "vp": "mobile",
+      "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot.",
+      "fix": "Tambahkan overlay gelap atau latar solid di belakang teks.",
+      "targets": [
+        {
+          "sel": "div.flex.items-center > button.btn-pill-action-green.group > span",
+          "text": "Unduh Buku Kas",
+          "rect": {
+            "x": 199.734375,
+            "y": 137,
+            "w": 115.78125,
+            "h": 14
+          },
+          "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+        },
+        {
+          "sel": "div.stat-card-actions > button.btn-pill-action-green.group > span",
+          "text": "Catat Kas",
+          "rect": {
+            "x": 52,
+            "y": 308,
+            "w": 69.078125,
+            "h": 14
+          },
+          "msg": "2 teks berada di atas gambar/gradien: kontras tidak bisa dihitung otomatis. Periksa manual lewat screenshot."
+        }
+      ],
+      "n_targets": 2,
+      "viewport_size": "375×812",
+      "n": 13,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          13
+        ],
+        [
+          "tablet",
+          12
+        ],
+        [
+          "desktop",
+          19
+        ]
+      ]
+    },
+    {
+      "rule": "UX-08",
+      "sev": "info",
+      "vp": "mobile",
+      "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+      "fix": "Tambahkan teks di samping ikon.",
+      "targets": [
+        {
+          "sel": "header.w-full.h-14 > div.flex.items-center > button.lg\\:hidden.w-11",
+          "text": "",
+          "rect": {
+            "x": 16,
+            "y": 5.5,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "375×812",
+      "n": 14,
+      "vps": [
+        "mobile",
+        "tablet"
+      ],
+      "refs": [
+        [
+          "mobile",
+          14
+        ],
+        [
+          "tablet",
+          13
+        ]
+      ]
+    },
+    {
+      "rule": "UX-08",
+      "sev": "info",
+      "vp": "mobile",
+      "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+      "fix": "Tambahkan teks di samping ikon.",
+      "targets": [
+        {
+          "sel": "div.flex.items-center > div.relative > button.relative.w-11",
+          "text": "",
+          "rect": {
+            "x": 237,
+            "y": 5.5,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "375×812",
+      "n": 15,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          15
+        ],
+        [
+          "tablet",
+          14
+        ],
+        [
+          "desktop",
+          20
+        ]
+      ]
+    },
+    {
+      "rule": "UX-08",
+      "sev": "info",
+      "vp": "mobile",
+      "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+      "fix": "Tambahkan teks di samping ikon.",
+      "targets": [
+        {
+          "sel": "div.flex.items-center > div.relative.select-none > button.flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 289,
+            "y": 5.5,
+            "w": 70,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "375×812",
+      "n": 16,
+      "vps": [
+        "mobile"
+      ],
+      "refs": [
+        [
+          "mobile",
+          16
+        ]
+      ]
+    },
+    {
+      "rule": "UX-08",
+      "sev": "info",
+      "vp": "mobile",
+      "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+      "fix": "Tambahkan teks di samping ikon.",
+      "targets": [
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 888.5,
+            "y": 1402,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 944.5,
+            "y": 1402,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 888.5,
+            "y": 1479,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 944.5,
+            "y": 1479,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 888.5,
+            "y": 1556,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 944.5,
+            "y": 1556,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 888.5,
+            "y": 1633,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 944.5,
+            "y": 1633,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 888.5,
+            "y": 1710,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 944.5,
+            "y": 1710,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 888.5,
+            "y": 1787,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        },
+        {
+          "sel": "td.py-4.sm\\:py-5 > div.flex.items-center > button.inline-flex.items-center",
+          "text": "",
+          "rect": {
+            "x": 944.5,
+            "y": 1787,
+            "w": 44,
+            "h": 44
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        }
+      ],
+      "n_targets": 16,
+      "viewport_size": "375×812",
+      "n": 17,
+      "vps": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "refs": [
+        [
+          "mobile",
+          17
+        ],
+        [
+          "tablet",
+          15
+        ],
+        [
+          "desktop",
+          22
+        ]
+      ]
+    },
+    {
+      "rule": "UX-08",
+      "sev": "info",
+      "vp": "desktop",
+      "msg": "Kontrol hanya berisi ikon tanpa label teks.",
+      "fix": "Tambahkan teks di samping ikon.",
+      "targets": [
+        {
+          "sel": "div.flex.flex-col > div.sidebar-banner.relative > button.sidebar-toggle-btn.absolute",
+          "text": "",
+          "rect": {
+            "x": 207,
+            "y": 68,
+            "w": 36,
+            "h": 36
+          },
+          "msg": "Kontrol hanya berisi ikon tanpa label teks."
+        }
+      ],
+      "n_targets": 1,
+      "viewport_size": "1440×900",
+      "n": 21,
+      "vps": [
+        "desktop"
+      ],
+      "refs": [
+        [
+          "desktop",
+          21
+        ]
+      ]
+    }
+  ],
+  "inventory": {
+    "body": 14.0,
+    "font_sizes": [
+      {
+        "px": 12.0,
+        "n": 32,
+        "sample": "PO/20261014/MALABAR/012"
+      },
+      {
+        "px": 14.0,
+        "n": 52,
+        "sample": "Susu Fresh Milk Pasteurisasi 60 Liter"
+      },
+      {
+        "px": 16.0,
+        "n": 1,
+        "sample": "Setiap catatan transaksi uang masuk dan "
+      },
+      {
+        "px": 20.0,
+        "n": 3,
+        "sample": "Daftar Mutasi Transaksi Kas Harian"
+      },
+      {
+        "px": 24.0,
+        "n": 5,
+        "sample": "+ Rp 13.170.000"
+      }
+    ],
+    "text_colors": [
+      [
+        "#18181b",
+        29
+      ],
+      [
+        "#52525b",
+        19
+      ],
+      [
+        "#27272a",
+        9
+      ],
+      [
+        "#065f46",
+        9
+      ],
+      [
+        "#64748b",
+        6
+      ],
+      [
+        "#171717",
+        5
+      ],
+      [
+        "#ffffff",
+        4
+      ],
+      [
+        "#155e75",
+        3
+      ],
+      [
+        "#156374",
+        2
+      ],
+      [
+        "#334155",
+        2
+      ],
+      [
+        "#075985",
+        2
+      ],
+      [
+        "#00800e",
+        1
+      ],
+      [
+        "#9f1239",
+        1
+      ],
+      [
+        "#0f172a",
+        1
+      ]
+    ],
+    "bg_colors": [
+      [
+        "#ffffff",
+        30
+      ],
+      [
+        "#ecfdf5",
+        3
+      ],
+      [
+        "#ecfeff",
+        3
+      ],
+      [
+        "#00aa13",
+        2
+      ],
+      [
+        "#f0f9ff",
+        2
+      ],
+      [
+        "#34d399",
+        1
+      ],
+      [
+        "#f4f4f6",
+        1
+      ],
+      [
+        "#e6f4f7",
+        1
+      ],
+      [
+        "#dc2626",
+        1
+      ],
+      [
+        "#f1f3f6",
+        1
+      ],
+      [
+        "#22c55e",
+        1
+      ],
+      [
+        "#047857",
+        1
+      ]
+    ],
+    "radii": [
+      [
+        8,
+        17
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        14,
+        2
+      ],
+      [
+        18,
+        5
+      ],
+      [
+        22,
+        1
+      ]
+    ],
+    "pill": 12,
+    "buttons": [
+      [
+        "44×44",
+        17
+      ],
+      [
+        "346×44",
+        3
+      ],
+      [
+        "185×44",
+        1
+      ],
+      [
+        "36×36",
+        1
+      ],
+      [
+        "157×44",
+        1
+      ],
+      [
+        "174×44",
+        1
+      ],
+      [
+        "127×44",
+        1
+      ],
+      [
+        "182×44",
+        1
+      ],
+      [
+        "184×44",
+        1
+      ],
+      [
+        "170×44",
+        1
+      ]
+    ],
+    "icons": [
+      [
+        16,
+        27
+      ],
+      [
+        18,
+        1
+      ],
+      [
+        20,
+        24
+      ],
+      [
+        30,
+        1
+      ],
+      [
+        34,
+        1
+      ]
+    ],
+    "spacing": [
+      [
+        20,
+        160
+      ],
+      [
+        8,
+        56
+      ],
+      [
+        4,
+        42
+      ],
+      [
+        24,
+        36
+      ],
+      [
+        12,
+        35
+      ],
+      [
+        2,
+        30
+      ],
+      [
+        10,
+        28
+      ],
+      [
+        6,
+        27
+      ],
+      [
+        16,
+        26
+      ],
+      [
+        14,
+        14
+      ],
+      [
+        32,
+        12
+      ],
+      [
+        64,
+        4
+      ],
+      [
+        36,
+        1
+      ],
+      [
+        40,
+        1
+      ]
+    ],
+    "families": [
+      [
+        "poppins",
+        85
+      ],
+      [
+        "jetbrains mono",
+        8
+      ]
+    ],
+    "targets_small": 1,
+    "targets_total": 38
+  },
+  "regression": {},
+  "manual": [],
+  "thresholds": {
+    "label": "Umum (WCAG AA)",
+    "min_font": 12,
+    "body_err": 14,
+    "body_warn": 16,
+    "line_height": 1.4,
+    "min_weight": 300,
+    "contrast_err": 4.5,
+    "contrast_warn": 4.5,
+    "contrast_large_err": 3.0,
+    "contrast_large_warn": 3.0,
+    "target_err": 24,
+    "target_warn": 44,
+    "target_gap": 8,
+    "max_line_ch": 90,
+    "fold_interactive": 18,
+    "input_min_font": 16,
+    "pad_min": 8,
+    "nav_max": 9,
+    "primary_max": 3,
+    "max_font_sizes": 9,
+    "max_colors": 9,
+    "max_radii": 4,
+    "max_btn_heights": 3,
+    "justify_warn": false,
+    "icon_only_sev": "info"
+  }
+}

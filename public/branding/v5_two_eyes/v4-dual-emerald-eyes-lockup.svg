@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">V4: Dual Emerald Vision Eyes</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #059669;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-v4">Beruang - Dual Emerald Vision Eyes</title>
+  <path fill="#0F172A" fill-rule="evenodd" d="M 98 64
+  C 86 60 70 42 54 52
+  C 42 60 44 80 52 96
+  C 38 116 34 146 52 174
+  C 68 202 96 216 128 216
+  C 160 216 188 202 204 174
+  C 222 146 218 116 204 96
+  C 212 80 214 60 202 52
+  C 186 42 170 60 160 64
+  L 98 64 Z
+      M 110 178
+      L 110 156
+      C 110 146 118 138 128 138
+      C 138 138 146 146 146 156
+      L 146 178
+      C 140 182 135 184 128 184
+      C 121 184 116 182 110 178 Z" />
+  <!-- Left Emerald Growth Eye -->
+      <polygon points="95,106 103,114 95,122 87,114" fill="#059669" />
+      <!-- Right Emerald Growth Eye -->
+      <polygon points="161,106 169,114 161,122 153,114" fill="#059669" />
+      <!-- Slate Navy Vault Key inside the white snout arch -->
+      <polygon points="128,150 136,160 128,170 120,160" fill="#0F172A" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

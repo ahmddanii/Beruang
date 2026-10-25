@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-ca">
+  <title id="t-ca">Beruang - The Forward Market Profile</title>
+  
+  <!-- Single Sculpted Profile Silhouette in Vibrant Blue (#0066D6) with Cutouts -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 56 196
+      C 52 168 56 136 68 108
+      C 76 88 92 72 108 68
+      C 106 52 116 38 132 38
+      C 146 38 156 48 158 64
+      C 176 68 196 82 208 104
+      C 214 116 218 130 220 144
+      L 184 144
+      C 174 144 164 148 156 156
+      L 142 170
+      C 134 178 122 184 110 184
+      L 76 184
+      C 66 184 58 188 56 196 Z
+
+      M 148 102
+      C 154 96 164 96 170 102
+      C 174 106 172 114 166 116
+      C 158 118 146 110 148 102 Z
+    "
+  />
+
+  <!-- Growth Green Snout Tip & Nose (#00AA13) - Titik Fokus Akselerasi -->
+  <path
+    fill="#00AA13"
+    d="
+      M 218 126
+      C 222 132 222 138 220 144
+      L 188 144
+      C 192 136 198 130 206 128
+      L 218 126 Z
+    "
+  />
+
+  <!-- Base Grounding Shadow Arc in Deep Blue (#0052B3) -->
+  <path
+    fill="#0052B3"
+    d="
+      M 56 196
+      C 72 192 90 190 110 190
+      L 142 190
+      C 156 190 168 196 176 206
+      L 156 214
+      C 148 208 138 204 126 204
+      L 72 204
+      C 62 204 56 200 56 196 Z
+    "
+  />
+</svg>

@@ -1,154 +1,151 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white dark:bg-[#0F1014] text-neutral-900 dark:text-neutral-100 font-sans transition-colors">
-    <div class="flex-1 flex min-h-0">
-      <!-- Desktop & Mobile Drawer Sidebar (styled in #fafafa) -->
-      <DashboardSidebar
-        :is-mobile-open="isMobileMenuOpen"
-        @close-mobile="isMobileMenuOpen = false"
-      />
-
-      <!-- Content Area with Top Navbar -->
-      <div class="flex-1 flex flex-col min-w-0 bg-white dark:bg-[#0F1014]">
-        <!-- Top Workspace Navbar (Showing current page information matching sidebar) -->
-        <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#0F1014]/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/80 px-6 sm:px-10 lg:pl-16 lg:pr-12 xl:pl-20 xl:pr-16 h-14 sm:h-16 flex items-center justify-between select-none">
-          <div class="flex items-center gap-3 min-w-0">
-            <!-- Mobile Menu Toggle Button (Only on < lg) -->
-            <button
-              type="button"
-              class="lg:hidden p-2 -ml-2 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors active:scale-95 shrink-0"
-              aria-label="Buka Menu Navigasi"
-              @click="isMobileMenuOpen = true"
-            >
-              <HugeiconsIcon :icon="Menu01Icon" :size="20" :stroke-width="1.75" />
-            </button>
-
-            <!-- Page Title Indicator (No icon, slightly larger text) -->
-            <div class="flex items-center min-w-0">
-              <h2 class="font-heading font-semibold text-lg sm:text-xl lg:text-[22px] text-neutral-900 dark:text-white truncate tracking-normal">
-                {{ currentPageInfo.title }}
-              </h2>
-            </div>
-          </div>
-
-          <!-- Right Side: Extended Search Bar + Square Containers (Notification & Settings) -->
-          <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <!-- Search Bar (Berada di samping kiri icon notification, lebar diperpanjang) -->
-            <div class="relative w-44 sm:w-64 md:w-80 lg:w-[360px] xl:w-[420px]">
-              <div
-                class="h-9 sm:h-10 flex items-center justify-between gap-2 px-3 sm:px-3.5 rounded-xl bg-neutral-100/90 dark:bg-[#18191E] border border-neutral-200/80 dark:border-neutral-800 transition-all duration-150 focus-within:border-primary-500/70 dark:focus-within:border-primary-500/70 focus-within:ring-2 focus-within:ring-primary-500/15 focus-within:bg-white dark:focus-within:bg-[#18191E] shadow-2xs"
-              >
-                <div class="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-                  <HugeiconsIcon
-                    :icon="Search01Icon"
-                    :size="16"
-                    :stroke-width="1.75"
-                    class="text-neutral-400 dark:text-neutral-500 shrink-0"
-                  />
-                  <input
-                    ref="navbarSearchInputRef"
-                    v-model="navSearchQuery"
-                    type="text"
-                    placeholder="Cari fitur, menu, transaksi..."
-                    class="w-full bg-transparent text-xs sm:text-sm font-sans text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none"
-                    @focus="isSearchDropdownOpen = true"
-                    @blur="onSearchBlur"
-                    @keydown.esc="navSearchQuery = ''; isSearchDropdownOpen = false"
-                  />
-                </div>
-                <button
-                  v-if="navSearchQuery"
-                  type="button"
-                  class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 p-0.5 rounded transition-colors"
-                  title="Hapus pencarian"
-                  @click="navSearchQuery = ''; isSearchDropdownOpen = false"
-                >
-                  <HugeiconsIcon :icon="Cancel01Icon" :size="14" :stroke-width="2" />
-                </button>
-                <kbd
-                  v-else
-                  class="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-sans font-medium text-neutral-400 dark:text-neutral-500 bg-neutral-200/60 dark:bg-neutral-800/80 border border-neutral-300/60 dark:border-neutral-700/60 rounded select-none"
-                >
-                  ⌘K
-                </kbd>
-              </div>
-
-              <!-- Quick Command / Search Dropdown when typing -->
-              <div
-                v-if="isSearchDropdownOpen && navSearchQuery.trim()"
-                class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#18191E] border border-neutral-200/90 dark:border-neutral-800 rounded-2xl shadow-xl overflow-hidden z-50 py-1.5 backdrop-blur-md"
-              >
-                <div v-if="filteredSearchOptions.length > 0" class="max-h-60 overflow-y-auto">
-                  <button
-                    v-for="item in filteredSearchOptions"
-                    :key="item.to"
-                    type="button"
-                    class="w-full flex items-center justify-between px-3.5 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800/70 text-left transition-colors cursor-pointer group"
-                    @mousedown.prevent="goToSearchTarget(item.to)"
-                  >
-                    <div class="flex items-center gap-2.5 min-w-0">
-                      <HugeiconsIcon
-                        :icon="item.icon"
-                        :size="16"
-                        class="text-neutral-400 group-hover:text-primary-500 transition-colors shrink-0"
-                      />
-                      <span class="text-xs sm:text-sm font-sans font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-neutral-900 dark:group-hover:text-white truncate">
-                        {{ item.label }}
-                      </span>
-                    </div>
-                    <span class="text-[10px] font-sans text-neutral-400 group-hover:text-primary-500 font-medium transition-colors">
-                      Buka →
-                    </span>
-                  </button>
-                </div>
-                <div v-else class="px-4 py-3 text-center text-xs text-neutral-400 dark:text-neutral-500 font-sans">
-                  Tidak ada menu yang cocok untuk "{{ navSearchQuery }}"
-                </div>
-              </div>
-            </div>
-
-            <!-- 1. Notification Container (Notification01Icon) -->
-            <button
-              type="button"
-              class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-white dark:bg-[#18191E] hover:bg-neutral-100 dark:hover:bg-[#202128] border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs"
-              aria-label="Pemberitahuan"
-              title="Pemberitahuan"
-            >
-              <HugeiconsIcon :icon="Notification01Icon" :size="18" :stroke-width="1.75" />
-              <!-- Unread notification indicator dot -->
-              <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-500 ring-2 ring-white dark:ring-[#18191E]" />
-            </button>
-
-            <!-- 2. Settings Container (BoltIcon) -->
-            <NuxtLink
-              :to="settingsRoute"
-              class="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-white dark:bg-[#18191E] hover:bg-neutral-100 dark:hover:bg-[#202128] border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-all duration-150 active:scale-95 cursor-pointer shadow-2xs"
-              aria-label="Pengaturan"
-              title="Pengaturan"
-            >
-              <HugeiconsIcon :icon="BoltIcon" :size="18" :stroke-width="1.75" />
-            </NuxtLink>
-          </div>
-        </header>
-
-        <!-- Main Dashboard Workspace Content (Fluid full-width layout matching Trueform references) -->
-        <main class="flex-1 w-full px-6 sm:px-10 lg:pl-16 lg:pr-12 xl:pl-20 xl:pr-16 py-7 sm:py-9">
-          <slot />
-        </main>
+  <div class="h-screen flex flex-col bg-white dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 font-poppins transition-colors overflow-hidden">
+    <!-- Top Workspace Navbar (Full Width Across Top) -->
+    <header class="w-full h-16 shrink-0 bg-[#FFFFFF] dark:bg-[#13161F] border-b border-[#E2E8F0] dark:border-neutral-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-none z-30 relative">
+      <!-- Left Side: Brand Logo & Name: Beruang -->
+      <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+        <!-- Brand Logo & Name: Beruang -->
+        <NuxtLink
+          :to="homePath"
+          class="flex items-center gap-2.5 min-h-[44px] cursor-pointer select-none group shrink-0"
+          title="Beranda Beruang"
+          @click="handleBrandClick"
+        >
+          <img
+            src="/logo/logoSmall.svg"
+            alt="Beruang Logo"
+            class="h-7 w-auto object-contain"
+          />
+          <span class="font-heading font-bold text-xl tracking-[-0.02em] leading-none select-none">
+            <span class="text-[#156374] dark:text-[#50AABF]">Ber</span><span class="text-[#00800e] dark:text-[#00C058]">uang</span>
+          </span>
+        </NuxtLink>
       </div>
+
+      <!-- Center: Advanced Search Bar in Top Navbar (Centered Horizontally) -->
+      <div
+        v-if="isInvestorRole"
+        class="hidden sm:flex absolute left-1/2 -translate-x-1/2 w-full max-w-sm sm:max-w-md lg:max-w-lg items-center justify-center pointer-events-none z-10 px-4"
+      >
+        <AdvancedNavbarSearch class="w-full pointer-events-auto" />
+      </div>
+
+      <!-- Right Side: User Profile Account & Notification Bell (Bell di sebelah kanan profile) -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- User Account Profile Dropdown (Dicoding Style) -->
+        <NavbarProfileDropdown />
+
+        <!-- Interactive Notification Popover Component (UMKM FinTech & GoPay Tactile) -->
+        <NotificationDropdown />
+      </div>
+    </header>
+
+    <!-- Body Layout: Sidebar placed below navbar on left + Main Content on right -->
+    <div class="flex-1 flex min-h-0 overflow-hidden relative">
+      <!-- Desktop & Mobile Drawer Sidebar (placed below navbar) -->
+      <DashboardSidebar class="h-full shrink-0 relative z-20" />
+
+      <!-- Main Dashboard Workspace Content (Centered Dicoding Layout with generous breathing room & Sticky Footer) -->
+      <main
+        ref="mainContentRef"
+        :class="[
+          'flex-1 w-full min-w-0 transition-colors bg-white dark:bg-[#0C121D] flex flex-col scroll-smooth',
+          isFixedLayout
+            ? 'overflow-hidden h-full'
+            : 'overflow-y-auto overflow-x-hidden [scrollbar-gutter:stable]'
+        ]"
+      >
+        <div
+          :class="[
+            'flex flex-col flex-1',
+            isFixedLayout ? 'h-full min-h-0' : 'min-h-full justify-between'
+          ]"
+        >
+          <!-- Content Container (max-w-7xl centered) -->
+          <div
+            :class="[
+              'w-full max-w-7xl mx-auto flex flex-col flex-1',
+              isFixedLayout
+                ? 'min-h-0 px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-6 sm:pb-8'
+                : 'px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 sm:pt-8 pb-28 sm:pb-32 lg:pb-10'
+            ]"
+          >
+            <!-- Page Header: Title + Icon at the very top of main container -->
+            <div
+              v-if="!route.meta.hideHeader"
+              class="flex items-center gap-2 sm:gap-2.5 mb-6 sm:mb-8"
+            >
+              <HugeiconsIcon
+                :icon="currentPageInfo.icon"
+                :size="20"
+                :stroke-width="2.2"
+                class="text-neutral-900 dark:text-white shrink-0"
+              />
+              <h1 class="font-poppins font-semibold text-lg sm:text-xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+                {{ currentPageInfo.title }}
+              </h1>
+            </div>
+
+            <!-- Route Transition Skeleton Screen UI (Zero-Overhead GPU Shimmer) -->
+            <Transition name="skeleton-fade" mode="out-in">
+              <BSkeletonScreen
+                v-if="isRouteLoading"
+                key="skeleton-screen"
+                :variant="currentSkeletonVariant"
+                :show-header="true"
+              />
+              <div
+                v-else
+                key="workspace-content"
+                ref="slotWrapperRef"
+                :class="isFixedLayout ? 'flex-1 min-h-0 flex flex-col overflow-hidden' : 'flex-1'"
+              >
+                <slot />
+              </div>
+            </Transition>
+          </div>
+
+          <!-- Bottom Footer (Dicoding Style, Sticky at Bottom of Viewport when Content is Short) -->
+          <footer
+            class="w-full shrink-0 border-t border-[#E2E8F0] dark:border-neutral-800 bg-white dark:bg-[#0C121D] mt-auto transition-colors font-sans pb-26 sm:pb-4"
+          >
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-4 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span>© 2026 Beruang Indonesia</span>
+                <span class="text-neutral-300 dark:text-neutral-700">|</span>
+                <span>Beruang is a trademark of PT Beruang Finansial Indonesia.</span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </main>
+
+      <!-- Persistent Floating LinkedIn Chat Dock at Bottom-Right (Hidden on Messages Page, Hidden on Admin, & Hidden on Mobile to Avoid Collision) -->
+      <LinkedInChatDock v-if="!isMessagesPage && !isAdminRole" class="hidden lg:block" />
+
+      <!-- Mobile Floating 5-Icon Pill Tab Bar & Quick Access Sheet for All Roles -->
+      <MobilePillTabBar />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '~/stores/auth'
+import { gsap } from 'gsap'
+import { useAuthStore, type UserRole } from '~/stores/auth'
+import { useUmkmStore } from '~/stores/umkm'
 import DashboardSidebar from '~/components/layout/DashboardSidebar.vue'
+import NotificationDropdown from '~/components/layout/NotificationDropdown.vue'
+import NavbarProfileDropdown from '~/components/layout/NavbarProfileDropdown.vue'
+import LinkedInChatDock from '~/components/layout/LinkedInChatDock.vue'
+import AdvancedNavbarSearch from '~/components/search/AdvancedNavbarSearch.vue'
+import MobilePillTabBar from '~/components/layout/MobilePillTabBar.vue'
+import BSkeletonScreen from '~/components/base/BSkeletonScreen.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
   Menu01Icon,
   Notification01Icon,
-  BoltIcon,
   Home03Icon,
   Coins01Icon,
   Task01Icon,
@@ -161,128 +158,241 @@ import {
   Alert01Icon,
   StarIcon,
   UserAdd01Icon,
-  Search01Icon,
-  Cancel01Icon,
-  UserCircleIcon
+  UserCircleIcon,
+  FileUnlockedIcon,
+  Message01Icon
 } from '@hugeicons/core-free-icons'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const isMobileMenuOpen = ref(false)
+const umkmStore = useUmkmStore()
+const { toggleMobile } = useSidebar()
+const mainContentRef = ref<HTMLElement | null>(null)
+const slotWrapperRef = ref<HTMLElement | null>(null)
+const isRouteLoading = ref(true)
+let routeSkeletonTimer: any = null
+let layoutGsapCtx: gsap.Context | null = null
 
-// Navbar Search State
-const navSearchQuery = ref('')
-const navbarSearchInputRef = ref<HTMLInputElement | null>(null)
-const isSearchDropdownOpen = ref(false)
-
-function onSearchBlur() {
-  setTimeout(() => {
-    isSearchDropdownOpen.value = false
-  }, 180)
-}
-
-function goToSearchTarget(targetUrl: string) {
-  navSearchQuery.value = ''
-  isSearchDropdownOpen.value = false
-  router.push(targetUrl)
-}
-
-const allSearchOptions = computed(() => {
-  const role = authStore.currentUser?.role || 'UMKM'
-  if (role === 'UMKM') {
-    return [
-      { to: '/dashboard', label: 'Beranda Toko', icon: Home03Icon },
-      { to: '/dashboard/profile', label: 'Profil Usaha & Banner Toko', icon: UserCircleIcon },
-      { to: '/dashboard/progres', label: 'Catatan Kas & Mutasi Harian', icon: Coins01Icon },
-      { to: '/dashboard/rencana-aksi', label: 'Rencana Aksi & Target Usaha', icon: Task01Icon },
-      { to: '/dashboard/penilaian', label: 'Cek Kesehatan Finansial', icon: AnalyticsUpIcon },
-      { to: '/dashboard/profil-publik', label: 'Toko Publik & Etalase Usaha', icon: Store01Icon },
-      { to: '/dashboard/pendanaan', label: 'Cari Modal & Akses Investor', icon: Award01Icon },
-      { to: '/dashboard/permintaan-investor', label: 'Tawaran Masuk Investor', icon: UserGroupIcon },
-      { to: '/dashboard/pengaturan', label: 'Pengaturan Profil Usaha', icon: Settings01Icon }
-    ]
-  } else if (role === 'CONSULTANT') {
-    return [
-      { to: '/konsultan', label: 'Daftar Klien UMKM Binaan', icon: UserGroupIcon },
-      { to: '/konsultan/validasi', label: 'Validasi Kas & Transaksi Harian', icon: CheckmarkCircle01Icon },
-      { to: '/konsultan/alert', label: 'Peringatan & Anomali Keuangan', icon: Alert01Icon },
-      { to: '/konsultan/pengaturan', label: 'Pengaturan Konsultan', icon: Settings01Icon }
-    ]
-  } else if (role === 'INVESTOR') {
-    return [
-      { to: '/investor', label: 'Katalog Usaha UMKM Kurasi', icon: Store01Icon },
-      { to: '/investor/watchlist', label: 'Usaha Disimpan (Watchlist)', icon: StarIcon },
-      { to: '/investor/pengaturan', label: 'Pengaturan Akun Investor', icon: Settings01Icon }
-    ]
-  } else {
-    return [
-      { to: '/admin', label: 'Ringkasan Platform', icon: Home03Icon },
-      { to: '/admin/penugasan', label: 'Penugasan Konsultan Ahli', icon: UserAdd01Icon },
-      { to: '/admin/pengguna', label: 'Kelola Pengguna Sistem', icon: UserGroupIcon }
-    ]
+const currentSkeletonVariant = computed<'dashboard' | 'feed' | 'profile' | 'table'>(() => {
+  const p = route.path
+  if (p === '/investor' || p.startsWith('/dashboard/postingan')) return 'feed'
+  if (p.includes('/profile') || p.includes('/umkm/')) return 'profile'
+  if (
+    p.startsWith('/dashboard/progres') ||
+    p.startsWith('/admin/umkm') ||
+    p.startsWith('/admin/mitra') ||
+    p.startsWith('/admin/audit') ||
+    p.startsWith('/admin/laporan')
+  ) {
+    return 'table'
   }
+  return 'dashboard'
 })
 
-const filteredSearchOptions = computed(() => {
-  if (!navSearchQuery.value.trim()) return []
-  const q = navSearchQuery.value.toLowerCase().trim()
-  return allSearchOptions.value.filter(item =>
-    item.label.toLowerCase().includes(q)
-  )
-})
+function runWorkspaceEntranceAnimations() {
+  if (!import.meta.client || !slotWrapperRef.value) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-function handleGlobalKeydown(e: KeyboardEvent) {
-  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-    e.preventDefault()
-    navbarSearchInputRef.value?.focus()
-    isSearchDropdownOpen.value = true
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
   }
+
+  layoutGsapCtx = gsap.context(() => {
+    const cards = Array.from(
+      slotWrapperRef.value!.querySelectorAll('.card-tactile-gopay, .stat-card-clean')
+    ).slice(0, 12)
+    if (cards.length > 0) {
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 12 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.38,
+          stagger: 0.035,
+          ease: 'power2.out',
+          overwrite: 'auto',
+          clearProps: 'transform,opacity'
+        }
+      )
+    }
+  }, slotWrapperRef.value)
 }
+
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (import.meta.client && oldPath && newPath !== oldPath) {
+      isRouteLoading.value = true
+      if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+      routeSkeletonTimer = setTimeout(() => {
+        isRouteLoading.value = false
+        nextTick(() => {
+          runWorkspaceEntranceAnimations()
+        })
+      }, 420)
+    }
+
+    nextTick(() => {
+      if (mainContentRef.value) {
+        mainContentRef.value.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      }
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      }
+    })
+
+    if (newPath.startsWith('/investor') && authStore.currentUser?.role !== 'INVESTOR') {
+      authStore.setRole('INVESTOR')
+    } else if (newPath.startsWith('/konsultan') && authStore.currentUser?.role !== 'CONSULTANT') {
+      authStore.setRole('CONSULTANT')
+    } else if (newPath.startsWith('/admin') && authStore.currentUser?.role !== 'ADMIN') {
+      authStore.setRole('ADMIN')
+    } else if (newPath.startsWith('/dashboard') && authStore.currentUser?.role !== 'UMKM') {
+      authStore.setRole('UMKM')
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
-  window.addEventListener('keydown', handleGlobalKeydown)
+  if (import.meta.client) {
+    if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+    routeSkeletonTimer = setTimeout(() => {
+      isRouteLoading.value = false
+      nextTick(() => {
+        runWorkspaceEntranceAnimations()
+      })
+    }, 450)
+  } else {
+    isRouteLoading.value = false
+  }
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleGlobalKeydown)
+  if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
 })
 
-const settingsRoute = computed(() => {
-  const role = authStore.currentUser?.role
-  if (role === 'CONSULTANT') return '/konsultan/pengaturan'
-  if (role === 'INVESTOR') return '/investor/pengaturan'
-  return '/dashboard/pengaturan'
+onBeforeUnmount(() => {
+  if (routeSkeletonTimer) clearTimeout(routeSkeletonTimer)
+  if (layoutGsapCtx) {
+    layoutGsapCtx.revert()
+    layoutGsapCtx = null
+  }
 })
+const isFixedLayout = computed(() => {
+  const p = route.path
+  return (
+    p.startsWith('/investor/pesan') ||
+    p.startsWith('/dashboard/pesan')
+  )
+})
+
+const isMessagesPage = computed(() => {
+  return route.path.includes('/pesan')
+})
+
+const currentRole = computed(() => authStore.currentUser?.role || 'UMKM')
+const isAdminRole = computed(() => {
+  return currentRole.value === 'ADMIN' || route.path.startsWith('/admin')
+})
+const isInvestorRole = computed(() => {
+  return currentRole.value === 'INVESTOR' || route.path.startsWith('/investor')
+})
+const isUmkmRole = computed(() => {
+  return currentRole.value === 'UMKM' && !route.path.startsWith('/investor') && !route.path.startsWith('/konsultan') && !route.path.startsWith('/admin')
+})
+const homePath = computed(() => {
+  if (currentRole.value === 'CONSULTANT') return '/konsultan'
+  if (currentRole.value === 'INVESTOR') return '/investor'
+  if (currentRole.value === 'ADMIN') return '/admin'
+  return '/dashboard'
+})
+
+const handleBrandClick = (e: MouseEvent) => {
+  if (route.path === homePath.value) {
+    e.preventDefault()
+    window.location.reload()
+  }
+}
 
 const currentPageInfo = computed(() => {
   const p = route.path
   if (p === '/dashboard' || p === '/dashboard/') {
-    return { title: 'Beranda', icon: Home03Icon }
+    return {
+      title: 'Beranda',
+      icon: Home03Icon,
+      description: 'Pantau kesehatan kas, kemajuan rencana aksi, dan kesiapan tokomu untuk menarik pendanaan investor.'
+    }
   }
   if (p.startsWith('/dashboard/profile')) {
-    return { title: 'Profil Usaha', icon: UserCircleIcon }
+    return {
+      title: 'Profil Usaha',
+      icon: UserCircleIcon,
+      description: 'Kelola data legalitas, profil brand, dan identitas tokomu agar terverifikasi kredibel.'
+    }
   }
   if (p.startsWith('/dashboard/progres')) {
-    return { title: 'Catatan Kas', icon: Coins01Icon }
+    return {
+      title: 'Catatan Kas',
+      icon: Coins01Icon,
+      description: 'Pencatatan mutasi kas harian, uang masuk penjualan, modal belanja bahan baku, dan biaya operasional tokomu.'
+    }
   }
   if (p.startsWith('/dashboard/rencana-aksi')) {
-    return { title: 'Rencana Aksi', icon: Task01Icon }
+    return {
+      title: 'Progress Tugas',
+      icon: Task01Icon,
+      description: 'Daftar tugas taktis dan pemantauan progres langkah perbaikan tokomu bersama konsultan pendamping.'
+    }
   }
   if (p.startsWith('/dashboard/penilaian')) {
-    return { title: 'Cek Kesehatan', icon: AnalyticsUpIcon }
+    return {
+      title: 'Kesehatan Bisnis',
+      icon: AnalyticsUpIcon,
+      description: 'Diagnosa komprehensif kesehatan finansial tokomu berdasarkan data kas dan kepatuhan administrasi.'
+    }
   }
   if (p.startsWith('/dashboard/profil-publik')) {
-    return { title: 'Toko Publik', icon: Store01Icon }
+    return {
+      title: 'Toko Publik',
+      icon: Store01Icon,
+      description: 'Pratinjau profil tokomu sebagaimana dilihat oleh calon mitra dan investor.'
+    }
   }
   if (p.startsWith('/dashboard/pendanaan')) {
-    return { title: 'Cari Modal', icon: Award01Icon }
+    return {
+      title: 'Cari Modal',
+      icon: Award01Icon,
+      description: 'Eksplorasi opsi pendanaan dan kalkulator bagi hasil yang aman sesuai kemampuan usahamu.'
+    }
   }
-  if (p.startsWith('/dashboard/permintaan-investor')) {
-    return { title: 'Tawaran Masuk', icon: UserGroupIcon }
+  if (p.startsWith('/dashboard/pesan')) {
+    return {
+      title: 'Pesan',
+      icon: Message01Icon,
+      description: 'Ruang komunikasi dan diskusi pendanaan langsung dengan calon investor tokomu.'
+    }
+  }
+  if (p.startsWith('/dashboard/permintaan-investor') || p.startsWith('/dashboard/notifikasi')) {
+    return {
+      title: 'Notifikasi',
+      icon: Notification01Icon,
+      description: 'Pemberitahuan penting seputar aktivitas usaha, jadwal pendampingan, dan permintaan investor.'
+    }
   }
   if (p.startsWith('/dashboard/pengaturan')) {
-    return { title: 'Pengaturan Usaha', icon: Settings01Icon }
+    return {
+      title: 'Pengaturan Usaha',
+      icon: Settings01Icon,
+      description: 'Kelola preferensi akun, integrasi data, dan keamanan tokomu.'
+    }
   }
 
   // Konsultan pages
@@ -304,13 +414,30 @@ const currentPageInfo = computed(() => {
 
   // Investor pages
   if (p === '/investor' || p === '/investor/') {
-    return { title: 'Katalog Usaha', icon: Store01Icon }
+    return { title: 'Jaringan', icon: Store01Icon }
+  }
+  if (p.startsWith('/investor/pesan')) {
+    return {
+      title: 'Pesan',
+      icon: Message01Icon,
+      description: 'Diskusi langsung dengan pendiri UMKM dan tindak lanjut pendanaan usaha.'
+    }
+  }
+  if (p.startsWith('/investor/data-room')) {
+    return {
+      title: 'Virtual Data Room',
+      icon: FileUnlockedIcon,
+      description: 'Ruang data finansial privat terenkripsi dengan laporan untung rugi riil, rekening koran bank, dan bukti legalitas usaha.'
+    }
   }
   if (p.startsWith('/investor/watchlist')) {
-    return { title: 'Disimpan', icon: StarIcon }
+    return { title: 'Simpan', icon: StarIcon }
   }
   if (p.startsWith('/investor/umkm/')) {
     return { title: 'Detail Prospek UMKM', icon: Store01Icon }
+  }
+  if (p.startsWith('/investor/profile')) {
+    return { title: 'Profil Investor', icon: UserCircleIcon }
   }
   if (p.startsWith('/investor/pengaturan')) {
     return { title: 'Pengaturan Investor', icon: Settings01Icon }
@@ -318,13 +445,31 @@ const currentPageInfo = computed(() => {
 
   // Admin pages
   if (p === '/admin' || p === '/admin/') {
-    return { title: 'Ringkasan', icon: Home03Icon }
+    return { title: 'Beranda', icon: Home03Icon }
+  }
+  if (p.startsWith('/admin/umkm')) {
+    return { title: 'Kemitraan UMKM', icon: Store01Icon }
+  }
+  if (p.startsWith('/admin/daftar-umkm')) {
+    return { title: 'Data UMKM', icon: Store01Icon }
   }
   if (p.startsWith('/admin/penugasan')) {
-    return { title: 'Penugasan Konsultan', icon: UserAdd01Icon }
+    return { title: 'Konsultan', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/admin/investor')) {
+    return { title: 'Data Investor', icon: Coins01Icon }
+  }
+  if (p.startsWith('/admin/sertifikasi')) {
+    return { title: 'Sertifikasi Usaha', icon: Award01Icon }
+  }
+  if (p.startsWith('/admin/investasi')) {
+    return { title: 'Alur Investasi', icon: Coins01Icon }
   }
   if (p.startsWith('/admin/pengguna')) {
     return { title: 'Kelola Pengguna', icon: UserGroupIcon }
+  }
+  if (p.startsWith('/admin/pengaturan')) {
+    return { title: 'Pengaturan', icon: Settings01Icon }
   }
 
   return { title: 'Beranda', icon: Home03Icon }

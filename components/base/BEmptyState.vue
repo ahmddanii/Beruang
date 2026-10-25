@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center text-center p-8 select-none">
+  <div class="flex flex-col items-center justify-center text-center p-8">
     <!-- Si Beru Mascot -->
     <div class="relative mb-3">
       <SiBeru :state="mascotState" :size="mascotSize" />

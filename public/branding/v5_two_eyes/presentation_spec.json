@@ -1,0 +1,39 @@
+{
+  "brand": "Beruang",
+  "tagline": "Akselerator Kelayakan UMKM",
+  "brief": "Platform akselerator kelayakan pendanaan UMKM. Memperbaiki karakteristik wajah beruang dengan dua mata yang jelas (anti-mata satu) agar terhindar dari konotasi negatif, dengan tetap menjaga wibawa institusional dan presisi geometris.",
+  "adjectives": ["Solid", "Geometris", "Berwibawa", "Protektif", "Dua Mata Waspada"],
+  "criteria": "Anatomi 2 mata geometris beruang yang jelas, anti-mata satu, 1 moncong/brankas zamrud, palet Slate Navy (#0F172A) & Emerald Growth (#059669).",
+  "industry": "finance",
+  "brand_color": "#0F172A",
+  "tile_color": "#0F172A",
+  "greyscale": false,
+  "final": false,
+  "round": 3,
+  "designer": "Antigravity Senior Brand Team",
+  "concepts": [
+    {
+      "name": "V1: Discerning Guardian",
+      "symbol": "v1-dual-rhomboid.svg",
+      "lockup": "v1-dual-rhomboid-lockup.svg",
+      "idea": "Dua mata berlian geometris miring 15° menatap tajam waspada, dengan moncong brankas zamrud di bawah.",
+      "rationale": [
+        "Menghilangkan total kesan mata satu dengan menempatkan 2 mata geometris di posisi biologis beruang.",
+        "Mata berbentuk belah ketupat memancarkan ketajaman analitis mentor bisnis dan investor modal ventura.",
+        "Moncong brankas di bagian bawah menjaga fokus pertumbuhan modal (zamrud #059669)."
+      ]
+    },
+    {
+      "name": "V4: Dual Emerald Vision",
+      "symbol": "v4-dual-emerald-eyes.svg",
+      "lockup": "v4-dual-emerald-eyes-lockup.svg",
+      "idea": "Kedua mata beruang berupa permata zamrud kembar yang melambangkan visi pertumbuhan modal.",
+      "rationale": [
+        "Warna aksen hijau zamrud (#059669) dipindahkan ke kedua mata, menciptakan tatapan visi yang optimis dan futuristik.",
+        "Moncong brankas di bawah berupa ruang negatif bersih dengan siluet kunci brankas monolitik.",
+        "Sangat ikonik dan berdaya ingat tinggi pada avatar media sosial dan favicon."
+      ]
+    }
+  ],
+  "recommendation": "V1 (Discerning Guardian) memberikan wibawa mentor bisnis paling seimbang, sementara V4 (Dual Emerald Vision) memiliki daya tarik visual terkuat di platform digital."
+}

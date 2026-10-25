@@ -1,29 +1,97 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import type { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import { PrismaClient } from "@prisma/client";
 
-dotenv.config();
+import authRouter, { handleOtpSend, handleOtpVerify } from "./routes/auth.js";
+import financesRouter from "./routes/finances.js";
+import vdrRouter from "./routes/vdr.js";
+import umkmRouter from "./routes/umkm.js";
+import consultantRouter from "./routes/consultant.js";
+import investorRouter from "./routes/investor.js";
+import onboardingRouter, { handleUmkmOnboarding, handleConsultantOnboarding, handleInvestorOnboarding } from "./routes/onboarding.js";
+import adminRouter from "./routes/admin.js";
+import chatRouter from "./routes/chat.js";
+import notificationsRouter from "./routes/notifications.js";
+import userRouter from "./routes/user.js";
+import { optionalAuth, requireAuth } from "./middleware/auth.js";
+dotenv.config({ override: true });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
-export const prisma = new PrismaClient();
+import { prisma } from "./prisma.js";
+export { app, prisma };
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static uploads directory serving
+const uploadDir = path.resolve(__dirname, "../uploads");
+app.use("/uploads", express.static(uploadDir));
+
+// Root status route
+app.get("/", (_req: Request, res: Response) => {
+  res.json({
+    name: "Beruang API Backend",
+    status: "online",
+    health: "/api/health",
+  });
+});
 
 // Health check route
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({
     status: "ok",
-    message: "Beruang Backend API is active",
+    message: "Beruang Express + Prisma Backend API is fully active",
     timestamp: new Date().toISOString(),
   });
 });
 
-// Start Server
-app.listen(port, () => {
-  console.log(`🚀 Beruang API server running at http://localhost:${port}`);
-  console.log(`📡 Health check: http://localhost:${port}/api/health`);
+// Mounted Routes
+app.use("/api/auth", authRouter);
+app.use("/api/onboarding", onboardingRouter);
+app.post("/api/umkm/onboarding", requireAuth, handleUmkmOnboarding);
+app.post("/api/consultant/onboarding", requireAuth, handleConsultantOnboarding);
+app.post("/api/investor/onboarding", requireAuth, handleInvestorOnboarding);
+app.post("/api/otp/send", handleOtpSend);
+app.post("/api/otp/verify", handleOtpVerify);
+app.use("/api/finances", financesRouter);
+app.use("/api/umkm/monthly-reports", financesRouter);
+app.use("/api/vdr", vdrRouter);
+app.use("/api/umkm/documents", vdrRouter);
+app.use("/api/umkm", umkmRouter);
+app.use("/api/consultant", consultantRouter);
+app.use("/api/investor", investorRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/notifications", notificationsRouter);
+app.use("/api/user", userRouter);
+
+// Global Error Handler
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error("❌ Server Error:", err?.message || err);
+  const status = err?.status || (err?.name === "MulterError" ? 400 : 500);
+  res.status(status).json({
+    success: false,
+    message: err?.message || "Terjadi kesalahan pada pemrosesan berkas di server.",
+  });
 });
+
+// Start Server (only when not in Vercel serverless environment)
+if (process.env.VERCEL !== "1") {
+  app.listen(port, () => {
+    console.log(`🚀 Beruang API server running at http://localhost:${port}`);
+    console.log(`📡 Health check: http://localhost:${port}/api/health`);
+    console.log(`📁 Uploads served from: ${uploadDir}`);
+  });
+}
+
+export default app;

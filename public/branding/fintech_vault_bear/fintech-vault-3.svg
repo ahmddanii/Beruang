@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-f3">
+  <title id="title-f3">Beruang - The Prosperity Growth Bear</title>
+  <defs>
+    <clipPath id="squircle-f3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Deep Slate Navy Squircle Canvas -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#0F172A" />
+
+  <g clip-path="url(#squircle-f3)">
+    <!-- White Polar Bear Ears -->
+    <circle cx="76" cy="120" r="26" fill="#FFFFFF" />
+    <circle cx="76" cy="120" r="15" fill="#E2E8F0" />
+
+    <circle cx="180" cy="120" r="26" fill="#FFFFFF" />
+    <circle cx="180" cy="120" r="15" fill="#E2E8F0" />
+
+    <!-- Pure White Doughy Bear Head -->
+    <circle cx="128" cy="150" r="66" fill="#FFFFFF" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#0F172A"
+      stroke-width="8"
+      stroke-linecap="round"
+      d="
+        M 94 150
+        C 99 157 109 157 114 150
+
+        M 142 150
+        C 147 157 157 157 162 150
+      "
+    />
+
+    <!-- Emerald Growth / Profitability Vault Dial at the Base -->
+    <path
+      fill="#00AA13"
+      d="
+        M 86 240
+        C 86 200 104 186 128 186
+        C 152 186 170 200 170 240 Z
+      "
+    />
+    <!-- Upward Growth Arrow inside Dial (Ready for Funding / Profit) -->
+    <path
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="
+        M 108 226
+        L 120 216
+        L 130 220
+        L 146 204
+        M 136 204
+        L 146 204
+        L 146 214
+      "
+    />
+  </g>
+</svg>

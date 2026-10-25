@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Vault Helmet Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #FF7009;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-c3">Beruang - The Vault Helmet Bear</title>
+  <defs>
+    <clipPath id="squircle-c3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#squircle-c3)">
+    <!-- Golden Bear Ears -->
+    <circle cx="76" cy="140" r="22" fill="#EFA300" />
+    <circle cx="76" cy="140" r="13" fill="#D98A00" />
+
+    <circle cx="180" cy="140" r="22" fill="#EFA300" />
+    <circle cx="180" cy="140" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- White Smooth Vault Security Dome / Helmet -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 158
+        C 66 94 92 68 128 68
+        C 164 68 190 94 190 158
+        C 190 164 182 166 176 166
+        C 156 164 100 164 80 166
+        C 74 166 66 164 66 158 Z
+      "
+    />
+    <!-- Soft Helmet Visor Rim Shadow -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 66 158
+        C 86 162 170 162 190 158
+        L 188 165
+        C 170 168 86 168 68 165 Z
+      "
+    />
+
+    <!-- Soft Grey Minimalist Vault Dial on Helmet -->
+    <circle cx="128" cy="116" r="20" fill="none" stroke="#D1D5DB" stroke-width="4" />
+    <circle cx="128" cy="116" r="8" fill="none" stroke="#D1D5DB" stroke-width="3" />
+    <circle cx="128" cy="116" r="4" fill="#00AA13" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 192
+        C 102 200 114 200 120 192
+
+        M 142 192
+        C 148 200 160 200 166 192
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

@@ -1,27 +1,12 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
-}
-
-enum Role {
-  UMKM
-  CONSULTANT
-  INVESTOR
-  ADMIN
-}
-
-enum ReadinessStatus {
-  PROFILE_INCOMPLETE
-  PROFILE_COMPLETE
-  CONSULTANT_ASSIGNED
-  ASSESSMENT_IN_PROGRESS
-  ACTION_PLAN_ACTIVE
-  READINESS_EVALUATION
-  READY_FOR_FUNDING
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
 
 model User {
@@ -29,15 +14,21 @@ model User {
   name         String
   email        String    @unique
   passwordHash String
-  role         Role      @default(UMKM)
-  avatar       String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  role                String   @default("UMKM") // UMKM, CONSULTANT, INVESTOR, ADMIN
+  phone               String?
+  avatar              String?
+  verified            Boolean  @default(true)
+  onboardingCompleted Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   businessProfile   BusinessProfile?
   consultantProfile ConsultantProfile?
   investorProfile   InvestorProfile?
   accessRequests    AccessRequest[]
+  notifications     Notification[]
+  watchlists        InvestorWatchlist[]
+  vdrAuditLogs      VdrAuditLog[]
 }
 
 model ConsultantProfile {
@@ -45,11 +36,25 @@ model ConsultantProfile {
   userId             String   @unique
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   firmName           String
+  title              String?  @default("Konsultan Ahli Keuangan & Audit UMKM")
+  bio                String?  @default("Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.")
+  specialization     String?  @default("F&B & Ritel")
+  bnspLicense        String?  @default("BNSP-KM-2026-9812")
+  city               String?  @default("Bandung")
+  experience         String?  @default("8 Tahun")
+  maxClients         Int      @default(10)
   isCertified        Boolean  @default(true)
   activeClientsCount Int      @default(0)
+  receiveNewClients  Boolean  @default(true)
+  waNotification     Boolean  @default(true)
   createdAt          DateTime @default(now())
 
-  businesses BusinessProfile[]
+  businesses         BusinessProfile[]
+  assignments        ConsultantAssignment[]
+  agreements         ConsultantAgreement[]
+  mentorshipRequests ConsultantMentorshipRequest[]
+  milestones         ClientMilestone[]
+  documents          ConsultantDocument[]
 }
 
 model InvestorProfile {
@@ -58,47 +63,106 @@ model InvestorProfile {
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   firmName          String
   commitmentCapital String   @default("Rp 1.5 Miliar")
+  investorType      String?  @default("Angel Syndicate")
+  sectors           String?  @default("F&B, FMCG, Agroindustri")
+  minMargin         Float?   @default(40.0)
+  city              String?  @default("Jakarta")
+  phone             String?
+  whatsapp          String?
+  website           String?
+  nibEntity         String?
+  npwpEntity        String?
+  kycStatus         String   @default("VERIFIED") // VERIFIED, PENDING
+  minTicket         Float?   @default(50000000)
+  maxTicket         Float?   @default(1000000000)
+  investmentScheme  String?  @default("REVENUE_SHARE") // REVENUE_SHARE, EQUITY, CONVERTIBLE
   isVerified        Boolean  @default(true)
   createdAt         DateTime @default(now())
 }
 
 model BusinessProfile {
-  id             String          @id @default(cuid())
-  userId         String          @unique
-  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  brand          String
-  name           String
-  sector         String
-  location       String
-  description    String          @db.Text
-  fundingTarget  String          @default("Rp 250.000.000")
-  equityOffered  String          @default("12%")
-  status         ReadinessStatus @default(ACTION_PLAN_ACTIVE)
-  consultantId   String?
-  consultant     ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
-  nextMentoring  String          @default("Kamis, 14:00 WIB")
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand             String
+  name              String
+  ownerName         String?
+  sector            String
+  location          String
+  city              String?  @default("Bandung")
+  description       String?  @default("")
+  fundingTarget     Float    @default(250000000)
+  equityOffered     String   @default("12%")
+  status            String   @default("ACTION_PLAN_ACTIVE") // PROFILE_INCOMPLETE, PROFILE_COMPLETE, CONSULTANT_ASSIGNED, ACTION_PLAN_ACTIVE, READY_FOR_FUNDING
+  consultantId      String?
+  consultant        ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
+  nextMentoring     String?
+  nib               String?
+  npwp              String?
+  bankName          String?
+  bankAccountNumber String?
+  bankAccountHolder String?
+  whatsapp          String?
+  instagram         String?
+  outletsCount      Int      @default(1)
+  employeesCount    Int      @default(5)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  assessment     Assessment?
-  tasks          ActionPlanTask[]
-  monthlyReports MonthlyReport[]
-  documents      DataRoomDocument[]
-  accessRequests AccessRequest[]
+  assessment         Assessment?
+  tasks              ActionPlanTask[]
+  dailyTxs           DailyTransaction[]
+  monthlyReports     MonthlyReport[]
+  documents          DataRoomDocument[]
+  accessRequests     AccessRequest[]
+  watchlists         InvestorWatchlist[]
+  assignments        ConsultantAssignment[]
+  chatThreads        ChatThread[]
+  agreements         ConsultantAgreement[]
+  featuredProducts   FeaturedProduct[]
+  mentorshipRequests ConsultantMentorshipRequest[]
+  milestones         ClientMilestone[]
+  fundingCertificate FundingCertificate?
+}
+
+model FeaturedProduct {
+  id            String          @id @default(cuid())
+  businessId    String
+  business      BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name          String
+  categoryBadge String          @default("Makanan & Minuman")
+  price         Float
+  grossMargin   Float           @default(45.0)
+  monthlyVolume Int             @default(500)
+  description   String?
+  imageUrl      String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model ConsultantAssignment {
+  id           String            @id @default(cuid())
+  businessId   String
+  business     BusinessProfile   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  consultantId String
+  consultant   ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+  slaDays      Int               @default(7)
+  notes        String?
+  assignedAt   DateTime          @default(now())
 }
 
 model Assessment {
   id              String          @id @default(cuid())
   businessId      String          @unique
   business        BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  financial       Int             @default(50)
-  operationsHpp   Int             @default(50)
-  marketing       Int             @default(50)
-  hrTeam          Int             @default(50)
-  legal           Int             @default(50)
-  compositeScore  Int             @default(50)
-  isVerified      Boolean         @default(false)
-  consultantNotes String?         @db.Text
+  financial       Int             @default(78)
+  operationsHpp   Int             @default(85)
+  marketing       Int             @default(64)
+  hrTeam          Int             @default(75)
+  legal           Int             @default(92)
+  compositeScore  Int             @default(79)
+  isVerified      Boolean         @default(true)
+  consultantNotes String?
   updatedAt       DateTime        @updatedAt
 }
 
@@ -107,31 +171,58 @@ model ActionPlanTask {
   businessId         String
   business           BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
   title              String
-  description        String?         @db.Text
+  description        String?
+  category           String          @default("Finansial") // Finansial, Operasional, Pemasaran, Legalitas, Tata Kelola
   priority           String          @default("Sedang") // Mendesak, Tinggi, Sedang
   dueDate            String
-  status             String          @default("todo") // todo, submitted, verified, revision
-  umkmNotes          String?         @db.Text
+  status             String          @default("TODO") // TODO, IN_PROGRESS, DONE
+  completed          Boolean         @default(false)
+  umkmNotes          String?
   evidenceName       String?
   evidenceUrl        String?
-  consultantFeedback String?         @db.Text
+  evidenceSize       String?
+  consultantFeedback String?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
 
+model DailyTransaction {
+  id            String          @id @default(cuid())
+  businessId    String
+  business      BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  date          String
+  title         String
+  category      String          @default("PEMASUKAN") // PEMASUKAN, MODAL_JUALAN, OPERASIONAL
+  amount        Float
+  paymentMethod String          @default("QRIS") // QRIS, TRANSFER, TUNAI
+  status        String          @default("VERIFIED") // VERIFIED, PENDING
+  receiptNumber String?
+  receiptUrl    String?
+  notes         String?
+  createdAt     DateTime        @default(now())
+}
+
 model MonthlyReport {
-  id              String          @id @default(cuid())
-  businessId      String
-  business        BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  monthYear       String
-  omzet           Decimal         @db.Decimal(15, 2)
-  hpp             Decimal         @db.Decimal(15, 2)
-  hppRatio        Int
-  operationalCost Decimal         @db.Decimal(15, 2)
-  netCash         Decimal         @db.Decimal(15, 2)
-  status          String          @default("submitted") // submitted, verified, anomaly_flagged
-  anomalyFlagged  Boolean         @default(false)
-  submittedAt     DateTime        @default(now())
+  id                String          @id @default(cuid())
+  businessId        String
+  business          BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  month             String
+  year              Int
+  monthYear         String
+  omzet             Float
+  hpp               Float
+  hppRatio          Int
+  opex              Float
+  loss              Float?          @default(0)
+  netProfit         Float
+  cashBalance       Float
+  status            String          @default("VERIFIED") // submitted, verified, revision_needed
+  proofDocumentName String?
+  proofDocumentSize String?
+  proofDocumentUrl  String?
+  notes             String?
+  anomalyFlagged    Boolean         @default(false)
+  submittedAt       DateTime        @default(now())
 }
 
 model DataRoomDocument {
@@ -139,21 +230,228 @@ model DataRoomDocument {
   businessId     String
   business       BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
   name           String
-  category       String
-  size           String
+  category       String          @default("Legalitas") // Legalitas, Keuangan, Operasional, Perizinan
+  size           String          @default("1.5 MB")
   fileUrl        String?
+  storagePath    String?
   isConfidential Boolean         @default(true)
   verifiedAt     DateTime        @default(now())
+  createdAt      DateTime        @default(now())
+
+  auditLogs      VdrAuditLog[]
 }
 
 model AccessRequest {
-  id             String          @id @default(cuid())
-  businessId     String
-  business       BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  investorId     String
-  investor       User            @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  proposedTicket String
-  status         String          @default("pending") // pending, approved, rejected
-  requestedAt    DateTime        @default(now())
-  respondedAt    DateTime?
+  id               String          @id @default(cuid())
+  businessId       String
+  business         BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  investorId       String
+  investor         User            @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  proposedTicket   Float           @default(250000000)
+  investmentScheme String          @default("REVENUE_SHARE")
+  introMessage     String?
+  status           String          @default("PENDING") // PENDING, APPROVED, REJECTED
+  requestedAt      DateTime        @default(now())
+  respondedAt      DateTime?
 }
+
+model Notification {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  message      String
+  category     String   @default("KAS") // KONSULTAN, INVESTOR, KESEHATAN, KAS, AKSI
+  priority     String   @default("NORMAL") // HIGH, NORMAL
+  isRead       Boolean  @default(false)
+  link         String   @default("/dashboard/progres")
+  actionLabel  String?  @default("Lihat Kas")
+  roleTarget   String   @default("ALL") // UMKM, CONSULTANT, INVESTOR, ALL
+  senderName   String?
+  actionDetail String?
+  quoteSnippet String?
+  avatar       String?
+  badgeCount   Int?     @default(0)
+  iconType     String?  @default("avatar") // avatar, verified, shield, growth, deal, wallet
+  sectionGroup String?  @default("today") // today, yesterday
+  createdAt    DateTime @default(now())
+}
+
+model InvestorWatchlist {
+  id         String          @id @default(cuid())
+  userId     String
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime        @default(now())
+
+  @@unique([userId, businessId])
+}
+
+model ChatThread {
+  id              String           @id @default(cuid())
+  businessId      String?
+  business        BusinessProfile? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  umkmId          String?
+  investorId      String?
+  investorName    String?          @default("Hendro Wicaksono")
+  investorLembaga String?          @default("Nusantara Impact Angel Syndicate")
+  investorAvatar  String?          @default("https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces")
+  dealStatus      String           @default("Tahap Penjajakan Awal")
+  ticketDiscussed Float            @default(150000000)
+  unreadInvestor  Int              @default(0)
+  unreadUmkm      Int              @default(0)
+  lastMessage     String           @default("")
+  lastMessageAt   String?          @default("Baru saja")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  messages        ChatMessage[]
+}
+
+model ChatMessage {
+  id                 String      @id @default(cuid())
+  threadId           String
+  thread             ChatThread  @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  senderRole         String      // "INVESTOR" | "UMKM"
+  senderName         String
+  text               String
+  timestamp          String
+  attachmentType     String?     // "METRIC" | "DOCUMENT" | "DEAL_OFFER"
+  attachmentTitle    String?
+  attachmentSubtitle String?
+  attachmentValue    String?
+  createdAt          DateTime    @default(now())
+}
+
+model ConsultantAgreement {
+  id                   String             @id @default(cuid())
+  agreementCode        String             @unique
+  consultantId         String?
+  consultant           ConsultantProfile? @relation(fields: [consultantId], references: [id], onDelete: SetNull)
+  businessId           String
+  business             BusinessProfile    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  requestId            String?
+  monthlyFee           Float              @default(1500000)
+  durationMonths       Int                @default(3)
+  targetFunding        Float              @default(150000000)
+  status               String             @default("SIGNED_CONSULTANT") // DRAFT, SIGNED_CONSULTANT, ACTIVE, TERMINATED
+  consultantSignedAt   DateTime?          @default(now())
+  consultantSignerName String?            @default("Dra. Maya Suryani, M.M.")
+  consultantSignature  String?
+  consultantSignMode   String?            @default("draw")
+  umkmSignedAt         DateTime?
+  umkmSignerName       String?
+  umkmSignature        String?
+  umkmSignMode         String?
+  agreementText        String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model VdrAuditLog {
+  id          String            @id @default(cuid())
+  documentId  String?
+  document    DataRoomDocument? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName    String?           @default("Hendro Wicaksono")
+  userRole    String?           @default("INVESTOR")
+  userLembaga String?           @default("Nusantara Impact Angel Syndicate")
+  businessId  String
+  docTitle    String            @default("Laporan Keuangan Audit")
+  action      String            @default("VIEW") // VIEW, DOWNLOAD, PREVIEW
+  ipAddress   String?           @default("127.0.0.1")
+  userAgent   String?
+  accessedAt  DateTime          @default(now())
+}
+
+// 1. Konfigurasi Parameter Sistem Global (Admin Pengaturan)
+model SystemSetting {
+  id                    String   @id @default("global-config")
+  minCompositeScore     Int      @default(75)    // Ambang skor lulus sertifikasi
+  minGuidanceMonths     Int      @default(3)     // Durasi bimbingan wajib (bulan)
+  requireBankStatements Boolean  @default(true)  // Wajib mutasi bank 3 bulan
+  openCycleDay          Int      @default(25)    // Tanggal buka siklus pelaporan kas
+  closeCycleDay         Int      @default(30)    // Tanggal tutup siklus
+  validationWindowDays  Int      @default(5)     // Batas waktu validasi konsultan (hari)
+  updatedAt             DateTime @updatedAt
+  updatedBy             String?  // ID Admin yang memperbarui
+}
+
+// 2. Sertifikat Kelayakan Pendanaan Resmi (Admin Sertifikasi)
+model FundingCertificate {
+  id                String          @id @default(cuid())
+  businessId        String          @unique
+  business          BusinessProfile @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  certificateNo     String          @unique // e.g. "CERT-BERUANG-2026-0042"
+  compositeScore    Int
+  financialScore    Int
+  operationsScore   Int
+  legalScore        Int
+  approvedByAdminId String
+  approvedAt        DateTime        @default(now())
+  validUntil        DateTime        // Masa berlaku 12 bulan
+  certificatePdfUrl String?
+}
+
+// 3. Log Audit Aktivitas Ekosistem (Admin Beranda & Keamanan)
+model PlatformActivityLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String   // e.g. "CERTIFICATION_APPROVED", "VDR_ACCESS_GRANTED", "CONSULTANT_ASSIGNED"
+  entityType String   // "BUSINESS", "USER", "ACCESS_REQUEST"
+  entityId   String
+  title      String
+  detail     String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}
+
+// 4. Permohonan Bimbingan Masuk (Konsultan Request)
+model ConsultantMentorshipRequest {
+  id              String            @id @default(cuid())
+  consultantId    String
+  businessId      String
+  status          String            @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  offeredFee      Float             @default(1500000)
+  durationMonths  Int               @default(3)
+  message         String?
+  rejectionReason String?
+  createdAt       DateTime          @default(now())
+
+  consultant      ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+  business        BusinessProfile   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+// 5. Berkas Lisensi & Portofolio Konsultan
+model ConsultantDocument {
+  id           String            @id @default(cuid())
+  consultantId String
+  name         String
+  type         String            // BNSP_CERT, PORTOFOLIO, NPWP, OTHER
+  filename     String
+  fileSize     String
+  fileUrl      String?
+  status       String            @default("VERIFIED") // PENDING, VERIFIED, REJECTED
+  uploadedAt   DateTime          @default(now())
+
+  consultant   ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+}
+
+// 6. Milestone Tahapan Bimbingan
+model ClientMilestone {
+  id           String            @id @default(cuid())
+  businessId   String
+  consultantId String
+  title        String
+  phaseNumber  Int               @default(1)
+  targetMonth  String            // e.g. "Bulan ke-1"
+  status       String            @default("IN_PROGRESS") // TODO, IN_PROGRESS, COMPLETED
+  createdAt    DateTime          @default(now())
+
+  business     BusinessProfile   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  consultant   ConsultantProfile @relation(fields: [consultantId], references: [id], onDelete: Cascade)
+}
+
+

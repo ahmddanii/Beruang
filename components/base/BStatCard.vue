@@ -4,7 +4,7 @@
     :to="to"
     :class="[
       'bg-white dark:bg-[#15161A] border border-neutral-200/90 dark:border-neutral-800/90 rounded-2xl p-5 flex flex-col justify-between transition-colors duration-150',
-      to ? 'hover:border-neutral-300 dark:hover:border-neutral-700 cursor-pointer active:scale-[0.99] transition-transform' : '',
+      to ? 'hover:border-neutral-300 dark:hover:border-neutral-700 cursor-pointer' : '',
       customClass
     ]"
   >

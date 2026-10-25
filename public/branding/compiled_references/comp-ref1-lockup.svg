@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Organic Minimal</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #0081A0;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-r1">Beruang - The Organic Minimalist Bear (Ref 1 Synthesis)</title>
+  <!-- Trust Blue Squircle Canvas -->
+  <rect width="256" height="256" rx="56" fill="#0081A0" />
+
+  <!-- Organic Chubby Bear Head with Cutout Snout & Calm Almond Eyes -->
+  <path
+    fill="#FFFFFF"
+    fill-rule="evenodd"
+    d="
+      M 128 66
+      C 108 66 98 52 86 42
+      C 70 28 50 38 48 60
+      C 46 80 46 100 42 120
+      C 34 162 56 206 94 220
+      C 110 224 118 224 128 224
+      C 138 224 146 224 162 220
+      C 200 206 222 162 214 120
+      C 210 100 210 80 208 60
+      C 206 38 186 28 170 42
+      C 158 52 148 66 128 66 Z
+
+      M 128 116
+      C 148 116 164 132 164 152
+      C 164 172 148 188 128 188
+      C 108 188 92 172 92 152
+      C 92 132 108 116 128 116 Z
+
+      M 76 112
+      C 76 105 92 105 92 112
+      C 88 118 80 118 76 112 Z
+
+      M 164 112
+      C 164 105 180 105 180 112
+      C 176 118 168 118 164 112 Z
+    "
+  />
+
+  <!-- Emerald Growth Nose Keystone inside Snout -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 146
+      C 112 138 119 134 128 134
+      C 137 134 144 138 144 146
+      C 144 154 137 158 128 158
+      C 119 158 112 154 112 146 Z
+    "
+  />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

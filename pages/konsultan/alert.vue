@@ -11,7 +11,7 @@
           AI Anomaly Alert Feed
         </h1>
         <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-          Peringatan otomatis saat terdeteksi lonjakan HPP >10%, penurunan margin drastis, atau deviasi kas operasional.
+          Peringatan otomatis saat terdeteksi lonjakan modal jualan >10%, penurunan margin drastis, atau deviasi kas operasional.
         </p>
       </div>
 

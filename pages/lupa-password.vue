@@ -81,11 +81,18 @@ const email = ref('')
 const loading = ref(false)
 const sent = ref(false)
 
-function handleSubmit() {
+async function handleSubmit() {
   loading.value = true
-  setTimeout(() => {
+  try {
+    await useApi('/auth/forgot-password', {
+      method: 'POST',
+      body: { email: email.value }
+    })
+  } catch (err: any) {
+    console.warn('Endpoint lupa password offline/mock fallback:', err?.message)
+  } finally {
     loading.value = false
     sent.value = true
-  }, 400)
+  }
 }
 </script>

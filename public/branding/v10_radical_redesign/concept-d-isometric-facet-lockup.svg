@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">Konsep D: The Isometric Tech Bear (Poligon Facet Venture)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-cd">Beruang - The Isometric Tech Bear</title>
+  
+  <!-- Left Ear (Deep Tone #003E8A) -->
+  <polygon points="60,82 46,60 70,46 86,64" fill="#003E8A" />
+  <circle cx="68" cy="62" r="14" fill="#0052B3" />
+
+  <!-- Right Ear (Vibrant Tone #0052B3) -->
+  <polygon points="196,82 210,60 186,46 170,64" fill="#0052B3" />
+  <circle cx="188" cy="62" r="14" fill="#0066D6" />
+
+  <!-- Left Facet Face (Deep Shadow #0052B3) -->
+  <polygon points="128,68 86,64 54,104 48,156 128,224 128,154" fill="#0052B3" />
+
+  <!-- Right Facet Face (Vibrant Light #0066D6) -->
+  <polygon points="128,68 170,64 202,104 208,156 128,224 128,154" fill="#0066D6" />
+
+  <!-- Crown Forehead Facet (Mid Tone #0077F5) -->
+  <polygon points="128,68 86,64 128,102 170,64" fill="#0077F5" />
+
+  <!-- Left Eye Slit in White Negative Space -->
+  <polygon points="90,114 104,118 92,124 82,120" fill="#FFFFFF" />
+
+  <!-- Right Eye Slit in White Negative Space -->
+  <polygon points="166,114 152,118 164,124 174,120" fill="#FFFFFF" />
+
+  <!-- Center Snout Keystone Facet in Growth Green (#00AA13 - Venture Core) -->
+  <polygon points="128,138 148,162 128,186 108,162" fill="#00AA13" />
+  <!-- Keystone Highlight Plane -->
+  <polygon points="128,138 148,162 128,186" fill="#10B981" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

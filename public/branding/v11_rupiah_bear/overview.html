@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beruang - Adaptasi Flat Vektor Memegang Uang Lembar Rupiah</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #080C14;
+      color: #E2E8F0;
+      padding: 40px 32px;
+      line-height: 1.5;
+    }
+
+    .header {
+      max-width: 1280px;
+      margin: 0 auto 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 24px;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .badge-blue {
+      background: rgba(0, 102, 214, 0.2);
+      border: 1px solid rgba(0, 102, 214, 0.5);
+      color: #60A5FA;
+    }
+
+    .badge-green {
+      background: rgba(0, 170, 19, 0.2);
+      border: 1px solid rgba(0, 170, 19, 0.5);
+      color: #4ADE80;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #94A3B8;
+      font-size: 14px;
+      max-width: 960px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* 4 Options Grid */
+    .grid-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .card.highlight {
+      border: 2px solid #00AA13;
+      background: linear-gradient(180deg, #13241F 0%, #0D1620 100%);
+      box-shadow: 0 12px 36px -8px rgba(0, 170, 19, 0.35);
+    }
+
+    .badge-card {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-card.primary {
+      background: #00AA13;
+      color: #FFFFFF;
+    }
+
+    .badge-card.sec {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94A3B8;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 190px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      padding: 16px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .preview-box.dark-bg {
+      background: #080C14;
+    }
+
+    .preview-box svg {
+      width: 140px;
+      height: 140px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F8FAFC;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #38BDF8;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* Comparison Banner with Reference */
+    .compare-banner {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 2.5fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .ref-card {
+      background: #1A2234;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ref-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .transform-specs h3 {
+      font-size: 16px;
+      color: #34D399;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .transform-specs ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: #CBD5E1;
+    }
+
+    .transform-specs li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .transform-specs li span.check {
+      color: #10B981;
+      font-weight: 700;
+    }
+
+    /* Scalability Strip */
+    .scale-strip {
+      background: #0F1626;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .scale-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F1F5F9;
+      margin-bottom: 16px;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .scale-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .display-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .app-icon-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .favicon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .favicon-wrap svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .scale-lbl {
+      font-size: 11px;
+      color: #94A3B8;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="badge-bar">
+      <div class="badge-pill badge-green">✓ Eksekusi Flat Vector Clean</div>
+      <div class="badge-pill badge-green">✓ Memegang Uang Lembar Rupiah (Bukan Koin/Daun)</div>
+      <div class="badge-pill badge-blue">✓ Warna Selaras Beranda (#0066D6 & #00AA13)</div>
+    </div>
+    <h1>Beruang — Adaptasi Flat Vektor Memegang Uang Lembar Rupiah</h1>
+    <p class="subtitle">
+      Dibuat langsung merujuk pada gambar referensi Anda: figur beruang yang menggemaskan, ramah, dan bersahaja, namun dieksekusi dalam bentuk <strong>flat vector murni yang bersih (clean)</strong>, mengganti koin & daun menjadi <strong>selembar uang kertas Rupiah hijau</strong>, dan menyelaraskan warnanya dengan palet proyek.
+    </p>
+  </div>
+
+  <div class="container">
+
+    <!-- Comparison Banner with Reference Image -->
+    <div class="compare-banner">
+      <div class="ref-card">
+        <img src="ref_user.png" alt="Gambar Referensi Pengguna" />
+        <div style="font-size: 11px; font-weight: 700; color: #F59E0B;">REFERENSI PENGGUNA</div>
+        <div style="font-size: 10px; color: #94A3B8; margin-top: 2px;">Clay 3D / Oranye / Koin & Daun</div>
+      </div>
+      <div class="transform-specs">
+        <h3>Transformasi Desain Sesuai Arahan Anda:</h3>
+        <ul>
+          <li><span class="check">✔</span> <strong>Gaya Flat Vector Clean:</strong> Menghilangkan tekstur clay/3D glossy berlebih, diubah menjadi bentuk vektor geometris yang presisi dan tajam.</li>
+          <li><span class="check">✔</span> <strong>Uang Lembar Rupiah Hijau:</strong> Menghilangkan koin emas & daun; kini kedua tangan beruang memegang selembar uang kertas Rupiah hijau pertumbuhan modal (#00AA13) dengan lambang "Rp".</li>
+          <li><span class="check">✔</span> <strong>Harmonisasi Warna:</strong> Mengadopsi palet resmi aplikasi (GoPay Vibrant Blue #0066D6, Fresh Green #00AA13, dan Deep Blue #0052B3).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4 Options Grid -->
+    <div class="grid-options">
+
+      <!-- V1 -->
+      <div class="card highlight">
+        <span class="badge-card primary">★ OPSI 1: SERENE BLUE</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r1">
+  <title id="t-r1">Beruang - The Serene Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#0066D6" />
+  <circle cx="72" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#0066D6" />
+  <circle cx="184" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Main Round Bear Head (Clean Flat Vector in Vibrant Trust Blue) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Serene Closed Eyes (Filled Crescent Shapes without raw strokes) -->
+  <!-- Left Eye -->
+  <path
+    fill="#0F172A"
+    d="
+      M 78 132
+      C 86 120 102 120 110 132
+      C 104 127 92 127 78 132 Z
+    "
+  />
+  <!-- Left Eye Eyelash Ticks -->
+  <polygon points="76,134 78,131 72,138 71,140" fill="#0F172A" />
+  <polygon points="84,124 87,123 83,118 81,119" fill="#0F172A" />
+
+  <!-- Right Eye -->
+  <path
+    fill="#0F172A"
+    d="
+      M 146 132
+      C 154 120 170 120 178 132
+      C 164 127 152 127 146 132 Z
+    "
+  />
+  <!-- Right Eye Eyelash Ticks -->
+  <polygon points="180,134 178,131 184,138 185,140" fill="#0F172A" />
+  <polygon points="172,124 169,123 173,118 175,119" fill="#0F172A" />
+
+  <!-- Uang Lembar Rupiah (Clean Banknote in Growth Green #00AA13) -->
+  <g transform="translate(128, 194)">
+    <!-- Base Paper Bill -->
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <!-- White Guilloche Inner Border -->
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <!-- Central Value Medallion -->
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <!-- Corner Value Indicators -->
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+  
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw Holding Banknote -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#0066D6" />
+
+  <!-- Right Bear Paw Holding Banknote -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#0066D6" />
+</svg>
+        </div>
+        <div class="card-title">Opsi 1: The Serene Rupiah Bear</div>
+        <div class="card-meta">Biru Proyek + Mata Tenang Referensi</div>
+        <div class="card-desc">
+          Paling mirip dengan ekspresi referensi asli: mata terpejam tenang dan damai, telinga bundar ramah, memegang uang lembar rupiah hijau (#00AA13) dengan lambang "Rp".
+        </div>
+      </div>
+
+      <!-- V2 -->
+      <div class="card">
+        <span class="badge-card sec">OPSI 2: CONFIDENT</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r2">
+  <title id="t-r2">Beruang - The Confident Open-Eyed Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#0066D6" />
+  <circle cx="72" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#0066D6" />
+  <circle cx="184" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Main Round Bear Head -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Subtle Snout Base in White -->
+  <ellipse cx="128" cy="152" rx="32" ry="22" fill="#FFFFFF" />
+  <ellipse cx="128" cy="145" rx="10" ry="7" fill="#0052B3" />
+
+  <!-- Two Open, Intelligent, Friendly Eyes -->
+  <ellipse cx="94" cy="116" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="94" cy="117" r="6" fill="#0F172A" />
+  <circle cx="92" cy="114" r="2.2" fill="#FFFFFF" />
+
+  <ellipse cx="162" cy="116" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="162" cy="117" r="6" fill="#0F172A" />
+  <circle cx="160" cy="114" r="2.2" fill="#FFFFFF" />
+
+  <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+  <g transform="translate(128, 194)">
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#0066D6" />
+
+  <!-- Right Bear Paw -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#0066D6" />
+</svg>
+        </div>
+        <div class="card-title">Opsi 2: The Confident Bear</div>
+        <div class="card-meta">Mata Terbuka Cerdas & Ramah</div>
+        <div class="card-desc">
+          Pose yang sama memegang uang kertas Rupiah, namun dengan sepasang mata terbuka yang cerdas, optimis, dan siap membimbing UMKM.
+        </div>
+      </div>
+
+      <!-- V3 -->
+      <div class="card highlight">
+        <span class="badge-card primary">★ OPSI 3: APP ICON SQUIRCLE</span>
+        <div class="preview-box dark-bg">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r3">
+  <title id="t-r3">Beruang - Squircle App Icon Edition</title>
+  
+  <defs>
+    <clipPath id="squircle-clip-clean">
+      <rect x="12" y="12" width="232" height="232" rx="60" />
+    </clipPath>
+  </defs>
+
+  <!-- Squircle Canvas in Dark Ice Navy (#0C121D) -->
+  <rect x="12" y="12" width="232" height="232" rx="60" fill="#0C121D" />
+  <rect x="12" y="12" width="232" height="232" rx="60" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+
+  <g clip-path="url(#squircle-clip-clean)">
+    <!-- Ambient Glow behind Bear -->
+    <circle cx="128" cy="130" r="90" fill="#0066D6" opacity="0.2" />
+
+    <!-- Left Ear -->
+    <circle cx="74" cy="74" r="28" fill="#0066D6" />
+    <circle cx="74" cy="74" r="16" fill="#0052B3" />
+
+    <!-- Right Ear -->
+    <circle cx="182" cy="74" r="28" fill="#0066D6" />
+    <circle cx="182" cy="74" r="16" fill="#0052B3" />
+
+    <!-- Main Round Bear Head -->
+    <path
+      fill="#0066D6"
+      d="
+        M 94 70
+        C 106 66 117 64 128 64
+        C 139 64 150 66 162 70
+        C 190 78 214 104 216 138
+        C 218 176 194 204 168 218
+        C 155 226 141 228 128 228
+        C 115 228 101 226 88 218
+        C 62 204 38 176 40 138
+        C 42 104 66 78 94 70 Z
+      "
+    />
+
+    <!-- Serene Closed Eyes in White -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 80 136
+        C 88 124 104 124 112 136
+        C 106 131 94 131 80 136 Z
+      "
+    />
+    <polygon points="78,138 80,135 74,142 73,144" fill="#FFFFFF" />
+    <polygon points="86,128 89,127 85,122 83,123" fill="#FFFFFF" />
+
+    <path
+      fill="#FFFFFF"
+      d="
+        M 144 136
+        C 152 124 168 124 176 136
+        C 162 131 150 131 144 136 Z
+      "
+    />
+    <polygon points="178,138 176,135 182,142 183,144" fill="#FFFFFF" />
+    <polygon points="170,128 167,127 171,122 173,123" fill="#FFFFFF" />
+
+    <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+    <g transform="translate(128, 196)">
+      <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+      <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+      <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+      <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+      <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+      <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+      <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+      <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+    </g>
+
+    <g transform="translate(0, 2)">
+      <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+    </g>
+
+    <!-- Left Bear Paw -->
+    <ellipse cx="84" cy="198" rx="18" ry="16" fill="#0052B3" />
+    <ellipse cx="86" cy="196" rx="15" ry="13" fill="#0066D6" />
+
+    <!-- Right Bear Paw -->
+    <ellipse cx="172" cy="198" rx="18" ry="16" fill="#0052B3" />
+    <ellipse cx="170" cy="196" rx="15" ry="13" fill="#0066D6" />
+  </g>
+</svg>
+        </div>
+        <div class="card-title">Opsi 3: The Squircle App Icon</div>
+        <div class="card-meta">Format Full Squircle Seperti Referensi</div>
+        <div class="card-desc">
+          Membungkus figur beruang ke dalam kanvas squircle gelap elegan (#0C121D) dengan ambient glow biru. Siap menjadi ikon aplikasi mobile berkelas dunia.
+        </div>
+      </div>
+
+      <!-- V4 -->
+      <div class="card">
+        <span class="badge-card sec">OPSI 4: GOLDEN HONEY</span>
+        <div class="preview-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r4">
+  <title id="t-r4">Beruang - The Golden Honey Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#F59E0B" />
+  <circle cx="72" cy="68" r="16" fill="#D97706" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#F59E0B" />
+  <circle cx="184" cy="68" r="16" fill="#D97706" />
+
+  <!-- Main Round Golden Honey Bear Head -->
+  <path
+    fill="#F59E0B"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Serene Closed Eyes in Deep Brown -->
+  <path
+    fill="#78350F"
+    d="
+      M 78 132
+      C 86 120 102 120 110 132
+      C 104 127 92 127 78 132 Z
+    "
+  />
+  <polygon points="76,134 78,131 72,138 71,140" fill="#78350F" />
+  <polygon points="84,124 87,123 83,118 81,119" fill="#78350F" />
+
+  <path
+    fill="#78350F"
+    d="
+      M 146 132
+      C 154 120 170 120 178 132
+      C 164 127 152 127 146 132 Z
+    "
+  />
+  <polygon points="180,134 178,131 184,138 185,140" fill="#78350F" />
+  <polygon points="172,124 169,123 173,118 175,119" fill="#78350F" />
+
+  <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+  <g transform="translate(128, 194)">
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#D97706" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#F59E0B" />
+
+  <!-- Right Bear Paw -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#D97706" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#F59E0B" />
+</svg>
+        </div>
+        <div class="card-title">Opsi 4: The Golden Honey Bear</div>
+        <div class="card-meta">Warna Emas Asli + Rupiah Hijau</div>
+        <div class="card-desc">
+          Mempertahankan warna hangat emas/madu (#F59E0B) dari gambar asli Anda, namun tetap flat clean dan memegang uang lembar Rupiah hijau.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scalability Strip -->
+    <div class="scale-strip">
+      <div class="scale-title">Uji Keterbacaan Ikon Aplikasi Seluler & Favicon 16px (True Micro-Scale Test)</div>
+      <div class="scale-grid">
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r1">
+  <title id="t-r1">Beruang - The Serene Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#0066D6" />
+  <circle cx="72" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#0066D6" />
+  <circle cx="184" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Main Round Bear Head (Clean Flat Vector in Vibrant Trust Blue) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Serene Closed Eyes (Filled Crescent Shapes without raw strokes) -->
+  <!-- Left Eye -->
+  <path
+    fill="#0F172A"
+    d="
+      M 78 132
+      C 86 120 102 120 110 132
+      C 104 127 92 127 78 132 Z
+    "
+  />
+  <!-- Left Eye Eyelash Ticks -->
+  <polygon points="76,134 78,131 72,138 71,140" fill="#0F172A" />
+  <polygon points="84,124 87,123 83,118 81,119" fill="#0F172A" />
+
+  <!-- Right Eye -->
+  <path
+    fill="#0F172A"
+    d="
+      M 146 132
+      C 154 120 170 120 178 132
+      C 164 127 152 127 146 132 Z
+    "
+  />
+  <!-- Right Eye Eyelash Ticks -->
+  <polygon points="180,134 178,131 184,138 185,140" fill="#0F172A" />
+  <polygon points="172,124 169,123 173,118 175,119" fill="#0F172A" />
+
+  <!-- Uang Lembar Rupiah (Clean Banknote in Growth Green #00AA13) -->
+  <g transform="translate(128, 194)">
+    <!-- Base Paper Bill -->
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <!-- White Guilloche Inner Border -->
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <!-- Central Value Medallion -->
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <!-- Corner Value Indicators -->
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+  
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw Holding Banknote -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#0066D6" />
+
+  <!-- Right Bear Paw Holding Banknote -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#0066D6" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r1">
+  <title id="t-r1">Beruang - The Serene Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#0066D6" />
+  <circle cx="72" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#0066D6" />
+  <circle cx="184" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Main Round Bear Head (Clean Flat Vector in Vibrant Trust Blue) -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Serene Closed Eyes (Filled Crescent Shapes without raw strokes) -->
+  <!-- Left Eye -->
+  <path
+    fill="#0F172A"
+    d="
+      M 78 132
+      C 86 120 102 120 110 132
+      C 104 127 92 127 78 132 Z
+    "
+  />
+  <!-- Left Eye Eyelash Ticks -->
+  <polygon points="76,134 78,131 72,138 71,140" fill="#0F172A" />
+  <polygon points="84,124 87,123 83,118 81,119" fill="#0F172A" />
+
+  <!-- Right Eye -->
+  <path
+    fill="#0F172A"
+    d="
+      M 146 132
+      C 154 120 170 120 178 132
+      C 164 127 152 127 146 132 Z
+    "
+  />
+  <!-- Right Eye Eyelash Ticks -->
+  <polygon points="180,134 178,131 184,138 185,140" fill="#0F172A" />
+  <polygon points="172,124 169,123 173,118 175,119" fill="#0F172A" />
+
+  <!-- Uang Lembar Rupiah (Clean Banknote in Growth Green #00AA13) -->
+  <g transform="translate(128, 194)">
+    <!-- Base Paper Bill -->
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <!-- White Guilloche Inner Border -->
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <!-- Central Value Medallion -->
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <!-- Corner Value Indicators -->
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+  
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw Holding Banknote -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#0066D6" />
+
+  <!-- Right Bear Paw Holding Banknote -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#0066D6" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi 1</strong> (Serene Blue)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r2">
+  <title id="t-r2">Beruang - The Confident Open-Eyed Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#0066D6" />
+  <circle cx="72" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#0066D6" />
+  <circle cx="184" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Main Round Bear Head -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Subtle Snout Base in White -->
+  <ellipse cx="128" cy="152" rx="32" ry="22" fill="#FFFFFF" />
+  <ellipse cx="128" cy="145" rx="10" ry="7" fill="#0052B3" />
+
+  <!-- Two Open, Intelligent, Friendly Eyes -->
+  <ellipse cx="94" cy="116" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="94" cy="117" r="6" fill="#0F172A" />
+  <circle cx="92" cy="114" r="2.2" fill="#FFFFFF" />
+
+  <ellipse cx="162" cy="116" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="162" cy="117" r="6" fill="#0F172A" />
+  <circle cx="160" cy="114" r="2.2" fill="#FFFFFF" />
+
+  <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+  <g transform="translate(128, 194)">
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#0066D6" />
+
+  <!-- Right Bear Paw -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#0066D6" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r2">
+  <title id="t-r2">Beruang - The Confident Open-Eyed Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#0066D6" />
+  <circle cx="72" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#0066D6" />
+  <circle cx="184" cy="68" r="16" fill="#0052B3" />
+
+  <!-- Main Round Bear Head -->
+  <path
+    fill="#0066D6"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Subtle Snout Base in White -->
+  <ellipse cx="128" cy="152" rx="32" ry="22" fill="#FFFFFF" />
+  <ellipse cx="128" cy="145" rx="10" ry="7" fill="#0052B3" />
+
+  <!-- Two Open, Intelligent, Friendly Eyes -->
+  <ellipse cx="94" cy="116" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="94" cy="117" r="6" fill="#0F172A" />
+  <circle cx="92" cy="114" r="2.2" fill="#FFFFFF" />
+
+  <ellipse cx="162" cy="116" rx="9" ry="11" fill="#FFFFFF" />
+  <circle cx="162" cy="117" r="6" fill="#0F172A" />
+  <circle cx="160" cy="114" r="2.2" fill="#FFFFFF" />
+
+  <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+  <g transform="translate(128, 194)">
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#0066D6" />
+
+  <!-- Right Bear Paw -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#0052B3" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#0066D6" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi 2</strong> (Confident Open)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r3">
+  <title id="t-r3">Beruang - Squircle App Icon Edition</title>
+  
+  <defs>
+    <clipPath id="squircle-clip-clean">
+      <rect x="12" y="12" width="232" height="232" rx="60" />
+    </clipPath>
+  </defs>
+
+  <!-- Squircle Canvas in Dark Ice Navy (#0C121D) -->
+  <rect x="12" y="12" width="232" height="232" rx="60" fill="#0C121D" />
+  <rect x="12" y="12" width="232" height="232" rx="60" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+
+  <g clip-path="url(#squircle-clip-clean)">
+    <!-- Ambient Glow behind Bear -->
+    <circle cx="128" cy="130" r="90" fill="#0066D6" opacity="0.2" />
+
+    <!-- Left Ear -->
+    <circle cx="74" cy="74" r="28" fill="#0066D6" />
+    <circle cx="74" cy="74" r="16" fill="#0052B3" />
+
+    <!-- Right Ear -->
+    <circle cx="182" cy="74" r="28" fill="#0066D6" />
+    <circle cx="182" cy="74" r="16" fill="#0052B3" />
+
+    <!-- Main Round Bear Head -->
+    <path
+      fill="#0066D6"
+      d="
+        M 94 70
+        C 106 66 117 64 128 64
+        C 139 64 150 66 162 70
+        C 190 78 214 104 216 138
+        C 218 176 194 204 168 218
+        C 155 226 141 228 128 228
+        C 115 228 101 226 88 218
+        C 62 204 38 176 40 138
+        C 42 104 66 78 94 70 Z
+      "
+    />
+
+    <!-- Serene Closed Eyes in White -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 80 136
+        C 88 124 104 124 112 136
+        C 106 131 94 131 80 136 Z
+      "
+    />
+    <polygon points="78,138 80,135 74,142 73,144" fill="#FFFFFF" />
+    <polygon points="86,128 89,127 85,122 83,123" fill="#FFFFFF" />
+
+    <path
+      fill="#FFFFFF"
+      d="
+        M 144 136
+        C 152 124 168 124 176 136
+        C 162 131 150 131 144 136 Z
+      "
+    />
+    <polygon points="178,138 176,135 182,142 183,144" fill="#FFFFFF" />
+    <polygon points="170,128 167,127 171,122 173,123" fill="#FFFFFF" />
+
+    <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+    <g transform="translate(128, 196)">
+      <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+      <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+      <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+      <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+      <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+      <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+      <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+      <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+    </g>
+
+    <g transform="translate(0, 2)">
+      <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+    </g>
+
+    <!-- Left Bear Paw -->
+    <ellipse cx="84" cy="198" rx="18" ry="16" fill="#0052B3" />
+    <ellipse cx="86" cy="196" rx="15" ry="13" fill="#0066D6" />
+
+    <!-- Right Bear Paw -->
+    <ellipse cx="172" cy="198" rx="18" ry="16" fill="#0052B3" />
+    <ellipse cx="170" cy="196" rx="15" ry="13" fill="#0066D6" />
+  </g>
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r3">
+  <title id="t-r3">Beruang - Squircle App Icon Edition</title>
+  
+  <defs>
+    <clipPath id="squircle-clip-clean">
+      <rect x="12" y="12" width="232" height="232" rx="60" />
+    </clipPath>
+  </defs>
+
+  <!-- Squircle Canvas in Dark Ice Navy (#0C121D) -->
+  <rect x="12" y="12" width="232" height="232" rx="60" fill="#0C121D" />
+  <rect x="12" y="12" width="232" height="232" rx="60" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+
+  <g clip-path="url(#squircle-clip-clean)">
+    <!-- Ambient Glow behind Bear -->
+    <circle cx="128" cy="130" r="90" fill="#0066D6" opacity="0.2" />
+
+    <!-- Left Ear -->
+    <circle cx="74" cy="74" r="28" fill="#0066D6" />
+    <circle cx="74" cy="74" r="16" fill="#0052B3" />
+
+    <!-- Right Ear -->
+    <circle cx="182" cy="74" r="28" fill="#0066D6" />
+    <circle cx="182" cy="74" r="16" fill="#0052B3" />
+
+    <!-- Main Round Bear Head -->
+    <path
+      fill="#0066D6"
+      d="
+        M 94 70
+        C 106 66 117 64 128 64
+        C 139 64 150 66 162 70
+        C 190 78 214 104 216 138
+        C 218 176 194 204 168 218
+        C 155 226 141 228 128 228
+        C 115 228 101 226 88 218
+        C 62 204 38 176 40 138
+        C 42 104 66 78 94 70 Z
+      "
+    />
+
+    <!-- Serene Closed Eyes in White -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 80 136
+        C 88 124 104 124 112 136
+        C 106 131 94 131 80 136 Z
+      "
+    />
+    <polygon points="78,138 80,135 74,142 73,144" fill="#FFFFFF" />
+    <polygon points="86,128 89,127 85,122 83,123" fill="#FFFFFF" />
+
+    <path
+      fill="#FFFFFF"
+      d="
+        M 144 136
+        C 152 124 168 124 176 136
+        C 162 131 150 131 144 136 Z
+      "
+    />
+    <polygon points="178,138 176,135 182,142 183,144" fill="#FFFFFF" />
+    <polygon points="170,128 167,127 171,122 173,123" fill="#FFFFFF" />
+
+    <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+    <g transform="translate(128, 196)">
+      <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+      <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+      <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+      <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+      <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+      <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+      <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+      <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+    </g>
+
+    <g transform="translate(0, 2)">
+      <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+    </g>
+
+    <!-- Left Bear Paw -->
+    <ellipse cx="84" cy="198" rx="18" ry="16" fill="#0052B3" />
+    <ellipse cx="86" cy="196" rx="15" ry="13" fill="#0066D6" />
+
+    <!-- Right Bear Paw -->
+    <ellipse cx="172" cy="198" rx="18" ry="16" fill="#0052B3" />
+    <ellipse cx="170" cy="196" rx="15" ry="13" fill="#0066D6" />
+  </g>
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi 3</strong> (Squircle Tile)</div>
+        </div>
+
+        <div class="scale-item">
+          <div class="display-row">
+            <div class="app-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r4">
+  <title id="t-r4">Beruang - The Golden Honey Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#F59E0B" />
+  <circle cx="72" cy="68" r="16" fill="#D97706" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#F59E0B" />
+  <circle cx="184" cy="68" r="16" fill="#D97706" />
+
+  <!-- Main Round Golden Honey Bear Head -->
+  <path
+    fill="#F59E0B"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Serene Closed Eyes in Deep Brown -->
+  <path
+    fill="#78350F"
+    d="
+      M 78 132
+      C 86 120 102 120 110 132
+      C 104 127 92 127 78 132 Z
+    "
+  />
+  <polygon points="76,134 78,131 72,138 71,140" fill="#78350F" />
+  <polygon points="84,124 87,123 83,118 81,119" fill="#78350F" />
+
+  <path
+    fill="#78350F"
+    d="
+      M 146 132
+      C 154 120 170 120 178 132
+      C 164 127 152 127 146 132 Z
+    "
+  />
+  <polygon points="180,134 178,131 184,138 185,140" fill="#78350F" />
+  <polygon points="172,124 169,123 173,118 175,119" fill="#78350F" />
+
+  <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+  <g transform="translate(128, 194)">
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#D97706" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#F59E0B" />
+
+  <!-- Right Bear Paw -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#D97706" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#F59E0B" />
+</svg></div>
+            <div class="favicon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-r4">
+  <title id="t-r4">Beruang - The Golden Honey Rupiah Bear</title>
+  
+  <!-- Left Ear -->
+  <circle cx="72" cy="68" r="28" fill="#F59E0B" />
+  <circle cx="72" cy="68" r="16" fill="#D97706" />
+
+  <!-- Right Ear -->
+  <circle cx="184" cy="68" r="28" fill="#F59E0B" />
+  <circle cx="184" cy="68" r="16" fill="#D97706" />
+
+  <!-- Main Round Golden Honey Bear Head -->
+  <path
+    fill="#F59E0B"
+    d="
+      M 92 64
+      C 104 60 116 58 128 58
+      C 140 58 152 60 164 64
+      C 192 72 216 98 218 132
+      C 220 170 196 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 60 200 36 170 38 132
+      C 40 98 64 72 92 64 Z
+    "
+  />
+
+  <!-- Serene Closed Eyes in Deep Brown -->
+  <path
+    fill="#78350F"
+    d="
+      M 78 132
+      C 86 120 102 120 110 132
+      C 104 127 92 127 78 132 Z
+    "
+  />
+  <polygon points="76,134 78,131 72,138 71,140" fill="#78350F" />
+  <polygon points="84,124 87,123 83,118 81,119" fill="#78350F" />
+
+  <path
+    fill="#78350F"
+    d="
+      M 146 132
+      C 154 120 170 120 178 132
+      C 164 127 152 127 146 132 Z
+    "
+  />
+  <polygon points="180,134 178,131 184,138 185,140" fill="#78350F" />
+  <polygon points="172,124 169,123 173,118 175,119" fill="#78350F" />
+
+  <!-- Uang Lembar Rupiah Hijau (#00AA13) -->
+  <g transform="translate(128, 194)">
+    <rect x="-56" y="-26" width="112" height="52" rx="8" fill="#00AA13" />
+    <rect x="-51" y="-22" width="102" height="44" rx="5" fill="#10B981" />
+    <rect x="-46" y="-18" width="92" height="36" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#FFFFFF" />
+    <circle cx="-38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="-11" r="3" fill="#FFFFFF" />
+    <circle cx="-38" cy="11" r="3" fill="#FFFFFF" />
+    <circle cx="38" cy="11" r="3" fill="#FFFFFF" />
+  </g>
+
+  <!-- 'R' path -->
+  <path fill="#00AA13" d="M 122 189 L 126 189 C 128.5 189 129.5 190.2 129.5 192 C 129.5 193.8 128.5 195 126 195 L 124 195 L 124 199 L 122 199 Z M 124 191 L 124 193.5 L 125.8 193.5 C 126.8 193.5 127.5 193 127.5 192 C 127.5 191 126.8 191 125.8 191 Z" />
+  <path fill="#00AA13" d="M 125.5 194.5 L 128.5 199 L 126.2 199 L 124 195 Z" />
+  <!-- 'p' path -->
+  <path fill="#00AA13" d="M 130.5 191.5 L 132.3 191.5 L 132.3 192.8 C 133 191.8 134 191.3 135.2 191.3 C 137 191.3 138.2 192.8 138.2 194.8 C 138.2 196.8 137 198.3 135.2 198.3 C 134 198.3 133 197.8 132.3 196.8 L 132.3 201 L 130.5 201 Z M 132.3 194.8 C 132.3 196 133.2 196.8 134.4 196.8 C 135.6 196.8 136.4 196 136.4 194.8 C 136.4 193.6 135.6 192.8 134.4 192.8 C 133.2 192.8 132.3 193.6 132.3 194.8 Z" />
+
+  <!-- Left Bear Paw -->
+  <ellipse cx="84" cy="196" rx="18" ry="16" fill="#D97706" />
+  <ellipse cx="86" cy="194" rx="15" ry="13" fill="#F59E0B" />
+
+  <!-- Right Bear Paw -->
+  <ellipse cx="172" cy="196" rx="18" ry="16" fill="#D97706" />
+  <ellipse cx="170" cy="194" rx="15" ry="13" fill="#F59E0B" />
+</svg></div>
+          </div>
+          <div class="scale-lbl"><strong>Opsi 4</strong> (Golden Honey)</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

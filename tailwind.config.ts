@@ -12,6 +12,9 @@ export default {
   ],
   theme: {
     extend: {
+      spacing: {
+        13: '3.25rem', // 52px
+      },
       colors: {
         canvas: {
           dark: '#0F1014',
@@ -42,23 +45,31 @@ export default {
           'muted-light': '#9CA3AF',
         },
         primary: {
-          50: '#EEF3FE',
-          100: '#D8E4FD',
-          200: '#B4CBFC',
-          300: '#82ABFA',
-          400: '#4B82F6',
-          500: '#1F52EB', // Solid Accent Blue (Zero Gradient)
-          600: '#173FC7',
-          700: '#1332A3',
-          800: '#132B84',
-          900: '#14276E',
-          950: '#0D1845',
-          tint: 'rgba(31, 82, 235, 0.08)',
+          50: '#EBF6F9',
+          100: '#D4ECF2',
+          200: '#A9D8E5',
+          300: '#7DC4D7',
+          400: '#50AABF',
+          500: '#2091AA', // Beruang Primary Blue (Container Biru Beranda)
+          600: '#1A7A8F',
+          700: '#156374',
+          800: '#104D5A',
+          900: '#0C3943',
+          950: '#07232A',
+          tint: 'rgba(32, 145, 170, 0.08)',
         },
         success: {
-          DEFAULT: '#10B981',
-          light: '#ECFDF5',
-          dark: '#059669',
+          DEFAULT: '#00AA13', // GoPay Fresh Growth Green (30% Sekunder)
+          light: '#F0FDF4',
+          dark: '#00880C',
+        },
+        gopay: {
+          blue: '#2091AA',
+          'blue-deep': '#1A7A8F',
+          green: '#00AA13',
+          'green-deep': '#00880C',
+          cyan: '#50AABF',
+          canvas: '#F3F8FC',
         },
         warning: {
           DEFAULT: '#F59E0B',
@@ -101,9 +112,9 @@ export default {
         normal: '400',
         medium: '500',
         semibold: '600',
-        bold: '600',
-        extrabold: '600',
-        black: '600',
+        bold: '700',
+        extrabold: '800',
+        black: '900',
       },
       letterSpacing: {
         tighter: '0',

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">C2: The Crest Vault Bear (Single Path Solid)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-c2">Beruang - The Crest Vault Bear</title>
+  
+  <!-- Compound Path in Blue (#0066D6) with Cutout Muzzle and Dual Eyes -->
+  <path
+    fill="#0066D6"
+    fill-rule="evenodd"
+    d="
+      M 86 68
+      C 76 48 54 40 40 54
+      C 28 66 32 88 44 104
+      C 34 126 32 154 46 182
+      C 64 212 92 226 128 226
+      C 164 226 192 212 210 182
+      C 224 154 222 126 212 104
+      C 224 88 228 66 216 54
+      C 202 40 180 48 170 68
+      C 156 62 142 60 128 60
+      C 114 60 100 62 86 68 Z
+
+      M 88 112
+      A 8 8 0 1 0 88 128
+      A 8 8 0 1 0 88 112 Z
+
+      M 168 112
+      A 8 8 0 1 0 168 128
+      A 8 8 0 1 0 168 112 Z
+
+      M 128 138
+      C 156 138 174 152 174 176
+      C 174 198 154 212 128 212
+      C 102 212 82 198 82 176
+      C 82 152 100 138 128 138 Z
+    "
+  />
+
+  <!-- Keystone Bear Nose in Growth Green (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 154
+      C 118 148 123 146 128 146
+      C 133 146 138 148 144 154
+      C 148 160 145 170 138 176
+      C 134 179 131 180 128 180
+      C 125 180 122 179 118 176
+      C 111 170 108 160 112 154 Z
+    "
+  />
+  
+  <!-- Central Muzzle Column Notch in Deep Blue -->
+  <path fill="#0052B3" d="M 127 184 L 129 184 L 129 196 L 127 196 Z" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

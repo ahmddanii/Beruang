@@ -22,6 +22,6 @@ definePageMeta({
 
 useSeoMeta({
   title: 'Beruang - Tata Kelola Finansial & Sertifikasi Modal UMKM',
-  description: 'Platform tata kelola arus kas, audit 5 pilar berlisensi BNSP, dan sindikasi pendanaan terverifikasi untuk UMKM Indonesia.'
+  description: 'Platform tata kelola arus kas, penilaian 5 pilar bersama konsultan bersertifikat, dan sindikasi pendanaan terverifikasi untuk UMKM Indonesia.'
 })
 </script>

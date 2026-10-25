@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Filter Sidebar Menutupi Feed Utama di Layar Mobile",
+    "severity": "warn",
+    "viewport": "mobile",
+    "detail": "Pada tampilan mobile 375px, seluruh blok Profil dan Filter Portofolio ditempatkan di atas feed, sehingga investor harus menggulir layar panjang sebelum dapat melihat kartu UMKM pertama.",
+    "fix": "Gunakan flex-col-reverse atau jadikan filter sebagai modal/bottom-sheet popover pada layar mobile agar Story bar dan Feed UMKM langsung terlihat di viewport pertama."
+  },
+  {
+    "title": "Target Sentuh Titik Navigasi Carousel Terlalu Kecil & Tanpa Label",
+    "severity": "error",
+    "viewport": "semua",
+    "detail": "Titik indikator foto slider UMKM berukuran fisik 6px x 6px tanpa padding sentuh dan tanpa aria-label, sehingga sangat sulit ditekan pada layar sentuh dan tidak terbaca oleh screen reader.",
+    "fix": "Bungkus tombol dot dengan padding minimal 36px/44px sentuhan (contoh: class='p-2 flex items-center justify-center') dan sertakan aria-label='Foto ke-N'."
+  },
+  {
+    "title": "Kontras Sub-teks Metrik Finansial Sedikit di Bawah Standar WCAG AA",
+    "severity": "warn",
+    "viewport": "semua",
+    "detail": "Label metrik abu-abu (#71717a) dan pertumbuhan hijau (#059669) di atas latar abu-abu muda (#F4F5F7) memiliki rasio kontras 3.45:1 - 4.43:1 (syarat minimum WCAG AA adalah 4.5:1).",
+    "fix": "Tingkatkan ketebalan warna menjadi text-neutral-600/700 (#404040) dan text-emerald-700/800 (#047857) agar mencapai rasio kontras > 5:1."
+  },
+  {
+    "title": "Tombol Ikon Navigasi dan Bookmark Belum Memiliki Accessible Name",
+    "severity": "error",
+    "viewport": "semua",
+    "detail": "Tombol panah geser foto (chevron kiri/kanan) dan tombol bintang bookmark hanya berisi ikon SVG tanpa atribut aria-label.",
+    "fix": "Tambahkan atribut aria-label='Foto sebelumnya', aria-label='Foto berikutnya', dan aria-label='Simpan UMKM ke watchlist'."
+  }
+]

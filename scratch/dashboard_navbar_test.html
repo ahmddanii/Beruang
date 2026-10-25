@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Navbar Test</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #F3F8FC;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .dashboard-header {
+      background: rgba(246, 248, 250, 0.98);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+      height: 64px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .dashboard-header.dark {
+      background: rgba(19, 22, 31, 0.98);
+      border-color: rgba(38, 38, 48, 0.8);
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-text {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .ber {
+      color: #0081A0;
+    }
+
+    .dark .ber {
+      color: #00A5CC;
+    }
+
+    .uang {
+      color: #00AA13;
+    }
+
+    .dark .uang {
+      color: #22C55E;
+    }
+
+    .right-tools {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .noti-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #FFF;
+      border: 1px solid #E5E7EB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dark .noti-btn {
+      background: #18191E;
+      border-color: #2E2F38;
+      color: #FFF;
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #E5E7EB;
+      background: #E0F2FE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: #0081A0;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h3 style="font-size: 13px; color: #64748B; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Dashboard UMKM Top Bar (Mode Terang)</h3>
+    <header class="dashboard-header">
+      <a href="#" class="brand-link">
+        <img src="file:///F:/Percobaan Lomba/INSEVENT FULLSTACK/App/public/logo/logoSmall.svg" class="logo-img" alt="Logo" />
+        <span class="brand-text">
+          <span class="ber">Ber</span><span class="uang">uang</span>
+        </span>
+      </a>
+      <div class="right-tools">
+        <div class="noti-btn">🔔</div>
+        <div class="avatar-btn">FS</div>
+      </div>
+    </header>
+  </div>
+
+  <div>
+    <h3 style="font-size: 13px; color: #64748B; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Dashboard UMKM Top Bar (Mode Gelap)</h3>
+    <header class="dashboard-header dark">
+      <a href="#" class="brand-link">
+        <img src="file:///F:/Percobaan Lomba/INSEVENT FULLSTACK/App/public/logo/logoSmall.svg" class="logo-img" alt="Logo" />
+        <span class="brand-text">
+          <span class="ber">Ber</span><span class="uang">uang</span>
+        </span>
+      </a>
+      <div class="right-tools">
+        <div class="noti-btn">🔔</div>
+        <div class="avatar-btn">FS</div>
+      </div>
+    </header>
+  </div>
+</body>
+</html>

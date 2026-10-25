@@ -1,130 +1,44 @@
-# Beruang Design System
-## Desktop-first financial workspace
+# docs/DESIGN.md — Beruang Desktop Design System (SSOT)
+## 60-30-10 Blue & Green Architecture (Fintech Ecosystem Edition)
 
-Dokumen ini adalah sumber kebenaran visual untuk Beruang, platform B2B financial telemetry dan kesiapan pendanaan UMKM.
+Dokumen ini adalah Single Source of Truth (SSOT) resmi untuk seluruh arsitektur visual platform **Beruang (Ber-Uang)** versi Desktop.
 
-## 1. Creative thesis
+---
 
-Beruang adalah ruang kerja finansial yang membantu pemilik bisnis memahami kondisi usaha, memperbaiki kesiapan, dan mengambil keputusan pendanaan dengan percaya diri.
+## 1. Konsep & Creative Thesis
 
-Arah visual: refined fintech workspace. Tenang, terstruktur, transparan, dan berorientasi pada keputusan. Referensi utamanya adalah aplikasi desktop dengan sidebar persisten, topbar ringan, panel data yang lapang, dan aksen warna yang berfungsi sebagai status.
+Beruang adalah ruang kerja finansial B2B dan telemetri kesiapan pendanaan UMKM.
+- **Inspirasi Visual:** Fintech modern Indonesia (ekosistem GoPay/Gojek) yang dipadukan dengan disiplin layout desktop B2B.
+- **Komposisi Warna 60-30-10:**
+  - **60% Biru (Warna Dominan):** Latar belakang canvas desktop ice-blue (`#F3F8FC`), container header bento bernuansa biru, navigasi sidebar, dan struktur pembungkus.
+  - **30% Hijau (Warna Sekunder):** Indikator pertumbuhan omzet, untung bersih, kartu kesiapan pendanaan, tag status "Terverifikasi", dan badge pill "Baru".
+  - **10% Aksen 3D (Pemicu Aksi Taktil):** Tombol-tombol fisik berkilau (3D embossed/glassmorphic) untuk aksi bernilai konversi tinggi (misal: "Catat Kas", "Perkuat Kesiapan Usaha", dan "Kerjakan").
+- **Copywriting:** Komunikatif, optimis, dan memberi dorongan motivasi (*"80% → Dikit lagi lolos pendanaan! Yok bisa yok."*).
 
-Jangan membuat dashboard terasa seperti landing page, aplikasi crypto, atau kumpulan kartu dekoratif.
+---
 
-## 2. Desktop-first shell
+## 2. Token & Spesifikasi Warna
 
-Struktur dasar:
+| Peran | Spektrum Warna | Penerapan di DOM |
+|---|---|---|
+| **60% Dominan (Biru)** | `#F3F8FC` (Canvas), `#0066AE` s/d `#0081A7` (Header/Brand), `#E0EDF6` (Border) | Background layar, header bento, pembungkus layout desktop, tab header |
+| **30% Sekunder (Hijau)** | `#00AA13` / `#059669` (Solid), `#F0FDF4` (Surface), `#BBF7D0` (Border) | Kartu Untung Bersih, banner kesiapan pendanaan, status audit, tag "Baru" |
+| **10% Aksen (3D Button)** | Gradasi Biru `#1A8EFF` → `#0066D6`, Gradasi Hijau `#00C853` → `#009624` | Tombol Catat Kas, Tombol Simpan/Perkuat Kesiapan, Tombol Aksi Kritis |
 
-- Sidebar kiri persisten pada layar desktop.
-- Main workspace fleksibel di sebelah kanan.
-- Topbar ringan untuk konteks halaman, periode, notifikasi, AI Copilot, dan profil.
-- Konten dibatasi pada lebar sekitar 1440px agar tidak terlalu melebar.
-- Desktop menampilkan perbandingan data secara berdampingan.
-- Mobile mengubah sidebar menjadi drawer dan grid menjadi stack.
+---
 
-Sidebar memiliki lebar 240 sampai 280px, border kanan 1px, dan tidak memakai shadow besar.
+## 3. Spesifikasi 3D Button Framework
 
-## 3. Information architecture
+Tombol 3D diciptakan dengan kombinasi CSS murni (hardware-accelerated):
+1. **Bevel Inner Shadow:** `inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.45)` (kilau cahaya di tepi atas).
+2. **Bottom Dark Edge:** `inset 0 -2.5px 2px 0 rgba(0, 0, 0, 0.22)` (kedalaman ketebalan fisik di tepi bawah).
+3. **Elevated Glow Shadow:** `box-shadow: 0 8px 18px -4px rgba(..., 0.45), 0 3px 6px -2px rgba(0, 0, 0, 0.1)`.
+4. **Tactile Push (Active State):** `transform: translateY(2px)` saat tombol diklik.
 
-### UMKM
+---
 
-- Overview
-- Action Plan
-- Laporan dan Kas Harian
-- Audit 5-Dimensi
-- Verified Data Room
-- Profil dan Dokumen
+## 4. Copywriting Guidelines
 
-### Konsultan
-
-- Portfolio Klien
-- Radar Diagnostic
-- Verifikasi Laporan
-- Review Action Plan
-
-### Investor
-
-- Curated Deal Flow
-- Data Room Due Diligence
-- Investasi Aktif
-
-Sidebar hanya memuat area kerja utama. CTA seperti upload laporan, memperbarui profil, atau meminta review harus berada di halaman yang relevan.
-
-## 4. Layout and density
-
-- Canvas halaman menggunakan #F7F8FA.
-- Panel utama menggunakan putih.
-- Gunakan grid 12 kolom pada layar besar.
-- Metric summary biasanya memakai 4 kolom.
-- Area analitik memakai komposisi 8 kolom dan 4 kolom.
-- Table atau ledger dapat memakai seluruh 12 kolom.
-- Jarak antar panel 24 sampai 32px.
-- Padding halaman desktop 32 sampai 40px.
-- Gunakan whitespace untuk memisahkan konteks, bukan shadow.
-
-Jangan mengubah semua elemen menjadi card. Gunakan panel besar untuk chart, table untuk data komparatif, dan inline status untuk informasi singkat.
-
-## 5. Color tokens
-
-Warna utama: background #F7F8FA, foreground #111318, card #FFFFFF, primary #011BFF, primary hover #0016CC, secondary #EAF0FF, muted #F1F3F7, muted foreground #667085, border #E3E6EC, success #1F7A4D, warning #D97706, destructive #DC2626.
-
-Aksen blue tint digunakan untuk highlight progres dan secondary action. Blue solid hanya digunakan pada navigasi aktif dan tindakan utama. Jangan memenuhi seluruh halaman dengan warna aksen.
-
-## 6. Surfaces and components
-
-- Panel: background putih, border 1px #E3E6EC, radius 12 sampai 16px.
-- Sidebar active item: blue primary dengan teks putih.
-- Sidebar hover: muted parchment dengan teks foreground.
-- Button primary: blue primary.
-- Button secondary: soft blue tint.
-- Button outline: putih dengan border hairline.
-- Badge verified: success background dan success foreground.
-- Table: baris bersih, angka rata kanan, hover halus, tidak memakai zebra yang kontras.
-- Dialog: putih, radius 16px, border hairline, shadow hanya untuk pemisahan layer.
-- Input: minimal, label jelas, focus ring blue primary.
-
-Semua komponen interaktif wajib memiliki default, hover, active, focus-visible, disabled, loading, dan empty state jika relevan.
-
-## 7. Typography
-
-Heading dan metric memakai Plus Jakarta Sans. Body dan control memakai Inter atau Poppins. Hierarki harus jelas tanpa memakai terlalu banyak ukuran.
-
-Nominal Rupiah, persentase, skor, jumlah transaksi, dan tanggal numerik wajib memakai tabular-nums lining-nums.
-
-Judul halaman singkat. Deskripsi halaman memberi konteks dan menjelaskan manfaat, bukan mengulang judul.
-
-## 8. Copywriting
-
-Brand voice: grounded, authoritative, optimistic, transparent, dan mudah dipahami pemilik UMKM.
-
-Label sidebar harus ringkas: Overview, Action Plan, Data Room.
-
-Gunakan CTA yang konkret: Perbarui Data Keuangan, Upload Laporan, Lihat Rincian, Mulai Action Plan, dan Minta Review Konsultan.
-
-Gunakan deskripsi halaman yang lebih informatif, misalnya: Pantau arus kas, profitabilitas, dan perubahan kondisi bisnis Anda dalam satu tampilan.
-
-Hindari jargon teknis tanpa penjelasan, copy promosi berlebihan, dan CTA generik seperti Klik di sini.
-
-## 9. Responsive transformation
-
-- Desktop: sidebar persisten.
-- Tablet: sidebar dapat collapse menjadi rail atau drawer.
-- Mobile: sidebar hidden by default dan dibuka melalui menu.
-- Desktop multi-column menjadi mobile single-column.
-- Filter inline menjadi dialog atau sheet.
-- Table penuh menjadi horizontal scroll atau detail row.
-- CTA di samping heading berpindah ke bawah heading.
-
-Mobile bukan versi desktop yang diperkecil. Hierarki informasi tetap sama, tetapi pola interaksinya boleh berubah.
-
-## 10. Anti-patterns
-
-- Tidak memakai gradient neon ungu atau biru.
-- Tidak memakai fake phone frame pada desktop.
-- Tidak memakai biru sebagai dekorasi berlebihan; gunakan hanya untuk navigasi aktif dan tindakan utama.
-- Tidak memakai shadow besar pada setiap card.
-- Tidak membuat card di dalam card lebih dari dua lapisan.
-- Tidak memakai #000000 sebagai warna utama.
-- Tidak menaruh semua CTA di sidebar.
-- Tidak menyembunyikan data penting desktop di balik accordion tanpa alasan.
-- Tidak mengandalkan hover sebagai satu-satunya cara menemukan aksi.
+1. Gunakan kalimat bernada positif dan memberi dukungan langsung kepada pemilik UMKM.
+2. Gunakan metafora progres yang nyata: *"Dikit lagi gol!"*, *"Tinggal 1 langkah lagi"*, *"Buku kas aman"*.
+3. Sajikan data finansial selalu dengan font **Poppins** dan kelas `tabular-nums` agar sejajar rapi.

@@ -1,0 +1,1111 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="984" viewBox="0 0 1600 984"><rect width="1600" height="984" fill="#f7f7f4"/><text x="60" y="78" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="40" font-weight="700" fill="#161616">Beruang — Eksplorasi Style Maskot Referensi</text><text x="60" y="116" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="20" fill="#6b6b6b">Adaptasi Persis Style Referensi Pengguna (Squircle, Doughy, Peaceful Eyes)</text><rect x="60" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#161616" stroke-width="2"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="90" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c0-title-c1">Beruang - Chef Vault Bear</title>
+  <defs>
+    <clipPath id="c0-squircle-c1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Vibrant Orange Squircle Background -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#c0-squircle-c1)">
+    <!-- Golden Bear Ears (behind head) -->
+    <circle cx="78" cy="142" r="22" fill="#EFA300" />
+    <circle cx="78" cy="142" r="13" fill="#D98A00" />
+
+    <circle cx="178" cy="142" r="22" fill="#EFA300" />
+    <circle cx="178" cy="142" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head emerging from bottom -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Chef Hat -->
+    <!-- Hat Brim (Soft Shadow Grey) -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 155
+        C 168 159 88 159 88 155 Z
+      "
+    />
+    <!-- Hat Puffy Body -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 70 144 58 116 76 98
+        C 66 76 92 58 114 70
+        C 124 50 148 50 158 68
+        C 178 58 200 80 190 102
+        C 206 120 194 144 174 144 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-lockup" viewBox="0 0 680 180" x="90" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l0-title-lockup">Beruang - Chef Vault Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #FF7009;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="l0-title-c1">Beruang - Chef Vault Bear</title>
+  <defs>
+    <clipPath id="l0-squircle-c1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Vibrant Orange Squircle Background -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#l0-squircle-c1)">
+    <!-- Golden Bear Ears (behind head) -->
+    <circle cx="78" cy="142" r="22" fill="#EFA300" />
+    <circle cx="78" cy="142" r="13" fill="#D98A00" />
+
+    <circle cx="178" cy="142" r="22" fill="#EFA300" />
+    <circle cx="178" cy="142" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head emerging from bottom -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Chef Hat -->
+    <!-- Hat Brim (Soft Shadow Grey) -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 155
+        C 168 159 88 159 88 155 Z
+      "
+    />
+    <!-- Hat Puffy Body -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 70 144 58 116 76 98
+        C 66 76 92 58 114 70
+        C 124 50 148 50 158 68
+        C 178 58 200 80 190 102
+        C 206 120 194 144 174 144 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="90" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s064-title-c1">Beruang - Chef Vault Bear</title>
+  <defs>
+    <clipPath id="s064-squircle-c1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Vibrant Orange Squircle Background -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s064-squircle-c1)">
+    <!-- Golden Bear Ears (behind head) -->
+    <circle cx="78" cy="142" r="22" fill="#EFA300" />
+    <circle cx="78" cy="142" r="13" fill="#D98A00" />
+
+    <circle cx="178" cy="142" r="22" fill="#EFA300" />
+    <circle cx="178" cy="142" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head emerging from bottom -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Chef Hat -->
+    <!-- Hat Brim (Soft Shadow Grey) -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 155
+        C 168 159 88 159 88 155 Z
+      "
+    />
+    <!-- Hat Puffy Body -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 70 144 58 116 76 98
+        C 66 76 92 58 114 70
+        C 124 50 148 50 158 68
+        C 178 58 200 80 190 102
+        C 206 120 194 144 174 144 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><text x="122" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="180" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s032-title-c1">Beruang - Chef Vault Bear</title>
+  <defs>
+    <clipPath id="s032-squircle-c1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Vibrant Orange Squircle Background -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s032-squircle-c1)">
+    <!-- Golden Bear Ears (behind head) -->
+    <circle cx="78" cy="142" r="22" fill="#EFA300" />
+    <circle cx="78" cy="142" r="13" fill="#D98A00" />
+
+    <circle cx="178" cy="142" r="22" fill="#EFA300" />
+    <circle cx="178" cy="142" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head emerging from bottom -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Chef Hat -->
+    <!-- Hat Brim (Soft Shadow Grey) -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 155
+        C 168 159 88 159 88 155 Z
+      "
+    />
+    <!-- Hat Puffy Body -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 70 144 58 116 76 98
+        C 66 76 92 58 114 70
+        C 124 50 148 50 158 68
+        C 178 58 200 80 190 102
+        C 206 120 194 144 174 144 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><text x="196" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c1" viewBox="0 0 256 256" x="238" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s016-title-c1">Beruang - Chef Vault Bear</title>
+  <defs>
+    <clipPath id="s016-squircle-c1">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Vibrant Orange Squircle Background -->
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s016-squircle-c1)">
+    <!-- Golden Bear Ears (behind head) -->
+    <circle cx="78" cy="142" r="22" fill="#EFA300" />
+    <circle cx="78" cy="142" r="13" fill="#D98A00" />
+
+    <circle cx="178" cy="142" r="22" fill="#EFA300" />
+    <circle cx="178" cy="142" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head emerging from bottom -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Chef Hat -->
+    <!-- Hat Brim (Soft Shadow Grey) -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 155
+        C 168 159 88 159 88 155 Z
+      "
+    />
+    <!-- Hat Puffy Body -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 70 144 58 116 76 98
+        C 66 76 92 58 114 70
+        C 124 50 148 50 158 68
+        C 178 58 200 80 190 102
+        C 206 120 194 144 174 144 Z
+      "
+    />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><text x="246" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="90.0" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">A · Style 1: Chef Vault Bear</text><text x="90.0" y="808" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#161616" letter-spacing="1.5">RECOMMENDED</text><text x="90.0" y="842" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Karakter beruang kuning membal, topi chef</text><text x="90.0" y="868" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">awan putih, mata damai terpejam (Exact</text><text x="90.0" y="894" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Ref).</text><rect x="562.667" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="592.667" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c1-title-c2">Beruang - Bear-Eared Cloud Hat</title>
+  <defs>
+    <clipPath id="c1-squircle-c2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#c1-squircle-c2)">
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat with Bear Ears Built In -->
+    <!-- Hat Brim -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 156
+        C 168 160 88 160 88 156 Z
+      "
+    />
+    <!-- Cloud Hat Body with Integrated Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Inner Ear indentations on White Cloud Hat -->
+    <circle cx="94" cy="74" r="8" fill="#E5E7EB" />
+    <circle cx="162" cy="74" r="8" fill="#E5E7EB" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-lockup" viewBox="0 0 680 180" x="592.667" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l1-title-lockup">Beruang - Bear Cloud Hat</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #FF7009;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="l1-title-c2">Beruang - Bear-Eared Cloud Hat</title>
+  <defs>
+    <clipPath id="l1-squircle-c2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#l1-squircle-c2)">
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat with Bear Ears Built In -->
+    <!-- Hat Brim -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 156
+        C 168 160 88 160 88 156 Z
+      "
+    />
+    <!-- Cloud Hat Body with Integrated Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Inner Ear indentations on White Cloud Hat -->
+    <circle cx="94" cy="74" r="8" fill="#E5E7EB" />
+    <circle cx="162" cy="74" r="8" fill="#E5E7EB" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="592.667" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s164-title-c2">Beruang - Bear-Eared Cloud Hat</title>
+  <defs>
+    <clipPath id="s164-squircle-c2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s164-squircle-c2)">
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat with Bear Ears Built In -->
+    <!-- Hat Brim -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 156
+        C 168 160 88 160 88 156 Z
+      "
+    />
+    <!-- Cloud Hat Body with Integrated Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Inner Ear indentations on White Cloud Hat -->
+    <circle cx="94" cy="74" r="8" fill="#E5E7EB" />
+    <circle cx="162" cy="74" r="8" fill="#E5E7EB" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><text x="624.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="682.667" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s132-title-c2">Beruang - Bear-Eared Cloud Hat</title>
+  <defs>
+    <clipPath id="s132-squircle-c2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s132-squircle-c2)">
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat with Bear Ears Built In -->
+    <!-- Hat Brim -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 156
+        C 168 160 88 160 88 156 Z
+      "
+    />
+    <!-- Cloud Hat Body with Integrated Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Inner Ear indentations on White Cloud Hat -->
+    <circle cx="94" cy="74" r="8" fill="#E5E7EB" />
+    <circle cx="162" cy="74" r="8" fill="#E5E7EB" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><text x="698.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c2" viewBox="0 0 256 256" x="740.667" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s116-title-c2">Beruang - Bear-Eared Cloud Hat</title>
+  <defs>
+    <clipPath id="s116-squircle-c2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s116-squircle-c2)">
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat with Bear Ears Built In -->
+    <!-- Hat Brim -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 156
+        C 168 160 88 160 88 156 Z
+      "
+    />
+    <!-- Cloud Hat Body with Integrated Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Inner Ear indentations on White Cloud Hat -->
+    <circle cx="94" cy="74" r="8" fill="#E5E7EB" />
+    <circle cx="162" cy="74" r="8" fill="#E5E7EB" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+</svg>
+</g><text x="748.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="592.6666666666667" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">B · Style 2: Bear Cloud Hat</text><text x="592.6666666666667" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Topi awan beruang dengan telinga terpadu di</text><text x="592.6666666666667" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">atas kepala membal yang tenang.</text><rect x="1065.33" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1095.33" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c2-title-c3">Beruang - The Vault Helmet Bear</title>
+  <defs>
+    <clipPath id="c2-squircle-c3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#c2-squircle-c3)">
+    <!-- Golden Bear Ears -->
+    <circle cx="76" cy="140" r="22" fill="#EFA300" />
+    <circle cx="76" cy="140" r="13" fill="#D98A00" />
+
+    <circle cx="180" cy="140" r="22" fill="#EFA300" />
+    <circle cx="180" cy="140" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- White Smooth Vault Security Dome / Helmet -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 158
+        C 66 94 92 68 128 68
+        C 164 68 190 94 190 158
+        C 190 164 182 166 176 166
+        C 156 164 100 164 80 166
+        C 74 166 66 164 66 158 Z
+      "
+    />
+    <!-- Soft Helmet Visor Rim Shadow -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 66 158
+        C 86 162 170 162 190 158
+        L 188 165
+        C 170 168 86 168 68 165 Z
+      "
+    />
+
+    <!-- Soft Grey Minimalist Vault Dial on Helmet -->
+    <circle cx="128" cy="116" r="20" fill="none" stroke="#D1D5DB" stroke-width="4" />
+    <circle cx="128" cy="116" r="8" fill="none" stroke="#D1D5DB" stroke-width="3" />
+    <circle cx="128" cy="116" r="4" fill="#00AA13" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 192
+        C 102 200 114 200 120 192
+
+        M 142 192
+        C 148 200 160 200 166 192
+      "
+    />
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-lockup" viewBox="0 0 680 180" x="1095.33" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l2-title-lockup">Beruang - Vault Helmet Bear</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #FF7009;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="l2-title-c3">Beruang - The Vault Helmet Bear</title>
+  <defs>
+    <clipPath id="l2-squircle-c3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#l2-squircle-c3)">
+    <!-- Golden Bear Ears -->
+    <circle cx="76" cy="140" r="22" fill="#EFA300" />
+    <circle cx="76" cy="140" r="13" fill="#D98A00" />
+
+    <circle cx="180" cy="140" r="22" fill="#EFA300" />
+    <circle cx="180" cy="140" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- White Smooth Vault Security Dome / Helmet -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 158
+        C 66 94 92 68 128 68
+        C 164 68 190 94 190 158
+        C 190 164 182 166 176 166
+        C 156 164 100 164 80 166
+        C 74 166 66 164 66 158 Z
+      "
+    />
+    <!-- Soft Helmet Visor Rim Shadow -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 66 158
+        C 86 162 170 162 190 158
+        L 188 165
+        C 170 168 86 168 68 165 Z
+      "
+    />
+
+    <!-- Soft Grey Minimalist Vault Dial on Helmet -->
+    <circle cx="128" cy="116" r="20" fill="none" stroke="#D1D5DB" stroke-width="4" />
+    <circle cx="128" cy="116" r="8" fill="none" stroke="#D1D5DB" stroke-width="3" />
+    <circle cx="128" cy="116" r="4" fill="#00AA13" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 192
+        C 102 200 114 200 120 192
+
+        M 142 192
+        C 148 200 160 200 166 192
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1095.33" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s264-title-c3">Beruang - The Vault Helmet Bear</title>
+  <defs>
+    <clipPath id="s264-squircle-c3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s264-squircle-c3)">
+    <!-- Golden Bear Ears -->
+    <circle cx="76" cy="140" r="22" fill="#EFA300" />
+    <circle cx="76" cy="140" r="13" fill="#D98A00" />
+
+    <circle cx="180" cy="140" r="22" fill="#EFA300" />
+    <circle cx="180" cy="140" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- White Smooth Vault Security Dome / Helmet -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 158
+        C 66 94 92 68 128 68
+        C 164 68 190 94 190 158
+        C 190 164 182 166 176 166
+        C 156 164 100 164 80 166
+        C 74 166 66 164 66 158 Z
+      "
+    />
+    <!-- Soft Helmet Visor Rim Shadow -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 66 158
+        C 86 162 170 162 190 158
+        L 188 165
+        C 170 168 86 168 68 165 Z
+      "
+    />
+
+    <!-- Soft Grey Minimalist Vault Dial on Helmet -->
+    <circle cx="128" cy="116" r="20" fill="none" stroke="#D1D5DB" stroke-width="4" />
+    <circle cx="128" cy="116" r="8" fill="none" stroke="#D1D5DB" stroke-width="3" />
+    <circle cx="128" cy="116" r="4" fill="#00AA13" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 192
+        C 102 200 114 200 120 192
+
+        M 142 192
+        C 148 200 160 200 166 192
+      "
+    />
+  </g>
+</svg>
+</g><text x="1127.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1185.33" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s232-title-c3">Beruang - The Vault Helmet Bear</title>
+  <defs>
+    <clipPath id="s232-squircle-c3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s232-squircle-c3)">
+    <!-- Golden Bear Ears -->
+    <circle cx="76" cy="140" r="22" fill="#EFA300" />
+    <circle cx="76" cy="140" r="13" fill="#D98A00" />
+
+    <circle cx="180" cy="140" r="22" fill="#EFA300" />
+    <circle cx="180" cy="140" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- White Smooth Vault Security Dome / Helmet -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 158
+        C 66 94 92 68 128 68
+        C 164 68 190 94 190 158
+        C 190 164 182 166 176 166
+        C 156 164 100 164 80 166
+        C 74 166 66 164 66 158 Z
+      "
+    />
+    <!-- Soft Helmet Visor Rim Shadow -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 66 158
+        C 86 162 170 162 190 158
+        L 188 165
+        C 170 168 86 168 68 165 Z
+      "
+    />
+
+    <!-- Soft Grey Minimalist Vault Dial on Helmet -->
+    <circle cx="128" cy="116" r="20" fill="none" stroke="#D1D5DB" stroke-width="4" />
+    <circle cx="128" cy="116" r="8" fill="none" stroke="#D1D5DB" stroke-width="3" />
+    <circle cx="128" cy="116" r="4" fill="#00AA13" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 192
+        C 102 200 114 200 120 192
+
+        M 142 192
+        C 148 200 160 200 166 192
+      "
+    />
+  </g>
+</svg>
+</g><text x="1201.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-c3" viewBox="0 0 256 256" x="1243.33" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s216-title-c3">Beruang - The Vault Helmet Bear</title>
+  <defs>
+    <clipPath id="s216-squircle-c3">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#s216-squircle-c3)">
+    <!-- Golden Bear Ears -->
+    <circle cx="76" cy="140" r="22" fill="#EFA300" />
+    <circle cx="76" cy="140" r="13" fill="#D98A00" />
+
+    <circle cx="180" cy="140" r="22" fill="#EFA300" />
+    <circle cx="180" cy="140" r="13" fill="#D98A00" />
+
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- White Smooth Vault Security Dome / Helmet -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 66 158
+        C 66 94 92 68 128 68
+        C 164 68 190 94 190 158
+        C 190 164 182 166 176 166
+        C 156 164 100 164 80 166
+        C 74 166 66 164 66 158 Z
+      "
+    />
+    <!-- Soft Helmet Visor Rim Shadow -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 66 158
+        C 86 162 170 162 190 158
+        L 188 165
+        C 170 168 86 168 68 165 Z
+      "
+    />
+
+    <!-- Soft Grey Minimalist Vault Dial on Helmet -->
+    <circle cx="128" cy="116" r="20" fill="none" stroke="#D1D5DB" stroke-width="4" />
+    <circle cx="128" cy="116" r="8" fill="none" stroke="#D1D5DB" stroke-width="3" />
+    <circle cx="128" cy="116" r="4" fill="#00AA13" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 192
+        C 102 200 114 200 120 192
+
+        M 142 192
+        C 148 200 160 200 166 192
+      "
+    />
+  </g>
+</svg>
+</g><text x="1251.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="1095.3333333333335" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">C · Style 3: Vault Helmet Bear</text><text x="1095.3333333333335" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Helm kubah brankas putih dengan dial aksen</text><text x="1095.3333333333335" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">zamrud di atas kepala beruang.</text></svg>

@@ -9,7 +9,7 @@
       sizeClasses[size],
       variantClasses[variant],
       block ? 'w-full' : '',
-      (disabled || loading) ? 'opacity-50 cursor-not-allowed transform-none' : 'cursor-pointer active:scale-[0.96] transition-transform',
+      (disabled || loading) ? 'opacity-50 cursor-not-allowed transform-none' : 'cursor-pointer',
       customClass
     ]"
     @click="$emit('click', $event)"

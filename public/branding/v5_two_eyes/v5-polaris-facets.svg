@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t-v5">
+  <title id="t-v5">Beruang - The Polaris Vault</title>
+  <path fill="#0F172A" fill-rule="evenodd" d="M 98 64
+  C 86 60 70 42 54 52
+  C 42 60 44 80 52 96
+  C 38 116 34 146 52 174
+  C 68 202 96 216 128 216
+  C 160 216 188 202 204 174
+  C 222 146 218 116 204 96
+  C 212 80 214 60 202 52
+  C 186 42 170 60 160 64
+  L 98 64 Z
+      M 90 114 L 102 110 L 100 118 L 88 116 Z
+      M 166 114 L 154 110 L 156 118 L 168 116 Z
+      M 114 176
+      L 114 156
+      C 114 148 120 142 128 142
+      C 136 142 142 148 142 156
+      L 142 176
+      L 114 176 Z" />
+  <polygon points="128,148 136,158 128,168 120,158" fill="#059669" />
+</svg>

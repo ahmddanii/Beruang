@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: false },
+  devtools: { enabled: false }, // reload trigger 2
 
   experimental: {
     appManifest: false
@@ -14,6 +14,17 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    optimizeDeps: {
+      include: [
+        '@hugeicons/vue',
+        '@hugeicons/core-free-icons',
+        '@lottiefiles/dotlottie-vue',
+        'pinia',
+        'gsap',
+        'chart.js',
+        'vue-chartjs'
+      ]
+    },
     resolve: {
       alias: {
         '#app-manifest': fileURLToPath(new URL('./stubs/app-manifest.mjs', import.meta.url))
@@ -52,6 +63,9 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'id'
+      },
       title: 'Beruang - Naik Kelas & Siap Didanai',
       meta: [
         { charset: 'utf-8' },
@@ -64,6 +78,8 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+        { rel: 'preload', href: '/animations/hero.lottie', as: 'fetch', crossorigin: 'anonymous' },
+        { rel: 'preload', href: '/animations/mascot-siang.lottie', as: 'fetch', crossorigin: 'anonymous' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:wght@400;500;600&display=swap' }
@@ -73,6 +89,11 @@ export default defineNuxtConfig({
 
   // Hybrid rendering: SSR for public marketing pages, SPA/CSR for authenticated app dashboards
   routeRules: {
+    '/animations/**': {
+      headers: {
+        'cache-control': 'public, max-age=31536000, immutable'
+      }
+    },
     '/dashboard/**': { ssr: false },
     '/konsultan/**': { ssr: false },
     '/investor/**': { ssr: false },
@@ -86,5 +107,12 @@ export default defineNuxtConfig({
     configPath: 'tailwind.config.ts',
     exposeConfig: false,
     viewer: false
+  },
+
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api',
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID || ''
+    }
   }
 })

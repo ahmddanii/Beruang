@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lk">
+  <title id="title-lk">Beruang - Refined -30% (r=25, diamond=15)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #059669;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-25">Refined -30% (r=25, diamond=15) (r=25)</title>
+  <!-- Single Compound Path in Slate Navy with Negative Space Vault Cutout -->
+  <path
+    fill="#0F172A"
+    fill-rule="evenodd"
+    d="M 98 64
+  C 86 60 70 42 54 52
+  C 42 60 44 80 52 96
+  C 38 116 34 146 52 174
+  C 68 202 96 216 128 216
+  C 160 216 188 202 204 174
+  C 222 146 218 116 204 96
+  C 212 80 214 60 202 52
+  C 186 42 170 60 160 64
+  L 98 64 Z
+  M 128 117 A 25 25 0 1 0 128 167 A 25 25 0 1 0 128 117 Z"
+  />
+  <!-- Emerald Growth Geometric Keystone -->
+  <polygon points="128,127 143,142 128,157 113,142" fill="#059669" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

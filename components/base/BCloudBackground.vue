@@ -1,6 +1,9 @@
 <template>
   <div
-    class="pointer-events-none absolute bottom-0 left-0 right-0 w-full overflow-hidden select-none z-0 transform-gpu"
+    :class="[
+      fixed ? 'fixed' : 'absolute',
+      'pointer-events-none bottom-0 left-0 right-0 w-full overflow-hidden select-none z-0 transform-gpu leading-none'
+    ]"
     aria-hidden="true"
     role="presentation"
   >
@@ -17,7 +20,7 @@
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="none"
-      class="w-full h-[46vh] sm:h-[50vh] md:h-[54vh] lg:h-[56vh] min-h-[320px] max-h-[580px] transform-gpu transition-opacity duration-300"
+      class="block w-full h-[46vh] sm:h-[50vh] md:h-[54vh] lg:h-[56vh] min-h-[320px] max-h-[580px] transform-gpu transition-opacity duration-300"
     >
       <defs>
         <!-- ================================================================= -->
@@ -126,5 +129,12 @@
 </template>
 
 <script setup lang="ts">
-// BCloudBackground: Symmetrical, high-contrast sky-blue cumulus horizon
+withDefaults(
+  defineProps<{
+    fixed?: boolean
+  }>(),
+  {
+    fixed: false
+  }
+)
 </script>

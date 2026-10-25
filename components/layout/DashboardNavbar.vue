@@ -4,14 +4,12 @@
       <div class="flex items-center justify-between h-16 gap-4">
         <!-- Left: Brand Logo & Role Pill -->
         <div class="flex items-center gap-3 shrink-0">
-          <NuxtLink to="/" class="flex items-center gap-3 group">
-            <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs transition-transform group-hover:scale-105">
-              <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
-            </div>
+          <NuxtLink to="/" class="flex items-center gap-2 group">
+            <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-7 w-auto object-contain transition-transform group-hover:scale-105" />
             <div>
               <div class="flex items-center gap-1.5">
-                <span class=" font-extrabold text-lg tracking-tight text-neutral-900 dark:text-white">
-                  Beruang
+                <span class="font-heading font-extrabold text-lg tracking-tight leading-none select-none">
+                  <span class="text-[#2091AA] dark:text-[#50AABF]">Ber</span><span class="text-[#00AA13] dark:text-[#00C058]">uang</span>
                 </span>
                 <span
                   :class="[
@@ -22,7 +20,7 @@
                   {{ currentRoleName }}
                 </span>
               </div>
-              <span class="text-[11px] text-neutral-500 font-medium block -mt-0.5">
+              <span class="text-[11px] text-neutral-500 font-medium block mt-0.5">
                 {{ authStore.currentUser?.businessName || 'Platform Terpadu' }}
               </span>
             </div>
@@ -90,13 +88,14 @@
           </div>
 
           <!-- Logout Button -->
-          <NuxtLink
-            to="/masuk"
-            class="p-2 rounded-xl text-neutral-400 hover:text-danger hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+          <button
+            type="button"
+            class="p-2 rounded-xl text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer"
             title="Keluar Akun"
+            @click="handleLogout"
           >
             <HugeiconsIcon :icon="Logout01Icon" :size="18" :stroke-width="1.75" />
-          </NuxtLink>
+          </button>
         </div>
       </div>
     </div>
@@ -105,7 +104,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
 import { useKonsultanStore } from '~/stores/konsultan'
@@ -173,7 +172,7 @@ const navItems = computed(() => {
       },
       {
         to: '/dashboard/rencana-aksi',
-        label: 'Rencana Aksi',
+        label: 'Progress Tugas',
         icon: Task01Icon,
         badge: `${umkmStore.tasksCompletedCount}/${umkmStore.tasks.length}`
       },
@@ -204,10 +203,10 @@ const navItems = computed(() => {
         badge: `${konsultanStore.validationsQueue.length}`
       },
       {
-        to: '/konsultan/alert',
-        label: 'Peringatan Anomali',
-        icon: Alert01Icon,
-        badge: `${konsultanStore.alerts.filter(a => !a.dismissed).length}`
+        to: '/konsultan/rencana-aksi',
+        label: 'Rencana Aksi',
+        icon: Task01Icon,
+        badge: `${konsultanStore.actionPlans.filter(p => p.status === 'TODO').length}`
       }
     ]
   } else {
@@ -215,7 +214,7 @@ const navItems = computed(() => {
     return [
       {
         to: '/investor',
-        label: 'Katalog Usaha',
+        label: 'Katalog',
         icon: Store01Icon
       },
       {
@@ -227,4 +226,11 @@ const navItems = computed(() => {
     ]
   }
 })
+
+const router = useRouter()
+
+async function handleLogout() {
+  await authStore.logout()
+  router.push('/masuk')
+}
 </script>

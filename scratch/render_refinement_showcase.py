@@ -1,0 +1,584 @@
+import os
+import subprocess
+
+HTML_PATH = "public/branding/v4_refinement/comparison.html"
+PNG_PATH = "public/branding/v4_refinement/refinement-overview.png"
+
+# Read SVGs
+def read_file(name):
+    with open(os.path.join("public/branding/v4_refinement", name), "r", encoding="utf-8") as f:
+        return f.read()
+
+svg_r36 = read_file("vault-original-r36.svg")
+svg_r29 = read_file("vault-refined-r29.svg")
+svg_r27 = read_file("vault-refined-r27.svg")
+svg_r25 = read_file("vault-refined-r25.svg")
+
+lockup_r36 = read_file("vault-original-r36-lockup.svg")
+lockup_r27 = read_file("vault-refined-r27-lockup.svg")
+
+html_content = f"""<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beruang - Geometric Refinement Audit (Konsep A Iterasi)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    
+    * {{
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }}
+    
+    body {{
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0B0F17;
+      color: #E2E8F0;
+      padding: 48px 40px;
+      line-height: 1.5;
+    }}
+
+    .header {{
+      max-width: 1280px;
+      margin: 0 auto 36px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 24px;
+    }}
+
+    .badge-pill {{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(5, 150, 105, 0.15);
+      border: 1px solid rgba(5, 150, 105, 0.4);
+      color: #34D399;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }}
+
+    h1 {{
+      font-size: 32px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }}
+
+    .subtitle {{
+      color: #94A3B8;
+      font-size: 15px;
+      max-width: 860px;
+    }}
+
+    .container {{
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }}
+
+    /* Section 1: Direct Evolution Comparison */
+    .section-title {{
+      font-size: 18px;
+      font-weight: 600;
+      color: #F1F5F9;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }}
+
+    .section-title span.num {{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: #059669;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+    }}
+
+    .grid-compare {{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }}
+
+    .card {{
+      background: #131B2A;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }}
+
+    .card.highlight {{
+      border: 2px solid #059669;
+      background: linear-gradient(180deg, #162438 0%, #101826 100%);
+      box-shadow: 0 12px 36px -8px rgba(5, 150, 105, 0.25);
+    }}
+
+    .badge-card {{
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }}
+
+    .badge-card.old {{
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }}
+
+    .badge-card.winner {{
+      background: #059669;
+      color: #FFFFFF;
+    }}
+
+    .badge-card.variant {{
+      background: rgba(148, 163, 184, 0.15);
+      color: #94A3B8;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }}
+
+    .preview-box {{
+      width: 100%;
+      height: 190px;
+      background: #F8FAFC;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      padding: 16px;
+    }}
+
+    .preview-box svg {{
+      width: 140px;
+      height: 140px;
+    }}
+
+    .card-title {{
+      font-size: 16px;
+      font-weight: 600;
+      color: #F8FAFC;
+      margin-bottom: 4px;
+      text-align: center;
+    }}
+
+    .card-stats {{
+      font-size: 12px;
+      color: #38BDF8;
+      font-family: monospace;
+      margin-bottom: 10px;
+      text-align: center;
+    }}
+
+    .card-desc {{
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      line-height: 1.5;
+    }}
+
+    /* Section 2: Mathematical Proportion Analysis */
+    .math-analysis {{
+      background: #131B2A;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+    }}
+
+    .math-grid {{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-top: 16px;
+    }}
+
+    .math-item {{
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+    }}
+
+    .math-label {{
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748B;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }}
+
+    .math-val {{
+      font-size: 22px;
+      font-weight: 700;
+      color: #34D399;
+      font-feature-settings: "tnum";
+    }}
+
+    .math-note {{
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 4px;
+    }}
+
+    /* Section 3: Scalability Matrix */
+    .scale-matrix {{
+      background: #131B2A;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 28px;
+    }}
+
+    .scale-row {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }}
+
+    .scale-row:last-child {{
+      border-bottom: none;
+    }}
+
+    .scale-info {{
+      width: 240px;
+    }}
+
+    .scale-name {{
+      font-size: 14px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }}
+
+    .scale-detail {{
+      font-size: 12px;
+      color: #64748B;
+    }}
+
+    .scale-displays {{
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }}
+
+    .scale-item {{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }}
+
+    .scale-canvas-white {{
+      background: #FFFFFF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }}
+
+    .scale-canvas-dark {{
+      background: #0F172A;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }}
+
+    .scale-lbl {{
+      font-size: 11px;
+      color: #94A3B8;
+    }}
+
+    /* Section 4: Lockup & Context */
+    .context-grid {{
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 20px;
+    }}
+
+    .lockup-card {{
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }}
+
+    .lockup-card svg {{
+      max-width: 100%;
+      height: auto;
+    }}
+
+    .app-preview-card {{
+      background: #1E293B;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }}
+
+    .app-icon-row {{
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }}
+
+    .squircle-icon {{
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: #0F172A;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }}
+
+    .squircle-icon.light {{
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+    }}
+
+    .squircle-icon svg {{
+      width: 48px;
+      height: 48px;
+    }}
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="badge-pill">✓ Logo Design Skill · Phase 4 Geometric Refinement</div>
+    <h1>Beruang — The Monolithic Vault (Iterasi Geometris)</h1>
+    <p class="subtitle">
+      Evaluasi kritis pengguna diakomodasi secara presisi: radius lingkaran brankas putih di tengah diperkecil 25% (r = 36px → 27px). Area Slate Navy bertambah tebal +26%, memulihkan siluet beruang yang kokoh dan melindungi, serta menghilangkan kesan "eyeball/lensa kamera".
+    </p>
+  </div>
+
+  <div class="container">
+
+    <!-- Section 1 -->
+    <div>
+      <div class="section-title">
+        <span class="num">1</span> Perbandingan Langsung: Original vs Iterasi Reduksi Ruang Negatif
+      </div>
+      <div class="grid-compare">
+        
+        <!-- Card 1: Original -->
+        <div class="card">
+          <span class="badge-card old">ORIGINAL</span>
+          <div class="preview-box">
+            {svg_r36}
+          </div>
+          <div class="card-title">Original (r = 36px)</div>
+          <div class="card-stats">Diameter: 72px · Luas: 4,071 px²</div>
+          <div class="card-desc">
+            Lingkaran putih terlalu dominan (48% tinggi kepala). Beresiko terbaca sebagai mata (eyeball) atau lensa kamera.
+          </div>
+        </div>
+
+        <!-- Card 2: -20% -->
+        <div class="card">
+          <span class="badge-card variant">-20% RADIUS</span>
+          <div class="preview-box">
+            {svg_r29}
+          </div>
+          <div class="card-title">Iterasi A1 (r = 29px)</div>
+          <div class="card-stats">Diameter: 58px · Luas: 2,642 px²</div>
+          <div class="card-desc">
+            Pengurangan moderat. Dagu dan dahi bertambah tebal +14px, proporsi brankas terasa lebih seimbang.
+          </div>
+        </div>
+
+        <!-- Card 3: -25% (SWEET SPOT) -->
+        <div class="card highlight">
+          <span class="badge-card winner">★ REKOMENDASI UTAMA</span>
+          <div class="preview-box">
+            {svg_r27}
+          </div>
+          <div class="card-title">Iterasi A2 (r = 27px)</div>
+          <div class="card-stats">Diameter: 54px · Luas: 2,290 px²</div>
+          <div class="card-desc">
+            <strong>Rasio Keemasan (Golden Ratio).</strong> Area Slate Navy +26% lebih padat. Siluet kepala beruang kokoh terlindungi, permata zamrud menjadi jangkar fokus yang harmonis.
+          </div>
+        </div>
+
+        <!-- Card 4: -30% -->
+        <div class="card">
+          <span class="badge-card variant">-30% RADIUS</span>
+          <div class="preview-box">
+            {svg_r25}
+          </div>
+          <div class="card-title">Iterasi A3 (r = 25px)</div>
+          <div class="card-stats">Diameter: 50px · Luas: 1,963 px²</div>
+          <div class="card-desc">
+            Reduksi maksimal. Kepala beruang sangat monolitik dan masif. Cocok jika menginginkan kesan brankas baja ultra-heavyweight.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 2: Mathematical Analysis -->
+    <div class="math-analysis">
+      <div class="section-title" style="margin-bottom: 0;">
+        <span class="num">2</span> Analisis Geometri & Ketebalan Siluet (Iterasi A2 r=27px vs Original)
+      </div>
+      <div class="math-grid">
+        <div class="math-item">
+          <div class="math-label">Ketebalan Dagu / Penopang Bawah</div>
+          <div class="math-val">48 px <span style="font-size: 13px; color: #38BDF8;">(+26.3%)</span></div>
+          <div class="math-note">Original: 38 px. Fondasi bawah kini jauh lebih mantap sebagai perisai penopang modal.</div>
+        </div>
+        <div class="math-item">
+          <div class="math-label">Ketebalan Jembatan Dahi / Atas</div>
+          <div class="math-val">52 px <span style="font-size: 13px; color: #38BDF8;">(+23.8%)</span></div>
+          <div class="math-note">Original: 42 px. Menghilangkan rongga kosong di dahi, menyatukan mahkota kepala & telinga.</div>
+        </div>
+        <div class="math-item">
+          <div class="math-label">Toleransi Skalabilitas Favicon 16px</div>
+          <div class="math-val">99 / 100</div>
+          <div class="math-note">Diaudit dengan <code>svg_audit.py</code>: 0 stroke, compound path murni, 100% presisi matematis.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Scalability Matrix -->
+    <div class="scale-matrix">
+      <div class="section-title">
+        <span class="num">3</span> Uji Ketahanan Skala (Favicon 16px → Squircle 64px → Master 128px)
+      </div>
+
+      <div class="scale-row">
+        <div class="scale-info">
+          <div class="scale-name">Favicon Browser & Micro-avatar</div>
+          <div class="scale-detail">Target: Tab browser 16×16 px & 32×32 px</div>
+        </div>
+        <div class="scale-displays">
+          <div class="scale-item">
+            <div class="scale-canvas-white" style="width: 32px; height: 32px; padding: 4px;">
+              <div style="width: 16px; height: 16px; transform: scale(0.0625); transform-origin: top left;">
+                {svg_r27}
+              </div>
+            </div>
+            <div class="scale-lbl">16px (True size)</div>
+          </div>
+          <div class="scale-item">
+            <div class="scale-canvas-white" style="width: 48px; height: 48px; padding: 8px;">
+              <div style="width: 32px; height: 32px; transform: scale(0.125); transform-origin: top left;">
+                {svg_r27}
+              </div>
+            </div>
+            <div class="scale-lbl">32px (Retina)</div>
+          </div>
+          <div class="scale-item">
+            <div class="scale-canvas-dark" style="width: 48px; height: 48px; padding: 8px;">
+              <div style="width: 32px; height: 32px; transform: scale(0.125); transform-origin: top left;">
+                {svg_r27}
+              </div>
+            </div>
+            <div class="scale-lbl">32px (Dark)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scale-row">
+        <div class="scale-info">
+          <div class="scale-name">App Icon & Dashboard Header</div>
+          <div class="scale-detail">Target: Mobile icon 64×64 px & Navbar brand</div>
+        </div>
+        <div class="scale-displays">
+          <div class="scale-item">
+            <div class="scale-canvas-white" style="width: 80px; height: 80px; padding: 8px;">
+              <div style="width: 64px; height: 64px; transform: scale(0.25); transform-origin: top left;">
+                {svg_r27}
+              </div>
+            </div>
+            <div class="scale-lbl">64px Squircle</div>
+          </div>
+          <div class="scale-item">
+            <div class="scale-canvas-white" style="width: 140px; height: 140px; padding: 6px;">
+              <div style="width: 128px; height: 128px; transform: scale(0.5); transform-origin: top left;">
+                {svg_r27}
+              </div>
+            </div>
+            <div class="scale-lbl">128px Master Display</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Section 4: Lockup & Real Context -->
+    <div>
+      <div class="section-title">
+        <span class="num">4</span> Lockup Horizontal Resmi & Format Mobile App Icon
+      </div>
+      <div class="context-grid">
+        <div class="lockup-card">
+          {lockup_r27}
+        </div>
+        <div class="app-preview-card">
+          <div style="font-size: 13px; font-weight: 600; color: #F1F5F9;">Aplikasi Seluler & Squircle PWA</div>
+          <div class="app-icon-row">
+            <div class="squircle-icon">
+              {svg_r27}
+            </div>
+            <div class="squircle-icon light">
+              {svg_r27}
+            </div>
+            <div style="font-size: 12px; color: #94A3B8; line-height: 1.4;">
+              Ikon terlihat solid dan berwibawa di home screen Android/iOS tanpa terdistorsi.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
+"""
+
+with open(HTML_PATH, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Generated {HTML_PATH}")
+
+# Render to PNG using render_png.py
+cmd = ["python", ".agents/skills/logo-design/scripts/render_png.py", HTML_PATH, "-o", PNG_PATH, "--width", "1380", "--height", "1750"]
+subprocess.run(cmd, check=True)
+print(f"Rendered {PNG_PATH}")

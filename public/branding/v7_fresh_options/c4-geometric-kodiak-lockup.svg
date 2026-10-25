@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="t-lk">
+  <title id="t-lk">C4: The Geometric Kodiak (Agency Minimalist)</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0066D6;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #00AA13;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="t-c4">Beruang - The Geometric Kodiak</title>
+  
+  <!-- Left Outer Ear -->
+  <path fill="#0052B3" d="M 52 58 C 40 70 42 94 56 106 L 72 92 C 64 80 60 70 60 58 Z" />
+  <circle cx="68" cy="74" r="22" fill="#0066D6" />
+
+  <!-- Right Outer Ear -->
+  <path fill="#0052B3" d="M 204 58 C 216 70 214 94 200 106 L 184 92 C 192 80 196 70 196 58 Z" />
+  <circle cx="188" cy="74" r="22" fill="#0066D6" />
+
+  <!-- Main Head Body -->
+  <path
+    fill="#0066D6"
+    d="
+      M 90 70
+      L 166 70
+      C 192 78 214 104 214 136
+      C 214 172 194 200 170 214
+      C 156 222 142 224 128 224
+      C 114 224 100 222 86 214
+      C 62 200 42 172 42 136
+      C 42 104 64 78 90 70 Z
+    "
+  />
+
+  <!-- White Muzzle Arch -->
+  <path
+    fill="#FFFFFF"
+    d="
+      M 128 134
+      C 154 134 172 148 172 172
+      C 172 194 152 208 128 208
+      C 104 208 84 194 84 172
+      C 84 148 102 134 128 134 Z
+    "
+  />
+
+  <!-- Wide Bear Nose Pad in Growth Green (#00AA13) -->
+  <path
+    fill="#00AA13"
+    d="
+      M 112 152
+      C 118 146 123 144 128 144
+      C 133 144 138 146 144 152
+      C 148 158 145 166 138 172
+      C 134 175 131 176 128 176
+      C 125 176 122 175 118 172
+      C 111 166 108 158 112 152 Z
+    "
+  />
+
+  <!-- Two Open Eyes: Geometric Confident Slits -->
+  <polygon points="90,110 102,114 90,118 84,114" fill="#FFFFFF" />
+  <polygon points="166,110 172,114 166,118 154,114" fill="#FFFFFF" />
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

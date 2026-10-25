@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="680" height="180" role="img" aria-labelledby="title-lockup">
+  <title id="title-lockup">Beruang - Bear Cloud Hat</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;display=swap');
+      .brand-title {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 54px;
+        font-weight: 700;
+        fill: #0F172A;
+      }
+      .brand-tagline {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        fill: #FF7009;
+        letter-spacing: 2px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(24, 25) scale(0.5078)">
+    
+  <title id="title-c2">Beruang - Bear-Eared Cloud Hat</title>
+  <defs>
+    <clipPath id="squircle-c2">
+      <rect x="16" y="16" width="224" height="224" rx="56" />
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="56" fill="#FF7009" />
+
+  <g clip-path="url(#squircle-c2)">
+    <!-- Golden Doughy Bear Head -->
+    <path
+      fill="#FFB600"
+      d="
+        M 44 240
+        C 40 166 74 126 128 126
+        C 182 126 216 166 212 240 Z
+      "
+    />
+
+    <!-- Puffy White Cloud Hat with Bear Ears Built In -->
+    <!-- Hat Brim -->
+    <path
+      fill="#E5E7EB"
+      d="
+        M 86 146
+        C 86 138 170 138 170 146
+        L 168 156
+        C 168 160 88 160 88 156 Z
+      "
+    />
+    <!-- Cloud Hat Body with Integrated Ears -->
+    <path
+      fill="#FFFFFF"
+      d="
+        M 90 144
+        C 68 144 60 114 78 96
+        C 66 76 80 50 102 54
+        C 108 55 112 59 116 64
+        C 124 58 132 58 140 64
+        C 144 59 148 55 154 54
+        C 176 50 190 76 178 96
+        C 196 114 188 144 166 144 Z
+      "
+    />
+    <!-- Inner Ear indentations on White Cloud Hat -->
+    <circle cx="94" cy="74" r="8" fill="#E5E7EB" />
+    <circle cx="162" cy="74" r="8" fill="#E5E7EB" />
+
+    <!-- Iconic Thick Peaceful Closed Eyes -->
+    <path
+      fill="none"
+      stroke="#18181B"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      d="
+        M 96 186
+        C 102 194 114 194 120 186
+
+        M 142 186
+        C 148 194 160 194 166 186
+      "
+    />
+  </g>
+
+  </g>
+  <text x="180" y="96" class="brand-title">Beruang</text>
+  <text x="182" y="128" class="brand-tagline">AKSELERATOR KELAYAKAN UMKM</text>
+</svg>

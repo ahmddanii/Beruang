@@ -1,326 +1,986 @@
 <template>
-  <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 p-4 sm:p-8 ">
-    <div class="max-w-2xl mx-auto space-y-8">
-      <!-- Top Brand Header -->
-      <div class="flex items-center justify-between">
-        <NuxtLink to="/" class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-amber-400 p-1.5 shadow-xs">
-            <img src="/logo.svg" alt="Beruang Logo" class="w-full h-full object-contain" />
+  <div class="min-h-screen min-h-dvh w-full bg-[#F3F8FC] dark:bg-[#0C121D] text-neutral-900 dark:text-neutral-100 flex flex-col justify-start sm:justify-center items-center px-4 py-8 sm:py-12 select-none relative font-sans overflow-x-hidden">
+    
+    <!-- Subtle Ambient Background Glow -->
+    <div class="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-[#0081A0]/5 dark:bg-[#0081A0]/10 rounded-full blur-3xl" />
+
+    <!-- Atmospheric Layered Cloud Horizon -->
+    <BCloudBackground :fixed="true" />
+
+    <!-- TOP-LEFT: Pill Button "Kembali ke Halaman Masuk" -->
+    <div class="fixed top-6 left-6 sm:top-8 sm:left-8 z-30">
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 text-xs sm:text-sm font-semibold shadow-xs hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] transition-all duration-150 cursor-pointer"
+        @click="handleBackToLogin"
+      >
+        <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2.2" />
+        <span>Kembali ke Halaman Masuk</span>
+      </button>
+    </div>
+
+    <!-- Center Flow Container -->
+    <div class="relative z-10 w-full max-w-2xl mx-auto my-auto space-y-4 pt-14 sm:pt-6 pb-12">
+      
+      <!-- Top Brand Header & Role Switcher -->
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2.5 select-none cursor-default">
+          <img src="/logo/logoSmall.svg" alt="Beruang Logo" class="h-8 w-auto object-contain select-none" />
+          <div class="text-left">
+            <span class="font-heading font-extrabold text-xl tracking-tight leading-none select-none block">
+              <span class="text-[#0081A0] dark:text-[#2091AA]">Ber</span><span class="text-[#00AA13] dark:text-[#22C55E]">uang</span>
+            </span>
+            <span class="text-[11px] font-semibold text-[#0081A0] dark:text-[#2091AA] select-none">
+              {{ roleHeaderTitle }}
+            </span>
           </div>
-          <span class=" font-extrabold text-xl tracking-tight text-neutral-900 dark:text-white">
-            Beruang
+        </div>
+
+        <!-- Account Role Locked Badge & Step Counter -->
+        <div class="flex items-center gap-2">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 shadow-2xs">
+            <span class="w-2 h-2 rounded-full bg-[#00AA13]" />
+            <span class="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+              {{ activeRoleBadgeLabel }}
+            </span>
+          </div>
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-xs text-neutral-600 dark:text-neutral-300 font-semibold shadow-2xs tabular-nums">
+            {{ currentStep }} / {{ currentStepsList.length }}
           </span>
-        </NuxtLink>
-        <span class="text-xs text-neutral-500 font-medium tabular-nums">
-          Langkah {{ currentStep }} dari 4
-        </span>
+        </div>
       </div>
 
       <!-- Stepper Component -->
-      <BStepper :steps="steps" :current-step="currentStep" />
+      <div class="p-3 sm:p-4 rounded-2xl bg-white/90 dark:bg-[#13161F]/90 backdrop-blur-md border border-[#E2E8F0] dark:border-white/10 shadow-xs">
+        <BStepper :steps="currentStepsList" :current-step="currentStep" />
+      </div>
 
       <!-- Main Form Container -->
-      <BCard padding="lg" class="border border-[#E4E7EC] dark:border-[#2B2B31] shadow-none">
-        <!-- Step 1: Identitas Usaha -->
-        <div v-if="currentStep === 1" class="space-y-4">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
-              <HugeiconsIcon :icon="Building01Icon" :size="20" :stroke-width="1.75" />
+      <div class="bg-white/95 dark:bg-[#13161F]/95 backdrop-blur-md rounded-3xl border border-[#E2E8F0] dark:border-white/10 shadow-sm p-6 sm:p-8">
+        
+        <!-- ================================================================= -->
+        <!-- ROLE 1: UMKM ONBOARDING                                           -->
+        <!-- ================================================================= -->
+        <template v-if="activeRole === 'UMKM'">
+          <!-- Step 1: Identitas Usaha -->
+          <div v-if="currentStep === 1" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Building01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  1. Tentang Usahamu
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Isi nama usaha dan status izin saat ini.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-50">
-                1. Kenalkan Usahamu
-              </h3>
-              <p class="text-xs text-neutral-500">
-                Ceritakan identitas dasar bisnis agar konsultan dapat memetakan potensi usahamu.
-              </p>
-            </div>
-          </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-              Nama Brand / Usaha
-            </label>
-            <input
-              v-model="form.name"
-              type="text"
-              required
-              placeholder="contoh: Kopi Senja Nusantara"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-              Nama Pemilik / Founder
-            </label>
-            <input
-              v-model="form.owner"
-              type="text"
-              required
-              placeholder="contoh: Budi Setiawan"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-                Tahun Berdiri
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Nama Usaha <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
-                v-model.number="form.year"
-                type="number"
-                min="2000"
-                max="2026"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                v-model="formUmkm.name"
+                type="text"
+                required
+                placeholder="contoh: Toko Kopi Harapan"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
               />
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-                Status Izin Usaha
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Nama Pemilik <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <input
+                v-model="formUmkm.owner"
+                type="text"
+                required
+                placeholder="contoh: Fikri Setiawan"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div ref="yearPickerRef" class="space-y-1 relative">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Tahun Mulai Usaha <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <div
+                  class="relative flex items-center cursor-pointer"
+                  @click="isYearPickerOpen = !isYearPickerOpen"
+                >
+                  <input
+                    v-model.number="formUmkm.year"
+                    type="number"
+                    min="1990"
+                    max="2026"
+                    placeholder="2021"
+                    class="w-full px-3.5 pr-10 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums font-semibold cursor-pointer"
+                    @keydown.enter.prevent="isYearPickerOpen = false"
+                  />
+                  <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                    <HugeiconsIcon :icon="Calendar03Icon" :size="18" :stroke-width="1.8" />
+                  </div>
+                </div>
+
+                <!-- Tanggalan Popover Pemilih Tahun -->
+                <div
+                  v-if="isYearPickerOpen"
+                  class="absolute top-full left-0 mt-1.5 w-64 p-3 rounded-2xl bg-white dark:bg-[#1A1D24] border border-neutral-200 dark:border-neutral-700 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150"
+                >
+                  <div class="flex items-center justify-between pb-2 mb-2 border-b border-neutral-100 dark:border-neutral-800">
+                    <button
+                      type="button"
+                      class="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center transition-colors cursor-pointer"
+                      @click.stop="pickerDecadeStart -= 12"
+                    >
+                      <HugeiconsIcon :icon="ArrowLeft02Icon" :size="14" :stroke-width="2" />
+                    </button>
+                    <span class="text-xs font-bold text-neutral-800 dark:text-neutral-200 tabular-nums">
+                      {{ pickerDecadeStart }} - {{ pickerDecadeStart + 11 }}
+                    </span>
+                    <button
+                      type="button"
+                      class="w-7 h-7 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 flex items-center justify-center transition-colors cursor-pointer"
+                      @click.stop="pickerDecadeStart += 12"
+                    >
+                      <HugeiconsIcon :icon="ArrowRight02Icon" :size="14" :stroke-width="2" />
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-1.5">
+                    <button
+                      v-for="y in decadeYears"
+                      :key="y"
+                      type="button"
+                      :disabled="y > 2026"
+                      :class="[
+                        'py-2 px-1 rounded-xl text-xs font-bold transition-all tabular-nums text-center cursor-pointer',
+                        formUmkm.year === y
+                          ? 'bg-primary-600 text-white shadow-xs'
+                          : y > 2026
+                            ? 'text-neutral-300 dark:text-neutral-600 cursor-not-allowed opacity-40'
+                            : 'text-neutral-700 dark:text-neutral-200 hover:bg-primary-50 dark:hover:bg-primary-950/60 hover:text-primary-600 dark:hover:text-primary-400'
+                      ]"
+                      @click.stop="selectYear(y)"
+                    >
+                      {{ y }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Status Izin Usaha
+                </label>
+                <select
+                  v-model="formUmkm.legalStatus"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                >
+                  <option value="NIB_READY">Sudah ada NIB (Izin Resmi)</option>
+                  <option value="HALAL_READY">NIB + Sertifikat Halal</option>
+                  <option value="IN_PROGRESS">Sedang mengurus izin</option>
+                  <option value="NONE">Belum ada izin</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Nomor NIB (Bila ada)
+                </label>
+                <input
+                  v-model="formUmkm.nib"
+                  type="text"
+                  placeholder="contoh: 1209000123456"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  NPWP Usaha (Bila ada)
+                </label>
+                <input
+                  v-model="formUmkm.npwp"
+                  type="text"
+                  placeholder="81.423.891.4-429.000"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Sektor & Lokasi/Outlet -->
+          <div v-else-if="currentStep === 2" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  2. Bidang & Lokasi Usaha
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Pilih bidang usaha dan sebaran tokomu.
+                </p>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1.5">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Bidang Usaha <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <button
+                  v-for="s in umkmSectors"
+                  :key="s"
+                  type="button"
+                  :class="[
+                    'p-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                    formUmkm.sector === s
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                      : 'border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'
+                  ]"
+                  @click="formUmkm.sector = s"
+                >
+                  {{ s }}
+                </button>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Kota Usaha <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <input
+                v-model="formUmkm.city"
+                type="text"
+                placeholder="contoh: Bandung, Jawa Barat"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Jumlah Cabang / Gerai <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <input
+                  v-model.number="formUmkm.outlets"
+                  type="number"
+                  min="1"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Jumlah Karyawan <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <input
+                  v-model.number="formUmkm.employees"
+                  type="number"
+                  min="1"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Baseline Finansial -->
+          <div v-else-if="currentStep === 3" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  3. Keuangan Usaha
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Perkiraan angka kas bulananmu (tidak perlu persis).
+                </p>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Rata-rata Penjualan / Bulan <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400">Rp.</span>
+                </div>
+                <input
+                  v-model="displayMonthlyRevenue"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="0"
+                  class="w-full pl-11 pr-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums font-semibold"
+                  @input="handleMonthlyRevenueInput"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Modal Bahan (%) <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <input
+                  v-model.number="formUmkm.hppPercentage"
+                  type="number"
+                  min="10"
+                  max="90"
+                  placeholder="40"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+                <span class="text-[10px] text-neutral-400">Persen biaya beli stok/bahan</span>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Kebutuhan Modal <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <span class="text-xs font-bold text-neutral-500 dark:text-neutral-400">Rp.</span>
+                  </div>
+                  <input
+                    v-model="displayTargetFunding"
+                    type="text"
+                    inputmode="numeric"
+                    placeholder="0"
+                    class="w-full pl-11 pr-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums font-semibold"
+                    @input="handleTargetFundingInput"
+                  />
+                </div>
+                <span class="text-[10px] text-neutral-400">Modal yang ingin dicari</span>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Tawaran Bagi Hasil / Modal <span class="text-rose-500 font-bold">*</span>
               </label>
               <select
-                v-model="form.legalStatus"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                v-model="formUmkm.equityOffered"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
               >
-                <option value="NIB_READY">Sudah Memiliki NIB (OSS)</option>
-                <option value="HALAL_READY">NIB + Sertifikasi Halal</option>
-                <option value="IN_PROGRESS">Sedang Pengurusan</option>
-                <option value="NONE">Belum Ada (Perlu Bantuan)</option>
+                <option value="5% Bagi Hasil">5% Bagi Hasil</option>
+                <option value="10% Bagi Hasil">10% Bagi Hasil</option>
+                <option value="15% Bagi Hasil">15% Bagi Hasil</option>
+                <option value="20% Bagi Hasil">20% Bagi Hasil</option>
+                <option value="Sesuai Diskusi">Sesuai Diskusi Nanti</option>
               </select>
             </div>
           </div>
-        </div>
 
-        <!-- Step 2: Sektor & Lokasi/Outlet -->
-        <div v-else-if="currentStep === 2" class="space-y-4">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 flex items-center justify-center shrink-0">
-              <HugeiconsIcon :icon="Store01Icon" :size="20" :stroke-width="1.75" />
+          <!-- Step 4: Pilih Konsultan Pendamping -->
+          <div v-else-if="currentStep === 4" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Award01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  4. Pilih Konsultan Pendamping
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Pilih konsultan bisnis bersertifikasi resmi BNSP yang akan mengaudit & memandu usahamu hingga siap didanai investor.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-50">
-                2. Sektor & Skala Usaha
-              </h3>
-              <p class="text-xs text-neutral-500">
-                Data sebaran gerai dan bidang usaha untuk menyelaraskan kurasi pasar.
-              </p>
-            </div>
-          </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 ">
-              Sektor Bisnis
-            </label>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              <button
-                v-for="s in sectors"
-                :key="s"
-                type="button"
+            <!-- List Konsultan Cards -->
+            <div class="space-y-3 text-left">
+              <div
+                v-for="c in consultantList"
+                :key="c.id"
                 :class="[
-                  'p-2.5 rounded-xl text-xs  font-semibold border transition-all text-center',
-                  form.sector === s
-                    ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
-                    : 'border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'
+                  'p-4 rounded-2xl border transition-all duration-150 cursor-pointer relative',
+                  formUmkm.consultantId === c.id
+                    ? 'border-[#0081A0] bg-[#0081A0]/5 dark:bg-[#0081A0]/10 shadow-sm ring-1 ring-[#0081A0]'
+                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600'
                 ]"
-                @click="form.sector = s"
+                @click="selectConsultant(c)"
               >
-                {{ s }}
-              </button>
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-[#0081A0]/10 text-[#0081A0] font-bold text-sm flex items-center justify-center shrink-0 border border-[#0081A0]/20">
+                      {{ c.name.charAt(0) }}
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <h4 class="font-bold text-sm text-neutral-900 dark:text-white">
+                          {{ c.name }}
+                        </h4>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold border border-emerald-200 dark:border-emerald-800">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          BNSP Terakreditasi
+                        </span>
+                      </div>
+                      <p class="text-xs text-neutral-600 dark:text-neutral-300 font-medium mt-0.5">
+                        {{ c.firmName }} • {{ c.city }}
+                      </p>
+                      <p class="text-[11px] text-[#0081A0] dark:text-[#2091AA] font-semibold mt-1">
+                        Spesialisasi: {{ c.specialization }} (Pengalaman {{ c.experience }})
+                      </p>
+                      <p class="text-[11px] text-neutral-500 mt-1 line-clamp-2">
+                        "{{ c.bio }}"
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Radio Circle Indicator -->
+                  <div class="shrink-0 mt-1">
+                    <div
+                      :class="[
+                        'w-5 h-5 rounded-full border flex items-center justify-center transition-all',
+                        formUmkm.consultantId === c.id
+                          ? 'border-[#0081A0] bg-[#0081A0] text-white'
+                          : 'border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800'
+                      ]"
+                    >
+                      <span v-if="formUmkm.consultantId === c.id" class="w-2 h-2 rounded-full bg-white"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-              Kota / Kabupaten Operasional
-            </label>
-            <input
-              v-model="form.city"
-              type="text"
-              placeholder="contoh: Bandung, Jawa Barat"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-                Jumlah Outlet / Cabang
-              </label>
-              <input
-                v-model.number="form.outlets"
-                type="number"
-                min="1"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
-              />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-                Jumlah Karyawan
-              </label>
-              <input
-                v-model.number="form.employees"
-                type="number"
-                min="1"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 3: Baseline Finansial -->
-        <div v-else-if="currentStep === 3" class="space-y-4">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center shrink-0">
-              <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
-            </div>
-            <div>
-              <h3 class=" font-bold text-lg text-neutral-900 dark:text-neutral-50">
-                3. Baseline Finansial Awal
+          <!-- Step 5: Ringkasan & Konfirmasi -->
+          <div v-else class="space-y-4">
+            <div class="text-center mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
+                <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
+              </div>
+              <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
+                Profil Usaha Anda Siap Dibuat!
               </h3>
-              <p class="text-xs text-neutral-500">
-                Estimasi kasar kinerja saat ini. Data ini dirahasiakan dan hanya untuk evaluasi konsultan pendamping.
+              <p class="text-xs text-neutral-500 max-w-sm mx-auto">
+                Periksa kembali ringkasan usahamu dan konsultan pendamping sebelum masuk ke beranda tokomu.
               </p>
             </div>
-          </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-              Rata-rata Omzet Penjualan Bulanan (Rp)
-            </label>
-            <input
-              v-model.number="form.monthlyRevenue"
-              type="number"
-              step="1000000"
-              placeholder="contoh: 50000000"
-              class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
-            />
-            <span class="text-[11px] text-neutral-500 mt-1 block tabular-nums">
-              Format: Rp {{ (form.monthlyRevenue || 0).toLocaleString('id-ID') }}
-            </span>
+            <div class="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Nama Usaha:</span>
+                <span class="font-bold text-neutral-900 dark:text-white">{{ formUmkm.name }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Bidang & Kota:</span>
+                <span class="font-semibold">{{ formUmkm.sector }} • {{ formUmkm.city }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Cabang & Tim:</span>
+                <span class="font-semibold">{{ formUmkm.outlets }} Gerai • {{ formUmkm.employees }} Orang</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Penjualan / Bulan:</span>
+                <span class="font-semibold tabular-nums">Rp {{ (formUmkm.monthlyRevenue || 0).toLocaleString('id-ID') }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kebutuhan Modal:</span>
+                <span class="font-bold text-primary-600 tabular-nums">
+                  Rp {{ (formUmkm.targetFunding || 0).toLocaleString('id-ID') }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-500">Konsultan Pembimbing:</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">
+                  {{ formUmkm.consultantName || 'Dra. Maya Suryani, M.M.' }}
+                </span>
+              </div>
+            </div>
           </div>
+        </template>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-                Estimasi HPP (% dari Omzet)
+        <!-- ================================================================= -->
+        <!-- ROLE 2: CONSULTANT ONBOARDING                                     -->
+        <!-- ================================================================= -->
+        <template v-else-if="activeRole === 'CONSULTANT'">
+          <!-- Step 1: Kredensial & Sertifikasi BNSP -->
+          <div v-if="currentStep === 1" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Award01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  1. Data Diri & Izin
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Data diri dan sertifikat pendamping UMKM.
+                </p>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Nama Lengkap & Gelar <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
-                v-model.number="form.hppPercentage"
-                type="number"
-                min="10"
-                max="90"
-                placeholder="40"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                v-model="formConsultant.name"
+                type="text"
+                required
+                placeholder="contoh: Dra. Maya Suryani, M.M."
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
               />
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 ">
-                Target Pendanaan (Rp)
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Nama Kantor / Lembaga <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
-                v-model.number="form.targetFunding"
-                type="number"
-                step="5000000"
-                placeholder="150000000"
-                class="w-full px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                v-model="formConsultant.institution"
+                type="text"
+                placeholder="contoh: Maya Advisory atau Mandiri"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
               />
             </div>
-          </div>
-        </div>
 
-        <!-- Step 4: Ringkasan & Konfirmasi -->
-        <div v-else class="space-y-5">
-          <div class="text-center mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-3">
-              <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="28" :stroke-width="1.75" />
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Nomor Sertifikat BNSP <span class="text-neutral-400 font-normal">(Bila ada)</span>
+                </label>
+                <input
+                  v-model="formConsultant.bnspLicense"
+                  type="text"
+                  placeholder="BNSP-KONS-2024-8891"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none tabular-nums"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Kota Tinggal <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <input
+                  v-model="formConsultant.city"
+                  type="text"
+                  placeholder="contoh: Jakarta Selatan"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                />
+              </div>
             </div>
-            <h3 class=" font-extrabold text-xl text-neutral-900 dark:text-neutral-50">
-              Profil Usahamu Siap Dikaji
-            </h3>
-            <p class="text-xs text-neutral-600 dark:text-neutral-400 max-w-md mx-auto mt-1">
-              Konsultan pendampingmu akan menyusun Action Plan prioritas dan menyiapkan penilaian 5 aspek fundamental bisnismu.
-            </p>
           </div>
 
-          <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2.5">
-            <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
-              <span class="text-neutral-500 font-medium">Nama Usaha:</span>
-              <span class=" font-bold text-neutral-900 dark:text-white">{{ form.name }}</span>
+          <!-- Step 2: Spesialisasi & Kapasitas Pendampingan -->
+          <div v-else-if="currentStep === 2" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="UserGroupIcon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  2. Keahlian & Jumlah UMKM
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Pilih bidang yang kamu kuasai dan kapasitas bantuanmu.
+                </p>
+              </div>
             </div>
-            <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
-              <span class="text-neutral-500 font-medium">Sektor & Kota:</span>
-              <span class="font-semibold">{{ form.sector }} • {{ form.city }}</span>
+
+            <div class="text-left space-y-1.5">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Bidang Keahlian <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  v-for="sp in consultantSpecializations"
+                  :key="sp"
+                  type="button"
+                  :class="[
+                    'p-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                    formConsultant.specialization === sp
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                      : 'border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'
+                  ]"
+                  @click="formConsultant.specialization = sp"
+                >
+                  {{ sp }}
+                </button>
+              </div>
             </div>
-            <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
-              <span class="text-neutral-500 font-medium">Skala Gerai:</span>
-              <span class="font-semibold">{{ form.outlets }} Outlet • {{ form.employees }} Karyawan</span>
-            </div>
-            <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
-              <span class="text-neutral-500 font-medium">Omzet Bulanan:</span>
-              <span class="font-semibold tabular-nums">Rp {{ form.monthlyRevenue.toLocaleString('id-ID') }}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-neutral-500 font-medium">Target Pendanaan:</span>
-              <span class="font-bold text-primary-600 tabular-nums ">
-                Rp {{ form.targetFunding.toLocaleString('id-ID') }}
-              </span>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Lama Pengalaman <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <select
+                  v-model="formConsultant.experience"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                >
+                  <option value="5+ Tahun">> 5 Tahun</option>
+                  <option value="3-5 Tahun">3 - 5 Tahun</option>
+                  <option value="1-3 Tahun">1 - 3 Tahun</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Maksimal UMKM yang Dibantu <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <select
+                  v-model.number="formConsultant.maxClients"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                >
+                  <option :value="5">5 Usaha</option>
+                  <option :value="10">10 Usaha</option>
+                  <option :value="15">15 Usaha</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
+
+          <!-- Step 3: Kesimpulan / Ringkasan Data Konsultan -->
+          <div v-else class="space-y-4">
+            <div class="text-center mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
+                <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
+              </div>
+              <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
+                Profil Anda Sudah Siap!
+              </h3>
+              <p class="text-xs text-neutral-500 max-w-sm mx-auto">
+                Periksa kembali data keahlianmu sebelum mulai mendampingi UMKM.
+              </p>
+            </div>
+
+            <!-- Profile Summary Card -->
+            <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Nama Konsultan:</span>
+                <span class="font-bold text-neutral-900 dark:text-white">{{ formConsultant.name }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kantor / Lembaga:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.institution || 'Praktisi Independen' }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Sertifikat BNSP:</span>
+                <span class="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ formConsultant.bnspLicense || '-' }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kota Domisili:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.city }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Bidang Keahlian:</span>
+                <span class="font-bold text-primary-600 dark:text-primary-400">{{ formConsultant.specialization }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-500">Kapasitas Pendampingan:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formConsultant.maxClients }} Usaha (Pengalaman {{ formConsultant.experience }})</span>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- ================================================================= -->
+        <!-- ROLE 3: INVESTOR ONBOARDING                                       -->
+        <!-- ================================================================= -->
+        <template v-else-if="activeRole === 'INVESTOR'">
+          <!-- Step 1: Profil Entitas Investor -->
+          <div v-if="currentStep === 1" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                  1. Data Investor
+                </h3>
+                <p class="text-xs text-neutral-500">
+                  Identitas pihak yang akan menanamkan modal.
+                </p>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Nama Lengkap <span class="text-rose-500 font-bold">*</span>
+              </label>
+              <input
+                v-model="formInvestor.name"
+                type="text"
+                required
+                placeholder="contoh: Hendro Wicaksono"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              />
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Nama Perusahaan / Kelompok <span class="text-neutral-400 font-normal">(Bila ada / Pribadi)</span>
+              </label>
+              <input
+                v-model="formInvestor.entityName"
+                type="text"
+                placeholder="contoh: Nusantara Angel Syndicate atau Pribadi"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-left">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Jenis Investor <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <select
+                  v-model="formInvestor.investorType"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                >
+                  <option value="Pribadi">Pribadi / Perorangan</option>
+                  <option value="Kelompok Modal">Kelompok Pemodal</option>
+                  <option value="Perusahaan Modal">Perusahaan Modal Usaha</option>
+                  <option value="Kantor Keluarga">Pengelola Dana Keluarga</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Kota Asal <span class="text-rose-500 font-bold">*</span>
+                </label>
+                <input
+                  v-model="formInvestor.city"
+                  type="text"
+                  placeholder="contoh: Jakarta Pusat"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Kriteria Portofolio & Tiket Modal (Opsional untuk Bantuan Rekomendasi) -->
+          <div v-else-if="currentStep === 2" class="space-y-3.5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-950 text-primary-600 flex items-center justify-center shrink-0">
+                <HugeiconsIcon :icon="Coins01Icon" :size="20" :stroke-width="1.75" />
+              </div>
+              <div class="text-left">
+                <div class="flex items-center gap-2">
+                  <h3 class="font-bold text-base sm:text-lg text-neutral-900 dark:text-neutral-50">
+                    2. Pilihan Modal & Bidang
+                  </h3>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 font-bold border border-neutral-200 dark:border-neutral-700">
+                    Opsional
+                  </span>
+                </div>
+                <p class="text-xs text-neutral-500 mt-0.5">
+                  Hanya bantuan rekomendasi awal di katalog. Boleh diisi atau langsung dilewati (bebas diatur kapan saja di filter pencarian).
+                </p>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Kisaran Modal per Usaha
+                </label>
+                <span class="text-[10px] text-neutral-400">Bisa diubah nanti</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  v-for="tr in ticketRanges"
+                  :key="tr"
+                  type="button"
+                  :class="[
+                    'p-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                    formInvestor.ticketRange === tr
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                      : 'border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'
+                  ]"
+                  @click="formInvestor.ticketRange = tr"
+                >
+                  {{ tr }}
+                </button>
+              </div>
+            </div>
+
+            <div class="text-left space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Bidang Usaha yang Dicari
+                </label>
+                <button
+                  type="button"
+                  class="text-[11px] text-primary-600 dark:text-primary-400 font-semibold hover:underline cursor-pointer"
+                  @click="formInvestor.sectors = formInvestor.sectors.length === investorTargetSectors.length ? [] : [...investorTargetSectors]"
+                >
+                  {{ formInvestor.sectors.length === investorTargetSectors.length ? 'Kosongkan (Bebas)' : 'Pilih Semua' }}
+                </button>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <button
+                  v-for="sec in investorTargetSectors"
+                  :key="sec"
+                  type="button"
+                  :class="[
+                    'p-2 rounded-xl text-xs font-semibold border transition-all text-center cursor-pointer',
+                    formInvestor.sectors.includes(sec)
+                      ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300 font-bold'
+                      : 'border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'
+                  ]"
+                  @click="toggleInvestorSector(sec)"
+                >
+                  {{ sec }}
+                </button>
+              </div>
+              <p class="text-[11px] text-neutral-400">
+                {{ formInvestor.sectors.length === 0 ? '✓ Menampilkan semua jenis usaha tanpa filter.' : `${formInvestor.sectors.length} bidang usaha dipilih.` }}
+              </p>
+            </div>
+
+            <div class="text-left space-y-1">
+              <label class="block text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                Harapan Untung Bersih Usaha
+              </label>
+              <select
+                v-model="formInvestor.minMargin"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              >
+                <option value="25%">&gt; 25% (Untung Normal)</option>
+                <option value="35%">&gt; 35% (Untung Tinggi)</option>
+                <option value="50%">&gt; 50% (Untung Sangat Tinggi)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Step 3: Rekap Data & Konfirmasi Investor -->
+          <div v-else class="space-y-4">
+            <div class="text-center mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mx-auto mb-2">
+                <HugeiconsIcon :icon="CheckmarkBadge01Icon" :size="24" :stroke-width="2" />
+              </div>
+              <h3 class="font-extrabold text-lg sm:text-xl text-neutral-900 dark:text-neutral-50">
+                Profil Anda Sudah Siap!
+              </h3>
+              <p class="text-xs text-neutral-500 max-w-sm mx-auto">
+                Periksa kembali pilihan modalmu sebelum mulai mencari peluang usaha.
+              </p>
+            </div>
+
+            <!-- Profile Summary Card -->
+            <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 text-xs space-y-2">
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Nama Investor:</span>
+                <span class="font-bold text-neutral-900 dark:text-white">{{ formInvestor.name }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Perusahaan / Kelompok:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formInvestor.entityName || 'Pribadi / Perorangan' }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Jenis Investor:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formInvestor.investorType }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kota Asal:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200">{{ formInvestor.city }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Kisaran Modal:</span>
+                <span class="font-bold text-primary-600 dark:text-primary-400 tabular-nums">{{ formInvestor.ticketRange }}</span>
+              </div>
+              <div class="flex justify-between border-b border-neutral-200/60 dark:border-neutral-700/60 pb-2">
+                <span class="text-neutral-500">Bidang Usaha Pilihan:</span>
+                <span class="font-semibold text-neutral-900 dark:text-neutral-200 text-right max-w-[60%]">
+                  {{ formInvestor.sectors.length > 0 ? formInvestor.sectors.join(', ') : 'Semua Bidang Usaha (Bebas)' }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-neutral-500">Harapan Untung Bersih:</span>
+                <span class="font-semibold text-emerald-600 dark:text-emerald-400">&gt; {{ formInvestor.minMargin }}</span>
+              </div>
+            </div>
+          </div>
+        </template>
 
         <!-- Step Navigation Buttons -->
-        <div class="mt-8 pt-5 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-          <BButton
+        <div class="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+          <button
             v-if="currentStep > 1"
             type="button"
-            variant="secondary"
-            size="md"
-            class="flex items-center gap-1.5"
+            class="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-[0.99]"
             @click="currentStep--"
           >
-            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="15" :stroke-width="2" />
+            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
             <span>Kembali</span>
-          </BButton>
-          <div v-else />
-
-          <BButton
-            v-if="currentStep < 4"
-            type="button"
-            variant="primary"
-            size="md"
-            class="flex items-center gap-1.5"
-            @click="currentStep++"
-          >
-            <span>Langkah Selanjutnya</span>
-            <HugeiconsIcon :icon="ArrowRight02Icon" :size="15" :stroke-width="2" />
-          </BButton>
-
-          <BButton
+          </button>
+          <button
             v-else
             type="button"
-            variant="primary"
-            size="lg"
-            :loading="submitting"
-            class="flex items-center gap-2"
-            @click="finishOnboarding"
+            class="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-white/90 dark:bg-[#13161F]/90 border border-[#E2E8F0] dark:border-white/10 text-neutral-800 dark:text-neutral-200 hover:border-[#0081A0] hover:text-[#0081A0] dark:hover:border-[#2091AA] dark:hover:text-[#2091AA] font-semibold text-xs sm:text-sm transition-all cursor-pointer shadow-xs active:scale-[0.99]"
+            @click="handleBackToLogin"
           >
-            <span>Masuk ke Dashboard Saya</span>
-            <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
-          </BButton>
+            <HugeiconsIcon :icon="ArrowLeft02Icon" :size="16" :stroke-width="2" />
+            <span>Kembali ke Masuk</span>
+          </button>
+
+          <div class="flex items-center gap-3">
+            <span v-if="!isCurrentStepValid && currentStep < currentStepsList.length" class="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
+              Lengkapi isian wajib (*) untuk lanjut
+            </span>
+
+            <button
+              v-if="activeRole === 'INVESTOR' && currentStep === 2"
+              type="button"
+              class="text-xs font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white px-2 py-2 cursor-pointer transition-colors"
+              @click="currentStep++"
+            >
+              Lewati Langkah Ini
+            </button>
+
+            <button
+              v-if="currentStep < currentStepsList.length"
+              type="button"
+              :disabled="!isCurrentStepValid"
+              :class="[
+                'inline-flex items-center gap-2 h-10 px-6 rounded-full font-bold text-xs sm:text-sm transition-all',
+                isCurrentStepValid
+                  ? 'bg-[#0081A0] hover:bg-[#00708C] text-white shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] cursor-pointer'
+                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 cursor-not-allowed border border-neutral-200 dark:border-neutral-700'
+              ]"
+              @click="currentStep++"
+            >
+              <span>Lanjut</span>
+              <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
+            </button>
+
+            <button
+              v-else
+              type="button"
+              :disabled="submitting"
+              class="inline-flex items-center gap-2 h-10 px-6 rounded-full bg-[#0081A0] hover:bg-[#00708C] text-white font-bold text-xs sm:text-sm shadow-[0_4px_14px_rgba(0,129,160,0.25)] active:scale-[0.99] transition-all cursor-pointer"
+              @click="finishOnboarding"
+            >
+              <span v-if="submitting">Memproses...</span>
+              <template v-else>
+                <span>{{ finishButtonLabel }}</span>
+                <HugeiconsIcon :icon="ArrowRight02Icon" :size="16" :stroke-width="2" />
+              </template>
+            </button>
+          </div>
         </div>
-      </BCard>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAuthStore, type UserRole } from '~/stores/auth'
 import { useUmkmStore } from '~/stores/umkm'
-import BCard from '~/components/base/BCard.vue'
-import BButton from '~/components/base/BButton.vue'
+import { useApi } from '~/composables/useApi'
+import BCloudBackground from '~/components/base/BCloudBackground.vue'
 import BStepper from '~/components/base/BStepper.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -329,57 +989,698 @@ import {
   Coins01Icon,
   CheckmarkBadge01Icon,
   ArrowLeft02Icon,
-  ArrowRight02Icon
+  ArrowRight02Icon,
+  UserGroupIcon,
+  Award01Icon,
+  Calendar03Icon
 } from '@hugeicons/core-free-icons'
+import { onClickOutside } from '@vueuse/core'
+
+definePageMeta({
+  layout: false
+})
 
 const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
+
+// Role aktif terkunci sesuai akun pendaftaran / Google Auth
+const activeRole = ref<UserRole>('UMKM')
+
+const initialRole = (route.query.role as string)?.toUpperCase() as UserRole
+if (initialRole && ['UMKM', 'CONSULTANT', 'INVESTOR'].includes(initialRole)) {
+  activeRole.value = initialRole
+} else if (authStore.currentUser?.role) {
+  activeRole.value = authStore.currentUser.role
+}
 
 const currentStep = ref(1)
 const submitting = ref(false)
 
-const steps = [
-  { title: 'Identitas Usaha' },
-  { title: 'Sektor & Outlet' },
-  { title: 'Baseline Finansial' },
-  { title: 'Konfirmasi' }
+// Step navigasi terstruktur per peran akun
+const stepsUmkm = [
+  { title: 'Data Usaha' },
+  { title: 'Lokasi Usaha' },
+  { title: 'Keuangan' },
+  { title: 'Pilih Konsultan' },
+  { title: 'Selesai' }
 ]
 
-const sectors = [
-  'Kuliner (F&B)',
-  'Fashion & Kriya',
-  'Jasa & Katering',
-  'Agroindustri',
-  'Ritel & Toko',
-  'Teknologi / Jasa'
+const stepsConsultant = [
+  { title: 'Data Diri' },
+  { title: 'Keahlian' },
+  { title: 'Selesai' }
 ]
 
-const form = ref({
-  name: 'Kopi Senja Nusantara',
-  owner: 'Budi Setiawan',
-  year: 2021,
-  legalStatus: 'NIB_READY',
-  sector: 'Kuliner (F&B)',
-  city: 'Bandung, Jawa Barat',
-  outlets: 3,
-  employees: 14,
-  monthlyRevenue: 60000000,
-  hppPercentage: 42,
-  targetFunding: 250000000
+const stepsInvestor = [
+  { title: 'Data Diri' },
+  { title: 'Pilihan Modal' },
+  { title: 'Selesai' }
+]
+
+const currentStepsList = computed(() => {
+  if (activeRole.value === 'CONSULTANT') return stepsConsultant
+  if (activeRole.value === 'INVESTOR') return stepsInvestor
+  return stepsUmkm
 })
 
-function finishOnboarding() {
+const roleHeaderTitle = computed(() => {
+  if (activeRole.value === 'CONSULTANT') return 'Data Konsultan'
+  if (activeRole.value === 'INVESTOR') return 'Data Investor'
+  return 'Data Usaha'
+})
+
+const activeRoleBadgeLabel = computed(() => {
+  if (activeRole.value === 'CONSULTANT') return 'Akun Konsultan Mitra'
+  if (activeRole.value === 'INVESTOR') return 'Akun Investor Mitra'
+  return 'Akun Pemilik UMKM'
+})
+
+const finishButtonLabel = computed(() => {
+  if (activeRole.value === 'CONSULTANT') return 'Buka Halaman Konsultan'
+  if (activeRole.value === 'INVESTOR') return 'Mulai Cari Peluang Usaha'
+  return 'Masuk ke Beranda Usaha'
+})
+
+// ============================================================================
+// DATA & STATE: UMKM
+// ============================================================================
+export interface UmkmFormData {
+  name: string
+  owner: string
+  year: number | null
+  startDate: string
+  legalStatus: string
+  nib: string
+  npwp: string
+  sector: string
+  city: string
+  outlets: number
+  employees: number
+  monthlyRevenue: number | null
+  hppPercentage: number
+  targetFunding: number | null
+  equityOffered: string
+  description: string
+  consultantId: string
+  consultantName: string
+}
+
+export interface ConsultantOption {
+  id: string
+  name: string
+  title: string
+  firmName: string
+  specialization: string
+  bnspLicense: string
+  city: string
+  experience: string
+  avatar: string
+  activeClientsCount: number
+  maxClients: number
+  isCertified: boolean
+  bio: string
+}
+
+const consultantList = ref<ConsultantOption[]>([
+  {
+    id: 'cons-prof-01',
+    name: 'Dra. Maya Suryani, M.M.',
+    title: 'Konsultan Ahli Keuangan & Audit UMKM',
+    firmName: 'Suryani Consulting & Advisory',
+    specialization: 'F&B, Keuangan & Standardisasi Operasional',
+    bnspLicense: 'BNSP-KM-2026-9812',
+    city: 'Bandung',
+    experience: '8 Tahun',
+    avatar: '',
+    activeClientsCount: 8,
+    maxClients: 10,
+    isCertified: true,
+    bio: 'Konsultan pendamping bisnis bersertifikasi resmi BNSP dengan spesialisasi penataan arus kas, efisiensi rasio HPP, dan standarisasi kesiapan modal usaha mikro & kecil.'
+  },
+  {
+    id: 'cons-prof-02',
+    name: 'Bambang Sudarsono, S.E.',
+    title: 'Konsultan Rantai Pasok & Agroindustri',
+    firmName: 'Sudarsono Supply Chain Advisory',
+    specialization: 'Agro & Rantai Pasok',
+    bnspLicense: 'BNSP-KM-2026-7731',
+    city: 'Surabaya',
+    experience: '10 Tahun',
+    avatar: '',
+    activeClientsCount: 6,
+    maxClients: 10,
+    isCertified: true,
+    bio: 'Ahli restrukturisasi vendor dan sistem pergudangan untuk produsen dan ritel modern binaan daerah.'
+  },
+  {
+    id: 'cons-prof-03',
+    name: 'Dr. Hendra Gunawan',
+    title: 'Konsultan Pajak & Kepatuhan Legalitas',
+    firmName: 'Gunawan Tax & Legal Partners',
+    specialization: 'Kepatuhan Pajak & Hukum',
+    bnspLicense: 'BNSP-KM-2026-4412',
+    city: 'Jakarta',
+    experience: '12 Tahun',
+    avatar: '',
+    activeClientsCount: 5,
+    maxClients: 10,
+    isCertified: true,
+    bio: 'Spesialis perizinan NIB, BPOM, Sertifikasi Halal, dan optimalisasi pajak badan usaha UMKM siap investasi.'
+  }
+])
+
+const loadingConsultants = ref(false)
+
+async function fetchConsultants() {
+  loadingConsultants.value = true
+  try {
+    const res = await useApi<ConsultantOption[]>('/consultant/list')
+    if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      consultantList.value = res.data
+    }
+  } catch (err) {
+    console.warn('Menggunakan daftar konsultan default:', err)
+  } finally {
+    loadingConsultants.value = false
+  }
+}
+
+function selectConsultant(c: ConsultantOption) {
+  formUmkm.value.consultantId = c.id
+  formUmkm.value.consultantName = c.name
+}
+
+const umkmSectors = [
+  'Makanan & Minuman',
+  'Pakaian & Kerajinan',
+  'Pertanian',
+  'Toko & Jasa',
+  'Teknologi'
+]
+
+function cleanInitialText(val?: string, demoWords: string[] = []): string {
+  if (!val) return ''
+  const trimmed = val.trim()
+  const lower = trimmed.toLowerCase()
+  for (const w of demoWords) {
+    if (lower.includes(w.toLowerCase())) return ''
+  }
+  return trimmed
+}
+
+const safeInitialBusiness = cleanInitialText(
+  authStore.currentUser?.businessName || authStore.currentUser?.org_name,
+  ['kopi senja', 'suryani consulting', 'nusantara angel', 'operations team']
+)
+
+const safeInitialOwner = cleanInitialText(
+  authStore.currentUser?.name,
+  ['fikri', 'setiawan', 'maya suryani', 'hendro wicaksono', 'super admin', 'pengguna']
+)
+
+const formUmkm = ref<UmkmFormData>({
+  name: safeInitialBusiness,
+  owner: safeInitialOwner,
+  year: null,
+  startDate: '',
+  legalStatus: 'NIB_READY',
+  nib: '',
+  npwp: '',
+  sector: 'Makanan & Minuman',
+  city: '',
+  outlets: 1,
+  employees: 1,
+  monthlyRevenue: null,
+  hppPercentage: 40,
+  targetFunding: null,
+  equityOffered: '10% Bagi Hasil',
+  description: '',
+  consultantId: 'cons-prof-01',
+  consultantName: 'Dra. Maya Suryani, M.M.'
+})
+
+const displayMonthlyRevenue = ref(
+  formUmkm.value.monthlyRevenue ? Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID') : ''
+)
+const displayTargetFunding = ref(
+  formUmkm.value.targetFunding ? Number(formUmkm.value.targetFunding).toLocaleString('id-ID') : ''
+)
+
+function handleMonthlyRevenueInput(e: Event) {
+  const input = e.target as HTMLInputElement
+  const rawDigits = input.value.replace(/\D/g, '')
+  const num = rawDigits ? parseInt(rawDigits, 10) : 0
+  formUmkm.value.monthlyRevenue = num
+  displayMonthlyRevenue.value = rawDigits ? Number(rawDigits).toLocaleString('id-ID') : ''
+}
+
+function handleTargetFundingInput(e: Event) {
+  const input = e.target as HTMLInputElement
+  const rawDigits = input.value.replace(/\D/g, '')
+  const num = rawDigits ? parseInt(rawDigits, 10) : 0
+  formUmkm.value.targetFunding = num
+  displayTargetFunding.value = rawDigits ? Number(rawDigits).toLocaleString('id-ID') : ''
+}
+
+// Year Picker (Kalender Pemilih Tahun Usaha)
+const isYearPickerOpen = ref(false)
+const yearPickerRef = ref<HTMLElement | null>(null)
+const pickerDecadeStart = ref(2015)
+
+const decadeYears = computed(() => {
+  const years = []
+  for (let i = 0; i < 12; i++) {
+    years.push(pickerDecadeStart.value + i)
+  }
+  return years
+})
+
+function selectYear(y: number) {
+  if (y > 2026) return
+  formUmkm.value.year = y
+  formUmkm.value.startDate = `${y}-01-01`
+  isYearPickerOpen.value = false
+}
+
+onClickOutside(yearPickerRef, () => {
+  isYearPickerOpen.value = false
+})
+
+// ============================================================================
+// DATA & STATE: KONSULTAN
+// ============================================================================
+export interface ConsultantFormData {
+  name: string
+  institution: string
+  bnspLicense: string
+  city: string
+  specialization: string
+  experience: string
+  maxClients: number
+}
+
+const consultantSpecializations = [
+  'Keuangan & Biaya',
+  'Operasional & Stok',
+  'Pemasaran & Jual',
+  'Izin Usaha'
+]
+
+const formConsultant = ref<ConsultantFormData>({
+  name: safeInitialOwner,
+  institution: safeInitialBusiness,
+  bnspLicense: '',
+  city: authStore.currentUser?.city || '',
+  specialization: 'Keuangan & Biaya',
+  experience: '3 - 5 Tahun',
+  maxClients: 5
+})
+
+// ============================================================================
+// DATA & STATE: INVESTOR
+// ============================================================================
+export interface InvestorFormData {
+  name: string
+  entityName: string
+  investorType: string
+  city: string
+  ticketRange: string
+  sectors: string[]
+  minMargin: string
+}
+
+const ticketRanges = [
+  '50 - 150 Juta',
+  '150 - 500 Juta',
+  '500 Jt - 1 Miliar',
+  '> 1 Miliar'
+]
+
+const investorTargetSectors = [
+  'Makanan & Minuman',
+  'Pakaian & Kerajinan',
+  'Pertanian',
+  'Toko & Jasa',
+  'Teknologi'
+]
+
+const formInvestor = ref<InvestorFormData>({
+  name: safeInitialOwner,
+  entityName: safeInitialBusiness,
+  investorType: 'Pribadi',
+  city: authStore.currentUser?.city || '',
+  ticketRange: '50 - 150 Juta',
+  sectors: ['Makanan & Minuman'],
+  minMargin: '30%'
+})
+
+function toggleInvestorSector(sec: string) {
+  const idx = formInvestor.value.sectors.indexOf(sec)
+  if (idx > -1) {
+    formInvestor.value.sectors.splice(idx, 1)
+  } else {
+    formInvestor.value.sectors.push(sec)
+  }
+}
+
+// ============================================================================
+// VALIDASI & HYDRATION
+// ============================================================================
+const isCurrentStepValid = computed(() => {
+  if (activeRole.value === 'UMKM') {
+    if (currentStep.value === 1) {
+      return Boolean(
+        formUmkm.value.name?.trim() &&
+        formUmkm.value.owner?.trim() &&
+        formUmkm.value.year &&
+        formUmkm.value.year >= 1970 &&
+        formUmkm.value.year <= new Date().getFullYear()
+      )
+    }
+    if (currentStep.value === 2) {
+      return Boolean(
+        formUmkm.value.sector?.trim() &&
+        formUmkm.value.city?.trim() &&
+        formUmkm.value.outlets &&
+        formUmkm.value.outlets >= 1 &&
+        formUmkm.value.employees &&
+        formUmkm.value.employees >= 1
+      )
+    }
+    if (currentStep.value === 3) {
+      return Boolean(
+        formUmkm.value.monthlyRevenue &&
+        formUmkm.value.monthlyRevenue > 0 &&
+        formUmkm.value.targetFunding &&
+        formUmkm.value.targetFunding > 0 &&
+        formUmkm.value.hppPercentage &&
+        formUmkm.value.hppPercentage >= 1 &&
+        formUmkm.value.hppPercentage <= 99 &&
+        formUmkm.value.equityOffered?.trim()
+      )
+    }
+    if (currentStep.value === 4) {
+      return Boolean(formUmkm.value.consultantId)
+    }
+    return true
+  } else if (activeRole.value === 'CONSULTANT') {
+    if (currentStep.value === 1) {
+      return Boolean(
+        formConsultant.value.name?.trim() &&
+        formConsultant.value.institution?.trim() &&
+        formConsultant.value.city?.trim()
+      )
+    }
+    if (currentStep.value === 2) {
+      return Boolean(
+        formConsultant.value.specialization?.trim() &&
+        formConsultant.value.experience?.trim() &&
+        formConsultant.value.maxClients &&
+        formConsultant.value.maxClients >= 1
+      )
+    }
+    return true
+  } else if (activeRole.value === 'INVESTOR') {
+    if (currentStep.value === 1) {
+      return Boolean(
+        formInvestor.value.name?.trim() &&
+        formInvestor.value.investorType?.trim() &&
+        formInvestor.value.city?.trim()
+      )
+    }
+    if (currentStep.value === 2) {
+      return true
+    }
+    return true
+  }
+  return true
+})
+
+function syncAuthToForms() {
+  const u = authStore.currentUser
+  if (!u) return
+
+  // Sinkronkan Nama Pemilik (abaikan nama dummy seeder)
+  const cleanName = cleanInitialText(u.name, ['fikri', 'setiawan', 'maya suryani', 'hendro wicaksono', 'super admin', 'pengguna'])
+  if (cleanName) {
+    if (!formUmkm.value.owner) formUmkm.value.owner = cleanName
+    if (!formConsultant.value.name) formConsultant.value.name = cleanName
+    if (!formInvestor.value.name) formInvestor.value.name = cleanName
+  }
+
+  // Sinkronkan Nama Usaha (Abaikan nama dummy Kopi Senja Nusantara)
+  const businessOrOrg = (u.businessName || u.org_name || u.orgName || u.institution || u.entityName || '').trim()
+  const cleanBusiness = cleanInitialText(businessOrOrg, ['kopi senja', 'suryani consulting', 'nusantara angel', 'operations team'])
+  if (cleanBusiness) {
+    if (!formUmkm.value.name) formUmkm.value.name = cleanBusiness
+    if (!formConsultant.value.institution) formConsultant.value.institution = cleanBusiness
+    if (!formInvestor.value.entityName) formInvestor.value.entityName = cleanBusiness
+  }
+
+  // Sinkronkan Domisili Kota
+  if (u.city) {
+    if (!formUmkm.value.city) formUmkm.value.city = u.city
+    if (!formConsultant.value.city) formConsultant.value.city = u.city
+    if (!formInvestor.value.city) formInvestor.value.city = u.city
+  }
+
+  // Format angka jika tersedia dari profil
+  if (formUmkm.value.monthlyRevenue && !displayMonthlyRevenue.value) {
+    displayMonthlyRevenue.value = Number(formUmkm.value.monthlyRevenue).toLocaleString('id-ID')
+  }
+  if (formUmkm.value.targetFunding && !displayTargetFunding.value) {
+    displayTargetFunding.value = Number(formUmkm.value.targetFunding).toLocaleString('id-ID')
+  }
+
+  // Kunci role jika ada di profil dan tidak dioverride oleh query
+  if (u.role && !route.query.role) {
+    activeRole.value = u.role
+  }
+}
+
+onMounted(() => {
+  syncAuthToForms()
+  fetchConsultants()
+})
+
+// Pastikan sinkron bila data user terhidrasi secara asinkron dari Google OAuth / Cookie
+watch(() => authStore.currentUser, () => {
+  syncAuthToForms()
+}, { deep: true })
+
+// ============================================================================
+// SIMPAN ONBOARDING & LANJUT KE BERANDA
+// ============================================================================
+async function finishOnboarding() {
   submitting.value = true
-  setTimeout(() => {
-    umkmStore.profile.name = form.value.name
-    umkmStore.profile.ownerName = form.value.owner
-    umkmStore.profile.sector = form.value.sector
-    umkmStore.profile.city = form.value.city
-    umkmStore.profile.outletsCount = form.value.outlets
-    umkmStore.profile.employeesCount = form.value.employees
-    umkmStore.profile.fundingTarget = form.value.targetFunding
+
+  try {
+    const onboardedCookie = useCookie<string | null>('beruang_onboarded', {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+      path: '/'
+    })
+    onboardedCookie.value = 'true'
+
+    // Kunci role pada state sesi pengguna aktif saat ini
+    if (authStore.currentUser) {
+      authStore.currentUser.role = activeRole.value
+      authStore.currentUser.onboardingCompleted = true
+    }
+
+    if (activeRole.value === 'UMKM') {
+      const establishedYear = formUmkm.value.startDate
+        ? new Date(formUmkm.value.startDate).getFullYear()
+        : (formUmkm.value.year || 2021)
+
+      let savedBizId = authStore.currentUser?.businessId
+      // Kirim ke backend live API jika endpoint tersedia
+      try {
+        const res = await useApi<any>('/umkm/onboarding', {
+          method: 'POST',
+          body: {
+            brand: formUmkm.value.name,
+            owner_name: formUmkm.value.owner,
+            sector: formUmkm.value.sector,
+            city: formUmkm.value.city,
+            established_year: establishedYear,
+            outlets_count: formUmkm.value.outlets || 1,
+            employees_count: formUmkm.value.employees || 1,
+            funding_target: formUmkm.value.targetFunding || 0,
+            equity_offered: formUmkm.value.equityOffered || '10% Bagi Hasil',
+            description: formUmkm.value.description || 'UMKM terkurasi Beruang',
+            nib: formUmkm.value.nib,
+            npwp: formUmkm.value.npwp,
+            consultant_id: formUmkm.value.consultantId,
+            consultant_name: formUmkm.value.consultantName
+          }
+        })
+        if (res?.data?.id) {
+          savedBizId = res.data.id
+        }
+        await authStore.fetchMe()
+      } catch (err: any) {
+        console.warn('Gagal simpan onboarding ke live API, tetap lanjut ke dashboard:', err?.message)
+      }
+
+      // Sinkronkan ke umkmStore
+      umkmStore.profile.brand = formUmkm.value.name
+      umkmStore.profile.name = formUmkm.value.name
+      umkmStore.profile.owner_name = formUmkm.value.owner
+      umkmStore.profile.ownerName = formUmkm.value.owner
+      umkmStore.profile.sector = formUmkm.value.sector
+      umkmStore.profile.city = formUmkm.value.city
+      umkmStore.profile.established_year = establishedYear
+      umkmStore.profile.establishedYear = establishedYear
+      umkmStore.profile.outlets_count = formUmkm.value.outlets
+      umkmStore.profile.outletsCount = formUmkm.value.outlets
+      umkmStore.profile.employees_count = formUmkm.value.employees
+      umkmStore.profile.employeesCount = formUmkm.value.employees
+      umkmStore.profile.funding_target = formUmkm.value.targetFunding || 0
+      umkmStore.profile.fundingTarget = formUmkm.value.targetFunding || 0
+      umkmStore.profile.nib = formUmkm.value.nib
+      umkmStore.profile.npwp = formUmkm.value.npwp
+      umkmStore.profile.equity_offered = formUmkm.value.equityOffered
+      umkmStore.profile.description = formUmkm.value.description
+      umkmStore.profile.consultantId = formUmkm.value.consultantId
+      umkmStore.profile.consultantName = formUmkm.value.consultantName
+      umkmStore.profile.fundingStatus = 'READY_FOR_FUNDING'
+
+      // Simpan ke authStore
+      authStore.updateProfile({
+        name: formUmkm.value.owner,
+        businessName: formUmkm.value.name,
+        org_name: formUmkm.value.name,
+        sector: formUmkm.value.sector,
+        city: formUmkm.value.city,
+        establishedYear,
+        outletsCount: formUmkm.value.outlets,
+        employeesCount: formUmkm.value.employees,
+        monthlyRevenue: formUmkm.value.monthlyRevenue,
+        fundingTarget: formUmkm.value.targetFunding,
+        nib: formUmkm.value.nib,
+        npwp: formUmkm.value.npwp,
+        equityOffered: formUmkm.value.equityOffered,
+        description: formUmkm.value.description,
+        consultantId: formUmkm.value.consultantId,
+        consultantName: formUmkm.value.consultantName,
+        onboardingCompleted: true,
+        businessId: savedBizId,
+        businessProfile: {
+          id: savedBizId || `bp-${authStore.currentUser?.id || 1}`,
+          user_id: Number(authStore.currentUser?.id || 1),
+          brand: formUmkm.value.name,
+          owner_name: formUmkm.value.owner,
+          sector: formUmkm.value.sector,
+          city: formUmkm.value.city,
+          established_year: establishedYear,
+          outlets_count: formUmkm.value.outlets,
+          employees_count: formUmkm.value.employees,
+          funding_target: formUmkm.value.targetFunding,
+          nib: formUmkm.value.nib,
+          npwp: formUmkm.value.npwp,
+          equity_offered: formUmkm.value.equityOffered,
+          description: formUmkm.value.description,
+          status: 'READY_FOR_FUNDING'
+        }
+      })
+
+      router.push('/dashboard')
+    } else if (activeRole.value === 'CONSULTANT') {
+      try {
+        await useApi('/onboarding/consultant', {
+          method: 'POST',
+          body: {
+            name: formConsultant.value.name,
+            institution: formConsultant.value.institution,
+            firmName: formConsultant.value.institution,
+            bnspLicense: formConsultant.value.bnspLicense,
+            specialization: formConsultant.value.specialization,
+            city: formConsultant.value.city,
+            experience: formConsultant.value.experience,
+            maxClients: formConsultant.value.maxClients,
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan onboarding konsultan ke live API:', err?.message)
+      }
+
+      authStore.updateProfile({
+        name: formConsultant.value.name,
+        businessName: formConsultant.value.institution,
+        org_name: formConsultant.value.institution,
+        institution: formConsultant.value.institution,
+        bnspLicense: formConsultant.value.bnspLicense,
+        specialization: formConsultant.value.specialization,
+        city: formConsultant.value.city,
+        experience: formConsultant.value.experience,
+        maxClients: formConsultant.value.maxClients,
+        onboardingCompleted: true,
+        consultantProfile: {
+          id: `cp-${authStore.currentUser?.id || 2}`,
+          user_id: Number(authStore.currentUser?.id || 2),
+          firm_name: formConsultant.value.institution,
+          institution: formConsultant.value.institution,
+          specialization: formConsultant.value.specialization,
+          is_certified: true,
+          active_clients_count: 0
+        }
+      })
+
+      router.push('/konsultan')
+    } else if (activeRole.value === 'INVESTOR') {
+      try {
+        await useApi('/onboarding/investor', {
+          method: 'POST',
+          body: {
+            name: formInvestor.value.name,
+            entityName: formInvestor.value.entityName,
+            firmName: formInvestor.value.entityName,
+            investorType: formInvestor.value.investorType,
+            ticketRange: formInvestor.value.ticketRange,
+            sectors: formInvestor.value.sectors,
+            minMargin: formInvestor.value.minMargin,
+            city: formInvestor.value.city,
+          }
+        })
+      } catch (err: any) {
+        console.warn('Gagal simpan onboarding investor ke live API:', err?.message)
+      }
+
+      authStore.updateProfile({
+        name: formInvestor.value.name,
+        businessName: formInvestor.value.entityName,
+        org_name: formInvestor.value.entityName,
+        entityName: formInvestor.value.entityName,
+        investorType: formInvestor.value.investorType,
+        ticketRange: formInvestor.value.ticketRange,
+        sectors: formInvestor.value.sectors,
+        minMargin: formInvestor.value.minMargin,
+        city: formInvestor.value.city,
+        onboardingCompleted: true,
+        investorProfile: {
+          id: `ip-${authStore.currentUser?.id || 3}`,
+          user_id: Number(authStore.currentUser?.id || 3),
+          firm_name: formInvestor.value.entityName,
+          entity_name: formInvestor.value.entityName,
+          commitment_capital: formInvestor.value.ticketRange,
+          is_verified: true
+        }
+      })
+
+      router.push('/investor')
+    }
+  } catch (err: any) {
+    console.warn('Onboarding error:', err)
+  } finally {
     submitting.value = false
-    router.push('/dashboard')
-  }, 500)
+  }
+}
+
+async function handleBackToLogin() {
+  await authStore.logout()
+  router.push('/masuk')
 }
 </script>

@@ -166,9 +166,9 @@ export const DEMO_CHAT_THREADS: ChatThread[] = [
 
 export const useChatStore = defineStore('chat', {
   state: () => ({
-    activeThreadId: null as string | null,
+    activeThreadId: 'thread-01' as string | null,
     searchQuery: '',
-    threads: [] as ChatThread[]
+    threads: [...DEMO_CHAT_THREADS] as ChatThread[]
   }),
 
   getters: {
@@ -201,16 +201,14 @@ export const useChatStore = defineStore('chat', {
         if (res.data && Array.isArray(res.data) && res.data.length > 0) {
           this.threads = res.data.map(t => ({
             ...t,
-            messages: t.messages || []
+            messages: (t.messages && t.messages.length > 0) ? t.messages : (this.threads.find(old => old.id === t.id)?.messages || [])
           }))
-        } else {
-          this.threads = []
+        } else if (this.threads.length === 0) {
+          this.threads = [...DEMO_CHAT_THREADS]
         }
 
         if (!this.activeThreadId && this.threads.length > 0) {
           this.activeThreadId = this.threads[0].id
-        } else if (this.threads.length === 0) {
-          this.activeThreadId = null
         }
 
         if (this.activeThreadId) {
@@ -218,15 +216,17 @@ export const useChatStore = defineStore('chat', {
         }
       } catch (err: any) {
         console.warn('Gagal memuat daftar obrolan live:', err?.message)
-        this.threads = []
-        this.activeThreadId = null
+        if (this.threads.length === 0) {
+          this.threads = [...DEMO_CHAT_THREADS]
+          this.activeThreadId = this.threads[0]?.id || null
+        }
       }
     },
 
     async fetchMessages(threadId: string) {
       try {
         const res = await useApi<ChatMessage[]>(`/chat/threads/${threadId}/messages`)
-        if (res.data && Array.isArray(res.data)) {
+        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
           const thread = this.threads.find(t => t.id === threadId)
           if (thread) {
             thread.messages = res.data

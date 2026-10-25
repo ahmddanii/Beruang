@@ -335,7 +335,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useChatStore, type ChatThread, type ChatMessage } from '~/stores/chat'
@@ -475,6 +475,12 @@ function scrollToBottom() {
 watch(currentView, (newV) => {
   if (newV === 'chat') {
     scrollToBottom()
+  }
+})
+
+onMounted(async () => {
+  if (import.meta.client) {
+    await chatStore.fetchThreads()
   }
 })
 </script>

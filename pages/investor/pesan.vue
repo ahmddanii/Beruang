@@ -983,22 +983,23 @@ function handleGlobalKeydown(e: KeyboardEvent) {
 
 watch(
   () => [route.query.threadId, route.query.umkm, route.query.umkmId],
-  ([newId, umkm, umkmId]) => {
+  async ([newId, umkm, umkmId]) => {
     if (newId && typeof newId === 'string') {
-      chatStore.setActiveThread(newId)
+      await chatStore.setActiveThread(newId)
       chatStore.markAsRead(newId, 'INVESTOR')
     } else if (umkm || umkmId) {
       const targetUmkmId = (umkm || umkmId) as string
-      const targetThreadId = chatStore.startOrGetThread(targetUmkmId)
-      chatStore.setActiveThread(targetThreadId)
+      const targetThreadId = await chatStore.startOrGetThread(targetUmkmId)
+      await chatStore.setActiveThread(targetThreadId)
       chatStore.markAsRead(targetThreadId, 'INVESTOR')
     }
   },
   { immediate: true }
 )
 
-onMounted(() => {
+onMounted(async () => {
   if (import.meta.client) {
+    await chatStore.fetchThreads()
     window.addEventListener('keydown', handleGlobalKeydown)
     if (activeThread.value) {
       chatStore.markAsRead(activeThread.value.id, 'INVESTOR')

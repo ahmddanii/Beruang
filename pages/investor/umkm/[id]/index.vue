@@ -127,7 +127,7 @@
 
             <!-- Hubungi UMKM Button -->
             <BActionButton
-              to="/investor/pesan"
+              :to="`/investor/pesan?umkm=${item.id}&name=${encodeURIComponent(item.name)}`"
               variant="green"
               :huge-icon="Comment01Icon"
               :icon-size="15"

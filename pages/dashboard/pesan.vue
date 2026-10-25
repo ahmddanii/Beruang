@@ -1074,7 +1074,8 @@ function animateLatestMessageEntrance() {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await chatStore.fetchThreads()
   if (chatStore.activeThreadId) {
     chatStore.markAsRead(chatStore.activeThreadId, 'UMKM')
     scrollToBottom()

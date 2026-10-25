@@ -80,32 +80,139 @@ function formatThread(t: any) {
 }
 
 /**
+ * Pastikan database memiliki thread percakapan bawaan untuk demo & operasional
+ */
+async function ensureSeedThreads() {
+  try {
+    const count = await prisma.chatThread.count();
+    if (count > 0) return;
+
+    const biz = await prisma.businessProfile.findFirst({
+      where: { OR: [{ id: "biz-kopisenja-01" }, { brand: { contains: "Kopi Senja" } }] },
+    });
+    const businessId = biz?.id || undefined;
+
+    // 1. Thread East Ventures (Franklyn Galvin Lodo)
+    await prisma.chatThread.create({
+      data: {
+        id: "thread-01",
+        businessId,
+        investorId: "usr-inv-01",
+        investorName: "Franklyn Galvin Lodo",
+        investorLembaga: "East Ventures Associate",
+        investorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces",
+        dealStatus: "Tahap Due Diligence Kas",
+        ticketDiscussed: 250000000,
+        unreadInvestor: 0,
+        unreadUmkm: 1,
+        lastMessage: "Franklyn: Kami sedang mengkaji proyeksi arus kas tokomu.",
+        lastMessageAt: "8 Agu",
+        messages: {
+          create: [
+            {
+              id: "m-01",
+              senderRole: "INVESTOR",
+              senderName: "Franklyn Galvin Lodo",
+              text: "Halo, salam kenal. Kami dari komite investasi telah meninjau profil tokomu di Beruang.",
+              timestamp: "09:45",
+            },
+            {
+              id: "m-02",
+              senderRole: "UMKM",
+              senderName: "Fikri Setiawan",
+              text: "Halo Mas Franklyn, salam kenal kembali! Terima kasih banyak atas apresiasinya.",
+              timestamp: "09:58",
+            },
+            {
+              id: "m-03",
+              senderRole: "INVESTOR",
+              senderName: "Franklyn Galvin Lodo",
+              text: "Franklyn: Kami sedang mengkaji proyeksi arus kas tokomu.",
+              timestamp: "8 Agu",
+            },
+          ],
+        },
+      },
+    });
+
+    // 2. Thread Inkubator Bisnis (Raihan Fariz N.)
+    await prisma.chatThread.create({
+      data: {
+        id: "thread-02",
+        businessId,
+        investorId: "usr-inv-02",
+        investorName: "Raihan Fariz N.",
+        investorLembaga: "Inkubator Bisnis UMKM",
+        investorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces",
+        dealStatus: "Pendampingan Validasi",
+        ticketDiscussed: 150000000,
+        unreadInvestor: 0,
+        unreadUmkm: 0,
+        lastMessage: "Raihan Fariz: Kami mengenal satu sama lain dari program inkubasi.",
+        lastMessageAt: "4 Mei",
+        messages: {
+          create: [
+            {
+              id: "m-11",
+              senderRole: "INVESTOR",
+              senderName: "Raihan Fariz N.",
+              text: "Raihan Fariz: Kami mengenal satu sama lain dari program inkubasi.",
+              timestamp: "4 Mei 11:20",
+            },
+          ],
+        },
+      },
+    });
+
+    // 3. Thread Konsultan Keuangan (Dra. Maya Suryani)
+    await prisma.chatThread.create({
+      data: {
+        id: "thread-04",
+        businessId,
+        investorId: "usr-cons-01",
+        investorName: "Dra. Maya Suryani",
+        investorLembaga: "Konsultan Keuangan Beruang",
+        investorAvatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces",
+        dealStatus: "Konsultasi Rutin",
+        ticketDiscussed: 0,
+        unreadInvestor: 0,
+        unreadUmkm: 0,
+        lastMessage: "Maya: Rapor keuangan bulan ini sudah selesai kami validasi.",
+        lastMessageAt: "Kemarin",
+        messages: {
+          create: [
+            {
+              id: "m-31",
+              senderRole: "INVESTOR",
+              senderName: "Dra. Maya Suryani",
+              text: "Maya: Rapor keuangan bulan ini sudah selesai kami validasi.",
+              timestamp: "Kemarin",
+            },
+          ],
+        },
+      },
+    });
+    console.log("✅ Seeded default ChatThreads into database.");
+  } catch (err: any) {
+    console.warn("⚠️ Warning auto-seeding chat threads:", err.message);
+  }
+}
+
+/**
  * GET /api/chat/threads
  * Mengambil daftar percakapan aktif antar UMKM dan Investor
  */
 router.get("/threads", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    if (!req.user) {
-      return res.json({
-        success: true,
-        message: "Silakan masuk untuk melihat daftar percakapan.",
-        data: [],
-      });
-    }
+    await ensureSeedThreads();
 
     let whereClause: any = {};
-    if (req.user.role === "UMKM") {
+    if (req.user?.role === "UMKM") {
       const isDemo = req.user.email?.toLowerCase() === "fikri@kopisenja.id" || req.user.id === "usr-demo-01";
       if (!isDemo) {
         const biz = await prisma.businessProfile.findFirst({ where: { userId: req.user.id } });
         if (biz) {
           whereClause = { businessId: biz.id };
-        } else {
-          return res.json({
-            success: true,
-            message: "Daftar percakapan berhasil dimuat.",
-            data: [],
-          });
         }
       }
     }
@@ -181,14 +288,26 @@ router.post("/threads/:id/messages", optionalAuth, async (req: AuthenticatedRequ
       });
     }
 
-    const thread = await prisma.chatThread.findUnique({
+    let thread = await prisma.chatThread.findUnique({
       where: { id },
     });
 
     if (!thread) {
-      return res.status(404).json({
-        success: false,
-        message: "Thread percakapan tidak ditemukan.",
+      await ensureSeedThreads();
+      thread = await prisma.chatThread.findUnique({
+        where: { id },
+      });
+    }
+
+    if (!thread) {
+      // Auto-create thread if dynamically initiated
+      thread = await prisma.chatThread.create({
+        data: {
+          id,
+          dealStatus: "Diskusi Penjajakan",
+          ticketDiscussed: 150000000,
+          lastMessage: text.trim(),
+        },
       });
     }
 

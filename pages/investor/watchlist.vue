@@ -221,8 +221,8 @@ function removeFromWatchlist(item: MarketplaceUmkm) {
   triggerToast(`${item.name} ${template}`)
 }
 
-function goToChat(item: MarketplaceUmkm) {
-  const threadId = chatStore.startOrGetThread(item.id, item.name)
+async function goToChat(item: MarketplaceUmkm) {
+  const threadId = await chatStore.startOrGetThread(item.id, item.name)
   navigateTo(`/investor/pesan?threadId=${threadId}`)
 }
 

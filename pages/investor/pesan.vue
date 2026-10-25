@@ -951,11 +951,16 @@ function handleGlobalKeydown(e: KeyboardEvent) {
 }
 
 watch(
-  () => route.query.threadId,
-  (newId) => {
+  () => [route.query.threadId, route.query.umkm, route.query.umkmId],
+  ([newId, umkm, umkmId]) => {
     if (newId && typeof newId === 'string') {
       chatStore.setActiveThread(newId)
       chatStore.markAsRead(newId, 'INVESTOR')
+    } else if (umkm || umkmId) {
+      const targetUmkmId = (umkm || umkmId) as string
+      const targetThreadId = chatStore.startOrGetThread(targetUmkmId)
+      chatStore.setActiveThread(targetThreadId)
+      chatStore.markAsRead(targetThreadId, 'INVESTOR')
     }
   },
   { immediate: true }

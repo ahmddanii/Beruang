@@ -236,7 +236,22 @@ const translations: Record<Language, Record<string, string>> = {
     banner_center: 'Tengah',
     banner_top: 'Atas',
     banner_bottom: 'Bawah',
-    banner_hint: 'Geser untuk mengatur posisi · Gunakan tombol atau slider untuk sesuaikan'
+    banner_hint: 'Geser untuk mengatur posisi · Gunakan tombol atau slider untuk sesuaikan',
+
+    // Watchlist / Simpan
+    watchlist_title: 'Simpan',
+    watchlist_empty_title: 'Belum Ada Bisnis Tersimpan',
+    watchlist_empty_desc: 'Jelajahi Jaringan dan klik ikon simpan pada kartu UMKM untuk menyimpan bisnis potensial ke daftar pantau Anda.',
+    watchlist_explore_btn: 'Eksplorasi Feed UMKM',
+    watchlist_status_pending: 'Menunggu',
+    watchlist_status_approved: 'Diterima',
+    watchlist_status_rejected: 'Ditolak',
+    watchlist_view_profile: 'Lihat Profil',
+    watchlist_connect: 'Koneksi',
+    watchlist_remove_tooltip: 'Hapus dari Simpanan',
+    watchlist_removed_toast: 'dihapus dari daftar simpan.',
+    profile_save_business: 'Simpan Usaha',
+    profile_remove_from_saved: 'Hapus dari Simpan'
   },
   en: {
     // Top Bar
@@ -471,7 +486,22 @@ const translations: Record<Language, Record<string, string>> = {
     banner_center: 'Center',
     banner_top: 'Top',
     banner_bottom: 'Bottom',
-    banner_hint: 'Drag to reposition · Use buttons or slider to scale'
+    banner_hint: 'Drag to reposition · Use buttons or slider to scale',
+
+    // Watchlist / Simpan
+    watchlist_title: 'Saved',
+    watchlist_empty_title: 'No Saved Businesses Yet',
+    watchlist_empty_desc: 'Explore the Network and click the bookmark icon on MSME cards to save potential businesses to your watchlist.',
+    watchlist_explore_btn: 'Explore MSME Feed',
+    watchlist_status_pending: 'Pending',
+    watchlist_status_approved: 'Accepted',
+    watchlist_status_rejected: 'Rejected',
+    watchlist_view_profile: 'View Profile',
+    watchlist_connect: 'Connect',
+    watchlist_remove_tooltip: 'Remove from Saved',
+    watchlist_removed_toast: 'removed from saved.',
+    profile_save_business: 'Save Business',
+    profile_remove_from_saved: 'Remove from Saved'
   }
 }
 

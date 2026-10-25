@@ -103,15 +103,26 @@
 
           <!-- Investor Action Buttons on Right (Menggunakan BActionButton) -->
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto [&>*]:w-full sm:[&>*]:w-auto pt-1 sm:pt-0">
-            <!-- Simpan Usaha Button -->
+            <!-- Simpan Usaha / Hapus dari Simpan Button -->
             <BActionButton
-              :variant="item.bookmarked ? 'green' : 'default'"
-              :huge-icon="Bookmark02Icon"
-              :icon-size="14"
+              :variant="isItemBookmarked ? 'red' : 'default'"
               custom-class="w-full sm:w-auto justify-center text-center"
-              @click="toggleBookmark"
+              @click="toggleBookmark()"
             >
-              {{ item.bookmarked ? 'Tersimpan' : 'Simpan Usaha' }}
+              <template #icon>
+                <HugeiconsIcon
+                  :icon="Bookmark02Icon"
+                  :size="15"
+                  :stroke-width="2"
+                  :class="[
+                    'shrink-0 transition-colors',
+                    isItemBookmarked
+                      ? '[&_path]:fill-current fill-current text-white'
+                      : 'text-neutral-500 dark:text-neutral-400'
+                  ]"
+                />
+              </template>
+              <span>{{ isItemBookmarked ? (t('profile_remove_from_saved') || 'Hapus dari Simpan') : (t('profile_save_business') || 'Simpan Usaha') }}</span>
             </BActionButton>
 
             <!-- Hubungi UMKM Button -->
@@ -620,7 +631,7 @@
                         :icon="Bookmark02Icon"
                         :size="16"
                         :stroke-width="2"
-                        :class="post.bookmarked || item.bookmarked ? 'fill-current' : ''"
+                        :class="post.bookmarked || item.bookmarked ? '[&_path]:fill-current fill-current' : ''"
                       />
                     </button>
 
@@ -801,11 +812,11 @@
             <div class="pt-2">
               <NuxtLink
                 v-if="item.accessStatus === 'APPROVED'"
-                :to="`/investor/data-room/${item.id}`"
+                :to="`/investor/pesan?umkm=${item.id}`"
                 class="btn-pill-action btn-pill-action-green w-full justify-center text-center shadow-none"
               >
-                <HugeiconsIcon :icon="FileValidationIcon" :size="15" />
-                <span>Buka Ruang Data Finansial</span>
+                <HugeiconsIcon :icon="Comment01Icon" :size="15" />
+                <span>Buka Diskusi UMKM</span>
               </NuxtLink>
               <NuxtLink
                 v-else-if="item.accessStatus === 'NONE'"
@@ -1098,6 +1109,7 @@ definePageMeta({
 const route = useRoute()
 const investorStore = useInvestorStore()
 const umkmStore = useUmkmStore()
+const { t } = useLanguage()
 const pageRootRef = ref<HTMLElement | null>(null)
 let gsapCtx: gsap.Context | null = null
 
@@ -1115,6 +1127,13 @@ const item = computed<MarketplaceUmkm>(() => {
       m => m.id === umkmId.value || m.umkmRefId === umkmId.value
     ) || sourceList[0]!
   )
+})
+
+const isItemBookmarked = computed(() => {
+  const targetId = item.value?.id
+  if (!targetId) return false
+  const found = (investorStore.marketplaceList || []).find(m => m.id === targetId || m.umkmRefId === targetId)
+  return found ? Boolean(found.bookmarked) : Boolean(item.value?.bookmarked)
 })
 
 // Rich Profile Metadata per UMKM ID (Synced with umkmStore for umkm-01)
@@ -1425,14 +1444,29 @@ function triggerToast(msg: string) {
   }, 2500)
 }
 
-function toggleBookmark(post?: MarketplaceUmkm) {
-  const target = post || item.value
-  investorStore.toggleBookmark(target.id)
-  const isBookmarked = target.bookmarked || investorStore.isBookmarked(target.id)
-  if (isBookmarked) {
-    triggerToast(`${target.name} disimpan ke daftar Simpan!`)
+function toggleBookmark(post?: any) {
+  // If post is a DOM Event or missing valid id, default to item.value
+  const isPostObject = post && typeof post === 'object' && 'id' in post && typeof post.id === 'string' && !('target' in post)
+  const targetId = isPostObject ? post.id : item.value.id
+  const targetName = isPostObject ? post.name : item.value.name
+
+  investorStore.toggleBookmark(targetId)
+
+  // Sync item.value if in fallback list or local ref
+  if (item.value && item.value.id === targetId) {
+    const storeItem = (investorStore.marketplaceList || []).find(m => m.id === targetId)
+    if (storeItem) {
+      item.value.bookmarked = storeItem.bookmarked
+    } else {
+      item.value.bookmarked = !item.value.bookmarked
+    }
+  }
+
+  const isNowBookmarked = item.value.id === targetId ? isItemBookmarked.value : Boolean(post?.bookmarked)
+  if (isNowBookmarked) {
+    triggerToast(`${targetName} disimpan ke daftar Simpan!`)
   } else {
-    triggerToast(`${target.name} dihapus dari daftar Simpan.`)
+    triggerToast(`${targetName} dihapus dari daftar Simpan.`)
   }
 }
 

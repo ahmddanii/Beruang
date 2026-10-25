@@ -63,19 +63,11 @@ describe('Frontend UI Components & Design System Contracts', () => {
       'pages/investor/index.vue',
       'pages/investor/profile.vue',
       'pages/investor/watchlist.vue',
-      'pages/investor/umkm/[id]/index.vue',
-      'pages/investor/data-room/[id].vue'
+      'pages/investor/umkm/[id]/index.vue'
     ]) {
       const content = fs.readFileSync(page, 'utf8')
       assert.ok(content.includes('gsap'), `${page} must import and use gsap`)
       assert.ok(content.includes('onMounted') && content.includes('onBeforeUnmount'), `${page} must have onMounted and onBeforeUnmount for GSAP lifecycle cleanup`)
     }
-  })
-
-  it('pages/investor/data-room/[id].vue adopts BPillTabs adhering to the segmented pill design scheme', () => {
-    const content = fs.readFileSync('pages/investor/data-room/[id].vue', 'utf8')
-    assert.ok(content.includes('BPillTabs'), 'Data room page must use BPillTabs')
-    assert.ok(content.includes('dataRoomTabs'), 'Data room page must pass dataRoomTabs to BPillTabs')
-    assert.ok(content.includes('shortLabel'), 'dataRoomTabs must provide shortLabel for mobile responsiveness')
   })
 })

@@ -18,29 +18,17 @@
       </div>
     </Transition>
 
-    <!-- 1. Top Header: Title on Left & Action Control on Right -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-h-[44px]">
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        <HugeiconsIcon
-          :icon="Bookmark02Icon"
-          :size="26"
-          :stroke-width="2.2"
-          class="text-neutral-900 dark:text-white shrink-0"
-        />
-        <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
-          Simpan
-        </h1>
-      </div>
-
-      <div class="flex items-center gap-2.5 shrink-0">
-        <BActionButton
-          to="/investor"
-          variant="default"
-          :huge-icon="ArrowLeft01Icon"
-        >
-          Kembali ke Jaringan
-        </BActionButton>
-      </div>
+    <!-- 1. Top Header: Title on Left (btn kembali ke jaringan dihapus) -->
+    <div class="flex items-center gap-2.5 sm:gap-3 min-h-[44px]">
+      <HugeiconsIcon
+        :icon="Bookmark02Icon"
+        :size="26"
+        :stroke-width="2.2"
+        class="text-neutral-900 dark:text-white shrink-0"
+      />
+      <h1 class="font-poppins font-semibold text-2xl sm:text-3xl text-neutral-900 dark:text-white tracking-tight leading-tight">
+        {{ t('watchlist_title') || 'Simpan' }}
+      </h1>
     </div>
 
     <!-- Empty State if empty -->
@@ -48,15 +36,15 @@
       v-if="investorStore.watchlist.length === 0"
       class="card-tactile-gopay rounded-2xl p-12 sm:p-16 border text-center max-w-lg mx-auto space-y-4"
     >
-      <div class="w-14 h-14 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-500 flex items-center justify-center mx-auto">
-        <HugeiconsIcon :icon="StarIcon" :size="24" :stroke-width="1.8" />
+      <div class="w-14 h-14 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[#00800e] dark:text-emerald-400 flex items-center justify-center mx-auto">
+        <HugeiconsIcon :icon="Bookmark02Icon" :size="24" :stroke-width="1.8" />
       </div>
       <div>
         <h3 class="font-poppins font-bold text-base text-neutral-900 dark:text-white">
-          Belum Ada Bisnis Tersimpan
+          {{ t('watchlist_empty_title') || 'Belum Ada Bisnis Tersimpan' }}
         </h3>
         <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto mt-1 leading-relaxed font-sans">
-          Jelajahi Venture Social Feed dan klik ikon bintang pada kartu UMKM untuk menyimpan bisnis potensial ke daftar pantau Anda.
+          {{ t('watchlist_empty_desc') || 'Jelajahi Jaringan dan klik ikon simpan pada kartu UMKM untuk menyimpan bisnis potensial ke daftar pantau Anda.' }}
         </p>
       </div>
       <div class="pt-2">
@@ -64,7 +52,7 @@
           to="/investor"
           class="btn-pill-action group cursor-pointer inline-flex items-center gap-2"
         >
-          <span>Eksplorasi Feed UMKM</span>
+          <span>{{ t('watchlist_explore_btn') || 'Eksplorasi Feed UMKM' }}</span>
           <HugeiconsIcon :icon="ArrowRight01Icon" :size="15" :stroke-width="2.2" />
         </NuxtLink>
       </div>
@@ -77,33 +65,23 @@
         :key="item.id"
         class="gsap-watchlist-card lazy-render-card card-tactile-gopay rounded-2xl p-5 sm:p-6 border flex flex-col justify-between hover:border-neutral-300 dark:hover:border-neutral-700 transition-all font-poppins space-y-4.5 group"
       >
-        <div class="space-y-4">
-          <!-- Top Row: Code Pill, Badge & Star Toggle -->
-          <div class="flex items-start justify-between gap-2">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700">
-                {{ item.code }}
-              </span>
-              <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-[#00AA13] dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="11" :stroke-width="2.5" />
-                <span>Ready for Funding</span>
-              </span>
-            </div>
-
-            <!-- Remove from Watchlist -->
-            <button
-              type="button"
-              class="p-1.5 rounded-lg text-amber-500 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 transition-colors cursor-pointer"
-              title="Hapus dari Simpanan"
-              @click="removeFromWatchlist(item)"
+        <div class="space-y-3.5">
+          <!-- 1. Top Row: Status Pill Placed Above UMKM Name -->
+          <div class="flex items-center justify-between">
+            <span
+              :class="[
+                'inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border tabular-nums',
+                getStatusBadge(item.accessStatus).class
+              ]"
             >
-              <HugeiconsIcon :icon="StarIcon" :size="17" :stroke-width="2" class="fill-amber-400 text-amber-500" />
-            </button>
+              <span class="w-1.5 h-1.5 rounded-full" :class="getStatusBadge(item.accessStatus).dot" />
+              <span>{{ getStatusBadge(item.accessStatus).label }}</span>
+            </span>
           </div>
 
-          <!-- Store Identity & Location -->
+          <!-- 2. Store Identity & Location (Without blue text hover effect) -->
           <div>
-            <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white group-hover:text-[#2091AA] transition-colors leading-tight">
+            <h3 class="font-poppins font-bold text-lg text-neutral-900 dark:text-white leading-tight">
               {{ item.name }}
             </h3>
             <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 flex items-center gap-2">
@@ -116,86 +94,49 @@
             </p>
           </div>
 
-          <!-- Pitch Summary -->
+          <!-- 3. Pitch Summary -->
           <p class="text-xs text-neutral-600 dark:text-neutral-300 line-clamp-2 leading-relaxed font-sans">
             "{{ item.pitchSummary }}"
           </p>
-
-          <!-- Key Metrics Bento Grid -->
-          <div class="grid grid-cols-2 gap-2 p-3 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-neutral-200/60 dark:border-neutral-700/60 text-center font-poppins">
-            <div>
-              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Margin Kotor</span>
-              <span class="font-poppins font-bold text-sm text-emerald-600 dark:text-emerald-400 tabular-nums">
-                {{ item.marginPercentage }}%
-              </span>
-            </div>
-            <div>
-              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block font-medium">Skor Audit BNSP</span>
-              <span class="font-poppins font-bold text-sm text-[#2091AA] dark:text-[#50AABF] tabular-nums">
-                {{ item.healthScore }}/100
-              </span>
-            </div>
-          </div>
-
-          <!-- Status Akses Data Room Indicator -->
-          <div class="p-2.5 rounded-xl bg-neutral-50 dark:bg-[#18191E] border border-neutral-200/60 dark:border-neutral-700/60 flex items-center justify-between text-xs">
-            <span class="text-neutral-500 text-[11px]">Status Akses Data:</span>
-            <span
-              v-if="item.accessStatus === 'APPROVED'"
-              class="font-bold text-[#00AA13] flex items-center gap-1 text-[11px]"
-            >
-              <HugeiconsIcon :icon="CheckmarkCircle01Icon" :size="12" />
-              <span>Izin Aktif</span>
-            </span>
-            <span
-              v-else-if="item.accessStatus === 'PENDING'"
-              class="font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1 text-[11px]"
-            >
-              <HugeiconsIcon :icon="Clock01Icon" :size="12" />
-              <span>Menunggu UMKM</span>
-            </span>
-            <span
-              v-else
-              class="font-medium text-neutral-500 text-[11px]"
-            >
-              Belum Diajukan
-            </span>
-          </div>
         </div>
 
-        <!-- Footer Actions -->
-        <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3">
-          <NuxtLink
+        <!-- 4. Footer Actions Row: [Icon Save Only] [Btn Lihat Profil (Putih)] [Btn Koneksi (Direct ke pesan)] -->
+        <div class="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center gap-2.5">
+          <!-- Btn Save: Base dari btn putih tapi tanpa label (Filled icon karena status tersimpan) -->
+          <BActionButton
+            variant="default"
+            custom-class="!w-11 !h-11 !min-w-[44px] !max-w-[44px] !px-0 shrink-0 justify-center text-center"
+            :title="t('watchlist_remove_tooltip') || 'Hapus dari Simpanan'"
+            :aria-label="t('watchlist_remove_tooltip') || 'Hapus dari Simpanan'"
+            @click="removeFromWatchlist(item)"
+          >
+            <template #icon>
+              <HugeiconsIcon
+                :icon="Bookmark02Icon"
+                :size="17"
+                :stroke-width="2"
+                class="shrink-0 [&_path]:fill-current fill-current text-[#156374] dark:text-[#50AABF]"
+              />
+            </template>
+          </BActionButton>
+
+          <!-- Btn Lihat Profil (White button / default) -->
+          <BActionButton
             :to="`/investor/umkm/${item.id}`"
-            class="text-xs text-neutral-600 dark:text-neutral-300 font-semibold hover:text-[#2091AA] transition-colors"
+            variant="default"
+            custom-class="flex-1 justify-center text-center text-xs py-2"
           >
-            Lihat Profil
-          </NuxtLink>
+            {{ t('watchlist_view_profile') || 'Lihat Profil' }}
+          </BActionButton>
 
-          <NuxtLink
-            v-if="item.accessStatus === 'APPROVED'"
-            :to="`/investor/data-room/${item.id}`"
-            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#00AA13] hover:bg-[#009210] text-white shadow-xs transition-all cursor-pointer"
+          <!-- Btn Koneksi (Direct ke pesan dari si UMKM) -->
+          <BActionButton
+            variant="green"
+            custom-class="flex-1 justify-center text-center text-xs py-2"
+            @click="goToChat(item)"
           >
-            <HugeiconsIcon :icon="FileUnlockedIcon" :size="14" :stroke-width="2" />
-            <span>Data Room</span>
-          </NuxtLink>
-
-          <div
-            v-else-if="item.accessStatus === 'PENDING'"
-            class="text-[11px] font-medium text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-2.5 py-1 rounded-lg"
-          >
-            Proses Review
-          </div>
-
-          <NuxtLink
-            v-else
-            :to="`/investor/umkm/${item.id}/ajukan-akses`"
-            class="btn-pill-action group cursor-pointer inline-flex items-center gap-1.5 text-xs py-1 px-3"
-          >
-            <span>Ajukan Akses</span>
-            <HugeiconsIcon :icon="ArrowRight01Icon" :size="13" :stroke-width="2" />
-          </NuxtLink>
+            {{ t('watchlist_connect') || 'Koneksi' }}
+          </BActionButton>
         </div>
       </div>
     </div>
@@ -206,17 +147,15 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import gsap from 'gsap'
 import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
+import { useChatStore } from '~/stores/chat'
+import { useLanguage } from '~/composables/useLanguage'
 import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  ArrowLeft01Icon,
   ArrowRight01Icon,
-  StarIcon,
   Bookmark02Icon,
-  FileUnlockedIcon,
   CheckmarkCircle01Icon,
-  Location01Icon,
-  Clock01Icon
+  Location01Icon
 } from '@hugeicons/core-free-icons'
 
 definePageMeta({
@@ -225,6 +164,8 @@ definePageMeta({
 })
 
 const investorStore = useInvestorStore()
+const chatStore = useChatStore()
+const { t } = useLanguage()
 
 const pageRootRef = ref<HTMLElement | null>(null)
 let gsapCtx: gsap.Context | null = null
@@ -275,6 +216,34 @@ function triggerToast(msg: string) {
 
 function removeFromWatchlist(item: MarketplaceUmkm) {
   investorStore.toggleBookmark(item.id)
-  triggerToast(`${item.name} dihapus dari Portofolio Pantau.`)
+  const template = t('watchlist_removed_toast') || 'dihapus dari daftar simpan.'
+  triggerToast(`${item.name} ${template}`)
+}
+
+function goToChat(item: MarketplaceUmkm) {
+  const threadId = chatStore.startOrGetThread(item.id, item.name)
+  navigateTo(`/investor/pesan?threadId=${threadId}`)
+}
+
+function getStatusBadge(status?: string) {
+  if (status === 'APPROVED') {
+    return {
+      label: t('watchlist_status_approved') || 'Diterima',
+      class: 'bg-emerald-50 dark:bg-emerald-950/60 text-[#00800e] dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
+      dot: 'bg-[#00800e]'
+    }
+  }
+  if (status === 'REJECTED') {
+    return {
+      label: t('watchlist_status_rejected') || 'Ditolak',
+      class: 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800',
+      dot: 'bg-rose-600'
+    }
+  }
+  return {
+    label: t('watchlist_status_pending') || 'Menunggu',
+    class: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    dot: 'bg-amber-500'
+  }
 }
 </script>

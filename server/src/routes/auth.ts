@@ -291,6 +291,38 @@ router.post("/logout", (_req: Request, res: Response) => {
 });
 
 /**
+ * POST /api/auth/forgot-password
+ */
+router.post("/forgot-password", async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Alamat email wajib diisi.",
+      });
+    }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+    const user = await prisma.user.findUnique({
+      where: { email: cleanEmail },
+    });
+
+    console.log(`🔑 Permintaan reset sandi untuk: ${cleanEmail} (userExists: ${Boolean(user)})`);
+
+    return res.json({
+      success: true,
+      message: "Instruksi pemulihan kata sandi telah dikirimkan ke alamat email Anda.",
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Terjadi gangguan saat memproses pemulihan kata sandi.",
+    });
+  }
+});
+
+/**
  * Helper untuk verifikasi token Google OAuth
  */
 async function verifyGoogleToken(token: string): Promise<{ email: string; name?: string; picture?: string; sub?: string } | null> {

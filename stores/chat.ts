@@ -196,9 +196,6 @@ export const useChatStore = defineStore('chat', {
 
   actions: {
     async fetchThreads() {
-      const authStore = useAuthStore()
-      const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-
       try {
         const res = await useApi<ChatThread[]>('/chat/threads')
         if (res.data && Array.isArray(res.data) && res.data.length > 0) {
@@ -206,8 +203,6 @@ export const useChatStore = defineStore('chat', {
             ...t,
             messages: t.messages || []
           }))
-        } else if (isDemo) {
-          this.threads = [...DEMO_CHAT_THREADS]
         } else {
           this.threads = []
         }
@@ -223,10 +218,8 @@ export const useChatStore = defineStore('chat', {
         }
       } catch (err: any) {
         console.warn('Gagal memuat daftar obrolan live:', err?.message)
-        if (isDemo && this.threads.length === 0) {
-          this.threads = [...DEMO_CHAT_THREADS]
-          this.activeThreadId = this.threads[0]?.id || null
-        }
+        this.threads = []
+        this.activeThreadId = null
       }
     },
 

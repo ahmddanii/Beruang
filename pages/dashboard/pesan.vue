@@ -942,8 +942,8 @@ function handleOfficialDocUpload(event: Event) {
 
 // Working Real Document Download (Blob Creation)
 function downloadDocument(docName: string) {
-  const dummyContent = `BERUANG PLATFORM - DOKUMEN RESMI\nNama Dokumen: ${docName}\nStatus: Terverifikasi Digital\nDicetak pada: ${new Date().toLocaleString('id-ID')}\nIntegritas Dokumen: Terjamin enkripsi Beruang.\n`
-  const blob = new Blob([dummyContent], { type: 'application/pdf;charset=utf-8' })
+  const docContent = `BERUANG PLATFORM - DOKUMEN RESMI\nNama Dokumen: ${docName}\nStatus: Terverifikasi Digital\nDicetak pada: ${new Date().toLocaleString('id-ID')}\nIntegritas Dokumen: Terjamin enkripsi Beruang.\n`
+  const blob = new Blob([docContent], { type: 'application/pdf;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url

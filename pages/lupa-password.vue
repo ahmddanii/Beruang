@@ -88,11 +88,11 @@ async function handleSubmit() {
       method: 'POST',
       body: { email: email.value }
     })
+    sent.value = true
   } catch (err: any) {
-    console.warn('Endpoint lupa password offline/mock fallback:', err?.message)
+    alert(err?.data?.message || err?.message || 'Gagal mengirim instruksi pemulihan kata sandi.')
   } finally {
     loading.value = false
-    sent.value = true
   }
 }
 </script>

@@ -1064,7 +1064,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import gsap from 'gsap'
 import { useRoute } from 'vue-router'
-import { useInvestorStore, build150MarketplaceUmkms, type MarketplaceUmkm } from '~/stores/investor'
+import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
 import { useUmkmStore } from '~/stores/umkm'
 import BStoreBanner from '~/components/base/BStoreBanner.vue'
 import BBadge from '~/components/base/BBadge.vue'
@@ -1115,17 +1115,12 @@ let gsapCtx: gsap.Context | null = null
 
 const umkmId = computed(() => (route.params.id as string) || 'umkm-01')
 
-const fallback150List = build150MarketplaceUmkms()
-
-const item = computed<MarketplaceUmkm>(() => {
-  const sourceList =
-    investorStore.marketplaceList && investorStore.marketplaceList.length >= 150
-      ? investorStore.marketplaceList
-      : fallback150List
+const item = computed<MarketplaceUmkm | null>(() => {
+  const sourceList = investorStore.marketplaceList || []
   return (
     sourceList.find(
       m => m.id === umkmId.value || m.umkmRefId === umkmId.value
-    ) || sourceList[0]!
+    ) || sourceList[0] || null
   )
 })
 
@@ -1487,11 +1482,12 @@ function formatTargetWords(val: number): string {
   return `Rp ${new Intl.NumberFormat('id-ID').format(val)}`
 }
 
-onMounted(() => {
+onMounted(async () => {
   umkmStore.initBannerFromStorage()
   umkmStore.initAvatarFromStorage()
   umkmStore.initQuickProfileFromStorage()
   investorStore.initPostsFromStorage()
+  await investorStore.fetchMarketplace()
 
   if (typeof window !== 'undefined') {
     try {

@@ -340,37 +340,11 @@ export const useAuthStore = defineStore('auth', {
 
         return res.data
       } catch (err: any) {
-        // Fallback demo/mock login jika live API gagal atau mode demo tanpa rekursi
-        const demo = DEMO_CREDENTIALS[role]
-        const demoToken = 'demo-' + role.toLowerCase()
-        const tokenCookie = useCookie<string | null>('beruang_token', {
-          maxAge: 60 * 60 * 24 * 7,
-          sameSite: 'lax',
-          path: '/'
-        })
-        tokenCookie.value = demoToken
-        this.token = demoToken
-
-        this.currentUser = {
-          id: 'demo-' + role.toLowerCase(),
-          role,
-          name: demo?.name || 'Fikri Setiawan',
-          email: email || demo?.email || 'fikri@kopisenja.id',
-          businessName: demo?.businessName || 'Kopi Senja Nusantara',
-          avatar: '',
-          verified: true
-        }
-        this.isAuthenticated = true
-        this.syncRoleStores()
-
-        if (import.meta.client) {
-          try {
-            localStorage.setItem('beruang_token', demoToken)
-            localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
-          } catch {}
-        }
-
-        return { user: this.currentUser, token: demoToken }
+        this.error = err?.data?.message || err?.message || 'Email atau kata sandi tidak sesuai'
+        this.isAuthenticated = false
+        this.token = null
+        this.currentUser = null
+        throw err
       } finally {
         this.loading = false
       }
@@ -429,26 +403,8 @@ export const useAuthStore = defineStore('auth', {
 
         return res.data
       } catch (err: any) {
-        if (preloadedProfile?.email) {
-          console.warn('Backend Google Auth belum sinkron, menggunakan data profil Google autentik:', err?.message)
-          const fallbackToken = 'google-session-active'
-          const tokenCookie = useCookie<string | null>('beruang_token', {
-            maxAge: 60 * 60 * 24 * 7,
-            sameSite: 'lax',
-            path: '/'
-          })
-          tokenCookie.value = fallbackToken
-          this.token = fallbackToken
-          this.isAuthenticated = true
-          if (import.meta.client && this.currentUser) {
-            try {
-              localStorage.setItem('beruang_token', fallbackToken)
-              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
-            } catch {}
-          }
-          return { token: fallbackToken, user: this.currentUser! }
-        }
-        this.error = err?.message || 'Login dengan akun Google gagal'
+        this.isAuthenticated = false
+        this.error = err?.data?.message || err?.message || 'Login dengan akun Google gagal'
         throw err
       } finally {
         this.loading = false
@@ -591,35 +547,11 @@ export const useAuthStore = defineStore('auth', {
 
         return res.data
       } catch (err: any) {
-        // Fallback mode demo lokal jika live backend offline atau belum terkoneksi
-        const tokenCookie = useCookie<string | null>('beruang_token', {
-          maxAge: 60 * 60 * 24 * 7,
-          sameSite: 'lax',
-          path: '/'
-        })
-        const mockToken = 'beruang-reg-token-' + Date.now()
-        tokenCookie.value = mockToken
-        this.token = mockToken
-        this.currentUser = {
-          id: 'usr-' + Date.now(),
-          name: payload.name || '',
-          email: payload.email,
-          phone: payload.phone,
-          role: payload.role,
-          businessName: '',
-          onboardingCompleted: false,
-          verified: true
-        }
-        this.isAuthenticated = true
-
-        if (import.meta.client && this.currentUser) {
-          try {
-            localStorage.setItem('beruang_token', mockToken)
-            localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
-          } catch {}
-        }
-
-        return { user: this.currentUser, token: mockToken }
+        this.error = err?.data?.message || err?.message || 'Registrasi akun gagal. Silakan coba lagi.'
+        this.isAuthenticated = false
+        this.token = null
+        this.currentUser = null
+        throw err
       } finally {
         this.loading = false
       }

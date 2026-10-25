@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { useApi } from '~/composables/useApi'
 
 export interface ClientUmkm {
@@ -221,593 +221,31 @@ export const useKonsultanStore = defineStore('konsultan', {
     profile: getDemoConsultantProfile(),
 
     // Daftar Permintaan Bimbingan Masuk dari UMKM
-    clientRequests: [
-      {
-        id: 'req-01',
-        umkmId: 'umkm-new-01',
-        businessName: 'Dapoer Renyah Nusantara',
-        ownerName: 'Siti Aminah',
-        sector: 'Makanan & Camilan',
-        city: 'Bandung',
-        revenue: 35000000,
-        healthScore: 74,
-        offeredFee: 2000000,
-        durationMonths: 3,
-        message: 'Halo Bu Maya, kami butuh bimbingan profesional untuk memisahkan keuangan pribadi dan usaha, serta merapikan pencatatan kas agar siap diajukan ke investor modal usaha.',
-        requestedAt: 'Hari ini, 09:15',
-        status: 'PENDING'
-      },
-      {
-        id: 'req-02',
-        umkmId: 'umkm-new-02',
-        businessName: 'Tenun Sutra Garut Elok',
-        ownerName: 'Ahmad Fauzi',
-        sector: 'Kriya & Tekstil',
-        city: 'Garut',
-        revenue: 28000000,
-        healthScore: 68,
-        offeredFee: 1500000,
-        durationMonths: 6,
-        message: 'Mohon arahan dan action plan untuk efisiensi biaya bahan baku benang tenun dan legalitas usaha NIB kami.',
-        requestedAt: 'Kemarin, 16:40',
-        status: 'PENDING'
-      },
-      {
-        id: 'req-03',
-        umkmId: 'umkm-new-03',
-        businessName: 'Kripik Tempe Barokah',
-        ownerName: 'Wahyu Hidayat',
-        sector: 'Makanan Ringan',
-        city: 'Malang',
-        revenue: 18000000,
-        healthScore: 62,
-        offeredFee: 1200000,
-        durationMonths: 3,
-        message: 'Ingin dibimbing dari awal untuk pembukuan kas harian dan persiapan uji kelayakan pembiayaan.',
-        requestedAt: '12 Okt 2026',
-        status: 'PENDING'
-      }
-    ] as ClientMentorshipRequest[],
+    clientRequests: [] as ClientMentorshipRequest[],
 
     // Daftar UMKM Klien Binaan Aktif
-    clients: [
-      {
-        id: 'umkm-01',
-        name: 'Kopi Senja Nusantara',
-        owner: 'Fikri Setiawan',
-        sector: 'Makanan & Minuman (Kopi & Resto)',
-        city: 'Bandung',
-        healthScore: 79,
-        status: 'healthy',
-        fundingStatus: 'READY_FOR_FUNDING',
-        monthlyStatus: 'VERIFIED',
-        lastAuditDate: '18 Sep 2026',
-        fundingTarget: 250000000,
-        tasksCompleted: 5,
-        totalTasks: 6,
-        growthPct: 15.8,
-        joinedDate: '15 Jul 2026',
-        monthlyFee: 2500000,
-        durationMonths: 6
-      },
-      {
-        id: 'umkm-02',
-        name: 'Batik Lestari Heritage',
-        owner: 'Siti Rahmawati',
-        sector: 'Fashion & Kriya Tradisional',
-        city: 'Pekalongan',
-        healthScore: 71,
-        status: 'warning',
-        fundingStatus: 'IN_REVIEW',
-        monthlyStatus: 'PENDING',
-        lastAuditDate: '21 Sep 2026',
-        fundingTarget: 180000000,
-        tasksCompleted: 4,
-        totalTasks: 7,
-        growthPct: 8.2,
-        joinedDate: '01 Agu 2026',
-        monthlyFee: 1800000,
-        durationMonths: 3
-      },
-      {
-        id: 'umkm-03',
-        name: 'Sambal Bu Rudy Asli',
-        owner: 'Rudy Hartono',
-        sector: 'Makanan & Minuman (Oleh-oleh)',
-        city: 'Surabaya',
-        healthScore: 88,
-        status: 'healthy',
-        fundingStatus: 'READY_FOR_FUNDING',
-        monthlyStatus: 'VERIFIED',
-        lastAuditDate: '15 Sep 2026',
-        fundingTarget: 500000000,
-        tasksCompleted: 8,
-        totalTasks: 8,
-        growthPct: 22.4,
-        joinedDate: '10 Jun 2026',
-        monthlyFee: 3000000,
-        durationMonths: 6
-      },
-      {
-        id: 'umkm-04',
-        name: 'Dapur Mama Catering',
-        owner: 'Dewi Anggraini',
-        sector: 'Jasa Boga & Katering',
-        city: 'Yogyakarta',
-        healthScore: 54,
-        status: 'danger',
-        fundingStatus: 'DRAFT',
-        monthlyStatus: 'OVERDUE',
-        lastAuditDate: '02 Agu 2026',
-        fundingTarget: 120000000,
-        tasksCompleted: 2,
-        totalTasks: 6,
-        growthPct: -4.5,
-        joinedDate: '20 Agu 2026',
-        monthlyFee: 1500000,
-        durationMonths: 3
-      }
-    ] as ClientUmkm[],
+    clients: [] as ClientUmkm[],
 
     // Daftar Action Plan yang Diberikan Konsultan untuk Klien Binaan
-    actionPlans: [
-      {
-        id: 'plan-01',
-        clientId: 'umkm-01',
-        clientName: 'Kopi Senja Nusantara',
-        title: 'Pisahkan Rekening Operasional & Pribadi Usaha',
-        description: 'Buka rekening bank khusus untuk kas harian kedai dan gunakan QRIS toko agar pencatatan arus kas tidak tercampur uang dapur keluarga.',
-        pillar: 'Keuangan',
-        priority: 'Tinggi',
-        status: 'DONE',
-        targetDate: '30 Sep 2026',
-        assignedAt: '15 Sep 2026',
-        consultantNotes: 'Rekening bank Mandiri khusus usaha sudah aktif dan terintegrasi.'
-      },
-      {
-        id: 'plan-02',
-        clientId: 'umkm-01',
-        clientName: 'Kopi Senja Nusantara',
-        title: 'Efisiensi HPP Bahan Baku Biji Kopi',
-        description: 'Lakukan perbandingan harga vendor green beans dan terapkan standar takaran espresso 18g untuk menjaga margin minimal 50%.',
-        pillar: 'Operasional',
-        priority: 'Tinggi',
-        status: 'IN_PROGRESS',
-        targetDate: '20 Okt 2026',
-        assignedAt: '25 Sep 2026',
-        consultantNotes: 'Sedang meninjau ulang kontrak dengan supplier petani Ciwidey.'
-      },
-      {
-        id: 'plan-03',
-        clientId: 'umkm-01',
-        clientName: 'Kopi Senja Nusantara',
-        title: 'Pembaruan Sertifikasi Laik Higiene Sanitasi & Halal',
-        description: 'Lengkapi berkas pendaftaran sertifikasi Halal self-declare untuk menu minuman kopi susu guna menaikkan skor kesiapan investor.',
-        pillar: 'Legalitas',
-        priority: 'Sedang',
-        status: 'TODO',
-        targetDate: '15 Nov 2026',
-        assignedAt: '01 Okt 2026',
-        consultantNotes: 'Format formulir sudah dikirimkan via WhatsApp.'
-      },
-      {
-        id: 'plan-04',
-        clientId: 'umkm-02',
-        clientName: 'Batik Lestari Heritage',
-        title: 'Catat Arus Kas Harian Selama 30 Hari Penuh',
-        description: 'Gunakan fitur Catatan Kas Beruang untuk merekam setiap nota penjualan kain batik harian tanpa ada yang terlewat.',
-        pillar: 'Keuangan',
-        priority: 'Tinggi',
-        status: 'IN_PROGRESS',
-        targetDate: '25 Okt 2026',
-        assignedAt: '20 Sep 2026',
-        consultantNotes: 'Sudah mencapai hari ke-18 pencatatan rutin.'
-      },
-      {
-        id: 'plan-05',
-        clientId: 'umkm-04',
-        clientName: 'Dapur Mama Catering',
-        title: 'Restrukturisasi Biaya Logistik Pengantaran',
-        description: 'Beralih ke sistem rute terjadwal atau negosiasi kurir borongan agar biaya operasional kirim makanan tidak membebani laba katering.',
-        pillar: 'Operasional',
-        priority: 'Tinggi',
-        status: 'TODO',
-        targetDate: '18 Okt 2026',
-        assignedAt: '23 Sep 2026',
-        consultantNotes: 'Klien perlu segera memangkas biaya transportasi.'
-      }
-    ] as ActionPlanItem[],
+    actionPlans: [] as ActionPlanItem[],
 
     // Antrean Validasi Kas
-    validationsQueue: [
-      {
-        id: 'val-01',
-        clientId: 'umkm-02',
-        clientName: 'Batik Lestari Heritage',
-        month: 'September 2026',
-        omzet: 42000000,
-        hpp: 19500000,
-        opex: 11000000,
-        proofDocument: 'rekening_koran_mandiri_sep2026.pdf',
-        submittedAt: '25 Sep 2026 14:30',
-        notes: 'Pencatatan nota penjualan offline workshop dan pesanan Tokopedia.'
-      },
-      {
-        id: 'val-02',
-        clientId: 'umkm-01',
-        clientName: 'Kopi Senja Nusantara',
-        month: 'September 2026',
-        omzet: 73000000,
-        hpp: 34500000,
-        opex: 18000000,
-        proofDocument: 'mutasi_bank_bca_dan_pos_moka_sep2026.pdf',
-        submittedAt: '24 Sep 2026 10:15',
-        notes: 'Rekap mutasi rekening operasional BCA dan struk POS Moka dari 3 outlet Bandung.'
-      },
-      {
-        id: 'val-03',
-        clientId: 'umkm-04',
-        clientName: 'Dapur Mama Catering',
-        month: 'Agustus 2026',
-        omzet: 28000000,
-        hpp: 16200000,
-        opex: 10300000,
-        proofDocument: 'rekap_kasir_dan_nota_pasar_agu2026.pdf',
-        submittedAt: '20 Agu 2026 16:45',
-        notes: 'Laporan kasir pesanan hajatan katering dan bon belanja bahan mentah pasar.'
-      }
-    ] as ProgressValidationItem[],
+    validationsQueue: [] as CashValidationQueueItem[],
 
-    // Riwayat Validasi Kas yang Telah Diproses
-    validatedHistory: [
-      {
-        id: 'hist-01',
-        clientId: 'umkm-03',
-        clientName: 'Sambal Bu Broto',
-        month: 'Agustus 2026',
-        omzet: 125000000,
-        hpp: 58000000,
-        opex: 26000000,
-        verifiedAt: '15 Sep 2026',
-        consultantNotes: 'Pembukuan kas pabrik sambal sangat rapi, mutasi bank sesuai sistem POS.',
-        status: 'VERIFIED'
-      },
-      {
-        id: 'hist-02',
-        clientId: 'umkm-01',
-        clientName: 'Kopi Senja Nusantara',
-        month: 'Agustus 2026',
-        omzet: 65000000,
-        hpp: 28000000,
-        opex: 16500000,
-        verifiedAt: '10 Sep 2026',
-        consultantNotes: 'Validasi mutasi bank dan kartu stok biji kopi beres tanpa selisih.',
-        status: 'VERIFIED'
-      },
-      {
-        id: 'hist-03',
-        clientId: 'umkm-02',
-        clientName: 'Batik Lestari Heritage',
-        month: 'Juli 2026',
-        omzet: 38000000,
-        hpp: 18000000,
-        opex: 10500000,
-        verifiedAt: '05 Agu 2026',
-        consultantNotes: 'Arus kas toko batik tervalidasi siap untuk pelaporan investor.',
-        status: 'VERIFIED'
-      }
-    ] as ProgressValidationHistoryItem[],
+    // Riwayat Validasi Kas yang Disahkan
+    validationHistory: [] as ProgressValidationHistoryItem[],
 
     // Peringatan Anomali
-    alerts: [
-      {
-        id: 'alt-01',
-        clientId: 'umkm-01',
-        clientName: 'Kopi Senja Nusantara',
-        type: 'HPP_SPIKE',
-        title: 'Lonjakan HPP Biji Kopi (+12.4%)',
-        message: 'HPP naik dari 38% ke 47.2% dari omzet di bulan September. Rekomendasi: koordinasikan penyesuaian porsi resep atau kunci harga pasokan supplier.',
-        timestamp: '25 Sep 2026 09:15',
-        severity: 'medium',
-        dismissed: false
-      },
-      {
-        id: 'alt-02',
-        clientId: 'umkm-04',
-        clientName: 'Dapur Mama Catering',
-        type: 'MARGIN_DROP',
-        title: 'Margin Bersih Turun Signifikan (<5%)',
-        message: 'Biaya logistik katering naik 30% tanpa penyesuaian harga menu. Segera adakan pendampingan tatap muka.',
-        timestamp: '23 Sep 2026 11:20',
-        severity: 'high',
-        dismissed: false
-      }
-    ] as AnomalyAlert[],
+    alerts: [] as AnomalyAlert[],
 
     // 5 Aspek Fundamental Radar per Klien
-    clientAssessments: {
-      'umkm-01': [
-        { id: 'fin', name: 'Finansial & Arus Kas', score: 78, maxScore: 100, targetScore: 85, status: 'good', notes: 'Margin kotor di atas 45%, rasio kas sehat 4 bulan operasional. Disiplin pelaporan kas harian rapi.' },
-        { id: 'ops', name: 'Operasional & SOP', score: 85, maxScore: 100, targetScore: 80, status: 'good', notes: 'SOP resep minuman dan kartu stok mingguan sudah berjalan tertib di seluruh 3 outlet.' },
-        { id: 'leg', name: 'Legalitas & Izin', score: 92, maxScore: 100, targetScore: 90, status: 'good', notes: 'NIB RBA, sertifikat Halal BPJPH aktif, izin P-IRT dan sewa tempat aman.' },
-        { id: 'mkt', name: 'Pasar & Pemasaran', score: 64, maxScore: 100, targetScore: 75, status: 'warning', notes: 'Perlu perluasan kanal penjualan non-ojol dan promosi brand awareness terarah.' },
-        { id: 'gov', name: 'SDM & Tata Kelola', score: 75, maxScore: 100, targetScore: 80, status: 'good', notes: 'Struktur tim gerai jelas dengan Store Leader di tiap cabang serta insentif target.' }
-      ],
-      'umkm-02': [
-        { id: 'fin', name: 'Finansial & Arus Kas', score: 68, maxScore: 100, targetScore: 85, status: 'warning', notes: 'Pemisahan kas workshop batik dan belanja rumah tangga masih perlu penegasan.' },
-        { id: 'ops', name: 'Operasional & SOP', score: 74, maxScore: 100, targetScore: 80, status: 'warning', notes: 'SOP pewarnaan malam batik alami butuh pencatatan takaran baku.' },
-        { id: 'leg', name: 'Legalitas & Izin', score: 65, maxScore: 100, targetScore: 90, status: 'warning', notes: 'Pendaftaran HAKI motif orisinal Pekalongan dalam tahap pemeriksaan substantif.' },
-        { id: 'mkt', name: 'Pasar & Pemasaran', score: 82, maxScore: 100, targetScore: 75, status: 'good', notes: 'Permintaan pameran kriya dan jaringan reseller luar kota sangat kuat.' },
-        { id: 'gov', name: 'SDM & Tata Kelola', score: 66, maxScore: 100, targetScore: 80, status: 'warning', notes: 'Perlu program magang regenerasi perajin batik canting muda.' }
-      ],
-      'umkm-03': [
-        { id: 'fin', name: 'Finansial & Arus Kas', score: 90, maxScore: 100, targetScore: 85, status: 'good', notes: 'Arus kas sangat stabil dengan cadangan dana lancar di atas 6 bulan.' },
-        { id: 'ops', name: 'Operasional & SOP', score: 88, maxScore: 100, targetScore: 80, status: 'good', notes: 'Kapasitas produksi pabrik sambal modern, standar sanitasi higienis tinggi.' },
-        { id: 'leg', name: 'Legalitas & Izin', score: 86, maxScore: 100, targetScore: 90, status: 'good', notes: 'Izin BPOM MD dan sertifikasi Halal lengkap terpasang di seluruh kemasan.' },
-        { id: 'mkt', name: 'Pasar & Pemasaran', score: 92, maxScore: 100, targetScore: 75, status: 'good', notes: 'Kanal retail modern dan toko online nasional memiliki repeat order tinggi.' },
-        { id: 'gov', name: 'SDM & Tata Kelola', score: 84, maxScore: 100, targetScore: 80, status: 'good', notes: 'Struktur manajemen profesional dengan sistem KPI produksi berbasis tim.' }
-      ],
-      'umkm-04': [
-        { id: 'fin', name: 'Finansial & Arus Kas', score: 48, maxScore: 100, targetScore: 85, status: 'needs_work', notes: 'Biaya belanja bahan mentah dan transportasi logistik menekan margin bersih.' },
-        { id: 'ops', name: 'Operasional & SOP', score: 56, maxScore: 100, targetScore: 80, status: 'needs_work', notes: 'SOP estimasi porsi katering butuh revisi untuk menekan sisa bahan mentah.' },
-        { id: 'leg', name: 'Legalitas & Izin', score: 50, maxScore: 100, targetScore: 90, status: 'needs_work', notes: 'Sertifikasi laik higiene sanitasi jasaboga sedang dalam pemenuhan berkas.' },
-        { id: 'mkt', name: 'Pasar & Pemasaran', score: 60, maxScore: 100, targetScore: 75, status: 'warning', notes: 'Perlu penetrasi paket wedding expo dan korporasi untuk menutup beban tetap.' },
-        { id: 'gov', name: 'SDM & Tata Kelola', score: 56, maxScore: 100, targetScore: 80, status: 'needs_work', notes: 'Karyawan lepas harian butuh pelatihan dasar standar kebersihan saji.' }
-      ]
-    } as Record<string, ClientAssessmentAspect[]>,
+    clientAssessments: {} as Record<string, AssessmentPillar[]>,
 
-    // Roadmap Milestone Binaan per Klien
-    clientMilestones: [
-      {
-        id: 'ms-01-1',
-        clientId: 'umkm-01',
-        order: 1,
-        title: 'Fondasi Pencatatan Kas & Legalitas Usaha',
-        description: 'Standardisasi rekening operasional toko, izin usaha NIB berbasis risiko, dan pencatatan kas harian.',
-        targetDate: 'Bulan 1'
-      },
-      {
-        id: 'ms-01-2',
-        clientId: 'umkm-01',
-        order: 2,
-        title: 'Efisiensi Biaya Bahan Baku & HPP',
-        description: 'Negosiasi supplier biji kopi, standardisasi takaran resep, dan kontrol kartu stok mingguan.',
-        targetDate: 'Bulan 2'
-      },
-      {
-        id: 'ms-01-3',
-        clientId: 'umkm-01',
-        order: 3,
-        title: 'Validasi Kepatuhan & Akses Modal Investor',
-        description: 'Audit 3 bulan kepatuhan pembukuan kas dan penyusunan proposal investasi resmi.',
-        targetDate: 'Bulan 3'
-      },
-      {
-        id: 'ms-02-1',
-        clientId: 'umkm-02',
-        order: 1,
-        title: 'Disiplin Arus Kas & Pemisahan Dompet Usaha',
-        description: 'Pencatatan nota penjualan offline dan marketplace harian tanpa tercampur uang rumah tangga.',
-        targetDate: 'Bulan 1'
-      },
-      {
-        id: 'ms-02-2',
-        clientId: 'umkm-02',
-        order: 2,
-        title: 'Standardisasi Mutu & Perlindungan HAKI Motif',
-        description: 'Pendaftaran hak cipta motif batik tulis Pekalongan dan penguatan kontrak pengrajin lokal.',
-        targetDate: 'Bulan 2'
-      },
-      {
-        id: 'ms-03-1',
-        clientId: 'umkm-03',
-        order: 1,
-        title: 'Standardisasi Mutu Ekspor & Audit Kesiapan Sindikasi',
-        description: 'Pemeriksaan kepatuhan izin BPOM MD dan audit laporan laba bersih untuk tiket modal sindikasi.',
-        targetDate: 'Bulan 1'
-      },
-      {
-        id: 'ms-04-1',
-        clientId: 'umkm-04',
-        order: 1,
-        title: 'Restrukturisasi Efisiensi Biaya Operasional Katering',
-        description: 'Pemangkasan pemborosan bahan mentah, negosiasi kurir logistik, dan penetapan harga paket baru.',
-        targetDate: 'Bulan 1'
-      }
-    ] as ClientMilestone[],
+    // Daftar Target & Milestone
+    clientMilestones: [] as ClientMilestone[],
 
     // Daftar Task di dalam Milestone
-    clientTasks: [
-      {
-        id: 'ct-01-1',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-1',
-        title: 'Pisahkan Rekening Operasional & Pribadi Usaha',
-        description: 'Buka rekening bank khusus kas harian kedai dan integrasikan QRIS Beruang.',
-        category: 'Finansial',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '10 Juli 2026',
-        consultantNote: 'Terverifikasi per rekening koran Mandiri.'
-      },
-      {
-        id: 'ct-01-2',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-1',
-        title: 'Lengkapi Izin Edar & NIB Berbasis Risiko',
-        description: 'Pastikan KBLI kedai kopi sesuai dan sertifikat halal terbit resmi.',
-        category: 'Legalitas',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '25 Juli 2026',
-        consultantNote: 'NIB RBA dan sertifikat Halal BPJPH aktif.'
-      },
-      {
-        id: 'ct-01-3',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-2',
-        title: 'Standardisasi Kartu Stok Biji Kopi Mingguan',
-        description: 'Terapkan formulir opname bahan baku setiap Minggu malam di seluruh 3 outlet.',
-        category: 'Operasional',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '15 Agustus 2026',
-        consultantNote: 'Selisih stok bahan kini konsisten di bawah 2%.'
-      },
-      {
-        id: 'ct-01-4',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-2',
-        title: 'Perbarui Kontrak Supplier Biji Kopi Ciwidey',
-        description: 'Kunci harga bahan baku 6 bulan ke depan untuk menjaga margin minimal 50%.',
-        category: 'Finansial',
-        priority: 'Sedang',
-        status: 'DONE',
-        completed: true,
-        dueDate: '30 Agustus 2026'
-      },
-      {
-        id: 'ct-01-5',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-2',
-        title: 'Efisiensi Porsi Espresso 18g untuk Kontrol HPP',
-        description: 'Pastikan seluruh barista menggunakan timbangan digital presisi pada setiap shot espresso.',
-        category: 'Operasional',
-        priority: 'Sedang',
-        status: 'DONE',
-        completed: true,
-        dueDate: '10 September 2026',
-        consultantNote: 'Rasio HPP berhasil ditekan kembali ke 44%.'
-      },
-      {
-        id: 'ct-01-6',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-3',
-        title: 'Validasi Pembukuan Kas Harian Bulan September',
-        description: 'Unggah rekapitulasi penjualan POS dan bukti rekening koran bulan September.',
-        category: 'Finansial',
-        priority: 'Tinggi',
-        status: 'IN_PROGRESS',
-        completed: false,
-        dueDate: '05 Oktober 2026',
-        consultantNote: 'Menunggu kelengkapan bukti nota pengeluaran operasional outlet 2.'
-      },
-      {
-        id: 'ct-01-7',
-        clientId: 'umkm-01',
-        milestoneId: 'ms-01-3',
-        title: 'Pembaruan Sertifikasi Laik Higiene Sanitasi & Halal Self-Declare',
-        description: 'Lengkapi berkas pendaftaran sertifikasi Halal self-declare untuk menu minuman kopi susu.',
-        category: 'Legalitas',
-        priority: 'Sedang',
-        status: 'TODO',
-        completed: false,
-        dueDate: '15 November 2026',
-        consultantNote: 'Format formulir panduan audit sudah dibagikan.'
-      },
-      {
-        id: 'ct-02-1',
-        clientId: 'umkm-02',
-        milestoneId: 'ms-02-1',
-        title: 'Catat Arus Kas Harian Selama 30 Hari Tanpa Terputus',
-        description: 'Gunakan fitur Catatan Kas Beruang untuk merekam setiap nota penjualan kain batik harian.',
-        category: 'Finansial',
-        priority: 'Tinggi',
-        status: 'IN_PROGRESS',
-        completed: false,
-        dueDate: '25 Oktober 2026',
-        consultantNote: 'Sudah mencapai hari ke-18 pencatatan rutin.'
-      },
-      {
-        id: 'ct-02-2',
-        clientId: 'umkm-02',
-        milestoneId: 'ms-02-1',
-        title: 'Integrasikan Mutasi Rekening Bank Mandiri ke Beruang',
-        description: 'Sinkronisasi mutasi rekening kas usaha untuk mempermudah audit bulanan konsultan.',
-        category: 'Finansial',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '15 September 2026'
-      },
-      {
-        id: 'ct-02-3',
-        clientId: 'umkm-02',
-        milestoneId: 'ms-02-2',
-        title: 'Dokumentasi 5 Desain Motif Batik Khas untuk HAKI',
-        description: 'Siapkan foto resolusi tinggi, filosofi corak motif, dan surat pernyataan kepemilikan cipta.',
-        category: 'Legalitas',
-        priority: 'Sedang',
-        status: 'IN_PROGRESS',
-        completed: false,
-        dueDate: '10 November 2026'
-      },
-      {
-        id: 'ct-03-1',
-        clientId: 'umkm-03',
-        milestoneId: 'ms-03-1',
-        title: 'Pemeriksaan Kalibrasi Mesin Segel Botol Sambal',
-        description: 'Verifikasi hasil uji kebocoran kemasan botol sambal untuk standarisasi rantai pasok modern.',
-        category: 'Operasional',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '20 September 2026'
-      },
-      {
-        id: 'ct-03-2',
-        clientId: 'umkm-03',
-        milestoneId: 'ms-03-1',
-        title: 'Audit Laporan Laba Bersih Q3 2026 untuk Sindikasi Investor',
-        description: 'Finalisasi rekapitulasi laba kotor, opex, dan laba bersih bersama konsultan pendamping.',
-        category: 'Finansial',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '30 September 2026',
-        consultantNote: 'Laporan bersih tervalidasi siap dipromosikan.'
-      },
-      {
-        id: 'ct-04-1',
-        clientId: 'umkm-04',
-        milestoneId: 'ms-04-1',
-        title: 'Analisis Food Waste & Kontrol Porsi Bahan Mentah',
-        description: 'Timbang sisa bahan mentah harian dan susun standar porsi menu katering hemat.',
-        category: 'Operasional',
-        priority: 'Tinggi',
-        status: 'DONE',
-        completed: true,
-        dueDate: '20 September 2026'
-      },
-      {
-        id: 'ct-04-2',
-        clientId: 'umkm-04',
-        milestoneId: 'ms-04-1',
-        title: 'Negosiasi Kurir Borongan untuk Pengantaran Katering',
-        description: 'Beralih ke sistem rute terjadwal atau kurir borongan untuk memangkas ongkos kirim.',
-        category: 'Operasional',
-        priority: 'Tinggi',
-        status: 'TODO',
-        completed: false,
-        dueDate: '18 Oktober 2026',
-        consultantNote: 'Klien perlu segera memangkas biaya transportasi.'
-      },
-      {
-        id: 'ct-04-3',
-        clientId: 'umkm-04',
-        milestoneId: 'ms-04-1',
-        title: 'Pemisahan Rekening Belanja Dapur dan Tabungan Pemilik',
-        description: 'Buka rekening khusus giro belanja dapur basah agar tidak tercampur dana keluarga.',
-        category: 'Finansial',
-        priority: 'Tinggi',
-        status: 'TODO',
-        completed: false,
-        dueDate: '25 Oktober 2026'
-      }
-    ] as ClientTask[]
+    clientTasks: [] as ClientTask[]
   }),
 
   getters: {
@@ -922,7 +360,7 @@ export const useKonsultanStore = defineStore('konsultan', {
         const res = await useApi<any>('/consultant/clients')
         if (res.data) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             this.clients = list
           }
         }
@@ -950,7 +388,7 @@ export const useKonsultanStore = defineStore('konsultan', {
         const res = await useApi<any>('/consultant/alerts')
         if (res.data) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             this.alerts = list
           }
         }
@@ -964,7 +402,7 @@ export const useKonsultanStore = defineStore('konsultan', {
         const res = await useApi<any>('/consultant/requests')
         if (res.data) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             this.clientRequests = list
           }
         }
@@ -1053,7 +491,7 @@ export const useKonsultanStore = defineStore('konsultan', {
         const res = await useApi<any>('/consultant/action-plans')
         if (res.data) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
+          if (Array.isArray(list)) {
             this.actionPlans = list
           }
         }

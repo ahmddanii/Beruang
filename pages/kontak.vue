@@ -173,16 +173,16 @@ async function handleSubmit() {
         message: message.value
       }
     })
-  } catch (err: any) {
-    console.warn('Endpoint kontak offline/mock fallback:', err?.message)
-  } finally {
-    loading.value = false
     submitted.value = true
     setTimeout(() => {
       name.value = ''
       email.value = ''
       message.value = ''
     }, 2500)
+  } catch (err: any) {
+    alert(err?.data?.message || err?.message || 'Gagal mengirimkan pesan kontak.')
+  } finally {
+    loading.value = false
   }
 }
 </script>

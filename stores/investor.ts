@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { useApi } from '~/composables/useApi'
 
 export interface MarketplaceUmkm {
@@ -57,275 +57,6 @@ export interface InvestorProfile {
   npwpEntity: string
   nibEntity: string
   description: string
-}
-
-const INITIAL_CURATED_UMKM: MarketplaceUmkm[] = [
-  {
-    id: 'umkm-01',
-    name: 'Kopi Senja Nusantara',
-    code: 'BERU-KOP-01',
-    sector: 'F&B (Coffee & Drinks)',
-    city: 'Bandung',
-    establishedYear: 2021,
-    postedAt: '2 jam yang lalu',
-    fundingTarget: 250000000,
-    marginPercentage: 48.5,
-    growthYoY: 34.2,
-    healthScore: 79,
-    certifiedAt: '18 Sep 2026',
-    consultantName: 'Dra. Maya Suryani, M.M.',
-    pitchSummary: 'Spesialis kopi arabika-robusta dengan 3 gerai offline di Bandung. Margin kotor konsisten di atas 48% dengan SOP barista standar.',
-    postImageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
-    postImages: [
-      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&auto=format&fit=crop&q=80'
-    ],
-    postAspectRatio: '3:4',
-    tags: ['F&B', 'Ready for Funding', 'Margin >45%', 'Halal'],
-    accessStatus: 'APPROVED',
-    bookmarked: false
-  },
-  {
-    id: 'umkm-03',
-    name: 'Sambal Bu Rudy Asli',
-    code: 'BERU-SMB-03',
-    sector: 'F&B (Oleh-oleh & FMCG)',
-    city: 'Surabaya',
-    establishedYear: 2019,
-    postedAt: '5 jam yang lalu',
-    fundingTarget: 500000000,
-    marginPercentage: 52.0,
-    growthYoY: 42.0,
-    healthScore: 88,
-    certifiedAt: '15 Sep 2026',
-    consultantName: 'Bambang Sudarsono, S.E.',
-    pitchSummary: 'Pabrikasi sambal kemasan botol higienis dengan distribusi 120+ toko oleh-oleh se-Jawa Timur. Standar BPOM dan pencatatan kas harian sangat rapi.',
-    postImageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=900&auto=format&fit=crop&q=80',
-    postImages: [
-      'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=900&auto=format&fit=crop&q=80'
-    ],
-    postAspectRatio: '3:4',
-    tags: ['FMCG', 'Ready for Funding', 'Margin >50%', 'Ekspansi'],
-    accessStatus: 'NONE',
-    bookmarked: false
-  },
-  {
-    id: 'umkm-05',
-    name: 'Keripik Tempe Marem',
-    code: 'BERU-KRP-05',
-    sector: 'Agroindustri & Camilan',
-    city: 'Malang',
-    establishedYear: 2020,
-    postedAt: 'Kemarin • 16:40 WIB',
-    fundingTarget: 175000000,
-    marginPercentage: 41.0,
-    growthYoY: 28.5,
-    healthScore: 76,
-    certifiedAt: '10 Sep 2026',
-    consultantName: 'Dra. Maya Suryani, M.M.',
-    pitchSummary: 'Inovasi keripik tempe sagu aneka rasa dengan izin P-IRT dan Halal. Memasok rutin modern market lokal di Malang dan Surabaya.',
-    postImageUrl: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=900&auto=format&fit=crop&q=80',
-    postImages: [
-      'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1621996346565-e3d5d6281298?w=900&auto=format&fit=crop&q=80'
-    ],
-    postAspectRatio: '3:4',
-    tags: ['Agroindustri', 'Ready for Funding', 'P-IRT', 'Halal'],
-    accessStatus: 'PENDING',
-    bookmarked: false
-  },
-  {
-    id: 'umkm-07',
-    name: 'Batik Lawasan Prabu',
-    code: 'BERU-BTK-07',
-    sector: 'Fashion & Kriya',
-    city: 'Solo',
-    establishedYear: 2018,
-    postedAt: '2 hari yang lalu',
-    fundingTarget: 350000000,
-    marginPercentage: 55.4,
-    growthYoY: 31.8,
-    healthScore: 84,
-    certifiedAt: '05 Sep 2026',
-    consultantName: 'Rahmat Hidayat, M.B.A.',
-    pitchSummary: 'Produksi batik cap & tulis bahan pewarna alam ramah lingkungan dengan ekspor berkala ke Jepang dan Australia. Laporan keuangan terverifikasi.',
-    postImageUrl: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80',
-    postImages: [
-      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&auto=format&fit=crop&q=80'
-    ],
-    postAspectRatio: '3:4',
-    tags: ['Kriya Ekspor', 'Ready for Funding', 'Eco-Friendly', 'Margin >50%'],
-    accessStatus: 'NONE',
-    bookmarked: false
-  },
-  {
-    id: 'umkm-09',
-    name: 'Dapur Rendang Mak Etek',
-    code: 'BERU-RDG-09',
-    sector: 'F&B (Oleh-oleh & FMCG)',
-    city: 'Padang',
-    establishedYear: 2020,
-    postedAt: '3 hari yang lalu',
-    fundingTarget: 220000000,
-    marginPercentage: 46.2,
-    growthYoY: 38.6,
-    healthScore: 81,
-    certifiedAt: '01 Sep 2026',
-    consultantName: 'Dra. Maya Suryani, M.M.',
-    pitchSummary: 'Rendang kemasan retort pouch dengan daya tahan simpan 12 bulan tanpa pengawet. Tersertifikasi HACCP dan sertifikat Halal BPJPH.',
-    postImageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=900&auto=format&fit=crop&q=80',
-    postImages: [
-      'https://images.unsplash.com/photo-1544025162-d76694265947?w=900&auto=format&fit=crop&q=80'
-    ],
-    postAspectRatio: '3:4',
-    tags: ['FMCG', 'Ready for Funding', 'HACCP', 'Retort Pouch'],
-    accessStatus: 'NONE',
-    bookmarked: false
-  },
-  {
-    id: 'umkm-12',
-    name: 'Agro Herbal Merapi',
-    code: 'BERU-HRB-12',
-    sector: 'Agroindustri & Camilan',
-    city: 'Yogyakarta',
-    establishedYear: 2017,
-    postedAt: '4 hari yang lalu',
-    fundingTarget: 420000000,
-    marginPercentage: 49.0,
-    growthYoY: 26.4,
-    healthScore: 82,
-    certifiedAt: '28 Agu 2026',
-    consultantName: 'Bambang Sudarsono, S.E.',
-    pitchSummary: 'Pengolahan simplisia jamu dan teh celup herbal organik dari petani lereng Merapi. Memiliki izin edar BPOM TR dan fasilitas lab higienis.',
-    postImageUrl: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=900&auto=format&fit=crop&q=80',
-    postImages: [
-      'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=900&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=80'
-    ],
-    postAspectRatio: '3:4',
-    tags: ['Agroindustri', 'Ready for Funding', 'Organik', 'BPOM TR'],
-    accessStatus: 'NONE',
-    bookmarked: false
-  }
-]
-
-const SAMPLE_UMKM_PREFIXES = [
-  'Roastery Kopi', 'Dapur Nusantara', 'Sentra Kriya', 'Batik Pusaka', 'Kebun Organik',
-  'Cokelat Artisan', 'Tenun Ikat', 'Keripik Singkong', 'Bakpia Kukus', 'Gelato Tropis',
-  'Roti Gandum', 'Madu Hutan', 'Teh Rempah', 'Olahan Laut', 'Konveksi Linen',
-  'Susu Fermentasi', 'Abon Sapi', 'Kopi Arabika', 'Anyaman Rotan', 'Bumbu Instan',
-  'Sari Buah', 'Kue Lapis', 'Dendeng Balado', 'Kriya Kayu'
-]
-
-const SAMPLE_UMKM_SUFFIXES = [
-  'Lestari', 'Mandiri', 'Nusantara', 'Berkah', 'Sejahtera', 'Abadi',
-  'Kencana', 'Pratama', 'Jaya', 'Sentosa', 'Utama', 'Murni'
-]
-
-const SAMPLE_CITIES = [
-  'Bandung', 'Surabaya', 'Malang', 'Solo', 'Yogyakarta', 'Jakarta',
-  'Semarang', 'Bogor', 'Tangerang', 'Bekasi', 'Depok', 'Cirebon',
-  'Medan', 'Padang', 'Palembang', 'Pekanbaru', 'Bandar Lampung', 'Batam',
-  'Denpasar', 'Badung', 'Gianyar', 'Mataram', 'Balikpapan', 'Samarinda',
-  'Banjarmasin', 'Pontianak', 'Makassar', 'Manado', 'Ambon', 'Jayapura'
-]
-
-const SAMPLE_SECTORS = [
-  'F&B (Coffee & Drinks)',
-  'F&B (Oleh-oleh & FMCG)',
-  'Agroindustri & Camilan',
-  'Fashion & Kriya',
-  'Pertanian & Agribisnis',
-  'Jasa & Perdagangan Ritel'
-]
-
-const SAMPLE_CONSULTANTS = [
-  'Dra. Maya Suryani, M.M.',
-  'Bambang Sudarsono, S.E.',
-  'Rahmat Hidayat, M.B.A.',
-  'Hendra Wijaya, CFA',
-  'Siti Aminah, Ak., CA.',
-  'Dr. Arif Budiman, M.Ec.'
-]
-
-const SAMPLE_IMAGE_SETS: string[][] = [
-  [
-    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=900&auto=format&fit=crop&q=80'
-  ],
-  [
-    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=900&auto=format&fit=crop&q=80'
-  ],
-  [
-    'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=900&auto=format&fit=crop&q=80'
-  ],
-  [
-    'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&auto=format&fit=crop&q=80'
-  ],
-  [
-    'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=900&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900&auto=format&fit=crop&q=80'
-  ],
-  [
-    'https://images.unsplash.com/photo-1544025162-d76694265947?w=900&auto=format&fit=crop&q=80'
-  ]
-]
-
-export function build150MarketplaceUmkms(): MarketplaceUmkm[] {
-  const generated: MarketplaceUmkm[] = [...INITIAL_CURATED_UMKM]
-
-  for (let i = 7; i <= 150; i++) {
-    const idx = i - 7
-    const prefix = SAMPLE_UMKM_PREFIXES[idx % SAMPLE_UMKM_PREFIXES.length]!
-    const suffix = SAMPLE_UMKM_SUFFIXES[Math.floor(idx / SAMPLE_UMKM_PREFIXES.length) % SAMPLE_UMKM_SUFFIXES.length]!
-    const city = SAMPLE_CITIES[idx % SAMPLE_CITIES.length]!
-    const sector = SAMPLE_SECTORS[idx % SAMPLE_SECTORS.length]!
-    const consultant = SAMPLE_CONSULTANTS[idx % SAMPLE_CONSULTANTS.length]!
-    const imgs = SAMPLE_IMAGE_SETS[idx % SAMPLE_IMAGE_SETS.length]!
-    const hoursAgo = (idx % 23) + 1
-    const daysAgo = Math.floor(idx / 12) + 1
-    const postedAt = idx < 24 ? `${hoursAgo} jam yang lalu` : `${daysAgo} hari yang lalu`
-
-    generated.push({
-      id: `umkm-${String(i + 10).padStart(3, '0')}`,
-      name: `${prefix} ${suffix} ${city}`,
-      code: `BERU-UMK-${String(i + 10).padStart(3, '0')}`,
-      sector,
-      city,
-      establishedYear: 2016 + (idx % 9),
-      postedAt,
-      fundingTarget: (150 + (idx % 12) * 35) * 1000000,
-      marginPercentage: 38 + (idx % 18),
-      growthYoY: 22 + (idx % 24),
-      healthScore: 76 + (idx % 18),
-      certifiedAt: `${(idx % 28) + 1} Sep 2026`,
-      consultantName: consultant,
-      pitchSummary: `Unit usaha ${prefix.toLowerCase()} unggulan di ${city} dengan pertumbuhan kas bulanan stabil, distribusi ritel aktif di ${2 + (idx % 6)} gerai mitra, serta dokumen perizinan resmi terverifikasi.`,
-      postImageUrl: imgs[0]!,
-      postImages: [...imgs],
-      postAspectRatio: '3:4',
-      tags: [sector.split(' ')[0] || 'UMKM', 'Ready for Funding', 'Terverifikasi'],
-      accessStatus: idx % 5 === 0 ? 'APPROVED' : 'NONE',
-      bookmarked: idx % 14 === 0
-    })
-  }
-
-  return generated
 }
 
 export function getDemoInvestorProfile(): InvestorProfile {
@@ -387,7 +118,7 @@ export const useInvestorStore = defineStore('investor', {
 
     profile: getDemoInvestorProfile(),
 
-    marketplaceList: build150MarketplaceUmkms(),
+    marketplaceList: [] as MarketplaceUmkm[],
 
     platformPosts: [
       {
@@ -497,8 +228,32 @@ export const useInvestorStore = defineStore('investor', {
         const res = await useApi<any>('/investor/marketplace', { params })
         if (res.data) {
           const list = Array.isArray(res.data) ? res.data : (res.data as any).data
-          if (Array.isArray(list) && list.length > 0) {
-            this.marketplaceList = list
+          if (Array.isArray(list)) {
+            const customPosts = this.marketplaceList.filter(m => m.isCustomPost)
+            const apiPosts: MarketplaceUmkm[] = list.map((item: any) => ({
+              id: item.id,
+              umkmRefId: item.umkmRefId || item.id,
+              name: item.name,
+              code: item.code || `BERU-${(item.city || 'UMK').substring(0, 3).toUpperCase()}-01`,
+              sector: item.sector,
+              city: item.city,
+              establishedYear: item.establishedYear || 2021,
+              postedAt: item.postedAt || 'Terverifikasi',
+              fundingTarget: item.fundingTarget || 250000000,
+              marginPercentage: item.marginPercentage || 45,
+              growthYoY: item.growthYoY || 30,
+              healthScore: item.healthScore || 80,
+              certifiedAt: item.certifiedAt || 'BNSP Terakreditasi',
+              consultantName: item.consultantName || 'Dra. Maya Suryani, M.M.',
+              pitchSummary: item.pitchSummary || '',
+              postImageUrl: item.postImageUrl || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
+              postImages: item.postImages && item.postImages.length > 0 ? item.postImages : ['https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80'],
+              postAspectRatio: item.postAspectRatio || '3:4',
+              tags: item.tags || ['UMKM Binaan'],
+              accessStatus: item.accessStatus || 'NONE',
+              bookmarked: Boolean(item.bookmarked)
+            }))
+            this.marketplaceList = [...customPosts, ...apiPosts]
           }
         }
       } catch (err: any) {
@@ -555,43 +310,7 @@ export const useInvestorStore = defineStore('investor', {
       }
     },
 
-    /**
-     * GET /api/investor/marketplace
-     */
-    async fetchMarketplace() {
-      try {
-        const res = await useApi<any>('/investor/marketplace')
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-          const customPosts = this.marketplaceList.filter(m => m.isCustomPost)
-          const apiPosts: MarketplaceUmkm[] = res.data.map((item: any) => ({
-            id: item.id,
-            umkmRefId: item.umkmRefId || item.id,
-            name: item.name,
-            code: item.code || `BERU-${(item.city || 'UMK').substring(0, 3).toUpperCase()}-01`,
-            sector: item.sector,
-            city: item.city,
-            establishedYear: item.establishedYear || 2021,
-            postedAt: item.postedAt || 'Terverifikasi',
-            fundingTarget: item.fundingTarget || 250000000,
-            marginPercentage: item.marginPercentage || 45,
-            growthYoY: item.growthYoY || 30,
-            healthScore: item.healthScore || 80,
-            certifiedAt: item.certifiedAt || 'BNSP Terakreditasi',
-            consultantName: item.consultantName || 'Dra. Maya Suryani, M.M.',
-            pitchSummary: item.pitchSummary || '',
-            postImageUrl: item.postImageUrl || 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80',
-            postImages: item.postImages && item.postImages.length > 0 ? item.postImages : ['https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&auto=format&fit=crop&q=80'],
-            postAspectRatio: item.postAspectRatio || '3:4',
-            tags: item.tags || ['UMKM Binaan'],
-            accessStatus: item.accessStatus || 'NONE',
-            bookmarked: Boolean(item.bookmarked)
-          }))
-          this.marketplaceList = [...customPosts, ...apiPosts]
-        }
-      } catch (err: any) {
-        console.warn('Gagal memuat marketplace live:', err?.message)
-      }
-    },
+
 
     /**
      * POST /api/investor/requests
@@ -729,14 +448,6 @@ export const useInvestorStore = defineStore('investor', {
     },
 
     initPostsFromStorage() {
-      if (this.marketplaceList.length < 150) {
-        const full150 = build150MarketplaceUmkms()
-        for (const item of full150) {
-          if (!this.marketplaceList.some(m => m.id === item.id)) {
-            this.marketplaceList.push(item)
-          }
-        }
-      }
       if (typeof window === 'undefined') return
       try {
         const raw = window.localStorage.getItem('beruang_umkm_posts')

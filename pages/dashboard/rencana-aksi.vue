@@ -278,10 +278,6 @@ definePageMeta({
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
-const isDemoUser = computed(() => {
-  const email = authStore.currentUser?.email?.toLowerCase() || ''
-  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
-})
 
 // Task Counts
 const completedTasksCount = computed(() => {
@@ -348,34 +344,7 @@ const selectedTaskForPreview = ref<any>(null)
 const evidenceFileInputRef = ref<HTMLInputElement | null>(null)
 const currentUploadTaskId = ref<string | null>(null)
 
-const defaultTaskEvidence: Record<string, any> = {
-  't-1': {
-    title: 'Rekening Giro Operasional Usaha',
-    issuer: 'PT Bank Mandiri (Persero) Tbk · KCP Fatmawati',
-    regNo: 'MDR/KORAN/2026/0912',
-    classification: 'Pemisahan Kas Pribadi & Bisnis',
-    date: '10 Juli 2026',
-    file: { name: 'Rekening_Giro_Mandiri_KopiSenja.pdf', size: '1.2 MB' }
-  },
-  't-2': {
-    title: 'Dokumentasi Sertifikat Halal & NIB',
-    issuer: 'BPJPH Kemenag RI & OSS RBA',
-    regNo: 'OSS-RBA-91283019283 / ID321100019283',
-    classification: 'Perizinan Usaha Terverifikasi',
-    date: '25 Juli 2026',
-    file: { name: 'Sertifikat_Halal_NIB_Kasir.pdf', size: '2.1 MB' }
-  },
-  't-3': {
-    title: 'Lembar Opname Kartu Stok Bahan Baku',
-    issuer: 'SOP Manajemen Persediaan Gerai',
-    regNo: 'SOP-STOK-WK42/2026',
-    classification: 'Pengendalian Biaya Bahan',
-    date: '15 Agustus 2026',
-    file: { name: 'Kartu_Stok_Mingguan_Outlet.pdf', size: '980 KB' }
-  }
-}
-
-const taskEvidenceMap = ref<Record<string, any>>(isDemoUser.value ? { ...defaultTaskEvidence } : {})
+const taskEvidenceMap = ref<Record<string, any>>({})
 
 onMounted(async () => {
   await umkmStore.fetchTasks()

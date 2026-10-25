@@ -44,7 +44,7 @@
               v-if="hasAssessment"
               class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0"
             >
-              {{ isDemoUser ? '+5 Poin' : 'Terverifikasi' }}
+              Terverifikasi
             </span>
             <span
               v-else
@@ -65,7 +65,7 @@
               <span class="text-sm font-semibold text-neutral-400 dark:text-neutral-500">/ 100</span>
             </div>
             <p class="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pt-1 leading-relaxed">
-              {{ hasAssessment ? (isDemoUser ? 'Naik dari 74 poin evaluasi bulan lalu' : 'Skor indeks kesehatan tokomu') : 'Menunggu evaluasi konsultan pendamping' }}
+              {{ hasAssessment ? 'Skor indeks kesehatan tokomu dari konsultan pendamping' : 'Menunggu evaluasi konsultan pendamping' }}
             </p>
           </div>
         </div>
@@ -145,7 +145,7 @@
               <HugeiconsIcon :icon="MoneyBag01Icon" :size="17" class="text-[#156374] dark:text-[#50AABF]" />
             </div>
             <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-              {{ isDemoUser ? '+12% MoM' : (Number(currentMarginPercentage) > 0 ? `${currentMarginPercentage}% Margin` : 'Bulan Ini') }}
+              {{ Number(currentMarginPercentage) > 0 ? `${currentMarginPercentage}% Margin` : 'Bulan Ini' }}
             </span>
           </div>
 
@@ -387,7 +387,7 @@
             <!-- NIB Usaha -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div :class="[umkmStore.profile.nib || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.profile.nib ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -399,15 +399,15 @@
                   </p>
                 </div>
               </div>
-              <span :class="[umkmStore.profile.nib || isDemoUser ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
-                {{ umkmStore.profile.nib || isDemoUser ? 'Lengkap' : 'Belum Ada' }}
+              <span :class="[umkmStore.profile.nib ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ umkmStore.profile.nib ? 'Lengkap' : 'Belum Ada' }}
               </span>
             </div>
 
             <!-- NPWP Toko -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div :class="[umkmStore.profile.npwp || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.profile.npwp ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -419,15 +419,15 @@
                   </p>
                 </div>
               </div>
-              <span :class="[umkmStore.profile.npwp || isDemoUser ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
-                {{ umkmStore.profile.npwp || isDemoUser ? 'Lengkap' : 'Belum Ada' }}
+              <span :class="[umkmStore.profile.npwp ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ umkmStore.profile.npwp ? 'Lengkap' : 'Belum Ada' }}
               </span>
             </div>
 
             <!-- Rekening Khusus -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div :class="[umkmStore.profile.bankAccountNumber || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.profile.bankAccountNumber ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="ShieldCheckIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -439,15 +439,15 @@
                   </p>
                 </div>
               </div>
-              <span :class="[umkmStore.profile.bankAccountNumber || isDemoUser ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
-                {{ umkmStore.profile.bankAccountNumber || isDemoUser ? 'Lengkap' : 'Belum Ada' }}
+              <span :class="[umkmStore.profile.bankAccountNumber ? 'bg-emerald-50 text-[#00800e] dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/80' : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border-neutral-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ umkmStore.profile.bankAccountNumber ? 'Lengkap' : 'Belum Ada' }}
               </span>
             </div>
 
             <!-- Bukti Nota Transaksi -->
             <div class="p-3.5 rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#15161A] flex items-center justify-between gap-3">
               <div class="flex items-start gap-2.5 min-w-0">
-                <div :class="[umkmStore.dailyTransactions.length > 0 || isDemoUser ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <div :class="[umkmStore.dailyTransactions.length > 0 ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#00800e]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400']" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon :icon="FileValidationIcon" :size="17" />
                 </div>
                 <div class="min-w-0">
@@ -459,8 +459,8 @@
                   </p>
                 </div>
               </div>
-              <span :class="[(umkmStore.dailyTransactions.length >= 10) || isDemoUser ? 'bg-emerald-50 text-[#00800e] border-emerald-200/80' : 'bg-amber-50 text-amber-700 border-amber-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
-                {{ (umkmStore.dailyTransactions.length >= 10) || isDemoUser ? 'Lengkap' : (umkmStore.dailyTransactions.length > 0 ? 'Perlu Aksi' : 'Belum Ada') }}
+              <span :class="[(umkmStore.dailyTransactions.length >= 10) ? 'bg-emerald-50 text-[#00800e] border-emerald-200/80' : 'bg-amber-50 text-amber-700 border-amber-200']" class="px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0">
+                {{ (umkmStore.dailyTransactions.length >= 10) ? 'Lengkap' : (umkmStore.dailyTransactions.length > 0 ? 'Perlu Aksi' : 'Belum Ada') }}
               </span>
             </div>
           </div>
@@ -521,7 +521,7 @@
         </div>
 
         <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
-          <span>{{ hasAssessment ? (isDemoUser ? 'Laporan kas terverifikasi oleh Konsultan Pendamping Dra. Maya Suryani, M.M.' : 'Laporan kas dievaluasi berkala oleh konsultan tokomu.') : 'Mulai catat kas harianmu agar dapat divalidasi oleh konsultan pendamping.' }}</span>
+          <span>{{ hasAssessment ? (umkmStore.profile.consultantName ? `Laporan kas terverifikasi oleh Konsultan Pendamping ${umkmStore.profile.consultantName}.` : 'Laporan kas dievaluasi berkala oleh konsultan tokomu.') : 'Mulai catat kas harianmu agar dapat divalidasi oleh konsultan pendamping.' }}</span>
           <span class="font-semibold text-neutral-800 dark:text-neutral-200">Arus Kas: {{ hasAssessment ? 'Sehat' : 'Awal' }}</span>
         </div>
       </div>
@@ -714,19 +714,12 @@ definePageMeta({
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
-const isDemoUser = computed(() => {
-  const email = authStore.currentUser?.email?.toLowerCase() || ''
-  return email === 'fikri@kopisenja.id' || authStore.isDemoUser
-})
-
 const hasAssessment = computed(() => {
-  if (isDemoUser.value) return true
   return umkmStore.hasAssessment || (umkmStore.overallHealthScore > 0)
 })
 
 // Metric 1: Indeks Kesehatan Toko
 const overallHealthScore = computed(() => {
-  if (isDemoUser.value) return 79
   return umkmStore.overallHealthScore || 0
 })
 
@@ -779,23 +772,10 @@ const basePillars = [
   }
 ]
 
-const demoScores: Record<string, number> = {
-  fin: 78,
-  ops: 85,
-  mkt: 64,
-  leg: 92,
-  gov: 75
-}
-
 const fivePillars = computed(() => {
   return basePillars.map(p => {
-    let score = 0
-    if (isDemoUser.value) {
-      score = demoScores[p.id] || 0
-    } else {
-      const match = umkmStore.assessmentAspects.find(a => a.id === p.id)
-      score = match ? match.score : 0
-    }
+    const match = umkmStore.assessmentAspects.find(a => a.id === p.id)
+    const score = match ? match.score : 0
     return {
       ...p,
       score
@@ -813,7 +793,6 @@ const passedPillarsPct = computed(() => {
 
 // Metric 3: Estimasi Plafon Modal
 const estimatedFundingPlafon = computed(() => {
-  if (isDemoUser.value) return 'Rp 250 Jt'
   if (umkmStore.profile.fundingTarget && umkmStore.profile.fundingTarget > 0) {
     const val = umkmStore.profile.fundingTarget
     if (val >= 1000000000) return `Rp ${(val / 1000000000).toFixed(1).replace('.0', '')} M`
@@ -825,7 +804,6 @@ const estimatedFundingPlafon = computed(() => {
 
 // Metric 4: Pergerakan Untung Bersih & Margin
 const currentNetProfitDisplay = computed(() => {
-  if (isDemoUser.value && umkmStore.financeSummary.netProfitMonth === 0) return 'Rp 32,6 Jt'
   const val = umkmStore.financeSummary.netProfitMonth || 0
   if (val === 0) return 'Rp 0'
   if (Math.abs(val) >= 1000000000) return `Rp ${(val / 1000000000).toFixed(1).replace('.0', '')} M`
@@ -834,23 +812,19 @@ const currentNetProfitDisplay = computed(() => {
 })
 
 const currentMarginPercentage = computed(() => {
-  if (isDemoUser.value && umkmStore.financeSummary.marginPercentage === 0) return '32.6'
   return umkmStore.financeSummary.marginPercentage ? umkmStore.financeSummary.marginPercentage.toFixed(1) : '0.0'
 })
 
 // Bento 1: Legalitas Items
 const legalNibDisplay = computed(() => {
-  if (isDemoUser.value) return 'No. 1209.2831.0091 • OSS'
   return umkmStore.profile.nib ? `No. ${umkmStore.profile.nib} • OSS` : 'Belum Ditambahkan'
 })
 
 const legalNpwpDisplay = computed(() => {
-  if (isDemoUser.value) return 'No. 82.910.455.2 • Taat'
   return umkmStore.profile.npwp ? `No. ${umkmStore.profile.npwp} • Taat` : 'Belum Ditambahkan'
 })
 
 const legalBankAccountDisplay = computed(() => {
-  if (isDemoUser.value) return 'Giro Mandiri 142-00-19283'
   if (umkmStore.profile.bankAccountNumber) {
     return `${umkmStore.profile.bankName || 'Rekening'} ${umkmStore.profile.bankAccountNumber}`
   }
@@ -858,13 +832,11 @@ const legalBankAccountDisplay = computed(() => {
 })
 
 const legalReceiptDisplay = computed(() => {
-  if (isDemoUser.value) return 'Arsip 30 Hari • 80% Terarsip'
   const count = umkmStore.dailyTransactions.length
   return count > 0 ? `${count} Transaksi Tercatat` : 'Belum Ada Transaksi'
 })
 
 const validLegalCount = computed(() => {
-  if (isDemoUser.value) return 3
   let count = 0
   if (umkmStore.profile.nib) count++
   if (umkmStore.profile.npwp) count++
@@ -886,17 +858,14 @@ function formatShortIdr(amount: number): string {
 }
 
 const displayTotalIncome = computed(() => {
-  if (isDemoUser.value && umkmStore.financeSummary.totalIncomeMonth === 0) return 'Rp 100 Jt'
   return formatShortIdr(umkmStore.financeSummary.totalIncomeMonth)
 })
 
 const displayTotalCogs = computed(() => {
-  if (isDemoUser.value && umkmStore.financeSummary.totalCogsMonth === 0) return 'Rp 45,1 Jt'
   return formatShortIdr(umkmStore.financeSummary.totalCogsMonth)
 })
 
 const displayNetProfit = computed(() => {
-  if (isDemoUser.value && umkmStore.financeSummary.netProfitMonth === 0) return 'Rp 32,6 Jt'
   return formatShortIdr(umkmStore.financeSummary.netProfitMonth)
 })
 
@@ -1077,22 +1046,6 @@ function handleEscapeChartDropdowns(event: KeyboardEvent) {
 }
 
 const profitTrendRecords = computed(() => {
-  if (isDemoUser.value) {
-    return [
-      { month: 'Nov', profit: 19200000, omzet: 68000000, outflow: 48800000 },
-      { month: 'Des', profit: 21500000, omzet: 74000000, outflow: 52500000 },
-      { month: 'Jan', profit: 22400000, omzet: 76500000, outflow: 54100000 },
-      { month: 'Feb', profit: 23800000, omzet: 79000000, outflow: 55200000 },
-      { month: 'Mar', profit: 24100000, omzet: 81000000, outflow: 56900000 },
-      { month: 'Apr', profit: 25600000, omzet: 83500000, outflow: 57900000 },
-      { month: 'Mei', profit: 26400000, omzet: 85000000, outflow: 58600000 },
-      { month: 'Jun', profit: 27900000, omzet: 88000000, outflow: 60100000 },
-      { month: 'Jul', profit: 29100000, omzet: 90500000, outflow: 61400000 },
-      { month: 'Agu', profit: 28000000, omzet: 82000000, outflow: 54000000 },
-      { month: 'Sep', profit: 31500000, omzet: 91000000, outflow: 59500000 },
-      { month: 'Okt', profit: 32600000, omzet: 100000000, outflow: 67400000 }
-    ]
-  }
   return (umkmStore.monthlyRecords || []).map(r => ({
     month: r.month.slice(0, 3),
     profit: r.netProfit || 0,

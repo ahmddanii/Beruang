@@ -765,8 +765,9 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import gsap from 'gsap'
-import { useInvestorStore, build150MarketplaceUmkms, type MarketplaceUmkm } from '~/stores/investor'
+import { useInvestorStore, type MarketplaceUmkm } from '~/stores/investor'
 import { useAuthStore } from '~/stores/auth'
+import { useChatStore } from '~/stores/chat'
 import BActionButton from '~/components/base/BActionButton.vue'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import {
@@ -846,6 +847,7 @@ onMounted(async () => {
   investorStore.initPostsFromStorage()
   await investorStore.fetchMarketplace()
   await investorStore.fetchWatchlist()
+  await chatStore.fetchThreads()
   setupFeedLazyObserver()
 
   if (typeof window !== 'undefined' && pageRootRef.value) {
@@ -893,32 +895,17 @@ interface RecentUmkmChat {
   online: boolean
 }
 
-const recentUmkmChats = ref<RecentUmkmChat[]>([
-  {
-    id: 'chat-umkm-01',
-    umkmName: 'Kopi Senja Nusantara',
-    avatarUrl: '/logo.svg',
-    lastMessage: 'Kami siap menjadwalkan sesi bedah ruang data minggu ini.',
-    lastTime: '17:05',
-    online: true
-  },
-  {
-    id: 'chat-umkm-03',
-    umkmName: 'Sambal Bu Rudy Asli',
-    avatarUrl: '/logo.svg',
-    lastMessage: 'Laporan mutasi kas kuartal terbaru sudah kami unggah.',
-    lastTime: '15:40',
-    online: false
-  },
-  {
-    id: 'chat-umkm-05',
-    umkmName: 'Keripik Tempe Marem',
-    avatarUrl: '/logo.svg',
-    lastMessage: 'Terima kasih atas ketertarikan Bapak pada ekspansi produksi kami.',
-    lastTime: '11:20',
-    online: true
-  }
-])
+const chatStore = useChatStore()
+const recentUmkmChats = computed<RecentUmkmChat[]>(() => {
+  return (chatStore.threads || []).slice(0, 3).map(t => ({
+    id: t.id,
+    umkmName: t.participantName || (t.participant as any)?.name || 'Mitra Usaha',
+    avatarUrl: t.participantAvatar || '/logo.svg',
+    lastMessage: t.lastMessage || 'Mulai percakapan bisnis...',
+    lastTime: t.lastMessageAt ? new Date(t.lastMessageAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'Baru',
+    online: !!t.isOnline
+  }))
+})
 
 // Carousel Slide State per Post ID + HMR-Safe Fallback Multi-Image Dummy Slides
 const activeSlides = ref<Record<string, number>>({})
@@ -1256,16 +1243,10 @@ const fallbackPlatformPosts: MarketplaceUmkm[] = [
   }
 ]
 
-// Feed Filtering + Interleaving Platform "Tips & Trick" Posts (dengan sumber 150 data UMKM)
-const fallback150Umkms = build150MarketplaceUmkms()
-
+// Feed Filtering + Interleaving Platform "Tips & Trick" Posts
 const filteredFeed = computed<MarketplaceUmkm[]>(() => {
   const q = investorStore.searchQuery.toLowerCase().trim()
-
-  const sourceList =
-    investorStore.marketplaceList && investorStore.marketplaceList.length >= 150
-      ? investorStore.marketplaceList
-      : fallback150Umkms
+  const sourceList = investorStore.marketplaceList || []
 
   const umkmFiltered = sourceList.filter(item => {
     const matchSearch =

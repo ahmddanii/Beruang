@@ -75,6 +75,23 @@ app.use("/api/chat", chatRouter);
 app.use("/api/notifications", notificationsRouter);
 app.use("/api/user", userRouter);
 
+// Public Contact Form Endpoint
+app.post("/api/contact", async (req: Request, res: Response) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    console.log(`📩 Pesan kontak baru dari ${name} (${email}): [${subject}] ${message}`);
+    return res.json({
+      success: true,
+      message: "Pesan Anda berhasil diterima oleh tim Beruang. Kami akan segera menghubungi Anda.",
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Gagal mengirimkan formulir kontak.",
+    });
+  }
+});
+
 // Global Error Handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error("❌ Server Error:", err?.message || err);

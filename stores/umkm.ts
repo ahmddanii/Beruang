@@ -158,30 +158,6 @@ export interface FinanceSummary {
   marginStatus: 'SEHAT' | 'WASPADA' | 'KRITIS' | string
 }
 
-export const DEMO_UMKM_PROFILE: UmkmBusinessProfile = {
-  id: 'umkm-01',
-  name: 'Kopi Senja Nusantara',
-  brand: 'Kopi Senja Nusantara',
-  ownerName: 'Fikri Setiawan',
-  owner_name: 'Fikri Setiawan',
-  ownerAvatarUrl: '',
-  sector: 'Kuliner & Minuman (F&B)',
-  city: 'Bandung, Jawa Barat',
-  establishedYear: 2021,
-  outletsCount: 3,
-  employeesCount: 14,
-  fundingTarget: 250000000,
-  pitchSummary: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
-  description: 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%. Menargetkan ekspansi 2 gerai cloud kitchen dan standardisasi roastery terpusat.',
-  logoUrl: '/logo.svg',
-  bannerUrl: '',
-  nib: '1209000123456',
-  npwp: '81.423.891.4-429.000',
-  fundingStatus: 'READY_FOR_FUNDING',
-  certifiedAt: '18 September 2026',
-  consultantName: 'Dra. Maya Suryani, M.M.'
-}
-
 export const CLEAN_UMKM_PROFILE: UmkmBusinessProfile = {
   id: '',
   name: '',
@@ -206,16 +182,6 @@ export const CLEAN_UMKM_PROFILE: UmkmBusinessProfile = {
   consultantName: ''
 }
 
-export const DEMO_FINANCE_SUMMARY: FinanceSummary = {
-  cashBalance: 75500000,
-  totalIncomeMonth: 100000000,
-  totalCogsMonth: 45100000,
-  totalOpexMonth: 22300000,
-  netProfitMonth: 32600000,
-  marginPercentage: 32.6,
-  marginStatus: 'SEHAT'
-}
-
 export const CLEAN_FINANCE_SUMMARY: FinanceSummary = {
   cashBalance: 0,
   totalIncomeMonth: 0,
@@ -225,318 +191,6 @@ export const CLEAN_FINANCE_SUMMARY: FinanceSummary = {
   marginPercentage: 0,
   marginStatus: 'BELUM_ADA_DATA'
 }
-
-export const DEMO_MONTHLY_RECORDS: MonthlyRecord[] = [
-  {
-    month: 'Januari',
-    year: 2026,
-    omzet: 42000000,
-    hpp: 19000000,
-    opex: 11000000,
-    netProfit: 12000000,
-    cashBalance: 28000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Februari',
-    year: 2026,
-    omzet: 45000000,
-    hpp: 20500000,
-    opex: 11500000,
-    netProfit: 13000000,
-    cashBalance: 33000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Maret',
-    year: 2026,
-    omzet: 49000000,
-    hpp: 22000000,
-    opex: 12000000,
-    netProfit: 15000000,
-    cashBalance: 39000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'April',
-    year: 2026,
-    omzet: 53000000,
-    hpp: 24000000,
-    opex: 12500000,
-    netProfit: 16500000,
-    cashBalance: 45000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Mei',
-    year: 2026,
-    omzet: 58000000,
-    hpp: 26000000,
-    opex: 13500000,
-    netProfit: 18500000,
-    cashBalance: 52000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Juni',
-    year: 2026,
-    omzet: 64000000,
-    hpp: 28500000,
-    opex: 14500000,
-    netProfit: 21000000,
-    cashBalance: 59000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Juli',
-    year: 2026,
-    omzet: 72000000,
-    hpp: 32000000,
-    opex: 16000000,
-    netProfit: 24000000,
-    cashBalance: 66000000,
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Agustus',
-    year: 2026,
-    omzet: 82000000,
-    hpp: 36500000,
-    opex: 17500000,
-    netProfit: 28000000,
-    cashBalance: 71000000,
-    proofDocumentName: 'Mutasi_Kasir_POS_Agustus_2026.pdf',
-    proofDocumentSize: '2.1 MB',
-    uploadedAt: '02 Sep 2026',
-    status: 'VERIFIED'
-  },
-  {
-    month: 'September',
-    year: 2026,
-    omzet: 91000000,
-    hpp: 40500000,
-    opex: 19000000,
-    netProfit: 31500000,
-    cashBalance: 74000000,
-    proofDocumentName: 'Rekening_Koran_Mandiri_Sept2026.pdf',
-    proofDocumentSize: '2.4 MB',
-    uploadedAt: '03 Okt 2026',
-    status: 'VERIFIED'
-  },
-  {
-    month: 'Oktober',
-    year: 2026,
-    omzet: 100000000,
-    hpp: 45100000,
-    opex: 22300000,
-    netProfit: 32600000,
-    cashBalance: 75500000,
-    proofDocumentName: 'Rekap_POS_BukuKas_Okt2026.pdf',
-    proofDocumentSize: '3.1 MB',
-    uploadedAt: '18 Okt 2026',
-    status: 'VERIFIED',
-    hasAnomaly: false,
-    anomalyNote: 'Proporsi modal bahan dan operasional harian berada dalam batas aman evaluasi sistem.'
-  }
-]
-
-export const DEMO_INVESTOR_REQUESTS: InvestorRequest[] = [
-  {
-    id: 'req-01',
-    investorId: 'inv-101',
-    investorName: 'Hendro Wicaksono',
-    firmName: 'Nusantara Angel Syndicate',
-    avatar: '',
-    requestedAt: '22 September 2026',
-    status: 'APPROVED',
-    proposedTicket: 150000000,
-    introMessage: 'Halo Mas Fikri, kami melihat pertumbuhan gerai Kopi Senja sangat konsisten di Bandung. Kami berminat mendanai ekspansi 2 cloud kitchen baru dengan skema bagi hasil/equity.',
-    reviewedAt: '23 September 2026'
-  },
-  {
-    id: 'req-02',
-    investorId: 'inv-102',
-    investorName: 'Pratama Kusuma',
-    firmName: 'Jawa Maju Ventures',
-    avatar: '',
-    requestedAt: '25 September 2026',
-    status: 'PENDING',
-    proposedTicket: 100000000,
-    introMessage: 'Tertarik dengan model roastery efisien dan margin sehat. Ingin meninjau rekening koran dan proyeksi cashflow.'
-  }
-]
-
-export const DEMO_DAILY_TRANSACTIONS: DailyTransaction[] = [
-  {
-    id: 'tx-01',
-    date: '15 Oktober 2026',
-    title: 'Penjualan Kopi Susu Aren POS Kasir',
-    category: 'PEMASUKAN',
-    amount: 3850000,
-    paymentMethod: 'QRIS',
-    status: 'VERIFIED',
-    receiptNumber: 'INV/20261015/POS/089',
-    notes: 'Rekap harian kasir 3 gerai aktif'
-  },
-  {
-    id: 'tx-02',
-    date: '14 Oktober 2026',
-    title: 'Biji Kopi Arabika Malabar 25kg (Bahan Baku)',
-    category: 'MODAL_JUALAN',
-    amount: 3250000,
-    paymentMethod: 'TRANSFER',
-    status: 'VERIFIED',
-    receiptNumber: 'PO/20261014/MALABAR/012',
-    notes: 'Restock mingguan roastery supplier Malabar'
-  },
-  {
-    id: 'tx-03',
-    date: '13 Oktober 2026',
-    title: 'Susu Fresh Milk Pasteurisasi 60 Liter',
-    category: 'MODAL_JUALAN',
-    amount: 1140000,
-    paymentMethod: 'TRANSFER',
-    status: 'VERIFIED',
-    receiptNumber: 'INV/20261013/MILK/45',
-    notes: 'Pasokan harian susu murni peternak Lembang'
-  },
-  {
-    id: 'tx-04',
-    date: '12 Oktober 2026',
-    title: 'Tagihan Listrik PLN & Wi-Fi Gerai Cabang Dago',
-    category: 'OPERASIONAL',
-    amount: 2450000,
-    paymentMethod: 'TRANSFER',
-    status: 'VERIFIED',
-    receiptNumber: 'PLN/20261012/DAGO/981',
-    notes: 'Beban operasional rutin bulanan'
-  },
-  {
-    id: 'tx-05',
-    date: '11 Oktober 2026',
-    title: 'Penjualan Weekend Dine-in & Takeaway Cabang 1 & 2',
-    category: 'PEMASUKAN',
-    amount: 5200000,
-    paymentMethod: 'QRIS',
-    status: 'VERIFIED',
-    receiptNumber: 'INV/20261011/POS/102',
-    notes: 'Lonjakan pesanan promo akhir pekan'
-  },
-  {
-    id: 'tx-06',
-    date: '10 Oktober 2026',
-    title: 'Pengadaan Cup Biodegradable & Paper Straw',
-    category: 'MODAL_JUALAN',
-    amount: 880000,
-    paymentMethod: 'TUNAI',
-    status: 'VERIFIED',
-    receiptNumber: 'NOTA/20261010/CUP/21',
-    notes: 'Kemasan takeaway 1.000 pcs'
-  },
-  {
-    id: 'tx-07',
-    date: '09 Oktober 2026',
-    title: 'Maintenance Rutin Mesin Espresso Simonelli',
-    category: 'OPERASIONAL',
-    amount: 750000,
-    paymentMethod: 'TUNAI',
-    status: 'VERIFIED',
-    receiptNumber: 'SRV/20261009/TECH/07',
-    notes: 'Descaling dan pergantian gasket seal'
-  },
-  {
-    id: 'tx-08',
-    date: '08 Oktober 2026',
-    title: 'Penjualan Hari Kerja (Senin - Rabu)',
-    category: 'PEMASUKAN',
-    amount: 4120000,
-    paymentMethod: 'QRIS',
-    status: 'VERIFIED',
-    receiptNumber: 'INV/20261008/POS/067',
-    notes: 'Kasir online terhubung mPOS'
-  }
-]
-
-export const DEMO_BRANCHES: UmkmBranch[] = [
-  {
-    id: 'branch-1',
-    name: 'Cabang Utama Riau',
-    location: 'Bandung',
-    address: 'Jl. R.E. Martadinata No. 45, Citarum, Bandung',
-    city: 'Bandung',
-    isPrimary: true,
-    shareRatio: 0.45,
-    establishedYear: 2021
-  },
-  {
-    id: 'branch-2',
-    name: 'Cabang Dago Heritage',
-    location: 'Bandung',
-    address: 'Jl. Ir. H. Juanda No. 102, Dago, Bandung',
-    city: 'Bandung',
-    isPrimary: false,
-    shareRatio: 0.35,
-    establishedYear: 2023
-  },
-  {
-    id: 'branch-3',
-    name: 'Cabang Sudirman Walk',
-    location: 'Jakarta Selatan',
-    address: 'Jl. Jend. Sudirman Kav. 52, SCBD, Jakarta Selatan',
-    city: 'Jakarta Selatan',
-    isPrimary: false,
-    shareRatio: 0.20,
-    establishedYear: 2024
-  }
-]
-
-export const DEMO_ASSESSMENT_ASPECTS: AssessmentAspect[] = [
-  {
-    id: 'fin',
-    name: 'Keuangan & Pergerakan Uang',
-    score: 78,
-    maxScore: 100,
-    targetScore: 85,
-    status: 'good',
-    notes: 'Margin kotor di atas 45%, rasio kas sehat untuk 4 bulan operasional. Disiplin pelaporan kas harian sudah membaik.'
-  },
-  {
-    id: 'ops',
-    name: 'Operasional & Standar Kerja',
-    score: 85,
-    maxScore: 100,
-    targetScore: 80,
-    status: 'good',
-    notes: 'SOP resep dan penyajian menu F&B sudah terdokumentasi rapi. Kartu stok mingguan sudah berjalan rutin.'
-  },
-  {
-    id: 'mkt',
-    name: 'Pasar & Pemasaran',
-    score: 64,
-    maxScore: 100,
-    targetScore: 75,
-    status: 'warning',
-    notes: 'Basis pelanggan loyal cukup kuat di area kampus, namun perlu diversifikasi strategi pemasaran digital di luar promo ojol.'
-  },
-  {
-    id: 'leg',
-    name: 'Legalitas & Izin Usaha',
-    score: 92,
-    maxScore: 100,
-    targetScore: 90,
-    status: 'good',
-    notes: 'NIB RBA terbit, sertifikat Halal BPJPH aktif, izin P-IRT dan sewa lokasi aman untuk 3 tahun ke depan.'
-  },
-  {
-    id: 'gov',
-    name: 'Tim & Pembagian Tugas',
-    score: 75,
-    maxScore: 100,
-    targetScore: 80,
-    status: 'good',
-    notes: 'Struktur tim gerai jelas dengan Store Leader di tiap cabang. Pembagian kompensasi insentif berbasis target.'
-  }
-]
 
 export const CLEAN_ASSESSMENT_ASPECTS: AssessmentAspect[] = [
   {
@@ -586,96 +240,6 @@ export const CLEAN_ASSESSMENT_ASPECTS: AssessmentAspect[] = [
   }
 ]
 
-export const DEMO_TASKS: ActionPlanTask[] = [
-  {
-    id: 't-1',
-    title: 'Pisahkan Rekening Pribadi dan Usaha',
-    description: 'Buka rekening giro khusus operasional warung dan integrasikan mutasi kas.',
-    category: 'Finansial',
-    completed: true,
-    dueDate: '10 Juli 2026',
-    milestoneId: 'm1',
-    consultantNote: 'Terverifikasi per rekening koran Bank Mandiri.',
-    steps: [
-      { id: 's1-1', title: 'Buka rekening giro operasional khusus atas nama usaha di bank mitra', completed: true },
-      { id: 's1-2', title: 'Integrasikan pencatatan kas harian dan mutasi rekening toko', completed: true },
-      { id: 's1-3', title: 'Terapkan pemisahan kas fisik di laci kasir dari dompet pribadi', completed: true }
-    ]
-  },
-  {
-    id: 't-2',
-    title: 'Lengkapi Izin Edar & NIB Berbasis Risiko',
-    description: 'Pastikan KBLI sesuai dan sertifikasi halal gerai terpasang di dinding kasir.',
-    category: 'Legalitas',
-    completed: true,
-    dueDate: '25 Juli 2026',
-    milestoneId: 'm1',
-    steps: [
-      { id: 's2-1', title: 'Perbarui nomor KBLI 56303 (Kedai Minuman/Kopi) di sistem OSS RBA', completed: true },
-      { id: 's2-2', title: 'Unggah berkas permohonan sertifikasi halal BPJPH & audit bahan', completed: true },
-      { id: 's2-3', title: 'Cetak dan pasang sertifikat legalitas resmi di dinding gerai utama', completed: true }
-    ]
-  },
-  {
-    id: 't-3',
-    title: 'Standardisasi Kartu Stok Mingguan',
-    description: 'Terapkan formulir opname bahan baku setiap Minggu malam di seluruh 3 outlet.',
-    category: 'Operasional',
-    completed: true,
-    dueDate: '15 Agustus 2026',
-    milestoneId: 'm2',
-    consultantNote: 'Selisih stok bahan baku kini di bawah batas wajar 2%.',
-    steps: [
-      { id: 's3-1', title: 'Buat formulir checklist opname stok harian/mingguan untuk barista', completed: true },
-      { id: 's3-2', title: 'Latih tim gerai cara menghitung sisa biji kopi, susu, dan sirup', completed: true },
-      { id: 's3-3', title: 'Evaluasi selisih stok bahan baku (waste) mingguan agar di bawah 2%', completed: true }
-    ]
-  },
-  {
-    id: 't-4',
-    title: 'Perbarui Kontrak Supplier Bahan Baku & Kemasan Gerai',
-    description: 'Kunci harga bahan baku 6 bulan ke depan untuk cegah lonjakan modal produksi mendadak.',
-    category: 'Finansial',
-    completed: true,
-    dueDate: '30 Agustus 2026',
-    milestoneId: 'm2',
-    steps: [
-      { id: 's4-1', title: 'Negosiasi harga pembelian kuantiti biji kopi arabika ke supplier', completed: true },
-      { id: 's4-2', title: 'Kunci kontrak pasokan kemasan ramah lingkungan untuk 6 bulan ke depan', completed: true },
-      { id: 's4-3', title: 'Tetapkan jadwal dan alur pembayaran tempo supplier (termin H+14)', completed: true }
-    ]
-  },
-  {
-    id: 't-5',
-    title: 'Input Progres Finansial Rutin Bulan September',
-    description: 'Unggah rekapitulasi penjualan POS dan bukti rekening koran bulan September.',
-    category: 'Finansial',
-    completed: true,
-    dueDate: '05 Oktober 2026',
-    milestoneId: 'm3',
-    steps: [
-      { id: 's5-1', title: 'Rekapitulasi total mutasi uang masuk mesin POS kasir bulan September', completed: true },
-      { id: 's5-2', title: 'Unduh dan validasi mutasi rekening koran operasional bulan September', completed: true },
-      { id: 's5-3', title: 'Cocokkan saldo akhir kas toko dengan laporan keuangan di Beruang', completed: true }
-    ]
-  },
-  {
-    id: 't-6',
-    title: 'Simulasi Pitching & Data Room Briefing',
-    description: 'Diskusi bersama konsultan mengenai data privat yang dibuka untuk investor.',
-    category: 'Tata Kelola',
-    completed: false,
-    dueDate: '12 Oktober 2026',
-    milestoneId: 'm3',
-    consultantNote: 'Fokus pada proyeksi payback period 18 bulan.',
-    steps: [
-      { id: 's6-1', title: 'Susun dokumen ringkasan eksekutif (executive summary) 1 halaman', completed: true },
-      { id: 's6-2', title: 'Siapkan dokumen legalitas resmi & bukti arus kas dalam folder Data Room', completed: false },
-      { id: 's6-3', title: 'Simulasi presentasi proyeksi payback period 18 bulan bersama konsultan', completed: false }
-    ]
-  }
-]
-
 export const useUmkmStore = defineStore('umkm', {
   state: () => ({
     financeSummary: { ...CLEAN_FINANCE_SUMMARY } as FinanceSummary,
@@ -690,11 +254,7 @@ export const useUmkmStore = defineStore('umkm', {
 
     assessmentAspects: [] as AssessmentAspect[],
 
-    milestones: [
-      { id: 'm1', order: 1, title: 'Fondasi Pencatatan & Legalitas', description: 'Standardisasi rekening usaha, NIB, dan kartu stok' },
-      { id: 'm2', order: 2, title: 'Efisiensi Biaya & HPP', description: 'Negosiasi supplier bahan baku dan pengendalian efisiensi produksi' },
-      { id: 'm3', order: 3, title: 'Validasi & Sertifikasi Investor', description: '3 bulan pelaporan bersih dan audit kesiapan pendanaan' }
-    ] as Milestone[],
+    milestones: [] as Milestone[],
 
     tasks: [] as ActionPlanTask[],
 
@@ -759,43 +319,10 @@ export const useUmkmStore = defineStore('umkm', {
       ])
     },
 
-    initMonthlyRecordsFromStorage() {
-      if (typeof window === 'undefined') return
-      try {
-        const authStore = useAuthStore()
-        const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-        const saved = localStorage.getItem('umkm_monthly_records')
-        if (saved) {
-          const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            // Jika akun baru/bukan demo namun localStorage berisi catatan demo Kopi Senja, bersihkan
-            const isDemoData = parsed.some((r: any) => r.omzet === 42000000 || r.omzet === 100000000)
-            if (!isDemo && isDemoData) {
-              localStorage.removeItem('umkm_monthly_records')
-              this.monthlyRecords = []
-              return
-            }
-            this.monthlyRecords = parsed
-            return
-          }
-        }
-        if (isDemo && this.monthlyRecords.length === 0) {
-          this.monthlyRecords = [...DEMO_MONTHLY_RECORDS]
-        } else if (!isDemo) {
-          this.monthlyRecords = []
-        }
-      } catch (e) {
-        console.warn('Gagal membaca monthly records dari localStorage', e)
-      }
-    },
-
     /**
      * GET /api/umkm/profile
      */
     async fetchProfile() {
-      const authStore = useAuthStore()
-      const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-
       try {
         const res = await useApi<any>('/umkm/profile')
         if (res.data) {
@@ -803,7 +330,7 @@ export const useUmkmStore = defineStore('umkm', {
           const resolvedConsultantId = d.consultantId || ''
           const resolvedConsultantName = resolvedConsultantId
             ? (d.consultant?.user?.name || d.consultantName || 'Konsultan Pendamping')
-            : (isDemo ? 'Dra. Maya Suryani, M.M.' : '')
+            : ''
 
           this.profile = {
             ...this.profile,
@@ -829,14 +356,9 @@ export const useUmkmStore = defineStore('umkm', {
             consultantId: resolvedConsultantId,
             consultantName: resolvedConsultantName
           }
-        } else if (isDemo && !this.profile.name) {
-          this.profile = { ...DEMO_UMKM_PROFILE }
         }
       } catch (err: any) {
         console.warn('Gagal memuat profil UMKM:', err?.message)
-        if (isDemo && !this.profile.name) {
-          this.profile = { ...DEMO_UMKM_PROFILE }
-        }
       }
     },
 
@@ -844,42 +366,26 @@ export const useUmkmStore = defineStore('umkm', {
      * GET /api/umkm/assessment
      */
     async fetchAssessment() {
-      const authStore = useAuthStore()
-      const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-
       try {
         const res = await useApi<any>('/umkm/assessment')
         if (res.data) {
-          this.hasAssessment = res.data.hasAssessment ?? (isDemo || res.data.compositeScore > 0)
-          if (res.data.aspects && Array.isArray(res.data.aspects)) {
-            this.assessmentAspects = res.data.aspects
-          }
-        } else if (isDemo) {
-          this.hasAssessment = true
-          this.assessmentAspects = [...DEMO_ASSESSMENT_ASPECTS]
-        } else {
-          this.hasAssessment = false
-          this.assessmentAspects = [...CLEAN_ASSESSMENT_ASPECTS]
+          this.hasAssessment = res.data.hasAssessment ?? (res.data.compositeScore > 0)
+          this.assessmentAspects = Array.isArray(res.data.aspects) && res.data.aspects.length
+            ? res.data.aspects
+            : [...CLEAN_ASSESSMENT_ASPECTS]
+          return
         }
       } catch (err: any) {
         console.warn('Gagal memuat assessment UMKM:', err?.message)
-        if (isDemo) {
-          this.hasAssessment = true
-          this.assessmentAspects = [...DEMO_ASSESSMENT_ASPECTS]
-        } else {
-          this.hasAssessment = false
-          this.assessmentAspects = [...CLEAN_ASSESSMENT_ASPECTS]
-        }
       }
+      this.hasAssessment = false
+      this.assessmentAspects = [...CLEAN_ASSESSMENT_ASPECTS]
     },
 
     /**
      * GET /api/umkm/tasks & /api/umkm/milestones
      */
     async fetchTasks() {
-      const authStore = useAuthStore()
-      const isDemo = authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser
-
       try {
         const [tasksRes, milestonesRes] = await Promise.allSettled([
           useApi<any>('/umkm/tasks'),
@@ -896,8 +402,6 @@ export const useUmkmStore = defineStore('umkm', {
               this.milestones = d.milestones
             }
           }
-        } else if (isDemo && this.tasks.length === 0) {
-          this.tasks = [...DEMO_TASKS]
         }
 
         if (milestonesRes.status === 'fulfilled' && milestonesRes.value?.data && Array.isArray(milestonesRes.value.data)) {
@@ -905,9 +409,6 @@ export const useUmkmStore = defineStore('umkm', {
         }
       } catch (err: any) {
         console.warn('Gagal memuat tasks UMKM:', err?.message)
-        if (isDemo && this.tasks.length === 0) {
-          this.tasks = [...DEMO_TASKS]
-        }
       }
     },
 
@@ -1048,9 +549,6 @@ export const useUmkmStore = defineStore('umkm', {
      * GET /api/finances/summary, /api/finances/daily, /api/finances/monthly
      */
     async fetchFinances() {
-      const authStore = useAuthStore()
-      const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
-
       try {
         const [dailyRes, monthlyRes, monthlyAltRes, summaryRes] = await Promise.allSettled([
           useApi<any>('/finances/daily'),
@@ -1070,8 +568,6 @@ export const useUmkmStore = defineStore('umkm', {
             marginPercentage: Number(s.marginPercentage ?? s.margin_percentage ?? 0),
             marginStatus: s.marginStatus ?? s.margin_status ?? 'BELUM_ADA_DATA'
           }
-        } else if (isDemo && this.financeSummary.totalIncomeMonth === 0) {
-          this.financeSummary = { ...DEMO_FINANCE_SUMMARY }
         }
 
         if (dailyRes.status === 'fulfilled' && dailyRes.value?.data) {
@@ -1079,8 +575,6 @@ export const useUmkmStore = defineStore('umkm', {
           if (Array.isArray(list)) {
             this.dailyTransactions = list
           }
-        } else if (isDemo && this.dailyTransactions.length === 0) {
-          this.dailyTransactions = [...DEMO_DAILY_TRANSACTIONS]
         }
 
         const validMonthly = (monthlyRes.status === 'fulfilled' && monthlyRes.value?.data)
@@ -1094,8 +588,6 @@ export const useUmkmStore = defineStore('umkm', {
           if (Array.isArray(mList)) {
             this.monthlyRecords = mList
           }
-        } else if (isDemo && this.monthlyRecords.length === 0) {
-          this.monthlyRecords = [...DEMO_MONTHLY_RECORDS]
         }
       } catch (err: any) {
         console.warn('Gagal memuat data keuangan live:', err?.message)
@@ -1235,14 +727,6 @@ export const useUmkmStore = defineStore('umkm', {
         this.financeSummary.marginPercentage = Number(((newRec.netProfit / newRec.omzet) * 100).toFixed(1))
       }
 
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.setItem('umkm_monthly_records', JSON.stringify(this.monthlyRecords))
-        } catch (e) {
-          console.warn('Gagal menyimpan rekap bulanan ke localStorage', e)
-        }
-      }
-
       try {
         let bodyPayload: any = newRec
         if (record.rawFile instanceof File) {
@@ -1288,14 +772,6 @@ export const useUmkmStore = defineStore('umkm', {
         target.status = 'PENDING'
       }
 
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.setItem('umkm_monthly_records', JSON.stringify(this.monthlyRecords))
-        } catch (e) {
-          console.warn('Gagal simpan file laporan ke localStorage', e)
-        }
-      }
-
       if (file.rawFile instanceof File && target) {
         try {
           const formData = new FormData()
@@ -1319,25 +795,9 @@ export const useUmkmStore = defineStore('umkm', {
       }
     },
 
+    /** Rekap bulanan kini hanya dari backend (fetchFinances). Dipertahankan agar pemanggil lama tidak rusak. */
     initMonthlyRecordsFromStorage() {
-      if (typeof window !== 'undefined') {
-        try {
-          const authStore = useAuthStore()
-          const isDemo = authStore.currentUser?.email === 'fikri@kopisenja.id'
-          const storageKey = authStore.currentUser?.id ? `umkm_monthly_records_${authStore.currentUser.id}` : 'umkm_monthly_records'
-          const saved = localStorage.getItem(storageKey)
-          if (saved) {
-            const parsed = JSON.parse(saved)
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              if (isDemo || parsed[0]?.omzet !== 42000000) {
-                this.monthlyRecords = parsed
-              }
-            }
-          }
-        } catch (e) {
-          // ignore
-        }
-      }
+      if (this.monthlyRecords.length === 0) this.fetchFinances()
     },
 
     /**
@@ -1516,19 +976,13 @@ export const useUmkmStore = defineStore('umkm', {
       if (typeof window !== 'undefined') {
         try {
           const auth = useAuthStore()
-          const isDemo = auth.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id'
           const keySuffix = auth.currentUser?.id ? `_${auth.currentUser.id}` : ''
           const savedName = localStorage.getItem(`umkm_profile_name${keySuffix}`)
           const savedDesc = localStorage.getItem(`umkm_profile_desc${keySuffix}`)
-          if (savedName) this.profile.name = savedName
-          if (savedDesc) {
-            if (!isDemo && savedDesc.includes('Spesialis kopi arabika')) {
-              localStorage.removeItem(`umkm_profile_desc${keySuffix}`)
-              localStorage.removeItem('umkm_profile_desc')
-            } else {
-              this.profile.pitchSummary = savedDesc
-              this.profile.description = savedDesc
-            }
+          if (savedName && !this.profile.name) this.profile.name = savedName
+          if (savedDesc && !this.profile.description) {
+            this.profile.pitchSummary = savedDesc
+            this.profile.description = savedDesc
           }
         } catch (e) {
           // ignore
@@ -1589,25 +1043,13 @@ export const useUmkmStore = defineStore('umkm', {
       if (typeof window !== 'undefined') {
         try {
           const auth = useAuthStore()
-          const isDemo = auth.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || auth.isDemoUser
-          const userKey = auth.currentUser?.id ? `_${auth.currentUser.id}` : ''
-          const savedBranches = localStorage.getItem(`umkm_branches_list${userKey}`) || (isDemo ? localStorage.getItem('umkm_branches_list') : null)
-          const savedSelected = localStorage.getItem(`umkm_selected_branch_ids${userKey}`) || (isDemo ? localStorage.getItem('umkm_selected_branch_ids') : null)
-          const savedOutlets = localStorage.getItem(`umkm_outlets_count${userKey}`) || (isDemo ? localStorage.getItem('umkm_outlets_count') : null)
-          if (savedBranches) {
-            const parsed = JSON.parse(savedBranches)
-            if (Array.isArray(parsed)) {
-              if (!isDemo && savedBranches.includes('Cabang Utama Riau')) {
-                localStorage.removeItem(`umkm_branches_list${userKey}`)
-                localStorage.removeItem('umkm_branches_list')
-                this.branches = []
-              } else {
-                this.branches = parsed
-              }
-            }
-          } else if (!isDemo) {
-            this.branches = []
-          }
+          if (!auth.currentUser?.id) return
+          const userKey = `_${auth.currentUser.id}`
+          const savedBranches = localStorage.getItem(`umkm_branches_list${userKey}`)
+          const savedSelected = localStorage.getItem(`umkm_selected_branch_ids${userKey}`)
+          const savedOutlets = localStorage.getItem(`umkm_outlets_count${userKey}`)
+          const parsedBranches = savedBranches ? JSON.parse(savedBranches) : []
+          this.branches = Array.isArray(parsedBranches) ? parsedBranches : []
           if (savedSelected) {
             const parsed = JSON.parse(savedSelected)
             if (Array.isArray(parsed)) {

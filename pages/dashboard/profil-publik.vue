@@ -112,7 +112,7 @@
           <span
             :class="[
               'inline-flex items-center gap-1.5 text-xs font-poppins font-bold px-3 py-1 rounded-full shrink-0',
-              umkmStore.profile.nib || isDemo
+              umkmStore.profile.nib
                 ? 'bg-emerald-50 text-[#00AA13] border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
                 : 'bg-neutral-100 text-neutral-600 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700'
             ]"
@@ -184,48 +184,49 @@ definePageMeta({
 const authStore = useAuthStore()
 const umkmStore = useUmkmStore()
 
-const isDemo = computed(() => authStore.currentUser?.email?.toLowerCase() === 'fikri@kopisenja.id' || authStore.isDemoUser)
-
 const businessIdDisplay = computed(() => {
-  if (isDemo.value) return 'BERU-KOP-01'
   if (umkmStore.profile.id) return 'BERU-' + umkmStore.profile.id.substring(0, 8).toUpperCase()
   return 'BERU-NEW'
 })
 
 const isPublished = computed(() => {
-  if (isDemo.value) return true
   return umkmStore.hasAssessment && umkmStore.profile.fundingStatus === 'READY_FOR_FUNDING'
 })
 
 const marginDisplay = computed(() => {
-  if (isDemo.value) return '48.5%'
   return umkmStore.financeSummary.marginPercentage > 0 ? `${umkmStore.financeSummary.marginPercentage}%` : '-'
 })
 
 const growthDisplay = computed(() => {
-  if (isDemo.value) return '+34.2%'
-  return umkmStore.monthlyRecords.length > 1 ? '+0%' : '-'
+  if (umkmStore.monthlyRecords.length >= 2) {
+    const sorted = [...umkmStore.monthlyRecords].sort((a, b) => (b.year - a.year) || 0)
+    const current = sorted[0]?.omzet || 0
+    const prev = sorted[1]?.omzet || 0
+    if (prev > 0) {
+      const g = ((current - prev) / prev) * 100
+      return `${g >= 0 ? '+' : ''}${g.toFixed(1)}%`
+    }
+  }
+  return '-'
 })
 
 const scoreDisplay = computed(() => {
-  if (isDemo.value) return '79/100'
   return umkmStore.overallHealthScore > 0 ? `${umkmStore.overallHealthScore}/100` : '0/100'
 })
 
 const verifiedStatusText = computed(() => {
-  if (isDemo.value) return 'Terverifikasi OSS'
   return umkmStore.profile.nib ? 'NIB Terdaftar' : 'Belum Terverifikasi'
 })
 
 const pitchText = computed(() => {
-  if (umkmStore.profile.pitchSummary) return umkmStore.profile.pitchSummary
-  if (isDemo.value) return 'Spesialis kopi arabika susu gula aren dengan 3 outlet aktif di Bandung & margin kotor stabil di atas 48%.'
+  if (umkmStore.profile.pitchSummary || umkmStore.profile.description) {
+    return umkmStore.profile.pitchSummary || umkmStore.profile.description
+  }
   return 'Belum ada ringkasan usaha. Lengkapi profil tokomu di menu Profil Usaha.'
 })
 
 const consultantText = computed(() => {
   if (umkmStore.profile.consultantName) return umkmStore.profile.consultantName
-  if (isDemo.value) return 'Dra. Maya Suryani, M.M.'
   return 'Belum ditugaskan'
 })
 

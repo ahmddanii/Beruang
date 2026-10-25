@@ -110,6 +110,16 @@ router.post(
 
         if (supabaseKey && fs.existsSync(file.path)) {
           try {
+            // Auto-provision bucket 'vdr-vault' as public bucket if not exists
+            await fetch(`${supabaseUrl}/storage/v1/bucket`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${supabaseKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: "vdr-vault", name: "vdr-vault", public: true }),
+            }).catch(() => {});
+
             const fileBuffer = fs.readFileSync(file.path);
             const contentType = file.mimetype || "application/octet-stream";
             const uploadPath = `${businessId}/${file.filename}`;
@@ -127,6 +137,10 @@ router.post(
             if (uploadRes.ok) {
               fileUrl = `${supabaseUrl}/storage/v1/object/public/vdr-vault/${uploadPath}`;
               storagePath = `vdr-vault/${uploadPath}`;
+              console.log(`[Storage] Berkas ${title} sukses diunggah ke Supabase Storage Cloud: ${fileUrl}`);
+            } else {
+              const errBody = await uploadRes.text().catch(() => "");
+              console.warn(`[Storage] Supabase upload response (${uploadRes.status}):`, errBody);
             }
           } catch (e: any) {
             console.warn("[Storage] Supabase storage upload skipped or failed, using local fallback:", e?.message);

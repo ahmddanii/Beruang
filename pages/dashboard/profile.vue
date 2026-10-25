@@ -935,41 +935,45 @@
       v-model="isDeleteDocModalOpen"
       title="Hapus Dokumen?"
       size="sm"
-      :hide-divider="true"
     >
-      <div class="space-y-4 pt-1 font-poppins text-left">
+      <div class="space-y-4 py-2 font-poppins text-left">
         <div class="flex items-start gap-3.5">
-          <div class="w-11 h-11 rounded-2xl bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 shadow-xs">
-            <HugeiconsIcon :icon="Delete02Icon" :size="22" :stroke-width="2" />
+          <div class="w-12 h-12 rounded-2xl bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 shadow-xs">
+            <HugeiconsIcon :icon="Delete02Icon" :size="24" :stroke-width="2" />
           </div>
-          <div class="space-y-1 min-w-0 flex-1">
-            <h4 class="font-bold text-sm sm:text-base text-neutral-900 dark:text-neutral-100 leading-snug">
+          <div class="space-y-1.5 min-w-0 flex-1">
+            <h4 class="font-bold text-base text-neutral-900 dark:text-neutral-100 leading-snug">
               Hapus {{ docToDelete?.title }}?
             </h4>
             <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Berkas <span class="font-semibold text-neutral-800 dark:text-neutral-200">{{ docToDelete?.file?.name || 'dokumen ini' }}</span> akan dihapus dari Ruang Dokumen tokomu. Investor tidak akan dapat melihat berkas ini sampai kamu mengunggahnya kembali.
+              Berkas <span class="font-semibold text-neutral-800 dark:text-neutral-200 break-all">{{ docToDelete?.file?.name || 'dokumen ini' }}</span> akan dihapus dari Ruang Dokumen tokomu. Investor tidak akan dapat melihat berkas ini sampai kamu mengunggahnya kembali.
             </p>
           </div>
         </div>
+      </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-neutral-100 dark:border-neutral-800">
-          <button
-            type="button"
-            class="btn-pill-action !h-9 !px-4 !text-xs !rounded-xl"
+      <template #footer>
+        <div class="flex items-center justify-end gap-2.5 w-full">
+          <BButton
+            variant="secondary"
+            size="sm"
             @click="cancelDeleteDocument"
           >
             Batal
-          </button>
-          <button
-            type="button"
-            class="h-9 px-4 text-xs font-semibold rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+          </BButton>
+
+          <BButton
+            variant="danger"
+            size="sm"
             @click="confirmDeleteDocument"
           >
-            <HugeiconsIcon :icon="Delete02Icon" :size="14" />
-            <span>Ya, Hapus Berkas</span>
-          </button>
+            <template #icon-left>
+              <HugeiconsIcon :icon="Delete02Icon" :size="16" />
+            </template>
+            Ya, Hapus Berkas
+          </BButton>
         </div>
-      </div>
+      </template>
     </BModal>
 
     <!-- ========================================================================= -->

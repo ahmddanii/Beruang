@@ -20,15 +20,13 @@ test.describe('E2E: Authentication & RBAC Guard', () => {
 
   test('2. /masuk renders multi-option login view and validates phone step', async ({ page }) => {
     await page.goto('/masuk');
-    await page.waitForLoadState('domcontentloaded');
-    await page.locator('h1').waitFor({ state: 'visible' });
-
-    // Check headline
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('h1')).toContainText(/Halo, senang melihatmu kembali!/i);
 
-    // Switch to phone entry step via query parameter
-    await page.goto('/masuk?step=phone');
-    await page.waitForLoadState('domcontentloaded');
+    // Switch to phone entry step via button click
+    const waButton = page.locator('button', { hasText: 'Masuk dengan WhatsApp' });
+    await waButton.click();
+
     const phoneInput = page.locator('#loginPhone');
     await phoneInput.waitFor({ state: 'visible' });
 
@@ -38,7 +36,7 @@ test.describe('E2E: Authentication & RBAC Guard', () => {
 
     // Test phone validation: valid phone
     await phoneInput.fill('81234567890');
-    await expect(page.getByText(/Kirim Kode Verifikasi/i)).toBeEnabled();
+    await expect(page.getByRole('button', { name: /Kirim Kode Verifikasi/i })).toBeEnabled();
   });
 
   test('3. Unauthenticated access to private admin route redirects to /masuk', async ({ page }) => {

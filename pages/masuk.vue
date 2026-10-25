@@ -176,15 +176,13 @@
               <input
                 id="loginPhone"
                 ref="phoneInputRef"
-                :value="phoneInput"
+                v-model="phoneInput"
                 type="tel"
                 required
                 autocomplete="tel-national"
                 inputmode="numeric"
                 placeholder="812-3456-7890"
                 class="w-full px-3 py-2 bg-transparent text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-600 text-lg sm:text-xl font-medium tracking-normal focus:outline-none tabular-nums"
-                @input="onPhoneInput"
-                @keydown="onPhoneKeydown"
                 @keydown.enter="requestOtp"
               />
             </div>
@@ -725,12 +723,13 @@ function formatIndonesianPhone(val: string): string {
   return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
 }
 
-function onPhoneInput(event: Event) {
-  const target = event.target as HTMLInputElement
-  const formatted = formatIndonesianPhone(target.value)
-  phoneInput.value = formatted
-  target.value = formatted
-}
+watch(phoneInput, (val) => {
+  if (!val) return
+  const formatted = formatIndonesianPhone(val)
+  if (formatted !== val) {
+    phoneInput.value = formatted
+  }
+})
 
 function onPhoneKeydown(event: KeyboardEvent) {
   if (

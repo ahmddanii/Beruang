@@ -197,18 +197,28 @@ export const useChatStore = defineStore('chat', {
   actions: {
     async fetchThreads() {
       try {
-        const res = await useApi<ChatThread[]>('/chat/threads')
+        const authStore = useAuthStore()
+        const isDemo = Boolean(
+          authStore.currentUser?.email?.includes('kopisenja') ||
+          authStore.currentUser?.email?.includes('maya.suryani') ||
+          authStore.currentUser?.email?.includes('hendro')
+        )
+
         if (res.data && Array.isArray(res.data) && res.data.length > 0) {
           this.threads = res.data.map(t => ({
             ...t,
             messages: (t.messages && t.messages.length > 0) ? t.messages : (this.threads.find(old => old.id === t.id)?.messages || [])
           }))
-        } else if (this.threads.length === 0) {
+        } else if (isDemo && this.threads.length === 0) {
           this.threads = [...DEMO_CHAT_THREADS]
+        } else if (!isDemo) {
+          this.threads = []
         }
 
         if (!this.activeThreadId && this.threads.length > 0) {
           this.activeThreadId = this.threads[0].id
+        } else if (this.threads.length === 0) {
+          this.activeThreadId = null
         }
 
         if (this.activeThreadId) {
@@ -216,9 +226,18 @@ export const useChatStore = defineStore('chat', {
         }
       } catch (err: any) {
         console.warn('Gagal memuat daftar obrolan live:', err?.message)
-        if (this.threads.length === 0) {
+        const authStore = useAuthStore()
+        const isDemo = Boolean(
+          authStore.currentUser?.email?.includes('kopisenja') ||
+          authStore.currentUser?.email?.includes('maya.suryani') ||
+          authStore.currentUser?.email?.includes('hendro')
+        )
+        if (isDemo && this.threads.length === 0) {
           this.threads = [...DEMO_CHAT_THREADS]
           this.activeThreadId = this.threads[0]?.id || null
+        } else if (!isDemo) {
+          this.threads = []
+          this.activeThreadId = null
         }
       }
     },

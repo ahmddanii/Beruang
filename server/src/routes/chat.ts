@@ -204,17 +204,66 @@ async function ensureSeedThreads() {
  */
 router.get("/threads", optionalAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    await ensureSeedThreads();
+    const isFikriDemo = req.user?.email?.toLowerCase() === "fikri@kopisenja.id" || req.user?.id === "usr-demo-01";
+    if (isFikriDemo) {
+      await ensureSeedThreads();
+    }
 
-    let whereClause: any = {};
-    if (req.user?.role === "UMKM") {
-      const isDemo = req.user.email?.toLowerCase() === "fikri@kopisenja.id" || req.user.id === "usr-demo-01";
-      if (!isDemo) {
+    if (!req.user?.id) {
+      return res.json({
+        success: true,
+        message: "Daftar percakapan berhasil dimuat.",
+        data: [],
+      });
+    }
+
+    let whereClause: any = null;
+
+    if (req.user.role === "UMKM") {
+      if (isFikriDemo) {
+        whereClause = {};
+      } else {
         const biz = await prisma.businessProfile.findFirst({ where: { userId: req.user.id } });
         if (biz) {
           whereClause = { businessId: biz.id };
+        } else {
+          whereClause = { businessId: "none" };
         }
       }
+    } else if (req.user.role === "INVESTOR") {
+      const isHendroDemo = req.user.email?.toLowerCase().includes("hendro");
+      if (isHendroDemo) {
+        whereClause = {};
+      } else {
+        whereClause = { investorId: req.user.id };
+      }
+    } else if (req.user.role === "CONSULTANT") {
+      const isMayaDemo = req.user.email?.toLowerCase().includes("maya.suryani");
+      if (isMayaDemo) {
+        whereClause = { investorId: "usr-cons-01" };
+      } else {
+        const consultantProf = await prisma.consultantProfile.findFirst({ where: { userId: req.user.id } });
+        if (consultantProf) {
+          whereClause = {
+            OR: [
+              { investorId: req.user.id },
+              { business: { consultantId: consultantProf.id } },
+            ],
+          };
+        } else {
+          whereClause = { investorId: req.user.id };
+        }
+      }
+    } else if (req.user.role === "ADMIN") {
+      whereClause = {};
+    }
+
+    if (!whereClause) {
+      return res.json({
+        success: true,
+        message: "Daftar percakapan berhasil dimuat.",
+        data: [],
+      });
     }
 
     const threads = await prisma.chatThread.findMany({

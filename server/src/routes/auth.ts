@@ -178,8 +178,11 @@ router.post("/register", async (req: Request, res: Response) => {
       },
     });
 
-    // Jika mendaftar sebagai UMKM, otomatis inisialisasi businessProfile
+    // Inisialisasi profil peran yang dipilih
     let bizProfile = null;
+    let consProfile = null;
+    let invProfile = null;
+
     if (resolvedRole === "UMKM") {
       const bName = businessName || business_name || `${newUser.name} Store`;
       bizProfile = await prisma.businessProfile.create({
@@ -210,6 +213,31 @@ router.post("/register", async (req: Request, res: Response) => {
           isVerified: false,
         },
       });
+    } else if (resolvedRole === "CONSULTANT") {
+      consProfile = await prisma.consultantProfile.create({
+        data: {
+          userId: newUser.id,
+          firmName: `${newUser.name} Advisory`,
+          specialization: "Pendampingan Usaha & Finansial UMKM",
+          city: "Jakarta",
+          hourlyRate: 350000,
+          rating: 5.0,
+          yearsExperience: 3,
+          status: "ACTIVE",
+          isCertified: true,
+        },
+      });
+    } else if (resolvedRole === "INVESTOR") {
+      invProfile = await prisma.investorProfile.create({
+        data: {
+          userId: newUser.id,
+          firmName: `${newUser.name} Capital`,
+          investorType: "ANGEL",
+          sectors: JSON.stringify(["F&B", "Retail", "Agribisnis"]),
+          ticketMin: 25000000,
+          ticketMax: 500000000,
+        },
+      });
     }
 
     const token = generateToken(newUser);
@@ -226,6 +254,8 @@ router.post("/register", async (req: Request, res: Response) => {
           email: newUser.email,
           role: newUser.role,
           businessProfile: bizProfile,
+          consultantProfile: consProfile,
+          investorProfile: invProfile,
         },
       },
     });
@@ -518,8 +548,34 @@ router.post("/google", async (req: Request, res: Response) => {
         },
       });
 
-      // Biarkan profil kosong agar pengguna baru menyelesaikan tahap onboarding secara terpandu
-      // (Memasukkan nama usaha sendiri & memilih konsultan pendamping)
+      if (resolvedRole === "CONSULTANT") {
+        const cProfile = await prisma.consultantProfile.create({
+          data: {
+            userId: user.id,
+            firmName: `${user.name} Advisory`,
+            specialization: "Pendampingan Usaha & Finansial UMKM",
+            city: "Jakarta",
+            hourlyRate: 350000,
+            rating: 5.0,
+            yearsExperience: 3,
+            status: "ACTIVE",
+            isCertified: true,
+          },
+        });
+        user.consultantProfile = cProfile;
+      } else if (resolvedRole === "INVESTOR") {
+        const iProfile = await prisma.investorProfile.create({
+          data: {
+            userId: user.id,
+            firmName: `${user.name} Capital`,
+            investorType: "ANGEL",
+            sectors: JSON.stringify(["F&B", "Retail", "Agribisnis"]),
+            ticketMin: 25000000,
+            ticketMax: 500000000,
+          },
+        });
+        user.investorProfile = iProfile;
+      }
     } else if (avatar && !user.avatar) {
       user = await prisma.user.update({
         where: { id: user.id },
@@ -854,4 +910,5 @@ router.post("/onboarding/investor", requireAuth, async (req: AuthenticatedReques
   }
 });
 
+export { generateToken, computeIsOnboarded };
 export default router;

@@ -297,14 +297,14 @@ const rolesList: { id: UserRole; name: string; path: string }[] = [
   { id: 'ADMIN', name: 'Admin Platform', path: '/admin' }
 ]
 
-function handleSwitchRole(newRole: UserRole, targetPath: string) {
+async function handleSwitchRole(newRole: UserRole, targetPath: string) {
   if (!authStore.canSwitchRole) {
     console.warn('[RBAC] Switch role diblokir untuk akun biasa.')
     return
   }
-  authStore.setRole(newRole)
+  await authStore.setRole(newRole)
   isOpen.value = false
-  router.push(targetPath)
+  await router.push(targetPath)
 }
 
 async function handleLogout() {

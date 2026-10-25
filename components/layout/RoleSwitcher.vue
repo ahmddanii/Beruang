@@ -87,9 +87,9 @@ import { useAuthStore, type UserRole } from '~/stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-function switchToRole(role: UserRole, targetRoute: string) {
+async function switchToRole(role: UserRole, targetRoute: string) {
   if (!authStore.canSwitchRole) return
-  authStore.setRole(role)
-  router.push(targetRoute)
+  await authStore.setRole(role)
+  await router.push(targetRoute)
 }
 </script>

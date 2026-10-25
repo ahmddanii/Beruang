@@ -192,15 +192,18 @@ export const useAuthStore = defineStore('auth', {
       if (!state.currentUser) return false
       const email = state.currentUser.email?.toLowerCase() || ''
       const role = state.currentUser.role
-      // Switch role hanya diizinkan untuk akun fikri@kopisenja.id atau akun ADMIN
-      // Pengguna umum/biasa (UMKM, Konsultan, Investor/Funder biasa) tidak bisa switch role
-      return (
+      // Akun demo khusus & ADMIN secara eksplisit tercakup untuk pengujian RBAC
+      if (
         email === 'fikri@kopisenja.id' ||
         role === 'ADMIN' ||
         email === 'admin@beruang.id' ||
         email === 'maya.suryani@beruang.id' ||
         email === 'hendro@nusantaraventures.com'
-      )
+      ) {
+        return true
+      }
+      // Pengguna aktif yang sudah login juga diizinkan mengalihkan peran akun mereka
+      return true
     }
   },
 
@@ -625,6 +628,53 @@ export const useAuthStore = defineStore('auth', {
         return
       }
 
+      // 1. Jika pengguna adalah akun nyata terautentikasi (bukan demo), simpan langsung ke database backend
+      if (this.currentUser && !this.isDemoUser) {
+        try {
+          const res = await useApi<{ token: string; user: UserProfile }>('/user/switch-role', {
+            method: 'POST',
+            body: { role }
+          })
+          if (res.data?.user) {
+            if (res.data.token) {
+              const tokenCookie = useCookie<string | null>('beruang_token', {
+                maxAge: 60 * 60 * 24 * 7,
+                sameSite: 'lax',
+                path: '/'
+              })
+              tokenCookie.value = res.data.token
+              this.token = res.data.token
+              if (import.meta.client) {
+                localStorage.setItem('beruang_token', res.data.token)
+              }
+            }
+            this.currentUser = {
+              ...this.currentUser,
+              ...res.data.user,
+              role,
+            }
+            this.syncRoleStores()
+            if (import.meta.client && this.currentUser) {
+              try {
+                localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+              } catch {}
+            }
+            return
+          }
+        } catch (err: any) {
+          console.warn('Gagal mengubah peran di backend, menerapkan alih peran lokal:', err?.message)
+          this.currentUser.role = role
+          this.syncRoleStores()
+          if (import.meta.client && this.currentUser) {
+            try {
+              localStorage.setItem('beruang_user', JSON.stringify(this.currentUser))
+            } catch {}
+          }
+          return
+        }
+      }
+
+      // 2. Jika akun demo atau sesi lokal, beralih ke kredensial demo terkait
       const demo = DEMO_CREDENTIALS[role]
       if (demo) {
         this.currentUser = {

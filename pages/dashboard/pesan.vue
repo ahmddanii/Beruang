@@ -473,6 +473,24 @@
         </div>
       </section>
 
+      <!-- Empty state when no conversation is active -->
+      <section
+        v-else
+        class="hidden lg:flex lg:flex-1 lg:min-w-0 lg:h-full items-center justify-center bg-white dark:bg-[#13161F] p-8 text-center text-neutral-400"
+      >
+        <div class="space-y-3 max-w-sm">
+          <div class="w-16 h-16 rounded-2xl bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center mx-auto">
+            <HugeiconsIcon :icon="Message01Icon" :size="32" :stroke-width="1.8" />
+          </div>
+          <h3 class="font-poppins font-bold text-neutral-800 dark:text-neutral-200 text-base">
+            Belum Ada Percakapan Dipilih
+          </h3>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            Pilih salah satu percakapan di bilah kiri atau mulai permohonan bimbingan/pendanaan baru dengan mitra.
+          </p>
+        </div>
+      </section>
+
     </div>
 
     <!-- ========================================================================= -->
